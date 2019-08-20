@@ -10,13 +10,27 @@ import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
 import Typography from '@material-ui/core/Typography'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import MenuList from '@material-ui/core/MenuList'
+import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Divider from '@material-ui/core/Divider'
+import HeartIcon from '@material-ui/icons/Favorite'
+import HelpIcon from '@material-ui/icons/Help'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { commaFormatted } from 'js/utils/utils'
 import theme from 'js/theme/searchTheme'
 import Link from 'js/components/General/Link'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
-import { searchAuthURL, searchDonateHeartsURL } from 'js/navigation/navigation'
+import {
+  searchAuthURL,
+  searchDonateHeartsURL,
+  searchExternalHelpURL,
+  searchInviteFriendsURL,
+} from 'js/navigation/navigation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 
 const defaultTheme = createMuiTheme(theme)
@@ -59,6 +73,10 @@ const menuFontSize = 22
 const SearchMenuComponent = props => {
   const { app, classes, isSearchExtensionInstalled, style, user } = props
   const userExists = !!user
+
+  const onLogoutClick = () => {
+    console.error('FIXME')
+  }
 
   // We only want to show the sign in button if the user is
   // not signed in and has already installed the extension.
@@ -176,9 +194,63 @@ const SearchMenuComponent = props => {
                         marginTop: 6,
                       }}
                     >
-                      <div className={classes.heartsDropdownContainer}>
-                        <Typography variant={'h5'}>PLACEHOLDER!</Typography>
-                      </div>
+                      <MenuList style={{ width: 200 }}>
+                        <Link to={searchDonateHeartsURL}>
+                          <MenuItem>
+                            <ListItemIcon>
+                              <HeartIcon className={classes.icon} />
+                            </ListItemIcon>
+                            <ListItemText
+                              classes={{ primary: classes.listItemTextPrimary }}
+                              primaryTypographyProps={{ variant: 'body2' }}
+                            >
+                              Donate Hearts
+                            </ListItemText>
+                          </MenuItem>
+                        </Link>
+                        <Link to={searchInviteFriendsURL}>
+                          <MenuItem>
+                            <ListItemIcon>
+                              <PersonAddIcon className={classes.icon} />
+                            </ListItemIcon>
+                            <ListItemText
+                              classes={{ primary: classes.listItemTextPrimary }}
+                              primaryTypographyProps={{ variant: 'body2' }}
+                            >
+                              Invite Friends
+                            </ListItemText>
+                          </MenuItem>
+                        </Link>
+                        <Divider />
+                        <Link to={searchExternalHelpURL} target="_blank">
+                          <MenuItem>
+                            <ListItemIcon>
+                              <HelpIcon className={classes.icon} />
+                            </ListItemIcon>
+                            <ListItemText
+                              classes={{ primary: classes.listItemTextPrimary }}
+                              primaryTypographyProps={{ variant: 'body2' }}
+                            >
+                              Help
+                            </ListItemText>
+                          </MenuItem>
+                        </Link>
+                        <Divider />
+                        <MenuItem
+                          onClick={onLogoutClick}
+                          data-test-id={'app-menu-sign-out'}
+                        >
+                          <ListItemIcon>
+                            <ExitToAppIcon className={classes.icon} />
+                          </ListItemIcon>
+                          <ListItemText
+                            classes={{ primary: classes.listItemTextPrimary }}
+                            primaryTypographyProps={{ variant: 'body2' }}
+                          >
+                            Sign Out
+                          </ListItemText>
+                        </MenuItem>
+                      </MenuList>
                     </DashboardPopover>
                   )}
                 />

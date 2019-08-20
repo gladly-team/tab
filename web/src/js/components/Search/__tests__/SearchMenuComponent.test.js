@@ -6,11 +6,17 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
+import MenuItem from '@material-ui/core/MenuItem'
 import Typography from '@material-ui/core/Typography'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Link from 'js/components/General/Link'
-import { searchDonateHeartsURL } from 'js/navigation/navigation'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import {
+  searchDonateHeartsURL,
+  searchExternalHelpURL,
+  searchInviteFriendsURL,
+} from 'js/navigation/navigation'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
 jest.mock('js/components/Search/SearchHeartsContainer')
@@ -322,4 +328,156 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     })
     expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
+
+  it('has the expected width', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(
+      dropdownElem
+        .find(DashboardPopover)
+        .children()
+        .first()
+        .prop('style').width
+    ).toBe(200)
+  })
+
+  it('contains a "donate hearts" menu item', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Donate Hearts'
+    })
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('the "donate hearts" menu items links to the correct URL', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Donate Hearts'
+    })
+    expect(elem.parent().type()).toEqual(Link)
+    expect(elem.parent().prop('to')).toEqual(searchDonateHeartsURL)
+  })
+
+  it('contains an "invite friends" menu item', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Invite Friends'
+    })
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('the "invite friends" menu items links to the correct URL', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Invite Friends'
+    })
+    expect(elem.parent().type()).toEqual(Link)
+    expect(elem.parent().prop('to')).toEqual(searchInviteFriendsURL)
+  })
+
+  it('contains an "help" menu item', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Help'
+    })
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('the "help" menu items links to the correct URL', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Help'
+    })
+    expect(elem.parent().type()).toEqual(Link)
+    expect(elem.parent().prop('to')).toEqual(searchExternalHelpURL)
+  })
+
+  it('contains an "sign out" menu item', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Sign Out'
+    })
+    expect(elem.exists()).toBe(true)
+  })
+
+  // FIXME: logout tests
 })
