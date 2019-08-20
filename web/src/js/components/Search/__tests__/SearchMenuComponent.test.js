@@ -18,7 +18,7 @@ import {
   searchInviteFriendsURL,
 } from 'js/navigation/navigation'
 import { logout } from 'js/authentication/user'
-import { goToLogin } from 'js/navigation/navigation'
+import { goTo, searchAuthURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
@@ -552,7 +552,8 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     logout.mockResolvedValueOnce(true)
-    goToLogin.mockImplementationOnce(async () => {
+    goTo.mockImplementationOnce(async url => {
+      expect(url).toEqual(searchAuthURL)
       done()
     })
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()

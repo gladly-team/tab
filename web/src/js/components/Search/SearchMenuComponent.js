@@ -26,6 +26,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import {
+  goTo,
   searchAuthURL,
   searchDonateHeartsURL,
   searchExternalHelpURL,
@@ -33,7 +34,6 @@ import {
 } from 'js/navigation/navigation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { logout } from 'js/authentication/user'
-import { goToLogin } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
 const defaultTheme = createMuiTheme(theme)
@@ -241,8 +241,7 @@ const SearchMenuComponent = props => {
                               logger.error(e)
                             }
                             if (logoutSuccess) {
-                              // FIXME
-                              goToLogin()
+                              goTo(searchAuthURL)
                             }
                           }}
                         >
