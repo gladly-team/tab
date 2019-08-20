@@ -17,12 +17,18 @@ import {
   searchExternalHelpURL,
   searchInviteFriendsURL,
 } from 'js/navigation/navigation'
+import { logout } from 'js/authentication/user'
+import { goToLogin } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
 jest.mock('js/components/Search/SearchHeartsContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 jest.mock('js/components/General/Link')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   app: {
@@ -479,5 +485,68 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     expect(elem.exists()).toBe(true)
   })
 
-  // FIXME: logout tests
+  it('calls to log out when the "sign out" button is clicked', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Sign Out'
+    })
+    elem.simulate('click')
+    expect(logout).toHaveBeenCalled()
+  })
+
+  it('redirects to the login page on a successful logout', done => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    logout.mockResolvedValueOnce(true)
+    goToLogin.mockImplementationOnce(async () => {
+      done()
+    })
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Sign Out'
+    })
+    elem.simulate('click')
+  })
+
+  it('logs an error on a failed logout', done => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    logout.mockImplementationOnce(async () => {
+      throw new Error('Uh oh :(')
+    })
+    logger.error.mockImplementationOnce(async () => {
+      done()
+    })
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButton)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Sign Out'
+    })
+    elem.simulate('click')
+  })
 })

@@ -32,6 +32,9 @@ import {
   searchInviteFriendsURL,
 } from 'js/navigation/navigation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import { logout } from 'js/authentication/user'
+import { goToLogin } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -73,10 +76,6 @@ const menuFontSize = 22
 const SearchMenuComponent = props => {
   const { app, classes, isSearchExtensionInstalled, style, user } = props
   const userExists = !!user
-
-  const onLogoutClick = () => {
-    console.error('FIXME')
-  }
 
   // We only want to show the sign in button if the user is
   // not signed in and has already installed the extension.
@@ -237,8 +236,17 @@ const SearchMenuComponent = props => {
                         </Link>
                         <Divider />
                         <MenuItem
-                          onClick={onLogoutClick}
-                          data-test-id={'app-menu-sign-out'}
+                          onClick={async () => {
+                            var logoutSuccess = false
+                            try {
+                              logoutSuccess = await logout()
+                            } catch (e) {
+                              logger.error(e)
+                            }
+                            if (logoutSuccess) {
+                              goToLogin()
+                            }
+                          }}
                         >
                           <ListItemIcon>
                             <ExitToAppIcon className={classes.icon} />
