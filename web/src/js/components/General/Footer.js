@@ -5,33 +5,28 @@ import Divider from '@material-ui/core/Divider'
 
 import logoGrey from 'js/assets/logos/logo-grey.svg'
 import {
-  adblockerWhitelistingURL,
-  contactUsURL,
-  externalHelpURL,
+  adblockerWhitelistingForSearchURL,
+  externalContactUsURL,
   financialsURL,
-  homeURL,
-  jobsURL,
   privacyPolicyURL,
-  teamURL,
+  searchHomeURL,
+  searchExternalHelpURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
 
-// Matches tab-homepage style.
-const fontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif'
-const lightestShadingColor = 'rgba(128, 128, 128, 0.04)'
-const lighterTextColor = '#838383'
-const lightestTextColor = '#cecece'
+// Styles match tab-homepage style.
 
 //  Footer link component
 const footerLinkStyles = theme => ({
   footerLink: {
+    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
     textDecoration: 'none',
-    color: lightestTextColor,
+    color: '#cecece',
     fontSize: 12,
     margin: 20,
     '&:hover': {
-      color: lighterTextColor,
+      color: '#838383',
     },
   },
 })
@@ -46,7 +41,7 @@ const FooterLinkComponent = props => {
 }
 
 FooterLinkComponent.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   classes: PropTypes.object.isRequired,
 }
 FooterLinkComponent.defaultProps = {}
@@ -55,68 +50,61 @@ export { FooterLink }
 
 // Footer component
 const styles = theme => ({
+  container: {
+    background: 'rgba(128, 128, 128, 0.04)',
+    paddingTop: 1,
+    paddingBottom: 20,
+    paddingLeft: 40,
+    paddingRight: 40,
+  },
   divider: {
     width: '100%',
     marginBottom: 20,
   },
   contentContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+  },
+  logoImg: {
+    height: 43,
+    width: 43,
+  },
+  textLinkContainer: {
+    marginLeft: 30,
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
 })
 
 class Footer extends React.Component {
   render() {
     const { classes, style } = this.props
+
+    // Currently only for Search for a Cause. Customize if used
+    // for other apps.
     return (
-      <div
-        style={Object.assign(
-          {},
-          {
-            background: lightestShadingColor,
-            paddingTop: 1,
-            paddingBottom: 20,
-            paddingLeft: 40,
-            paddingRight: 40,
-            fontFamily: fontFamily,
-          },
-          style
-        )}
-      >
+      <div style={style} className={classes.container}>
         <Divider className={classes.divider} />
         <div className={classes.contentContainer}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              flexWrap: 'nowrap',
-              alignItems: 'center',
-            }}
-          >
-            <Link to={homeURL}>
-              <img
-                src={logoGrey}
-                style={{ height: 43 }}
-                alt="Tab for a Cause logo in grey"
-              />
-            </Link>
-            <div
-              style={{
-                marginLeft: 30,
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <FooterLink to={externalHelpURL}>Help</FooterLink>
-              <FooterLink to={adblockerWhitelistingURL}>Adblockers</FooterLink>
-              <FooterLink to={financialsURL}>Financials</FooterLink>
-              <FooterLink to={termsOfServiceURL}>Terms</FooterLink>
-              <FooterLink to={privacyPolicyURL}>Privacy</FooterLink>
-              <FooterLink to={teamURL}>Team</FooterLink>
-              <FooterLink to={contactUsURL}>Contact</FooterLink>
-              <FooterLink to={jobsURL}>Jobs</FooterLink>
-            </div>
+          <Link to={searchHomeURL}>
+            <img
+              src={logoGrey}
+              className={classes.logoImg}
+              alt="Search for a Cause logo"
+            />
+          </Link>
+          <div className={classes.textLinkContainer}>
+            <FooterLink to={searchExternalHelpURL}>Help</FooterLink>
+            <FooterLink to={adblockerWhitelistingForSearchURL}>
+              Adblockers
+            </FooterLink>
+            <FooterLink to={financialsURL}>Financials</FooterLink>
+            <FooterLink to={termsOfServiceURL}>Terms</FooterLink>
+            <FooterLink to={privacyPolicyURL}>Privacy</FooterLink>
+            <FooterLink to={externalContactUsURL}>Contact</FooterLink>
           </div>
         </div>
       </div>
