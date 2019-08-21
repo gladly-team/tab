@@ -8,9 +8,11 @@ import {
   adblockerWhitelistingForSearchURL,
   externalContactUsURL,
   financialsURL,
+  jobsURL,
   privacyPolicyURL,
   searchHomeURL,
   searchExternalHelpURL,
+  teamURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 
@@ -135,6 +137,18 @@ describe('Footer', () => {
     expect(linkElem.prop('to')).toEqual(privacyPolicyURL)
   })
 
+  it('contains a link to the team page', () => {
+    const Footer = require('../Footer').default
+    const { FooterLink } = require('../Footer')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Footer {...mockProps} />).dive()
+    const linkElem = wrapper
+      .find(FooterLink)
+      .filterWhere(e => e.prop('children') === 'Team')
+    expect(linkElem.exists()).toBe(true)
+    expect(linkElem.prop('to')).toEqual(teamURL)
+  })
+
   it('contains a link to the contact page', () => {
     const Footer = require('../Footer').default
     const { FooterLink } = require('../Footer')
@@ -145,5 +159,17 @@ describe('Footer', () => {
       .filterWhere(e => e.prop('children') === 'Contact')
     expect(linkElem.exists()).toBe(true)
     expect(linkElem.prop('to')).toEqual(externalContactUsURL)
+  })
+
+  it('contains a link to the team page', () => {
+    const Footer = require('../Footer').default
+    const { FooterLink } = require('../Footer')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Footer {...mockProps} />).dive()
+    const linkElem = wrapper
+      .find(FooterLink)
+      .filterWhere(e => e.prop('children') === 'Jobs')
+    expect(linkElem.exists()).toBe(true)
+    expect(linkElem.prop('to')).toEqual(jobsURL)
   })
 })

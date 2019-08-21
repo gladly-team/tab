@@ -8,9 +8,11 @@ import {
   adblockerWhitelistingForSearchURL,
   externalContactUsURL,
   financialsURL,
+  jobsURL,
   privacyPolicyURL,
   searchHomeURL,
   searchExternalHelpURL,
+  teamURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
@@ -104,7 +106,9 @@ class Footer extends React.Component {
             <FooterLink to={financialsURL}>Financials</FooterLink>
             <FooterLink to={termsOfServiceURL}>Terms</FooterLink>
             <FooterLink to={privacyPolicyURL}>Privacy</FooterLink>
+            <FooterLink to={teamURL}>Team</FooterLink>
             <FooterLink to={externalContactUsURL}>Contact</FooterLink>
+            <FooterLink to={jobsURL}>Jobs</FooterLink>
           </div>
         </div>
       </div>
