@@ -3,6 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Link from 'js/components/General/Link'
+import Logo from 'js/components/Logo/Logo'
 
 jest.mock('js/components/General/Link')
 
@@ -38,6 +39,21 @@ describe('Footer', () => {
   it('renders without error', () => {
     const Footer = require('../Footer').default
     const mockProps = getMockProps()
-    shallow(<Footer {...mockProps} />)
+    shallow(<Footer {...mockProps} />).dive()
+  })
+
+  it('contains the grey search logo without text', () => {
+    const Footer = require('../Footer').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Footer {...mockProps} />).dive()
+    expect(wrapper.find(Logo).props()).toMatchObject({
+      brand: 'search',
+      color: 'grey',
+      includeText: false,
+      style: {
+        width: 43,
+        height: 43,
+      },
+    })
   })
 })

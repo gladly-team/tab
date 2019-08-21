@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 
-import logoGrey from 'js/assets/logos/logo-grey.svg'
+import Logo from 'js/components/Logo/Logo'
 import {
   adblockerWhitelistingForSearchURL,
   externalContactUsURL,
@@ -14,6 +14,7 @@ import {
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
+import { SEARCH_APP } from 'js/constants'
 
 // Styles match tab-homepage style.
 
@@ -67,10 +68,6 @@ const styles = theme => ({
     flexWrap: 'nowrap',
     alignItems: 'center',
   },
-  logoImg: {
-    height: 43,
-    width: 43,
-  },
   textLinkContainer: {
     marginLeft: 30,
     display: 'flex',
@@ -90,10 +87,13 @@ class Footer extends React.Component {
         <Divider className={classes.divider} />
         <div className={classes.contentContainer}>
           <Link to={searchHomeURL}>
-            <img
-              src={logoGrey}
-              className={classes.logoImg}
-              alt="Search for a Cause logo"
+            <Logo
+              brand={SEARCH_APP}
+              color={'grey'}
+              style={{
+                width: 43,
+                height: 43,
+              }}
             />
           </Link>
           <div className={classes.textLinkContainer}>
@@ -113,7 +113,6 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-  children: PropTypes.element,
   style: PropTypes.object,
   classes: PropTypes.object.isRequired,
 }
