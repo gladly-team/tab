@@ -137,6 +137,7 @@ export const inviteFriendsURL = '/newtab/profile/invite/'
 export const accountURL = '/newtab/account/'
 
 // Search
+export const searchHomeURL = 'https://search.gladly.io'
 export const searchBaseURL = '/search'
 export const searchAuthURL = '/search/auth/'
 export const searchDonateHeartsURL = '/search/profile/donate/'
