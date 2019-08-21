@@ -27,6 +27,8 @@ import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
+  hasUserClickedNewTabSearchIntroNotif,
+  setUserClickedNewTabSearchIntroNotif,
 } from 'js/utils/local-user-data-mgr'
 import {
   CHROME_BROWSER,
@@ -50,7 +52,6 @@ import {
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_REFERRAL_NOTIFICATION,
-  EXPERIMENT_SEARCH_INTRO,
   getExperimentGroups,
   getUserExperimentGroup,
 } from 'js/utils/experiments'
@@ -88,11 +89,8 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
-      // Determines what message (if any) we should show to introduce
-      // Search for a Cause.
-      searchIntroExperimentGroup: getUserExperimentGroup(
-        EXPERIMENT_SEARCH_INTRO
-      ),
+      // Whether to show an introduction to Search.
+      showSearchIntro: !hasUserClickedNewTabSearchIntroNotif(),
       // @experiment-referral-notification
       referralNotificationExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_REFERRAL_NOTIFICATION
@@ -152,10 +150,9 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
       referralNotificationExperimentGroup,
-      searchIntroExperimentGroup,
       tabId,
     } = this.state
-    const { errorMessage, errorOpen } = this.state
+    const { errorMessage, errorOpen, showSearchIntro } = this.state
 
     // Whether or not a campaign should show on the dashboard
     const showCampaign = !!(
@@ -326,12 +323,11 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
-              {// @experiment-search-intro
-              (searchIntroExperimentGroup ===
-                getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ||
-                searchIntroExperimentGroup ===
-                  getExperimentGroups(EXPERIMENT_SEARCH_INTRO)
-                    .INTRO_HOMEPAGE) &&
+              {// Show the search introduction to all users who:
+              // * haven't already clicked it
+              // * haven't already interacted with the intro in our previous experiment
+              // * have opened at least three tabs
+              showSearchIntro &&
               !(
                 user.experimentActions.searchIntro === 'CLICK' ||
                 user.experimentActions.searchIntro === 'DISMISS'
@@ -358,50 +354,25 @@ class Dashboard extends React.Component {
                   }
                   buttonText={'Try it out'}
                   buttonURL={
-                    searchIntroExperimentGroup ===
-                    getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_HOMEPAGE
-                      ? 'https://search.gladly.io'
-                      : browser === CHROME_BROWSER
+                    browser === CHROME_BROWSER
                       ? searchChromeExtensionPage
                       : browser === FIREFOX_BROWSER
                       ? searchFirefoxExtensionPage
                       : searchChromeExtensionPage
                   }
-                  onClick={async () => {
-                    try {
-                      // Log the click.
-                      await LogUserExperimentActionsMutation({
-                        userId: user.id,
-                        experimentActions: {
-                          [EXPERIMENT_SEARCH_INTRO]: 'CLICK',
-                        },
-                      })
-                    } catch (e) {
-                      console.error(e)
-                    }
-
+                  onClick={() => {
                     // Hide the message because we don't want the user to
-                    // need to dismiss it after clicking the action, which
-                    // would also confuse our test metrics.
+                    // need to dismiss it after clicking.
                     this.setState({
-                      searchIntroExperimentGroup: false,
+                      showSearchIntro: false,
                     })
+                    setUserClickedNewTabSearchIntroNotif()
                   }}
-                  onDismiss={async () => {
-                    try {
-                      // Log the dismissal.
-                      await LogUserExperimentActionsMutation({
-                        userId: user.id,
-                        experimentActions: {
-                          [EXPERIMENT_SEARCH_INTRO]: 'DISMISS',
-                        },
-                      })
-                    } catch (e) {
-                      console.error(e)
-                    }
+                  onDismiss={() => {
                     this.setState({
-                      searchIntroExperimentGroup: false,
+                      showSearchIntro: false,
                     })
+                    setUserClickedNewTabSearchIntroNotif()
                   }}
                   style={{
                     width: 440,

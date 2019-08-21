@@ -43,6 +43,8 @@ import {
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
+  hasUserClickedNewTabSearchIntroNotif,
+  setUserClickedNewTabSearchIntroNotif,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import { getUserExperimentGroup } from 'js/utils/experiments'
@@ -648,23 +650,30 @@ describe('Dashboard component: global notification', () => {
 })
 
 describe('Dashboard component: search intro experiment', () => {
-  it('[none group] does not render the search intro notification when the user is not in the experiment', () => {
+  beforeEach(() => {
+    getUserExperimentGroup.mockReturnValue('none')
+    hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
+  })
+
+  // Showing the intro globally now that the experiment is finished.
+  it('[none group] renders the search intro notification when the user is not in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('none')
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
-      false
+      true
     )
   })
 
-  it('[control group] does not render the search intro notification when the user is in the control group', () => {
+  // Showing the intro globally now that the experiment is finished.
+  it('[control group] renders the search intro notification when the user is in the control group', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('noIntro')
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
-      false
+      true
     )
   })
 
@@ -688,10 +697,9 @@ describe('Dashboard component: search intro experiment', () => {
     expect(elem.prop('title')).toEqual(`We're working on Search for a Cause`)
   })
 
-  it('[experimental group] does not render the search intro notification when the user has opened fewer than 4 tabs', () => {
+  it('does not render the search intro notification when the user has opened fewer than 4 tabs', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    getUserExperimentGroup.mockReturnValue('introA')
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.user.tabs = 2
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
@@ -709,10 +717,9 @@ describe('Dashboard component: search intro experiment', () => {
     )
   })
 
-  it('[experimental group] does not render the search intro notification when the user has previously clicked it', () => {
+  it('does not render the search intro notification when the user has previously clicked it in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    getUserExperimentGroup.mockReturnValue('introA')
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.user.experimentActions.searchIntro = 'CLICK'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
@@ -720,10 +727,9 @@ describe('Dashboard component: search intro experiment', () => {
     expect(elem.exists()).toBe(false)
   })
 
-  it('[experimental group] does not render the search intro notification when the user has previously dismissed it', () => {
+  it('does not render the search intro notification when the user has previously dismissed it in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    getUserExperimentGroup.mockReturnValue('introA')
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.user.experimentActions.searchIntro = 'DISMISS'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
@@ -731,10 +737,9 @@ describe('Dashboard component: search intro experiment', () => {
     expect(elem.exists()).toBe(false)
   })
 
-  it('[experimental group] does render the search intro notification if the user has not taken any action', () => {
+  it('renders the search intro notification if the user has not taken any action in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    getUserExperimentGroup.mockReturnValue('introA')
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.user.experimentActions.searchIntro = 'NONE'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
@@ -742,66 +747,67 @@ describe('Dashboard component: search intro experiment', () => {
     expect(elem.exists()).toBe(true)
   })
 
-  it('[experimental group] hides the search intro when the onClick callback is called', async () => {
-    expect.assertions(2)
-    getUserExperimentGroup.mockReturnValue('introA')
+  it('does not render the search intro notification if the user has previously interacted with it', () => {
+    hasUserClickedNewTabSearchIntroNotif.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-notif"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('hides the search intro when the onClick callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find('[data-test-id="search-intro-notif"]').length).toBe(1)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(wrapper.find('[data-test-id="search-intro-notif"]').length).toBe(0)
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      true
+    )
+    wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      false
+    )
   })
 
-  it('[experimental group] hides the search intro when the onDismiss callback is called', async () => {
-    expect.assertions(2)
-    getUserExperimentGroup.mockReturnValue('introA')
+  it('saves the search intro click action to local storage when the onClick callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find('[data-test-id="search-intro-notif"]').length).toBe(1)
-    await wrapper
-      .find('[data-test-id="search-intro-notif"]')
-      .prop('onDismiss')()
-    expect(wrapper.find('[data-test-id="search-intro-notif"]').length).toBe(0)
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      true
+    )
+    wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
+    expect(setUserClickedNewTabSearchIntroNotif).toHaveBeenCalledTimes(1)
   })
 
-  it('[experimental group] logs the search intro experiment action when the onClick callback is called', async () => {
-    expect.assertions(1)
-    getUserExperimentGroup.mockReturnValue('introA')
+  it('hides the search intro when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
-      userId: 'abc-123',
-      experimentActions: {
-        searchIntro: 'CLICK',
-      },
-    })
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      true
+    )
+    wrapper.find('[data-test-id="search-intro-notif"]').prop('onDismiss')()
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      false
+    )
   })
 
-  it('[experimental group] logs the search intro experiment action when the onDismiss callback is called', async () => {
-    expect.assertions(1)
-    getUserExperimentGroup.mockReturnValue('introA')
+  it('saves the search intro click action to local storage when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper
-      .find('[data-test-id="search-intro-notif"]')
-      .prop('onDismiss')()
-    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
-      userId: 'abc-123',
-      experimentActions: {
-        searchIntro: 'DISMISS',
-      },
-    })
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      true
+    )
+    wrapper.find('[data-test-id="search-intro-notif"]').prop('onDismiss')()
+    expect(setUserClickedNewTabSearchIntroNotif).toHaveBeenCalledTimes(1)
   })
 
-  it('[search-intro-A] links to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
+  it('links to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
@@ -810,10 +816,9 @@ describe('Dashboard component: search intro experiment', () => {
     ).toEqual(searchChromeExtensionPage)
   })
 
-  it('[search-intro-A] links to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
+  it('links to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
@@ -822,58 +827,40 @@ describe('Dashboard component: search intro experiment', () => {
     ).toEqual(searchFirefoxExtensionPage)
   })
 
-  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
+  it('links to the Chrome web store when the user clicks the search intro action button on an unsupported browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(
       wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
-    ).toEqual('https://search.gladly.io')
+    ).toEqual(searchChromeExtensionPage)
   })
 
-  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on a Chrome browser', async () => {
+  it('does NOT log the search intro experiment action when the onClick callback is called', async () => {
     expect.assertions(1)
-    detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(
-      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
-    ).toEqual('https://search.gladly.io')
+    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
+    expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
   })
 
-  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on a Firefox browser', async () => {
+  it('does NOT log the search intro experiment action when the onDismiss callback is called', async () => {
     expect.assertions(1)
-    detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(
-      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
-    ).toEqual('https://search.gladly.io')
+    await wrapper
+      .find('[data-test-id="search-intro-notif"]')
+      .prop('onDismiss')()
+    expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
   })
 
-  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
-    expect.assertions(1)
-    detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
-    getUserExperimentGroup.mockReturnValue('introHomepage')
+  it('does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(
-      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
-    ).toEqual('https://search.gladly.io')
-  })
-
-  it('[experimental group] does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    getUserExperimentGroup.mockReturnValue('introA')
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.prop('useGlobalDismissalTime')).toBe(false)

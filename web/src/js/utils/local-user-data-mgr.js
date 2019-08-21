@@ -11,6 +11,7 @@ import {
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
   STORAGE_NOTIFICATIONS_DISMISS_TIME,
   STORAGE_CAMPAIGN_DISMISS_TIME,
+  STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO,
 } from 'js/constants'
 
 /**
@@ -209,6 +210,27 @@ export const hasUserDismissedNotificationRecently = () => {
     moment()
       .utc()
       .diff(dismissTime, 'days') < 10
+  )
+}
+
+/**
+ * Marks that the user has clicked or dismissed the notification on the
+ * new tab page that introduces Search for a Cause.
+ * @returns {undefined}
+ */
+export const setUserClickedNewTabSearchIntroNotif = () => {
+  localStorageMgr.setItem(STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO, 'true')
+}
+
+/**
+ * Gets whether the user has clicked/dismissed the notification on the
+ * new tab page that introduces Search for a Cause.
+ * @returns {Boolean} Whether the user has clicked/dismissed the notification
+ *   introducing Search.
+ */
+export const hasUserClickedNewTabSearchIntroNotif = () => {
+  return (
+    localStorageMgr.getItem(STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO) === 'true'
   )
 }
 
