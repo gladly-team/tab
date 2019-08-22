@@ -74,8 +74,7 @@
       Google Global Site Tag (gtag.js) - AdWords: 1013744060 
     -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
-    <script>
-      /* eslint-disable */
+    <script>/* eslint-disable */
      window.dataLayer = window.dataLayer || [];
      function gtag(){dataLayer.push(arguments);}
      gtag('js', new Date());
@@ -88,11 +87,23 @@
       @gladly-customization:
       Reddit conversion pixel
     -->
-    <script>
-    /* eslint-disable */
+    <script>/* eslint-disable */
     !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');
     </script>
     <% } %>
+
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
+    <!--
+      @gladly-customization:
+      Quora conversion pixel
+    -->
+    <script>/* eslint-disable */
+    !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
+    qp('init', '36541467ff4144d6a35e28bf2d6d3f4c');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://q.quora.com/_/ad/36541467ff4144d6a35e28bf2d6d3f4c/pixel?tag=ViewContent&noscript=1"/></noscript>
+    <% } %>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -101,8 +112,7 @@
       @gladly-customization:
       Search for a Cause global variable
     -->
-    <script type="text/javascript">
-      /* eslint-disable */
+    <script type="text/javascript">/* eslint-disable */
       (() => {
         // See search-utils.js for documentation.
         window.searchforacause = window.searchforacause || {
@@ -138,8 +148,7 @@
       @gladly-customization:
       Facebook Pixel Code
     -->
-    <script>
-    /* eslint-disable */
+    <script>/* eslint-disable */
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
@@ -184,8 +193,7 @@
       https://www.quantcast.com/gdpr/quantcast-choice-self-serve/
       https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
     -->
-    <script type="text/javascript" async=true>
-      /* eslint-disable */
+    <script type="text/javascript" async=true>/* eslint-disable */
       var __cmp = (function () {
         return typeof (__cmp) == "function" ? __cmp : function (c) {
           var b = arguments;
@@ -209,8 +217,7 @@
       @gladly-customization:
       Amazon apstag
     -->
-    <script>
-    /* eslint-disable */
+    <script>/* eslint-disable */
     !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
     </script>
     <% } %>
