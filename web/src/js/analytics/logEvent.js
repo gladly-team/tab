@@ -1,13 +1,14 @@
 import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
 import rdt from 'js/analytics/reddit-analytics'
+import qp from 'js/analytics/quora-analytics'
 
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.
 export const pageview = () => {
-  // GA and fbq pageviews
   fbq('track', 'PageView')
   GA.pageview()
+  qp('track', 'ViewContent')
 }
 
 export const homepageView = () => {
@@ -52,6 +53,7 @@ export const accountCreated = () => {
     action: 'AccountCreation',
   })
   rdt('track', 'SignUp')
+  qp('track', 'CompleteRegistration')
 
   // Google Ads conversion tracking.
   window.gtag('event', 'conversion', {
