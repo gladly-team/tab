@@ -21,7 +21,7 @@ export default () =>
           {
             _type: 'Ads/TextAd',
             id: 'https://www.bingapis.com/api/v7/#Ads.0',
-            url: 'https://www.bing.com/fake-ad-click-id-0',
+            url: 'https://www.amazon.com/s?k=cow',
             urlPingSuffix: 'Foo,1234',
             description:
               'Hoof It On Over and Shop High Performance Cow-Puters on Amazon',
@@ -29,7 +29,7 @@ export default () =>
             position: 'Mainline',
             impressionToken: '1',
             title: 'Cow-puters on A-moo-zon.com - Official Site',
-            displayUrl: 'www.example.com/cow',
+            displayUrl: 'www.amazon.com',
             isAdult: false,
             phoneNumber: '',
             extensions: [

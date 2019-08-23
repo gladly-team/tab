@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { clipTextToNearestWord } from 'js/utils/search-utils'
-
-const linkColor = '#1a0dab'
-const linkColorVisited = '#670199'
+import {
+  linkColor,
+  linkColorVisited,
+} from 'js/components/Search/searchResultsStyles'
 
 const styles = () => ({
   container: {
