@@ -8,6 +8,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import Button from '@material-ui/core/Button'
+import { Helmet } from 'react-helmet'
 import {
   isSearchPageEnabled,
   shouldRedirectSearchToThirdParty,
@@ -177,6 +178,41 @@ describe('Search page component', () => {
     expect(
       wrapper.find('[data-test-id="search-page"]').prop('style')
     ).toHaveProperty('minWidth', 1100)
+  })
+
+  it('sets the the page title with react-helmet when a query exists', async () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=i+like+food',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('i like food')
+  })
+
+  it('does not set the the page title with react-helmet when no query exists', async () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .exists()
+    ).toBe(false)
   })
 
   it('sets expected styling on the main search results column', () => {
