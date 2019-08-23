@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import WidgetSettings from 'js/components/Settings/Widgets/WidgetSettingsContainer'
 
 class WidgetsSettings extends React.Component {
@@ -40,6 +41,9 @@ class WidgetsSettings extends React.Component {
     const self = this
     return (
       <div style={{ paddingTop: 0 }}>
+        <Helmet>
+          <title>Widget Settings</title>
+        </Helmet>
         {app.widgets.edges.map((edge, index) => {
           return (
             <WidgetSettings
@@ -57,8 +61,16 @@ class WidgetsSettings extends React.Component {
 }
 
 WidgetsSettings.propTypes = {
-  user: PropTypes.object.isRequired,
-  app: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    widgets: PropTypes.shape({
+      edges: PropTypes.array.isRequired,
+    }).isRequired,
+  }).isRequired,
+  app: PropTypes.shape({
+    widgets: PropTypes.shape({
+      edges: PropTypes.array.isRequired,
+    }).isRequired,
+  }).isRequired,
   showError: PropTypes.func.isRequired,
 }
 

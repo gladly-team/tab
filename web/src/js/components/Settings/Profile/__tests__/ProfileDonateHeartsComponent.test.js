@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { shallow } from 'enzyme'
 import Charity from 'js/components/Donate/CharityContainer'
 
@@ -34,6 +35,20 @@ describe('ProfileDonateHearts component', () => {
       .default
     const mockProps = getMockProps()
     shallow(<ProfileDonateHearts {...mockProps} />).dive()
+  })
+
+  it('sets the the page title', async () => {
+    const ProfileDonateHearts = require('js/components/Settings/Profile/ProfileDonateHeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileDonateHearts {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Donate Hearts')
   })
 
   it('renders the Charity components', () => {

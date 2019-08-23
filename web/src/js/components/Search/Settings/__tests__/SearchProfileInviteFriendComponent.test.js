@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { Helmet } from 'react-helmet'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -18,6 +19,20 @@ describe('SearchProfileInviteFriendComponent', () => {
       .default
     const mockProps = getMockProps()
     shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
+  })
+
+  it('sets the the page title', async () => {
+    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Invite Friends')
   })
 
   it('renders the InviteFriend component and passes it a null "user" prop value', () => {

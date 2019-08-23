@@ -4,6 +4,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { Helmet } from 'react-helmet'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 
@@ -12,6 +13,7 @@ jest.mock('js/utils/client-location')
 jest.mock('js/components/General/QuantcastChoiceCMP')
 jest.mock('js/ads/consentManagement')
 jest.mock('js/analytics/withPageviewTracking', () => child => child)
+jest.mock('js/assets/logos/favicon.ico', () => '/tab-favicon.png')
 
 const getMockProps = () => ({
   location: {
@@ -62,6 +64,36 @@ describe('App.js: general', () => {
         .first()
         .prop('brand')
     ).toEqual('tab')
+  })
+
+  it('sets the the favicon with react-helmet', async () => {
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('link')
+        .first()
+        .prop('rel')
+    ).toEqual('icon')
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('link')
+        .first()
+        .prop('href')
+    ).toEqual('/tab-favicon.png')
+  })
+
+  it('sets the the titleTemplate and defaultTitle with react-helmet', async () => {
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
+    expect(wrapper.find(Helmet).prop('titleTemplate')).toEqual(
+      '%s - Tab for a Cause'
+    )
+    expect(wrapper.find(Helmet).prop('defaultTitle')).toEqual('Tab for a Cause')
   })
 })
 

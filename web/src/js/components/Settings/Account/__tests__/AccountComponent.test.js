@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 jest.mock('js/utils/client-location')
@@ -19,6 +20,19 @@ describe('Account component', () => {
       .default
     const userData = getMockUserData()
     shallow(<AccountComponent user={userData} />)
+  })
+
+  it('sets the the page title', async () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Account')
   })
 
   it('shows data privacy choices when the client is in the EU', async () => {

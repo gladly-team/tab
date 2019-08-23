@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
@@ -69,6 +70,9 @@ class Account extends React.Component {
     const { user } = this.props
     return (
       <Paper elevation={1}>
+        <Helmet>
+          <title>Account</title>
+        </Helmet>
         <Typography variant={'h5'} style={{ padding: 20 }}>
           Account
         </Typography>
