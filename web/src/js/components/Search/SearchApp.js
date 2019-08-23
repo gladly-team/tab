@@ -26,8 +26,10 @@ class SearchApp extends React.Component {
     return (
       <MuiThemeProvider theme={muiTheme}>
         <ErrorBoundary brand={SEARCH_APP}>
-          <Helmet>
-            <title>Search for a Cause</title>
+          <Helmet
+            titleTemplate={`%s - Search for a Cause`}
+            defaultTitle={'Search for a Cause'}
+          >
             <link rel="icon" href={searchFavicon} />
           </Helmet>
           <div>

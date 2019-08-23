@@ -10,6 +10,7 @@ import Tab from '@material-ui/core/Tab'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import { Helmet } from 'react-helmet'
 import {
   isSearchPageEnabled,
   shouldRedirectSearchToThirdParty,
@@ -247,6 +248,7 @@ class SearchPage extends React.Component {
           flexDirection: 'column',
         }}
       >
+        <Helmet>{query ? <title>{query}</title> : null}</Helmet>
         <div
           style={{
             backgroundColor: '#fff',

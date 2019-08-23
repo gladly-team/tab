@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { get } from 'lodash/object'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
@@ -273,6 +274,9 @@ class BackgroundSettings extends React.Component {
 
     return (
       <Card style={optionContainer}>
+        <Helmet>
+          <title>Background Settings</title>
+        </Helmet>
         <CardHeader
           title={'Background'}
           titleStyle={cardHeaderTitleStyle}

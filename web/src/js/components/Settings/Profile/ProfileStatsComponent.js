@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
@@ -69,6 +70,9 @@ const ProfileStats = props => {
   const greeting = user.username ? `Hi, ${user.username}!` : 'Hi!'
   return (
     <div>
+      <Helmet>
+        <title>Your Stats</title>
+      </Helmet>
       <Paper elevation={1} className={classes.messageContainer}>
         <ChartIcon className={classes.chartIcon} />
         <Typography variant={'body2'} className={classes.messageText}>
