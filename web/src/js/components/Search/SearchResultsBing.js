@@ -115,7 +115,7 @@ const SearchResultsBing = props => {
           // Set a min-height during queries to prevent the footer
           // from flickering before the search results return.
           minHeight:
-            isEmptyQuery || (queryReturned && !isQueryInProgress) ? 0 : 1000,
+            isEmptyQuery || (queryReturned && !isQueryInProgress) ? 0 : 4000,
         },
         style
       )}

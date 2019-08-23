@@ -147,7 +147,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isQueryInProgress = true // waiting for a response
     mockProps.queryReturned = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(wrapper.get(0).props.style.minHeight).toBe(1000)
+    expect(wrapper.get(0).props.style.minHeight).toBe(4000)
   })
 
   it('removes the a min-height from the results container when the search is successful', () => {
@@ -180,7 +180,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(wrapper.get(0).props.style.minHeight).toBe(1000)
+    expect(wrapper.get(0).props.style.minHeight).toBe(4000)
   })
 
   it('removes the a min-height from the results container when the query is empty', () => {

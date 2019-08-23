@@ -4,6 +4,10 @@ import { withStyles } from '@material-ui/core/styles'
 import { find } from 'lodash/collection'
 import { get } from 'lodash/object'
 import LinkWithActionBeforeNavigate from 'js/components/General/LinkWithActionBeforeNavigate'
+import {
+  linkColor,
+  linkColorVisited,
+} from 'js/components/Search/searchResultsStyles'
 
 export const SiteLink = props => {
   const {
@@ -69,14 +73,17 @@ const styles = () => ({
   },
   titleLink: {
     textDecoration: 'none',
+    color: linkColor,
     '&:hover': {
       textDecoration: 'underline',
+    },
+    '&:visited': {
+      color: linkColorVisited,
     },
   },
   // Note: we cannot truncate the title.
   title: {
     fontFamily: 'Roboto, arial, sans-serif',
-    color: '#1a0dab',
     margin: 0,
     fontSize: 18,
     fontWeight: 400,
