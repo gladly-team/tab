@@ -11,7 +11,6 @@ import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
-import searchFavicon from 'js/assets/logos/search-favicon.png'
 
 jest.mock('js/components/Search/SearchPageComponent')
 jest.mock('js/components/Search/SearchPostUninstallView')
