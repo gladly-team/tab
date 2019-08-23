@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { Helmet } from 'react-helmet'
 import { cloneDeep } from 'lodash/lang'
 import { RadioButtonGroup, RadioButton } from 'material-ui/RadioButton'
 import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerContainer'
@@ -58,6 +59,19 @@ describe('Background settings component', () => {
     const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent')
       .default
     shallow(<BackgroundSettings {...mockProps} />)
+  })
+
+  it('sets the the page title', async () => {
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent')
+      .default
+    const wrapper = shallow(<BackgroundSettings {...mockProps} />)
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Background Settings')
   })
 
   it('renders all of the expected background option radio buttons', () => {

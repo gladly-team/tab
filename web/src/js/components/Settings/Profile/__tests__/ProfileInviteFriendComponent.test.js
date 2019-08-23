@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { shallow } from 'enzyme'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Stat from 'js/components/Settings/Profile/StatComponent'
@@ -26,6 +27,20 @@ describe('ProfileInviteFriendComponent', () => {
       .default
     const mockProps = getMockProps()
     shallow(<ProfileInviteFriend {...mockProps} />).dive()
+  })
+
+  it('sets the the page title', async () => {
+    const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Invite Friends')
   })
 
   it('renders the InviteFriend component and passes it the "user" prop', () => {

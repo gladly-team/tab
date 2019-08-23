@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { shallow } from 'enzyme'
 import moment from 'moment'
 import MockDate from 'mockdate'
@@ -48,6 +49,20 @@ describe('Profile stats component', () => {
       .default
     const mockProps = getMockProps()
     shallow(<ProfileStatsComponent {...mockProps} />).dive()
+  })
+
+  it('sets the the page title', async () => {
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Helmet)
+        .find('title')
+        .first()
+        .text()
+    ).toEqual('Your Stats')
   })
 
   it('has the expected number of stats', () => {

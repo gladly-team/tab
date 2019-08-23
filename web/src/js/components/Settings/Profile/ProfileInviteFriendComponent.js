@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Stat from 'js/components/Settings/Profile/StatComponent'
@@ -57,6 +58,9 @@ const ProfileInviteFriend = props => {
   }
   return (
     <span className={classes.container}>
+      <Helmet>
+        <title>Invite Friends</title>
+      </Helmet>
       <Paper elevation={1} className={classes.inviteFriendPaper}>
         <InviteFriend
           user={user}

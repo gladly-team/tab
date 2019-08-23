@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Charity from 'js/components/Donate/CharityContainer'
 import Paper from '@material-ui/core/Paper'
@@ -44,6 +45,9 @@ class ProfileDonateHearts extends React.Component {
     const { app, classes, user } = this.props
     return (
       <div className={classes.container}>
+        <Helmet>
+          <title>Donate Hearts</title>
+        </Helmet>
         <Paper elevation={1} className={classes.messageContainer}>
           <InfoIcon className={classes.infoIcon} />
           <Typography variant={'body2'} className={classes.messageText}>
