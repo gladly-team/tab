@@ -5,6 +5,8 @@ import { find } from 'lodash/collection'
 import { get } from 'lodash/object'
 import LinkWithActionBeforeNavigate from 'js/components/General/LinkWithActionBeforeNavigate'
 
+// TODO: use same colors as WebPageSearchResult
+
 export const SiteLink = props => {
   const {
     classes,

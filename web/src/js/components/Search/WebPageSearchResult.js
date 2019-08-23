@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { clipTextToNearestWord } from 'js/utils/search-utils'
 
+const linkColor = '#1a0dab'
+const linkColorVisited = '#670199'
+
 const styles = () => ({
   container: {
     fontFamily: 'arial, sans-serif',
@@ -10,13 +13,16 @@ const styles = () => ({
   },
   titleLink: {
     textDecoration: 'none',
+    color: linkColor,
     '&:hover': {
       textDecoration: 'underline',
+    },
+    '&:visited': {
+      color: linkColorVisited,
     },
   },
   title: {
     fontFamily: 'Roboto, arial, sans-serif',
-    color: '#1a0dab',
     margin: 0,
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
