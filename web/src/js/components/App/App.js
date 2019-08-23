@@ -79,8 +79,10 @@ class App extends React.Component {
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
           <ErrorBoundary brand={TAB_APP}>
-            <Helmet>
-              <title>Tab for a Cause</title>
+            <Helmet
+              titleTemplate={`%s - Tab for a Cause`}
+              defaultTitle={'Tab for a Cause'}
+            >
               <link rel="icon" href={tabFavicon} />
             </Helmet>
             <div
