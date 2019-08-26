@@ -223,5 +223,19 @@
     "updated": "2019-07-25T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "79f59909-4fef-421d-b971-b0d9e87dfbc6",
+    "name": "Sierra Club",
+    "category": "The Environment",
+    "logo": "placeholder.png",
+    "image": "sierra-club.jpg",
+    "website": "https://www.sierraclub.org",
+    "impact": "Together, we can help the Sierra Club continue their work protecting the environment. Thanks for your support!",
+    "description": "Protects our natural landscapes and fights against climate change",
+    "created": "2019-08-26T10:00:000Z",
+    "updated": "2019-08-26T10:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]

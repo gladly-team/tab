@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting the AMF!
+                Thank You for Supporting the Sierra Club!
               </Typography>
               <div
                 style={{
@@ -56,15 +56,15 @@ class CampaignBase extends React.Component {
                 <Typography variant={'body2'} gutterBottom>
                   With your help, the{' '}
                   <a
-                    href="https://www.againstmalaria.com"
+                    href="https://www.sierraclub.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Against Malaria Foundation
+                    Sierra Club
                   </a>{' '}
-                  will continue their work protecting people from malaria
-                  through the purchase and distribution of nets.{' '}
+                  will continue their work protecting our natural landscapes and
+                  fighting against climate change.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          July Spotlight: Against Malaria Foundation
+          August Spotlight: Sierra Club
         </Typography>
         <div
           style={{
@@ -113,14 +113,14 @@ class CampaignBase extends React.Component {
           }}
         >
           <Typography variant={'body2'} gutterBottom>
-            This month, Tabbers selected{' '}
+            This month, Tabbers selected the{' '}
             <a
-              href="https://www.againstmalaria.com"
+              href="https://www.sierraclub.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Against Malaria Foundation
+              Sierra Club
             </a>{' '}
             for our July{' '}
             <a
@@ -131,13 +131,13 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . The Against Malaria foundation protects people from malaria by
-            funding long-lasting insecticidal nets (LLINs), and working with
-            distribution partners to ensure they are used. Each net costs
-            roughly $2, lasts for 3-4 years and protects on average 2 people.
+            . The Sierra Club fights for environmental and social justice by
+            working for clean air, safe water, and land protection. Since 1892,
+            the Sierra Club has been a leading force in land conservation and
+            environmental activism.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting the Against Malaria Foundation!
+            Join us in supporting the Sierra Club!
           </Typography>
         </div>
       </HeartDonationCampaign>

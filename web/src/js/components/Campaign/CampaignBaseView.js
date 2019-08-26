@@ -12,9 +12,9 @@ class CampaignBaseView extends React.Component {
     const { authUser } = this.props
     const userId = authUser ? authUser.id : null
 
-    const CAMPAIGN_START_TIME_ISO = '2019-07-25T20:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2019-07-30T22:00:00.000Z'
-    const CHARITY_ID = 'd874dc7f-f7f1-4364-b07d-1e6dd5ab1cf9'
+    const CAMPAIGN_START_TIME_ISO = '2019-08-26T18:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2019-08-30T22:00:00.000Z'
+    const CHARITY_ID = '79f59909-4fef-421d-b971-b0d9e87dfbc6'
 
     return (
       <QueryRenderer
