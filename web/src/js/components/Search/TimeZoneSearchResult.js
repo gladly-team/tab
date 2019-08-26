@@ -150,12 +150,26 @@ TimeZoneDifference.propTypes = {
 }
 TimeZoneDifference.defaultProps = {}
 
-// TODO
 export const TimeZoneTimeBetween = props => {
-  const { classes } = props
+  const {
+    classes,
+    item: { description, primaryResponse },
+  } = props
   return (
     <Paper className={classes.container} elevation={1}>
-      TODO
+      <Typography
+        variant={'h4'}
+        data-test-id={'search-result-time-zone-primary-response'}
+        gutterBottom
+      >
+        {primaryResponse}
+      </Typography>
+      <Typography
+        variant={'body2'}
+        data-test-id={'search-result-time-zone-description'}
+      >
+        {description}
+      </Typography>
     </Paper>
   )
 }
@@ -163,6 +177,7 @@ TimeZoneTimeBetween.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    primaryResponse: PropTypes.string.isRequired,
   }).isRequired,
 }
 TimeZoneTimeBetween.defaultProps = {}

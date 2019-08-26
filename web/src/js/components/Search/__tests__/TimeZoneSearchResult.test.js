@@ -524,4 +524,49 @@ describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
       .dive()
     expect(wrapper.at(0).type()).toEqual(Paper)
   })
+
+  it('renders the expected main text', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneTimeBetween,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryResponse = '14 days'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneTimeBetween)
+      .dive()
+    const typographyElem = wrapper.find(
+      '[data-test-id="search-result-time-zone-primary-response"]'
+    )
+    expect(typographyElem.render().text()).toEqual('14 days')
+    expect(typographyElem.type()).toEqual(Typography)
+    expect(typographyElem.prop('variant')).toEqual('h4')
+  })
+
+  it('renders the expected description text', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneTimeBetween,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.description =
+      'There are 11 days from August 26, 2019 to September 6, 2019'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneTimeBetween)
+      .dive()
+    const typographyElem = wrapper.find(
+      '[data-test-id="search-result-time-zone-description"]'
+    )
+    expect(typographyElem.render().text()).toEqual(
+      'There are 11 days from August 26, 2019 to September 6, 2019'
+    )
+    expect(typographyElem.type()).toEqual(Typography)
+    expect(typographyElem.prop('variant')).toEqual('body2')
+  })
 })
