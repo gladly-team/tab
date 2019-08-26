@@ -3,14 +3,20 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { getMockBingTimeZoneResult } from 'js/utils/test-utils-search'
-
-const getMockProps = () => ({
-  item: getMockBingTimeZoneResult(),
-})
+import {
+  getMockBingTimeZoneConversionResult,
+  getMockBingTimeZoneInfoMultipleZonesResult,
+  getMockBingTimeZoneResult,
+  getMockBingTimeZoneTimeBetweenResult,
+} from 'js/utils/test-utils-search'
 
 describe('TimeZoneSearchResult: TimeZoneCity', () => {
+  const getMockProps = () => ({
+    item: getMockBingTimeZoneResult(),
+  })
+
   it('renders without error', () => {
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
@@ -383,5 +389,79 @@ describe('TimeZoneSearchResult: TimeZoneCity', () => {
         .render()
         .text()
     ).toEqual('Anchorage (UTC-8)')
+  })
+})
+
+describe('TimeZoneSearchResult: TimeZoneGeneralInfo', () => {
+  const getMockProps = () => ({
+    // May also be structured like `getMockBingTimeZoneInfoResult`.
+    item: getMockBingTimeZoneInfoMultipleZonesResult(),
+  })
+
+  it('renders without error', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+  })
+
+  it('returns the TimeZoneGeneralInfo component type', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(wrapper.type()).toEqual(TimeZoneGeneralInfo)
+  })
+})
+
+describe('TimeZoneSearchResult: TimeZoneDifference', () => {
+  const getMockProps = () => ({
+    // May also be structured like `getMockBingTimeZoneConversionNoSpecificTimeResult`.
+    item: getMockBingTimeZoneConversionResult(),
+  })
+
+  it('renders without error', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+  })
+
+  it('returns the TimeZoneDifference component type', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(wrapper.type()).toEqual(TimeZoneDifference)
+  })
+})
+
+describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
+  const getMockProps = () => ({
+    item: getMockBingTimeZoneTimeBetweenResult(),
+  })
+
+  it('renders without error', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+  })
+
+  it('returns the TimeZoneTimeBetween component type', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneTimeBetween,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(wrapper.type()).toEqual(TimeZoneTimeBetween)
   })
 })
