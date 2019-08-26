@@ -35,6 +35,21 @@ describe('TimeZoneSearchResult: TimeZoneCity', () => {
     expect(wrapper.type()).toEqual(TimeZoneCity)
   })
 
+  it('returns a Paper component as the root element', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
+    expect(wrapper.at(0).type()).toEqual(Paper)
+  })
+
   it('returns null if the "primaryCityTime.location" value is not provided', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
@@ -415,6 +430,21 @@ describe('TimeZoneSearchResult: TimeZoneGeneralInfo', () => {
     const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
     expect(wrapper.type()).toEqual(TimeZoneGeneralInfo)
   })
+
+  it('returns a Paper component as the root element', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.at(0).type()).toEqual(Paper)
+  })
 })
 
 describe('TimeZoneSearchResult: TimeZoneDifference', () => {
@@ -440,6 +470,21 @@ describe('TimeZoneSearchResult: TimeZoneDifference', () => {
     const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
     expect(wrapper.type()).toEqual(TimeZoneDifference)
   })
+
+  it('returns a Paper component as the root element', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    expect(wrapper.at(0).type()).toEqual(Paper)
+  })
 })
 
 describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
@@ -463,5 +508,20 @@ describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
     expect(wrapper.type()).toEqual(TimeZoneTimeBetween)
+  })
+
+  it('returns a Paper component as the root element', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneTimeBetween,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneTimeBetween)
+      .dive()
+    expect(wrapper.at(0).type()).toEqual(Paper)
   })
 })
