@@ -10,7 +10,7 @@ const getMockProps = () => ({
   item: getMockBingTimeZoneResult(),
 })
 
-describe('TimeZoneSearchResult', () => {
+describe('TimeZoneSearchResult: TimeZoneCity', () => {
   it('renders without error', () => {
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
@@ -18,13 +18,30 @@ describe('TimeZoneSearchResult', () => {
     shallow(<TimeZoneSearchResult {...mockProps} />).dive()
   })
 
+  it('returns the TimeZoneCity component type', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(wrapper.type()).toEqual(TimeZoneCity)
+  })
+
   it('returns null if the "primaryCityTime.location" value is not provided', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     delete mockProps.item.primaryCityTime.location
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -32,9 +49,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     delete mockProps.item.primaryCityTime.time
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -42,9 +65,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     delete mockProps.item.primaryCityTime.utcOffset
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -52,9 +81,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2015-10-23T15:27:59.8892745Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-time"]')
       .first()
@@ -65,9 +100,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2019-06-25T05:59:53.0114595Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-time"]')
       .first()
@@ -78,9 +119,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2015-10-23T15:27:59.8892745Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-time"]')
       .first()
@@ -92,9 +139,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2015-10-23T15:27:59.8892745Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-date"]')
       .first()
@@ -105,9 +158,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2019-06-25T05:59:53.0114595Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-date"]')
       .first()
@@ -118,9 +177,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.time = '2015-10-23T15:27:59.8892745Z'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-date"]')
       .first()
@@ -132,9 +197,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.location = 'Washington, D.C., United States'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-location"]')
       .first()
@@ -147,9 +218,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.primaryCityTime.location = 'Washington, D.C., United States'
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-location"]')
       .first()
@@ -161,9 +238,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.otherCityTimes = undefined
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(
       wrapper
         .find('[data-test-id="search-result-time-zone-other-locations"]')
@@ -175,9 +258,15 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.otherCityTimes = []
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(
       wrapper
         .find('[data-test-id="search-result-time-zone-other-locations"]')
@@ -189,6 +278,9 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.otherCityTimes = [
       {
@@ -202,7 +294,10 @@ describe('TimeZoneSearchResult', () => {
         utcOffset: 'UTC-8',
       },
     ]
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(
       wrapper
         .find('[data-test-id="search-result-time-zone-other-locations"]')
@@ -214,6 +309,9 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.otherCityTimes = [
       {
@@ -227,7 +325,10 @@ describe('TimeZoneSearchResult', () => {
         utcOffset: 'UTC-8',
       },
     ]
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     expect(
       wrapper
         .find('[data-test-id="search-result-time-zone-other-locations"]')
@@ -241,6 +342,9 @@ describe('TimeZoneSearchResult', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
+    const {
+      TimeZoneCity,
+    } = require('js/components/Search/TimeZoneSearchResult')
     const mockProps = getMockProps()
     mockProps.item.otherCityTimes = [
       {
@@ -254,7 +358,10 @@ describe('TimeZoneSearchResult', () => {
         utcOffset: 'UTC-8',
       },
     ]
-    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneCity)
+      .dive()
     const secondOtherCityTime = wrapper
       .find('[data-test-id="search-result-time-zone-other-locations"]')
       .children()

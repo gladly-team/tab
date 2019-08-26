@@ -32,7 +32,7 @@ const styles = () => ({
 })
 
 // E.g. query: "time in florida"
-const TimeZoneCity = props => {
+export const TimeZoneCity = props => {
   const {
     classes,
     item: {
@@ -48,11 +48,7 @@ const TimeZoneCity = props => {
   const formatDate = isoTime => moment.utc(isoTime).format('dddd, MMMM D, YYYY')
   const formatTime = isoTime => moment.utc(isoTime).format('h:mm A')
   return (
-    <Paper
-      data-test-id={'search-result-time-zone-city'}
-      className={classes.container}
-      elevation={1}
-    >
+    <Paper className={classes.container} elevation={1}>
       <Typography
         variant={'h4'}
         data-test-id={'search-result-time-zone-time'}
@@ -121,14 +117,10 @@ TimeZoneCity.propTypes = {
 TimeZoneCity.defaultProps = {}
 
 // TODO
-const TimeZoneGeneralInfo = props => {
+export const TimeZoneGeneralInfo = props => {
   const { classes } = props
   return (
-    <Paper
-      data-test-id={'search-result-time-zone-general-info'}
-      className={classes.container}
-      elevation={1}
-    >
+    <Paper className={classes.container} elevation={1}>
       TODO
     </Paper>
   )
@@ -142,14 +134,10 @@ TimeZoneGeneralInfo.propTypes = {
 TimeZoneGeneralInfo.defaultProps = {}
 
 // TODO
-const TimeZoneDifference = props => {
+export const TimeZoneDifference = props => {
   const { classes } = props
   return (
-    <Paper
-      data-test-id={'search-result-time-zone-difference'}
-      className={classes.container}
-      elevation={1}
-    >
+    <Paper className={classes.container} elevation={1}>
       TODO
     </Paper>
   )
@@ -163,14 +151,10 @@ TimeZoneDifference.propTypes = {
 TimeZoneDifference.defaultProps = {}
 
 // TODO
-const TimeZoneTimeBetween = props => {
+export const TimeZoneTimeBetween = props => {
   const { classes } = props
   return (
-    <Paper
-      data-test-id={'search-result-time-zone-time-between'}
-      className={classes.container}
-      elevation={1}
-    >
+    <Paper className={classes.container} elevation={1}>
       TODO
     </Paper>
   )
