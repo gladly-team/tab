@@ -57,6 +57,127 @@ export const getMockBingComputationResult = overrides => {
   )
 }
 
+// One of the possible configurations of the TimeZone answer.
+// Query: "days until september 6"
+export const getMockBingTimeZoneTimeBetweenResult = () => ({
+  description: 'There are 11 days from August 26, 2019 to September 6, 2019',
+  id: 'https://www.bingapis.com/api/v7/#TimeZone',
+  primaryResponse: '11 days',
+})
+
+// One of the possible configurations of the TimeZone answer.
+// Query: "3pm et in china"
+export const getMockBingTimeZoneConversionResult = () => ({
+  location1: {
+    location: 'Eastern Daylight Time',
+    time: '2019-08-26T15:00:00.0000000Z',
+    timeZoneName: 'EDT',
+    utcOffset: 'UTC-4',
+  },
+  location2: {
+    location: 'China',
+    time: '2019-08-27T03:00:00.0000000Z',
+    timeZoneName: 'China Standard Time',
+    utcOffset: 'UTC+8',
+  },
+  text: '',
+})
+
+// One of the possible configurations of the TimeZone answer.
+// Query: "central time to france"
+export const getMockBingTimeZoneConversionNoSpecificTimeResult = () => ({
+  description: 'Central Daylight Time is behind France by',
+  id: 'https://www.bingapis.com/api/v7/#TimeZone',
+  timeZoneDifference: {
+    location1: {
+      location: 'Central Daylight Time',
+      time: '2019-08-26T12:52:05.8751624Z',
+      timeZoneName: 'CDT',
+      utcOffset: 'UTC-5',
+    },
+    location2: {
+      location: 'France',
+      time: '2019-08-26T19:41:29.5291241Z',
+      utcOffset: 'UTC+2',
+      timeZoneName: 'CEST',
+    },
+  },
+  text: '7 hours',
+})
+
+// One of the possible configurations of the TimeZone answer.
+// Query: "china time zone"
+export const getMockBingTimeZoneInfoResult = () => ({
+  id: 'https://www.bingapis.com/api/v7/#TimeZone',
+  primaryTimeZone: {
+    location: 'China',
+    time: '2019-08-27T01:53:38.5529130Z',
+    timeZoneName: 'China Standard Time',
+    utcOffset: 'UTC+8',
+  },
+  location: 'China',
+  time: '2019-08-27T01:43:45.1172527Z',
+  timeZoneName: 'China Standard Time',
+  utcOffset: 'UTC+8',
+})
+
+// One of the possible configurations of the TimeZone answer.
+// Query: "what time zone united states"
+export const getMockBingTimeZoneInfoMultipleZonesResult = () => ({
+  id: 'https://www.bingapis.com/api/v7/#TimeZone',
+  primaryTimeZone: {
+    location: 'Washington, D.C., United States',
+    time: '2019-08-26T14:02:58.7860830Z',
+    utcOffset: 'UTC-4',
+    timeZoneName: 'Eastern Daylight Time',
+  },
+  otherTimeZones: [
+    {
+      location: 'Washington, D.C.',
+      time: '2019-08-26T14:02:58.7860830Z',
+      utcOffset: 'UTC-4',
+      timeZoneName: 'Eastern Daylight Time',
+    },
+    {
+      location: 'Chicago',
+      time: '2019-08-26T13:02:58.7860830Z',
+      utcOffset: 'UTC-5',
+      timeZoneName: 'Central Daylight Time',
+    },
+    {
+      location: 'Denver',
+      time: '2019-08-26T12:02:58.7860830Z',
+      utcOffset: 'UTC-6',
+      timeZoneName: 'Mountain Daylight Time',
+    },
+    {
+      location: 'Los Angeles',
+      time: '2019-08-26T11:02:58.7860830Z',
+      utcOffset: 'UTC-7',
+      timeZoneName: 'Pacific Daylight Time',
+    },
+    {
+      location: 'Phoenix',
+      time: '2019-08-26T11:02:58.7860830Z',
+      utcOffset: 'UTC-7',
+      timeZoneName: 'Mountain Standard Time',
+    },
+    {
+      location: 'Anchorage',
+      time: '2019-08-26T10:02:58.7860830Z',
+      utcOffset: 'UTC-8',
+      timeZoneName: 'Alaska Daylight Time',
+    },
+    {
+      location: 'Honolulu',
+      time: '2019-08-26T08:02:58.7870833Z',
+      utcOffset: 'UTC-10',
+      timeZoneName: 'Hawaii-Aleutian Standard Time',
+    },
+  ],
+})
+
+// The documented configuration of the TimeZone answer.
 export const getMockBingTimeZoneResult = overrides => {
   return Object.assign(
     {},
