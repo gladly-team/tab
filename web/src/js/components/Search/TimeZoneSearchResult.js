@@ -133,12 +133,32 @@ TimeZoneGeneralInfo.propTypes = {
 }
 TimeZoneGeneralInfo.defaultProps = {}
 
-// TODO
 export const TimeZoneDifference = props => {
-  const { classes } = props
+  const {
+    classes,
+    item: {
+      description,
+      timeZoneDifference: { location1, location2, text },
+    },
+  } = props
+  // TODO: display locations/times
   return (
     <Paper className={classes.container} elevation={1}>
-      TODO
+      {text ? (
+        <Typography
+          variant={'body2'}
+          data-test-id={'search-result-time-zone-difference-text'}
+          gutterBottom
+        >
+          {description}
+        </Typography>
+      ) : null}
+      <Typography
+        variant={'h4'}
+        data-test-id={'search-result-time-zone-difference-text'}
+      >
+        {text}
+      </Typography>
     </Paper>
   )
 }
@@ -146,6 +166,12 @@ TimeZoneDifference.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    timeZoneDifference: PropTypes.shape({
+      location1: TimeZoneInfoPropType.isRequired,
+      location2: TimeZoneInfoPropType.isRequired,
+      text: PropTypes.string,
+    }).isRequired,
   }).isRequired,
 }
 TimeZoneDifference.defaultProps = {}
@@ -220,10 +246,10 @@ TimeZoneSearchResult.propTypes = {
     primaryCityTime: TimeZoneInfoPropType,
     primaryResponse: PropTypes.string,
     primaryTimeZone: TimeZoneInfoPropType,
-    text: PropTypes.string,
     timeZoneDifference: PropTypes.shape({
-      location1: TimeZoneInfoPropType,
-      location2: TimeZoneInfoPropType,
+      location1: TimeZoneInfoPropType.isRequired,
+      location2: TimeZoneInfoPropType.isRequired,
+      text: PropTypes.string,
     }),
   }).isRequired,
 }

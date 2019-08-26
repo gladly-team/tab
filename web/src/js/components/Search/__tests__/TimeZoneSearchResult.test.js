@@ -445,6 +445,8 @@ describe('TimeZoneSearchResult: TimeZoneGeneralInfo', () => {
       .dive()
     expect(wrapper.at(0).type()).toEqual(Paper)
   })
+
+  // TODO: tests
 })
 
 describe('TimeZoneSearchResult: TimeZoneDifference', () => {
@@ -485,6 +487,8 @@ describe('TimeZoneSearchResult: TimeZoneDifference', () => {
       .dive()
     expect(wrapper.at(0).type()).toEqual(Paper)
   })
+
+  // TODO: tests
 })
 
 describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
