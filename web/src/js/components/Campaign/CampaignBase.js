@@ -122,7 +122,7 @@ class CampaignBase extends React.Component {
             >
               Sierra Club
             </a>{' '}
-            for our July{' '}
+            for our{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
