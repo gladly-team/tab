@@ -68,19 +68,23 @@ export const getMockBingTimeZoneTimeBetweenResult = () => ({
 // One of the possible configurations of the TimeZone answer.
 // Query: "3pm et in china"
 export const getMockBingTimeZoneConversionResult = () => ({
-  location1: {
-    location: 'Eastern Daylight Time',
-    time: '2019-08-26T15:00:00.0000000Z',
-    timeZoneName: 'EDT',
-    utcOffset: 'UTC-4',
+  id: 'https://www.bingapis.com/api/v7/#TimeZone',
+  description: 'Convert time zones',
+  timeZoneDifference: {
+    location1: {
+      location: 'Eastern Daylight Time',
+      time: '2019-08-26T15:00:00.0000000Z',
+      utcOffset: 'UTC-4',
+      timeZoneName: 'EDT',
+    },
+    location2: {
+      location: 'China',
+      time: '2019-08-27T03:00:00.0000000Z',
+      utcOffset: 'UTC+8',
+      timeZoneName: 'China Standard Time',
+    },
+    text: '',
   },
-  location2: {
-    location: 'China',
-    time: '2019-08-27T03:00:00.0000000Z',
-    timeZoneName: 'China Standard Time',
-    utcOffset: 'UTC+8',
-  },
-  text: '',
 })
 
 // One of the possible configurations of the TimeZone answer.
@@ -101,8 +105,8 @@ export const getMockBingTimeZoneConversionNoSpecificTimeResult = () => ({
       utcOffset: 'UTC+2',
       timeZoneName: 'CEST',
     },
+    text: '7 hours',
   },
-  text: '7 hours',
 })
 
 // One of the possible configurations of the TimeZone answer.
@@ -115,10 +119,6 @@ export const getMockBingTimeZoneInfoResult = () => ({
     timeZoneName: 'China Standard Time',
     utcOffset: 'UTC+8',
   },
-  location: 'China',
-  time: '2019-08-27T01:43:45.1172527Z',
-  timeZoneName: 'China Standard Time',
-  utcOffset: 'UTC+8',
 })
 
 // One of the possible configurations of the TimeZone answer.
