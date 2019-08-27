@@ -506,7 +506,132 @@ describe('TimeZoneSearchResult: TimeZoneGeneralInfo', () => {
     expect(wrapper.at(0).type()).toBeNull()
   })
 
-  // TODO: tests
+  it('displays the location and UTC offset as expected', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.location = 'Washington, D.C., United States'
+    mockProps.item.primaryTimeZone.utcOffset = 'UTC-4'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-time-zone-info-location"]'
+    )
+    expect(elem.render().text()).toEqual(
+      'Washington, D.C., United States (UTC-4)'
+    )
+    expect(elem.type()).toEqual(Typography)
+    expect(elem.prop('variant')).toEqual('body2')
+  })
+
+  it('displays the time zone name as expected', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.timeZoneName = 'Eastern Daylight Time'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-time-zone-info-name"]'
+    )
+    expect(elem.render().text()).toEqual('Eastern Daylight Time')
+    expect(elem.type()).toEqual(Typography)
+    expect(elem.prop('variant')).toEqual('h4')
+  })
+
+  it('does not display a Divider or table if there are no other time zones to show', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.otherTimeZones = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.find(Divider).exists()).toBe(false)
+    expect(wrapper.find('table').exists()).toBe(false)
+  })
+
+  it('displays a table of other time zones when they exist', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.otherTimeZones = [
+      {
+        location: 'Washington, D.C.',
+        time: '2019-08-26T14:02:58.7860830Z',
+        utcOffset: 'UTC-4',
+        timeZoneName: 'Eastern Daylight Time',
+      },
+      {
+        location: 'Chicago',
+        time: '2019-08-26T13:02:58.7860830Z',
+        utcOffset: 'UTC-5',
+        timeZoneName: 'Central Daylight Time',
+      },
+    ]
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    const tableRows = wrapper
+      .find('table')
+      .children()
+      .find('tr')
+    expect(tableRows.length).toEqual(2)
+    expect(
+      tableRows
+        .at(0)
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('UTC-4')
+    expect(
+      tableRows
+        .at(0)
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('Washington, D.C. (Eastern Daylight Time)')
+    expect(
+      tableRows
+        .at(1)
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('UTC-5')
+    expect(
+      tableRows
+        .at(1)
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('Chicago (Central Daylight Time)')
+  })
 })
 
 describe('TimeZoneSearchResult: TimeZoneDifference', () => {

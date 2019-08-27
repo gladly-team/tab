@@ -170,7 +170,7 @@ export const TimeZoneGeneralInfo = props => {
         {formatTime(time)}
       </Typography>
       {otherTimeZones.length ? (
-        <div data-test-id={'search-result-time-zone-info-other'}>
+        <div>
           <Divider className={classes.otherTimeZoneInfoDivider} />
           <table>
             <tbody>
