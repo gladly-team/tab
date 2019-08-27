@@ -33,6 +33,20 @@ const styles = () => ({
     margin: '0px 20px 0px 0px',
     color: 'rgba(0, 0, 0, 0.46)',
   },
+  timeZoneGeneralInfoTimeText: {
+    color: 'rgba(0, 0, 0, 0.46)',
+  },
+  otherTimeZoneInfoDivider: {
+    margin: '20px 0px',
+  },
+  otherTimeZoneInfoTime: {
+    color: 'rgba(0, 0, 0, 0.46)',
+    textAlign: 'right',
+  },
+  otherTimeZoneInfoLocation: {
+    color: 'rgba(0, 0, 0, 0.46)',
+    marginLeft: 20,
+  },
 })
 
 const formatDate = isoTime => moment.utc(isoTime).format('dddd, MMMM D, YYYY')
@@ -121,12 +135,70 @@ TimeZoneCity.propTypes = {
 
 TimeZoneCity.defaultProps = {}
 
-// TODO
 export const TimeZoneGeneralInfo = props => {
-  const { classes } = props
+  const {
+    classes,
+    item: {
+      primaryTimeZone: { location, time, timeZoneName, utcOffset } = {},
+      otherTimeZones = [],
+    } = {},
+  } = props
   return (
     <Paper className={classes.container} elevation={1}>
-      TODO
+      <Typography
+        variant={'body2'}
+        data-test-id={'search-result-time-zone-info-location'}
+        gutterBottom
+      >
+        {location} ({utcOffset})
+      </Typography>
+      <Typography
+        variant={'h4'}
+        data-test-id={'search-result-time-zone-info-name'}
+        gutterBottom
+      >
+        {timeZoneName}
+      </Typography>
+      <Typography
+        variant={'body2'}
+        className={classes.timeZoneGeneralInfoTimeText}
+        gutterBottom
+      >
+        {formatTime(time)}
+      </Typography>
+      {otherTimeZones.length ? (
+        <div data-test-id={'search-result-time-zone-info-other'}>
+          <Divider className={classes.otherTimeZoneInfoDivider} />
+          <table>
+            <tbody>
+              {otherTimeZones.map(tzInfo => {
+                return (
+                  <tr key={tzInfo.location}>
+                    <td>
+                      <Typography
+                        variant={'body2'}
+                        className={classes.otherTimeZoneInfoTime}
+                        gutterBottom
+                      >
+                        {tzInfo.utcOffset}
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography
+                        variant={'body2'}
+                        className={classes.otherTimeZoneInfoLocation}
+                        gutterBottom
+                      >
+                        {tzInfo.location} ({tzInfo.timeZoneName})
+                      </Typography>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
     </Paper>
   )
 }
@@ -134,6 +206,7 @@ TimeZoneGeneralInfo.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    primaryTimeZone: TimeZoneInfoPropType.isRequired,
   }).isRequired,
 }
 TimeZoneGeneralInfo.defaultProps = {}
