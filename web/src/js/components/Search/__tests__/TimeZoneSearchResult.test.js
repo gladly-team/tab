@@ -488,7 +488,235 @@ describe('TimeZoneSearchResult: TimeZoneDifference', () => {
     expect(wrapper.at(0).type()).toEqual(Paper)
   })
 
-  // TODO: tests
+  it('returns null if the description is not provided', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.description = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    expect(wrapper.at(0).type()).toBeNull()
+  })
+
+  it('displays the description text', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.description = 'Convert time zones!! :o'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-time-zone-difference-description"]'
+    )
+    expect(elem.render().text()).toEqual('Convert time zones!! :o')
+  })
+
+  it('displays the description text as a h6 Typography element when there is no timeZoneDifference.text value or an h6 otherwise', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+
+    // Render without a timeZoneDifference.text value.
+    const mockProps = getMockProps()
+    mockProps.item.description = 'Convert time zones!!'
+    delete mockProps.item.timeZoneDifference.text
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-time-zone-difference-description"]'
+    )
+    expect(elem.type()).toEqual(Typography)
+    expect(elem.prop('variant')).toEqual('h6')
+
+    // Render with a timeZoneDifference.text value.
+    wrapper.setProps({
+      item: {
+        ...mockProps.item,
+        timeZoneDifference: {
+          ...mockProps.item.timeZoneDifference,
+          text: '32 days',
+        },
+      },
+    })
+
+    const elemAgain = wrapper.find(
+      '[data-test-id="search-result-time-zone-difference-description"]'
+    )
+    expect(elemAgain.type()).toEqual(Typography)
+    expect(elemAgain.prop('variant')).toEqual('body2')
+  })
+
+  it('displays the timeZoneDifference text as an h4 Typography element', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.timeZoneDifference.text = '423 years'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-time-zone-difference-text"]'
+    )
+    expect(elem.render().text()).toEqual('423 years')
+    expect(elem.type()).toEqual(Typography)
+    expect(elem.prop('variant')).toEqual('h4')
+  })
+
+  it('sets a bottom gutter on the timeZoneDifference text if location data is provided and not otherwise', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+
+    // Render with location data.
+    const mockProps = getMockProps()
+    mockProps.item.timeZoneDifference.text = '423 years'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-difference-text"]')
+        .prop('gutterBottom')
+    ).toBe(true)
+
+    // Render with some location data missing.
+    wrapper.setProps({
+      item: {
+        ...mockProps.item,
+        timeZoneDifference: {
+          ...mockProps.item.timeZoneDifference,
+          location1: undefined,
+        },
+      },
+    })
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-difference-text"]')
+        .prop('gutterBottom')
+    ).toBe(false)
+  })
+
+  it('displays the timeZoneDifference location data in a table when it exists', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = {
+      ...getMockProps(),
+      timeZoneDifference: {
+        location1: {
+          location: 'Eastern Daylight Time',
+          time: '2019-08-26T15:00:00.0000000Z',
+          utcOffset: 'UTC-4',
+          timeZoneName: 'EDT',
+        },
+        location2: {
+          location: 'China',
+          time: '2019-08-27T03:00:00.0000000Z',
+          utcOffset: 'UTC+8',
+          timeZoneName: 'China Standard Time',
+        },
+        text: '',
+      },
+    }
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    const table = wrapper.find('table')
+    expect(
+      table
+        .find(Typography)
+        .at(0)
+        .render()
+        .text()
+    ).toEqual('Eastern Daylight Time (EDT)')
+    expect(
+      table
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('China (China Standard Time)')
+    expect(
+      table
+        .find(Typography)
+        .at(2)
+        .render()
+        .text()
+    ).toEqual('3:00 PM')
+    expect(
+      table
+        .find(Typography)
+        .at(3)
+        .render()
+        .text()
+    ).toEqual('3:00 AM')
+  })
+
+  it('does not display a table when some timeZoneDifference location data is missing', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneDifference,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const initialProps = getMockProps()
+    const mockProps = {
+      ...initialProps,
+      item: {
+        ...initialProps.item,
+        timeZoneDifference: {
+          location1: {
+            location: 'Eastern Daylight Time',
+            // time: '2019-08-26T15:00:00.0000000Z', // missing
+            utcOffset: 'UTC-4',
+            timeZoneName: 'EDT',
+          },
+          location2: {
+            // location: 'China', // missing
+            time: '2019-08-27T03:00:00.0000000Z',
+            utcOffset: 'UTC+8',
+            timeZoneName: 'China Standard Time',
+          },
+          text: '',
+        },
+      },
+    }
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneDifference)
+      .dive()
+    expect(wrapper.find('table').exists()).toBe(false)
+  })
 })
 
 describe('TimeZoneSearchResult: TimeZoneTimeBetween', () => {
