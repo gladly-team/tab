@@ -143,6 +143,9 @@ export const TimeZoneGeneralInfo = props => {
       otherTimeZones = [],
     } = {},
   } = props
+  if (!(location && time && timeZoneName && utcOffset)) {
+    return null
+  }
   return (
     <Paper className={classes.container} elevation={1}>
       <Typography

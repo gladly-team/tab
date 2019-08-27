@@ -446,6 +446,66 @@ describe('TimeZoneSearchResult: TimeZoneGeneralInfo', () => {
     expect(wrapper.at(0).type()).toEqual(Paper)
   })
 
+  it('returns null if primaryTimeZone.location is not provided', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.location = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.at(0).type()).toBeNull()
+  })
+
+  it('returns null if primaryTimeZone.time is not provided', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.time = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.at(0).type()).toBeNull()
+  })
+
+  it('returns null if primaryTimeZone.timeZoneName is not provided', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.timeZoneName = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.at(0).type()).toBeNull()
+  })
+
+  it('returns null if primaryTimeZone.utcOffset is not provided', () => {
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const {
+      TimeZoneGeneralInfo,
+    } = require('js/components/Search/TimeZoneSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.primaryTimeZone.utcOffset = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />)
+      .dive()
+      .find(TimeZoneGeneralInfo)
+      .dive()
+    expect(wrapper.at(0).type()).toBeNull()
+  })
+
   // TODO: tests
 })
 
