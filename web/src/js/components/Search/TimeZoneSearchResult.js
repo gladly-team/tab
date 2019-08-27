@@ -29,7 +29,14 @@ const styles = () => ({
     color: 'rgba(0, 0, 0, 0.46)',
     marginLeft: 20,
   },
+  timeZoneDifferenceZoneText: {
+    margin: '0px 20px 0px 0px',
+    color: 'rgba(0, 0, 0, 0.46)',
+  },
 })
+
+const formatDate = isoTime => moment.utc(isoTime).format('dddd, MMMM D, YYYY')
+const formatTime = isoTime => moment.utc(isoTime).format('h:mm A')
 
 // E.g. query: "time in florida"
 export const TimeZoneCity = props => {
@@ -45,8 +52,6 @@ export const TimeZoneCity = props => {
   if (!(location && utcOffset && time)) {
     return null
   }
-  const formatDate = isoTime => moment.utc(isoTime).format('dddd, MMMM D, YYYY')
-  const formatTime = isoTime => moment.utc(isoTime).format('h:mm A')
   return (
     <Paper className={classes.container} elevation={1}>
       <Typography
@@ -141,24 +146,84 @@ export const TimeZoneDifference = props => {
       timeZoneDifference: { location1, location2, text },
     },
   } = props
-  // TODO: display locations/times
+
+  // If a required prop is not provided, return null.
+  if (!description) {
+    return null
+  }
+
+  const hasLocationInfo = !!(
+    location1 &&
+    location1.location &&
+    location1.time &&
+    location1.timeZoneName &&
+    location2 &&
+    location2.location &&
+    location2.time &&
+    location2.timeZoneName
+  )
   return (
     <Paper className={classes.container} elevation={1}>
+      <Typography
+        variant={text ? 'body2' : 'h6'}
+        data-test-id={'search-result-time-zone-difference-description'}
+        gutterBottom
+      >
+        {description}
+      </Typography>
       {text ? (
         <Typography
-          variant={'body2'}
+          variant={'h4'}
           data-test-id={'search-result-time-zone-difference-text'}
-          gutterBottom
+          gutterBottom={hasLocationInfo}
         >
-          {description}
+          {text}
         </Typography>
       ) : null}
-      <Typography
-        variant={'h4'}
-        data-test-id={'search-result-time-zone-difference-text'}
-      >
-        {text}
-      </Typography>
+      {hasLocationInfo ? (
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <Typography
+                  variant={'body2'}
+                  className={classes.timeZoneDifferenceZoneText}
+                  gutterBottom
+                >
+                  {location1.location} ({location1.timeZoneName})
+                </Typography>
+              </td>
+              <td>
+                <Typography
+                  variant={'body2'}
+                  className={classes.timeZoneDifferenceZoneText}
+                  gutterBottom
+                >
+                  {location2.location} ({location2.timeZoneName})
+                </Typography>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography
+                  variant={'body2'}
+                  className={classes.timeZoneDifferenceZoneText}
+                >
+                  {formatTime(location1.time)}
+                </Typography>
+              </td>
+              <td>
+                <Typography
+                  variant={'body2'}
+                  className={classes.timeZoneDifferenceZoneText}
+                >
+                  {formatTime(location2.time)}
+                </Typography>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      ) : null}
     </Paper>
   )
 }
