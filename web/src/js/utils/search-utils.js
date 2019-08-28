@@ -73,13 +73,24 @@ export const getBingThumbnailURLToFillDimensions = (
     return thumbnailURL
   }
 
-  const url = new URL(thumbnailURL)
-  url.searchParams.set('w', desiredDimensions.width)
-  url.searchParams.set('h', desiredDimensions.height)
+  var finalURL
+  try {
+    const url = new URL(thumbnailURL)
+    url.searchParams.set('w', desiredDimensions.width)
+    url.searchParams.set('h', desiredDimensions.height)
 
-  // Crop the image using "smart ratio" cropping.
-  url.searchParams.set('c', 7)
-  return url.href
+    // Crop the image using "smart ratio" cropping.
+    url.searchParams.set('c', 7)
+    finalURL = url.href
+  } catch (e) {
+    // Fall back on just appending params manually if the browser doesn't
+    // support URLSearchParams.
+    finalURL = `${thumbnailURL}&w=${desiredDimensions.width}&h=${
+      desiredDimensions.height
+    }&c=7`
+  }
+
+  return finalURL
 }
 
 /**
