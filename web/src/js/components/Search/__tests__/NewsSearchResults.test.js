@@ -182,6 +182,17 @@ describe('NewsSearchItem', () => {
     expect(elem.exists()).toBe(false)
   })
 
+  it('does not display the image (or throw an error) when the image URL is undefined', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image.thumbnail.contentUrl = undefined
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-news-img-container"]'
+    )
+    expect(elem.exists()).toBe(false)
+  })
+
   it('displays the image in an anchor tag', () => {
     const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
     const mockProps = getMockNewsStoryProps()
