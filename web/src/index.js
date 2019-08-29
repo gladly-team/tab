@@ -18,7 +18,7 @@ try {
     // https://github.com/getsentry/raven-js/issues/723
     // https://docs.sentry.io/clients/javascript/config/
     autoBreadcrumbs: sentryEnableAutoBreadcrumbs,
-    ignoreErrors: ['/^AbortError: The operation was aborted.$/'],
+    ignoreErrors: [/^AbortError/],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
       /tab\.gladly\.io\/newtab\/static/,
