@@ -132,7 +132,7 @@ export const NewsSearchItem = props => {
       url,
     },
   } = props
-  // console.log('news item', props.item)
+  const hasImage = !!get(image, 'thumbnail.contentUrl')
 
   // If the title or description are too long, slice them
   // and add ellipses.
@@ -149,7 +149,7 @@ export const NewsSearchItem = props => {
       className={classes.newsItem}
       data-test-id={'search-result-news-container'}
     >
-      {image ? (
+      {hasImage ? (
         <a
           href={url}
           className={classes.newsItemImgAnchor}
@@ -179,7 +179,7 @@ export const NewsSearchItem = props => {
           </h3>
         </a>
         {// Only show the description if there is no image.
-        image ? null : (
+        hasImage ? null : (
           <div className={classes.newsItemDescriptionContainer}>
             <p
               className={classes.newsItemDescription}

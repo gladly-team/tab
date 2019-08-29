@@ -67,6 +67,16 @@ describe('getSearchProvider', () => {
 })
 
 describe('getBingThumbnailURLToFillDimensions', () => {
+  var windowURLClass
+
+  beforeAll(() => {
+    windowURLClass = window.URL
+  })
+
+  afterEach(() => {
+    window.URL = windowURLClass
+  })
+
   it('returns an unmodified URL when desiredDimensions is not defined', () => {
     const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
     const desiredDimensions = undefined
@@ -87,6 +97,18 @@ describe('getBingThumbnailURLToFillDimensions', () => {
     expect(
       getBingThumbnailURLToFillDimensions(mockURL, desiredDimensions)
     ).toEqual(mockURL)
+  })
+
+  it('returns an the expected URL even when url.searchParams is not defined', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const desiredDimensions = { width: 300, height: 500 }
+    jest.spyOn(window, 'URL').mockImplementation(() => undefined)
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(mockURL, desiredDimensions)
+    ).toEqual('https://www.bing.com/th?id=abcdefg&pid=News&w=300&h=500&c=7')
   })
 
   it('returns the expected URL when the desired space is 3x the image and a different ratio', () => {
