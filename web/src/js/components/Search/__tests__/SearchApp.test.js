@@ -160,6 +160,17 @@ describe('SearchApp', () => {
     expect(route.prop('component')).toBe(SearchRandomQueryView)
   })
 
+  it('contains the "first search" route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/first-search/')
+    expect(route.exists()).toBe(true)
+
+    // TODO: test the component type when Enzyme fully supports React.lazy
+  })
+
   it('contains the "profile" route', async () => {
     const SearchApp = require('js/components/Search/SearchApp').default
     const wrapper = shallow(<SearchApp />)
