@@ -25,7 +25,7 @@ import {
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
-import { parseUrlSearchString } from 'js/utils/utils'
+import { makePromiseCancelable, parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
 import {
@@ -105,6 +105,8 @@ class SearchPage extends React.Component {
       searchText: '',
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
+
+    this.isExtInstalledCancelablePromise = null
   }
 
   componentDidMount() {
@@ -153,16 +155,31 @@ class SearchPage extends React.Component {
         console.error(e)
       })
 
-    // TODO: make cancelable
-    isSearchExtensionInstalled()
+    // Check if the Search extension is installed.
+    this.isExtInstalledCancelablePromise = makePromiseCancelable(
+      isSearchExtensionInstalled()
+    )
+    this.isExtInstalledCancelablePromise.promise
       .then(isInstalled => {
         this.setState({
           isSearchExtensionInstalled: isInstalled,
         })
       })
       .catch(e => {
+        if (e && e.isCanceled) {
+          return
+        }
         logger.error(e)
       })
+  }
+
+  componentWillUnmount() {
+    if (
+      this.isExtInstalledCancelablePromise &&
+      this.isExtInstalledCancelablePromise.cancel
+    ) {
+      this.isExtInstalledCancelablePromise.cancel()
+    }
   }
 
   componentDidUpdate(prevProps) {

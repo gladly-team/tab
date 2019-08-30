@@ -41,6 +41,7 @@ import {
   isSearchExtensionInstalled,
 } from 'js/utils/search-utils'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import logger from 'js/utils/logger'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -54,6 +55,7 @@ jest.mock('js/components/General/Link')
 jest.mock('js/components/Search/WikipediaQuery')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/detectBrowser')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   user: {
@@ -453,6 +455,36 @@ describe('Search page component', () => {
     expect(
       newWrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
     ).toEqual(true)
+  })
+
+  it('does not log an error if isSearchExtensionInstalled resolves after the component has unmounted', async () => {
+    expect.assertions(1)
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+
+    // Mock that the extension message response takes some time.
+    jest.useFakeTimers()
+    isSearchExtensionInstalled.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the Wikipedia request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
   })
 })
 
