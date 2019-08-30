@@ -135,8 +135,17 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
  * @return {Promise<Boolean>} Whether the extension is installed
  */
 const extensionRespondedToPing = async () => {
-  // TODO
-  return new Promise(resolve => setTimeout(() => resolve(false), 3000))
+  return new Promise(resolve => {
+    try {
+      const maxMsToWait = 200
+      setTimeout(() => resolve(false), maxMsToWait)
+
+      // TODO: message the extension
+    } catch (e) {
+      // If there's any error, just return false.
+      resolve(false)
+    }
+  })
 }
 
 /**
@@ -148,35 +157,44 @@ const extensionRespondedToPing = async () => {
  * @return {Promise<Boolean>} Whether the extension is installed
  */
 export const isSearchExtensionInstalled = async () => {
+  // If we already detected the extension, just return true.
   const detectedExtPreviously = !!get(
     window,
     'searchforacause.extension.isInstalled'
   )
-  let isInstalled = false
-  if (!detectedExtPreviously) {
-    // TODO: message the extension
-
-    const urlParams = getUrlParameters()
-    const searchSrc = urlParams.src
-    const browser = detectSupportedBrowser()
-    const isSearchFromExt =
-      (browser === CHROME_BROWSER &&
-        searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
-      (browser === FIREFOX_BROWSER &&
-        searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
-
-    // If there is no search query, let's say the extension is
-    // installed even if we're not sure. This avoids showing the
-    // "Add extension" button at inopportune times, like right after
-    // we send the user to the search page after sign-in without any
-    // URL parameter values set.
-    const hasSearchQuery = !!urlParams.q
-    isInstalled = !hasSearchQuery || isSearchFromExt
-    if (isInstalled) {
-      set(window, 'searchforacause.extension.isInstalled', true)
-    }
+  if (detectedExtPreviously) {
+    return true
   }
-  return detectedExtPreviously || isInstalled
+
+  // Message the extension and return true if the extension
+  // responds to the message
+  const extensionResponded = await extensionRespondedToPing()
+  if (extensionResponded) {
+    set(window, 'searchforacause.extension.isInstalled', true)
+    return true
+  }
+
+  // If the extension did not respond, do our best to guess
+  // whether the extension is installed. This will happen if the
+  // browser does not support extension messaging.
+  const urlParams = getUrlParameters()
+  const searchSrc = urlParams.src
+  const browser = detectSupportedBrowser()
+  const isSearchFromExt =
+    (browser === CHROME_BROWSER && searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
+    (browser === FIREFOX_BROWSER && searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
+
+  // If there is no search query, let's say the extension is
+  // installed even if we're not sure. This avoids showing the
+  // "Add extension" button at inopportune times, like right after
+  // we send the user to the search page after sign-in without any
+  // URL parameter values set.
+  const hasSearchQuery = !!urlParams.q
+  const isInstalled = !hasSearchQuery || isSearchFromExt
+  if (isInstalled) {
+    set(window, 'searchforacause.extension.isInstalled', true)
+  }
+  return isInstalled
 }
 
 /**
