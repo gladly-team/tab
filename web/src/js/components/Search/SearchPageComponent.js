@@ -107,6 +107,7 @@ class SearchPage extends React.Component {
     }
 
     this.isExtInstalledCancelablePromise = null
+    this.detectAdblockerCancelablePromise = null
   }
 
   componentDidMount() {
@@ -143,15 +144,20 @@ class SearchPage extends React.Component {
       showIntroMessage: !hasUserDismissedSearchIntro(),
     })
 
-    // TODO: make cancelable
     // AdBlockerDetection
-    detectAdblocker()
+    this.detectAdblockerCancelablePromise = makePromiseCancelable(
+      detectAdblocker()
+    )
+    this.detectAdblockerCancelablePromise.promise
       .then(isEnabled => {
         this.setState({
           isAdBlockerEnabled: isEnabled,
         })
       })
       .catch(e => {
+        if (e && e.isCanceled) {
+          return
+        }
         console.error(e)
       })
 
@@ -174,11 +180,18 @@ class SearchPage extends React.Component {
   }
 
   componentWillUnmount() {
+    // Cancel any pending promises.
     if (
       this.isExtInstalledCancelablePromise &&
       this.isExtInstalledCancelablePromise.cancel
     ) {
       this.isExtInstalledCancelablePromise.cancel()
+    }
+    if (
+      this.detectAdblockerCancelablePromise &&
+      this.detectAdblockerCancelablePromise.cancel
+    ) {
+      this.detectAdblockerCancelablePromise.cancel()
     }
   }
 

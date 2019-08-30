@@ -457,6 +457,36 @@ describe('Search page component', () => {
     ).toEqual(true)
   })
 
+  it('does not log an error if detectAdblocker resolves after the component has unmounted', async () => {
+    expect.assertions(1)
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+
+    // Mock that the detection takes some time.
+    jest.useFakeTimers()
+    detectAdblocker.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the async function resolves.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
   it('does not log an error if isSearchExtensionInstalled resolves after the component has unmounted', async () => {
     expect.assertions(1)
     isSearchPageEnabled.mockReturnValue(true)
