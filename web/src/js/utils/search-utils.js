@@ -127,20 +127,35 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
 }
 
 /**
+ * Message the extension, if possible, to confirm definitively
+ * whether it is installed. Firefox extensions don't support this
+ * kind of messaging yet:
+ * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/externally_connectable
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=1319168
+ * @return {Promise<Boolean>} Whether the extension is installed
+ */
+const extensionRespondedToPing = async () => {
+  // TODO
+  return new Promise(resolve => setTimeout(() => resolve(false), 3000))
+}
+
+/**
  * Determine if the search browser extension is currently
  * installed in the browser. This is a best-guess of whether
  * the extension is installed, because we don't yet support
  * messaging the extension directly. See:
  * https://github.com/gladly-team/tab/issues/616
- * @return {Boolean} Whether the extension is installed
+ * @return {Promise<Boolean>} Whether the extension is installed
  */
-export const isSearchExtensionInstalled = () => {
+export const isSearchExtensionInstalled = async () => {
   const detectedExtPreviously = !!get(
     window,
     'searchforacause.extension.isInstalled'
   )
   let isInstalled = false
   if (!detectedExtPreviously) {
+    // TODO: message the extension
+
     const urlParams = getUrlParameters()
     const searchSrc = urlParams.src
     const browser = detectSupportedBrowser()

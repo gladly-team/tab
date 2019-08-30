@@ -51,6 +51,7 @@ import {
 } from 'js/constants'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import Footer from 'js/components/General/Footer'
+import logger from 'js/utils/logger'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -95,7 +96,7 @@ class SearchPage extends React.Component {
       browser: null,
       showIntroMessage: false,
       isAdBlockerEnabled: false,
-      isSearchExtensionInstalled: false,
+      isSearchExtensionInstalled: true, // assume installed until confirmed
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       defaultSearchProvider: getSearchProvider(),
@@ -133,7 +134,6 @@ class SearchPage extends React.Component {
       // from state if we switch to server-side rendering.
       mounted: true, // in other words, this is not React Snap prerendering
       browser: detectSupportedBrowser(),
-      isSearchExtensionInstalled: isSearchExtensionInstalled(),
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
       searchSource: parseUrlSearchString(location.search).src || null,
@@ -141,6 +141,7 @@ class SearchPage extends React.Component {
       showIntroMessage: !hasUserDismissedSearchIntro(),
     })
 
+    // TODO: make cancelable
     // AdBlockerDetection
     detectAdblocker()
       .then(isEnabled => {
@@ -150,6 +151,17 @@ class SearchPage extends React.Component {
       })
       .catch(e => {
         console.error(e)
+      })
+
+    // TODO: make cancelable
+    isSearchExtensionInstalled()
+      .then(isInstalled => {
+        this.setState({
+          isSearchExtensionInstalled: isInstalled,
+        })
+      })
+      .catch(e => {
+        logger.error(e)
       })
   }
 
