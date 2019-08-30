@@ -7,6 +7,10 @@ import { getUrlParameters } from 'js/utils/utils'
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/utils/utils')
 
+beforeAll(() => {
+  process.env.REACT_APP_SEARCH_EXT_ID_CHROME = 'abc-fake-extension-id'
+})
+
 beforeEach(() => {
   window.searchforacause = getDefaultSearchGlobal()
   getUrlParameters.mockReturnValue({
@@ -224,11 +228,35 @@ describe('getSearchResultCountPerPage', () => {
 })
 
 describe('isSearchExtensionInstalled', () => {
+  const setExtensionResponse = shouldRespond => {
+    if (shouldRespond) {
+      // Mock that the extension responds with data.
+      jest
+        .spyOn(window.chrome.runtime, 'sendMessage')
+        .mockImplementation((extId, msg, callback) => {
+          window.chrome.runtime.lastError = undefined
+          callback({ installed: true })
+        })
+    } else {
+      // Mock that there is no response from messaging the extension.
+      jest
+        .spyOn(window.chrome.runtime, 'sendMessage')
+        .mockImplementation((extId, msg, callback) => {
+          window.chrome.runtime.lastError =
+            'Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.'
+          callback(undefined)
+        })
+    }
+  }
+
   beforeEach(() => {
     window.searchforacause.extension.isInstalled = false
+
+    // Mock that there is no response from messaging the extension.
+    setExtensionResponse(false)
   })
 
-  it('returns false if window.searchforacause is not defined and the "q" URL param has a value', async () => {
+  it('[no-ext-msg] returns false if window.searchforacause is not defined and the "q" URL param has a value', async () => {
     expect.assertions(1)
     delete window.searchforacause
     getUrlParameters.mockReturnValue({
@@ -238,7 +266,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(false)
   })
 
-  it('returns false if window.searchforacause.extension.isInstalled is false', async () => {
+  it('[no-ext-msg] returns false if window.searchforacause.extension.isInstalled is false', async () => {
     expect.assertions(1)
     window.searchforacause.extension.isInstalled = false
     getUrlParameters.mockReturnValue({
@@ -248,7 +276,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(false)
   })
 
-  it('returns true if window.searchforacause.extension.isInstalled is true', async () => {
+  it('[no-ext-msg] returns true if window.searchforacause.extension.isInstalled is true', async () => {
     expect.assertions(1)
     window.searchforacause.extension.isInstalled = true
     getUrlParameters.mockReturnValue({
@@ -258,7 +286,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(true)
   })
 
-  it('returns false if the search "src" URL param is null and a "q" URL param has a value', async () => {
+  it('[no-ext-msg] returns false if the search "src" URL param is null and a "q" URL param has a value', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
       q: 'coffee',
@@ -269,7 +297,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(false)
   })
 
-  it('returns true when the "q" URL param does not have value, even if the "src" URL param is not defined', async () => {
+  it('[no-ext-msg] returns true when the "q" URL param does not have value, even if the "src" URL param is not defined', async () => {
     expect.assertions(1)
     window.searchforacause.extension.isInstalled = false
     getUrlParameters.mockReturnValue({
@@ -281,7 +309,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(true)
   })
 
-  it('returns true if the search "src" URL param is Chrome and the browser is Chrome, even when window.searchforacause.extension.isInstalled is false', async () => {
+  it('[no-ext-msg] returns true if the search "src" URL param is Chrome and the browser is Chrome, even when window.searchforacause.extension.isInstalled is false', async () => {
     expect.assertions(1)
     window.searchforacause.extension.isInstalled = false
     getUrlParameters.mockReturnValue({
@@ -293,7 +321,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(true)
   })
 
-  it('returns true if the search "src" URL param is Firefox and the browser is Firefox, even when window.searchforacause.extension.isInstalled is false', async () => {
+  it('[no-ext-msg] returns true if the search "src" URL param is Firefox and the browser is Firefox, even when window.searchforacause.extension.isInstalled is false', async () => {
     expect.assertions(1)
     window.searchforacause.extension.isInstalled = false
     getUrlParameters.mockReturnValue({
@@ -305,7 +333,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(true)
   })
 
-  it('returns false if the search "src" URL param is Firefox but the browser is Chrome', async () => {
+  it('[no-ext-msg] returns false if the search "src" URL param is Firefox but the browser is Chrome', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
       q: 'coffee',
@@ -316,7 +344,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(false)
   })
 
-  it('returns false if the search "src" URL param is "self" but the browser is Chrome', async () => {
+  it('[no-ext-msg] returns false if the search "src" URL param is "self" but the browser is Chrome', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
       q: 'coffee',
@@ -327,7 +355,7 @@ describe('isSearchExtensionInstalled', () => {
     return expect(isSearchExtensionInstalled()).resolves.toBe(false)
   })
 
-  it('sets window.searchforacause.extension.isInstalled to true when the search source browser extension matches the browser', async () => {
+  it('[no-ext-msg] sets window.searchforacause.extension.isInstalled to true when the search source browser extension matches the browser', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
       q: 'coffee',
@@ -339,13 +367,133 @@ describe('isSearchExtensionInstalled', () => {
     expect(window.searchforacause.extension.isInstalled).toBe(true)
   })
 
-  it('sets window.searchforacause.extension.isInstalled to true when the "q" URL parameter is null', async () => {
+  it('[no-ext-msg] sets window.searchforacause.extension.isInstalled to true when the "q" URL parameter is null', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
       q: null,
       src: null,
     })
     detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] calls chrome.runtime.sendMessage with the expected extension ID and message', async () => {
+    expect.assertions(1)
+    setExtensionResponse(true)
+    getUrlParameters.mockReturnValue({
+      q: null,
+      src: null,
+    })
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.chrome.runtime.sendMessage).toHaveBeenCalledWith(
+      'abc-fake-extension-id',
+      { message: 'ping' },
+      expect.any(Function)
+    )
+  })
+
+  it('[ext-msg] returns true if the extension responds and the "q" and "src" URL params do not have values', async () => {
+    expect.assertions(1)
+    setExtensionResponse(true)
+    getUrlParameters.mockReturnValue({
+      q: null,
+      src: null,
+    })
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] sets window.searchforacause.extension.isInstalled to true when the extension responds', async () => {
+    expect.assertions(1)
+    setExtensionResponse(true)
+    getUrlParameters.mockReturnValue({
+      q: null,
+      src: null,
+    })
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] returns true if the extension responds, even when the search "src" URL param is Firefox but the browser is Chrome', async () => {
+    expect.assertions(1)
+    setExtensionResponse(true)
+    getUrlParameters.mockReturnValue({
+      q: 'pizza',
+      src: 'chrome',
+    })
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] returns true if the extension responds, even when the search "src" URL param is not set', async () => {
+    expect.assertions(1)
+    setExtensionResponse(true)
+    getUrlParameters.mockReturnValue({
+      q: 'pizza',
+      src: null,
+    })
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] returns false if messaging the extension throws an error when the "src" URL param is has no value and the "q" URL param has a value', async () => {
+    expect.assertions(1)
+
+    // Mock that the chrome.runtime.sendMessage throws.
+    jest.spyOn(window.chrome.runtime, 'sendMessage').mockImplementation(() => {
+      throw new Error('This is not a Chrome browser, yo.')
+    })
+
+    getUrlParameters.mockReturnValue({
+      q: 'pizza',
+      src: null,
+    })
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(false)
+  })
+
+  it('[ext-msg] returns true if messaging the extension throws an error, but when the "src" URL param is matches the browser and the "q" URL param has a value', async () => {
+    expect.assertions(1)
+
+    // Mock that the chrome.runtime.sendMessage throws.
+    jest.spyOn(window.chrome.runtime, 'sendMessage').mockImplementation(() => {
+      throw new Error('This is not a Chrome browser, yo.')
+    })
+
+    getUrlParameters.mockReturnValue({
+      q: 'pizza',
+      src: 'chrome',
+    })
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    await isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
+  })
+
+  it('[ext-msg] returns true if messaging the extension takes too long, but when the "src" URL param is matches the browser and the "q" URL param has a value', async () => {
+    expect.assertions(1)
+
+    // Mock that the chrome.runtime.sendMessage takes a long time to respond
+    jest.spyOn(window.chrome.runtime, 'sendMessage').mockImplementation(() => {
+      // Don't respond at all.
+    })
+
+    getUrlParameters.mockReturnValue({
+      q: 'pizza',
+      src: 'chrome',
+    })
+    detectSupportedBrowser.mockReturnValue('chrome')
     const { isSearchExtensionInstalled } = require('js/utils/search-utils')
     await isSearchExtensionInstalled()
     expect(window.searchforacause.extension.isInstalled).toBe(true)

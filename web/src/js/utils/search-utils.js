@@ -140,7 +140,20 @@ const extensionRespondedToPing = async () => {
       const maxMsToWait = 200
       setTimeout(() => resolve(false), maxMsToWait)
 
-      // TODO: message the extension
+      // Message the Chrome extension.
+      const searchChromeExtId = process.env.REACT_APP_SEARCH_EXT_ID_CHROME
+      window.chrome.runtime.sendMessage(
+        searchChromeExtId,
+        { message: 'ping' },
+        reply => {
+          if (window.chrome.runtime.lastError) {
+            resolve(false)
+          }
+
+          // `reply` may be undefined.
+          resolve(!!(reply && reply.installed))
+        }
+      )
     } catch (e) {
       // If there's any error, just return false.
       resolve(false)
