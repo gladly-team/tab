@@ -480,7 +480,7 @@ describe('Search page component', () => {
     // Unmount
     wrapper.unmount()
 
-    // Mock that the Wikipedia request returns.
+    // Mock that the async function resolves.
     jest.advanceTimersByTime(10e3)
     await flushAllPromises()
 
