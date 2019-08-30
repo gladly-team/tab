@@ -137,7 +137,7 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
 const extensionRespondedToPing = async () => {
   return new Promise(resolve => {
     try {
-      const maxMsToWait = 200
+      const maxMsToWait = 700
       setTimeout(() => resolve(false), maxMsToWait)
 
       // Message the Chrome extension.
