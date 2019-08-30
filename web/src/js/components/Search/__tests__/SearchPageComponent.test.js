@@ -41,6 +41,7 @@ import {
   isSearchExtensionInstalled,
 } from 'js/utils/search-utils'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import logger from 'js/utils/logger'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -54,6 +55,7 @@ jest.mock('js/components/General/Link')
 jest.mock('js/components/Search/WikipediaQuery')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/detectBrowser')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   user: {
@@ -69,7 +71,7 @@ beforeEach(() => {
   isSearchPageEnabled.mockReturnValue(true)
   shouldRedirectSearchToThirdParty.mockReturnValue(false)
   getSearchProvider.mockReturnValue('bing')
-  isSearchExtensionInstalled.mockReturnValue(false)
+  isSearchExtensionInstalled.mockResolvedValue(false)
   detectSupportedBrowser.mockReturnValue('chrome')
 })
 
@@ -433,23 +435,86 @@ describe('Search page component', () => {
     expect(elem.exists()).toEqual(true)
   })
 
-  it('passes the extension install state to the SearchMenuQuery component', () => {
+  it('passes the extension install state to the SearchMenuQuery component', async () => {
+    expect.assertions(2)
     isSearchPageEnabled.mockReturnValue(true)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
 
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
     ).toEqual(false)
 
-    isSearchExtensionInstalled.mockReturnValue(true)
+    isSearchExtensionInstalled.mockResolvedValue(true)
     const newWrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       newWrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
     ).toEqual(true)
+  })
+
+  it('does not log an error if detectAdblocker resolves after the component has unmounted', async () => {
+    expect.assertions(1)
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+
+    // Mock that the detection takes some time.
+    jest.useFakeTimers()
+    detectAdblocker.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the async function resolves.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('does not log an error if isSearchExtensionInstalled resolves after the component has unmounted', async () => {
+    expect.assertions(1)
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+
+    // Mock that the extension message response takes some time.
+    jest.useFakeTimers()
+    isSearchExtensionInstalled.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the async function resolves.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
   })
 })
 
@@ -732,61 +797,71 @@ describe('Search page: ad blocker message', () => {
 })
 
 describe('Search page: "add extension" button', () => {
-  it('shows the "Add extension" button when the extension is not installed', () => {
+  it('shows the "Add extension" button when the extension is not installed', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
     ).toBe(true)
   })
 
-  it('does not show the "Add extension" button when the extension IS installed', () => {
+  it('does not show the "Add extension" button when the extension IS installed', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(true)
+    isSearchExtensionInstalled.mockResolvedValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
     ).toBe(false)
   })
 
-  it('the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
+  it('the "Add extension" button says "Add to Chrome" when the browser is Chrome', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('chrome')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const button = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
       .find(Button)
     expect(button.render().text()).toEqual('Add to Chrome')
   })
 
-  it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
+  it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('firefox')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const button = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
       .find(Button)
     expect(button.render().text()).toEqual('Add to Firefox')
   })
 
-  it('the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
+  it('the "Add extension" button links to the Chrome Web Store when the browser is Chrome', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('chrome')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const elem = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
       .find(Link)
@@ -795,13 +870,15 @@ describe('Search page: "add extension" button', () => {
     )
   })
 
-  it('the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
+  it('the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('firefox')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const elem = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
       .find(Link)
@@ -810,25 +887,29 @@ describe('Search page: "add extension" button', () => {
     )
   })
 
-  it('does not render the "Add extension" button when prerendering with React Snap', () => {
+  it('does not render the "Add extension" button when prerendering with React Snap', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     const mockProps = getMockProps()
     isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
     ).toBe(false)
   })
 
-  it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
+  it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', async () => {
+    expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('safari')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
     ).toBe(false)
@@ -903,13 +984,15 @@ describe('Search page: intro message', () => {
     )
   })
 
-  it('[extension installed] shows the expected intro message title', () => {
-    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
+  it('[extension installed] shows the expected intro message title', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper
         .find('[data-test-id="search-intro-msg"]')
@@ -920,13 +1003,15 @@ describe('Search page: intro message', () => {
     ).toEqual('Your searches do good!')
   })
 
-  it('[extension installed] shows the expected intro message description', () => {
-    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
+  it('[extension installed] shows the expected intro message description', async () => {
+    expect.assertions(2)
+    isSearchExtensionInstalled.mockResolvedValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper
         .find('[data-test-id="search-intro-msg"]')
@@ -942,13 +1027,15 @@ describe('Search page: intro message', () => {
     ).toBe(2)
   })
 
-  it('[extension installed] shows the expected intro message button text', () => {
-    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
+  it('[extension installed] shows the expected intro message button text', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper
         .find('[data-test-id="search-intro-msg"]')
@@ -959,13 +1046,15 @@ describe('Search page: intro message', () => {
     ).toEqual('Great!')
   })
 
-  it('[extension installed] does not show the "Add extension" button', () => {
-    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
+  it('[extension installed] does not show the "Add extension" button', async () => {
+    expect.assertions(2)
+    isSearchExtensionInstalled.mockResolvedValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
       introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
@@ -973,13 +1062,15 @@ describe('Search page: intro message', () => {
     expect(introElem.find(Button).length).toBe(1)
   })
 
-  it('[not installed] shows the "Add extension" button when the extension is not installed', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] shows the "Add extension" button when the extension is not installed', async () => {
+    expect.assertions(2)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
       introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
@@ -987,37 +1078,43 @@ describe('Search page: intro message', () => {
     expect(introElem.find(Button).length).toBe(2)
   })
 
-  it('[not installed] the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] the "Add extension" button says "Add to Chrome" when the browser is Chrome', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('chrome')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const button = introElem.find(Button).at(1)
     expect(button.render().text()).toEqual('Add to Chrome')
   })
 
-  it('[not installed] the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] the "Add extension" button says "Add to Firefox" when the browser is Firefox', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('firefox')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const button = introElem.find(Button).at(1)
     expect(button.render().text()).toEqual('Add to Firefox')
   })
 
-  it('[not installed] the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] the "Add extension" button links to the Chrome Web Store when the browser is Chrome', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('chrome')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const elem = introElem.find(Link)
     expect(elem.prop('to')).toEqual(
@@ -1025,13 +1122,15 @@ describe('Search page: intro message', () => {
     )
   })
 
-  it('[not installed] the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('firefox')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const elem = introElem.find(Link)
     expect(elem.prop('to')).toEqual(
@@ -1039,26 +1138,30 @@ describe('Search page: intro message', () => {
     )
   })
 
-  it('[not installed] the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] the "Add extension" button does not appear if the browser is not Chrome or Firefox', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('safari')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
       introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
     ).toBe(false)
   })
 
-  it('[not installed] shows the expected intro message title', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] shows the expected intro message title', async () => {
+    expect.assertions(1)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper
         .find('[data-test-id="search-intro-msg"]')
@@ -1069,13 +1172,15 @@ describe('Search page: intro message', () => {
     ).toEqual('Your searches do good!')
   })
 
-  it('[not installed] shows the expected intro message description', () => {
-    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+  it('[not installed] shows the expected intro message description', async () => {
+    expect.assertions(3)
+    isSearchExtensionInstalled.mockResolvedValue(false) // extension not installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-intro-msg"]').find(Typography).length
     ).toBe(3)

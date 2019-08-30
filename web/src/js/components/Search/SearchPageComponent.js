@@ -25,7 +25,7 @@ import {
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
-import { parseUrlSearchString } from 'js/utils/utils'
+import { makePromiseCancelable, parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
 import {
@@ -51,6 +51,7 @@ import {
 } from 'js/constants'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import Footer from 'js/components/General/Footer'
+import logger from 'js/utils/logger'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -95,7 +96,7 @@ class SearchPage extends React.Component {
       browser: null,
       showIntroMessage: false,
       isAdBlockerEnabled: false,
-      isSearchExtensionInstalled: false,
+      isSearchExtensionInstalled: true, // assume installed until confirmed
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       defaultSearchProvider: getSearchProvider(),
@@ -104,6 +105,9 @@ class SearchPage extends React.Component {
       searchText: '',
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
+
+    this.isExtInstalledCancelablePromise = null
+    this.detectAdblockerCancelablePromise = null
   }
 
   componentDidMount() {
@@ -133,7 +137,6 @@ class SearchPage extends React.Component {
       // from state if we switch to server-side rendering.
       mounted: true, // in other words, this is not React Snap prerendering
       browser: detectSupportedBrowser(),
-      isSearchExtensionInstalled: isSearchExtensionInstalled(),
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
       searchSource: parseUrlSearchString(location.search).src || null,
@@ -142,15 +145,54 @@ class SearchPage extends React.Component {
     })
 
     // AdBlockerDetection
-    detectAdblocker()
+    this.detectAdblockerCancelablePromise = makePromiseCancelable(
+      detectAdblocker()
+    )
+    this.detectAdblockerCancelablePromise.promise
       .then(isEnabled => {
         this.setState({
           isAdBlockerEnabled: isEnabled,
         })
       })
       .catch(e => {
+        if (e && e.isCanceled) {
+          return
+        }
         console.error(e)
       })
+
+    // Check if the Search extension is installed.
+    this.isExtInstalledCancelablePromise = makePromiseCancelable(
+      isSearchExtensionInstalled()
+    )
+    this.isExtInstalledCancelablePromise.promise
+      .then(isInstalled => {
+        this.setState({
+          isSearchExtensionInstalled: isInstalled,
+        })
+      })
+      .catch(e => {
+        if (e && e.isCanceled) {
+          return
+        }
+        logger.error(e)
+      })
+  }
+
+  componentWillUnmount() {
+    // Cancel any pending promises.
+    if (
+      this.isExtInstalledCancelablePromise &&
+      this.isExtInstalledCancelablePromise.cancel
+    ) {
+      this.isExtInstalledCancelablePromise.cancel()
+    }
+    if (
+      this.detectAdblockerCancelablePromise &&
+      this.detectAdblockerCancelablePromise.cancel
+    ) {
+      this.detectAdblockerCancelablePromise.cancel()
+    }
   }
 
   componentDidUpdate(prevProps) {

@@ -127,41 +127,87 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
 }
 
 /**
+ * Message the extension, if possible, to confirm definitively
+ * whether it is installed. Firefox extensions don't support this
+ * kind of messaging yet:
+ * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/externally_connectable
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=1319168
+ * @return {Promise<Boolean>} Whether the extension is installed
+ */
+const extensionRespondedToPing = async () => {
+  return new Promise(resolve => {
+    try {
+      const maxMsToWait = 700
+      setTimeout(() => resolve(false), maxMsToWait)
+
+      // Message the Chrome extension.
+      const searchChromeExtId = process.env.REACT_APP_SEARCH_EXT_ID_CHROME
+      window.chrome.runtime.sendMessage(
+        searchChromeExtId,
+        { message: 'ping' },
+        reply => {
+          if (window.chrome.runtime.lastError) {
+            resolve(false)
+          }
+
+          // `reply` may be undefined.
+          resolve(!!(reply && reply.installed))
+        }
+      )
+    } catch (e) {
+      // If there's any error, just return false.
+      resolve(false)
+    }
+  })
+}
+
+/**
  * Determine if the search browser extension is currently
  * installed in the browser. This is a best-guess of whether
  * the extension is installed, because we don't yet support
  * messaging the extension directly. See:
  * https://github.com/gladly-team/tab/issues/616
- * @return {Boolean} Whether the extension is installed
+ * @return {Promise<Boolean>} Whether the extension is installed
  */
-export const isSearchExtensionInstalled = () => {
+export const isSearchExtensionInstalled = async () => {
+  // If we already detected the extension, just return true.
   const detectedExtPreviously = !!get(
     window,
     'searchforacause.extension.isInstalled'
   )
-  let isInstalled = false
-  if (!detectedExtPreviously) {
-    const urlParams = getUrlParameters()
-    const searchSrc = urlParams.src
-    const browser = detectSupportedBrowser()
-    const isSearchFromExt =
-      (browser === CHROME_BROWSER &&
-        searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
-      (browser === FIREFOX_BROWSER &&
-        searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
-
-    // If there is no search query, let's say the extension is
-    // installed even if we're not sure. This avoids showing the
-    // "Add extension" button at inopportune times, like right after
-    // we send the user to the search page after sign-in without any
-    // URL parameter values set.
-    const hasSearchQuery = !!urlParams.q
-    isInstalled = !hasSearchQuery || isSearchFromExt
-    if (isInstalled) {
-      set(window, 'searchforacause.extension.isInstalled', true)
-    }
+  if (detectedExtPreviously) {
+    return true
   }
-  return detectedExtPreviously || isInstalled
+
+  // Message the extension and return true if the extension
+  // responds to the message
+  const extensionResponded = await extensionRespondedToPing()
+  if (extensionResponded) {
+    set(window, 'searchforacause.extension.isInstalled', true)
+    return true
+  }
+
+  // If the extension did not respond, do our best to guess
+  // whether the extension is installed. This will happen if the
+  // browser does not support extension messaging.
+  const urlParams = getUrlParameters()
+  const searchSrc = urlParams.src
+  const browser = detectSupportedBrowser()
+  const isSearchFromExt =
+    (browser === CHROME_BROWSER && searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
+    (browser === FIREFOX_BROWSER && searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
+
+  // If there is no search query, let's say the extension is
+  // installed even if we're not sure. This avoids showing the
+  // "Add extension" button at inopportune times, like right after
+  // we send the user to the search page after sign-in without any
+  // URL parameter values set.
+  const hasSearchQuery = !!urlParams.q
+  const isInstalled = !hasSearchQuery || isSearchFromExt
+  if (isInstalled) {
+    set(window, 'searchforacause.extension.isInstalled', true)
+  }
+  return isInstalled
 }
 
 /**
