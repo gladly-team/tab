@@ -1259,27 +1259,43 @@ describe('Search results from Bing', () => {
     expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
   })
 
-  // FIXME
-  // it('[bing] passes "self" as the "searchSource" the SearchResultsQueryBing component when entering a new search on the page', () => {
-  //   const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-  //     .default
-  //   const mockProps = getMockProps()
-  //   mockProps.location.search = ''
-  //   const wrapper = mount(<SearchPageComponent {...mockProps} />)
-  //   expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
-  //   const searchInput = wrapper
-  //     .find(Input)
-  //     .first()
-  //     .find('input')
-  //   searchInput
-  //     .simulate('change', { target: { value: 'register to vote' } })
-  //     .simulate('keypress', { key: 'Enter' })
-  //   console.log('=========')
-  //   expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-  //     'self'
-  //   )
-  //   console.log('=========')
-  // })
+  it('[bing] passes the new "page" to the SearchResultsQueryBing component when the URL param changes', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=hello&page=34'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(34)
+    wrapper.setProps({
+      ...mockProps,
+      location: {
+        ...mockProps.location,
+        search: '?q=what+is+a+waffle+house&page=28',
+      },
+    })
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(28)
+  })
+
+  it('[bing] passes the new "src" to the SearchResultsQueryBing component when the URL param changes', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=hello&src=chrome'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
+      'chrome'
+    )
+    wrapper.setProps({
+      ...mockProps,
+      location: {
+        ...mockProps.location,
+        search: '?q=hello&src=ff',
+      },
+    })
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
+      'ff'
+    )
+  })
 
   // This is important for prerendering scripts for search results.
   it('[bing] renders the SearchResultsQueryBing component on mount even if there is no query', () => {
