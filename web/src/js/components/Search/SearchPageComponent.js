@@ -185,12 +185,11 @@ class SearchPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { location } = this.props
-    const currentQuery = parseUrlSearchString(location.search).q
-    const prevQuery = parseUrlSearchString(prevProps.location.search).q
-    if (currentQuery !== prevQuery) {
+    const { location: { search: previousSearchStr = '' } = {} } = prevProps
+    const previousQuery = this.getSearchQueryFromURL(previousSearchStr)
+    const currentQuery = this.getSearchQueryFromURL()
+    if (currentQuery !== previousQuery) {
       this.setState({
-        query: currentQuery,
         searchText: currentQuery,
       })
     }
@@ -212,12 +211,13 @@ class SearchPage extends React.Component {
   /**
    * @return {String} The decoded search query
    */
-  getSearchQueryFromURL() {
+  getSearchQueryFromURL(searchStr) {
     if (isReactSnapClient()) {
       return ''
     }
     const { location: { search = '' } = {} } = this.props
-    return parseUrlSearchString(search).q || ''
+    const searchStrToParse = searchStr ? searchStr : search
+    return parseUrlSearchString(searchStrToParse).q || ''
   }
 
   // TODO: documentation
