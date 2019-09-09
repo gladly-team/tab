@@ -27,7 +27,7 @@ import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
-  hasUserClickedNewTabSearchIntroNotif,
+  // hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -90,7 +90,8 @@ class Dashboard extends React.Component {
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
       // Whether to show an introduction to Search.
-      showSearchIntro: !hasUserClickedNewTabSearchIntroNotif(),
+      // showSearchIntro: !hasUserClickedNewTabSearchIntroNotif(),
+      showSearchIntro: false, // disabling temporarily
       // @experiment-referral-notification
       referralNotificationExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_REFERRAL_NOTIFICATION
