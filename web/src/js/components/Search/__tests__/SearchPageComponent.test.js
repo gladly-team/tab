@@ -1406,24 +1406,6 @@ describe('Search results from Yahoo', () => {
     expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
   })
 
-  // FIXME
-  // it('[yahoo] passes "self" as the "searchSource" the SearchResults component when entering a new search on the page', () => {
-  //   const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-  //     .default
-  //   const mockProps = getMockProps()
-  //   mockProps.location.search = ''
-  //   const wrapper = mount(<SearchPageComponent {...mockProps} />)
-  //   expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
-  //   const searchInput = wrapper
-  //     .find(Input)
-  //     .first()
-  //     .find('input')
-  //   searchInput
-  //     .simulate('change', { target: { value: 'register to vote' } })
-  //     .simulate('keypress', { key: 'Enter' })
-  //   expect(wrapper.find(SearchResults).prop('searchSource')).toEqual('self')
-  // })
-
   // This is important for prerendering scripts for search results.
   it('[yahoo] renders the SearchResults component on mount even if there is no query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
