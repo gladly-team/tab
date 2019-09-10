@@ -195,9 +195,11 @@ class SearchPage extends React.Component {
     }
   }
 
-  // TODO: documentation
   /**
-   * @return {Number} The search results page inded
+   * Get the integer value of the search results page number from the
+   * "page" URL parameter. During prerendering, or if the parameter is
+   * not set or is not an integer, return 1.
+   * @return {Number} The search results page index
    */
   getPageNumberFromURL() {
     if (isReactSnapClient()) {
@@ -207,8 +209,14 @@ class SearchPage extends React.Component {
     return parseInt(parseUrlSearchString(search).page, 10) || 1
   }
 
-  // TODO: documentation
   /**
+   * Get the search query string from the "q" URL parameter.
+   * By default, get it from the current location; or, if passed a
+   * searchStr parameter, get it from that search string. During
+   * prerendering, or if the parameter is not set, return an empty
+   * string
+   * @param {String} searchStr - The URL parameter string,
+   *   such as '?myParam=foo&another=bar'
    * @return {String} The decoded search query
    */
   getSearchQueryFromURL(searchStr) {
@@ -220,7 +228,12 @@ class SearchPage extends React.Component {
     return parseUrlSearchString(searchStrToParse).q || ''
   }
 
-  // TODO: documentation
+  /**
+   * Get the integer value of the search's source from the "src"
+   * URL parameter. During prerendering, or if the parameter is
+   * not set, return null.
+   * @return {String|null} The source of the search query
+   */
   getSearchSourceFromURL() {
     if (isReactSnapClient()) {
       return null
