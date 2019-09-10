@@ -94,16 +94,14 @@ class SearchPage extends React.Component {
       // Important: set all client-specific state in componentDidMount,
       // because we do HTML prerendering with these values.
       browser: null,
-      showIntroMessage: false,
+      defaultSearchProvider: getSearchProvider(),
       isAdBlockerEnabled: false,
       isSearchExtensionInstalled: true, // assume installed until confirmed
-      query: '',
-      searchFeatureEnabled: isSearchPageEnabled(),
-      defaultSearchProvider: getSearchProvider(),
-      searchRedirectToThirdParty: shouldRedirectSearchToThirdParty(),
-      searchSource: null,
-      searchText: '',
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
+      searchFeatureEnabled: isSearchPageEnabled(),
+      searchRedirectToThirdParty: shouldRedirectSearchToThirdParty(),
+      searchText: '',
+      showIntroMessage: false,
     }
 
     this.isExtInstalledCancelablePromise = null
@@ -119,10 +117,7 @@ class SearchPage extends React.Component {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
     }
-    const { location } = this.props
-
-    // Wait until after mount to update prerendered state.
-    const query = parseUrlSearchString(location.search).q || ''
+    const query = this.getSearchQueryFromURL()
 
     // Redirect to Google if enabled.
     if (this.state.searchRedirectToThirdParty) {
@@ -131,15 +126,9 @@ class SearchPage extends React.Component {
 
     this.setState({
       // We always derive the query and page values URL parameter
-      // values. We keep these in state so that we update the
-      // prerendered components after mount, because at prerender
-      // time we do not know search state. We can remove this
-      // from state if we switch to server-side rendering.
+      // values.
       mounted: true, // in other words, this is not React Snap prerendering
       browser: detectSupportedBrowser(),
-      query: query,
-      page: this.getPageNumberFromSearchString(location.search),
-      searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
       showIntroMessage: !hasUserDismissedSearchIntro(),
     })
@@ -196,38 +185,61 @@ class SearchPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { location } = this.props
-    const currentQuery = parseUrlSearchString(location.search).q
-    const prevQuery = parseUrlSearchString(prevProps.location.search).q
-    if (currentQuery !== prevQuery) {
+    const { location: { search: previousSearchStr = '' } = {} } = prevProps
+    const previousQuery = this.getSearchQueryFromURL(previousSearchStr)
+    const currentQuery = this.getSearchQueryFromURL()
+    if (currentQuery !== previousQuery) {
       this.setState({
-        query: currentQuery,
         searchText: currentQuery,
-      })
-    }
-
-    // Check if the page number has changed.
-    const currentPage = this.getPageNumberFromSearchString(location.search)
-    const prevPage = this.getPageNumberFromSearchString(
-      prevProps.location.search
-    )
-    if (currentPage !== prevPage) {
-      this.setState({
-        page: currentPage,
       })
     }
   }
 
   /**
-   * Take a search string, such as ?abc=hi&p=12, and return the
-   * integer value of the "page" URL parameter. If the parameter is
+   * Get the integer value of the search results page number from the
+   * "page" URL parameter. During prerendering, or if the parameter is
    * not set or is not an integer, return 1.
+   * @return {Number} The search results page index
+   */
+  getPageNumberFromURL() {
+    if (isReactSnapClient()) {
+      return 1
+    }
+    const { location: { search = '' } = {} } = this.props
+    return parseInt(parseUrlSearchString(search).page, 10) || 1
+  }
+
+  /**
+   * Get the search query string from the "q" URL parameter.
+   * By default, get it from the current location; or, if passed a
+   * searchStr parameter, get it from that search string. During
+   * prerendering, or if the parameter is not set, return an empty
+   * string
    * @param {String} searchStr - The URL parameter string,
    *   such as '?myParam=foo&another=bar'
-   * @return {Number} The search results page inded
+   * @return {String} The decoded search query
    */
-  getPageNumberFromSearchString(searchStr) {
-    return parseInt(parseUrlSearchString(searchStr).page, 10) || 1
+  getSearchQueryFromURL(searchStr) {
+    if (isReactSnapClient()) {
+      return ''
+    }
+    const { location: { search = '' } = {} } = this.props
+    const searchStrToParse = searchStr ? searchStr : search
+    return parseUrlSearchString(searchStrToParse).q || ''
+  }
+
+  /**
+   * Get the integer value of the search's source from the "src"
+   * URL parameter. During prerendering, or if the parameter is
+   * not set, return null.
+   * @return {String|null} The source of the search query
+   */
+  getSearchSourceFromURL() {
+    if (isReactSnapClient()) {
+      return null
+    }
+    const { location: { search = '' } = {} } = this.props
+    return parseUrlSearchString(search).src || null
   }
 
   search() {
@@ -237,9 +249,6 @@ class SearchPage extends React.Component {
         page: 1,
         q: newQuery,
         src: 'self',
-      })
-      this.setState({
-        searchSource: 'self',
       })
     }
   }
@@ -257,14 +266,16 @@ class SearchPage extends React.Component {
       isSearchExtensionInstalled,
       isAdBlockerEnabled,
       mounted,
-      page,
-      query,
       showIntroMessage,
       defaultSearchProvider,
-      searchSource,
       searchText,
     } = this.state
+
+    const page = this.getPageNumberFromURL()
+    const query = this.getSearchQueryFromURL()
     const queryEncoded = query ? encodeURI(query) : ''
+    const searchSource = this.getSearchSourceFromURL()
+
     const searchResultsPaddingLeft = 150
     if (!this.state.searchFeatureEnabled) {
       return null

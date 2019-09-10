@@ -196,58 +196,59 @@ const SearchResultsBing = props => {
           </div>
         </div>
       )}
-      <div
-        data-test-id={'pagination-container'}
-        className={classes.paginationContainer}
-        style={{
-          display: !SHOW_PAGINATION || noResultsToDisplay ? 'none' : 'flex',
-        }}
-      >
-        {page > MIN_PAGE ? (
-          <Button
-            data-test-id={'pagination-previous'}
-            className={classes.paginationButton}
-            onClick={() => {
-              onPageChange(page - 1)
-            }}
-          >
-            PREVIOUS
-          </Button>
-        ) : null}
-        {paginationIndices.map(pageNum => (
-          <Button
-            key={`page-${pageNum}`}
-            className={classes.paginationButton}
-            data-test-id={`pagination-${pageNum}`}
-            {...pageNum === page && {
-              color: 'secondary',
-              disabled: true,
-            }}
-            style={{
-              ...(pageNum === page && {
-                color: 'rgba(0, 0, 0, 0.87)',
-                borderBottom: '2px solid rgba(0, 0, 0, 0.87)',
-              }),
-            }}
-            onClick={() => {
-              onPageChange(pageNum)
-            }}
-          >
-            {pageNum}
-          </Button>
-        ))}
-        {page < MAX_PAGE ? (
-          <Button
-            data-test-id={'pagination-next'}
-            className={classes.paginationButton}
-            onClick={() => {
-              onPageChange(page + 1)
-            }}
-          >
-            NEXT
-          </Button>
-        ) : null}
-      </div>
+      {!!page && SHOW_PAGINATION && !noResultsToDisplay ? (
+        <div
+          data-test-id={'pagination-container'}
+          className={classes.paginationContainer}
+        >
+          {page > MIN_PAGE ? (
+            <Button
+              key={'pagination-previous'}
+              data-test-id={'pagination-previous'}
+              className={classes.paginationButton}
+              onClick={() => {
+                onPageChange(page - 1)
+              }}
+            >
+              PREVIOUS
+            </Button>
+          ) : null}
+          {paginationIndices.map(pageNum => (
+            <Button
+              key={`page-${pageNum}`}
+              className={classes.paginationButton}
+              data-test-id={`pagination-${pageNum}`}
+              {...pageNum === page && {
+                color: 'secondary',
+                disabled: true,
+              }}
+              style={{
+                ...(pageNum === page && {
+                  color: 'rgba(0, 0, 0, 0.87)',
+                  borderBottom: '2px solid rgba(0, 0, 0, 0.87)',
+                }),
+              }}
+              onClick={() => {
+                onPageChange(pageNum)
+              }}
+            >
+              {pageNum}
+            </Button>
+          ))}
+          {page < MAX_PAGE ? (
+            <Button
+              key={'pagination-next'}
+              data-test-id={'pagination-next'}
+              className={classes.paginationButton}
+              onClick={() => {
+                onPageChange(page + 1)
+              }}
+            >
+              NEXT
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   )
 }
