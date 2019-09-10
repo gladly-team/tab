@@ -621,10 +621,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 1
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-        .display
-    ).toEqual('flex')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      true
+    )
   })
 
   it('does not show the pagination container when it is not enabled', () => {
@@ -635,10 +634,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 1
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-        .display
-    ).toEqual('none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('hides the pagination container when there is an empty query', () => {
@@ -650,9 +648,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
 
     // The pagination container should not be hidden.
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'flex')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      true
+    )
 
     wrapper.setProps({
       query: '',
@@ -660,9 +658,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     })
 
     // The pagination container should be hidden now.
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('hides the pagination container when the search query is in progress', () => {
@@ -683,9 +681,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.queryReturned = false
     mockProps.isEmptyQuery = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('hides the pagination container when the search query is in progress and results are still available from the previous page', () => {
@@ -721,9 +719,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.queryReturned = false
     mockProps.isEmptyQuery = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('hides the pagination container when there are no search results', () => {
@@ -744,9 +742,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.queryReturned = true
     mockProps.isEmptyQuery = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('hides the pagination container when there is an error', () => {
@@ -758,9 +756,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
 
     // The pagination container should not be hidden.
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'flex')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      true
+    )
 
     wrapper.setProps({
       query: '',
@@ -768,9 +766,9 @@ describe('SearchResultsBing: tests for pagination', () => {
     })
 
     // The pagination container should be hidden now.
-    expect(
-      wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    expect(wrapper.find('[data-test-id="pagination-container"]').exists()).toBe(
+      false
+    )
   })
 
   it('does not render the "previous page" pagination button when on the first page', () => {
@@ -804,6 +802,26 @@ describe('SearchResultsBing: tests for pagination', () => {
     expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
       true
     )
+  })
+
+  it('renders the "previous page" pagination button after changing from the first page', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      false
+    )
+    wrapper.setProps({
+      page: 4,
+    })
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      true
+    )
+    expect(
+      wrapper.find('[data-test-id="pagination-previous"]').prop('disabled')
+    ).not.toBe(true)
   })
 
   it('does render the 9999th pagination button when on the final page (page 9999)', () => {
