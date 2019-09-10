@@ -293,6 +293,24 @@ describe('Search page component', () => {
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
+  it('updates the the search text in the box when the search query URL param value changes', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=blahblah'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(Input).prop('value')).toBe('blahblah')
+    wrapper.setProps(
+      Object.assign({}, mockProps, {
+        location: {
+          search: '?q=something%20here',
+        },
+      })
+    )
+    expect(wrapper.find(Input).prop('value')).toBe('something here')
+  })
+
   it('clicking the search button updates the "q" URL parameter, sets the page to 1, and sets the "src" to "self"', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
