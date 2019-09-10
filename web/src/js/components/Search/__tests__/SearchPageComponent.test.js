@@ -18,6 +18,7 @@ import {
   dashboardURL,
   modifyURLParams,
   searchBetaFeedback,
+  searchHomeURL,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
@@ -169,6 +170,17 @@ describe('Search page component', () => {
     expect(logoComponent.prop('style')).toEqual({
       width: 116,
     })
+  })
+
+  it('links to the homepage from the Logo component', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const logoComponentParent = wrapper.find(Logo).parent()
+    expect(logoComponentParent.type()).toEqual(Link)
+    expect(logoComponentParent.prop('to')).toEqual(searchHomeURL)
   })
 
   it('sets a min-width on the entire page', () => {
