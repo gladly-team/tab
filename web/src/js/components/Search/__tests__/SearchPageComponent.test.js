@@ -527,6 +527,20 @@ describe('Search page: search category tabs', () => {
     expect(tab.prop('href')).toBe('https://images.google.com')
   })
 
+  it('does not include the search query in the "Images" search category tab outbound link when prerendering', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    isReactSnapClient.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Images')
+    expect(tab.prop('href')).toBe('https://images.google.com')
+  })
+
   it('has the expected outbound link for the "News" search category tab when there is a search query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -547,6 +561,20 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'News')
+    expect(tab.prop('href')).toBe('https://www.google.com')
+  })
+
+  it('does not include the search query in the "News" search category tab outbound link when prerendering', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     const tab = wrapper
       .find(Tabs)
@@ -583,6 +611,20 @@ describe('Search page: search category tabs', () => {
     expect(tab.prop('href')).toBe('https://www.google.com')
   })
 
+  it('does not include the search query in the "Videos" search category tab outbound link when prerendering', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    isReactSnapClient.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Videos')
+    expect(tab.prop('href')).toBe('https://www.google.com')
+  })
+
   it('has the expected outbound link for the "Maps" search category tab when there is a search query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -601,6 +643,20 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Maps')
+    expect(tab.prop('href')).toBe('https://www.google.com/maps')
+  })
+
+  it('does not include the search query in the "Maps" search category tab outbound link when prerendering', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     const tab = wrapper
       .find(Tabs)
