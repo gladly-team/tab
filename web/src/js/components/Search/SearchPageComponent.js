@@ -447,7 +447,10 @@ class SearchPage extends React.Component {
               label="Images"
               target="_top"
               href={
-                queryEncoded
+                // Checking if it's mounted fixes a bug where the Tab href does
+                // not update after it's prerendered. Not sure if this is a
+                // MUI bug or our error.
+                mounted && queryEncoded
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=isch`
                   : 'https://images.google.com'
               }
@@ -459,7 +462,7 @@ class SearchPage extends React.Component {
               label="News"
               target="_top"
               href={
-                queryEncoded
+                mounted && queryEncoded
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=nws`
                   : 'https://www.google.com'
               }
@@ -471,7 +474,7 @@ class SearchPage extends React.Component {
               label="Videos"
               target="_top"
               href={
-                queryEncoded
+                mounted && queryEncoded
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=vid`
                   : 'https://www.google.com'
               }
@@ -483,7 +486,7 @@ class SearchPage extends React.Component {
               label="Maps"
               target="_top"
               href={
-                queryEncoded
+                mounted && queryEncoded
                   ? `https://www.google.com/maps/?q=${queryEncoded}`
                   : 'https://www.google.com/maps'
               }
