@@ -26,11 +26,13 @@ describe('SearchRandomQueryView', function() {
     shallow(<SearchRandomQueryView {...getMockProps()} />)
   })
 
-  it('redirects to the search page', () => {
+  it('redirects to the search page, preserving any URL param values', () => {
     const SearchRandomQueryView = require('js/components/Search/SearchRandomQueryView')
       .default
     shallow(<SearchRandomQueryView {...getMockProps()} />)
-    expect(goTo).toHaveBeenCalledWith(searchBaseURL, expect.any(Object))
+    expect(goTo).toHaveBeenCalledWith(searchBaseURL, expect.any(Object), {
+      keepURLParams: true,
+    })
   })
 
   it('uses a randomly-selected search query', () => {
@@ -40,16 +42,24 @@ describe('SearchRandomQueryView', function() {
     // Mock selecting the first item.
     mathRandomMock.mockReturnValue(0)
     shallow(<SearchRandomQueryView {...getMockProps()} />)
-    expect(goTo).toHaveBeenCalledWith('/search', {
-      q: 'volunteer opportunities near me',
-    })
+    expect(goTo).toHaveBeenCalledWith(
+      '/search',
+      {
+        q: 'volunteer opportunities near me',
+      },
+      expect.any(Object)
+    )
     goTo.mockClear()
 
     // Mock selecting the last item.
     mathRandomMock.mockReturnValue(0.99)
     shallow(<SearchRandomQueryView {...getMockProps()} />)
-    expect(goTo).toHaveBeenCalledWith('/search', {
-      q: 'ways to make someone smile',
-    })
+    expect(goTo).toHaveBeenCalledWith(
+      '/search',
+      {
+        q: 'ways to make someone smile',
+      },
+      expect.any(Object)
+    )
   })
 })
