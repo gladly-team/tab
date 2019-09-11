@@ -126,7 +126,10 @@ const withUser = (options = {}) => WrappedComponent => {
 
       // If the user must complete the authentication process, optionally
       // redirect to the appropriate auth page.
+
+      // TODO: add tests
       const currentURL = window.location.href
+
       let redirected = false
       if (redirectToAuthIfIncomplete) {
         try {
