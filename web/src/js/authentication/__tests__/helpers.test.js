@@ -317,14 +317,10 @@ describe('redirectToAuthIfNeeded tests', () => {
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     const redirected = redirectToAuthIfNeeded({ authUser })
     expect(redirected).toBe(true)
-    expect(replaceUrl).toHaveBeenCalledWith(
-      loginURL,
-      {},
-      { keepURLParams: true }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
 
-  it('[anon] passes URL parameters when redirecting to the main login page', () => {
+  it('[anon] does not keep all URL parameters when redirecting to the main login page', () => {
     setIfAnonymousUserIsAllowed(true)
 
     const authUser = null
@@ -335,9 +331,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       authUser,
       urlParams: urlParamsToUse,
     })
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, urlParamsToUse, {
-      keepURLParams: true,
-    })
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, urlParamsToUse)
   })
 
   it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', () => {
@@ -353,11 +347,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     const redirected = redirectToAuthIfNeeded({ authUser })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      loginURL,
-      {},
-      { keepURLParams: true }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
     expect(redirected).toBe(true)
   })
 
@@ -381,14 +371,10 @@ describe('redirectToAuthIfNeeded tests', () => {
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     redirectToAuthIfNeeded({ authUser })
 
-    expect(replaceUrl).toHaveBeenCalledWith(
-      authMessageURL,
-      {},
-      { keepURLParams: true }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
   })
 
-  it('[no-anon-allowed] passes URL parameters when redirecting to the sign-in message within an iframe', () => {
+  it('[no-anon-allowed] does not keep all URL when redirecting to the sign-in message within an iframe', () => {
     // This is longer than users are allowed to remain anonymous.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
     getBrowserExtensionInstallTime.mockReturnValue(
@@ -409,9 +395,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       authUser,
       urlParams: urlParamsToUse,
     })
-    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, urlParamsToUse, {
-      keepURLParams: true,
-    })
+    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, urlParamsToUse)
   })
 
   it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', () => {
@@ -433,11 +417,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     redirectToAuthIfNeeded({ authUser })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      loginURL,
-      { mandatory: 'true' },
-      { keepURLParams: true }
-    ) // includes URL param
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
   })
 
   it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', () => {
@@ -462,7 +442,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(replaceUrl).not.toHaveBeenCalled()
   })
 
-  it('passes URL parameters when redirecting to the mandatory login screen for anonymous users', () => {
+  it('does not keep all URL params when redirecting to the mandatory login screen for anonymous users', () => {
     // This is longer than users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
       moment(mockNow).subtract(5, 'days')
@@ -482,11 +462,10 @@ describe('redirectToAuthIfNeeded tests', () => {
     const urlParamsToUse = { a: 'bc', some: 'thing' }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     redirectToAuthIfNeeded({ authUser, urlParams: urlParamsToUse })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      loginURL,
-      { mandatory: 'true', ...urlParamsToUse },
-      { keepURLParams: true }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
+      mandatory: 'true',
+      ...urlParamsToUse,
+    })
   })
 
   it('[no-anon-allowed] redirects to the missing email screen if authed and there is no email address', () => {
@@ -501,17 +480,11 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const redirected = redirectToAuthIfNeeded({ authUser })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      missingEmailMessageURL,
-      {},
-      {
-        keepURLParams: true,
-      }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL, {})
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] passes URL params when redirecting to the missing email screen', () => {
+  it('[no-anon-allowed] does not keep all URL params when redirecting to the missing email screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
@@ -529,10 +502,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     })
     expect(replaceUrl).toHaveBeenCalledWith(
       missingEmailMessageURL,
-      urlParamsToUse,
-      {
-        keepURLParams: true,
-      }
+      urlParamsToUse
     )
     expect(redirected).toBe(true)
   })
@@ -549,17 +519,11 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const redirected = redirectToAuthIfNeeded({ authUser })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      verifyEmailURL,
-      {},
-      {
-        keepURLParams: true,
-      }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL, {})
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] passes URL params when redirecting to the email verification screen', () => {
+  it('[no-anon-allowed] does not keep all URL params when redirecting to the email verification screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
@@ -575,9 +539,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       authUser,
       urlParams: urlParamsToUse,
     })
-    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL, urlParamsToUse, {
-      keepURLParams: true,
-    })
+    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL, urlParamsToUse)
     expect(redirected).toBe(true)
   })
 
@@ -593,17 +555,11 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: true,
     }
     const redirected = redirectToAuthIfNeeded({ authUser })
-    expect(replaceUrl).toHaveBeenCalledWith(
-      enterUsernameURL,
-      {},
-      {
-        keepURLParams: true,
-      }
-    )
+    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL, {})
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] passes URL params when redirecting to the "enter username" screen', () => {
+  it('[no-anon-allowed] does not keep all URL params when redirecting to the "enter username" screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
@@ -619,9 +575,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       authUser,
       urlParams: urlParamsToUse,
     })
-    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL, urlParamsToUse, {
-      keepURLParams: true,
-    })
+    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL, urlParamsToUse)
     expect(redirected).toBe(true)
   })
 
