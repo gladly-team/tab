@@ -320,7 +320,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
 
-  it('[anon] does not keep all URL parameters when redirecting to the main login page', () => {
+  it('[anon] keeps the specifed (but not all) URL params when redirecting to the main login page', () => {
     setIfAnonymousUserIsAllowed(true)
 
     const authUser = null
@@ -374,7 +374,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
   })
 
-  it('[no-anon-allowed] does not keep all URL when redirecting to the sign-in message within an iframe', () => {
+  it('[no-anon-allowed] keeps the specifed (but not all) URL params when redirecting to the sign-in message within an iframe', () => {
     // This is longer than users are allowed to remain anonymous.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
     getBrowserExtensionInstallTime.mockReturnValue(
@@ -442,7 +442,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(replaceUrl).not.toHaveBeenCalled()
   })
 
-  it('does not keep all URL params when redirecting to the mandatory login screen for anonymous users', () => {
+  it('keeps the specifed (but not all) URL params when redirecting to the mandatory login screen for anonymous users', () => {
     // This is longer than users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
       moment(mockNow).subtract(5, 'days')
@@ -484,7 +484,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] does not keep all URL params when redirecting to the missing email screen', () => {
+  it('[no-anon-allowed] keeps the specifed (but not all) URL params when redirecting to the missing email screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
@@ -523,7 +523,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] does not keep all URL params when redirecting to the email verification screen', () => {
+  it('[no-anon-allowed] keeps the specifed (but not all) URL params when redirecting to the email verification screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
@@ -559,7 +559,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] does not keep all URL params when redirecting to the "enter username" screen', () => {
+  it('[no-anon-allowed] keeps the specifed (but not all) URL params when redirecting to the "enter username" screen', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
