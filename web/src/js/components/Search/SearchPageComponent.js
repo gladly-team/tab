@@ -22,6 +22,7 @@ import {
   searchBetaFeedback,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
+  searchHomeURL,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -322,23 +323,25 @@ class SearchPage extends React.Component {
                 height: 40,
               }}
             >
-              <Logo
-                brand={SEARCH_APP}
-                includeText
-                style={{
-                  width: 116,
-                }}
-              />
-              <Typography
-                color={'primary'}
-                variant={'overline'}
-                style={{
-                  lineHeight: '60%',
-                  fontWeight: 'bold',
-                }}
-              >
-                beta
-              </Typography>
+              <Link to={searchHomeURL}>
+                <Logo
+                  brand={SEARCH_APP}
+                  includeText
+                  style={{
+                    width: 116,
+                  }}
+                />
+                <Typography
+                  color={'primary'}
+                  variant={'overline'}
+                  style={{
+                    lineHeight: '60%',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  beta
+                </Typography>
+              </Link>
             </div>
             <div
               style={{
