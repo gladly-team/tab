@@ -42,7 +42,6 @@ env:
   - TEST_REACT_APP_MOCK_SEARCH_RESULTS=true
   - TEST_REACT_APP_SEARCH_PROVIDER=bing
   - TEST_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
-  - TEST_REACT_APP_SEARCH_EXT_ID_CHROME=eeiiknnphladbapfamiamfimnnnodife
   - TEST_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
   # GraphQL / Lambda
   - TEST_GQL_LOGGER=sentry
@@ -102,7 +101,6 @@ env:
   - DEV_REACT_APP_MOCK_SEARCH_RESULTS=false
   - DEV_REACT_APP_SEARCH_PROVIDER=bing
   - DEV_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
-  - DEV_REACT_APP_SEARCH_EXT_ID_CHROME=eeiiknnphladbapfamiamfimnnnodife
   - DEV_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
   # GraphQL / Lambda
   - DEV_GQL_LOGGER=sentry
@@ -157,7 +155,6 @@ env:
   - PROD_REACT_APP_MOCK_SEARCH_RESULTS=false
   - PROD_REACT_APP_SEARCH_PROVIDER=bing
   - PROD_REACT_APP_SEARCH_QUERY_ENDPOINT=https://search-api.gladly.io/api/query
-  - PROD_REACT_APP_SEARCH_EXT_ID_CHROME=eeiiknnphladbapfamiamfimnnnodife
   - PROD_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
   # GraphQL / Lambda
   - PROD_GQL_LOGGER=sentry
