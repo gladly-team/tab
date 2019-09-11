@@ -15,9 +15,13 @@ class SearchRandomQueryView extends React.Component {
       'ways to make someone smile',
     ]
     const query = queries[Math.floor(Math.random() * queries.length)]
-    goTo(searchBaseURL, {
-      q: query,
-    })
+    goTo(
+      searchBaseURL,
+      {
+        q: query,
+      },
+      { keepURLParams: true }
+    )
   }
 
   render() {
