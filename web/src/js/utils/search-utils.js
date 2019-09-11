@@ -136,7 +136,7 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
  * https://github.com/gladly-team/tab/pull/646
  * However, we removed it here due to the extension permission
  * warnings:
- *
+ * https://github.com/gladly-team/tab/pull/653
  * @return {Promise<Boolean>} Whether the extension is installed
  */
 export const isSearchExtensionInstalled = async () => {
