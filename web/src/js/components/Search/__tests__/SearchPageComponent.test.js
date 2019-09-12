@@ -1714,3 +1714,35 @@ describe('Search results from Yahoo', () => {
     expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(true)
   })
 })
+
+describe('withUser HOC in SearchPageComponent', () => {
+  beforeAll(() => {
+    jest.mock('js/components/Search/SearchMenuQuery')
+  })
+
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchPageComponent').default
+    expect(withUser).toHaveBeenCalledWith({
+      app: 'search',
+      createUserIfPossible: false,
+    })
+  })
+
+  it('wraps the SearchSettingsPage component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchPageComponent').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('SearchPage')
+  })
+})
