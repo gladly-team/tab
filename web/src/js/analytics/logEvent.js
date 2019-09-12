@@ -98,3 +98,13 @@ export const newTabView = () => {
   fbq('track', 'PageView')
   fbq('track', 'ViewContent', { content_name: 'Newtab' })
 }
+
+export const searchForACauseAccountCreated = () => {
+  fbq('track', 'CompleteRegistration', { content_name: 'SearchAccountCreated' })
+  GA.event({
+    category: 'ButtonClick',
+    action: 'SearchAccountCreation',
+  })
+  rdt('track', 'Search')
+  qp('track', 'Search')
+}

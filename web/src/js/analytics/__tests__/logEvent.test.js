@@ -126,4 +126,19 @@ describe('logEvent', () => {
     expect(GA.event).not.toHaveBeenCalledWith()
     expect(GA.pageview).not.toHaveBeenCalledWith()
   })
+
+  test('Search for a Cause account created event calls analytics as expected', () => {
+    const { searchForACauseAccountCreated } = require('js/analytics/logEvent')
+    searchForACauseAccountCreated()
+
+    expect(fbq).toHaveBeenCalledWith('track', 'CompleteRegistration', {
+      content_name: 'SearchAccountCreated',
+    })
+    expect(GA.event).toHaveBeenCalledWith({
+      category: 'ButtonClick',
+      action: 'SearchAccountCreation',
+    })
+    expect(rdt).toHaveBeenCalledWith('track', 'Search')
+    expect(qp).toHaveBeenCalledWith('track', 'Search')
+  })
 })
