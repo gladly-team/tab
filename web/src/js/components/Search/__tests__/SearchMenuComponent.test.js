@@ -9,6 +9,7 @@ import CircleIcon from '@material-ui/icons/Lens'
 import MenuItem from '@material-ui/core/MenuItem'
 import Typography from '@material-ui/core/Typography'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+import LogSearchAccountCreation from 'js/components/Search/LogSearchAccountCreationComponent'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Link from 'js/components/General/Link'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
@@ -24,6 +25,7 @@ import logger from 'js/utils/logger'
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
 jest.mock('js/components/Search/SearchHeartsContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
+jest.mock('js/components/Search/LogSearchAccountCreationComponent')
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 jest.mock('js/components/General/Link')
 jest.mock('js/authentication/user')
@@ -41,6 +43,7 @@ const getMockProps = () => ({
 
 const getMockUserData = () => ({
   vcDonatedAllTime: 1201,
+  searches: 2,
 })
 
 describe('SearchMenuComponent', () => {
@@ -719,5 +722,26 @@ describe('SearchMenuComponent: settings dropdown component', () => {
       return elem.render().text() === 'Sign Out'
     })
     elem.simulate('click')
+  })
+
+  it('renders the LogSearchAccountCreation component when a user exists and passes the user as a prop', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(true)
+    expect(wrapper.find(LogSearchAccountCreation).prop('user')).toEqual(
+      mockProps.user
+    )
+  })
+
+  it('does not render the LogSearchAccountCreation component when the user does not exist', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(false)
   })
 })
