@@ -165,6 +165,9 @@ const SearchResultsBing = props => {
               {commaFormatted(data.resultsCount)} results
             </Typography>
           ) : null}
+          {
+            // TODO: if this is the first query, show our intro card
+          }
           {data.results.mainline.map(searchResultItemData => {
             return (
               <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
