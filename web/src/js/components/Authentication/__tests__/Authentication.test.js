@@ -892,6 +892,51 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
+  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is set', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?app=search&next=https%3A%2F%2Fexample.gladly.io%2Fnewtab%2Ffoo%2F'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual(
+      'https://example.gladly.io/newtab/foo/'
+    )
+  })
+
+  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is NOT set and app === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual('/newtab/')
+  })
+
+  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is NOT set and app === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual('/search')
+  })
+
   it('passes "search" to the to the SignInIframeMessage "app" prop when the URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default

@@ -227,8 +227,6 @@ class Authentication extends React.Component {
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
-
-    // TODO: add tests
     const nextURL = this.getNextURLAfterSignIn()
 
     return (
