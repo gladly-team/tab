@@ -96,6 +96,18 @@ class Authentication extends React.Component {
     return validateAppName(urlParams.app || firebaseContinueURLAppVal)
   }
 
+  getNextURLAfterSignIn() {
+    const { location } = this.props
+    const urlParams = parseUrlSearchString(location.search)
+    const app = this.getApp()
+
+    // If the "next" URL param specifies a destination URL for after
+    // sign-in, use it. Otherwise, go to the main app page.
+    const nextURL = urlParams.next ? decodeURIComponent(urlParams.next) : null
+    const mainAppDestination = app === SEARCH_APP ? searchBaseURL : dashboardURL
+    return nextURL ? nextURL : mainAppDestination
+  }
+
   navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
@@ -103,18 +115,22 @@ class Authentication extends React.Component {
       return
     }
     const { authUser, location, user } = this.props
-    const redirected = redirectToAuthIfNeeded({ authUser, user })
+    const urlParams = parseUrlSearchString(location.search)
+
+    const redirected = redirectToAuthIfNeeded({
+      authUser,
+      user,
+      urlParams: { app: urlParams.app, next: urlParams.next },
+    })
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
-    const urlParams = parseUrlSearchString(location.search)
     const stayOnAuthPage = urlParams.noredirect === 'true'
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      const app = this.getApp()
-      const destinationUrl = app === SEARCH_APP ? searchBaseURL : dashboardURL
-      replaceUrl(destinationUrl)
+      const destinationURL = this.getNextURLAfterSignIn()
+      replaceUrl(destinationURL)
     }
   }
 
@@ -153,10 +169,11 @@ class Authentication extends React.Component {
         if (!currentUser.emailVerified) {
           // Ask the user to verify their email.
           sendVerificationEmail({
-            // Pass the "app" URL parameter value in the verification email.
+            // Pass the "app" and "next" URL parameter values in the
+            // "continue URL" after email verification.
             continueURL: constructUrl(
               enterUsernameURL,
-              { app: app },
+              { app: app, next: this.getNextURLAfterSignIn() },
               { absolute: true }
             ),
           })
@@ -210,6 +227,7 @@ class Authentication extends React.Component {
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
+    const nextURL = this.getNextURLAfterSignIn()
 
     return (
       <MuiThemeProvider theme={defaultTheme}>
@@ -276,7 +294,12 @@ class Authentication extends React.Component {
                   exact
                   path="/newtab/auth/username/"
                   render={props => (
-                    <EnterUsernameForm {...props} user={user} app={app} />
+                    <EnterUsernameForm
+                      {...props}
+                      user={user}
+                      app={app}
+                      nextURL={nextURL}
+                    />
                   )}
                 />
                 <Route

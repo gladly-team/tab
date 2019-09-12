@@ -99,9 +99,9 @@ const goToMainLoginPage = (urlParamsObj = {}) => {
   // new tab), authentication may not work correctly. Show an intermediary
   // page that will open a non-iframed auth page.
   if (isInIframe()) {
-    replaceUrl(authMessageURL, urlParamsObj, { keepURLParams: true })
+    replaceUrl(authMessageURL, urlParamsObj)
   } else {
-    replaceUrl(loginURL, urlParamsObj, { keepURLParams: true })
+    replaceUrl(loginURL, urlParamsObj)
   }
 }
 
@@ -188,11 +188,11 @@ export const redirectToAuthIfNeeded = ({
     // If the user does not have an email address, show a message
     // asking them to sign in with a different method.
   } else if (!authUser.email) {
-    replaceUrl(missingEmailMessageURL, urlParams, { keepURLParams: true })
+    replaceUrl(missingEmailMessageURL, urlParams)
     redirected = true
     // User is logged in but their email is not verified.
   } else if (!authUser.emailVerified) {
-    replaceUrl(verifyEmailURL, urlParams, { keepURLParams: true })
+    replaceUrl(verifyEmailURL, urlParams)
     redirected = true
     // User is logged in but has not set a username.
   } else if (!authUser.username) {
@@ -202,7 +202,7 @@ export const redirectToAuthIfNeeded = ({
       setUsernameInLocalStorage(user.username)
       redirected = false
     } else {
-      replaceUrl(enterUsernameURL, urlParams, { keepURLParams: true })
+      replaceUrl(enterUsernameURL, urlParams)
       redirected = true
     }
   } else {

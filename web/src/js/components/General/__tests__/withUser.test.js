@@ -7,7 +7,7 @@ import {
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange,
 } from 'js/authentication/user'
-import { flushAllPromises } from 'js/utils/test-utils'
+import { flushAllPromises, setWindowLocation } from 'js/utils/test-utils'
 import {
   createAnonymousUserIfPossible,
   redirectToAuthIfNeeded,
@@ -24,6 +24,10 @@ afterEach(() => {
   createAnonymousUserIfPossible.mockResolvedValue(null)
   redirectToAuthIfNeeded.mockReturnValue(false)
   __unregisterAuthStateChangeListeners()
+  setWindowLocation({
+    href: 'https://example.gladly.io/newtab/profile/donate/',
+    path: '/newtab/profile/donate/',
+  })
 })
 
 describe('withUser', () => {
@@ -557,6 +561,33 @@ describe('withUser', () => {
     expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
       urlParams: {
         app: SEARCH_APP,
+      },
+    })
+  })
+
+  it('passes the "next" URL parameter value to redirectToAuthIfNeeded, using the window.location.href', async () => {
+    expect.assertions(1)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser()(MockComponent)
+
+    setWindowLocation({
+      href: 'https://example.gladly.io/newtab/profile/donate/',
+      path: '/newtab/profile/donate/',
+    })
+    shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
+      urlParams: {
+        next: 'https://example.gladly.io/newtab/profile/donate/',
       },
     })
   })
