@@ -7,7 +7,7 @@ import UsernameField from 'js/components/General/UsernameField'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { goTo, dashboardURL, searchBaseURL } from 'js/navigation/navigation'
+import { goTo } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
 
@@ -57,6 +57,7 @@ class EnterUsernameForm extends React.Component {
   }
 
   onMutationCompleted(response) {
+    const { nextURL } = this.props
     this.setState({
       savingUsernameInProgress: false,
     })
@@ -84,10 +85,8 @@ class EnterUsernameForm extends React.Component {
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
 
-    // Go to a different URL depending on the app.
-    const { app } = this.props
-    const destination = app === SEARCH_APP ? searchBaseURL : dashboardURL
-    goTo(destination)
+    // Go to the app.
+    goTo(nextURL)
   }
 
   onMutationError(response) {
@@ -173,6 +172,7 @@ class EnterUsernameForm extends React.Component {
 
 EnterUsernameForm.propTypes = {
   app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
+  nextURL: PropTypes.string.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),

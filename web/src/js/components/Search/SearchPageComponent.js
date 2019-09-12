@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { Helmet } from 'react-helmet'
+import withUser from 'js/components/General/withUser'
 import {
   isSearchPageEnabled,
   shouldRedirectSearchToThirdParty,
@@ -737,4 +738,9 @@ SearchPage.propTypes = {
 
 SearchPage.defaultProps = {}
 
-export default withStyles(styles, { withTheme: true })(SearchPage)
+export default withStyles(styles, { withTheme: true })(
+  withUser({
+    app: SEARCH_APP,
+    createUserIfPossible: false,
+  })(SearchPage)
+)

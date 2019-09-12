@@ -6,6 +6,11 @@
  * @return {Boolean} Whether the new URL is for another app
  */
 export const isURLForDifferentApp = newURL => {
+  // If the URL is absolute, treat it as external.
+  if (isAbsoluteURL(newURL)) {
+    return true
+  }
+
   const newURLObj = new URL(newURL, window.location.origin)
 
   // If the URLs are on different domains, they're different apps.

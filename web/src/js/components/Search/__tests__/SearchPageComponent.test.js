@@ -57,6 +57,7 @@ jest.mock('js/components/Search/WikipediaQuery')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/utils/logger')
+jest.mock('js/components/General/withUser')
 
 const getMockProps = () => ({
   user: {
@@ -87,7 +88,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
   })
 
   it('renders without error when user and app props are not defined', () => {
@@ -96,7 +99,9 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     delete mockProps.app
     delete mockProps.user
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
   })
 
   it('renders no DOM elements when the search page feature is not enabled', () => {
@@ -104,7 +109,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(toJson(wrapper)).toEqual('')
   })
 
@@ -113,7 +120,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(toJson(wrapper)).toEqual('')
   })
 
@@ -122,7 +131,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
@@ -134,7 +145,9 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '?q=yumtacos',
     }
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(externalRedirect).toHaveBeenCalledWith(
       'https://www.google.com/search?q=yumtacos'
     )
@@ -145,7 +158,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(toJson(wrapper)).not.toEqual('')
   })
 
@@ -154,7 +169,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(externalRedirect).not.toHaveBeenCalled()
   })
 
@@ -163,7 +180,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const logoComponent = wrapper.find(Logo)
     expect(logoComponent.prop('brand')).toEqual('search')
     expect(logoComponent.prop('includeText')).toBe(true)
@@ -177,7 +196,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const logoComponentParent = wrapper.find(Logo).parent()
     expect(logoComponentParent.type()).toEqual(Link)
     expect(logoComponentParent.prop('to')).toEqual(searchHomeURL)
@@ -188,7 +209,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper.find('[data-test-id="search-page"]').prop('style')
     ).toHaveProperty('minWidth', 1100)
@@ -202,7 +225,9 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '?q=i+like+food',
     }
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper
         .find(Helmet)
@@ -220,7 +245,9 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '',
     }
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper
         .find(Helmet)
@@ -234,7 +261,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper
         .find('[data-test-id="search-primary-results-column"]')
@@ -251,7 +280,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('style')).toHaveProperty(
       'maxWidth',
       600
@@ -263,7 +294,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper.find('[data-test-id="search-sidebar"]').prop('style')
     ).toMatchObject({
@@ -281,7 +314,9 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '?page=14',
     }
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const onPageChangeHandler = wrapper
       .find(SearchResultsQueryBing)
       .prop('onPageChange')
@@ -301,7 +336,9 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=blahblah'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
@@ -311,7 +348,9 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=blahblah'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
     wrapper.setProps(
       Object.assign({}, mockProps, {
@@ -386,7 +425,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const feedbackLink = wrapper.find('[data-test-id="search-feedback"]')
     expect(feedbackLink.prop('to')).toEqual(searchBetaFeedback)
     expect(
@@ -403,7 +444,9 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const elem = wrapper.find(SearchMenuQuery)
     expect(elem.exists()).toEqual(true)
   })
@@ -416,14 +459,18 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
 
     isSearchExtensionInstalled.mockResolvedValue(false)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
     ).toEqual(false)
 
     isSearchExtensionInstalled.mockResolvedValue(true)
-    const newWrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const newWrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       newWrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
@@ -447,7 +494,9 @@ describe('Search page component', () => {
       })
     })
 
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
 
     // Unmount
@@ -477,7 +526,9 @@ describe('Search page component', () => {
       })
     })
 
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
 
     // Unmount
@@ -496,7 +547,9 @@ describe('Search page: search category tabs', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tabs = wrapper.find(Tabs)
     const expectedTabs = ['Web', 'Images', 'News', 'Videos', 'Maps']
     expectedTabs.forEach(tabText => {
@@ -516,7 +569,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -531,7 +586,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -545,7 +602,9 @@ describe('Search page: search category tabs', () => {
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -558,7 +617,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -573,7 +634,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -587,7 +650,9 @@ describe('Search page: search category tabs', () => {
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -600,7 +665,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -615,7 +682,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -629,7 +698,9 @@ describe('Search page: search category tabs', () => {
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -642,7 +713,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -655,7 +728,9 @@ describe('Search page: search category tabs', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -669,7 +744,9 @@ describe('Search page: search category tabs', () => {
     const mockProps = getMockProps()
     mockProps.location.search = '?q=mini%20golf'
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
@@ -685,7 +762,9 @@ describe('Search page: Wikipedia component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(WikipediaQuery).exists()).toBe(false)
   })
 
@@ -695,7 +774,9 @@ describe('Search page: Wikipedia component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=big%20bad%20wolf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(WikipediaQuery).prop('query')).toEqual('big bad wolf')
   })
 
@@ -705,7 +786,9 @@ describe('Search page: Wikipedia component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=big%20bad%20wolf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper
         .find(WikipediaQuery)
@@ -729,7 +812,9 @@ describe('Search page: ad blocker message', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-prevented-warning"]').exists()
@@ -743,7 +828,9 @@ describe('Search page: ad blocker message', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(false)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-prevented-warning"]').exists()
@@ -760,7 +847,9 @@ describe('Search page: ad blocker message', () => {
     detectAdblocker.mockImplementation(() => Promise.reject(mockErr))
     const mockConsoleError = jest.fn()
     jest.spyOn(console, 'error').mockImplementationOnce(mockConsoleError)
-    shallow(<SearchPageComponent {...mockProps} />).dive()
+    shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(mockConsoleError).toHaveBeenCalledWith(mockErr)
   })
@@ -772,7 +861,9 @@ describe('Search page: ad blocker message', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const messageElem = wrapper.find(
       '[data-test-id="search-prevented-warning"]'
@@ -802,7 +893,9 @@ describe('Search page: ad blocker message', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const messageElem = wrapper.find(
       '[data-test-id="search-prevented-warning"]'
@@ -832,7 +925,9 @@ describe('Search page: "add extension" button', () => {
       .default
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
@@ -845,7 +940,9 @@ describe('Search page: "add extension" button', () => {
       .default
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
@@ -859,7 +956,9 @@ describe('Search page: "add extension" button', () => {
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const button = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
@@ -874,7 +973,9 @@ describe('Search page: "add extension" button', () => {
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const button = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
@@ -889,7 +990,9 @@ describe('Search page: "add extension" button', () => {
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const elem = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
@@ -906,7 +1009,9 @@ describe('Search page: "add extension" button', () => {
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const elem = wrapper
       .find('[data-test-id="search-add-extension-cta"]')
@@ -923,7 +1028,9 @@ describe('Search page: "add extension" button', () => {
     isSearchExtensionInstalled.mockResolvedValue(false)
     const mockProps = getMockProps()
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
@@ -937,7 +1044,9 @@ describe('Search page: "add extension" button', () => {
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockResolvedValue(false)
     detectSupportedBrowser.mockReturnValue('safari')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
@@ -951,7 +1060,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       true
     )
@@ -962,7 +1073,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       false
     )
@@ -973,7 +1086,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       true
     )
@@ -992,7 +1107,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     wrapper
       .find('[data-test-id="search-intro-msg"]')
       .find(Button)
@@ -1007,7 +1124,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       false
     )
@@ -1020,7 +1139,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper
@@ -1039,7 +1160,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper
@@ -1063,7 +1186,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper
@@ -1082,7 +1207,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
@@ -1098,7 +1225,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
@@ -1114,7 +1243,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const button = introElem.find(Button).at(1)
@@ -1128,7 +1259,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const button = introElem.find(Button).at(1)
@@ -1142,7 +1275,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const elem = introElem.find(Link)
@@ -1158,7 +1293,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     const elem = introElem.find(Link)
@@ -1174,7 +1311,9 @@ describe('Search page: intro message', () => {
       .default
     const mockProps = getMockProps()
     detectSupportedBrowser.mockReturnValue('safari')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
     expect(
@@ -1189,7 +1328,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper
@@ -1208,7 +1349,9 @@ describe('Search page: intro message', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(
       wrapper.find('[data-test-id="search-intro-msg"]').find(Typography).length
@@ -1246,7 +1389,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&another=thing'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('foo')
 
     // Update the search parameter.
@@ -1267,7 +1412,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&page=12'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(12)
   })
 
@@ -1279,7 +1426,9 @@ describe('Search results from Bing', () => {
       search: '?q=yumtacos',
     }
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
   })
 
@@ -1291,7 +1440,9 @@ describe('Search results from Bing', () => {
       search: '?q=yumtacos&page=12',
     }
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(1)
   })
 
@@ -1303,7 +1454,9 @@ describe('Search results from Bing', () => {
       search: '?q=yumtacos&src=chrome',
     }
     isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
   })
 
@@ -1312,7 +1465,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
   })
 
@@ -1321,7 +1476,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&page=hello'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
   })
 
@@ -1330,7 +1487,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&src=some-source'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
       'some-source'
     )
@@ -1341,7 +1500,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
   })
 
@@ -1350,7 +1511,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=hello&page=34'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(34)
     wrapper.setProps({
       ...mockProps,
@@ -1367,7 +1530,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=hello&src=chrome'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
       'chrome'
     )
@@ -1389,7 +1554,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true)
     expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
   })
@@ -1400,7 +1567,9 @@ describe('Search results from Bing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=big%20bad%20wolf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(
       wrapper
         .find(SearchResultsQueryBing)
@@ -1420,7 +1589,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.searchProvider = 'bing'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).exists()).toBe(false) // not using Yahoo
     expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true) // using Bing
   })
@@ -1430,7 +1601,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.searchProvider = undefined
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).exists()).toBe(true) // using Yahoo
     expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(false) // not using Bing
   })
@@ -1440,7 +1613,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&another=thing'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).prop('query')).toEqual('foo')
 
     // Update the search parameter.
@@ -1459,7 +1634,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&page=12'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).prop('page')).toBe(12)
   })
 
@@ -1468,7 +1645,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).prop('page')).toBe(1)
   })
 
@@ -1477,7 +1656,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&src=some-source'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).prop('searchSource')).toEqual(
       'some-source'
     )
@@ -1488,7 +1669,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
   })
 
@@ -1498,7 +1681,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     expect(wrapper.find(SearchResults).exists()).toBe(true)
     expect(wrapper.find(SearchResults).prop('query')).toEqual('')
   })
@@ -1509,7 +1694,9 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(false)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(false)
   })
@@ -1520,8 +1707,42 @@ describe('Search results from Yahoo', () => {
       .default
     const mockProps = getMockProps()
     detectAdblocker.mockResolvedValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
     await flushAllPromises()
     expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(true)
+  })
+})
+
+describe('withUser HOC in SearchPageComponent', () => {
+  beforeAll(() => {
+    jest.mock('js/components/Search/SearchMenuQuery')
+  })
+
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchPageComponent').default
+    expect(withUser).toHaveBeenCalledWith({
+      app: 'search',
+      createUserIfPossible: false,
+    })
+  })
+
+  it('wraps the SearchSettingsPage component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchPageComponent').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('SearchPage')
   })
 })

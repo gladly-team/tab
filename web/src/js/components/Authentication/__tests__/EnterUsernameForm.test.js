@@ -20,6 +20,7 @@ jest.mock('js/authentication/user')
 
 const getMockProps = () => ({
   app: 'tab',
+  nextURL: 'https://tab.gladly.io/newtab/profile/donate/?foo=bar',
   user: {
     id: 'abc-123',
   },
@@ -297,10 +298,11 @@ describe('EnterUsernameForm tests', () => {
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('AirplaneLover')
   })
 
-  it('redirects to the Tab for a Cause app (by default) after saving the username', () => {
+  it('redirects to the "nextURL" prop value after saving the username', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
+    mockProps.nextURL = 'https://tab.gladly.io/newtab/profile/donate/?foo=bar'
     const wrapper = mount(<EnterUsernameForm {...mockProps} />)
 
     // Enter a username
@@ -321,34 +323,8 @@ describe('EnterUsernameForm tests', () => {
       },
     })
 
-    expect(goTo).toHaveBeenCalledWith('/newtab/')
-  })
-
-  it('redirects to the Search for a Cause app (when the "app" prop === "search") after saving the username', () => {
-    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
-      .default
-    const mockProps = getMockProps()
-    mockProps.app = 'search'
-    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
-
-    // Enter a username
-    const usernameTextField = wrapper.find(
-      '[data-test-id="enter-username-form-username-field"] input'
+    expect(goTo).toHaveBeenCalledWith(
+      'https://tab.gladly.io/newtab/profile/donate/?foo=bar'
     )
-    usernameTextField.instance().value = 'Sunol'
-    const button = wrapper
-      .find('[data-test-id="enter-username-form-button"]')
-      .first()
-    button.simulate('click')
-    __runOnCompleted({
-      setUsername: {
-        user: {
-          username: 'Sunol',
-        },
-        errors: null,
-      },
-    })
-
-    expect(goTo).toHaveBeenCalledWith('/search')
   })
 })
