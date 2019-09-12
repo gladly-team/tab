@@ -81,6 +81,11 @@ const SearchMenuComponent = props => {
   // not signed in and has already installed the extension.
   // Adding the extension is a higher priority.
   const showSignInButton = !userExists && isSearchExtensionInstalled
+
+  // TODO:
+  // Log a Search account creation if this is the user's
+  // first search. Put it here as a convenient place to use
+  // fetched user data.
   return (
     <MuiThemeProvider
       theme={{
