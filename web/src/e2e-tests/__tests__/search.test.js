@@ -22,7 +22,7 @@ const getAbsoluteUrl = relativeUrl => {
 
 // Sanity checking that the app deployed and loads correctly
 describe('Search basic integration tests', () => {
-  it('should show the query in the search box', async () => {
+  it('should redirect to auth from search', async () => {
     driver = getDriver(
       'Search basic integration tests: should redirect to auth from search'
     )
