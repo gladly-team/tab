@@ -5,7 +5,7 @@
   "private": true,
   "devDependencies": {
     "babel-plugin-relay": "^4.0.0",
-    "chromedriver": "^74.0.0",
+    "chromedriver": "^76.0.1",
     "codecov": "^3.5.0",
     "cross-env": "^5.2.0",
     "cross-var": "^1.1.0",
@@ -27,7 +27,7 @@
     "react-snap": "^1.23.0",
     "relay-compiler": "^4.0.0",
     "relay-runtime": "^4.0.0",
-    "selenium-webdriver": "^4.0.0-alpha.1",
+    "selenium-webdriver": "^4.0.0-alpha.5",
     "serverless": "^1.42.3",
     "source-map-explorer": "^1.8.0"
   },
