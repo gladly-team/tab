@@ -23,8 +23,13 @@ function getDisplayName(WrappedComponent) {
  * @param {String} options.app - One of "search" or "tab". This determines
  *   app-specific behavior, like the redirect URL. Defaults to "tab".
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
- *   children even if there is no user ID (the user is not signed in).
+ *   children after we determine the user is not signed in.
  *   Defaults to false.
+ * @param {Boolean} options.renderWhileDeterminingAuthState - If true,
+ *   we will render the children before we know whether the user is authed
+ *   or not. This is helpful for pages that need to load particularly quickly
+ *   or pages we prerender at build time. Typically, renderIfNoUser should also
+ *   be set to true if this is true. Defaults to false.
  * @param {Boolean} options.createUserIfPossible - If true, when a user does
  *   not exist, we will create a new anonymous user both in our auth service
  *   and in our database. We might not always create a new user, depending on
@@ -34,6 +39,9 @@ function getDisplayName(WrappedComponent) {
  *   user ID), we will redirect to the appropriate authentication page.
  *   our anonymous user restrictions. It should be false when using withUser
  *   in a page where authentication is optional. Defaults to true.
+ * @param {Boolean} options.setNullUserWhenPrerendering - If true, we will
+ *   not test auth state during build-time prerendering. Instead, we will
+ *   set the authUser value to null. Defaults to true.
  * @return {Function} A higher-order component.
  */
 const withUser = (options = {}) => WrappedComponent => {
