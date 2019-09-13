@@ -63,8 +63,6 @@ const withUser = (options = {}) => WrappedComponent => {
 
       // Check the auth state. Optionally, when prerendering, just
       // immediately set a null user value.
-
-      // TODO: add tests
       const { setNullUserWhenPrerendering = true } = options
       if (setNullUserWhenPrerendering && isReactSnapClient()) {
         this.setState({
@@ -173,7 +171,6 @@ const withUser = (options = {}) => WrappedComponent => {
       } = options
       const { authUser, authStateLoaded, userCreationInProgress } = this.state
 
-      // TODO: add tests
       // By default, don't render the children until we've determined the
       // auth state.
       if (
