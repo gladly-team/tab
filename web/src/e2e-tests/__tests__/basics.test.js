@@ -23,5 +23,6 @@ describe('Basic integration tests', () => {
   it('should sign in', async () => {
     driver = getDriver('Basic integration tests: should sign in')
     await driver.signIn()
+    await driver.waitForElementExistsByTestId('app-dashboard')
   }, 30e3)
 })

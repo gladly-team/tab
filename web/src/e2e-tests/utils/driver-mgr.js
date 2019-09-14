@@ -72,13 +72,33 @@ const augmentDriver = driver => {
   driver.navigateTo = url => driver.navigate().to(getAbsoluteUrl(url))
 
   driver.signIn = async () => {
+    const testUserEmail = process.env.INTEGRATION_TEST_USER_EMAIL
+    const testUserPassword = process.env.INTEGRATION_TEST_USER_PASSWORD
+    if (!testUserEmail) {
+      throw new Error(
+        'You must provide an email via `process.env.INTEGRATION_TEST_USER_EMAIL`.'
+      )
+    }
+    if (!testUserPassword) {
+      throw new Error(
+        'You must provide an email via `process.env.INTEGRATION_TEST_USER_PASSWORD`.'
+      )
+    }
+
     const authPageURL = '/newtab/auth/'
     const emailSignInButtonSelector = By.css('[data-provider-id="password"]')
+    const emailInputSelector = By.css('input[name="email"]')
+    const passwordInputSelector = By.css('input[name="password"]')
+
     await driver.navigateTo(authPageURL)
     await driver.waitForElementExistsByCustomSelector(emailSignInButtonSelector)
     await driver.click(emailSignInButtonSelector)
-
-    // TODO
+    await driver.waitForElementExistsByCustomSelector(emailInputSelector)
+    await driver.setValue(emailInputSelector, testUserEmail)
+    await driver.click(By.css('button[type="submit"]'))
+    await driver.waitForElementExistsByCustomSelector(passwordInputSelector)
+    await driver.setValue(passwordInputSelector, testUserPassword)
+    await driver.click(By.css('button[type="submit"]'))
   }
 
   return driver
