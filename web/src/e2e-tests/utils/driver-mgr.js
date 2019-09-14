@@ -72,6 +72,7 @@ const augmentDriver = driver => {
   driver.navigateTo = url => driver.navigate().to(getAbsoluteUrl(url))
 
   driver.signIn = async () => {
+    // We set these private env vars directly in our CI tool.
     const testUserEmail = process.env.INTEGRATION_TEST_USER_EMAIL
     const testUserPassword = process.env.INTEGRATION_TEST_USER_PASSWORD
     if (!testUserEmail) {
