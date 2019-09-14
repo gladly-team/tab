@@ -1,10 +1,12 @@
 import webdriver from 'selenium-webdriver'
+const By = webdriver.By
+const until = webdriver.until
 
 const BROWSER_NAME = 'chrome'
 const BROWSERSTACK_PROJECT = 'tab'
 const BROWSERSTACK_BUILD = 'tab-'
 
-function getDriver(testName) {
+export const getDriver = testName => {
   var driver
   if (
     !process.env.SELENIUM_DRIVER_TYPE ||
@@ -26,10 +28,10 @@ function getDriver(testName) {
       .withCapabilities(capabilities)
       .build()
   }
-  return driver
+  return augmentDriver(driver)
 }
 
-function getAppBaseUrl() {
+const getAppBaseUrl = () => {
   const seleniumHostDefault = 'http://localhost:3000'
   var seleniumHost
   if (process.env.SELENIUM_HOST) {
@@ -44,4 +46,30 @@ function getAppBaseUrl() {
   return seleniumHost
 }
 
-export { getDriver, getAppBaseUrl }
+const getAbsoluteUrl = relativeUrl => {
+  return `${getAppBaseUrl()}${relativeUrl}`
+}
+
+// Add some helper methods to the Selenium driver.
+const augmentDriver = driver => {
+  driver.waitForElementExistsByCustomSelector = selector =>
+    driver.wait(until.elementLocated(selector))
+
+  driver.waitForElementExistsByTestId = dataTestId =>
+    driver.wait(until.elementLocated(By.css(`[data-test-id='${dataTestId}']`)))
+
+  driver.getElementByTestId = dataTestId =>
+    driver.findElement(By.css(`[data-test-id='${dataTestId}']`))
+
+  driver.getElementByCSSSelector = selector =>
+    driver.findElement(By.css(selector))
+
+  driver.setValue = (selector, value) =>
+    driver.findElement(selector).sendKeys(value)
+
+  driver.click = selector => driver.findElement(selector).click()
+
+  driver.navigateTo = url => driver.navigate().to(getAbsoluteUrl(url))
+
+  return driver
+}
