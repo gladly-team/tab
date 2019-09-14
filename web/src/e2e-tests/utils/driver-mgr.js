@@ -71,5 +71,15 @@ const augmentDriver = driver => {
 
   driver.navigateTo = url => driver.navigate().to(getAbsoluteUrl(url))
 
+  driver.signIn = async () => {
+    const authPageURL = '/newtab/auth/'
+    const emailSignInButtonSelector = By.css('[data-provider-id="password"]')
+    await driver.navigateTo(authPageURL)
+    await driver.waitForElementExistsByCustomSelector(emailSignInButtonSelector)
+    await driver.click(emailSignInButtonSelector)
+
+    // TODO
+  }
+
   return driver
 }

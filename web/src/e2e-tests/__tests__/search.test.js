@@ -1,7 +1,6 @@
 /* eslint-env jest */
 /* globals jasmine */
 
-import driverUtils from '../utils/driver-utils'
 import { getDriver } from '../utils/driver-mgr'
 
 // const webdriver = require('selenium-webdriver')

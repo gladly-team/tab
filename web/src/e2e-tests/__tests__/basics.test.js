@@ -19,4 +19,9 @@ describe('Basic integration tests', () => {
     await driver.navigateTo('/newtab/')
     await driver.waitForElementExistsByTestId('authentication-page')
   }, 30e3)
+
+  it('should sign in', async () => {
+    driver = getDriver('Basic integration tests: should sign in')
+    await driver.signIn()
+  }, 30e3)
 })
