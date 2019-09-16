@@ -6,19 +6,19 @@ const fetch = require('node-fetch')
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 
-let driver
-afterEach(() => {
-  if (driver && driver.quit) {
-    return driver.quit()
-  }
-})
-
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
 
-describe('Search basic integration tests', () => {
+describe('Search: acceptance tests', () => {
+  let driver
+  afterEach(() => {
+    if (driver && driver.quit) {
+      return driver.quit()
+    }
+  })
+
   it('should redirect to auth from search', async () => {
     driver = getDriver(
-      'Search basic integration tests: should redirect to auth from search'
+      'Search: acceptance tests: should redirect to auth from search'
     )
     await driver.navigateTo('/search/?q=hi%20there!')
     await driver.waitForElementExistsByTestId('authentication-page')
@@ -26,7 +26,7 @@ describe('Search basic integration tests', () => {
 
   it('should load the search page (with search query) after signing in', async () => {
     driver = getDriver(
-      'Search basic integration tests: should load the search page (with search query) after signing in'
+      'Search: acceptance tests: should load the search page (with search query) after signing in'
     )
     await driver.navigateTo('/search/?q=hi%20there!') // this should redirect to the auth page
     await driver.waitForElementExistsByTestId('authentication-page')
@@ -46,7 +46,9 @@ describe('Search basic integration tests', () => {
     const inputVal = await inputElem.getAttribute('value')
     expect(inputVal).toEqual('hi there!')
   }, 30e3)
+})
 
+describe('Search: tests of pre-rendered HTML', () => {
   // This can help catch errors in our build-time prerendering.
   it('contains the expected prerendered HTML for the search results page', async () => {
     const url = getAbsoluteUrl('/search?q=tacos')

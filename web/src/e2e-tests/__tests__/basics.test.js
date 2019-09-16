@@ -13,16 +13,16 @@ afterEach(() => {
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
 
 // Sanity checking that the app deployed and loads correctly
-describe('Basic integration tests', () => {
+describe('Tab: acceptance tests', () => {
   it('should load the auth page', async () => {
-    driver = getDriver('Basic integration tests: should load auth page')
+    driver = getDriver('Tab: acceptance tests: should load auth page')
     await driver.navigateTo('/newtab/')
     await driver.waitForElementExistsByTestId('authentication-page')
   }, 30e3)
 
   it('should go to the new tab dashboard after signing in', async () => {
     driver = getDriver(
-      'Basic integration tests: should go to the new tab dashboard after signing in'
+      'Tab: acceptance tests: should go to the new tab dashboard after signing in'
     )
     await driver.navigateTo('/newtab/') // this should redirect to the auth page
     await driver.waitForElementExistsByTestId('authentication-page')
