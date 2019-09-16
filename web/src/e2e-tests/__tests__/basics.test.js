@@ -20,8 +20,12 @@ describe('Basic integration tests', () => {
     await driver.waitForElementExistsByTestId('authentication-page')
   }, 30e3)
 
-  it('should sign in', async () => {
-    driver = getDriver('Basic integration tests: should sign in')
+  it('should go to the new tab dashboard after signing in', async () => {
+    driver = getDriver(
+      'Basic integration tests: should go to the new tab dashboard after signing in'
+    )
+    await driver.navigateTo('/newtab/') // this should redirect to the auth page
+    await driver.waitForElementExistsByTestId('authentication-page')
     await driver.signIn()
     await driver.waitForElementExistsByTestId('app-dashboard')
   }, 30e3)
