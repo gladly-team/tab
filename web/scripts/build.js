@@ -60,6 +60,7 @@ spawnSync('mv', ['build/build-temp', `build/${buildSubdirectory}`])
 
 // For the search app, un react-snap to prerender HTML.
 if (appName === 'search') {
+  // FIXME: don't prerender analytics snippets
   console.log(`Running react-snap to prerender HTML...`)
   const reactSnapResult = spawnSync('react-snap')
   if (reactSnapResult.stdout) {
