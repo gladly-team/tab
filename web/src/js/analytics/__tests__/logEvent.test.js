@@ -3,13 +3,11 @@
 import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
 import rdt from 'js/analytics/reddit-analytics'
-import qp from 'js/analytics/quora-analytics'
 import logger from 'js/utils/logger'
 
 jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/analytics/google-analytics')
 jest.mock('js/analytics/reddit-analytics')
-jest.mock('js/analytics/quora-analytics')
 jest.mock('js/utils/logger')
 
 beforeAll(() => {
@@ -27,7 +25,6 @@ describe('logEvent', () => {
 
     expect(fbq).toHaveBeenCalledWith('track', 'PageView')
     expect(GA.pageview).toHaveBeenCalled()
-    expect(qp).toHaveBeenCalledWith('track', 'ViewContent')
   })
 
   test('homepage view event calls analytics as expected', () => {
@@ -95,7 +92,6 @@ describe('logEvent', () => {
       action: 'AccountCreation',
     })
     expect(rdt).toHaveBeenCalledWith('track', 'SignUp')
-    expect(qp).toHaveBeenCalledWith('track', 'CompleteRegistration')
     expect(window.gtag).toHaveBeenCalledWith('event', 'conversion', {
       send_to: 'AW-1013744060/v2M_COqV6owBELyDsuMD',
     })
@@ -141,7 +137,6 @@ describe('logEvent', () => {
       action: 'SearchAccountCreation',
     })
     expect(rdt).toHaveBeenCalledWith('track', 'Search')
-    expect(qp).toHaveBeenCalledWith('track', 'Search')
   })
 
   test('Search for a Cause account created event does not throw when analytics libraries throw and instead logs an error', () => {

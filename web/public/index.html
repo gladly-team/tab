@@ -113,24 +113,6 @@
     }
     </script>
 
-    <!--
-      @gladly-customization:
-      Quora conversion pixel
-    -->
-    <script>/* eslint-disable */
-    try {
-      !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
-      qp('init', '36541467ff4144d6a35e28bf2d6d3f4c');
-      // Note: not including the ViewContent tracking causes a fatal error
-      // when loading a page prerendering with react-snap:
-      // "Quora Pixel Error: Base pixel code is not installed properly."
-      // qp('track', 'ViewContent');
-    } catch(e) {
-      console.error(e)
-    }
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://q.quora.com/_/ad/36541467ff4144d6a35e28bf2d6d3f4c/pixel?tag=ViewContent&noscript=1"/></noscript>
-
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -1,7 +1,6 @@
 import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
 import rdt from 'js/analytics/reddit-analytics'
-import qp from 'js/analytics/quora-analytics'
 import logger from 'js/utils/logger'
 
 // We automatically track most pageviews on location change.
@@ -9,7 +8,6 @@ import logger from 'js/utils/logger'
 export const pageview = () => {
   fbq('track', 'PageView')
   GA.pageview()
-  qp('track', 'ViewContent')
 }
 
 export const homepageView = () => {
@@ -54,7 +52,6 @@ export const accountCreated = () => {
     action: 'AccountCreation',
   })
   rdt('track', 'SignUp')
-  qp('track', 'CompleteRegistration')
 
   // Google Ads conversion tracking.
   window.gtag('event', 'conversion', {
@@ -110,7 +107,11 @@ export const searchForACauseAccountCreated = () => {
       action: 'SearchAccountCreation',
     })
     rdt('track', 'Search')
-    qp('track', 'Search')
+
+    // A note about Quora, in case we reimplement its pixel in the future:
+    // It can cause fatal errors when paired with react-snap pre-rendering:
+    // "Quora Pixel Error: Base pixel code is not installed properly."
+    // Be cautious about implementing it on the Search app.
   } catch (e) {
     logger.error(e)
   }
