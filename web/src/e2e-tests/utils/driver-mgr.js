@@ -46,7 +46,7 @@ const getAppBaseUrl = () => {
   return seleniumHost
 }
 
-const getAbsoluteUrl = relativeUrl => {
+export const getAbsoluteUrl = relativeUrl => {
   return `${getAppBaseUrl()}${relativeUrl}`
 }
 

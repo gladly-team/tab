@@ -1,8 +1,8 @@
 /* eslint-env jest */
 /* globals jasmine */
 
-import { getDriver } from '../utils/driver-mgr'
-
+import { getDriver, getAbsoluteUrl } from '../utils/driver-mgr'
+const fetch = require('node-fetch')
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 
@@ -15,7 +15,6 @@ afterEach(() => {
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
 
-// Sanity checking that the app deployed and loads correctly
 describe('Search basic integration tests', () => {
   it('should redirect to auth from search', async () => {
     driver = getDriver(
@@ -46,5 +45,24 @@ describe('Search basic integration tests', () => {
     )
     const inputVal = await inputElem.getAttribute('value')
     expect(inputVal).toEqual('hi there!')
+  }, 30e3)
+
+  // This can help catch errors in our build-time prerendering.
+  it('contains the expected prerendered HTML for the search results page', async () => {
+    const url = getAbsoluteUrl('/search?q=tacos')
+    var html
+    try {
+      const response = await fetch(url)
+      html = await response.text()
+    } catch (e) {
+      throw e
+    }
+
+    // Do a rough check that the prerendered HTML contains the expected
+    // components for the search results page and not the auth page.
+    expect(html.indexOf('data-test-id="search-page"')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-test-id="authentication-page"')).toEqual(-1)
+    expect(html.indexOf('data-test-id="search-input"')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-test-id="search-results"')).toBeGreaterThan(-1)
   }, 30e3)
 })
