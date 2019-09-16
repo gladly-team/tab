@@ -740,5 +740,13 @@ export default withStyles(styles, { withTheme: true })(
   withUser({
     app: SEARCH_APP,
     createUserIfPossible: false,
+    // We want to:
+    // - render children immediately (without waiting on any auth determination)
+    // - prerender child HTML assuming no authed user
+    // - redirect to the auth page in production if the user is not signed in
+    redirectToAuthIfIncomplete: true,
+    renderIfNoUser: true,
+    renderWhileDeterminingAuthState: true,
+    setNullUserWhenPrerendering: true,
   })(SearchPage)
 )

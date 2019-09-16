@@ -7,6 +7,7 @@ import {
 import logger from 'js/utils/logger'
 import { makePromiseCancelable } from 'js/utils/utils'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -22,8 +23,13 @@ function getDisplayName(WrappedComponent) {
  * @param {String} options.app - One of "search" or "tab". This determines
  *   app-specific behavior, like the redirect URL. Defaults to "tab".
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
- *   children even if there is no user ID (the user is not signed in).
+ *   children after we determine the user is not signed in.
  *   Defaults to false.
+ * @param {Boolean} options.renderWhileDeterminingAuthState - If true,
+ *   we will render the children before we know whether the user is authed
+ *   or not. This is helpful for pages that need to load particularly quickly
+ *   or pages we prerender at build time. Typically, renderIfNoUser should also
+ *   be set to true if this is true. Defaults to false.
  * @param {Boolean} options.createUserIfPossible - If true, when a user does
  *   not exist, we will create a new anonymous user both in our auth service
  *   and in our database. We might not always create a new user, depending on
@@ -33,6 +39,9 @@ function getDisplayName(WrappedComponent) {
  *   user ID), we will redirect to the appropriate authentication page.
  *   our anonymous user restrictions. It should be false when using withUser
  *   in a page where authentication is optional. Defaults to true.
+ * @param {Boolean} options.setNullUserWhenPrerendering - If true, we will
+ *   not test auth state during build-time prerendering. Instead, we will
+ *   set the authUser value to null. Defaults to true.
  * @return {Function} A higher-order component.
  */
 const withUser = (options = {}) => WrappedComponent => {
@@ -52,11 +61,21 @@ const withUser = (options = {}) => WrappedComponent => {
     componentDidMount() {
       this.mounted = true
 
-      // Store unsubscribe function.
-      // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
-      this.authListenerUnsubscribe = onAuthStateChanged(user => {
-        this.determineAuthState(user)
-      })
+      // Check the auth state. Optionally, when prerendering, just
+      // immediately set a null user value.
+      const { setNullUserWhenPrerendering = true } = options
+      if (setNullUserWhenPrerendering && isReactSnapClient()) {
+        this.setState({
+          authUser: null,
+          authStateLoaded: true,
+        })
+      } else {
+        // Store unsubscribe function.
+        // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
+        this.authListenerUnsubscribe = onAuthStateChanged(user => {
+          this.determineAuthState(user)
+        })
+      }
     }
 
     componentWillUnmount() {
@@ -146,13 +165,22 @@ const withUser = (options = {}) => WrappedComponent => {
     }
 
     render() {
-      const { renderIfNoUser = false } = options
+      const {
+        renderWhileDeterminingAuthState = false,
+        renderIfNoUser = false,
+      } = options
       const { authUser, authStateLoaded, userCreationInProgress } = this.state
-      // Don't render the children until we've determined the auth state.
-      if (!authStateLoaded || userCreationInProgress) {
+
+      // By default, don't render the children until we've determined the
+      // auth state.
+      if (
+        !renderWhileDeterminingAuthState &&
+        (!authStateLoaded || userCreationInProgress)
+      ) {
         return null
       }
-      // Return null if the user is not authenticated but the children require
+
+      // Return null if the user is not authenticated and the children require
       // an authenticated user.
       if (!authUser && !renderIfNoUser) {
         return null

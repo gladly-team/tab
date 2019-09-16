@@ -12,6 +12,10 @@ custom:
   # Ideally would reference the Cloudformation output directly, but this is
   # buggy for the authorizer: https://github.com/serverless/serverless/issues/3129
   customAuthorizerArn: arn:aws:lambda:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:function:lambda-${self:provider.stage}-firebaseAuthorizer
+  # https://github.com/claygregory/serverless-prune-plugin
+  prune:
+    automatic: true
+    number: 5
 
 provider:
   name: aws
@@ -176,6 +180,8 @@ plugins:
   # Include only the required node modules.
   # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
   - serverless-plugin-include-dependencies
+  # https://github.com/claygregory/serverless-prune-plugin
+  - serverless-prune-plugin
 
 # Only include the build and its node modules.
 package:

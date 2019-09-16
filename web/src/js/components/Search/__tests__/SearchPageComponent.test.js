@@ -1732,6 +1732,10 @@ describe('withUser HOC in SearchPageComponent', () => {
     expect(withUser).toHaveBeenCalledWith({
       app: 'search',
       createUserIfPossible: false,
+      redirectToAuthIfIncomplete: true,
+      renderIfNoUser: true,
+      renderWhileDeterminingAuthState: true,
+      setNullUserWhenPrerendering: true,
     })
   })
 

@@ -37,6 +37,7 @@
     "prettier": "^1.17.1",
     "serverless": "^1.42.3",
     "serverless-plugin-include-dependencies": "^3.2.1",
+    "serverless-prune-plugin": "^1.4.1",
     "yamljs": "^0.3.0"
   },
   "scripts": {
