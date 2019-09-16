@@ -4,11 +4,13 @@ import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
 import rdt from 'js/analytics/reddit-analytics'
 import qp from 'js/analytics/quora-analytics'
+import logger from 'js/utils/logger'
 
 jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/analytics/google-analytics')
 jest.mock('js/analytics/reddit-analytics')
 jest.mock('js/analytics/quora-analytics')
+jest.mock('js/utils/logger')
 
 beforeAll(() => {
   window.gtag = jest.fn()
@@ -140,5 +142,17 @@ describe('logEvent', () => {
     })
     expect(rdt).toHaveBeenCalledWith('track', 'Search')
     expect(qp).toHaveBeenCalledWith('track', 'Search')
+  })
+
+  test('Search for a Cause account created event does not throw when analytics libraries throw and instead logs an error', () => {
+    const mockErr = new Error(':o')
+    fbq.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const { searchForACauseAccountCreated } = require('js/analytics/logEvent')
+    expect(() => {
+      searchForACauseAccountCreated()
+    }).not.toThrow()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })

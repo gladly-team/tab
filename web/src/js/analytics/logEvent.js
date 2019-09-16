@@ -2,6 +2,7 @@ import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
 import rdt from 'js/analytics/reddit-analytics'
 import qp from 'js/analytics/quora-analytics'
+import logger from 'js/utils/logger'
 
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.
@@ -100,11 +101,17 @@ export const newTabView = () => {
 }
 
 export const searchForACauseAccountCreated = () => {
-  fbq('track', 'CompleteRegistration', { content_name: 'SearchAccountCreated' })
-  GA.event({
-    category: 'ButtonClick',
-    action: 'SearchAccountCreation',
-  })
-  rdt('track', 'Search')
-  qp('track', 'Search')
+  try {
+    fbq('track', 'CompleteRegistration', {
+      content_name: 'SearchAccountCreated',
+    })
+    GA.event({
+      category: 'ButtonClick',
+      action: 'SearchAccountCreation',
+    })
+    rdt('track', 'Search')
+    qp('track', 'Search')
+  } catch (e) {
+    logger.error(e)
+  }
 }
