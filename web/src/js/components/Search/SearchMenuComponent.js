@@ -83,10 +83,6 @@ const SearchMenuComponent = props => {
   // Adding the extension is a higher priority.
   const showSignInButton = !userExists && isSearchExtensionInstalled
 
-  // TODO:
-  // Log a Search account creation if this is the user's
-  // first search. Put it here as a convenient place to use
-  // fetched user data.
   return (
     <MuiThemeProvider
       theme={{
@@ -321,6 +317,7 @@ const SearchMenuComponent = props => {
             ) : null}
           </div>
         ) : null}
+        {/* Log a Search account creation if this is the user's first search. */}
         {userExists ? <LogSearchAccountCreation user={user} /> : null}
       </div>
     </MuiThemeProvider>
