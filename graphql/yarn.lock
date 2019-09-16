@@ -1525,6 +1525,11 @@ bl@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
+bluebird@^3.4.7:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
+  integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
+
 bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
@@ -6907,6 +6912,13 @@ serverless-plugin-include-dependencies@^3.2.1:
     require-package-name "^2.0.1"
     resolve "^1.3.2"
     semver "^5.6.0"
+
+serverless-prune-plugin@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/serverless-prune-plugin/-/serverless-prune-plugin-1.4.1.tgz#94f43e69989de39647e7dc3e7e0c86db1999aba7"
+  integrity sha512-4kXCqdLoAlsQXZPWM2pzZiO0jAqpFQMIoCTkAK4P6JdrMgg8714yAYTzoRD/IZ4f6eS3GLjMoFOCxlrNA9LbKQ==
+  dependencies:
+    bluebird "^3.4.7"
 
 serverless@^1.42.3:
   version "1.42.3"
