@@ -66,9 +66,19 @@ provider:
       Action: "Update:Modify"
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
 
+plugins:
+  # https://github.com/claygregory/serverless-prune-plugin
+  - serverless-prune-plugin
+
 custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  # Don't automatically delete old function versions. We rely on specific
+  # function versions for our Lambda@Edge association in Cloudfront.
+  # https://github.com/claygregory/serverless-prune-plugin
+  prune:
+    automatic: false
+
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
