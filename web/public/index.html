@@ -19,8 +19,7 @@
       Set up the TTI polyfill for non-production environments:
       https://github.com/GoogleChromeLabs/tti-polyfill
     -->
-    <script>
-    /* eslint-disable */
+    <script>/* eslint-disable */
     !function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
     g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});
     g.o.observe({entryTypes:['longtask']})}}();
@@ -87,16 +86,24 @@
       Reddit conversion pixel
     -->
     <script>/* eslint-disable */
-    !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');
+    try {
+      !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');
+    } catch(e) {
+      console.error(e)
+    }
     </script>
 
     <!--
       @gladly-customization:
       Quora conversion pixel
     -->
-    <script>/* eslint-disable */ // TODO: try/catch
-    !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
-    qp('init', '36541467ff4144d6a35e28bf2d6d3f4c');
+    <script>/* eslint-disable */
+    try {
+      !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
+      qp('init', '36541467ff4144d6a35e28bf2d6d3f4c');
+    } catch(e) {
+      console.error(e)
+    }
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://q.quora.com/_/ad/36541467ff4144d6a35e28bf2d6d3f4c/pixel?tag=ViewContent&noscript=1"/></noscript>
 
@@ -144,12 +151,16 @@
       Facebook Pixel Code
     -->
     <script>/* eslint-disable */
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1813501258922708');
+    try {
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1813501258922708');
+    } catch(e) {
+      console.error(e)
+    }
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
@@ -160,8 +171,7 @@
       @gladly-customization:
       Google Publisher Tag
     -->
-    <script type="text/javascript">
-      /* eslint-disable */
+    <script type="text/javascript">/* eslint-disable */
       // Google Tag Manager
       var googletag = window.googletag || {}
       googletag.cmd = googletag.cmd || []
@@ -212,7 +222,11 @@
       Amazon apstag
     -->
     <script>/* eslint-disable */
-    !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
+    try {
+      !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
+    } catch(e) {
+      console.error(e)
+    }
     </script>
     <% } %>
 
