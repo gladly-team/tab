@@ -27,6 +27,25 @@
     <% } %>
 
     <!--
+      @gladly-customization
+    -->
+    <script type="text/javascript">/* eslint-disable */
+      window.runAnalyticsScripts = true
+      // Don't run analytics scripts if we are pre-rendering with react-snap.
+      // https://github.com/stereobooster/react-snap/blob/master/doc/recipes.md#usage-with-google-analytics
+      // Some analytics code, like the Reddit pixel, assumes its global is
+      // accessible before the script loads; but pre-rendering puts its
+      // script at the top of the head, before its inline script, which
+      // causes an error. (To reproduce this error, run on a fresh browser
+      // when the analytics JS is not in the memory cache.)
+      try {
+        window.runAnalyticsScripts = navigator.userAgent !== 'ReactSnap'
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
+    <!--
       @gladly-customization:
       global style for all served HTML
     -->
@@ -87,12 +106,14 @@
     -->
     <script>/* eslint-disable */
     try {
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1813501258922708');
+      if (window.runAnalyticsScripts) {
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+          n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+          document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '1813501258922708');
+      }
     } catch(e) {
       console.error(e)
     }
@@ -107,7 +128,9 @@
     -->
     <script>/* eslint-disable */
     try {
-      !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');
+      if (window.runAnalyticsScripts) {
+        !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');
+      }
     } catch(e) {
       console.error(e)
     }
