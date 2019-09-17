@@ -318,7 +318,9 @@ const SearchMenuComponent = props => {
           </div>
         ) : null}
         {/* Log a Search account creation if this is the user's first search. */}
-        {userExists ? <LogSearchAccountCreation user={user} /> : null}
+        {userExists && user.searches === 1 ? (
+          <LogSearchAccountCreation user={user} />
+        ) : null}
       </div>
     </MuiThemeProvider>
   )
