@@ -6,7 +6,7 @@ const fetch = require('node-fetch')
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 70e3
 
 describe('Search: acceptance tests', () => {
   let driver

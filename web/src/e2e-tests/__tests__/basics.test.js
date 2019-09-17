@@ -10,7 +10,7 @@ afterEach(() => {
   }
 })
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 70e3
 
 // Sanity checking that the app deployed and loads correctly
 describe('Tab: acceptance tests', () => {
