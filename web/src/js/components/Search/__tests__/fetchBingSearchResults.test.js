@@ -712,65 +712,6 @@ describe('fetchBingSearchResults: using data from in-progress requests', () => {
     })
     window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
   })
-
-  it("resolves and refetches after a timeout period to make sure we aren't waiting on a bad request", async done => {
-    expect.assertions(1)
-    getUrlParameters.mockReturnValue({
-      q: 'how to make boiled water',
-    })
-    window.searchforacause.queryRequest = {
-      status: 'IN_PROGRESS',
-      displayedResults: false,
-      responseData: null,
-    }
-    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-
-    // Note that we don't dispatch the SearchResultsFetched event.
-    fetchBingSearchResults().then(data => {
-      expect(spyRemoveEventListener).toHaveBeenCalledWith(
-        'SearchResultsFetched',
-        expect.any(Function),
-        false
-      )
-      done()
-    })
-
-    jest.advanceTimersByTime(1000)
-  })
-
-  it('removes its event listener when it times out', async done => {
-    expect.assertions(2)
-    getUrlParameters.mockReturnValue({
-      q: 'how to make boiled water',
-    })
-    window.searchforacause.queryRequest = {
-      status: 'IN_PROGRESS',
-      displayedResults: false,
-      responseData: null,
-    }
-    global.fetch.mockImplementation(() =>
-      Promise.resolve(
-        mockFetchResponse({
-          json: () =>
-            Promise.resolve({ answer: 'add lots of heat to cold water' }),
-        })
-      )
-    )
-
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-
-    // Note that we don't dispatch the SearchResultsFetched event.
-    fetchBingSearchResults().then(data => {
-      expect(data).toEqual({ answer: 'add lots of heat to cold water' })
-      expect(fetch).toHaveBeenCalledTimes(1)
-      done()
-    })
-
-    jest.advanceTimersByTime(1000)
-  })
 })
 
 describe('prefetchSearchResults: storing "prefetched" request data to the search global', () => {
@@ -810,6 +751,28 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
         msEdgeClientID: 'abc-123',
       },
     })
+  })
+
+  it('stores null data to the search global when fetching fails', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          ok: false,
+          status: 500,
+          json: () => Promise.resolve({ some: 'error' }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.responseData).toBeNull()
   })
 
   it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {

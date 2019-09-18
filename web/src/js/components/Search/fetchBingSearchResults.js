@@ -109,17 +109,6 @@ const getPreviouslyFetchedData = async () => {
         queryCompleteHandler,
         false
       )
-
-      // Set a max time to wait.
-      const msToWaitBeforeRetrying = 800
-      setTimeout(() => {
-        window.removeEventListener(
-          eventNameResultsFetched,
-          queryCompleteHandler,
-          false
-        )
-        resolve(null)
-      }, msToWaitBeforeRetrying)
     })
   }
 
