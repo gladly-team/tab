@@ -22,6 +22,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { commaFormatted } from 'js/utils/utils'
 import theme from 'js/theme/searchTheme'
 import Link from 'js/components/General/Link'
+import LogSearchAccountCreation from 'js/components/Search/LogSearchAccountCreationComponent'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
@@ -81,6 +82,7 @@ const SearchMenuComponent = props => {
   // not signed in and has already installed the extension.
   // Adding the extension is a higher priority.
   const showSignInButton = !userExists && isSearchExtensionInstalled
+
   return (
     <MuiThemeProvider
       theme={{
@@ -315,6 +317,9 @@ const SearchMenuComponent = props => {
             ) : null}
           </div>
         ) : null}
+        {userExists && user.searches < 2 ? (
+          <LogSearchAccountCreation user={user} />
+        ) : null}
       </div>
     </MuiThemeProvider>
   )
@@ -329,6 +334,7 @@ SearchMenuComponent.propTypes = {
   style: PropTypes.object,
   // May not exist if the user is not signed in.
   user: PropTypes.shape({
+    searches: PropTypes.number.isRequired,
     vcDonatedAllTime: PropTypes.number.isRequired,
   }),
 }
