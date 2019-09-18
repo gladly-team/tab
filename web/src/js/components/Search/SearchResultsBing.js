@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
@@ -11,6 +12,7 @@ import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMess
 import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
 
 // Pings Bing when the search results page loads.
 class BingPageLoadPing extends React.Component {
@@ -69,6 +71,12 @@ const styles = theme => ({
   },
   noResultsMessages: {
     marginTop: 20,
+  },
+  firstSearchCardContainer: {
+    padding: 20,
+    marginBottom: 26,
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 })
 
@@ -165,9 +173,35 @@ const SearchResultsBing = props => {
               {commaFormatted(data.resultsCount)} results
             </Typography>
           ) : null}
-          {
-            // TODO: if this is the first query, show our intro card
-          }
+          {// If this is the first query, show our intro card
+          query === SEARCH_INTRO_QUERY_ENGLISH ? (
+            <ErrorBoundary ignoreErrors>
+              <Paper
+                data-test-id={'first-search-card'}
+                className={classes.firstSearchCardContainer}
+                elevation={1}
+              >
+                <div>
+                  <Typography
+                    variant={'h4'}
+                    data-test-id={'first-search-card-value'}
+                    gutterBottom
+                  >
+                    Over 3.5 billion
+                  </Typography>
+                  <Typography
+                    variant={'body2'}
+                    data-test-id={'first-search-card-text'}
+                    gutterBottom
+                  >
+                    With Search for a Cause, those searches could give 500,000
+                    people access to clean water or protect 430 square miles of
+                    rainforest each day!
+                  </Typography>
+                </div>
+              </Paper>
+            </ErrorBoundary>
+          ) : null}
           {data.results.mainline.map(searchResultItemData => {
             return (
               <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
