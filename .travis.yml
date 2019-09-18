@@ -4,7 +4,7 @@ language: node_js
 # Node 6 has a bug that affects some of our unit tests:
 # https://github.com/facebook/jest/issues/3152#issuecomment-287496730
 node_js:
-- '8'
+- '10'
 env:
   global:
   - CI=true

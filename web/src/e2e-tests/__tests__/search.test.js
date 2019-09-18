@@ -1,69 +1,83 @@
 /* eslint-env jest */
 /* globals jasmine */
 
-import driverUtils from '../utils/driver-utils'
-import { getDriver, getAppBaseUrl } from '../utils/driver-mgr'
+import { getDriver, getAbsoluteUrl } from '../utils/driver-mgr'
+const fetch = require('node-fetch')
+const webdriver = require('selenium-webdriver')
+const By = webdriver.By
 
-// const webdriver = require('selenium-webdriver')
-// const By = webdriver.By
+const testTimeout = 70e3
+jasmine.DEFAULT_TIMEOUT_INTERVAL = testTimeout
 
-let driver
-afterEach(() => {
-  if (driver && driver.quit) {
-    return driver.quit()
-  }
+describe('Search: acceptance tests', () => {
+  let driver
+  afterEach(() => {
+    if (driver && driver.quit) {
+      return driver.quit()
+    }
+  })
+
+  it(
+    'should redirect to auth from search',
+    async () => {
+      driver = getDriver(
+        'Search: acceptance tests: should redirect to auth from search'
+      )
+      await driver.navigateTo('/search/?q=hi%20there!')
+      await driver.waitForElementExistsByTestId('authentication-page')
+    },
+    testTimeout
+  )
+
+  it(
+    'should load the search page (with search query) after signing in',
+    async () => {
+      driver = getDriver(
+        'Search: acceptance tests: should load the search page (with search query) after signing in'
+      )
+      await driver.navigateTo('/search/?q=hi%20there!') // this should redirect to the auth page
+      await driver.waitForElementExistsByTestId('authentication-page')
+      await driver.signIn()
+
+      // Make sure we navigate to the search results page after signing in.
+      await driver.waitForElementExistsByTestId('search-page')
+
+      // Make sure we show the original search query in the search input.
+      const inputElemCSSSelector = `[data-test-id='search-input'] > input`
+      await driver.waitForElementExistsByCustomSelector(
+        By.css(inputElemCSSSelector)
+      )
+      const inputElem = await driver.findElement(
+        By.css(`[data-test-id='search-input'] > input`)
+      )
+      const inputVal = await inputElem.getAttribute('value')
+      expect(inputVal).toEqual('hi there!')
+    },
+    testTimeout
+  )
 })
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
+describe('Search: tests of pre-rendered HTML', () => {
+  // This can help catch errors in our build-time prerendering.
+  it(
+    'contains the expected prerendered HTML for the search results page',
+    async () => {
+      const url = getAbsoluteUrl('/search?q=tacos')
+      var html
+      try {
+        const response = await fetch(url)
+        html = await response.text()
+      } catch (e) {
+        throw e
+      }
 
-const getAbsoluteUrl = relativeUrl => {
-  return `${getAppBaseUrl()}${relativeUrl}`
-}
-
-// Sanity checking that the app deployed and loads correctly
-describe('Search basic integration tests', () => {
-  it('should redirect to auth from search', async () => {
-    driver = getDriver(
-      'Search basic integration tests: should redirect to auth from search'
-    )
-    await driverUtils(driver).navigateTo(
-      getAbsoluteUrl('/search/?q=hi%20there!')
-    )
-    await driverUtils(driver).waitForElementExistsByTestId(
-      'authentication-page'
-    )
-  }, 30e3)
-
-  // Tests for if auth is not required to search.
-  //   it('should load the search page', async () => {
-  //     driver = getDriver(
-  //       'Search basic integration tests: should load the search page'
-  //     )
-  //     await driverUtils(driver).navigateTo(
-  //       getAbsoluteUrl('/search/?q=hi%20there!')
-  //     )
-  //     await driverUtils(driver).waitForElementExistsByTestId('search-page')
-  //   }, 30e3)
-  //
-  //   it('should show the query in the search box', async () => {
-  //     driver = getDriver(
-  //       'Search basic integration tests: should show the query in the search box'
-  //     )
-  //     await driverUtils(driver).navigateTo(
-  //       getAbsoluteUrl('/search/?q=hi%20there!')
-  //     )
-  //     const inputElemCSSSelector = `[data-test-id='search-input'] > input`
-  //
-  //     // Wait for the search input element to render.
-  //     await driverUtils(driver).waitForElementExistsByCustomSelector(
-  //       By.css(inputElemCSSSelector)
-  //     )
-  //
-  //     // Get the value of the search input.
-  //     const inputElem = await driver.findElement(
-  //       By.css(`[data-test-id='search-input'] > input`)
-  //     )
-  //     const inputVal = await inputElem.getAttribute('value')
-  //     expect(inputVal).toEqual('hi there!')
-  //   }, 30e3)
+      // Do a rough check that the prerendered HTML contains the expected
+      // components for the search results page and not the auth page.
+      expect(html.indexOf('data-test-id="search-page"')).toBeGreaterThan(-1)
+      expect(html.indexOf('data-test-id="authentication-page"')).toEqual(-1)
+      expect(html.indexOf('data-test-id="search-input"')).toBeGreaterThan(-1)
+      expect(html.indexOf('data-test-id="search-results"')).toBeGreaterThan(-1)
+    },
+    testTimeout
+  )
 })
