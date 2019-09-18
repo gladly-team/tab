@@ -667,9 +667,7 @@ class SearchPage extends React.Component {
                   >
                     <Button
                       color={'primary'}
-                      variant={
-                        showExtensionInstallCTA ? 'outlined' : 'contained'
-                      }
+                      variant={'outlined'}
                       onClick={() => {
                         setUserDismissedSearchIntro()
                         this.setState({
