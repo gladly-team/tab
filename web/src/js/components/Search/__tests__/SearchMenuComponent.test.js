@@ -724,16 +724,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     elem.simulate('click')
   })
 
-  it('renders the LogSearchAccountCreation component when a user exists and has exactly one search, and passes the user as a prop', () => {
+  it('renders the LogSearchAccountCreation component when a user exists and passes the user as a prop', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
-
-    // We only want to render the LogSearchAccountCreation when the user has
-    // one search so that it can log analytics on mount exactly once per
-    // user. This prevents failing to log the analytics event in the case we
-    // mount the component when the user has zero searches and then makes a search.
     mockProps.user.searches = 1
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(true)
@@ -751,14 +746,14 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(false)
   })
 
-  it('does not render the LogSearchAccountCreation component when the user has made zero searches', () => {
+  it('renders the LogSearchAccountCreation component when the user has made zero searches', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     mockProps.user.searches = 0
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(false)
+    expect(wrapper.find(LogSearchAccountCreation).exists()).toBe(true)
   })
 
   it('does not render the LogSearchAccountCreation component when the user has made two searches', () => {

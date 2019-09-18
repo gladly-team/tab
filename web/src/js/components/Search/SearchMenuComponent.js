@@ -317,8 +317,7 @@ const SearchMenuComponent = props => {
             ) : null}
           </div>
         ) : null}
-        {/* Log a Search account creation if this is the user's first search. */}
-        {userExists && user.searches === 1 ? (
+        {userExists && user.searches < 2 ? (
           <LogSearchAccountCreation user={user} />
         ) : null}
       </div>
