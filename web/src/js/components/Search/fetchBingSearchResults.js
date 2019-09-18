@@ -34,10 +34,18 @@ export const prefetchSearchResults = async () => {
   const searchGlobalObj = getSearchGlobal()
   set(searchGlobalObj, 'queryRequest.status', QUERY_IN_PROGRESS)
 
+  let query = null
+  try {
+    const urlParams = getUrlParameters()
+    const query = urlParams.q || null
+    set(searchGlobalObj, 'queryRequest.query', query)
+  } catch (e) {}
+
   // Fetch search results.
   let results = null
   try {
     results = await fetchBingSearchResults({
+      query,
       ignoreStoredData: true,
     })
     if (DEBUG) {
@@ -64,9 +72,11 @@ export const prefetchSearchResults = async () => {
  * requests. The previous request may happen via another JS entry point
  * that we prioritize to speed up fetching the search results. If there
  * is no valid data, return null.
+ * @param {Object} options
+ * @param {String} options.query - The search query, unencoded.
  * @return {Promise<Object|null>}
  */
-const getPreviouslyFetchedData = async () => {
+const getPreviouslyFetchedData = async ({ query = null }) => {
   if (DEBUG) {
     console.log('App fetch: getting previously-fetched data')
   }
@@ -82,6 +92,12 @@ const getPreviouslyFetchedData = async () => {
   // If we already used the search results data, don't re-use it.
   // Return null so we fetch fresh data.
   else if (queryRequest.displayedResults) {
+    return null
+  }
+
+  // If this query is different from the query in stored results,
+  // don't use the stored results.
+  else if (query !== queryRequest.query) {
     return null
   }
 
@@ -109,17 +125,6 @@ const getPreviouslyFetchedData = async () => {
         queryCompleteHandler,
         false
       )
-
-      // Set a max time to wait.
-      const msToWaitBeforeRetrying = 800
-      setTimeout(() => {
-        window.removeEventListener(
-          eventNameResultsFetched,
-          queryCompleteHandler,
-          false
-        )
-        resolve(null)
-      }, msToWaitBeforeRetrying)
     })
   }
 
@@ -174,7 +179,7 @@ const fetchBingSearchResults = async ({
   // progress, use that request's data.
   if (!ignoreStoredData) {
     try {
-      const priorFetchedData = await getPreviouslyFetchedData()
+      const priorFetchedData = await getPreviouslyFetchedData({ query })
       if (priorFetchedData) {
         // Save that we've used this data already so that we fetch fresh
         // data the next time the user queries.

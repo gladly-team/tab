@@ -553,6 +553,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'NONE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: null,
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -561,11 +562,26 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
+  it('[completed request with data]: fetches new data when the query is different', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      query: 'how cold is frozen stuff',
+      responseData: { some: 'data' },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'science facts' }) // different query
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
   it('[completed request with data]: does not fetch new data', async () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data' },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -579,6 +595,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -592,6 +609,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -605,6 +623,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: true, // already displayed these results
+      query: 'blue whales',
       responseData: { some: 'data' },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -618,6 +637,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -633,6 +653,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data', abc: 123 },
     }
     global.fetch.mockImplementation(() =>
@@ -657,6 +678,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: null,
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -675,6 +697,7 @@ describe('fetchBingSearchResults: using data from in-progress requests', () => {
     window.searchforacause.queryRequest = {
       status: 'IN_PROGRESS',
       displayedResults: false,
+      query: 'how to make boiled water',
       responseData: null,
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -697,6 +720,7 @@ describe('fetchBingSearchResults: using data from in-progress requests', () => {
     window.searchforacause.queryRequest = {
       status: 'IN_PROGRESS',
       displayedResults: false,
+      query: 'how to make boiled water',
       responseData: null,
     }
     const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
@@ -711,65 +735,6 @@ describe('fetchBingSearchResults: using data from in-progress requests', () => {
       done()
     })
     window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
-  })
-
-  it("resolves and refetches after a timeout period to make sure we aren't waiting on a bad request", async done => {
-    expect.assertions(1)
-    getUrlParameters.mockReturnValue({
-      q: 'how to make boiled water',
-    })
-    window.searchforacause.queryRequest = {
-      status: 'IN_PROGRESS',
-      displayedResults: false,
-      responseData: null,
-    }
-    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-
-    // Note that we don't dispatch the SearchResultsFetched event.
-    fetchBingSearchResults().then(data => {
-      expect(spyRemoveEventListener).toHaveBeenCalledWith(
-        'SearchResultsFetched',
-        expect.any(Function),
-        false
-      )
-      done()
-    })
-
-    jest.advanceTimersByTime(1000)
-  })
-
-  it('removes its event listener when it times out', async done => {
-    expect.assertions(2)
-    getUrlParameters.mockReturnValue({
-      q: 'how to make boiled water',
-    })
-    window.searchforacause.queryRequest = {
-      status: 'IN_PROGRESS',
-      displayedResults: false,
-      responseData: null,
-    }
-    global.fetch.mockImplementation(() =>
-      Promise.resolve(
-        mockFetchResponse({
-          json: () =>
-            Promise.resolve({ answer: 'add lots of heat to cold water' }),
-        })
-      )
-    )
-
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-
-    // Note that we don't dispatch the SearchResultsFetched event.
-    fetchBingSearchResults().then(data => {
-      expect(data).toEqual({ answer: 'add lots of heat to cold water' })
-      expect(fetch).toHaveBeenCalledTimes(1)
-      done()
-    })
-
-    jest.advanceTimersByTime(1000)
   })
 })
 
@@ -812,6 +777,49 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     })
   })
 
+  it('stores the search query to the search global', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.resolve({ some: 'thing' }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.query).toEqual(
+      'how to make boiled water'
+    )
+  })
+
+  it('stores null data to the search global when fetching fails', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          ok: false,
+          status: 500,
+          json: () => Promise.resolve({ some: 'error' }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.responseData).toBeNull()
+  })
+
   it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {
     expect.assertions(3)
     getUrlParameters.mockReturnValue({
@@ -850,6 +858,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
       displayedResults: false,
+      query: 'blue whales',
       responseData: { some: 'data', abc: 123 },
     }
     global.fetch.mockImplementation(() =>
