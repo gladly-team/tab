@@ -90,6 +90,12 @@ export const SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO =
 // search.user: values related to the Search for a Cause user.
 export const SEARCH_STORAGE_USER_BING_CLIENT_ID = 'search.user.bingClientID'
 
+// search.referralData: referral data set on homepage
+export const SEARCH_STORAGE_REFERRAL_DATA_REFERRING_USER =
+  'search.referralData.referringUser'
+export const SEARCH_STORAGE_REFERRAL_DATA_REFERRING_CHANNEL =
+  'search.referralData.referringChannel'
+
 /**
   Error codes passed from server-side.
 **/

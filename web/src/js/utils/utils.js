@@ -2,6 +2,8 @@
 
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
+  SEARCH_STORAGE_REFERRAL_DATA_REFERRING_USER,
+  SEARCH_STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
   STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
   STORAGE_REFERRAL_DATA_REFERRING_USER,
   SEARCH_APP,
@@ -59,36 +61,22 @@ export const parseUrlSearchString = searchString => {
 
 // BEGIN: referral data helpers
 
-const referralParams = [
-  {
-    urlParam: 'u',
-    fieldName: 'referringUser',
-    storageKey: STORAGE_REFERRAL_DATA_REFERRING_USER,
-  },
-  {
-    urlParam: 'r',
-    fieldName: 'referringChannel',
-    storageKey: STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
-  },
-]
-
-export const setReferralData = urlParams => {
-  referralParams.forEach(paramObj => {
-    if (urlParams[paramObj.urlParam]) {
-      localStorageMgr.setItem(paramObj.storageKey, urlParams[paramObj.urlParam])
-    }
-  })
-}
-
 export const getReferralData = () => {
-  const data = {}
-  referralParams.forEach(paramObj => {
-    var fieldData = localStorageMgr.getItem(paramObj.storageKey)
-    if (fieldData) {
-      data[paramObj.fieldName] = fieldData
-    }
-  })
-  return data
+  // We only have one referring user and referring channel for a
+  // particular user, even if they come to different apps in
+  // different ways. Use any Tab referrer values first, then any
+  // Search referrer values.
+  const referringChannelVal =
+    localStorageMgr.getItem(STORAGE_REFERRAL_DATA_REFERRING_CHANNEL) ||
+    localStorageMgr.getItem(SEARCH_STORAGE_REFERRAL_DATA_REFERRING_CHANNEL)
+  const referringUserVal =
+    localStorageMgr.getItem(STORAGE_REFERRAL_DATA_REFERRING_USER) ||
+    localStorageMgr.getItem(SEARCH_STORAGE_REFERRAL_DATA_REFERRING_USER)
+  const referralData = {
+    ...(referringChannelVal && { referringChannel: referringChannelVal }),
+    ...(referringUserVal && { referringUser: referringUserVal }),
+  }
+  return referralData
 }
 
 // END: referral data helpers
