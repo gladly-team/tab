@@ -3,6 +3,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
@@ -10,6 +11,7 @@ import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { mockFetchResponse } from 'js/utils/test-utils'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
@@ -605,6 +607,60 @@ describe('SearchResultsBing: tests for displaying search results', () => {
     expect(elem.prop('itemData')).toEqual(
       mockProps.data.results.mainline[1].value
     )
+  })
+})
+
+describe('SearchResultsBing: "first search card" result', () => {
+  it('does not render "first search card" when the query is not the "first search query" value', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="first-search-card"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('renders the "first search card" when the query is the "first search query" value', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = SEARCH_INTRO_QUERY_ENGLISH
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="first-search-card"]')
+    expect(elem.exists()).toBe(true)
+    expect(
+      elem
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Over 3.5 billion')
+    expect(
+      elem
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      'With Search for a Cause, those searches could give 500,000 people access to clean water or protect 430 square miles of rainforest each day!'
+    )
+  })
+
+  it('renders the "first search card" at the top of the search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = SEARCH_INTRO_QUERY_ENGLISH
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-results"]')
+        .find(Paper)
+        .first()
+        .prop('data-test-id')
+    ).toEqual('first-search-card')
   })
 })
 
