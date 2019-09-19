@@ -144,7 +144,7 @@ describe('URL query string utils', () => {
 })
 
 describe('getting referral data', () => {
-  it('works with all fields set', () => {
+  it('works with all Tab fields set', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
     localStorageMgr.setItem('tab.referralData.referringChannel', '42')
     const getReferralData = require('js/utils/utils').getReferralData
@@ -154,7 +154,7 @@ describe('getting referral data', () => {
     })
   })
 
-  it('works with only referring user', () => {
+  it('works with only a Tab referring user value', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'bob')
     localStorageMgr.setItem('tab.referralData.referringChannel', undefined)
     const getReferralData = require('js/utils/utils').getReferralData
@@ -163,12 +163,65 @@ describe('getting referral data', () => {
     })
   })
 
-  it('works with only referring channel', () => {
+  it('works with only a Tab referring channel value', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', undefined)
     localStorageMgr.setItem('tab.referralData.referringChannel', '33')
     const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
       referringChannel: '33',
+    })
+  })
+
+  it('works with all Search fields set', () => {
+    localStorageMgr.setItem('search.referralData.referringUser', 'chandrika')
+    localStorageMgr.setItem('search.referralData.referringChannel', '7')
+    const getReferralData = require('js/utils/utils').getReferralData
+    expect(getReferralData()).toEqual({
+      referringUser: 'chandrika',
+      referringChannel: '7',
+    })
+  })
+
+  it('works with only a Search referring user value', () => {
+    localStorageMgr.setItem(
+      'search.referralData.referringUser',
+      'SnailLEnthusiast'
+    )
+    localStorageMgr.setItem('search.referralData.referringChannel', undefined)
+    const getReferralData = require('js/utils/utils').getReferralData
+    expect(getReferralData()).toEqual({
+      referringUser: 'SnailLEnthusiast',
+    })
+  })
+
+  it('works with only a Search referring channel value', () => {
+    localStorageMgr.setItem('search.referralData.referringUser', undefined)
+    localStorageMgr.setItem('search.referralData.referringChannel', '22')
+    const getReferralData = require('js/utils/utils').getReferralData
+    expect(getReferralData()).toEqual({
+      referringChannel: '22',
+    })
+  })
+
+  it('uses Tab referral values when both Tab and Search values are set', () => {
+    localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
+    localStorageMgr.setItem('tab.referralData.referringChannel', '42')
+    localStorageMgr.setItem('search.referralData.referringUser', 'chandrika')
+    localStorageMgr.setItem('search.referralData.referringChannel', '7')
+    const getReferralData = require('js/utils/utils').getReferralData
+    expect(getReferralData()).toEqual({
+      referringUser: 'sandra',
+      referringChannel: '42',
+    })
+  })
+
+  it('uses one of each referral values when one Tab value is set and another Search value is set', () => {
+    localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
+    localStorageMgr.setItem('search.referralData.referringChannel', '7')
+    const getReferralData = require('js/utils/utils').getReferralData
+    expect(getReferralData()).toEqual({
+      referringUser: 'sandra',
+      referringChannel: '7',
     })
   })
 })
