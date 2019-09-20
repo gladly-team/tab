@@ -237,5 +237,19 @@
     "updated": "2019-08-26T10:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "b92989f8-2771-421a-b170-a39d4e765dab",
+    "name": "The Rainforest Alliance",
+    "category": "The Environment",
+    "logo": "placeholder.png",
+    "image": "rainforest-alliance.jpg",
+    "website": "https://www.rainforest-alliance.org",
+    "impact": "Together, we can help the Rainforest Alliance continue their work of making sure environmentally-friendly, responsible business is the new normal. Thanks for your support!",
+    "description": "Protects Earth's forests and climate through improving supply chains, advocating for policy change, and spreading sustainable agriculture practices",
+    "created": "2019-09-20T10:00:000Z",
+    "updated": "2019-09-20T10:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
