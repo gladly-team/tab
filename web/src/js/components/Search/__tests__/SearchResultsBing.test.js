@@ -662,6 +662,63 @@ describe('SearchResultsBing: "first search card" result', () => {
         .prop('data-test-id')
     ).toEqual('first-search-card')
   })
+
+  it('does not render "first search card" when the query is in progress', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = SEARCH_INTRO_QUERY_ENGLISH
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = true // waiting for a response
+    mockProps.queryReturned = false
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="first-search-card"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render "first search card" when the search results request errors', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = SEARCH_INTRO_QUERY_ENGLISH
+    mockProps.isError = true
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="first-search-card"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render "first search card" when there are no search results to display', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = SEARCH_INTRO_QUERY_ENGLISH
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="first-search-card"]').exists()).toBe(
+      false
+    )
+  })
 })
 
 describe('SearchResultsBing: tests for pagination', () => {
