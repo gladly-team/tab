@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting the Sierra Club!
+                Thank You for Taking Climate Action!
               </Typography>
               <div
                 style={{
@@ -56,15 +56,16 @@ class CampaignBase extends React.Component {
                 <Typography variant={'body2'} gutterBottom>
                   With your help, the{' '}
                   <a
-                    href="https://www.sierraclub.org"
+                    href="https://www.rainforest-alliance.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Sierra Club
+                    Rainforest Alliance
                   </a>{' '}
-                  will continue their work protecting our natural landscapes and
-                  fighting against climate change.{' '}
+                  will continue their work protecting Earth’s forests and
+                  climate through improving supply chains, advocating for policy
+                  change, and spreading sustainable agriculture practices.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +105,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          August Spotlight: Sierra Club
+          September Spotlight: Rainforest Alliance
         </Typography>
         <div
           style={{
@@ -115,12 +116,12 @@ class CampaignBase extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             This month, Tabbers selected the{' '}
             <a
-              href="https://www.sierraclub.org"
+              href="https://www.rainforest-alliance.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Sierra Club
+              Rainforest Alliance
             </a>{' '}
             for our{' '}
             <a
@@ -131,13 +132,26 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . The Sierra Club fights for environmental and social justice by
-            working for clean air, safe water, and land protection. Since 1892,
-            the Sierra Club has been a leading force in land conservation and
-            environmental activism.
+            , a group of companies, farmers, foresters, and consumers committed
+            to creating a world where people and nature thrive in harmony.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting the Sierra Club!
+            Want to do more against the climate crisis? On Sept 20 and 27,
+            people are walking out of their schools and workplaces to join a
+            youth-led{' '}
+            <a
+              href="https://globalclimatestrike.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={anchorStyle}
+            >
+              #ClimateStrike
+            </a>{' '}
+            demanding that leaders respond to this emergency.
+          </Typography>
+          <Typography variant={'body2'} gutterBottom>
+            Join us in supporting the Rainforest Alliance and action against
+            climate change!
           </Typography>
         </div>
       </HeartDonationCampaign>
