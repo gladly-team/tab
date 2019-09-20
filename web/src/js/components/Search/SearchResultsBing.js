@@ -174,7 +174,7 @@ const SearchResultsBing = props => {
             </Typography>
           ) : null}
           {// If this is the first query, show our intro card
-          query === SEARCH_INTRO_QUERY_ENGLISH ? (
+          !noResultsToDisplay && query === SEARCH_INTRO_QUERY_ENGLISH ? (
             <ErrorBoundary ignoreErrors>
               <Paper
                 data-test-id={'first-search-card'}
