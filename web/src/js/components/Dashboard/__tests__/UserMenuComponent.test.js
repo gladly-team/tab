@@ -10,7 +10,13 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import { logout } from 'js/authentication/user'
-import { goTo, inviteFriendsURL, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  inviteFriendsURL,
+  loginURL,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import Link from 'js/components/General/Link'
 
@@ -28,6 +34,8 @@ const getMockProps = () => {
     user: {},
     app: {},
     isUserAnonymous: false,
+    showSparklySearchIntroButton: false,
+    onClickSparklySearchIntroButton: jest.fn(),
   }
 }
 
@@ -451,5 +459,103 @@ describe('User menu component: settings dropdown component', () => {
     })
     const onLogoutClickFunc = dropdownElem.prop('onLogoutClick')
     onLogoutClickFunc()
+  })
+})
+
+describe('User menu component: sparkly search intro button', () => {
+  it('shows the sparkly intro button if the showSparklySearchIntroButton prop is true', () => {
+    const mockProps = getMockProps()
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-intro-sparkly-button"]').exists()
+    ).toBe(true)
+  })
+
+  it('does not show the sparkly intro button if the showSparklySearchIntroButton prop is false', () => {
+    const mockProps = getMockProps()
+    mockProps.showSparklySearchIntroButton = false
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-intro-sparkly-button"]').exists()
+    ).toBe(false)
+  })
+
+  it('contains the expected text', () => {
+    const mockProps = getMockProps()
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-sparkly-button"]')
+        .find(Link)
+        .render()
+        .text()
+    ).toEqual('Double your impact')
+  })
+
+  it('links to the Chrome Web Store when the browser prop === "chrome"', () => {
+    const mockProps = getMockProps()
+    mockProps.browser = 'chrome'
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-sparkly-button"]')
+        .find(Link)
+        .prop('to')
+    ).toEqual(searchChromeExtensionPage)
+  })
+
+  it('links to the Firefox Addons page when the browser prop === "firefox"', () => {
+    const mockProps = getMockProps()
+    mockProps.browser = 'firefox'
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-sparkly-button"]')
+        .find(Link)
+        .prop('to')
+    ).toEqual(searchFirefoxExtensionPage)
+  })
+
+  it('links to the Chrome Web Store when the browser prop === "unsupported"', () => {
+    const mockProps = getMockProps()
+    mockProps.browser = 'other'
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-sparkly-button"]')
+        .find(Link)
+        .prop('to')
+    ).toEqual(searchChromeExtensionPage)
+  })
+
+  it('calls the onClickSparklySearchIntroButton prop when clicked', () => {
+    const mockProps = getMockProps()
+    mockProps.showSparklySearchIntroButton = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(mockProps.onClickSparklySearchIntroButton).not.toHaveBeenCalled()
+    wrapper
+      .find('[data-test-id="search-intro-sparkly-button"]')
+      .find(Link)
+      .simulate('click')
+    expect(mockProps.onClickSparklySearchIntroButton).toHaveBeenCalledTimes(1)
   })
 })

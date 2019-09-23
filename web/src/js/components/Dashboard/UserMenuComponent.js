@@ -160,7 +160,7 @@ class UserMenu extends React.Component {
         >
           {showSparklySearchIntroButton ? (
             <div
-              data-test-id={'search-intro-button-sparkle'}
+              data-test-id={'search-intro-sparkly-button'}
               style={{ position: 'relative' }}
             >
               <Link
