@@ -16,11 +16,21 @@ import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  loginURL,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  UNSUPPORTED_BROWSER,
+} from 'js/constants'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -53,7 +63,7 @@ class UserMenu extends React.Component {
   }
 
   render() {
-    const { app, classes, user, isUserAnonymous } = this.props
+    const { app, browser, classes, user, isUserAnonymous } = this.props
     return (
       <MuiThemeProvider
         theme={{
@@ -144,7 +154,15 @@ class UserMenu extends React.Component {
             data-test-id={'search-intro-button-sparkle'}
             style={{ position: 'relative' }}
           >
-            <Link to={inviteFriendsURL}>
+            <Link
+              to={
+                browser === CHROME_BROWSER
+                  ? searchChromeExtensionPage
+                  : browser === FIREFOX_BROWSER
+                  ? searchFirefoxExtensionPage
+                  : searchChromeExtensionPage
+              }
+            >
               <Button
                 variant={'text'}
                 color={'default'}
@@ -253,6 +271,11 @@ class UserMenu extends React.Component {
 
 UserMenu.propTypes = {
   app: PropTypes.shape({}).isRequired,
+  browser: PropTypes.oneOf([
+    CHROME_BROWSER,
+    FIREFOX_BROWSER,
+    UNSUPPORTED_BROWSER,
+  ]).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
   user: PropTypes.shape({}).isRequired,

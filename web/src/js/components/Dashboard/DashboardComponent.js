@@ -256,6 +256,7 @@ class Dashboard extends React.Component {
             >
               <UserMenu
                 app={app}
+                browser={browser}
                 user={user}
                 isUserAnonymous={this.state.isUserAnonymous}
               />
