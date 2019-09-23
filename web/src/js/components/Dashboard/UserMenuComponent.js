@@ -63,7 +63,15 @@ class UserMenu extends React.Component {
   }
 
   render() {
-    const { app, browser, classes, user, isUserAnonymous } = this.props
+    const {
+      app,
+      browser,
+      classes,
+      user,
+      isUserAnonymous,
+      onClickSparklySearchIntroButton,
+      showSparklySearchIntroButton,
+    } = this.props
     return (
       <MuiThemeProvider
         theme={{
@@ -150,40 +158,44 @@ class UserMenu extends React.Component {
             justifyContent: 'flex-end',
           }}
         >
-          <div
-            data-test-id={'search-intro-button-sparkle'}
-            style={{ position: 'relative' }}
-          >
-            <Link
-              to={
-                browser === CHROME_BROWSER
-                  ? searchChromeExtensionPage
-                  : browser === FIREFOX_BROWSER
-                  ? searchFirefoxExtensionPage
-                  : searchChromeExtensionPage
-              }
+          {showSparklySearchIntroButton ? (
+            <div
+              data-test-id={'search-intro-button-sparkle'}
+              style={{ position: 'relative' }}
             >
-              <Button
-                variant={'text'}
-                color={'default'}
-                style={{
-                  marginRight: 16,
-                  color: 'rgba(255, 255, 255, 0.8)',
-                }}
+              <Link
+                to={
+                  browser === CHROME_BROWSER
+                    ? searchChromeExtensionPage
+                    : browser === FIREFOX_BROWSER
+                    ? searchFirefoxExtensionPage
+                    : searchChromeExtensionPage
+                }
+                target={'blank'}
+                onClick={onClickSparklySearchIntroButton}
               >
-                Double your impact
-              </Button>
-            </Link>
-            <Suspense fallback={null}>
-              <Sparkle
-                color={'#FFEBA2'}
-                count={12}
-                fadeOutSpeed={34}
-                overflowPx={8}
-                flicker={false}
-              />
-            </Suspense>
-          </div>
+                <Button
+                  variant={'text'}
+                  color={'default'}
+                  style={{
+                    marginRight: 16,
+                    color: 'rgba(255, 255, 255, 0.8)',
+                  }}
+                >
+                  Double your impact
+                </Button>
+              </Link>
+              <Suspense fallback={null}>
+                <Sparkle
+                  color={'#FFEBA2'}
+                  count={12}
+                  fadeOutSpeed={34}
+                  overflowPx={8}
+                  flicker={false}
+                />
+              </Suspense>
+            </div>
+          ) : null}
           <MoneyRaised
             app={app}
             dropdown={({ open, onClose, anchorElement }) => (
@@ -278,11 +290,15 @@ UserMenu.propTypes = {
   ]).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
+  onClickSparklySearchIntroButton: PropTypes.func,
+  showSparklySearchIntroButton: PropTypes.bool,
   user: PropTypes.shape({}).isRequired,
 }
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
+  onClickSparklySearchIntroButton: () => {},
+  showSparklySearchIntroButton: false,
 }
 
 export default withStyles(styles)(UserMenu)

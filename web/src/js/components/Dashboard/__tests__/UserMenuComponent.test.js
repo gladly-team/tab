@@ -24,6 +24,7 @@ jest.mock('js/utils/logger')
 
 const getMockProps = () => {
   return {
+    browser: 'chrome',
     user: {},
     app: {},
     isUserAnonymous: false,

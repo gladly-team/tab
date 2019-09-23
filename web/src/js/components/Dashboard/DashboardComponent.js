@@ -29,6 +29,8 @@ import {
   hasUserDismissedCampaignRecently,
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
+  hasUserClickedNewTabSearchIntroNotifV2,
+  setUserClickedNewTabSearchIntroNotifV2,
 } from 'js/utils/local-user-data-mgr'
 import {
   CHROME_BROWSER,
@@ -89,8 +91,8 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
-      // Whether to show an introduction to Search.
-      showSearchIntro: !hasUserClickedNewTabSearchIntroNotif(),
+      userClickedSearchIntroV1: hasUserClickedNewTabSearchIntroNotif(),
+      userClickedSearchIntroV2: hasUserClickedNewTabSearchIntroNotifV2(),
       // @experiment-referral-notification
       referralNotificationExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_REFERRAL_NOTIFICATION
@@ -152,7 +154,12 @@ class Dashboard extends React.Component {
       referralNotificationExperimentGroup,
       tabId,
     } = this.state
-    const { errorMessage, errorOpen, showSearchIntro } = this.state
+    const {
+      errorMessage,
+      errorOpen,
+      userClickedSearchIntroV1,
+      userClickedSearchIntroV2,
+    } = this.state
 
     // Whether or not a campaign should show on the dashboard
     const showCampaign = !!(
@@ -170,6 +177,28 @@ class Dashboard extends React.Component {
         .utc()
         .diff(moment(user.joined), 'hours') < 2 &&
       !userAlreadyViewedNewUserTour
+
+    // Whether to show a search introduction message or button.
+    // Show the search introduction message to all users who:
+    // * haven't already clicked it
+    // * haven't already interacted with the intro in our previous experiment
+    // * have opened at least three tabs but fewer than 100 tabs
+    const showSearchIntro =
+      user &&
+      !userClickedSearchIntroV1 &&
+      !(
+        user.experimentActions.searchIntro === 'CLICK' ||
+        user.experimentActions.searchIntro === 'DISMISS'
+      ) &&
+      user.tabs > 3 &&
+      user.tabs < 100
+
+    // Show the sparkly search introduction button to all users who:
+    // * aren't seeing the search intro message
+    // * haven't already clicked it
+    // * have opened at least 150 tabs
+    const showSparklySearchIntroButton =
+      user && !showSearchIntro && !userClickedSearchIntroV2 && user.tabs > 150
 
     // Determine if the user is in an experimental group for
     // the "referral notification" experiment.
@@ -259,6 +288,13 @@ class Dashboard extends React.Component {
                 browser={browser}
                 user={user}
                 isUserAnonymous={this.state.isUserAnonymous}
+                showSparklySearchIntroButton={showSparklySearchIntroButton}
+                onClickSparklySearchIntroButton={() => {
+                  setUserClickedNewTabSearchIntroNotifV2()
+                  this.setState({
+                    userClickedSearchIntroV2: true,
+                  })
+                }}
               />
               {this.state.showNotification ? (
                 <Notification
@@ -324,16 +360,7 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
-              {// Show the search introduction to all users who:
-              // * haven't already clicked it
-              // * haven't already interacted with the intro in our previous experiment
-              // * have opened at least three tabs
-              showSearchIntro &&
-              !(
-                user.experimentActions.searchIntro === 'CLICK' ||
-                user.experimentActions.searchIntro === 'DISMISS'
-              ) &&
-              user.tabs > 3 ? (
+              {showSearchIntro ? (
                 <Notification
                   data-test-id={'search-intro-notif'}
                   title={`We're working on Search for a Cause`}
@@ -365,13 +392,13 @@ class Dashboard extends React.Component {
                     // Hide the message because we don't want the user to
                     // need to dismiss it after clicking.
                     this.setState({
-                      showSearchIntro: false,
+                      userClickedSearchIntroV1: true,
                     })
                     setUserClickedNewTabSearchIntroNotif()
                   }}
                   onDismiss={() => {
                     this.setState({
-                      showSearchIntro: false,
+                      userClickedSearchIntroV1: true,
                     })
                     setUserClickedNewTabSearchIntroNotif()
                   }}
