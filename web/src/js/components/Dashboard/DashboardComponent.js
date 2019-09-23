@@ -180,11 +180,13 @@ class Dashboard extends React.Component {
 
     // Whether to show a search introduction message or button.
     // Show the search introduction message to all users who:
-    // * haven't already clicked it
+    // * haven't already searched
+    // * haven't already clicked the intro message
     // * haven't already interacted with the intro in our previous experiment
     // * have opened at least three tabs but fewer than 100 tabs
     const showSearchIntro =
       user &&
+      user.searches < 1 &&
       !userClickedSearchIntroV1 &&
       !(
         user.experimentActions.searchIntro === 'CLICK' ||
@@ -194,11 +196,16 @@ class Dashboard extends React.Component {
       user.tabs < 100
 
     // Show the sparkly search introduction button to all users who:
+    // * haven't already searched
     // * aren't seeing the search intro message
-    // * haven't already clicked it
+    // * haven't already clicked the intro button
     // * have opened at least 150 tabs
     const showSparklySearchIntroButton =
-      user && !showSearchIntro && !userClickedSearchIntroV2 && user.tabs > 150
+      user &&
+      user.searches < 1 &&
+      !showSearchIntro &&
+      !userClickedSearchIntroV2 &&
+      user.tabs > 150
 
     // Determine if the user is in an experimental group for
     // the "referral notification" experiment.
@@ -608,6 +615,7 @@ Dashboard.propTypes = {
       searchIntro: PropTypes.string,
     }).isRequired,
     joined: PropTypes.string.isRequired,
+    searches: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,
   }),
   app: PropTypes.shape({

@@ -18,6 +18,7 @@ export default createFragmentContainer(Dashboard, {
         searchIntro
       }
       joined
+      searches
       tabs
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
