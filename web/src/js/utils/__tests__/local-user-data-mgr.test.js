@@ -357,6 +357,31 @@ describe('local user data manager', () => {
     expect(hasUserClickedNewTabSearchIntroNotif()).toBe(false)
   })
 
+  // setUserClickedNewTabSearchIntroNotifV2 method
+  it('marks the new tab search intro notification(v2) click in localStorage', () => {
+    const {
+      setUserClickedNewTabSearchIntroNotifV2,
+    } = require('js/utils/local-user-data-mgr')
+    setUserClickedNewTabSearchIntroNotifV2()
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.newUser.clickedNewTabSearchIntroV2',
+      'true'
+    )
+  })
+
+  // hasUserClickedNewTabSearchIntroNotifV2
+  it('gets the new tab search intro notification(v2) click from localStorage', () => {
+    localStorageMgr.setItem('tab.newUser.clickedNewTabSearchIntroV2', 'true')
+    const {
+      hasUserClickedNewTabSearchIntroNotifV2,
+    } = require('js/utils/local-user-data-mgr')
+    expect(hasUserClickedNewTabSearchIntroNotifV2()).toBe(true)
+    localStorageMgr.setItem('tab.newUser.clickedNewTabSearchIntroV2', 'blah')
+    expect(hasUserClickedNewTabSearchIntroNotifV2()).toBe(false)
+    localStorageMgr.removeItem('tab.newUser.clickedNewTabSearchIntroV2')
+    expect(hasUserClickedNewTabSearchIntroNotifV2()).toBe(false)
+  })
+
   // setCampaignDismissTime method
   it('sets the notification dismiss time timestamp in localStorage', () => {
     const { setCampaignDismissTime } = require('js/utils/local-user-data-mgr')
