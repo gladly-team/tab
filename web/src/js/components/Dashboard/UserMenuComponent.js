@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import {
@@ -21,6 +21,8 @@ import logger from 'js/utils/logger'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
+
+const Sparkle = lazy(() => import('react-sparkle'))
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -138,6 +140,32 @@ class UserMenu extends React.Component {
             justifyContent: 'flex-end',
           }}
         >
+          <div
+            data-test-id={'search-intro-button-sparkle'}
+            style={{ position: 'relative' }}
+          >
+            <Link to={inviteFriendsURL}>
+              <Button
+                variant={'text'}
+                color={'default'}
+                style={{
+                  marginRight: 16,
+                  color: 'rgba(255, 255, 255, 0.8)',
+                }}
+              >
+                Double your impact
+              </Button>
+            </Link>
+            <Suspense fallback={null}>
+              <Sparkle
+                color={'#FFEBA2'}
+                count={12}
+                fadeOutSpeed={34}
+                overflowPx={8}
+                flicker={false}
+              />
+            </Suspense>
+          </div>
           <MoneyRaised
             app={app}
             dropdown={({ open, onClose, anchorElement }) => (
