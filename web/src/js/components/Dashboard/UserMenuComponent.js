@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import {
@@ -16,11 +16,23 @@ import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  loginURL,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  UNSUPPORTED_BROWSER,
+} from 'js/constants'
+
+const Sparkle = lazy(() => import('react-sparkle'))
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -51,7 +63,15 @@ class UserMenu extends React.Component {
   }
 
   render() {
-    const { app, classes, user, isUserAnonymous } = this.props
+    const {
+      app,
+      browser,
+      classes,
+      user,
+      isUserAnonymous,
+      onClickSparklySearchIntroButton,
+      showSparklySearchIntroButton,
+    } = this.props
     return (
       <MuiThemeProvider
         theme={{
@@ -138,6 +158,44 @@ class UserMenu extends React.Component {
             justifyContent: 'flex-end',
           }}
         >
+          {showSparklySearchIntroButton ? (
+            <div
+              data-test-id={'search-intro-sparkly-button'}
+              style={{ position: 'relative' }}
+            >
+              <Link
+                to={
+                  browser === CHROME_BROWSER
+                    ? searchChromeExtensionPage
+                    : browser === FIREFOX_BROWSER
+                    ? searchFirefoxExtensionPage
+                    : searchChromeExtensionPage
+                }
+                target={'blank'}
+                onClick={onClickSparklySearchIntroButton}
+              >
+                <Button
+                  variant={'text'}
+                  color={'default'}
+                  style={{
+                    marginRight: 16,
+                    color: 'rgba(255, 255, 255, 0.8)',
+                  }}
+                >
+                  Double your impact
+                </Button>
+              </Link>
+              <Suspense fallback={null}>
+                <Sparkle
+                  color={'#FFEBA2'}
+                  count={12}
+                  fadeOutSpeed={34}
+                  overflowPx={8}
+                  flicker={false}
+                />
+              </Suspense>
+            </div>
+          ) : null}
           <MoneyRaised
             app={app}
             dropdown={({ open, onClose, anchorElement }) => (
@@ -225,13 +283,22 @@ class UserMenu extends React.Component {
 
 UserMenu.propTypes = {
   app: PropTypes.shape({}).isRequired,
+  browser: PropTypes.oneOf([
+    CHROME_BROWSER,
+    FIREFOX_BROWSER,
+    UNSUPPORTED_BROWSER,
+  ]).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
+  onClickSparklySearchIntroButton: PropTypes.func,
+  showSparklySearchIntroButton: PropTypes.bool,
   user: PropTypes.shape({}).isRequired,
 }
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
+  onClickSparklySearchIntroButton: () => {},
+  showSparklySearchIntroButton: false,
 }
 
 export default withStyles(styles)(UserMenu)

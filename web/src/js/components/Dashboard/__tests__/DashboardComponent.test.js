@@ -45,6 +45,8 @@ import {
   hasUserDismissedNotificationRecently,
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
+  hasUserClickedNewTabSearchIntroNotifV2,
+  setUserClickedNewTabSearchIntroNotifV2,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import { getUserExperimentGroup } from 'js/utils/experiments'
@@ -97,6 +99,7 @@ const mockProps = {
   user: {
     id: 'abc-123',
     joined: '2017-04-10T14:00:00.000',
+    searches: 0,
     tabs: 12,
     experimentActions: {},
   },
@@ -649,7 +652,7 @@ describe('Dashboard component: global notification', () => {
   })
 })
 
-describe('Dashboard component: search intro experiment', () => {
+describe('Dashboard component: search intro message', () => {
   beforeEach(() => {
     getUserExperimentGroup.mockReturnValue('none')
     hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
@@ -715,6 +718,36 @@ describe('Dashboard component: search intro experiment', () => {
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
+  })
+
+  it('does not render the search intro notification when the user has opened more than 99 tabs', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 99
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      true
+    )
+    wrapper.setProps({
+      user: {
+        ...modifiedProps.user,
+        tabs: 100,
+      },
+    })
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render the search intro notification if the user has already searched', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.searches = 1
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-notif"]')
+    expect(elem.exists()).toBe(false)
   })
 
   it('does not render the search intro notification when the user has previously clicked it in the experiment', () => {
@@ -858,12 +891,131 @@ describe('Dashboard component: search intro experiment', () => {
     expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
   })
 
-  it('does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
+  it('does not set the "useGlobalDismissalTime" on the experiment notification', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.prop('useGlobalDismissalTime')).toBe(false)
+  })
+})
+
+describe('Dashboard component: sparkly search intro button', () => {
+  beforeEach(() => {
+    getUserExperimentGroup.mockReturnValue('none')
+    hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+  })
+
+  it('shows the sparkly search intro button when the user has not already clicked it, has opened more than 150 tabs, and has not already searched', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    modifiedProps.user.searches = 0
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      true
+    )
+  })
+
+  it('does not shows the sparkly search intro button when the user has already searched', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    modifiedProps.user.searches = 1
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
+  })
+
+  it('does not show the sparkly search intro button when the user has opened fewer than 151 tabs', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 150
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
+    wrapper.setProps({
+      user: {
+        ...modifiedProps.user,
+        tabs: 151,
+      },
+    })
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      true
+    )
+  })
+
+  it('does not show the search intro button when the user has previously clicked it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(true)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
+  })
+
+  it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      true
+    )
+    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+    wrapper.update()
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
+  })
+
+  it('saves the search intro click action to local storage when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+    expect(setUserClickedNewTabSearchIntroNotifV2).toHaveBeenCalledTimes(1)
+  })
+
+  it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      true
+    )
+    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
+  })
+
+  it('passes the browser name to the UserMenu component', async () => {
+    expect.assertions(1)
+    detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('browser')).toEqual('firefox')
   })
 })
 
