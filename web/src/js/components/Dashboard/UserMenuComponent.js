@@ -29,8 +29,10 @@ import Link from 'js/components/General/Link'
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
+  TAB_APP,
   UNSUPPORTED_BROWSER,
 } from 'js/constants'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -185,15 +187,17 @@ class UserMenu extends React.Component {
                   Double your impact
                 </Button>
               </Link>
-              <Suspense fallback={null}>
-                <Sparkle
-                  color={'#FFEBA2'}
-                  count={12}
-                  fadeOutSpeed={34}
-                  overflowPx={8}
-                  flicker={false}
-                />
-              </Suspense>
+              <ErrorBoundary ignoreErrors brand={TAB_APP}>
+                <Suspense fallback={null}>
+                  <Sparkle
+                    color={'#FFEBA2'}
+                    count={12}
+                    fadeOutSpeed={34}
+                    overflowPx={8}
+                    flicker={false}
+                  />
+                </Suspense>
+              </ErrorBoundary>
             </div>
           ) : null}
           <MoneyRaised
