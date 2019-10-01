@@ -60,7 +60,7 @@
     "react-relay": "^4.0.0",
     "react-router": "^5.0.0",
     "react-router-dom": "5.0.0",
-    "react-sparkle": "^1.0.4",
+    "react-sparkle": "^1.0.5",
     "react-transition-group": "^4.0.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.20.1",
