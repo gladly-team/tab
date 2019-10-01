@@ -8,6 +8,9 @@ import {
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
+import { showBingJSAds } from 'js/utils/feature-flags'
+
+const SHOW_BING_JS_ADS = showBingJSAds()
 
 // Note: this module should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
@@ -145,6 +148,44 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
   }
 }
 
+// TODO: add tests
+// TODO: test with prerendering
+const loadBingJSAds = ({ query, pageNumber }) => {
+  var adsParameter = {
+    adUnitId: '367432',
+    query: query,
+    pageNumber: pageNumber,
+    adLanguage: 'en', // TODO
+    // navigator.languages ? navigator.languages[0] : 'en'
+    safeSearch: 'Moderate',
+    testMode: 'On', // TODO
+    personalization: 'On',
+    disableTextAdExtensions: ['app'],
+    containers: [
+      {
+        containerId: 'BingAdsContainer1',
+        width: 620,
+        position: 'Mainline',
+        adTypesFilter: 'TextAds',
+        adSlots: 3,
+        adStyle: {
+          textAd: {
+            // fontFamily: 'roboto', // TODO
+            titleFontSize: 19,
+            urlFontSize: 14,
+            descriptionFontSize: 14,
+            titleColor: '#1A0DAB',
+            descriptionColor: '#505050',
+            urlColor: '#007526',
+          },
+        },
+      },
+    ],
+  }
+
+  window.searchAds(adsParameter)
+}
+
 /**
  * Call our search API endpoint. All parameters must be optional.
  * @param {Object} options
@@ -217,6 +258,11 @@ const fetchBingSearchResults = async ({
       }
     }
 
+    if (SHOW_BING_JS_ADS) {
+      // Load JS ads.
+      loadBingJSAds({ query, pageNumber })
+    }
+
     // The mkt parameter is not required but highly recommended.
     const mkt = await getBingMarketCode()
 
@@ -227,7 +273,7 @@ const fetchBingSearchResults = async ({
       q: query,
       count: getSearchResultCountPerPage(),
       // The maximum number of mainline ads to return.
-      mainlineCount: 3,
+      mainlineCount: SHOW_BING_JS_ADS ? 0 : 3,
       // The zero-based page number, used for ads.
       pageNumber: pageNumber,
       // The maximum number of sidebar ads to return.

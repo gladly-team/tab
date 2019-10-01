@@ -9,12 +9,14 @@ import {
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
+import { showBingJSAds } from 'js/utils/feature-flags'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Search/getBingMarketCode')
 jest.mock('js/utils/utils')
+jest.mock('js/utils/feature-flags')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -25,6 +27,8 @@ beforeEach(() => {
   getSearchResultCountPerPage.mockReturnValue(10)
   getUrlParameters.mockReturnValue({})
   window.searchforacause = getDefaultSearchGlobal()
+  window.searchAds = jest.fn()
+  showBingJSAds.mockReturnValue(false)
   jest.useFakeTimers()
 })
 
