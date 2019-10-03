@@ -2,13 +2,13 @@
 
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import Account from 'js/components/Settings/Account/AccountContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import logger from 'js/utils/logger'
 
-jest.mock('react-relay')
+jest.mock('js/components/General/QueryRendererWithUser')
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/components/General/withUser')
 jest.mock('js/utils/logger')
@@ -47,13 +47,13 @@ describe('AccountView', () => {
   it('includes a QueryRenderer', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountView {...mockProps} />)
-    expect(wrapper.find(QueryRenderer).exists()).toBe(true)
+    expect(wrapper.find(QueryRendererWithUser).exists()).toBe(true)
   })
 
   it('passes the expected variables to the QueryRenderer', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<AccountView {...mockProps} />)
-    expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
+    expect(wrapper.find(QueryRendererWithUser).prop('variables')).toEqual({
       userId: 'example-user-id', // from the authUser prop
     })
   })
@@ -66,7 +66,7 @@ describe('AccountView', () => {
   })
 
   it('does not render the child component when there is no data', () => {
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: null,
       retry: jest.fn(),
@@ -83,7 +83,7 @@ describe('AccountView', () => {
         vc: 233,
       },
     }
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: fakeQueryRendererProps,
       retry: jest.fn(),
@@ -97,7 +97,7 @@ describe('AccountView', () => {
   })
 
   it('logs an error and renders an ErrorMessage if unexpected QueryRenderer errors occur', () => {
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: {
         name: 'RelayNetwork',
         type: 'mustfix',

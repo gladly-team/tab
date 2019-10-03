@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
-import environment from 'js/relay-env'
 
 import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
 import BackgroundSettings from 'js/components/Settings/Background/BackgroundSettingsContainer'
@@ -19,8 +18,7 @@ class BackgroundSettingsView extends React.Component {
           width: '100%',
         }}
       >
-        <QueryRenderer
-          environment={environment}
+        <QueryRendererWithUser
           query={graphql`
             query BackgroundSettingsViewQuery($userId: String!) {
               app {

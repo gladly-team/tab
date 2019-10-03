@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import { get } from 'lodash/object'
-import environment from 'js/relay-env'
 import { createNewUser } from 'js/authentication/helpers'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 import logger from 'js/utils/logger'
@@ -28,7 +27,6 @@ class QueryRendererWithUser extends React.Component {
     const { render, ...otherProps } = this.props
     return (
       <QueryRenderer
-        environment={environment}
         render={({ error, props, retry }) => {
           var errToPassToChild = error
           if (error && get(error, 'source.errors')) {
