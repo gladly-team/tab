@@ -286,4 +286,59 @@ describe('QueryRendererWithUser', () => {
     await flushAllPromises()
     expect(logger.error).not.toHaveBeenCalled()
   })
+
+  it("does not pass any errors to the child QueryRenderer's render function while trying to create a server-side user", async () => {
+    expect.assertions(2)
+
+    const mockRetryFn = jest.fn()
+
+    // Mock an error that the user does not exist server-side.
+    const mockQueryResponse = {
+      error: {
+        name: 'RelayNetwork',
+        type: 'mustfix',
+        framesToPop: 2,
+        source: {
+          errors: [
+            {
+              message: 'No user exists with this ID.',
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
+              path: ['user'],
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
+          ],
+          operation: { foo: 'bar' },
+          variables: { foo: 'baz' },
+        },
+      },
+      props: null,
+      retry: mockRetryFn,
+    }
+
+    const mockProps = getMockProps()
+    const wrapper = shallow(<QueryRendererWithUser {...mockProps} />)
+    const ourQueryRendererRenderFn = wrapper.find(QueryRenderer).prop('render')
+    ourQueryRendererRenderFn(mockQueryResponse)
+    expect(mockProps.render).toHaveBeenCalledWith({
+      props: null,
+      error: null,
+      retry: expect.any(Function),
+    })
+
+    // After we give up trying to create a user, we should pass
+    // the actual error to the child to let it handle the error.
+    for (let i = 0; i < 5; i++) {
+      ourQueryRendererRenderFn(mockQueryResponse)
+    }
+    expect(mockProps.render).toHaveBeenLastCalledWith({
+      props: null,
+      error: mockQueryResponse.error,
+      retry: expect.any(Function),
+    })
+  })
 })

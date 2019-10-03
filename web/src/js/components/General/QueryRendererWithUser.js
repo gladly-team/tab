@@ -30,6 +30,7 @@ class QueryRendererWithUser extends React.Component {
       <QueryRenderer
         environment={environment}
         render={({ error, props, retry }) => {
+          var errToPassToChild = error
           if (error && get(error, 'source.errors')) {
             // If any of the errors is because the user does not exist
             // on the server side, create the user and re-query if
@@ -45,6 +46,10 @@ class QueryRendererWithUser extends React.Component {
               userDoesNotExistError &&
               this.createNewUserAttempts < MAX_CREATE_USER_ATTEMPTS
             ) {
+              // While we're trying to create the server-side user, don't
+              // pass an error to the child.
+              errToPassToChild = null
+
               this.createNewUserAttempts = this.createNewUserAttempts + 1
 
               // Cancel new user creation on unmount.
@@ -64,7 +69,7 @@ class QueryRendererWithUser extends React.Component {
             }
           }
 
-          return render({ error, props, retry })
+          return render({ error: errToPassToChild, props, retry })
         }}
         {...otherProps}
       />
