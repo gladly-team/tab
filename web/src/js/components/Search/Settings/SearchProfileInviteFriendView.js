@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { QueryRenderer } from 'react-relay'
-import environment from 'js/relay-env'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 
 import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
 import SearchProfileInviteFriend from 'js/components/Search/Settings/SearchProfileInviteFriendComponent'
@@ -17,8 +16,7 @@ class ProfileInviteFriendView extends React.Component {
           width: '100%',
         }}
       >
-        <QueryRenderer
-          environment={environment}
+        <QueryRendererWithUser
           query={null}
           variables={{}}
           render={({ error, props }) => {

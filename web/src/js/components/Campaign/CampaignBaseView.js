@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
-import environment from 'js/relay-env'
 import withUser from 'js/components/General/withUser'
 import CampaignBase from 'js/components/Campaign/CampaignBase'
 import logger from 'js/utils/logger'
@@ -17,8 +16,7 @@ class CampaignBaseView extends React.Component {
     const CHARITY_ID = 'b92989f8-2771-421a-b170-a39d4e765dab'
 
     return (
-      <QueryRenderer
-        environment={environment}
+      <QueryRendererWithUser
         // Hardcode campaign-specific data requirements here, and remove
         // after the campaign is no longer live.
         query={graphql`
