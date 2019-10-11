@@ -41,4 +41,16 @@ describe('feature flags', () => {
     process.env.REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED = 'true'
     expect(isSearchPageEnabled()).toBe(true)
   })
+
+  test('showBingJSAds is false if the env var is "false"', () => {
+    const showBingJSAds = require('js/utils/feature-flags').showBingJSAds
+    process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS = 'false'
+    expect(showBingJSAds()).toBe(false)
+  })
+
+  test('showBingJSAds is true if the env var is "true"', () => {
+    const showBingJSAds = require('js/utils/feature-flags').showBingJSAds
+    process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS = 'true'
+    expect(showBingJSAds()).toBe(true)
+  })
 })

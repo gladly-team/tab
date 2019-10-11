@@ -148,6 +148,7 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
   }
 }
 
+// Important: this is only for dev. It is not production-ready.
 // TODO: add tests
 // TODO: test with prerendering
 const loadBingJSAds = ({ query, pageNumber }) => {

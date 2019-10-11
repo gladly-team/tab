@@ -12,4 +12,5 @@ export const isSearchPageEnabled = () =>
 export const shouldRedirectSearchToThirdParty = () =>
   process.env.REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY === 'true'
 
-export const showBingJSAds = () => true
+export const showBingJSAds = () =>
+  process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS === 'true'
