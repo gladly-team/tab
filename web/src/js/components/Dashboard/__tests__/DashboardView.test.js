@@ -3,19 +3,12 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import DashboardView from 'js/components/Dashboard/DashboardView'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import { createNewUser } from 'js/authentication/helpers'
-import { goTo, loginURL } from 'js/navigation/navigation'
-import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
-import { __setMockAuthUser } from 'js/components/General/withUser'
-import { flushAllPromises } from 'js/utils/test-utils'
-import logger from 'js/utils/logger'
 
-jest.mock('react-relay')
+jest.mock('js/components/General/QueryRendererWithUser')
 jest.mock('js/components/General/ErrorMessage')
-jest.mock('js/analytics/logEvent')
 jest.mock('js/components/Dashboard/DashboardContainer')
 jest.mock('js/authentication/helpers')
 jest.mock('js/navigation/navigation')
@@ -76,22 +69,22 @@ describe('DashboardView', () => {
     })
   })
 
-  it('includes QueryRenderer', () => {
+  it('includes QueryRendererWithUser', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<DashboardView {...mockProps} />).dive()
-    expect(wrapper.find(QueryRenderer).length).toBe(1)
+    expect(wrapper.find(QueryRendererWithUser).length).toBe(1)
   })
 
-  it('passes the expected variables to the QueryRenderer', () => {
+  it('passes the expected variables to the QueryRendererWithUser', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<DashboardView {...mockProps} />)
-    expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
+    expect(wrapper.find(QueryRendererWithUser).prop('variables')).toEqual({
       userId: 'example-user-id', // from the authUser prop
     })
   })
 
   it('renders DashboardContainer before receiving a query response', () => {
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: null,
       retry: jest.fn(),
@@ -112,7 +105,7 @@ describe('DashboardView', () => {
         vc: 233,
       },
     }
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: fakeProps,
       retry: jest.fn(),
@@ -126,7 +119,7 @@ describe('DashboardView', () => {
   })
 
   it('renders an ErrorMessage if unexpected errors occur', () => {
-    QueryRenderer.__setQueryResponse({
+    QueryRendererWithUser.__setQueryResponse({
       error: {
         name: 'RelayNetwork',
         type: 'mustfix',
@@ -164,181 +157,5 @@ describe('DashboardView', () => {
     expect(wrapper.find(ErrorMessage).prop('message')).toBe(
       'We had a problem loading your dashboard :('
     )
-  })
-
-  it('attempts to create a new user and refetch when there is a "user does not exist" error', async () => {
-    expect.assertions(2)
-
-    const mockRetryFn = jest.fn()
-    QueryRenderer.__setQueryResponse({
-      error: {
-        name: 'RelayNetwork',
-        type: 'mustfix',
-        framesToPop: 2,
-        source: {
-          errors: [
-            {
-              message: 'No user exists with this ID.',
-              locations: [
-                {
-                  line: 8,
-                  column: 3,
-                },
-              ],
-              path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST,
-            },
-          ],
-          operation: { foo: 'bar' },
-          variables: { foo: 'baz' },
-        },
-      },
-      props: null,
-      retry: mockRetryFn,
-    })
-
-    createNewUser.mockResolvedValue({
-      id: 'abc123xyz456',
-      username: null,
-      email: null,
-    })
-
-    const mockProps = getMockProps()
-    mount(<DashboardView {...mockProps} />)
-
-    // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
-
-    expect(createNewUser).toHaveBeenCalledTimes(1)
-    expect(mockRetryFn).toHaveBeenCalledTimes(1)
-  })
-
-  it('redirects to the login page and logs an error if it cannot create the user after a "user does not exist" error', async () => {
-    expect.assertions(4)
-
-    const mockRetryFn = jest.fn()
-    QueryRenderer.__setQueryResponse({
-      error: {
-        name: 'RelayNetwork',
-        type: 'mustfix',
-        framesToPop: 2,
-        source: {
-          errors: [
-            {
-              message: 'No user exists with this ID.',
-              locations: [
-                {
-                  line: 8,
-                  column: 3,
-                },
-              ],
-              path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST,
-            },
-          ],
-          operation: { foo: 'bar' },
-          variables: { foo: 'baz' },
-        },
-      },
-      props: null,
-      retry: mockRetryFn,
-    })
-
-    // Failed to create a new user.
-    createNewUser.mockRejectedValue(new Error('Failure'))
-
-    const mockProps = getMockProps()
-    mount(<DashboardView {...mockProps} />)
-
-    // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
-
-    expect(createNewUser).toHaveBeenCalledTimes(1)
-    expect(mockRetryFn).not.toHaveBeenCalled()
-    expect(goTo).toHaveBeenCalledWith(loginURL)
-    expect(logger.error).toHaveBeenCalled()
-  })
-
-  // Note: Jest warnings will fail the test, because we include this
-  // in our setupTests.js file:
-  // https://github.com/facebook/jest/issues/6121#issuecomment-444269677
-  it('does not throw an error, log an error, retry the user fetch, or redirect if the component unmounts during the async createNewUser call', async () => {
-    expect.assertions(3)
-
-    __setMockAuthUser({
-      id: 'acbdegfh2468',
-      email: 'foo@example.com',
-      username: 'example',
-      isAnonymous: false,
-      emailVerified: true,
-    })
-
-    // Have the server return an error on the first request.
-    const mockRetryFn = jest.fn()
-    QueryRenderer.__setQueryResponseOnce({
-      error: {
-        name: 'RelayNetwork',
-        type: 'mustfix',
-        framesToPop: 2,
-        source: {
-          errors: [
-            {
-              message: 'No user exists with this ID.',
-              locations: [
-                {
-                  line: 8,
-                  column: 3,
-                },
-              ],
-              path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST,
-            },
-          ],
-          operation: { foo: 'bar' },
-          variables: { foo: 'baz' },
-        },
-      },
-      props: null,
-      retry: mockRetryFn,
-    })
-
-    // The server returns the user on the second request.
-    QueryRenderer.__setQueryResponse({
-      error: null,
-      props: {
-        user: {
-          id: 'acbdegfh2468',
-          email: 'foo@example.com',
-          username: null,
-        },
-      },
-      retry: jest.fn(),
-    })
-
-    jest.useFakeTimers()
-    createNewUser.mockImplementation(() => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve({
-            id: 'acbdegfh2468',
-            username: null,
-            email: 'foo@example.com',
-          })
-        }, 4e3)
-      })
-    })
-
-    const mockProps = getMockProps()
-    const wrapper = mount(<DashboardView {...mockProps} />)
-    await flushAllPromises()
-
-    // Unmount
-    wrapper.unmount()
-
-    jest.advanceTimersByTime(10e3)
-    await flushAllPromises()
-    expect(mockRetryFn).not.toHaveBeenCalled()
-    expect(logger.error).not.toHaveBeenCalled()
-    expect(goTo).not.toHaveBeenCalled()
   })
 })

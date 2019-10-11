@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import { shallow } from 'enzyme'
 
-jest.mock('react-relay')
+jest.mock('js/components/General/QueryRendererWithUser')
 jest.mock('js/components/General/withUser')
 jest.mock('js/utils/local-user-data-mgr')
 
@@ -19,7 +19,7 @@ describe('Campaign base view', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<CampaignBaseView {...mockProps} />).dive()
-    expect(wrapper.find(QueryRenderer).length).toBe(1)
+    expect(wrapper.find(QueryRendererWithUser).length).toBe(1)
   })
 
   it("uses the authed user's user ID in the query", () => {
@@ -28,9 +28,8 @@ describe('Campaign base view', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<CampaignBaseView {...mockProps} />).dive()
     const mockUserId = 'abc123xyz456' // from mocked `withUser` function
-    expect(wrapper.find(QueryRenderer).prop('variables')).toHaveProperty(
-      'userId',
-      mockUserId
-    )
+    expect(
+      wrapper.find(QueryRendererWithUser).prop('variables')
+    ).toHaveProperty('userId', mockUserId)
   })
 })

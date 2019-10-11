@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { QueryRenderer } from 'react-relay'
+import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
-import environment from 'js/relay-env'
 import SearchMenuContainer from 'js/components/Search/SearchMenuContainer'
 import withUser from 'js/components/General/withUser'
 import logger from 'js/utils/logger'
@@ -14,7 +13,7 @@ const SearchMenuQueryRenderer = props => {
   const { userId, ...queryRendererProps } = props
   if (userId) {
     return (
-      <QueryRenderer
+      <QueryRendererWithUser
         query={graphql`
           query SearchMenuQuery($userId: String!) {
             app {
@@ -33,7 +32,7 @@ const SearchMenuQueryRenderer = props => {
     )
   } else {
     return (
-      <QueryRenderer
+      <QueryRendererWithUser
         query={graphql`
           query SearchMenuQueryAnonymousQuery {
             app {
@@ -54,7 +53,6 @@ class SearchMenuQuery extends React.Component {
     return (
       <SearchMenuQueryRenderer
         userId={userId}
-        environment={environment}
         render={({ error, props }) => {
           if (error) {
             logger.error(error)

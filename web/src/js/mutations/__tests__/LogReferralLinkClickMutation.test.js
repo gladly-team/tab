@@ -4,7 +4,7 @@ import environment from 'js/relay-env'
 import commitMutation from 'relay-commit-mutation-promise'
 
 jest.mock('js/relay-env')
-jest.mock('react-relay')
+jest.mock('js/components/General/QueryRendererWithUser')
 jest.mock('relay-commit-mutation-promise')
 
 const getMockInput = () => ({

@@ -3,7 +3,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 
-jest.mock('react-relay')
+jest.mock('js/components/General/QueryRendererWithUser')
 jest.mock('js/components/General/withUser')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/components/Search/SearchMenuContainer')
@@ -53,8 +53,9 @@ describe('SearchMenuQuery', () => {
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
       .default
     const wrapper = mount(<SearchMenuQuery />)
-    const { QueryRenderer } = require('react-relay')
-    expect(wrapper.find(QueryRenderer).length).toBe(1)
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    expect(wrapper.find(QueryRendererWithUser).length).toBe(1)
   })
 
   it('QueryRenderer has the "variables" prop when the user is authenticated', () => {
@@ -74,11 +75,11 @@ describe('SearchMenuQuery', () => {
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
       .default
     const wrapper = mount(<SearchMenuQuery />)
-    const { QueryRenderer } = require('react-relay')
-    expect(wrapper.find(QueryRenderer).prop('variables')).toHaveProperty(
-      'userId',
-      'abc123xyz456'
-    )
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    expect(
+      wrapper.find(QueryRendererWithUser).prop('variables')
+    ).toHaveProperty('userId', 'abc123xyz456')
   })
 
   it('QueryRenderer does not have the "variables" prop when the user is not authenticated', () => {
@@ -90,8 +91,11 @@ describe('SearchMenuQuery', () => {
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
       .default
     const wrapper = mount(<SearchMenuQuery />)
-    const { QueryRenderer } = require('react-relay')
-    expect(wrapper.find(QueryRenderer).prop('variables')).not.toBeDefined()
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    expect(
+      wrapper.find(QueryRendererWithUser).prop('variables')
+    ).not.toBeDefined()
   })
 
   it('passes "app", "user", "location" props to the child container when they exist', () => {
@@ -104,8 +108,9 @@ describe('SearchMenuQuery', () => {
         vc: 233,
       },
     }
-    const { QueryRenderer } = require('react-relay')
-    QueryRenderer.__setQueryResponse({
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: fakeProps,
       retry: jest.fn(),
@@ -134,8 +139,9 @@ describe('SearchMenuQuery', () => {
     const fakeProps = {
       app: null,
     }
-    const { QueryRenderer } = require('react-relay')
-    QueryRenderer.__setQueryResponse({
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: fakeProps,
       retry: jest.fn(),
@@ -165,8 +171,9 @@ describe('SearchMenuQuery', () => {
         vc: 233,
       },
     }
-    const { QueryRenderer } = require('react-relay')
-    QueryRenderer.__setQueryResponse({
+    const QueryRendererWithUser = require('js/components/General/QueryRendererWithUser')
+      .default
+    QueryRendererWithUser.__setQueryResponse({
       error: null,
       props: fakeProps,
       retry: jest.fn(),
