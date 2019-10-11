@@ -13,6 +13,9 @@ import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
+import { showBingJSAds } from 'js/utils/feature-flags'
+
+const SHOW_BING_JS_ADS = showBingJSAds()
 
 // Pings Bing when the search results page loads.
 class BingPageLoadPing extends React.Component {
@@ -200,6 +203,11 @@ const SearchResultsBing = props => {
                   </Typography>
                 </div>
               </Paper>
+            </ErrorBoundary>
+          ) : null}
+          {SHOW_BING_JS_ADS ? ( // TODO: display only when search results return
+            <ErrorBoundary ignoreErrors>
+              <div id="BingAdsContainer1" />
             </ErrorBoundary>
           ) : null}
           {data.results.mainline.map(searchResultItemData => {

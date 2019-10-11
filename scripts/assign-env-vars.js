@@ -34,6 +34,7 @@ export const envVars = [
   },
   { name: 'REACT_APP_SEARCH_PROVIDER', optional: true },
   { name: 'REACT_APP_SEARCH_QUERY_ENDPOINT' },
+  { name: 'REACT_APP_FEATURE_FLAG_BING_JS_ADS' },
   { name: 'REACT_APP_MEASURE_TIME_TO_INTERACTIVE', optional: true },
   // GraphQL / Lambda
   { name: 'GQL_LOGGER' },
