@@ -164,7 +164,7 @@ const loadBingJSAds = ({ query, pageNumber }) => {
     disableTextAdExtensions: ['app'],
     containers: [
       {
-        containerId: 'BingAdsContainer1',
+        containerId: 'bing-js-ads-container',
         width: 620,
         position: 'Mainline',
         adTypesFilter: 'TextAds',
