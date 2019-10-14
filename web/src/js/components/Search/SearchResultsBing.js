@@ -131,6 +131,11 @@ const SearchResultsBing = props => {
         style
       )}
     >
+      {SHOW_BING_JS_ADS ? ( // TODO: display only when search results return
+        <ErrorBoundary ignoreErrors>
+          <div id="BingAdsContainer1" />
+        </ErrorBoundary>
+      ) : null}
       {isError ? (
         <SearchResultErrorMessage
           className={classes.noResultsMessages}
@@ -203,11 +208,6 @@ const SearchResultsBing = props => {
                   </Typography>
                 </div>
               </Paper>
-            </ErrorBoundary>
-          ) : null}
-          {SHOW_BING_JS_ADS ? ( // TODO: display only when search results return
-            <ErrorBoundary ignoreErrors>
-              <div id="BingAdsContainer1" />
             </ErrorBoundary>
           ) : null}
           {data.results.mainline.map(searchResultItemData => {

@@ -171,10 +171,10 @@ const loadBingJSAds = ({ query, pageNumber }) => {
         adSlots: 3,
         adStyle: {
           textAd: {
-            // fontFamily: 'roboto', // TODO
-            titleFontSize: 19,
-            urlFontSize: 14,
-            descriptionFontSize: 14,
+            fontFamily: 'Roboto, arial, sans-serif',
+            titleFontSize: 18,
+            urlFontSize: 13,
+            descriptionFontSize: 13,
             titleColor: '#1A0DAB',
             descriptionColor: '#505050',
             urlColor: '#007526',
