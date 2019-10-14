@@ -13,7 +13,10 @@
 // Return an empty script when building the newtab app.
 // The newtab app will still build this entry point because
 // we share Webpack configs.
-if (process.env.REACT_APP_WHICH_APP === 'search') {
+if (
+  process.env.REACT_APP_WHICH_APP === 'search' &&
+  process.env.NODE_ENV === 'production'
+) {
   const {
     prefetchSearchResults,
   } = require('js/components/Search/fetchBingSearchResults')
