@@ -207,7 +207,12 @@ const SearchResultsBing = props => {
         ) : null}
         {SHOW_BING_JS_ADS ? (
           <ErrorBoundary ignoreErrors>
-            <div id="bing-js-ads-container" />
+            <div
+              id="bing-js-ads-container"
+              style={{
+                marginLeft: -10, // to deal with unwanted padding
+              }}
+            />
           </ErrorBoundary>
         ) : null}
         {data.results.mainline.map(searchResultItemData => {
