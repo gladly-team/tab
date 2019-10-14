@@ -168,7 +168,7 @@ const loadBingJSAds = ({ query, pageNumber }) => {
         width: 620,
         position: 'Mainline',
         adTypesFilter: 'TextAds',
-        adSlots: 3,
+        adSlots: 2,
         adStyle: {
           textAd: {
             fontFamily: 'Roboto, arial, sans-serif',
