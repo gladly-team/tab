@@ -131,11 +131,6 @@ const SearchResultsBing = props => {
         style
       )}
     >
-      {SHOW_BING_JS_ADS ? ( // TODO: display only when search results return
-        <ErrorBoundary ignoreErrors>
-          <div id="BingAdsContainer1" />
-        </ErrorBoundary>
-      ) : null}
       {isError ? (
         <SearchResultErrorMessage
           className={classes.noResultsMessages}
@@ -158,89 +153,93 @@ const SearchResultsBing = props => {
           No results found for{' '}
           <span style={{ fontWeight: 'bold' }}>{query}</span>
         </Typography>
-      ) : isQueryInProgress ? null : (
-        <div
-          data-test-id={'search-results'}
-          className={classes.searchResultsContainer}
-          style={{
-            display: noResultsToDisplay ? 'none' : 'block',
-          }}
-        >
-          {pageLoadPingUrl ? (
-            <BingPageLoadPing
-              key={pageLoadPingUrl}
-              pageLoadPingUrl={pageLoadPingUrl}
-            />
-          ) : null}
-          {data.resultsCount ? (
-            <Typography
-              data-test-id={'search-results-count'}
-              variant={'caption'}
-              className={classes.resultsCountText}
-            >
-              {commaFormatted(data.resultsCount)} results
-            </Typography>
-          ) : null}
-          {// If this is the first query, show our intro card
-          !noResultsToDisplay && query === SEARCH_INTRO_QUERY_ENGLISH ? (
-            <ErrorBoundary ignoreErrors>
-              <Paper
-                data-test-id={'first-search-card'}
-                className={classes.firstSearchCardContainer}
-                elevation={1}
-              >
-                <div>
-                  <Typography
-                    variant={'h4'}
-                    data-test-id={'first-search-card-value'}
-                    gutterBottom
-                  >
-                    Over 3.5 billion
-                  </Typography>
-                  <Typography
-                    variant={'body2'}
-                    data-test-id={'first-search-card-text'}
-                    gutterBottom
-                  >
-                    With Search for a Cause, those searches could give 500,000
-                    people access to clean water or protect 430 square miles of
-                    rainforest each day!
-                  </Typography>
-                </div>
-              </Paper>
-            </ErrorBoundary>
-          ) : null}
-          {data.results.mainline.map(searchResultItemData => {
-            return (
-              <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
-                <SearchResultItem
-                  key={searchResultItemData.key}
-                  type={searchResultItemData.type}
-                  itemData={searchResultItemData.value}
-                  instrumentation={data.instrumentation}
-                />
-              </ErrorBoundary>
-            )
-          })}
-          <div
-            data-test-id={'search-results-attribution'}
-            className={classes.resultsAttributionContainer}
+      ) : null}
+      <div
+        data-test-id={'search-results'}
+        className={classes.searchResultsContainer}
+        style={{
+          display: noResultsToDisplay ? 'none' : 'block',
+        }}
+      >
+        {pageLoadPingUrl ? (
+          <BingPageLoadPing
+            key={pageLoadPingUrl}
+            pageLoadPingUrl={pageLoadPingUrl}
+          />
+        ) : null}
+        {data.resultsCount ? (
+          <Typography
+            data-test-id={'search-results-count'}
+            variant={'caption'}
+            className={classes.resultsCountText}
           >
-            <Link
-              to={'https://privacy.microsoft.com/privacystatement'}
-              target="_blank"
-              rel="noopener noreferrer"
+            {commaFormatted(data.resultsCount)} results
+          </Typography>
+        ) : null}
+        {// If this is the first query, show our intro card
+        !noResultsToDisplay && query === SEARCH_INTRO_QUERY_ENGLISH ? (
+          <ErrorBoundary ignoreErrors>
+            <Paper
+              data-test-id={'first-search-card'}
+              className={classes.firstSearchCardContainer}
+              elevation={1}
             >
-              <Typography
-                variant={'caption'}
-                className={classes.resultsAttribution}
-              >
-                Results by Microsoft
-              </Typography>
-            </Link>
-          </div>
+              <div>
+                <Typography
+                  variant={'h4'}
+                  data-test-id={'first-search-card-value'}
+                  gutterBottom
+                >
+                  Over 3.5 billion
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  data-test-id={'first-search-card-text'}
+                  gutterBottom
+                >
+                  With Search for a Cause, those searches could give 500,000
+                  people access to clean water or protect 430 square miles of
+                  rainforest each day!
+                </Typography>
+              </div>
+            </Paper>
+          </ErrorBoundary>
+        ) : null}
+        {SHOW_BING_JS_ADS ? (
+          <ErrorBoundary ignoreErrors>
+            <div id="BingAdsContainer1" />
+          </ErrorBoundary>
+        ) : null}
+        {data.results.mainline.map(searchResultItemData => {
+          return (
+            <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
+              <SearchResultItem
+                key={searchResultItemData.key}
+                type={searchResultItemData.type}
+                itemData={searchResultItemData.value}
+                instrumentation={data.instrumentation}
+              />
+            </ErrorBoundary>
+          )
+        })}
+        <div
+          data-test-id={'search-results-attribution'}
+          className={classes.resultsAttributionContainer}
+        >
+          <Link
+            to={'https://privacy.microsoft.com/privacystatement'}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Typography
+              variant={'caption'}
+              className={classes.resultsAttribution}
+            >
+              Results by Microsoft
+            </Typography>
+          </Link>
         </div>
-      )}
+      </div>
       {!!page && SHOW_PAGINATION && !noResultsToDisplay ? (
         <div
           data-test-id={'pagination-container'}
