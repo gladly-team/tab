@@ -79,6 +79,7 @@ class InviteFriend extends React.Component {
           },
         }}
         style={this.props.style}
+        // TODO: override props
       />
     )
   }
