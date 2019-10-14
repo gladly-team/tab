@@ -161,7 +161,7 @@ const SearchResultsBing = props => {
           display: noResultsToDisplay ? 'none' : 'block',
         }}
       >
-        {pageLoadPingUrl ? (
+        {!noResultsToDisplay && pageLoadPingUrl ? (
           <BingPageLoadPing
             key={pageLoadPingUrl}
             pageLoadPingUrl={pageLoadPingUrl}
