@@ -4,6 +4,7 @@ jest.mock('js/components/Search/fetchBingSearchResults')
 
 beforeEach(() => {
   process.env.REACT_APP_WHICH_APP = 'search'
+  process.env.NODE_ENV = 'production'
   const { setWindowLocation } = require('js/utils/test-utils')
   setWindowLocation({
     pathname: '/search',
@@ -93,6 +94,15 @@ describe('searchQuery entry point', () => {
 
   it('does not call prefetchSearchResults when REACT_APP_WHICH_APP is undefined', () => {
     delete process.env.REACT_APP_WHICH_APP
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    require('searchQuery')
+    expect(prefetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('does not call prefetchSearchResults when NODE_ENV is not "production"', () => {
+    process.env.NODE_ENV = 'development'
     const {
       prefetchSearchResults,
     } = require('js/components/Search/fetchBingSearchResults')
