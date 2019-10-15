@@ -212,6 +212,14 @@ const SearchResultsBing = props => {
               style={{
                 marginLeft: -10, // to deal with unwanted padding
               }}
+              // Prevent rerendering the container during hydration,
+              // which can break 3rd-party Bing JS:
+              // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+              // https://github.com/facebook/react/issues/10923#issuecomment-338715787
+              dangerouslySetInnerHTML={{
+                __html: '',
+              }}
+              suppressHydrationWarning
             />
           </ErrorBoundary>
         ) : null}
