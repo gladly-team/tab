@@ -588,6 +588,55 @@ describe('Bing JS ads', () => {
     await fetchBingSearchResults({ query: 'blue whales' })
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
+
+  it('uses the language from navigator.languages when possible', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: ['fr'],
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'fr')
+  })
+
+  it('uses the language from navigator.language when navigator.languages is not available', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: 'es',
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'es')
+  })
+
+  it('defaults to English when navigator.languages and navigator.language are not available', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'en')
+  })
 })
 
 describe('fetchBingSearchResults: using previously-fetched data', () => {

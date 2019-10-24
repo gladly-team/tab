@@ -152,12 +152,17 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
 // TODO: test with prerendering
 const loadBingJSAds = ({ query, pageNumber }) => {
   try {
+    let language = 'en'
+    if (navigator.languages) {
+      language = navigator.languages[0]
+    } else if (navigator.language) {
+      language = navigator.language
+    }
     var adsParameter = {
       adUnitId: '367432',
       query: query,
       pageNumber: pageNumber,
-      adLanguage: 'en', // TODO
-      // navigator.languages ? navigator.languages[0] : 'en'
+      adLanguage: language,
       safeSearch: 'Moderate',
       testMode: 'On', // TODO
       personalization: 'On',
