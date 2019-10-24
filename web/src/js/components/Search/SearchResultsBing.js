@@ -158,7 +158,10 @@ const SearchResultsBing = props => {
         data-test-id={'search-results'}
         className={classes.searchResultsContainer}
         style={{
-          display: noResultsToDisplay ? 'none' : 'block',
+          // Note: this cannot be "display: 'none'" when using the Bing JS ads,
+          // because the ads JS needs to be able to measure the iframe
+          // dimensions.
+          visibility: noResultsToDisplay ? 'hidden' : 'visible',
         }}
       >
         {!noResultsToDisplay && pageLoadPingUrl ? (
@@ -205,7 +208,9 @@ const SearchResultsBing = props => {
             </Paper>
           </ErrorBoundary>
         ) : null}
-        {SHOW_BING_JS_ADS ? (
+        {/* Important: this needs to prerender into HTML so the container
+             exists for the ads JS code even when there isn't search data. */
+        SHOW_BING_JS_ADS ? (
           <ErrorBoundary ignoreErrors>
             <div
               id="bing-js-ads-container"
