@@ -8,7 +8,10 @@ import {
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
-import { showBingJSAds } from 'js/utils/feature-flags'
+import {
+  isBingJSAdsProductionMode,
+  showBingJSAds,
+} from 'js/utils/feature-flags'
 import logger from 'js/utils/logger'
 
 // Note: this module should reasonably stand on its own because
@@ -158,13 +161,14 @@ const loadBingJSAds = ({ query, pageNumber }) => {
     } else if (navigator.language) {
       language = navigator.language
     }
+    const productionMode = isBingJSAdsProductionMode()
     var adsParameter = {
       adUnitId: '367432',
       query: query,
       pageNumber: pageNumber,
       adLanguage: language,
       safeSearch: 'Moderate',
-      testMode: 'On', // TODO
+      testMode: productionMode ? 'Off' : 'On',
       personalization: 'On',
       disableTextAdExtensions: ['app'],
       containers: [

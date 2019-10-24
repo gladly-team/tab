@@ -9,7 +9,10 @@ import {
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
-import { showBingJSAds } from 'js/utils/feature-flags'
+import {
+  isBingJSAdsProductionMode,
+  showBingJSAds,
+} from 'js/utils/feature-flags'
 import logger from 'js/utils/logger'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
@@ -31,6 +34,7 @@ beforeEach(() => {
   window.searchforacause = getDefaultSearchGlobal()
   window.searchAds = jest.fn()
   showBingJSAds.mockReturnValue(false)
+  isBingJSAdsProductionMode.mockReturnValue(true)
   jest.useFakeTimers()
 })
 
@@ -538,6 +542,7 @@ describe('fetchBingSearchResults: development-only mock data', () => {
 describe('Bing JS ads', () => {
   beforeEach(() => {
     showBingJSAds.mockReturnValue(true)
+    isBingJSAdsProductionMode.mockReturnValue(true)
   })
 
   it("does not request any ads via the API's mainlineCount value", async () => {
@@ -636,6 +641,24 @@ describe('Bing JS ads', () => {
       .default
     await fetchBingSearchResults({ query: 'blue whales' })
     expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'en')
+  })
+
+  it('sets testMode to "Off" when isBingJSAdsProductionMode returns false', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('testMode', 'Off')
+  })
+
+  it('sets testMode to "On" when isBingJSAdsProductionMode returns false', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(false)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('testMode', 'On')
   })
 })
 
