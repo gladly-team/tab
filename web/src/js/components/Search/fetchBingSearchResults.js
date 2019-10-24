@@ -10,8 +10,6 @@ import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
 import { showBingJSAds } from 'js/utils/feature-flags'
 
-const SHOW_BING_JS_ADS = showBingJSAds()
-
 // Note: this module should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
 // which speeds up fetching search results. We also call this
@@ -262,6 +260,7 @@ const fetchBingSearchResults = async ({
       }
     }
 
+    const SHOW_BING_JS_ADS = showBingJSAds()
     if (SHOW_BING_JS_ADS) {
       // Load JS ads.
       loadBingJSAds({ query, pageNumber })

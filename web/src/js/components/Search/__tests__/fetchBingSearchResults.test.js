@@ -533,6 +533,40 @@ describe('fetchBingSearchResults: development-only mock data', () => {
   })
 })
 
+describe('Bing JS ads', () => {
+  beforeEach(() => {
+    showBingJSAds.mockReturnValue(true)
+  })
+
+  it("does not request any ads via the API's mainlineCount value", async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('mainlineCount')).toEqual('0')
+  })
+
+  it('does not call the searchAds Bing function if JS ads are not enabled', async () => {
+    expect.assertions(1)
+    showBingJSAds.mockReturnValue(false)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds).not.toHaveBeenCalled()
+  })
+
+  it('calls the searchAds Bing function if JS ads are enabled', async () => {
+    expect.assertions(1)
+    showBingJSAds.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds).toHaveBeenCalledTimes(1)
+  })
+})
+
 describe('fetchBingSearchResults: using previously-fetched data', () => {
   it("[no previous request data]: fetches new data when the search global doesn't exist", async () => {
     expect.assertions(1)
