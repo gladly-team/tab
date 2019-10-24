@@ -9,6 +9,7 @@ import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
 import { showBingJSAds } from 'js/utils/feature-flags'
+import logger from 'js/utils/logger'
 
 // Note: this module should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
@@ -150,42 +151,46 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
 // TODO: add tests
 // TODO: test with prerendering
 const loadBingJSAds = ({ query, pageNumber }) => {
-  var adsParameter = {
-    adUnitId: '367432',
-    query: query,
-    pageNumber: pageNumber,
-    adLanguage: 'en', // TODO
-    // navigator.languages ? navigator.languages[0] : 'en'
-    safeSearch: 'Moderate',
-    testMode: 'On', // TODO
-    personalization: 'On',
-    disableTextAdExtensions: ['app'],
-    containers: [
-      {
-        containerId: 'bing-js-ads-container',
-        width: 620,
-        position: 'Mainline',
-        adTypesFilter: 'TextAds',
-        adSlots: 2,
-        adStyle: {
-          textAd: {
-            fontFamily: 'Roboto, arial, sans-serif',
-            titleFontSize: 18,
-            urlFontSize: 13,
-            descriptionFontSize: 13,
-            titleColor: '#1A0DAB',
-            urlColor: '#007526',
-            descriptionColor: '#505050',
-            backgroundColor: '#FFFFFF',
-            borderColorForAd: '#FFFFFF',
-            borderColorForAdContainer: '#FFFFFF',
+  try {
+    var adsParameter = {
+      adUnitId: '367432',
+      query: query,
+      pageNumber: pageNumber,
+      adLanguage: 'en', // TODO
+      // navigator.languages ? navigator.languages[0] : 'en'
+      safeSearch: 'Moderate',
+      testMode: 'On', // TODO
+      personalization: 'On',
+      disableTextAdExtensions: ['app'],
+      containers: [
+        {
+          containerId: 'bing-js-ads-container',
+          width: 620,
+          position: 'Mainline',
+          adTypesFilter: 'TextAds',
+          adSlots: 2,
+          adStyle: {
+            textAd: {
+              fontFamily: 'Roboto, arial, sans-serif',
+              titleFontSize: 18,
+              urlFontSize: 13,
+              descriptionFontSize: 13,
+              titleColor: '#1A0DAB',
+              urlColor: '#007526',
+              descriptionColor: '#505050',
+              backgroundColor: '#FFFFFF',
+              borderColorForAd: '#FFFFFF',
+              borderColorForAdContainer: '#FFFFFF',
+            },
           },
         },
-      },
-    ],
-  }
+      ],
+    }
 
-  window.searchAds(adsParameter)
+    window.searchAds(adsParameter)
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
 /**

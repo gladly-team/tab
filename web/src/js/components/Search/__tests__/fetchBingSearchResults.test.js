@@ -10,6 +10,7 @@ import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
 import { showBingJSAds } from 'js/utils/feature-flags'
+import logger from 'js/utils/logger'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
@@ -17,6 +18,7 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Search/getBingMarketCode')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/logger')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -559,11 +561,32 @@ describe('Bing JS ads', () => {
 
   it('calls the searchAds Bing function if JS ads are enabled', async () => {
     expect.assertions(1)
-    showBingJSAds.mockReturnValue(true)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     await fetchBingSearchResults({ query: 'blue whales' })
     expect(window.searchAds).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not throw if the searchAds function throws', async () => {
+    expect.assertions(0)
+    window.searchAds.mockImplementationOnce(() => {
+      throw new Error('That is not a good thing.')
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+  })
+
+  it('logs an error if the searchAds function throws', async () => {
+    expect.assertions(1)
+    const mockErr = new Error('That is not a good thing.')
+    window.searchAds.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })
 
