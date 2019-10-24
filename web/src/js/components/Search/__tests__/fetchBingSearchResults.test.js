@@ -643,7 +643,7 @@ describe('Bing JS ads', () => {
     expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'en')
   })
 
-  it('sets testMode to "Off" when isBingJSAdsProductionMode returns false', async () => {
+  it('sets testMode to "Off" when isBingJSAdsProductionMode returns true', async () => {
     expect.assertions(1)
     isBingJSAdsProductionMode.mockReturnValue(true)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
