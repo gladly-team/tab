@@ -150,9 +150,14 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
   }
 }
 
-// Important: this is only for dev. It is not production-ready.
-// TODO: add tests
-// TODO: test with prerendering
+/**
+ * Call the Bing ads JS library, an alternative to fetching ads via
+ * the API. It will load any ads into a predefined container div.
+ * @param {Object} options
+ * @param {String} options.query - The search query, unencoded.
+ * @param {Number} options.pageNumber - The 1-based search results page number.
+ * @return {undefined}
+ */
 const loadBingJSAds = ({ query, pageNumber }) => {
   try {
     let language = 'en'
