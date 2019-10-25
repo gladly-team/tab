@@ -691,6 +691,24 @@ describe('Bing JS ads', () => {
     await fetchBingSearchResults({ query: 'blue whales' })
     expect(window.searchAds.mock.calls[0][0]).toHaveProperty('testMode', 'On')
   })
+
+  it('passes the correct page number when on the first page (it should be 1, not 0)', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales', page: 1 })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('pageNumber', 1)
+  })
+
+  it('passes the correct page number on a higher page number', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales', page: 8 })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('pageNumber', 8)
+  })
 })
 
 describe('fetchBingSearchResults: using previously-fetched data', () => {

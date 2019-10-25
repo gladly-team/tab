@@ -281,8 +281,8 @@ const fetchBingSearchResults = async ({
 
     const SHOW_BING_JS_ADS = showBingJSAds()
     if (SHOW_BING_JS_ADS) {
-      // Load JS ads.
-      loadBingJSAds({ query, pageNumber })
+      // Load JS ads. The lowest pageNumber value is 1 (not 0).
+      loadBingJSAds({ query, pageNumber: pageNumber + 1 })
     }
 
     // The mkt parameter is not required but highly recommended.
