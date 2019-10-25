@@ -15,8 +15,6 @@ import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
 import { showBingJSAds } from 'js/utils/feature-flags'
 
-const SHOW_BING_JS_ADS = showBingJSAds()
-
 // Pings Bing when the search results page loads.
 class BingPageLoadPing extends React.Component {
   componentDidMount() {
@@ -116,6 +114,8 @@ const SearchResultsBing = props => {
     !data.results.mainline.length ||
     isQueryInProgress ||
     isError
+
+  const SHOW_BING_JS_ADS = showBingJSAds()
 
   return (
     <div
