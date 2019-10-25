@@ -162,9 +162,9 @@ const loadBingJSAds = ({ query, pageNumber }) => {
   try {
     let language = 'en'
     if (navigator.languages) {
-      language = navigator.languages[0]
+      language = navigator.languages[0].slice(0, 2)
     } else if (navigator.language) {
-      language = navigator.language
+      language = navigator.language.slice(0, 2)
     }
     const productionMode = isBingJSAdsProductionMode()
     var adsParameter = {

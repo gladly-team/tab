@@ -607,6 +607,19 @@ describe('Bing JS ads', () => {
     expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'fr')
   })
 
+  it('modifies the 5-letter navigator.languages into a 2-letter language when needed', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: ['fr-FR'],
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'fr')
+  })
+
   it('uses the language from navigator.language when navigator.languages is not available', async () => {
     expect.assertions(1)
     Object.defineProperty(window.navigator, 'languages', {
@@ -616,6 +629,24 @@ describe('Bing JS ads', () => {
     })
     Object.defineProperty(window.navigator, 'language', {
       value: 'es',
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'es')
+  })
+
+  it('modifies the 5-letter navigator.language when needed', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: 'es-MX',
       configurable: true,
       writable: true,
     })
