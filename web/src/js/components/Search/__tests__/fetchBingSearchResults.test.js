@@ -9,7 +9,11 @@ import {
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
-import { showBingJSAds } from 'js/utils/feature-flags'
+import {
+  isBingJSAdsProductionMode,
+  showBingJSAds,
+} from 'js/utils/feature-flags'
+import logger from 'js/utils/logger'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
@@ -17,6 +21,7 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Search/getBingMarketCode')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/logger')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -29,6 +34,7 @@ beforeEach(() => {
   window.searchforacause = getDefaultSearchGlobal()
   window.searchAds = jest.fn()
   showBingJSAds.mockReturnValue(false)
+  isBingJSAdsProductionMode.mockReturnValue(true)
   jest.useFakeTimers()
 })
 
@@ -530,6 +536,160 @@ describe('fetchBingSearchResults: development-only mock data', () => {
         throw e
       })
     jest.runAllTimers()
+  })
+})
+
+describe('Bing JS ads', () => {
+  beforeEach(() => {
+    showBingJSAds.mockReturnValue(true)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+  })
+
+  it("does not request any ads via the API's mainlineCount value", async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('mainlineCount')).toEqual('0')
+  })
+
+  it('does not call the searchAds Bing function if JS ads are not enabled', async () => {
+    expect.assertions(1)
+    showBingJSAds.mockReturnValue(false)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds).not.toHaveBeenCalled()
+  })
+
+  it('calls the searchAds Bing function if JS ads are enabled', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not throw if the searchAds function throws', async () => {
+    expect.assertions(0)
+    window.searchAds.mockImplementationOnce(() => {
+      throw new Error('That is not a good thing.')
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+  })
+
+  it('logs an error if the searchAds function throws', async () => {
+    expect.assertions(1)
+    const mockErr = new Error('That is not a good thing.')
+    window.searchAds.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('uses the language from navigator.languages when possible', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: ['fr'],
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'fr')
+  })
+
+  it('modifies the 5-letter navigator.languages into a 2-letter language when needed', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: ['fr-FR'],
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'fr')
+  })
+
+  it('uses the language from navigator.language when navigator.languages is not available', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: 'es',
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'es')
+  })
+
+  it('modifies the 5-letter navigator.language when needed', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: 'es-MX',
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'es')
+  })
+
+  it('defaults to English when navigator.languages and navigator.language are not available', async () => {
+    expect.assertions(1)
+    Object.defineProperty(window.navigator, 'languages', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(window.navigator, 'language', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('adLanguage', 'en')
+  })
+
+  it('sets testMode to "Off" when isBingJSAdsProductionMode returns true', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('testMode', 'Off')
+  })
+
+  it('sets testMode to "On" when isBingJSAdsProductionMode returns false', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(false)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toHaveProperty('testMode', 'On')
   })
 })
 

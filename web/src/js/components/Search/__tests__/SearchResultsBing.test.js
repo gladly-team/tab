@@ -313,7 +313,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    ).toHaveProperty('visibility', 'hidden')
   })
 
   it('shows a message if there is no search query', () => {
@@ -368,7 +368,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results"]').prop('style')
-    ).toHaveProperty('display', 'none')
+    ).toHaveProperty('visibility', 'hidden')
   })
 
   it('renders the search result attribution text when there are search results', () => {
