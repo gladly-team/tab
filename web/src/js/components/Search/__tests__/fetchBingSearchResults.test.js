@@ -709,6 +709,66 @@ describe('Bing JS ads', () => {
     await fetchBingSearchResults({ query: 'blue whales', page: 8 })
     expect(window.searchAds.mock.calls[0][0]).toHaveProperty('pageNumber', 8)
   })
+
+  it('contains expected ad unit ID and other hardcoded settings', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0]).toMatchObject({
+      adUnitId: '367432',
+      safeSearch: 'Moderate',
+      personalization: 'On',
+      disableTextAdExtensions: ['app'],
+    })
+  })
+
+  it('contains only one ad container', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0].containers.length).toEqual(1)
+  })
+
+  it('contains expected container settings (div ID, ad type, ad number)', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchAds.mock.calls[0][0].containers[0]).toMatchObject({
+      containerId: 'bing-js-ads-container',
+      width: 620,
+      position: 'Mainline',
+      adTypesFilter: 'TextAds',
+      adSlots: 2,
+    })
+  })
+
+  it('contains expected ad styling (font family, font size, etc.)', async () => {
+    expect.assertions(1)
+    isBingJSAdsProductionMode.mockReturnValue(true)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(
+      window.searchAds.mock.calls[0][0].containers[0].adStyle.textAd
+    ).toMatchObject({
+      fontFamily: 'Roboto, arial, sans-serif',
+      titleFontSize: 18,
+      urlFontSize: 13,
+      descriptionFontSize: 13,
+      titleColor: '#1A0DAB',
+      urlColor: '#007526',
+      descriptionColor: '#505050',
+      backgroundColor: '#FFFFFF',
+      borderColorForAd: '#FFFFFF',
+      borderColorForAdContainer: '#FFFFFF',
+    })
+  })
 })
 
 describe('fetchBingSearchResults: using previously-fetched data', () => {
