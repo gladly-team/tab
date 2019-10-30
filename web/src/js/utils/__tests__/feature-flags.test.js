@@ -53,4 +53,18 @@ describe('feature flags', () => {
     process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS = 'true'
     expect(showBingJSAds()).toBe(true)
   })
+
+  test('isBingJSAdsProductionMode is false if the env var is "false"', () => {
+    const isBingJSAdsProductionMode = require('js/utils/feature-flags')
+      .isBingJSAdsProductionMode
+    process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE = 'false'
+    expect(isBingJSAdsProductionMode()).toBe(false)
+  })
+
+  test('isBingJSAdsProductionMode is true if the env var is "true"', () => {
+    const isBingJSAdsProductionMode = require('js/utils/feature-flags')
+      .isBingJSAdsProductionMode
+    process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE = 'true'
+    expect(isBingJSAdsProductionMode()).toBe(true)
+  })
 })

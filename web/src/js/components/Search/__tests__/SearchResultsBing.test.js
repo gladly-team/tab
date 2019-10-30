@@ -12,10 +12,12 @@ import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMess
 import { mockFetchResponse } from 'js/utils/test-utils'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
+import { showBingJSAds } from 'js/utils/feature-flags'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
 jest.mock('js/utils/search-utils')
+jest.mock('js/utils/feature-flags')
 
 const getMockProps = () => ({
   classes: {},
@@ -77,6 +79,9 @@ beforeEach(() => {
   showBingPagination.mockReturnValue(false)
 
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
+
+  // Whether we are using the Bing JS ads rather than the ads API.
+  showBingJSAds.mockReturnValue(false)
 })
 
 afterEach(() => {
@@ -281,7 +286,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     )
   })
 
-  it('does not render any search result items when there is some error', () => {
+  it('does not display search results when there is some error', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -311,7 +316,9 @@ describe('SearchResultsBing: tests for non-results display', () => {
       },
     })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultItem).exists()).toBe(false)
+    expect(
+      wrapper.find('[data-test-id="search-results"]').prop('style')
+    ).toHaveProperty('visibility', 'hidden')
   })
 
   it('shows a message if there is no search query', () => {
@@ -333,7 +340,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     ).toBe(true)
   })
 
-  it('does not render any search result items when there no search query', () => {
+  it('does not render any search results when there no search query', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -364,7 +371,9 @@ describe('SearchResultsBing: tests for non-results display', () => {
       },
     })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultItem).exists()).toBe(false)
+    expect(
+      wrapper.find('[data-test-id="search-results"]').prop('style')
+    ).toHaveProperty('visibility', 'hidden')
   })
 
   it('renders the search result attribution text when there are search results', () => {
@@ -375,6 +384,19 @@ describe('SearchResultsBing: tests for non-results display', () => {
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
     ).toBe(true)
+  })
+
+  it('renders the search result attribution as a child of our search results container (meaning it will only display with other results)', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-results-attribution"]')
+        .parent()
+        .prop('data-test-id')
+    ).toEqual('search-results')
   })
 
   it('renders the expected text for the search result attribution', () => {
@@ -404,65 +426,6 @@ describe('SearchResultsBing: tests for non-results display', () => {
     expect(attributionContainer.find(Link).prop('to')).toEqual(
       'https://privacy.microsoft.com/privacystatement'
     )
-  })
-
-  it('does not render the search result attribution text when it is an empty query', () => {
-    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
-      .default
-    const mockProps = getMockProps()
-    mockProps.query = ''
-    mockProps.isError = false
-    mockProps.isEmptyQuery = true
-    mockProps.isQueryInProgress = false
-    mockProps.queryReturned = true
-    mockProps.data = Object.assign({}, mockProps.data, {
-      results: {
-        pole: [],
-        mainline: [
-          {
-            type: 'WebPages',
-            key: 'some-key-1',
-            value: {
-              data: 'here',
-            },
-          },
-          {
-            type: 'WebPages',
-            key: 'some-key-2',
-            value: {
-              data: 'here',
-            },
-          },
-        ],
-        sidebar: [],
-      },
-    })
-    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="search-results-attribution"]').exists()
-    ).toBe(false)
-  })
-
-  it('does not render the search result attribution text when there are no search results', () => {
-    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
-      .default
-    const mockProps = getMockProps()
-    mockProps.query = ''
-    mockProps.isError = false
-    mockProps.isEmptyQuery = false
-    mockProps.isQueryInProgress = false
-    mockProps.queryReturned = true
-    mockProps.data = Object.assign({}, mockProps.data, {
-      results: {
-        pole: [],
-        mainline: [],
-        sidebar: [],
-      },
-    })
-    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="search-results-attribution"]').exists()
-    ).toBe(false)
   })
 
   it('renders the expected text for the total search result count', () => {
@@ -501,65 +464,29 @@ describe('SearchResultsBing: tests for non-results display', () => {
     )
   })
 
-  it('does not render the total search result count if the query is empty', () => {
+  it('does not render the total search result count if the value is zero', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
-    mockProps.data.resultsCount = 20100
-    mockProps.query = ''
-    mockProps.isError = false
-    mockProps.isEmptyQuery = true
-    mockProps.isQueryInProgress = false
-    mockProps.queryReturned = true
-    mockProps.data = Object.assign({}, mockProps.data, {
-      results: {
-        pole: [],
-        mainline: [
-          {
-            type: 'WebPages',
-            key: 'some-key-1',
-            value: {
-              data: 'here',
-            },
-          },
-          {
-            type: 'WebPages',
-            key: 'some-key-2',
-            value: {
-              data: 'here',
-            },
-          },
-        ],
-        sidebar: [],
-      },
-    })
+    mockProps.data.resultsCount = 0
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
       false
     )
   })
 
-  it('does not render the total search result count if there are no results', () => {
+  it('renders the total search result count as a child of our search results container (meaning it will only display with other results)', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
-    mockProps.data.resultsCount = 20100
-    mockProps.query = ''
-    mockProps.isError = false
-    mockProps.isEmptyQuery = false
-    mockProps.isQueryInProgress = false
-    mockProps.queryReturned = true
-    mockProps.data = Object.assign({}, mockProps.data, {
-      results: {
-        pole: [],
-        mainline: [],
-        sidebar: [],
-      },
-    })
+    mockProps.data.resultsCount = 41500000
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
-      false
-    )
+    expect(
+      wrapper
+        .find('[data-test-id="search-results-count"]')
+        .parent()
+        .prop('data-test-id')
+    ).toEqual('search-results')
   })
 })
 
@@ -1200,5 +1127,91 @@ describe('SearchResultsBing: tests for the Bing page load ping', () => {
     const mockProps = getMockProps()
     fetch.mockImplementation(() => Promise.reject('My bad.'))
     mount(<SearchResultsBing {...mockProps} />)
+  })
+})
+
+describe('SearchResultsBing: tests for the Bing ads JS', () => {
+  beforeEach(() => {
+    showBingJSAds.mockReturnValue(true)
+  })
+
+  it('renders the ads container', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+
+    // Do not change this div ID without updating the Bing JS params.
+    expect(wrapper.find('#bing-js-ads-container').exists()).toBe(true)
+  })
+
+  it('renders the ads container even when there is no query', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    mockProps.query = ''
+    mockProps.queryReturned = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('#bing-js-ads-container').exists()).toBe(true)
+  })
+
+  it('renders the ads container even when no search results return', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    mockProps.query = 'foo'
+    mockProps.queryReturned = true
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('#bing-js-ads-container').exists()).toBe(true)
+  })
+
+  it('renders the ads container as a child of an ErrorBoundary', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const parent = wrapper.find('#bing-js-ads-container').parent()
+    expect(parent.type()).toEqual(ErrorBoundary)
+  })
+
+  it('does not render the ads container when Bing JS ads are disabled', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    showBingJSAds.mockReturnValue(false)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('#bing-js-ads-container').exists()).toBe(false)
+  })
+
+  it('sets inner HTML and suppresses the React hydration warning to prevent unmounting', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const adsContainer = wrapper.find('#bing-js-ads-container')
+    expect(adsContainer.prop('suppressHydrationWarning')).toBe(true)
+  })
+
+  it('sets a negative left margin to align the ads with our results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const adsContainer = wrapper.find('#bing-js-ads-container')
+    expect(adsContainer.prop('style')).toHaveProperty('marginLeft', -10)
   })
 })

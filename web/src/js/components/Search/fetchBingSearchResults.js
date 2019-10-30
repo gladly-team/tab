@@ -8,9 +8,11 @@ import {
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
-import { showBingJSAds } from 'js/utils/feature-flags'
-
-const SHOW_BING_JS_ADS = showBingJSAds()
+import {
+  isBingJSAdsProductionMode,
+  showBingJSAds,
+} from 'js/utils/feature-flags'
+import logger from 'js/utils/logger'
 
 // Note: this module should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
@@ -148,43 +150,61 @@ const getPreviouslyFetchedData = async ({ query = null }) => {
   }
 }
 
-// Important: this is only for dev. It is not production-ready.
-// TODO: add tests
-// TODO: test with prerendering
+/**
+ * Call the Bing ads JS library, an alternative to fetching ads via
+ * the API. It will load any ads into a predefined container div.
+ * @param {Object} options
+ * @param {String} options.query - The search query, unencoded.
+ * @param {Number} options.pageNumber - The 1-based search results page number.
+ * @return {undefined}
+ */
 const loadBingJSAds = ({ query, pageNumber }) => {
-  var adsParameter = {
-    adUnitId: '367432',
-    query: query,
-    pageNumber: pageNumber,
-    adLanguage: 'en', // TODO
-    // navigator.languages ? navigator.languages[0] : 'en'
-    safeSearch: 'Moderate',
-    testMode: 'On', // TODO
-    personalization: 'On',
-    disableTextAdExtensions: ['app'],
-    containers: [
-      {
-        containerId: 'BingAdsContainer1',
-        width: 620,
-        position: 'Mainline',
-        adTypesFilter: 'TextAds',
-        adSlots: 3,
-        adStyle: {
-          textAd: {
-            // fontFamily: 'roboto', // TODO
-            titleFontSize: 19,
-            urlFontSize: 14,
-            descriptionFontSize: 14,
-            titleColor: '#1A0DAB',
-            descriptionColor: '#505050',
-            urlColor: '#007526',
+  try {
+    let language = 'en'
+    if (navigator.languages) {
+      language = navigator.languages[0].slice(0, 2)
+    } else if (navigator.language) {
+      language = navigator.language.slice(0, 2)
+    }
+    const productionMode = isBingJSAdsProductionMode()
+    var adsParameter = {
+      adUnitId: '367432',
+      query: query,
+      pageNumber: pageNumber,
+      adLanguage: language,
+      safeSearch: 'Moderate',
+      testMode: productionMode ? 'Off' : 'On',
+      personalization: 'On',
+      disableTextAdExtensions: ['app'],
+      containers: [
+        {
+          containerId: 'bing-js-ads-container',
+          width: 620,
+          position: 'Mainline',
+          adTypesFilter: 'TextAds',
+          adSlots: 2,
+          adStyle: {
+            textAd: {
+              fontFamily: 'Roboto, arial, sans-serif',
+              titleFontSize: 18,
+              urlFontSize: 13,
+              descriptionFontSize: 13,
+              titleColor: '#1A0DAB',
+              urlColor: '#007526',
+              descriptionColor: '#505050',
+              backgroundColor: '#FFFFFF',
+              borderColorForAd: '#FFFFFF',
+              borderColorForAdContainer: '#FFFFFF',
+            },
           },
         },
-      },
-    ],
-  }
+      ],
+    }
 
-  window.searchAds(adsParameter)
+    window.searchAds(adsParameter)
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
 /**
@@ -259,9 +279,10 @@ const fetchBingSearchResults = async ({
       }
     }
 
+    const SHOW_BING_JS_ADS = showBingJSAds()
     if (SHOW_BING_JS_ADS) {
-      // Load JS ads.
-      loadBingJSAds({ query, pageNumber })
+      // Load JS ads. The lowest pageNumber value is 1 (not 0).
+      loadBingJSAds({ query, pageNumber: pageNumber + 1 })
     }
 
     // The mkt parameter is not required but highly recommended.
