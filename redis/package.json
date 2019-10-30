@@ -1,0 +1,21 @@
+{
+  "name": "tab-redis",
+  "version": "0.1.0",
+  "description": "Redis service for Tab for a Cause.",
+  "private": true,
+  "devDependencies": {
+    "serverless": "^1.55.1"
+  },
+  "scripts": {
+    "deploy": "serverless deploy -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}

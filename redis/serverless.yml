@@ -1,0 +1,9 @@
+service: tab-redis
+
+provider:
+  name: aws
+  region: us-west-2
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+
+custom:
+  stageDefault: dev
