@@ -13,12 +13,15 @@ custom:
 
 resources:
   Resources:
-    TabLambdaRedisSecurityGroup:
+    LambdaForRedisSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupName: Tab Lambda accessing Redis
         GroupDescription: For Lambda function that accesses Tab Redis ElastiCache
-    TabRedisClusterStorageSecurityGroup:
+        Tags:
+          - Key: Name
+            Value: Tab Lambda for Redis
+    RedisClusterSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupName: Tab Redis cluster
@@ -28,4 +31,7 @@ resources:
             FromPort: 6379
             ToPort: 6379
             SourceSecurityGroupId:
-              "Fn::GetAtt": TabLambdaRedisSecurityGroup.GroupId
+              "Fn::GetAtt": LambdaForRedisSecurityGroup.GroupId
+        Tags:
+          - Key: Name
+            Value: Tab Redis cluster
