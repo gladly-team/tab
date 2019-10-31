@@ -7,3 +7,25 @@ provider:
 
 custom:
   stageDefault: dev
+
+# Based on:
+# https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
+
+resources:
+  Resources:
+    TabLambdaRedisSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupName: Tab Lambda accessing Redis
+        GroupDescription: For Lambda function that accesses Tab Redis ElastiCache
+    TabRedisClusterStorageSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupName: Tab Redis cluster
+        GroupDescription: Ingress for Tab Redis ElastiCache Cluster
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 6379
+            ToPort: 6379
+            SourceSecurityGroupId:
+              "Fn::GetAtt": TabLambdaRedisSecurityGroup.GroupId
