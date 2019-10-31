@@ -4,12 +4,18 @@ provider:
   name: aws
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  runtime: nodejs10.x
 
 custom:
   stageDefault: dev
 
 # Based on:
 # https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
+
+# Service-wide environment variables
+environment:
+  redisEndpoint:
+    "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Port]]]
 
 resources:
   Resources:
@@ -89,3 +95,15 @@ resources:
         - "Fn::GetAtt": RedisClusterSecurityGroup.GroupId
         CacheSubnetGroupName:
           Ref: TabRedisSubnetGroup
+
+functions:
+  tabRedis:
+    handler: build/handler.serverlessHandler
+    timeout: 10
+    vpc:
+      securityGroupIds:
+        - "Fn::GetAtt": LambdaForRedisSecurityGroup.GroupId
+      subnetIds:
+        - Ref: TabRedisVPCSubnetA
+        - Ref: TabRedisVPCSubnetB
+        - Ref: TabRedisVPCSubnetC

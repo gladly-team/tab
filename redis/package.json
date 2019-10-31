@@ -4,10 +4,29 @@
   "description": "Redis service for Tab for a Cause.",
   "private": true,
   "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^24.9.0",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
     "serverless": "^1.55.1"
   },
   "scripts": {
-    "deploy": "serverless deploy -v"
+    "build": "rm -rf ./build && cross-env NODE_ENV=production babel --out-dir='build' ./src/handler.js",
+    "deploy": "yarn run build && serverless deploy -v",
+    "format:fix": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --write",
+    "lint": "eslint \"**/*.{js,jsx}\"",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
