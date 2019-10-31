@@ -41,6 +41,14 @@ resources:
           Ref: TabRedisVPC
         AvailabilityZone: ${self:provider.region}c
         CidrBlock: "10.0.2.0/24"
+    TabRedisSubnetGroup:
+      Type: AWS::ElastiCache::SubnetGroup
+      Properties:
+        Description: "Cache Subnet Group"
+        SubnetIds:
+        - Ref: TabRedisVPCSubnetA
+        - Ref: TabRedisVPCSubnetB
+        - Ref: TabRedisVPCSubnetC
     LambdaForRedisSecurityGroup:
       DependsOn: TabRedisVPC
       Type: AWS::EC2::SecurityGroup
@@ -69,3 +77,15 @@ resources:
             Value: Tab Redis cluster
         VpcId:
           Ref: TabRedisVPC
+    RedisCluster:
+      DependsOn: RedisClusterSecurityGroup
+      Type: AWS::ElastiCache::CacheCluster
+      Properties:
+        AutoMinorVersionUpgrade: true
+        Engine: redis
+        CacheNodeType: cache.t2.small
+        NumCacheNodes: 1
+        VpcSecurityGroupIds:
+        - "Fn::GetAtt": RedisClusterSecurityGroup.GroupId
+        CacheSubnetGroupName:
+          Ref: TabRedisSubnetGroup
