@@ -3,6 +3,7 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
+import callRedis from '../../utils/redis'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -102,6 +103,14 @@ const logTab = async (userContext, userId, tabId = null) => {
   } catch (e) {
     throw e
   }
+
+  // TODO: remove. This is just for experimenting.
+  try {
+    await callRedis({ hi: 'there', time: moment.utc().toISOString() })
+  } catch (e) {
+    console.error(e)
+  }
+
   return user
 }
 
