@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.4.4",
-    "aws-sdk": "^2.457.0",
+    "aws-sdk": "^2.562.0",
     "bluebird": "^3.5.4",
     "consent-string": "^1.4.2",
     "cors": "^2.8.5",
