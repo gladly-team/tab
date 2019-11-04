@@ -107,3 +107,11 @@ functions:
         - Ref: TabRedisVPCSubnetA
         - Ref: TabRedisVPCSubnetB
         - Ref: TabRedisVPCSubnetC
+    events:
+      - http:
+          path: redis/
+          method: post
+          # Restrict access to specific services.
+          # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+          # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-aws_iam-authorizers
+          authorizer: aws_iam
