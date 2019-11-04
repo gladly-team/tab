@@ -207,3 +207,6 @@ functions:
             # Bug with this behavior:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
+    environment:
+      redisServiceEndpoint:
+        '"Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint'
