@@ -95,6 +95,19 @@ resources:
         - "Fn::GetAtt": RedisClusterSecurityGroup.GroupId
         CacheSubnetGroupName:
           Ref: TabRedisSubnetGroup
+  Outputs:
+    # Export the service endpoint.
+    # https://github.com/serverless/serverless/issues/3616#issuecomment-371755084
+    ServiceEndpointExport:
+      Description: The endpoint to access the Redis service
+      Value:
+        Fn::Join:
+          - ""
+          - - "https://"
+            - "Ref": "ApiGatewayRestApi"
+            - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
+      Export:
+        Name: "${self:service}-${self:provider.stage}-ServiceEndpoint"
 
 functions:
   tabRedis:
