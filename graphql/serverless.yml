@@ -209,4 +209,4 @@ functions:
             arn: ${self:custom.customAuthorizerArn}
     environment:
       redisServiceEndpoint:
-        '"Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint'
+        "Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint
