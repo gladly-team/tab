@@ -12,10 +12,10 @@ custom:
 # Based on:
 # https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
 
-# Service-wide environment variables
+# Service-wide it variables
 environment:
   redisEndpoint:
-    "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Port]]]
+    "Fn::Join": [":", ["Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Port]]]
 
 resources:
   Resources:
