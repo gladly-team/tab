@@ -175,6 +175,13 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}ReferralLinkClickLog-${self:provider.stage}"
+      # Grant access to our Redis service.
+      # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+      - Effect: "Allow"
+        Action:
+          - "execute-api:Invoke"
+        # FIXME: use Fn::ImportValue instead of hardcoding
+        Resource: "arn:aws:execute-api:us-west-2:${env:AWS_ACCOUNT_ID}:dev-tab-redis/dev/POST/redis"
 
 plugins:
   # Include only the required node modules.
