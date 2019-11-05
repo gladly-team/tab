@@ -6,6 +6,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.4",
     "aws-sdk": "^2.562.0",
+    "aws4": "^1.8.0",
     "bluebird": "^3.5.4",
     "consent-string": "^1.4.2",
     "cors": "^2.8.5",
@@ -16,6 +17,7 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "node-fetch": "^2.6.0",
     "raven": "^2.6.4",
     "uuid": "3.3.2"
   },
@@ -44,7 +46,6 @@
     "jest": "^24.8.0",
     "jwt-decode": "^2.2.0",
     "mkdirp": "^0.5.1",
-    "node-fetch": "^2.6.0",
     "npm-run-all": "^4.1.5",
     "prettier": "1.17.1",
     "require-clean": "^0.1.3",
