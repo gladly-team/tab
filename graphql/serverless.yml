@@ -180,8 +180,11 @@ provider:
     - Effect: "Allow"
       Action:
         - "execute-api:Invoke"
-      # FIXME: use Fn::ImportValue instead of hardcoding
-      Resource: "arn:aws:execute-api:us-west-2:${env:AWS_ACCOUNT_ID}:dev-tab-redis/dev/POST/redis"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
+            - /POST/redis
 
 plugins:
   # Include only the required node modules.

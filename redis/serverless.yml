@@ -108,6 +108,16 @@ resources:
             - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
       Export:
         Name: "${self:service}-${self:provider.stage}-ServiceEndpoint"
+    # The base resource expression to give other services permission to
+    # invoke the API.
+    # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    APIGatewayBaseResourceID:
+      Description: The endpoint to access the Redis service
+      # To allow access to specific endpoints, append /HTTP-VERB/resource-path-specifier
+      # to this.
+      Value: "arn:aws:execute-api:${self:provider.region}:${env:AWS_ACCOUNT_ID}:${self:provider.stage}-${self:service}/${self:provider.stage}"
+      Export:
+        Name: "${self:service}-${self:provider.stage}-APIGatewayBaseResourceID"
 
 functions:
   tabRedis:
