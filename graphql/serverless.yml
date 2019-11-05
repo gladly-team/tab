@@ -215,5 +215,5 @@ functions:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
     environment:
-      redisServiceEndpoint:
+      REDIS_SERVICE_ENDPOINT:
         "Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint
