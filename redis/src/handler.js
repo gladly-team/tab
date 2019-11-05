@@ -5,6 +5,7 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 })
 
+// TODO: use Redis client library to get/set simple values.
 export const handler = async event => {
   try {
     JSON.parse(event.body)

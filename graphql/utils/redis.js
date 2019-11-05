@@ -1,9 +1,13 @@
-// FIXME: debugging only.
+// TODO: remove eslint-disable
 /* eslint-disable */
+
 import fetch from 'node-fetch'
 
 const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis/`
 
+// TODO:
+//   - call to get/set values
+//   - gracefully handle Redis downtime or missing cache value
 const callRedis = async data => {
   let responseData
   try {

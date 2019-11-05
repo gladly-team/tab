@@ -1,3 +1,7 @@
+# Note: for now, we'll just manually deploy this service whenever
+# we need it and then destroy it when it's unused to reduce costs.
+# At this point, any access to the service should gracefully handle
+# missing cache values or Redis downtime.
 service: tab-redis
 
 provider:

@@ -8,6 +8,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+// TODO
 describe('Redis Lambda handler', () => {
   it('is a placeholder', async () => {
     expect.assertions(1)
