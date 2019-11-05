@@ -177,14 +177,17 @@ provider:
       Resource: "${self:custom.dbTableArnBase}ReferralLinkClickLog-${self:provider.stage}"
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    # FIXME
     - Effect: "Allow"
       Action:
         - "execute-api:Invoke"
       Resource:
-        Fn::Join:
-          - ""
-          - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
-            - /POST/redis
+        - "arn:aws:execute-api:*:*:*"
+      # Resource:
+      #   Fn::Join:
+      #     - ""
+      #     - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
+      #       - /POST/redis # TODO: trailing slash?
 
 plugins:
   # Include only the required node modules.
