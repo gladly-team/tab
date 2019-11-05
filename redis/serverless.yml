@@ -138,5 +138,5 @@ functions:
           # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-aws_iam-authorizers
           authorizer: aws_iam
     environment:
-      REDIS_ENDPOINT:
-        "Fn::Join": [":", ["Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Port]]]
+      REDIS_ENDPOINT: 'some-endpoint' # FIXME
+        # "Fn::Join": [":", ["Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Port]]]
