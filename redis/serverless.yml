@@ -12,11 +12,6 @@ custom:
 # Based on:
 # https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
 
-# Service-wide it variables
-environment:
-  redisEndpoint:
-    "Fn::Join": [":", ["Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Port]]]
-
 resources:
   Resources:
     TabRedisVPC:
@@ -138,3 +133,6 @@ functions:
           # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
           # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-aws_iam-authorizers
           authorizer: aws_iam
+    environment:
+      REDIS_ENDPOINT:
+        "Fn::Join": [":", ["Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [RedisCluster, ConfigurationEndpoint.Port]]]
