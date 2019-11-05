@@ -1,6 +1,7 @@
 /* eslint no-console:0 */
 // TODO: remove eslint-disable
 
+import { URL } from 'url'
 import fetch from 'node-fetch'
 import aws4 from 'aws4'
 
