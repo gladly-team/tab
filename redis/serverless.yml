@@ -114,7 +114,12 @@ resources:
       Description: The endpoint to access the Redis service
       # To allow access to specific endpoints, append /HTTP-VERB/resource-path-specifier
       # to this.
-      Value: "arn:aws:execute-api:${self:provider.region}:${env:AWS_ACCOUNT_ID}:${self:provider.stage}-${self:service}/${self:provider.stage}"
+      Value:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:${self:provider.region}:${env:AWS_ACCOUNT_ID}:"
+            - "Ref": "ApiGatewayRestApi"
+            - "/${self:provider.stage}"
       Export:
         Name: "${self:service}-${self:provider.stage}-APIGatewayBaseResourceID"
 
