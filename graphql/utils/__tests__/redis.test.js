@@ -85,7 +85,7 @@ describe('Redis outbound', () => {
     )
   })
 
-  it('returns the data provided by the Redis service', async () => {
+  it('returns string data provided by the Redis service', async () => {
     expect.assertions(1)
     const callRedis = require('../redis').default
     const mockInputData = getMockInputData()
@@ -99,6 +99,28 @@ describe('Redis outbound', () => {
     })
     const returnVal = await callRedis(mockInputData)
     expect(returnVal).toEqual('this-is-the-fetched-redis-value')
+  })
+
+  it('returns object data provided by the Redis service', async () => {
+    expect.assertions(1)
+    const callRedis = require('../redis').default
+    const mockInputData = getMockInputData()
+    fetch.mockResolvedValue({
+      ...getMockFetchResponse(),
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            redisReturned: 'anObject',
+            so: 'hereYouGo',
+          },
+        }),
+    })
+    const returnVal = await callRedis(mockInputData)
+    expect(returnVal).toEqual({
+      redisReturned: 'anObject',
+      so: 'hereYouGo',
+    })
   })
 
   it('logs an error and throws if the Redis service returns an error', async () => {
