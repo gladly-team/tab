@@ -5,6 +5,10 @@ import logger from './logger'
 
 const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
 
+export const redisKeys = {
+  foo: 'foo',
+}
+
 /**
  * Call the Redis service.
  * @param {Object} data - Data on the operation to perform on Redis.
@@ -48,9 +52,6 @@ const callRedis = async data => {
     logger.error(e)
     throw e
   }
-
-  // eslint-disable-next-line no-console
-  console.log('===== Redis service response data =====', responseData)
 
   return responseData
 }
