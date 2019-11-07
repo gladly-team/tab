@@ -11,28 +11,42 @@ const createResponse = (statusCode, body) => ({
 })
 
 const errors = {
-  NO_DATA: {
-    code: 'NO_DATA',
-    message: 'No data provided in the request body.',
-  },
   MISSING_OPERATION: {
     code: 'MISSING_OPERATION',
     message: 'The request body did not include an "operation" value.',
-  },
-  UNSUPPORTED_OPERATION: {
-    code: 'UNSUPPORTED_OPERATION',
-    message: 'The provided "operation" value is not supported.',
   },
   MISSING_KEY: {
     code: 'MISSING_KEY',
     message: 'The "key" property is required for this operation.',
   },
+  NO_DATA: {
+    code: 'NO_DATA',
+    message: 'No data provided in the request body.',
+  },
+  UNKNOWN_ERROR: {
+    code: 'UNKNOWN_ERROR',
+    message: 'An unknown error occurred.',
+  },
+  UNSUPPORTED_OPERATION: {
+    code: 'UNSUPPORTED_OPERATION',
+    message: 'The provided "operation" value is not supported.',
+  },
 }
 
-const missingKeyResponse = () => {
+/**
+ * Create a response object with status code 400 and an appropriate
+ * error code and message.
+ * @param {Object} error
+ * @param {String} error.code - The error code, returned to other services
+ * @param {String} error.message - The error message, returned to other services
+ * @return {Object} returnVal - the Lambda response object
+ * @return {Number} returnVal.statusCode - the response code (400)
+ * @return {String} returnVal.body - the response body
+ */
+const createBadRequestResponse = error => {
   return createResponse(500, {
-    code: errors.MISSING_KEY.code,
-    message: errors.MISSING_KEY.message,
+    code: error.code,
+    message: error.message,
   })
 }
 
@@ -49,16 +63,10 @@ export const handler = async event => {
   try {
     body = JSON.parse(event.body)
   } catch (e) {
-    return createResponse(500, {
-      code: errors.NO_DATA.code,
-      message: errors.NO_DATA.message,
-    })
+    return createBadRequestResponse(errors.NO_DATA)
   }
   if (!body.operation) {
-    return createResponse(500, {
-      code: errors.MISSING_OPERATION.code,
-      message: errors.MISSING_OPERATION.message,
-    })
+    return createBadRequestResponse(errors.MISSING_OPERATION)
   }
 
   const client = redis.createClient({
@@ -71,25 +79,25 @@ export const handler = async event => {
     switch (body.operation) {
       case 'GET':
         if (!body.key) {
-          return missingKeyResponse()
+          return createBadRequestResponse(errors.MISSING_KEY)
         }
         responseData = await client.getAsync(body.key)
         break
       case 'INCR':
         if (!body.key) {
-          return missingKeyResponse()
+          return createBadRequestResponse(errors.MISSING_KEY)
         }
         responseData = await client.incrAsync(body.key)
         break
       default:
-        return createResponse(500, {
-          code: errors.UNSUPPORTED_OPERATION.code,
-          message: errors.UNSUPPORTED_OPERATION.message,
-        })
+        return createBadRequestResponse(errors.UNSUPPORTED_OPERATION)
     }
   } catch (e) {
     console.error(e)
-    createResponse(500, { message: 'Something went wrong.' })
+    createResponse(500, {
+      code: errors.UNKNOWN_ERROR.code,
+      message: errors.UNKNOWN_ERROR.message,
+    })
   }
   await client.quitAsync()
   return createResponse(200, {
