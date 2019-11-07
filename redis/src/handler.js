@@ -10,9 +10,29 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 })
 
+const errors = {
+  NO_DATA: {
+    code: 'NO_DATA',
+    message: 'No data provided in the request body.',
+  },
+  MISSING_OPERATION: {
+    code: 'MISSING_OPERATION',
+    message: 'The request body did not include an "operation" value.',
+  },
+  UNSUPPORTED_OPERATION: {
+    code: 'UNSUPPORTED_OPERATION',
+    message: 'The provided "operation" value is not supported.',
+  },
+  MISSING_KEY: {
+    code: 'MISSING_KEY',
+    message: 'The "key" property is required for this operation.',
+  },
+}
+
 const missingKeyResponse = () => {
   return createResponse(500, {
-    message: 'The "key" property is required for this operation.',
+    code: errors.MISSING_KEY.code,
+    message: errors.MISSING_KEY.message,
   })
 }
 
@@ -30,12 +50,14 @@ export const handler = async event => {
     body = JSON.parse(event.body)
   } catch (e) {
     return createResponse(500, {
-      message: 'No data provided in the request body.',
+      code: errors.NO_DATA.code,
+      message: errors.NO_DATA.message,
     })
   }
   if (!body.operation) {
     return createResponse(500, {
-      message: 'The request body did not include an "operation" value.',
+      code: errors.MISSING_OPERATION.code,
+      message: errors.MISSING_OPERATION.message,
     })
   }
 
@@ -61,7 +83,8 @@ export const handler = async event => {
         break
       default:
         return createResponse(500, {
-          message: 'The provided "operation" value is not supported.',
+          code: errors.UNSUPPORTED_OPERATION.code,
+          message: errors.UNSUPPORTED_OPERATION.message,
         })
     }
   } catch (e) {

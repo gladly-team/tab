@@ -63,6 +63,7 @@ describe('Redis Lambda handler', () => {
     expect(response).toEqual({
       statusCode: 500,
       body: JSON.stringify({
+        code: 'NO_DATA',
         message: 'No data provided in the request body.',
       }),
     })
@@ -78,6 +79,7 @@ describe('Redis Lambda handler', () => {
     expect(response).toEqual({
       statusCode: 500,
       body: JSON.stringify({
+        code: 'MISSING_OPERATION',
         message: 'The request body did not include an "operation" value.',
       }),
     })
@@ -93,6 +95,7 @@ describe('Redis Lambda handler', () => {
     expect(response).toEqual({
       statusCode: 500,
       body: JSON.stringify({
+        code: 'UNSUPPORTED_OPERATION',
         message: 'The provided "operation" value is not supported.',
       }),
     })
@@ -133,6 +136,7 @@ describe('Redis Lambda handler', () => {
     expect(response).toEqual({
       statusCode: 500,
       body: JSON.stringify({
+        code: 'MISSING_KEY',
         message: 'The "key" property is required for this operation.',
       }),
     })
