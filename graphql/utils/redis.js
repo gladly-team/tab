@@ -6,7 +6,7 @@ import logger from './logger'
 const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
 
 export const redisKeys = {
-  foo: 'foo',
+  // foo: 'foo',
 }
 
 /**

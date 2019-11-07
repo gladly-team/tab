@@ -17,7 +17,6 @@ import {
 
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
-jest.mock('../../../utils/redis')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'

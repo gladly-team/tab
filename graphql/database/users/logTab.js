@@ -3,7 +3,6 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import callRedis, { redisKeys } from '../../utils/redis'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -102,16 +101,6 @@ const logTab = async (userContext, userId, tabId = null) => {
     })
   } catch (e) {
     throw e
-  }
-
-  // TODO: remove. This is just for experimenting.
-  try {
-    const fooVal = await callRedis({ operation: 'INCR', key: redisKeys.foo })
-    // eslint-disable-next-line no-console
-    console.log(`===== Got a foo value of ${fooVal} =====`)
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e)
   }
 
   return user
