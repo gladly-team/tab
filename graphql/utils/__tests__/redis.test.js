@@ -49,4 +49,55 @@ describe('Redis outbound', () => {
       body: JSON.stringify(mockInputData),
     })
   })
+
+  it('uses the aws4.sign headers in the fetch request headers', async () => {
+    expect.assertions(1)
+    const callRedis = require('../redis').default
+
+    const headers = {
+      Host: 'some.endpoint.example.com',
+      'X-Amz-Date': '20191224T162032Z',
+      Authorization:
+        'AWS4-HMAC-SHA256 Credential=ABCDEF/20191224/us-west-2/execute-api/aws4_request, etc.',
+    }
+    aws4.sign.mockReturnValue({
+      host: 'some.endpoint.example.com',
+      path: '/dev/redis',
+      headers,
+    })
+    const mockInputData = getMockInputData()
+    await callRedis(mockInputData)
+    expect(fetch).toHaveBeenCalledWith(expect.any(String), {
+      body: expect.any(String),
+      method: 'POST',
+      headers,
+    })
+  })
+
+  it('calls the expected endpoint via fetch', async () => {
+    expect.assertions(1)
+    const callRedis = require('../redis').default
+    const mockInputData = getMockInputData()
+    await callRedis(mockInputData)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://some.endpoint.example.com/dev/redis',
+      expect.any(Object)
+    )
+  })
+
+  it('returns the data provided by the Redis service', async () => {
+    expect.assertions(1)
+    const callRedis = require('../redis').default
+    const mockInputData = getMockInputData()
+    fetch.mockResolvedValue({
+      ...getMockFetchResponse(),
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: 'this-is-the-fetched-redis-value',
+        }),
+    })
+    const returnVal = await callRedis(mockInputData)
+    expect(returnVal).toEqual('this-is-the-fetched-redis-value')
+  })
 })

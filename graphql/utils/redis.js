@@ -35,7 +35,8 @@ const callRedis = async data => {
       },
       body,
     })
-    responseData = await response.json()
+    const responseBody = await response.json()
+    responseData = responseBody.data
 
     // Log any error message returned from the Redis service.
     if (!response.ok) {
