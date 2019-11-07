@@ -173,4 +173,30 @@ describe('Redis Lambda handler', () => {
       }),
     })
   })
+
+  it('calls console.error and returns a 500 cdoe if something unexpected goes wrong', async () => {
+    expect.assertions(2)
+    const eventData = getMockEventObj({
+      operation: 'GET',
+      key: 'optimism',
+    })
+
+    // Mock some error.
+    mockRedisClient.getAsync.mockRejectedValueOnce('oh no!')
+
+    // Suppress expected console log.
+    const mockConsoleErr = jest
+      .spyOn(console, 'error')
+      .mockImplementationOnce(() => {})
+
+    const response = await handler(eventData)
+    expect(mockConsoleErr).toHaveBeenCalledWith('oh no!')
+    expect(response).toEqual({
+      statusCode: 500,
+      body: JSON.stringify({
+        code: 'UNKNOWN_ERROR',
+        message: 'An unknown error occurred.',
+      }),
+    })
+  })
 })

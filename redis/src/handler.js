@@ -94,7 +94,7 @@ export const handler = async event => {
     }
   } catch (e) {
     console.error(e)
-    createResponse(500, {
+    return createResponse(500, {
       code: errors.UNKNOWN_ERROR.code,
       message: errors.UNKNOWN_ERROR.message,
     })
