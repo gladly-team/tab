@@ -131,7 +131,6 @@ describe('Redis Lambda handler', () => {
       operation: 'INCR',
       // no key
     })
-    mockRedisClient.incrAsync.mockResolvedValueOnce(1234)
     const response = await handler(eventData)
     expect(response).toEqual({
       statusCode: 400,
@@ -155,6 +154,22 @@ describe('Redis Lambda handler', () => {
       statusCode: 200,
       body: JSON.stringify({
         data: 'optimism is the key!',
+      }),
+    })
+  })
+
+  it('throws if no key is provided to the GET operation', async () => {
+    expect.assertions(1)
+    const eventData = getMockEventObj({
+      operation: 'GET',
+      // no key
+    })
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 400,
+      body: JSON.stringify({
+        code: 'MISSING_KEY',
+        message: 'The "key" property is required for this operation.',
       }),
     })
   })
