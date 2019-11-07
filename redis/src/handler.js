@@ -10,14 +10,39 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 })
 
-// TODO: use Redis client library to get/set simple values.
+/**
+ * Perform a Redis operation and return a value as needed.
+ * @param {Object} event - The AWS Lambda event received from API Gateway.
+ * @param {String} event.body - The request data, stringified.
+ * @return {Object} returnVal - the Lambda response object
+ * @return {Number} returnVal.statusCode - the response code
+ * @return {String} returnVal.body - the response body
+ */
 export const handler = async event => {
+  let body
   try {
-    JSON.parse(event.body)
+    body = JSON.parse(event.body)
   } catch (e) {
     return createResponse(500, {
       message: 'No data provided in the request body.',
     })
+  }
+  if (!body.operation) {
+    return createResponse(500, {
+      message: 'The request body did not include an "operation" value.',
+    })
+  }
+
+  // TODO
+  switch (body.operation) {
+    case 'GET':
+      break
+    case 'INCR':
+      break
+    default:
+      return createResponse(500, {
+        message: 'The provided "operation" value is not supported.',
+      })
   }
   const client = redis.createClient({
     host: process.env.REDIS_HOST,

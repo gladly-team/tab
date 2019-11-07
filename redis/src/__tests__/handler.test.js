@@ -68,6 +68,42 @@ describe('Redis Lambda handler', () => {
     })
   })
 
+  it('returns a 500 error if body.operation is not provided', async () => {
+    expect.assertions(1)
+    const eventData = {
+      ...getMockEventObj(),
+      body: JSON.stringify({
+        key: 'foo',
+        // missing "operation" property
+      }),
+    }
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'The request body did not include an "operation" value.',
+      }),
+    })
+  })
+
+  it('returns a 500 error if the body.operation is not supported', async () => {
+    expect.assertions(1)
+    const eventData = {
+      ...getMockEventObj(),
+      body: JSON.stringify({
+        key: 'foo',
+        operation: 'EVALSHA', // unsupported Redis operation
+      }),
+    }
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'The provided "operation" value is not supported.',
+      }),
+    })
+  })
+
   it('quits the client', async () => {
     expect.assertions(1)
     const eventData = getMockEventObj()
