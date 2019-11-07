@@ -4,17 +4,28 @@
 # missing cache values or Redis downtime.
 service: tab-redis
 
+# Based on:
+# https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
+
 provider:
   name: aws
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   runtime: nodejs10.x
+  
+  # Need the permissions in AWSLambdaVPCAccessExecutionRole so the
+  # function can manage network connections to a VPC.
+  # https://docs.aws.amazon.com/lambda/latest/dg/services-elasticache-tutorial.html#vpc-ec-create-iam-role
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+      Resource: "*"
 
 custom:
   stageDefault: dev
-
-# Based on:
-# https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
 
 resources:
   Resources:
@@ -143,8 +154,7 @@ functions:
           # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-aws_iam-authorizers
           authorizer: aws_iam
     environment:
-      REDIS_ENDPOINT:
-        Fn::Join:
-          - ":"
-          - - "Fn::GetAtt": RedisCluster.RedisEndpoint.Address
-            - "Fn::GetAtt": RedisCluster.RedisEndpoint.Port
+      REDIS_HOST:
+        "Fn::GetAtt": RedisCluster.RedisEndpoint.Address
+      REDIS_PORT:
+        "Fn::GetAtt": RedisCluster.RedisEndpoint.Port

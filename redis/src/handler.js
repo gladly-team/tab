@@ -1,5 +1,10 @@
 /* eslint no-console: 0 */
 
+import redis from 'redis'
+import bluebird from 'bluebird'
+
+bluebird.promisifyAll(redis)
+
 const createResponse = (statusCode, body) => ({
   statusCode,
   body: JSON.stringify(body),
@@ -12,10 +17,17 @@ export const handler = async event => {
   } catch (e) {
     return createResponse(500, e)
   }
-  console.log('Testing out Tab Redis.')
-  return createResponse(200, { just: 'a-test' })
+  const client = redis.createClient({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  })
+  const fooVal = await client.incrAsync('foo')
+  await client.quitAsync()
+  return createResponse(200, { foo: fooVal })
 }
 
 export const serverlessHandler = (event, context, callback) => {
-  handler(event).then(response => callback(null, response))
+  handler(event)
+    .then(response => callback(null, response))
+    .catch(err => callback(err, null))
 }
