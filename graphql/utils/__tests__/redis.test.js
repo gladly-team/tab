@@ -16,6 +16,10 @@ const getMockInputData = () => ({
 
 beforeAll(() => {
   process.env.REDIS_SERVICE_ENDPOINT = 'https://some.endpoint.example.com/dev'
+})
+
+beforeEach(() => {
+  fetch.mockResolvedValue(getMockFetchResponse())
   aws4.sign.mockReturnValue({
     host: 'some.endpoint.example.com',
     path: '/dev/redis',
@@ -26,10 +30,6 @@ beforeAll(() => {
         'AWS4-HMAC-SHA256 Credential=ABCDEF/20191224/us-west-2/execute-api/aws4_request, etc.',
     },
   })
-})
-
-beforeEach(() => {
-  fetch.mockResolvedValue(getMockFetchResponse())
 })
 
 afterEach(() => {
@@ -101,7 +101,7 @@ describe('Redis outbound', () => {
     expect(returnVal).toEqual('this-is-the-fetched-redis-value')
   })
 
-  it('logs an error and throws if the Redis service returns a non-500 error', async () => {
+  it('logs an error and throws if the Redis service returns an error', async () => {
     expect.assertions(2)
     const callRedis = require('../redis').default
     const mockInputData = getMockInputData()
@@ -123,5 +123,19 @@ describe('Redis outbound', () => {
         'Bad request data sent to the Redis service: Some error happened.'
       )
     )
+  })
+
+  it('logs an error and throws if the something goes wrong when calling Redis', async () => {
+    expect.assertions(2)
+    const callRedis = require('../redis').default
+
+    // Mock some unexpected error.
+    aws4.sign.mockImplementation(() => {
+      throw new Error('You did it wrong.')
+    })
+
+    const mockInputData = getMockInputData()
+    await expect(callRedis(mockInputData)).rejects.toThrow('You did it wrong.')
+    expect(logger.error).toHaveBeenCalledWith(new Error('You did it wrong.'))
   })
 })
