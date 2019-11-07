@@ -174,7 +174,7 @@ describe('Redis Lambda handler', () => {
     })
   })
 
-  it('calls console.error and returns a 500 cdoe if something unexpected goes wrong', async () => {
+  it('calls console.error and returns a 500 code if something unexpected goes wrong', async () => {
     expect.assertions(2)
     const eventData = getMockEventObj({
       operation: 'GET',
