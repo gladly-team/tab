@@ -15,7 +15,9 @@ export const handler = async event => {
   try {
     JSON.parse(event.body)
   } catch (e) {
-    return createResponse(500, e)
+    return createResponse(500, {
+      message: 'No data provided in the request body.',
+    })
   }
   const client = redis.createClient({
     host: process.env.REDIS_HOST,

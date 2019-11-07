@@ -42,4 +42,36 @@ describe('Redis Lambda handler', () => {
       port: '6379',
     })
   })
+
+  it('returns a 200 error when successful', async () => {
+    expect.assertions(1)
+    const eventData = getMockEventObj()
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 200,
+      body: expect.any(String),
+    })
+  })
+
+  it('returns a 500 error if body is not provided', async () => {
+    expect.assertions(1)
+    const eventData = {
+      ...getMockEventObj(),
+      body: undefined,
+    }
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'No data provided in the request body.',
+      }),
+    })
+  })
+
+  it('quits the client', async () => {
+    expect.assertions(1)
+    const eventData = getMockEventObj()
+    await handler(eventData)
+    expect(mockRedisClient.quitAsync).toHaveBeenCalledTimes(1)
+  })
 })
