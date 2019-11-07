@@ -44,7 +44,6 @@ export const handler = async event => {
     port: process.env.REDIS_PORT,
   })
 
-  // TODO: tests
   let responseData
   try {
     switch (body.operation) {
@@ -52,13 +51,13 @@ export const handler = async event => {
         if (!body.key) {
           return missingKeyResponse()
         }
-        await client.getAsync(body.key)
+        responseData = await client.getAsync(body.key)
         break
       case 'INCR':
         if (!body.key) {
           return missingKeyResponse()
         }
-        await client.incrAsync(body.key)
+        responseData = await client.incrAsync(body.key)
         break
       default:
         return createResponse(500, {
@@ -66,11 +65,11 @@ export const handler = async event => {
         })
     }
   } catch (e) {
-    createResponse(200, { error: true, data: null })
+    console.error(e)
+    createResponse(500, { message: 'Something went wrong.' })
   }
   await client.quitAsync()
   return createResponse(200, {
-    error: false,
     data: responseData,
   })
 }
