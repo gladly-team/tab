@@ -2,7 +2,7 @@
 
 import fetch from 'node-fetch'
 import aws4 from 'aws4'
-// import logger from '../logger'
+import logger from '../logger'
 import { getMockFetchResponse } from '../../database/test-utils'
 
 jest.mock('node-fetch')
@@ -99,5 +99,29 @@ describe('Redis outbound', () => {
     })
     const returnVal = await callRedis(mockInputData)
     expect(returnVal).toEqual('this-is-the-fetched-redis-value')
+  })
+
+  it('logs an error and throws if the Redis service returns a non-500 error', async () => {
+    expect.assertions(2)
+    const callRedis = require('../redis').default
+    const mockInputData = getMockInputData()
+    fetch.mockResolvedValue({
+      ...getMockFetchResponse(),
+      ok: false,
+      status: 400,
+      json: () =>
+        Promise.resolve({
+          code: 'SOME_ERROR',
+          message: 'Some error happened.',
+        }),
+    })
+    await expect(callRedis(mockInputData)).rejects.toThrow(
+      'Bad request data sent to the Redis service: Some error happened.'
+    )
+    expect(logger.error).toHaveBeenCalledWith(
+      new Error(
+        'Bad request data sent to the Redis service: Some error happened.'
+      )
+    )
   })
 })

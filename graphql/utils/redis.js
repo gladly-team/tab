@@ -41,7 +41,7 @@ const callRedis = async data => {
     // Log any error message returned from the Redis service.
     if (!response.ok) {
       throw new Error(
-        `Bad request data sent to the Redis service: ${responseData.message}`
+        `Bad request data sent to the Redis service: ${responseBody.message}`
       )
     }
   } catch (e) {
