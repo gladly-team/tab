@@ -2,7 +2,7 @@
 
 import fetch from 'node-fetch'
 import aws4 from 'aws4'
-import logger from '../logger'
+// import logger from '../logger'
 import { getMockFetchResponse } from '../../database/test-utils'
 
 jest.mock('node-fetch')
