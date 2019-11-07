@@ -53,7 +53,7 @@ describe('Redis Lambda handler', () => {
     })
   })
 
-  it('returns a 500 error if body is not provided', async () => {
+  it('returns an error if body is not provided', async () => {
     expect.assertions(1)
     const eventData = {
       ...getMockEventObj(),
@@ -61,7 +61,7 @@ describe('Redis Lambda handler', () => {
     }
     const response = await handler(eventData)
     expect(response).toEqual({
-      statusCode: 500,
+      statusCode: 400,
       body: JSON.stringify({
         code: 'NO_DATA',
         message: 'No data provided in the request body.',
@@ -69,7 +69,7 @@ describe('Redis Lambda handler', () => {
     })
   })
 
-  it('returns a 500 error if body.operation is not provided', async () => {
+  it('returns an error if body.operation is not provided', async () => {
     expect.assertions(1)
     const eventData = getMockEventObj({
       key: 'foo',
@@ -77,7 +77,7 @@ describe('Redis Lambda handler', () => {
     })
     const response = await handler(eventData)
     expect(response).toEqual({
-      statusCode: 500,
+      statusCode: 400,
       body: JSON.stringify({
         code: 'MISSING_OPERATION',
         message: 'The request body did not include an "operation" value.',
@@ -85,7 +85,7 @@ describe('Redis Lambda handler', () => {
     })
   })
 
-  it('returns a 500 error if the body.operation is not supported', async () => {
+  it('returns an error if the body.operation is not supported', async () => {
     expect.assertions(1)
     const eventData = getMockEventObj({
       key: 'foo',
@@ -93,7 +93,7 @@ describe('Redis Lambda handler', () => {
     })
     const response = await handler(eventData)
     expect(response).toEqual({
-      statusCode: 500,
+      statusCode: 400,
       body: JSON.stringify({
         code: 'UNSUPPORTED_OPERATION',
         message: 'The provided "operation" value is not supported.',
@@ -134,7 +134,7 @@ describe('Redis Lambda handler', () => {
     mockRedisClient.incrAsync.mockResolvedValueOnce(1234)
     const response = await handler(eventData)
     expect(response).toEqual({
-      statusCode: 500,
+      statusCode: 400,
       body: JSON.stringify({
         code: 'MISSING_KEY',
         message: 'The "key" property is required for this operation.',

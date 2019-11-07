@@ -44,7 +44,7 @@ const errors = {
  * @return {String} returnVal.body - the response body
  */
 const createBadRequestResponse = error => {
-  return createResponse(500, {
+  return createResponse(400, {
     code: error.code,
     message: error.message,
   })
