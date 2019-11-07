@@ -10,6 +10,12 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 })
 
+const missingKeyResponse = () => {
+  return createResponse(500, {
+    message: 'The "key" property is required for this operation.',
+  })
+}
+
 /**
  * Perform a Redis operation and return a value as needed.
  * @param {Object} event - The AWS Lambda event received from API Gateway.
@@ -33,24 +39,40 @@ export const handler = async event => {
     })
   }
 
-  // TODO
-  switch (body.operation) {
-    case 'GET':
-      break
-    case 'INCR':
-      break
-    default:
-      return createResponse(500, {
-        message: 'The provided "operation" value is not supported.',
-      })
-  }
   const client = redis.createClient({
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
   })
-  const fooVal = await client.incrAsync('foo')
+
+  // TODO: tests
+  let responseData
+  try {
+    switch (body.operation) {
+      case 'GET':
+        if (!body.key) {
+          return missingKeyResponse()
+        }
+        await client.getAsync(body.key)
+        break
+      case 'INCR':
+        if (!body.key) {
+          return missingKeyResponse()
+        }
+        await client.incrAsync(body.key)
+        break
+      default:
+        return createResponse(500, {
+          message: 'The provided "operation" value is not supported.',
+        })
+    }
+  } catch (e) {
+    createResponse(200, { error: true, data: null })
+  }
   await client.quitAsync()
-  return createResponse(200, { foo: fooVal })
+  return createResponse(200, {
+    error: false,
+    data: responseData,
+  })
 }
 
 export const serverlessHandler = (event, context, callback) => {
