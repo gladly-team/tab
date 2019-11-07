@@ -5,7 +5,7 @@ import { URL } from 'url'
 import fetch from 'node-fetch'
 import aws4 from 'aws4'
 
-const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis/`
+const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
 
 // TODO:
 //   - call to get/set values
