@@ -102,6 +102,7 @@ const logTab = async (userContext, userId, tabId = null) => {
   } catch (e) {
     throw e
   }
+
   return user
 }
 

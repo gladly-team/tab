@@ -3,6 +3,7 @@
 import UserModel from '../users/UserModel'
 
 import {
+  getMockFetchResponse,
   getMockUserContext,
   getMockUserInfo,
   getMockUserInstance,
@@ -51,5 +52,20 @@ describe('test-utils', () => {
     expect(
       getMockUserInstance({ username: 'Bob', heartsUntilNextLevel: 12 })
     ).toEqual(expectedUser)
+  })
+
+  test('mockFetchResponse returns the expected object', () => {
+    expect(getMockFetchResponse()).toMatchObject({
+      body: expect.any(Object),
+      bodyUsed: true,
+      headers: {},
+      json: expect.any(Function),
+      ok: true,
+      redirected: false,
+      status: 200,
+      statusText: '',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    })
   })
 })
