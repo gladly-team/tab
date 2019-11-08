@@ -162,9 +162,9 @@ class Dashboard extends React.Component {
     } = this.state
 
     // Whether or not a campaign should show on the dashboard
+    const isCampaignLive = !!(app && app.campaign && app.campaign.isLive)
     const showCampaign = !!(
-      app &&
-      app.isGlobalCampaignLive &&
+      isCampaignLive &&
       !hasUserDismissedCampaignRecently &&
       user.tabs > 1
     )
@@ -619,14 +619,12 @@ Dashboard.propTypes = {
     tabs: PropTypes.number.isRequired,
   }),
   app: PropTypes.shape({
-    isGlobalCampaignLive: PropTypes.bool,
+    campaign: PropTypes.shape({
+      isLive: PropTypes.bool.isRequired,
+    }).isRequired,
   }),
 }
 
-Dashboard.defaultProps = {
-  app: {
-    isGlobalCampaignLive: false,
-  },
-}
+Dashboard.defaultProps = {}
 
 export default Dashboard

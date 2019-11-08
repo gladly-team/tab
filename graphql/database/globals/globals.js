@@ -13,6 +13,7 @@ class Globals {
   }
 }
 
+// Deprecated. Use the Campaign schema object.
 function isGlobalCampaignLive() {
   return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
 }

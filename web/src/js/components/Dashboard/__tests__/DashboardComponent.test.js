@@ -104,7 +104,9 @@ const mockProps = {
     experimentActions: {},
   },
   app: {
-    isGlobalCampaignLive: false,
+    campaign: {
+      isLive: false,
+    },
   },
 }
 

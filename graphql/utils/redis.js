@@ -5,9 +5,8 @@ import logger from './logger'
 
 const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
 
-export const redisKeys = {
-  // foo: 'foo',
-}
+// Key namespaces:
+// - "campaign:*" used for campaign data
 
 /**
  * Call the Redis service.
