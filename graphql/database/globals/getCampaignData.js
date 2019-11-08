@@ -1,7 +1,12 @@
-const campaigns = {
-  testNov2019: {
-    campaignId: 'testNov2019',
+const createCampaign = data => ({
+  campaignId: data.campaignId,
+  getNewUsersRedisKey() {
+    return `campaign:${this.campaignId}:newUsers`
   },
+})
+
+const campaigns = {
+  testNov2019: createCampaign({ campaignId: 'testNov2019' }),
 }
 
 // Hardcode the currently-active campaign here.

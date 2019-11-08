@@ -6,11 +6,12 @@ beforeEach(() => {
 })
 
 describe('getCurrentCampaign', () => {
-  it('returns an object with campaign.campaignId and campaign.isLive properties', () => {
+  it('returns an object with the expected properties', () => {
     expect.assertions(1)
     expect(getCurrentCampaign()).toMatchObject({
       campaignId: expect.any(String),
       isLive: expect.any(Boolean),
+      getNewUsersRedisKey: expect.any(Function),
     })
   })
 
@@ -28,5 +29,13 @@ describe('getCurrentCampaign', () => {
     expect(getCurrentCampaign()).toMatchObject({
       isLive: false,
     })
+  })
+
+  it('creates the expected string when calling getNewUsersRedisKey', () => {
+    expect.assertions(1)
+    const campaign = getCurrentCampaign()
+    expect(getCurrentCampaign().getNewUsersRedisKey()).toEqual(
+      `campaign:${campaign.campaignId}:newUsers`
+    )
   })
 })

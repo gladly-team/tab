@@ -71,7 +71,10 @@ type Campaign {
   campaignId: String
 
   """whether or not the campaign should currently show to users"""
-  isLive: Boolean
+  isLive: Boolean!
+
+  """the number of new users who joined during this campaign"""
+  numNewUsers: Int
 }
 
 """Fields on which to filter the list of charities."""

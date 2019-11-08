@@ -1,4 +1,6 @@
 import { getCurrentCampaign } from './getCampaignData'
+import callRedis from '../../utils/redis'
+import logger from '../../utils/logger'
 
 /**
  * Return data about any currently-live campaign.
@@ -16,10 +18,23 @@ const getCampaign = async () => {
       isLive: false,
     }
   }
+
+  // Try to get the number of new users from this campaign.
+  let numNewUsers = null
+  try {
+    numNewUsers = await callRedis({
+      operation: 'GET',
+      key: campaign.getNewUsersRedisKey(),
+    })
+  } catch (e) {
+    logger.error(e)
+  }
+
   return {
     isLive: campaign.isLive,
     ...(campaign.isLive && {
       campaignId: campaign.campaignId,
+      numNewUsers,
     }),
   }
 }

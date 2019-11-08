@@ -682,8 +682,12 @@ const campaignType = new GraphQLObjectType({
       description: 'the ID of the campaign',
     },
     isLive: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether or not the campaign should currently show to users',
+    },
+    numNewUsers: {
+      type: GraphQLInt,
+      description: 'the number of new users who joined during this campaign',
     },
   }),
 })
