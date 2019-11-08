@@ -82,6 +82,7 @@ import {
   getDollarsPerDayRate,
   isGlobalCampaignLive,
 } from '../database/globals/globals'
+import getCampaign from '../database/globals/getCampaign'
 
 class App {
   constructor(id) {
@@ -672,6 +673,21 @@ const charityType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const campaignType = new GraphQLObjectType({
+  name: 'Campaign',
+  description: 'Campaigns (or "charity spotlights") shown to users.',
+  fields: () => ({
+    campaignId: {
+      type: GraphQLString,
+      description: 'the ID of the campaign',
+    },
+    isLive: {
+      type: GraphQLBoolean,
+      description: 'whether or not the campaign should currently show to users',
+    },
+  }),
+})
+
 const appType = new GraphQLObjectType({
   name: 'App',
   description: 'Global app fields',
@@ -738,9 +754,15 @@ const appType = new GraphQLObjectType({
           args
         ),
     },
+    // Deprecated. Use the campaign object.
     isGlobalCampaignLive: {
       type: GraphQLBoolean,
       resolve: () => isGlobalCampaignLive(),
+    },
+    campaign: {
+      type: campaignType,
+      description: 'Campaigns (or "charity spotlights") shown to users.',
+      resolve: () => getCampaign(),
     },
   }),
   interfaces: [nodeInterface],

@@ -1,6 +1,6 @@
 const campaigns = {
   testNov2019: {
-    id: 'testNov2019',
+    campaignId: 'testNov2019',
   },
 }
 

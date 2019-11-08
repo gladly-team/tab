@@ -19,7 +19,7 @@ const getCampaign = async () => {
   return {
     isLive: campaign.isLive,
     ...(campaign.isLive && {
-      id: campaign.id,
+      campaignId: campaign.campaignId,
     }),
   }
 }

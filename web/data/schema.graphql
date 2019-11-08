@@ -18,6 +18,9 @@ type App implements Node {
   """All the background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
   isGlobalCampaignLive: Boolean
+
+  """Campaigns (or "charity spotlights") shown to users."""
+  campaign: Campaign
 }
 
 """A background image"""
@@ -60,6 +63,15 @@ type BackgroundImageEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""Campaigns (or "charity spotlights") shown to users."""
+type Campaign {
+  """the ID of the campaign"""
+  campaignId: String
+
+  """whether or not the campaign should currently show to users"""
+  isLive: Boolean
 }
 
 """Fields on which to filter the list of charities."""

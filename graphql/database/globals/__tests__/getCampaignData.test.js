@@ -6,10 +6,10 @@ beforeEach(() => {
 })
 
 describe('getCurrentCampaign', () => {
-  it('returns an object with campaign.id and campaign.isLive properties', () => {
+  it('returns an object with campaign.campaignId and campaign.isLive properties', () => {
     expect.assertions(1)
     expect(getCurrentCampaign()).toMatchObject({
-      id: expect.any(String),
+      campaignId: expect.any(String),
       isLive: expect.any(Boolean),
     })
   })
