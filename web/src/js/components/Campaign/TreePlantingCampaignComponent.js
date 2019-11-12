@@ -8,12 +8,11 @@ import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
-
-const CAMPAIGN_COLOR = 'green'
+import { withTheme } from '@material-ui/core/styles'
 
 class TreePlantingCampaign extends React.Component {
   render() {
-    const { app, user, campaign } = this.props
+    const { app, user, campaign, theme } = this.props
     const {
       recruits: { recruitsWithAtLeastOneTab = {} },
     } = user
@@ -134,7 +133,7 @@ class TreePlantingCampaign extends React.Component {
                     to={'#'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: CAMPAIGN_COLOR }}
+                    style={{ color: theme.palette.secondary.main }}
                   >
                     we're planting a tree
                   </Link>{' '}
@@ -173,7 +172,11 @@ class TreePlantingCampaign extends React.Component {
                 </Typography>
               </span>
             )}
-            <LinearProgress variant="determinate" value={progress} />
+            <LinearProgress
+              color={'primary'}
+              variant={'determinate'}
+              value={progress}
+            />
           </div>
           <Typography variant={'caption'}>
             <CountdownClock
@@ -194,13 +197,6 @@ TreePlantingCampaign.propTypes = {
       numNewUsers: PropTypes.number.isRequired,
     }).isRequired,
   }),
-  user: PropTypes.shape({
-    recruits: PropTypes.shape({
-      totalRecruits: PropTypes.number.isRequired, // TODO: probably remove
-      recruitsActiveForAtLeastOneDay: PropTypes.number.isRequired, // TODO: probably remove
-      recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
-    }).isRequired,
-  }).isRequired,
   campaign: PropTypes.shape({
     time: PropTypes.shape({
       start: PropTypes.instanceOf(moment).isRequired,
@@ -208,6 +204,14 @@ TreePlantingCampaign.propTypes = {
     }),
     treesPlantedGoal: PropTypes.number.isRequired,
   }).isRequired,
+  user: PropTypes.shape({
+    recruits: PropTypes.shape({
+      totalRecruits: PropTypes.number.isRequired, // TODO: probably remove
+      recruitsActiveForAtLeastOneDay: PropTypes.number.isRequired, // TODO: probably remove
+      recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+  theme: PropTypes.object.isRequired,
 }
 
-export default TreePlantingCampaign
+export default withTheme()(TreePlantingCampaign)

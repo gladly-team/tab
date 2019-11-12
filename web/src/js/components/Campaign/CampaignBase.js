@@ -8,6 +8,10 @@ import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnima
 import Paper from '@material-ui/core/Paper'
 import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import theme from 'js/theme/defaultV1'
+
+const defaultTheme = createMuiTheme(theme)
 
 class CampaignBase extends React.Component {
   render() {
@@ -37,62 +41,81 @@ class CampaignBase extends React.Component {
     )
 
     return (
-      <div
-        style={{
-          zIndex: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          boxSizing: 'border-box',
-          pointerEvents: 'none',
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          palette: {
+            ...defaultTheme.palette,
+            primary: {
+              ...defaultTheme.palette.primary,
+              main: '#FF0000',
+              light: '#FF0000',
+            },
+            secondary: {
+              ...defaultTheme.palette.secondary,
+              main: '#FF0000',
+              light: '#FF0000',
+            },
+          },
         }}
       >
-        <FadeInDashboardAnimation>
-          <Paper
-            elevation={1}
-            style={{
-              position: 'relative',
-              pointerEvents: 'all',
-              minWidth: 400,
-              margin: 0,
-              marginBottom: 100,
-              padding: 0,
-              background: '#FFF',
-              border: 'none',
-            }}
-          >
-            <div
+        <div
+          style={{
+            zIndex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            boxSizing: 'border-box',
+            pointerEvents: 'none',
+          }}
+        >
+          <FadeInDashboardAnimation>
+            <Paper
+              elevation={1}
               style={{
-                width: '100%',
-                height: 3,
-                borderTopLeftRadius: 2,
-                borderTopRightRadius: 2,
-                backgroundColor: theme.palette.secondary.main,
-              }}
-            />
-            <IconButton
-              onClick={() => {
-                setCampaignDismissTime()
-                onDismiss()
-              }}
-              style={{
-                position: 'absolute',
-                top: 5,
-                right: 2,
+                position: 'relative',
+                pointerEvents: 'all',
+                minWidth: 400,
+                margin: 0,
+                marginBottom: 100,
+                padding: 0,
+                background: '#FFF',
+                border: 'none',
               }}
             >
-              <CloseIcon />
-            </IconButton>
-            {currentCampaign}
-          </Paper>
-        </FadeInDashboardAnimation>
-      </div>
+              <div
+                style={{
+                  width: '100%',
+                  height: 3,
+                  borderTopLeftRadius: 2,
+                  borderTopRightRadius: 2,
+                  backgroundColor: theme.palette.secondary.main,
+                }}
+              />
+              <IconButton
+                onClick={() => {
+                  setCampaignDismissTime()
+                  onDismiss()
+                }}
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  right: 2,
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+              {currentCampaign}
+            </Paper>
+          </FadeInDashboardAnimation>
+        </div>
+      </MuiThemeProvider>
     )
   }
 }
