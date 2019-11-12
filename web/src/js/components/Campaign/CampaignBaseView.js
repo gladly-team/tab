@@ -37,6 +37,15 @@ class CampaignBaseView extends React.Component {
             }
             user(userId: $userId) {
               ...HeartDonationCampaignContainer_user
+              recruits(
+                first: 5000
+                startTime: "2019-11-12T10:00:00.000Z"
+                endTime: "2020-01-05T10:00:00.000Z"
+              ) {
+                totalRecruits
+                recruitsActiveForAtLeastOneDay
+                recruitsWithAtLeastOneTab
+              }
             }
           }
         `}
