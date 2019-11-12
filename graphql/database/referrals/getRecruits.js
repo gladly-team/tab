@@ -84,6 +84,7 @@ export const getRecruits = async (
         recruitData.push({
           recruitedAt: referralLog.created,
           lastActive: recruitedUser.lastTabTimestamp || null,
+          hasOpenedOneTab: recruitedUser.tabs > 0,
         })
       }
     })
@@ -104,6 +105,8 @@ export const getRecruits = async (
  *   when the recruited user joined
  * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
  *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
  * @return {integer} The total number of recruits in the returned set.
  */
 export const getTotalRecruitsCount = recruitsEdges => {
@@ -124,6 +127,8 @@ export const getTotalRecruitsCount = recruitsEdges => {
  *   when the recruited user joined
  * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
  *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
  * @return {integer} The number of recruits in the returned set who
  *   were active for at least one day.
  */

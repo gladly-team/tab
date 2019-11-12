@@ -149,10 +149,12 @@ describe('getRecruits', () => {
       {
         id: 'efghijklmnopqrs',
         lastTabTimestamp: '2017-07-21T05:15:00Z', // >2 days after joining
+        tabs: 302,
       },
       {
         id: 'pqrstuvwxyzabcd',
         lastTabTimestamp: '2017-08-20T17:40:52Z', // <1 hour after joining
+        tabs: 12,
       },
     ]
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
@@ -178,16 +180,18 @@ describe('getRecruits', () => {
       {
         recruitedAt: '2017-07-19T03:05:12Z',
         lastActive: '2017-07-21T05:15:00Z',
+        hasOpenedOneTab: true,
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
         lastActive: '2017-08-20T17:40:52Z',
+        hasOpenedOneTab: true,
       },
     ]
     expect(returnedVal).toEqual(expectedReturn)
   })
 
-  test('getRecruits (with missing lastTabTimestamp values) returns expected value', async () => {
+  test('getRecruits (with missing tabs and lastTabTimestamp values) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const { getRecruits } = require('../getRecruits')
 
@@ -221,13 +225,15 @@ describe('getRecruits', () => {
       {
         id: 'efghijklmnopqrs',
         lastTabTimestamp: null, // no timestamp
+        tabs: undefined,
       },
       {
         id: 'pqrstuvwxyzabcd',
         lastTabTimestamp: '2017-08-20T17:40:52Z', // valid
+        tabs: 4,
       },
       {
-        // missing lastTabTimestamp field
+        // missing lastTabTimestamp and tabs fields
         id: 'tuvwxyzabcdefgh',
       },
     ]
@@ -243,14 +249,17 @@ describe('getRecruits', () => {
       {
         recruitedAt: '2017-07-19T03:05:12Z',
         lastActive: null,
+        hasOpenedOneTab: false,
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
         lastActive: '2017-08-20T17:40:52Z',
+        hasOpenedOneTab: true,
       },
       {
         recruitedAt: '2017-07-23T01:18:11Z',
         lastActive: null,
+        hasOpenedOneTab: false,
       },
     ]
     expect(returnedVal).toEqual(expectedReturn)
@@ -290,6 +299,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: false,
         },
       },
       {
@@ -297,6 +307,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
           lastActive: '2017-02-07T18:00:09.031Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -304,6 +315,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
           lastActive: null,
+          hasOpenedOneTab: false,
         },
       },
     ]
@@ -315,6 +327,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -322,6 +335,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
           lastActive: '2017-02-09T08:23:40.532Z',
+          hasOpenedOneTab: true,
         },
       },
     ]
