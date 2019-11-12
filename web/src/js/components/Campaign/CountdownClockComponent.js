@@ -18,8 +18,10 @@ class CountdownClock extends React.Component {
       timeRemaining = 0
     }
     const duration = moment.duration(timeRemaining, 'milliseconds')
-    return `${duration.days()}d ${duration.hours()}h
-      ${duration.minutes()}m ${duration.seconds()}s`
+    return `${parseInt(
+      duration.asDays(),
+      10
+    )}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`
   }
 
   componentDidMount() {
