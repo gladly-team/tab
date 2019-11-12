@@ -119,15 +119,13 @@ const CampaignBase = props => (
         ...defaultTheme.palette,
         primary: {
           ...defaultTheme.palette.primary,
-          // TODO
-          main: '#FF0000',
-          light: '#FF0000',
+          main: '#028502',
+          light: '#0aac0a',
         },
         secondary: {
           ...defaultTheme.palette.secondary,
-          // TODO
-          main: '#FF0000',
-          light: '#FF0000',
+          main: '#028502',
+          light: '#0aac0a',
         },
       },
     }}
