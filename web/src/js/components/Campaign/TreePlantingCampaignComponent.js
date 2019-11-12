@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import { abbreviateNumber } from 'js/utils/utils'
+import TreeIcon from 'mdi-material-ui/Tree'
 
 class TreePlantingCampaign extends React.Component {
   render() {
@@ -17,6 +18,19 @@ class TreePlantingCampaign extends React.Component {
     const treesPlantedAbbreviated = abbreviateNumber(app.campaign.numNewUsers)
     const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
     const progress = (100 * app.campaign.numNewUsers) / treesPlantedGoal
+
+    // Tree icon style
+    const treeStyle = {
+      height: 50,
+      width: 50,
+    }
+    const plantedTreeStyle = Object.assign({}, treeStyle, {
+      color: 'green',
+    })
+    const incompleteTreeStyle = Object.assign({}, treeStyle, {
+      color: '#BBB',
+    })
+
     return (
       <div
         style={{
@@ -53,6 +67,23 @@ class TreePlantingCampaign extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             {totalRecruits} total people recruited
           </Typography>
+          <div>
+            {recruitsWithAtLeastOneTab > 0 ? (
+              <TreeIcon style={plantedTreeStyle} />
+            ) : (
+              <TreeIcon style={incompleteTreeStyle} />
+            )}
+            {recruitsWithAtLeastOneTab > 1 ? (
+              <TreeIcon style={plantedTreeStyle} />
+            ) : (
+              <TreeIcon style={incompleteTreeStyle} />
+            )}
+            {recruitsWithAtLeastOneTab > 2 ? (
+              <TreeIcon style={plantedTreeStyle} />
+            ) : (
+              <TreeIcon style={incompleteTreeStyle} />
+            )}
+          </div>
         </div>
         <div
           style={{
