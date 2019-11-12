@@ -7,7 +7,7 @@ import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
+import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
 class CampaignBase extends React.Component {
@@ -27,7 +27,7 @@ class CampaignBase extends React.Component {
 
     // Hardcode campaign component here when running one.
     const currentCampaign = (
-      <HeartDonationCampaign
+      <TreePlantingCampaign
         app={app}
         user={user}
         campaign={{
@@ -35,7 +35,7 @@ class CampaignBase extends React.Component {
             start: moment(campaignStartTimeISO),
             end: moment(campaignEndTimeISO),
           },
-          heartsGoal: 5e6,
+          treesPlantedGoal: 20000,
           endContent: (
             <div>
               <Typography
@@ -154,7 +154,7 @@ class CampaignBase extends React.Component {
             climate change!
           </Typography>
         </div>
-      </HeartDonationCampaign>
+      </TreePlantingCampaign>
     )
 
     return (

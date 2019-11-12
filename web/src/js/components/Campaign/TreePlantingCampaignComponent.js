@@ -4,17 +4,16 @@ import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
-import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 
 class TreePlantingCampaign extends React.Component {
   render() {
     const { app, user, campaign, children, showError } = this.props
-    const { time, heartsGoal, endContent } = campaign
+    const { time, endContent, treesPlantedGoal } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
-    const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
-    const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
-    const progress = (100 * app.charity.vcReceived) / heartsGoal
+    const treesPlantedAbbreviated = abbreviateNumber(app.campaign.numNewUsers)
+    const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
+    const progress = (100 * app.campaign.numNewUsers) / treesPlantedGoal
     return (
       <div
         style={{
@@ -27,19 +26,6 @@ class TreePlantingCampaign extends React.Component {
       >
         {' '}
         {hasCampaignEnded && endContent ? endContent : children}
-        {hasCampaignEnded ? null : (
-          <DonateHeartsControls
-            charity={app.charity}
-            user={user}
-            heartDonationCampaign={{
-              time: {
-                start: time.start,
-                end: time.end,
-              },
-            }}
-            showError={showError}
-          />
-        )}
         <div
           style={{
             marginTop: 8,
@@ -55,8 +41,8 @@ class TreePlantingCampaign extends React.Component {
           >
             {hasCampaignEnded ? (
               <Typography variant={'caption'} gutterBottom>
-                Great job! Together, we donated {heartsDonatedAbbreviated}{' '}
-                Hearts of our {heartsGoalAbbreviated} goal.
+                Great job! Together, we planted {treesPlantedAbbreviated} trees
+                of our {treesPlantedGoalAbbreviated} goal.
               </Typography>
             ) : null}
             {hasCampaignEnded ? null : (
@@ -68,10 +54,10 @@ class TreePlantingCampaign extends React.Component {
                 }}
               >
                 <Typography variant={'caption'}>
-                  {heartsDonatedAbbreviated} Hearts donated
+                  {treesPlantedAbbreviated} trees planted
                 </Typography>
                 <Typography variant={'caption'}>
-                  Goal: {heartsGoalAbbreviated}
+                  Goal: {treesPlantedGoalAbbreviated}
                 </Typography>
               </span>
             )}
@@ -92,23 +78,27 @@ class TreePlantingCampaign extends React.Component {
 
 TreePlantingCampaign.propTypes = {
   app: PropTypes.shape({
-    charity: PropTypes.shape({
-      vcReceived: PropTypes.number.isRequired,
+    campaign: PropTypes.shape({
+      numNewUsers: PropTypes.number.isRequired,
     }).isRequired,
   }),
   user: PropTypes.shape({
-    vcCurrent: PropTypes.number.isRequired,
+    recruits: PropTypes.shape({
+      totalRecruits: PropTypes.number.isRequired, // TODO: probably remove
+      recruitsActiveForAtLeastOneDay: PropTypes.number.isRequired, // TODO: probably remove
+      recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
+    }).isRequired,
   }).isRequired,
   campaign: PropTypes.shape({
     time: PropTypes.shape({
       start: PropTypes.instanceOf(moment).isRequired,
       end: PropTypes.instanceOf(moment).isRequired,
     }),
-    heartsGoal: PropTypes.number.isRequired,
     endContent: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    treesPlantedGoal: PropTypes.number.isRequired,
   }).isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

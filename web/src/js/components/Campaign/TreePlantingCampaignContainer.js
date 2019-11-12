@@ -5,23 +5,23 @@ import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignCom
 
 export default createFragmentContainer(TreePlantingCampaign, {
   app: graphql`
-    fragment TreePlantingCampaignContainer_app on App
-      @argumentDefinitions(
-        startTime: { type: "String" }
-        endTime: { type: "String" }
-      ) {
-      charity(charityId: $charityId) {
-        id
-        name
-        vcReceived(startTime: $startTime, endTime: $endTime)
-        ...DonateHeartsControlsContainer_charity
+    fragment TreePlantingCampaignContainer_app on App {
+      campaign {
+        numNewUsers
       }
     }
   `,
   user: graphql`
-    fragment TreePlantingCampaignContainer_user on User {
-      vcCurrent
-      ...DonateHeartsControlsContainer_user
+    fragment TreePlantingCampaignContainer_user on User
+      @argumentDefinitions(
+        startTime: { type: "String" }
+        endTime: { type: "String" }
+      ) {
+      recruits(first: 5000, startTime: $startTime, endTime: $endTime) {
+        totalRecruits
+        recruitsActiveForAtLeastOneDay
+        recruitsWithAtLeastOneTab
+      }
     }
   `,
 })
