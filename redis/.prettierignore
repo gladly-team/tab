@@ -1,5 +1,4 @@
 node_modules
 coverage
-schema.json
-schema.graphql
 build
+.serverless

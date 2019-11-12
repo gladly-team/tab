@@ -6,7 +6,9 @@ import Dashboard from 'js/components/Dashboard/DashboardComponent'
 export default createFragmentContainer(Dashboard, {
   app: graphql`
     fragment DashboardContainer_app on App {
-      isGlobalCampaignLive
+      campaign {
+        isLive
+      }
       ...UserMenuContainer_app
     }
   `,

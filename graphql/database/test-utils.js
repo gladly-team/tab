@@ -191,3 +191,20 @@ export const ConditionalCheckFailedException = () => {
   err.code = 'ConditionalCheckFailedException'
   return err
 }
+
+/**
+ * Mock a response from node-fetch.
+ * @return {Object}
+ */
+export const getMockFetchResponse = () => ({
+  body: {},
+  bodyUsed: true,
+  headers: {},
+  json: () => Promise.resolve({}),
+  ok: true,
+  redirected: false,
+  status: 200,
+  statusText: '',
+  type: 'cors',
+  url: 'https://example.com/foo/',
+})

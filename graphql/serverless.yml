@@ -175,6 +175,16 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}ReferralLinkClickLog-${self:provider.stage}"
+    # Grant access to our Redis service.
+    # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    - Effect: "Allow"
+      Action:
+        - "execute-api:Invoke"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
+            - /POST/redis
 
 plugins:
   # Include only the required node modules.
@@ -207,3 +217,6 @@ functions:
             # Bug with this behavior:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
+    environment:
+      REDIS_SERVICE_ENDPOINT:
+        "Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint

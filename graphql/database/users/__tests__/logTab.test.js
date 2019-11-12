@@ -14,12 +14,26 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
+import { getCurrentCampaign } from '../../globals/getCampaignData'
+import callRedis from '../../../utils/redis'
 
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
+jest.mock('../../globals/getCampaignData')
+jest.mock('../../../utils/redis')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
+
+const getMockCurrentCampaign = ({
+  campaignId = 'someCampaign',
+  ...otherProps
+} = {}) => ({
+  campaignId,
+  isLive: false,
+  getNewUsersRedisKey: jest.fn(() => `campaign:${campaignId}:newUsers`),
+  ...otherProps,
+})
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -27,15 +41,16 @@ beforeAll(() => {
   })
 })
 
+beforeEach(() => {
+  jest.clearAllMocks()
+  getCurrentCampaign.mockReturnValue(getMockCurrentCampaign())
+})
+
 afterAll(() => {
   mockDate.off()
 })
 
 describe('logTab', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   test('when a valid tab, it increments the VC and valid tab counts', async () => {
     const userId = userContext.id
 
@@ -95,6 +110,7 @@ describe('logTab', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     await logTab(userContext, userId)
 
@@ -118,6 +134,7 @@ describe('logTab', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     await logTab(userContext, userId)
 
@@ -141,6 +158,7 @@ describe('logTab', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     const tabId = uuid()
     await logTab(userContext, userId, tabId)
@@ -455,5 +473,120 @@ describe('logTab', () => {
         numTabs: 1, // added 1
       },
     })
+  })
+})
+
+describe('counting campaign new users', () => {
+  it("calls Redis to increment the new user count when the user's tab count is exactly one and a campaign is live", async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    const mockUser = getMockUserInstance({
+      tabs: 1, // exactly one tab
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that a campaign is live.
+    getCurrentCampaign.mockReturnValue(
+      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    )
+
+    await logTab(userContext, userId)
+
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:coolThing:newUsers',
+    })
+  })
+
+  it("does not call Redis to increment the new user count when the user's tab count is zero", async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    const mockUser = getMockUserInstance({
+      tabs: 0, // zero
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that a campaign is live.
+    getCurrentCampaign.mockReturnValue(
+      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    )
+
+    await logTab(userContext, userId)
+
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it("does not call Redis to increment the new user count when the user's tab count is two", async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    const mockUser = getMockUserInstance({
+      tabs: 2, // two
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that a campaign is live.
+    getCurrentCampaign.mockReturnValue(
+      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    )
+
+    await logTab(userContext, userId)
+
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it("does not calls Redis to increment the new user count when the user's tab count is exactly one but a campaign is NOT live", async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    const mockUser = getMockUserInstance({
+      tabs: 1, // exactly one tab
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that a campaign is NOT live.
+    getCurrentCampaign.mockReturnValue(
+      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: false })
+    )
+
+    await logTab(userContext, userId)
+
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not throw an error if Redis throws', async () => {
+    expect.assertions(0)
+    const userId = userContext.id
+
+    const mockUser = getMockUserInstance({
+      tabs: 1, // exactly one tab
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that a campaign is live.
+    getCurrentCampaign.mockReturnValue(
+      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    )
+
+    callRedis.mockRejectedValue("Well, that's not good.")
+
+    await logTab(userContext, userId) // should not throw
   })
 })

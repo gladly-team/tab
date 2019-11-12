@@ -29,6 +29,11 @@ class CampaignBaseView extends React.Component {
             app {
               ...HeartDonationCampaignContainer_app
                 @arguments(startTime: $startTime, endTime: $endTime)
+              campaign {
+                campaignId
+                isLive
+                numNewUsers
+              }
             }
             user(userId: $userId) {
               ...HeartDonationCampaignContainer_user

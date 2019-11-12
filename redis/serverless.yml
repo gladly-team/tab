@@ -1,0 +1,160 @@
+# Note: for now, we'll just manually deploy this service whenever
+# we need it and then destroy it when it's unused to reduce costs.
+# At this point, any access to the service should gracefully handle
+# missing cache values or Redis downtime.
+service: tab-redis
+
+# Based on:
+# https://github.com/mugglmenzel/serverless-examples-cached-rds-ws/blob/master/serverless.yml
+
+provider:
+  name: aws
+  region: us-west-2
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  runtime: nodejs10.x
+  
+  # Need the permissions in AWSLambdaVPCAccessExecutionRole so the
+  # function can manage network connections to a VPC.
+  # https://docs.aws.amazon.com/lambda/latest/dg/services-elasticache-tutorial.html#vpc-ec-create-iam-role
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+      Resource: "*"
+
+custom:
+  stageDefault: dev
+
+resources:
+  Resources:
+    TabRedisVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: "10.0.0.0/16"
+    TabRedisVPCSubnetA:
+      DependsOn: TabRedisVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: TabRedisVPC
+        AvailabilityZone: ${self:provider.region}a
+        CidrBlock: "10.0.0.0/24"
+    TabRedisVPCSubnetB:
+      DependsOn: TabRedisVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: TabRedisVPC
+        AvailabilityZone: ${self:provider.region}b
+        CidrBlock: "10.0.1.0/24"
+    TabRedisVPCSubnetC:
+      DependsOn: TabRedisVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: TabRedisVPC
+        AvailabilityZone: ${self:provider.region}c
+        CidrBlock: "10.0.2.0/24"
+    TabRedisSubnetGroup:
+      Type: AWS::ElastiCache::SubnetGroup
+      Properties:
+        Description: "Cache Subnet Group"
+        SubnetIds:
+        - Ref: TabRedisVPCSubnetA
+        - Ref: TabRedisVPCSubnetB
+        - Ref: TabRedisVPCSubnetC
+    LambdaForRedisSecurityGroup:
+      DependsOn: TabRedisVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupName: Tab Lambda accessing Redis
+        GroupDescription: For Lambda function that accesses Tab Redis ElastiCache
+        Tags:
+          - Key: Name
+            Value: Tab Lambda for Redis
+        VpcId:
+          Ref: TabRedisVPC
+    RedisClusterSecurityGroup:
+      DependsOn: TabRedisVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupName: Tab Redis cluster
+        GroupDescription: Ingress for Tab Redis ElastiCache Cluster
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 6379
+            ToPort: 6379
+            SourceSecurityGroupId:
+              "Fn::GetAtt": LambdaForRedisSecurityGroup.GroupId
+        Tags:
+          - Key: Name
+            Value: Tab Redis cluster
+        VpcId:
+          Ref: TabRedisVPC
+    RedisCluster:
+      DependsOn: RedisClusterSecurityGroup
+      Type: AWS::ElastiCache::CacheCluster
+      Properties:
+        AutoMinorVersionUpgrade: true
+        Engine: redis
+        CacheNodeType: cache.t2.small
+        NumCacheNodes: 1
+        VpcSecurityGroupIds:
+        - "Fn::GetAtt": RedisClusterSecurityGroup.GroupId
+        CacheSubnetGroupName:
+          Ref: TabRedisSubnetGroup
+  Outputs:
+    # Export the service endpoint.
+    # https://github.com/serverless/serverless/issues/3616#issuecomment-371755084
+    ServiceEndpointExport:
+      Description: The endpoint to access the Redis service
+      Value:
+        Fn::Join:
+          - ""
+          - - "https://"
+            - "Ref": "ApiGatewayRestApi"
+            - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
+      Export:
+        Name: "${self:service}-${self:provider.stage}-ServiceEndpoint"
+    # The base resource expression to give other services permission to
+    # invoke the API.
+    # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    APIGatewayBaseResourceID:
+      Description: The endpoint to access the Redis service
+      # To allow access to specific endpoints, append /HTTP-VERB/resource-path-specifier
+      # to this.
+      Value:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:${self:provider.region}:${env:AWS_ACCOUNT_ID}:"
+            - "Ref": "ApiGatewayRestApi"
+            - "/${self:provider.stage}"
+      Export:
+        Name: "${self:service}-${self:provider.stage}-APIGatewayBaseResourceID"
+
+functions:
+  tabRedis:
+    handler: build/handler.serverlessHandler
+    timeout: 10
+    vpc:
+      securityGroupIds:
+        - "Fn::GetAtt": LambdaForRedisSecurityGroup.GroupId
+      subnetIds:
+        - Ref: TabRedisVPCSubnetA
+        - Ref: TabRedisVPCSubnetB
+        - Ref: TabRedisVPCSubnetC
+    events:
+      - http:
+          path: redis/
+          method: post
+          # Restrict access to specific services.
+          # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+          # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-aws_iam-authorizers
+          authorizer: aws_iam
+    environment:
+      REDIS_HOST:
+        "Fn::GetAtt": RedisCluster.RedisEndpoint.Address
+      REDIS_PORT:
+        "Fn::GetAtt": RedisCluster.RedisEndpoint.Port
