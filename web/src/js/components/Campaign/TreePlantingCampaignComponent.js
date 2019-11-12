@@ -53,7 +53,9 @@ class TreePlantingCampaign extends React.Component {
             marginTop: 4,
           }}
         >
-          Recruit a friend, plant a tree
+          {hasCampaignEnded
+            ? 'Thanks for planting trees!'
+            : 'Recruit a friend, plant a tree'}
         </Typography>
         <div
           style={{
@@ -105,30 +107,40 @@ class TreePlantingCampaign extends React.Component {
                 </Typography>
               </div>
             </div>
-            <div style={{ margin: 16 }}>
-              <InviteFriend
-                user={user}
-                InputProps={{ style: { fontSize: 14 } }}
-                label={'Share this link with a friend'}
-                helperText={"and you'll plant a tree when they join!"}
-                style={{
-                  minWidth: 280,
-                }}
-              />
-            </div>
+            {hasCampaignEnded ? null : (
+              <div style={{ margin: 16 }}>
+                <InviteFriend
+                  user={user}
+                  InputProps={{ style: { fontSize: 14 } }}
+                  label={'Share this link with a friend'}
+                  helperText={"and you'll plant a tree when they join!"}
+                  style={{
+                    minWidth: 280,
+                  }}
+                />
+              </div>
+            )}
             <div style={{ margin: 12 }}>
-              <Typography variant={'body2'}>
-                Now until January 10,{' '}
-                <Link
-                  to={'#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: CAMPAIGN_COLOR }}
-                >
-                  we're planting a tree
-                </Link>{' '}
-                for every person who joins Tab for a Cause!
-              </Typography>
+              {hasCampaignEnded ? (
+                <Typography variant={'body2'}>
+                  Together, we planted {treesPlantedAbbreviated} trees this
+                  holiday season! Great job, and thank you for spreading the
+                  word about Tab for a Cause!
+                </Typography>
+              ) : (
+                <Typography variant={'body2'}>
+                  Now until January 10,{' '}
+                  <Link
+                    to={'#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: CAMPAIGN_COLOR }}
+                  >
+                    we're planting a tree
+                  </Link>{' '}
+                  for every person who joins Tab for a Cause!
+                </Typography>
+              )}
             </div>
           </div>
         </div>
@@ -145,11 +157,6 @@ class TreePlantingCampaign extends React.Component {
               marginRight: 10,
             }}
           >
-            {hasCampaignEnded ? (
-              <Typography variant={'caption'} gutterBottom>
-                Great job! Together, we planted {treesPlantedAbbreviated} trees!
-              </Typography>
-            ) : null}
             {hasCampaignEnded ? null : (
               <span
                 style={{
