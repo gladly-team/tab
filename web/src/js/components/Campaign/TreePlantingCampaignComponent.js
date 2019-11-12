@@ -28,7 +28,7 @@ class TreePlantingCampaign extends React.Component {
       width: 60,
     }
     const plantedTreeStyle = Object.assign({}, treeStyle, {
-      color: 'green',
+      color: theme.palette.secondary.main,
     })
     const incompleteTreeStyle = Object.assign({}, treeStyle, {
       color: '#BBB',
