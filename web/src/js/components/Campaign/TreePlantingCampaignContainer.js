@@ -22,6 +22,7 @@ export default createFragmentContainer(TreePlantingCampaign, {
         recruitsActiveForAtLeastOneDay
         recruitsWithAtLeastOneTab
       }
+      ...InviteFriendContainer_user
     }
   `,
 })

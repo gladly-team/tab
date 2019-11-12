@@ -4,6 +4,7 @@ import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
+import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import TreeIcon from 'mdi-material-ui/Tree'
 
@@ -84,6 +85,7 @@ class TreePlantingCampaign extends React.Component {
               <TreeIcon style={incompleteTreeStyle} />
             )}
           </div>
+          <InviteFriend user={user} />
         </div>
         <div
           style={{
