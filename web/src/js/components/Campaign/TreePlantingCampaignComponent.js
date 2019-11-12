@@ -3,16 +3,19 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import TreeIcon from 'mdi-material-ui/Tree'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
-import TreeIcon from 'mdi-material-ui/Tree'
+import Link from 'js/components/General/Link'
+
+const CAMPAIGN_COLOR = 'green'
 
 class TreePlantingCampaign extends React.Component {
   render() {
     const { app, user, campaign } = this.props
     const {
-      recruits: { totalRecruits, recruitsWithAtLeastOneTab = {} },
+      recruits: { recruitsWithAtLeastOneTab = {} },
     } = user
     const { time, treesPlantedGoal } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
@@ -22,8 +25,8 @@ class TreePlantingCampaign extends React.Component {
 
     // Tree icon style
     const treeStyle = {
-      height: 50,
-      width: 50,
+      height: 60,
+      width: 60,
     }
     const plantedTreeStyle = Object.assign({}, treeStyle, {
       color: 'green',
@@ -54,42 +57,80 @@ class TreePlantingCampaign extends React.Component {
         </Typography>
         <div
           style={{
-            margin: '14px 10px 20px',
+            margin: '14px 10px 14px',
             textAlign: 'left',
           }}
         >
-          <Typography variant={'body2'} gutterBottom>
-            Lorem ipsum foo bar lorem ipsum foo bar lorem ipsum foo bar lorem
-            ipsum foo bar
-          </Typography>
-          <Typography variant={'body2'} gutterBottom>
-            {recruitsWithAtLeastOneTab} trees planted
-          </Typography>
-          <Typography variant={'body2'} gutterBottom>
-            {totalRecruits} total people recruited
-          </Typography>
-          <div>
-            {recruitsWithAtLeastOneTab > 0 ? (
-              <TreeIcon style={plantedTreeStyle} />
-            ) : (
-              <TreeIcon style={incompleteTreeStyle} />
-            )}
-            {recruitsWithAtLeastOneTab > 1 ? (
-              <TreeIcon style={plantedTreeStyle} />
-            ) : (
-              <TreeIcon style={incompleteTreeStyle} />
-            )}
-            {recruitsWithAtLeastOneTab > 2 ? (
-              <TreeIcon style={plantedTreeStyle} />
-            ) : (
-              <TreeIcon style={incompleteTreeStyle} />
-            )}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  margin: 8,
+                }}
+              >
+                <div>
+                  {recruitsWithAtLeastOneTab > 0 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                  {recruitsWithAtLeastOneTab > 1 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                  {recruitsWithAtLeastOneTab > 2 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                </div>
+                <Typography variant={'body2'} gutterBottom>
+                  {recruitsWithAtLeastOneTab}/3 trees planted
+                </Typography>
+              </div>
+            </div>
+            <div style={{ margin: 16 }}>
+              <InviteFriend
+                user={user}
+                InputProps={{ style: { fontSize: 14 } }}
+                label={'Share this link with a friend'}
+                helperText={"and you'll plant a tree when they join!"}
+                style={{
+                  minWidth: 280,
+                }}
+              />
+            </div>
+            <div style={{ margin: 12 }}>
+              <Typography variant={'body2'}>
+                Now until January 10,{' '}
+                <Link
+                  to={'#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: CAMPAIGN_COLOR }}
+                >
+                  we're planting a tree
+                </Link>{' '}
+                for every person who joins Tab for a Cause!
+              </Typography>
+            </div>
           </div>
-          <InviteFriend
-            user={user}
-            InputProps={{ style: { fontSize: 14 } }}
-            helperText={"and you'll plant a tree for every person who joins!"}
-          />
         </div>
         <div
           style={{
@@ -106,8 +147,7 @@ class TreePlantingCampaign extends React.Component {
           >
             {hasCampaignEnded ? (
               <Typography variant={'caption'} gutterBottom>
-                Great job! Together, we planted {treesPlantedAbbreviated} trees
-                of our {treesPlantedGoalAbbreviated} goal.
+                Great job! Together, we planted {treesPlantedAbbreviated} trees!
               </Typography>
             ) : null}
             {hasCampaignEnded ? null : (
