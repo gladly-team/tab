@@ -150,4 +150,28 @@ export const getRecruitsActiveForAtLeastOneDay = recruitsEdges => {
   }).length
 }
 
+/**
+ * Get the count of recruits returned from the `getRecruits` query
+ *   who have opened at least one tab.
+ * @param {Object[]} recruitsEdges - An array of edges returned by
+ *   the `getRecruits` query.
+ * @param {string} recruitsEdges.cursor - The edge's GraphQL cursor
+ * @param {Object} recruitsEdges.node - The GraphQL node
+ * @param {string} recruitsEdges.node.recruitedAt - The ISO timestamp of
+ *   when the recruited user joined
+ * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
+ *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
+ * @return {integer} The number of recruits in the returned set who
+ *   have opened one or more tabs.
+ */
+export const getRecruitsWithAtLeastOneTab = recruitsEdges => {
+  if (!recruitsEdges) {
+    return 0
+  }
+  return filter(recruitsEdges, recruitEdge => recruitEdge.node.hasOpenedOneTab)
+    .length
+}
+
 export default getRecruits

@@ -355,6 +355,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -362,6 +363,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
           lastActive: '2017-02-07T18:00:09.031Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -369,6 +371,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
           lastActive: null,
+          hasOpenedOneTab: true,
         },
       },
     ]
@@ -380,6 +383,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -387,6 +391,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
           lastActive: '2017-02-09T08:23:40.532Z',
+          hasOpenedOneTab: true,
         },
       },
     ]
@@ -403,6 +408,7 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-05-20T13:59:47.000Z',
+          hasOpenedOneTab: true,
         },
       },
       {
@@ -410,9 +416,86 @@ describe('getRecruits', () => {
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
           lastActive: '2017-05-20T13:59:45.499Z',
+          hasOpenedOneTab: true,
         },
       },
     ]
     expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestD)).toBe(1)
+  })
+
+  test('getRecruitsWithAtLeastOneTab works as expected', async () => {
+    const { getRecruitsWithAtLeastOneTab } = require('../getRecruits')
+    const recruitsEdgesTestA = [
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: true,
+        },
+      },
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-02-07T13:59:46.000Z',
+          lastActive: '2017-02-07T18:00:09.031Z',
+          // hasOpenedOneTab: true, // missing field
+        },
+      },
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-02-07T17:69:46.000Z',
+          lastActive: null,
+          hasOpenedOneTab: true,
+        },
+      },
+    ]
+    expect(getRecruitsWithAtLeastOneTab(recruitsEdgesTestA)).toBe(2)
+
+    const recruitsEdgesTestB = [
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-12-19T08:23:40.532Z',
+          hasOpenedOneTab: true,
+        },
+      },
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-02-07T13:59:46.000Z',
+          lastActive: '2017-02-09T08:23:40.532Z',
+          hasOpenedOneTab: false,
+        },
+      },
+    ]
+    expect(getRecruitsWithAtLeastOneTab(recruitsEdgesTestB)).toBe(1)
+
+    const recruitsEdgesTestC = []
+    expect(getRecruitsWithAtLeastOneTab(recruitsEdgesTestC)).toBe(0)
+
+    expect(getRecruitsWithAtLeastOneTab(null)).toBe(0)
+
+    const recruitsEdgesTestD = [
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-05-20T13:59:47.000Z',
+          hasOpenedOneTab: true,
+        },
+      },
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-05-20T13:59:45.499Z',
+          hasOpenedOneTab: true,
+        },
+      },
+    ]
+    expect(getRecruitsWithAtLeastOneTab(recruitsEdgesTestD)).toBe(2)
   })
 })
