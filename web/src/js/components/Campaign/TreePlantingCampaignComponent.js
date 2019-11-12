@@ -85,7 +85,11 @@ class TreePlantingCampaign extends React.Component {
               <TreeIcon style={incompleteTreeStyle} />
             )}
           </div>
-          <InviteFriend user={user} />
+          <InviteFriend
+            user={user}
+            InputProps={{ style: { fontSize: 14 } }}
+            helperText={"and you'll plant a tree for every person who joins!"}
+          />
         </div>
         <div
           style={{
