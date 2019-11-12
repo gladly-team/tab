@@ -3,6 +3,8 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
+import { getCurrentCampaign } from '../globals/getCampaignData'
+import callRedis from '../../utils/redis'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -101,6 +103,27 @@ const logTab = async (userContext, userId, tabId = null) => {
     })
   } catch (e) {
     throw e
+  }
+
+  // Optionally, keep track of the number of new users who join during a
+  // campaign. When a user logs their first tab, we know they signed up
+  // and verified their email address. Increment the campaign's user count
+  // in Redis.
+  if (user.tabs === 1) {
+    try {
+      // Get the currently-active campaign.
+      const campaign = getCurrentCampaign()
+
+      // If the campaign is live, increment the new user count.
+      if (campaign.isLive) {
+        await callRedis({
+          operation: 'INCR',
+          key: campaign.getNewUsersRedisKey(),
+        })
+      }
+    } catch (e) {
+      // The Redis caller handles error logging.
+    }
   }
 
   return user

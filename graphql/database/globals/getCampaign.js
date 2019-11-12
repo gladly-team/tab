@@ -20,12 +20,17 @@ const getCampaign = async () => {
   }
 
   // Try to get the number of new users from this campaign.
-  let numNewUsers = null
+  // Default to zero if the item doesn't exist or fails to
+  // fetch.
+  let numNewUsers = 0
   try {
     numNewUsers = await callRedis({
       operation: 'GET',
       key: campaign.getNewUsersRedisKey(),
     })
+    if (!numNewUsers) {
+      numNewUsers = 0
+    }
   } catch (e) {
     logger.error(e)
   }

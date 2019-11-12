@@ -99,11 +99,27 @@ describe('getCampaign', () => {
     )
   })
 
-  it('return null for Redis items if Redis throws', async () => {
+  it('return expected defaults for Redis items if Redis throws', async () => {
     expect.assertions(1)
     callRedis.mockRejectedValue('Uh, Redis seems to be out at the moment.')
     expect(await getCampaign()).toMatchObject({
-      numNewUsers: null,
+      numNewUsers: 0,
+    })
+  })
+
+  it('return zero "numNewUsers" if Redis returns null', async () => {
+    expect.assertions(1)
+    callRedis.mockResolvedValue(null)
+    expect(await getCampaign()).toMatchObject({
+      numNewUsers: 0,
+    })
+  })
+
+  it('return zero "numNewUsers" if Redis returns undefined', async () => {
+    expect.assertions(1)
+    callRedis.mockResolvedValue(undefined)
+    expect(await getCampaign()).toMatchObject({
+      numNewUsers: 0,
     })
   })
 
