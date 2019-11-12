@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { filter } from 'lodash/collection'
+import { filter, find } from 'lodash/collection'
 
 import { isValidISOString } from '../../utils/utils'
 import ReferralDataModel from './ReferralDataModel'
@@ -8,6 +8,7 @@ import {
   getPermissionsOverride,
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE,
 } from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
 
 const getRecruitsOverride = getPermissionsOverride(
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE
@@ -65,28 +66,31 @@ export const getRecruits = async (
     return []
   }
 
-  // Batch-get times of last tab opened for recruits of shape:
-  // [{ userId: 'timeOfLastTab' }]
-  const recruitsLastActiveTimes = await UserModel.getBatch(
-    getRecruitsOverride,
-    referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
-  ).then(recruits => {
-    const recruitsLastActiveMap = {}
-    recruits.forEach(user => {
-      recruitsLastActiveMap[user.id] = user.lastTabTimestamp || null
-    })
-    return recruitsLastActiveMap
-  })
-
+  // Return selected info about each recruited user.
   const recruitData = []
-  referralLogs.forEach(referralLog => {
-    // Do not include any sensitive user data about recruits, because
-    // this data is visible to the referrer.
-    recruitData.push({
-      recruitedAt: referralLog.created,
-      lastActive: recruitsLastActiveTimes[referralLog.userId] || null,
+  try {
+    // Batch-get recruited users.
+    const recruits = await UserModel.getBatch(
+      getRecruitsOverride,
+      referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
+    )
+
+    referralLogs.forEach(referralLog => {
+      const recruitedUser = find(recruits, { id: referralLog.userId })
+
+      if (recruitedUser) {
+        // Do not include any sensitive user data about recruits, because
+        // this data is visible to the referrer.
+        recruitData.push({
+          recruitedAt: referralLog.created,
+          lastActive: recruitedUser.lastTabTimestamp || null,
+        })
+      }
     })
-  })
+  } catch (e) {
+    logger.error(e)
+  }
+
   return recruitData
 }
 
