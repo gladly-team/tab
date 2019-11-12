@@ -35,10 +35,8 @@ const getMockProps = () => ({
       start: moment('2017-05-12T10:00:00.000Z'),
       end: moment('2017-05-22T10:00:00.000Z'),
     },
-    endContent: <span>hi</span>,
     treesPlantedGoal: 20000,
   },
-  showError: jest.fn(),
 })
 
 describe('Tree planting campaign component', () => {
@@ -46,27 +44,7 @@ describe('Tree planting campaign component', () => {
     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
       .default
     const mockProps = getMockProps()
-    shallow(
-      <TreePlantingCampaign {...mockProps}>
-        <span>Some content</span>
-      </TreePlantingCampaign>
-    )
-  })
-
-  it('displays the provided children during the campaign', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(
-      <TreePlantingCampaign {...mockProps}>
-        <span>Some content</span>
-      </TreePlantingCampaign>
-    )
-    expect(
-      wrapper.find('span').filterWhere(n => {
-        return n.text() === 'Some content'
-      }).length
-    ).toBe(1)
+    shallow(<TreePlantingCampaign {...mockProps} />)
   })
 
   // TODO: progress bar for trees planted
@@ -78,7 +56,6 @@ describe('Tree planting campaign component', () => {
   //   mockProps.app.charity.vcReceived = 250000
   //   const wrapper = shallow(
   //     <TreePlantingCampaign {...mockProps}>
-  //       <span>Some content</span>
   //     </TreePlantingCampaign>
   //   )
   //   const progressBar = wrapper.find(LinearProgress)
@@ -96,7 +73,6 @@ describe('Tree planting campaign component', () => {
   //     mockProps.campaign.endContent = null
   //     const wrapper = shallow(
   //       <TreePlantingCampaign {...mockProps}>
-  //         <span>Some content</span>
   //       </TreePlantingCampaign>
   //     )
   //     expect(
@@ -115,7 +91,6 @@ describe('Tree planting campaign component', () => {
   //     mockProps.campaign.endContent = <span>The campaign has ended!</span>
   //     const wrapper = shallow(
   //       <TreePlantingCampaign {...mockProps}>
-  //         <span>Some content</span>
   //       </TreePlantingCampaign>
   //     )
   //     expect(

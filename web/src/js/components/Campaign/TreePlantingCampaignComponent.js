@@ -8,8 +8,11 @@ import { abbreviateNumber } from 'js/utils/utils'
 
 class TreePlantingCampaign extends React.Component {
   render() {
-    const { app, user, campaign, children, showError } = this.props
-    const { time, endContent, treesPlantedGoal } = campaign
+    const { app, user, campaign } = this.props
+    const {
+      recruits: { totalRecruits, recruitsWithAtLeastOneTab = {} },
+    } = user
+    const { time, treesPlantedGoal } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
     const treesPlantedAbbreviated = abbreviateNumber(app.campaign.numNewUsers)
     const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
@@ -25,7 +28,32 @@ class TreePlantingCampaign extends React.Component {
         }}
       >
         {' '}
-        {hasCampaignEnded && endContent ? endContent : children}
+        <Typography
+          variant={'h6'}
+          style={{
+            textAlign: 'center',
+            marginTop: 4,
+          }}
+        >
+          Recruit a friend, plant a tree
+        </Typography>
+        <div
+          style={{
+            margin: '14px 10px 20px',
+            textAlign: 'left',
+          }}
+        >
+          <Typography variant={'body2'} gutterBottom>
+            Lorem ipsum foo bar lorem ipsum foo bar lorem ipsum foo bar lorem
+            ipsum foo bar
+          </Typography>
+          <Typography variant={'body2'} gutterBottom>
+            {recruitsWithAtLeastOneTab} trees planted
+          </Typography>
+          <Typography variant={'body2'} gutterBottom>
+            {totalRecruits} total people recruited
+          </Typography>
+        </div>
         <div
           style={{
             marginTop: 8,
@@ -94,17 +122,8 @@ TreePlantingCampaign.propTypes = {
       start: PropTypes.instanceOf(moment).isRequired,
       end: PropTypes.instanceOf(moment).isRequired,
     }),
-    endContent: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
     treesPlantedGoal: PropTypes.number.isRequired,
   }).isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-  showError: PropTypes.func.isRequired,
 }
 
 export default TreePlantingCampaign
