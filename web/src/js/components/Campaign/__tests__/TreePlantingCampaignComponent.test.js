@@ -6,7 +6,7 @@ import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import TreeIcon from 'mdi-material-ui/PineTree'
-// import LinearProgress from '@material-ui/core/LinearProgress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Link from 'js/components/General/Link'
 import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
@@ -207,56 +207,14 @@ describe('Tree planting campaign component', () => {
     expect(link.render().text()).toEqual("we're planting a tree")
   })
 
-  // TODO: progress bar for trees planted
-  // it('sets the correct value on the progress bar', () => {
-  //   const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
-  //     .default
-  //   const mockProps = getMockProps()
-  //   mockProps.campaign.heartsGoal = 10e5
-  //   mockProps.app.charity.vcReceived = 250000
-  //   const wrapper = shallow(
-  //     <TreePlantingCampaign {...mockProps}>
-  //     </TreePlantingCampaign>
-  //   )
-  //   const progressBar = wrapper.find(LinearProgress)
-  //   expect(progressBar.prop('value')).toEqual(25.0)
-  // })
-
-  // TODO: decide how to handle campaign end
-
-  //   it('displays the provided children after the campaign has ended if no "end content" is provided', () => {
-  //     const afterCampaignTime = '2017-05-28T12:11:10.000Z'
-  //     MockDate.set(moment(afterCampaignTime))
-  //     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
-  //       .default
-  //     const mockProps = getMockProps()
-  //     mockProps.campaign.endContent = null
-  //     const wrapper = shallow(
-  //       <TreePlantingCampaign {...mockProps}>
-  //       </TreePlantingCampaign>
-  //     )
-  //     expect(
-  //       wrapper.find('span').filterWhere(n => {
-  //         return n.text() === 'Some content'
-  //       }).length
-  //     ).toBe(1)
-  //   })
-  //
-  //   it('displays the "end content" after the campaign has ended', () => {
-  //     const afterCampaignTime = '2017-05-28T12:11:10.000Z'
-  //     MockDate.set(moment(afterCampaignTime))
-  //     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
-  //       .default
-  //     const mockProps = getMockProps()
-  //     mockProps.campaign.endContent = <span>The campaign has ended!</span>
-  //     const wrapper = shallow(
-  //       <TreePlantingCampaign {...mockProps}>
-  //       </TreePlantingCampaign>
-  //     )
-  //     expect(
-  //       wrapper.find('span').filterWhere(n => {
-  //         return n.text() === 'The campaign has ended!'
-  //       }).length
-  //     ).toBe(1)
-  //   })
+  it('sets the correct value on the progress bar', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.campaign.treesPlantedGoal = 30000
+    mockProps.app.campaign.numNewUsers = 6000
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBar = wrapper.find(LinearProgress)
+    expect(progressBar.prop('value')).toEqual(20)
+  })
 })
