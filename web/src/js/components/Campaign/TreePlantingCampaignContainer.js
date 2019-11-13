@@ -18,8 +18,6 @@ export default createFragmentContainer(TreePlantingCampaign, {
         endTime: { type: "String" }
       ) {
       recruits(first: 5000, startTime: $startTime, endTime: $endTime) {
-        totalRecruits
-        recruitsActiveForAtLeastOneDay
         recruitsWithAtLeastOneTab
       }
       ...InviteFriendContainer_user

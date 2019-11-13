@@ -209,8 +209,6 @@ TreePlantingCampaign.propTypes = {
   }).isRequired,
   user: PropTypes.shape({
     recruits: PropTypes.shape({
-      totalRecruits: PropTypes.number.isRequired, // TODO: probably remove
-      recruitsActiveForAtLeastOneDay: PropTypes.number.isRequired, // TODO: probably remove
       recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
     }).isRequired,
   }).isRequired,

@@ -31,8 +31,6 @@ const getMockProps = () => ({
   },
   user: {
     recruits: {
-      totalRecruits: 0,
-      recruitsActiveForAtLeastOneDay: 0,
       recruitsWithAtLeastOneTab: 0,
     },
   },
