@@ -9,6 +9,7 @@ import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
 import { withTheme } from '@material-ui/core/styles'
+import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
 
 class TreePlantingCampaign extends React.Component {
   render() {
@@ -131,7 +132,7 @@ class TreePlantingCampaign extends React.Component {
                 <Typography variant={'body2'}>
                   Now until January 10,{' '}
                   <Link
-                    to={'#'}
+                    to={treePlantingCampaignHomepageURL}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: theme.palette.secondary.main }}

@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import TreeIcon from 'mdi-material-ui/PineTree'
 // import LinearProgress from '@material-ui/core/LinearProgress'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
+import Link from 'js/components/General/Link'
+import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
 
 jest.mock('js/components/General/Link')
 
@@ -193,6 +195,16 @@ describe('Tree planting campaign component', () => {
     ).toEqual(
       'Together, we planted 192 trees this holiday season! Great job, and thank you for spreading the word about Tab for a Cause!'
     )
+  })
+
+  it('links to the tree planting FAQ page', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const link = wrapper.find(Link)
+    expect(link.prop('to')).toEqual(treePlantingCampaignHomepageURL)
+    expect(link.render().text()).toEqual("we're planting a tree")
   })
 
   // TODO: progress bar for trees planted
