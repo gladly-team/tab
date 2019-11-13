@@ -21,7 +21,8 @@ const createCampaign = data => ({
    * @return {Boolean}
    */
   isActive() {
-    return moment().isAfter(this.time.start) && moment().isBefore(this.time.end)
+    const timeInfo = data.time
+    return moment().isAfter(timeInfo.start) && moment().isBefore(timeInfo.end)
   },
 
   isLive: data.isLive,
