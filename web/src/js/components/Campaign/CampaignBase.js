@@ -33,7 +33,7 @@ const CampaignBaseContent = props => {
           start: moment(campaignStartTimeISO),
           end: moment(campaignEndTimeISO),
         },
-        treesPlantedGoal: 20000,
+        treesPlantedGoal: 30000,
       }}
       showError={props.showError}
     />
