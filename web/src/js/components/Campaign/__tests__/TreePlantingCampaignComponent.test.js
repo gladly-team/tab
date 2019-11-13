@@ -217,4 +217,109 @@ describe('Tree planting campaign component', () => {
     const progressBar = wrapper.find(LinearProgress)
     expect(progressBar.prop('value')).toEqual(20)
   })
+
+  it('displays the expected text above the progress bar when the campaign is live and zero trees have been planted', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app.campaign.numNewUsers = 0
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(
+      progressBarContainer
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('0 trees planted')
+  })
+
+  it('displays the expected text above the progress bar when the campaign is live and one tree has been planted', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app.campaign.numNewUsers = 1
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(
+      progressBarContainer
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('1 tree planted')
+  })
+
+  it('displays the expected text above the progress bar when the campaign is live and two trees have been planted', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app.campaign.numNewUsers = 2
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(
+      progressBarContainer
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('2 trees planted')
+  })
+
+  it('displays the expected text above the progress bar when the campaign is live and a large number of trees have been planted', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app.campaign.numNewUsers = 38911
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(
+      progressBarContainer
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('38.9K trees planted')
+  })
+
+  it('displays the expected "goal" text above the progress bar', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.campaign.treesPlantedGoal = 35000
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(
+      progressBarContainer
+        .find(Typography)
+        .last()
+        .render()
+        .text()
+    ).toEqual('Goal: 35K')
+  })
+
+  it('does not displays any text above the progress bar when the campaign is has ended', () => {
+    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+      .default
+
+    // Mock that now is after the campaign end time.
+    MockDate.set(moment('2017-05-23T12:14:00.000Z'))
+
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const progressBarContainer = wrapper.find(
+      '[data-test-id="trees-planted-progress-bar"]'
+    )
+    expect(progressBarContainer.find(Typography).exists()).toBe(false)
+  })
 })

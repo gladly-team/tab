@@ -153,6 +153,7 @@ class TreePlantingCampaign extends React.Component {
           }}
         >
           <div
+            data-test-id={'trees-planted-progress-bar'}
             style={{
               marginLeft: 10,
               marginRight: 10,
