@@ -114,10 +114,9 @@ const logTab = async (userContext, userId, tabId = null) => {
       // Get the currently-active campaign.
       const campaign = getCampaignObject()
 
-      // FIXME: hardcode dates for now instead of using "live" state
-      //   so that it matches the individual user recruit count.
-      // If the campaign is live, increment the new user count.
-      if (campaign.isLive) {
+      // If the campaign is active (we are between the campaign's start
+      // and end times), increment the new user count.
+      if (campaign.isActive()) {
         await callRedis({
           operation: 'INCR',
           key: campaign.getNewUsersRedisKey(),
