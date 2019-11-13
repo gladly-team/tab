@@ -21,6 +21,7 @@ class TreePlantingCampaign extends React.Component {
     const treesPlantedAbbreviated = abbreviateNumber(app.campaign.numNewUsers)
     const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
     const progress = (100 * app.campaign.numNewUsers) / treesPlantedGoal
+    const treesWord = app.campaign.numNewUsers === 1 ? 'tree' : 'trees'
 
     // Tree icon style
     const treeStyle = {
@@ -165,7 +166,7 @@ class TreePlantingCampaign extends React.Component {
                 }}
               >
                 <Typography variant={'caption'}>
-                  {treesPlantedAbbreviated} trees planted
+                  {treesPlantedAbbreviated} {treesWord} planted
                 </Typography>
                 <Typography variant={'caption'}>
                   Goal: {treesPlantedGoalAbbreviated}
