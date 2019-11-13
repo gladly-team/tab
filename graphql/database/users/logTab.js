@@ -3,7 +3,7 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import { getCurrentCampaign } from '../globals/getCampaignData'
+import { getCampaignObject } from '../globals/getCampaign'
 import callRedis from '../../utils/redis'
 
 /**
@@ -112,7 +112,7 @@ const logTab = async (userContext, userId, tabId = null) => {
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaign = getCurrentCampaign()
+      const campaign = getCampaignObject()
 
       // FIXME: hardcode dates for now instead of using "live" state
       //   so that it matches the individual user recruit count.
