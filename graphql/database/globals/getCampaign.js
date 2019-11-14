@@ -44,12 +44,11 @@ export const getCampaignObject = () => {
 const getCampaign = async () => {
   const campaign = getCampaignObject()
 
-  // TODO: revert this after testing out Redis.
-  // if (!campaign || !campaign.isLive) {
-  //   return {
-  //     isLive: false,
-  //   }
-  // }
+  if (!campaign || !campaign.isLive) {
+    return {
+      isLive: false,
+    }
+  }
 
   // Try to get the number of new users from this campaign.
   // Default to zero if the item doesn't exist or fails to
