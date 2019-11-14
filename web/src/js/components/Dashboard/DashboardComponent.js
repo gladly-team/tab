@@ -51,7 +51,10 @@ import {
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
-import { showGlobalNotification } from 'js/utils/feature-flags'
+import {
+  showGlobalNotification,
+  showSearchIntroductionMessage,
+} from 'js/utils/feature-flags'
 import {
   EXPERIMENT_REFERRAL_NOTIFICATION,
   getExperimentGroups,
@@ -91,6 +94,8 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      // Whether to show an introduction to Search for a Cause.
+      showSearchIntroductionMessage: showSearchIntroductionMessage(),
       userClickedSearchIntroV1: hasUserClickedNewTabSearchIntroNotif(),
       userClickedSearchIntroV2: hasUserClickedNewTabSearchIntroNotifV2(),
       // @experiment-referral-notification
@@ -152,6 +157,7 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
       referralNotificationExperimentGroup,
+      showSearchIntroductionMessage,
       tabId,
     } = this.state
     const {
@@ -185,6 +191,7 @@ class Dashboard extends React.Component {
     // * haven't already interacted with the intro in our previous experiment
     // * have opened at least three tabs but fewer than 100 tabs
     const showSearchIntro =
+      showSearchIntroductionMessage &&
       user &&
       user.searches < 1 &&
       !userClickedSearchIntroV1 &&
@@ -201,6 +208,7 @@ class Dashboard extends React.Component {
     // * haven't already clicked the intro button
     // * have opened at least 150 tabs
     const showSparklySearchIntroButton =
+      showSearchIntroductionMessage &&
       user &&
       user.searches < 1 &&
       !showSearchIntro &&
