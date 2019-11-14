@@ -239,6 +239,7 @@ class UserMenu extends React.Component {
               </div>
               <CircleIcon
                 style={{
+                  marginLeft: 10,
                   color: 'rgba(255, 255, 255, 0.8)',
                 }}
                 classes={{
