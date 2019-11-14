@@ -40,6 +40,7 @@ const getMockProps = () => {
     app: {},
     isUserAnonymous: false,
     showSparklySearchIntroButton: false,
+    onClickCampaignReopen: jest.fn(),
     onClickSparklySearchIntroButton: jest.fn(),
   }
 }
@@ -608,5 +609,16 @@ describe('User menu component: campaign reopen button', () => {
         .find(TreeIcon)
         .exists()
     ).toBe(true)
+  })
+
+  it('calls the onClickCampaignReopen prop when clicked', () => {
+    const mockProps = getMockProps()
+    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(mockProps.onClickCampaignReopen).not.toHaveBeenCalled()
+    wrapper.find('[data-test-id="tree-campaign-reopen"]').simulate('click')
+    expect(mockProps.onClickCampaignReopen).toHaveBeenCalledTimes(1)
   })
 })

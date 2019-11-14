@@ -268,6 +268,14 @@ export const setCampaignDismissTime = () => {
 }
 
 /**
+ * Deletes the time the user dismissed a campaign.
+ * @returns {undefined}
+ */
+export const removeCampaignDismissTime = () => {
+  localStorageMgr.removeItem(STORAGE_CAMPAIGN_DISMISS_TIME)
+}
+
+/**
  * Returns whether the user has dismissed a campaign
  * in the last few days.
  * @returns {Boolean}

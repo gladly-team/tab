@@ -42,11 +42,13 @@ import {
 } from 'js/ads/adSettings'
 import {
   setUserDismissedAdExplanation,
+  hasUserDismissedCampaignRecently,
   hasUserDismissedNotificationRecently,
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
+  removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
   showGlobalNotification,
@@ -55,6 +57,7 @@ import {
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
+import CampaignBase from 'js/components/Campaign/CampaignBaseView'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -1287,5 +1290,37 @@ describe('Dashboard component: referral notification experiment', () => {
         .indexOf('Get a friend to join you on Tab for a Cause, and together') >
         -1
     ).toBe(true)
+  })
+})
+
+describe('Dashboard component: campaign reopen click', () => {
+  beforeEach(() => {
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
+  })
+
+  it('reopens the campaign when the UserMenu calls the onClickCampaignReopen function', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+
+    // It would be better to directly test that the campaign is rendered.
+    // We're not doing that because of lack of Enzyme support for lazy/Suspense
+    // (see notes above).
+    expect(wrapper.state('hasUserDismissedCampaignRecently')).toBe(true)
+    const callback = wrapper.find(UserMenu).prop('onClickCampaignReopen')
+    callback()
+    expect(wrapper.state('hasUserDismissedCampaignRecently')).toBe(false)
+  })
+
+  it('deletes local "campaign dismissed" state when the UserMenu calls the onClickCampaignReopen function', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+
+    expect(removeCampaignDismissTime).not.toHaveBeenCalled()
+    expect(wrapper.state('hasUserDismissedCampaignRecently')).toBe(true)
+    const callback = wrapper.find(UserMenu).prop('onClickCampaignReopen')
+    callback()
+    expect(removeCampaignDismissTime).toHaveBeenCalledTimes(1)
   })
 })

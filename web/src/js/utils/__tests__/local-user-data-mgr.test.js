@@ -392,6 +392,17 @@ describe('local user data manager', () => {
     )
   })
 
+  // removeCampaignDismissTime method
+  it('sets the notification dismiss time timestamp in localStorage', () => {
+    const {
+      removeCampaignDismissTime,
+    } = require('js/utils/local-user-data-mgr')
+    removeCampaignDismissTime()
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.user.campaign.dismissTime'
+    )
+  })
+
   // hasUserDismissedCampaignRecently method
   it('returns true if the user dismissed a notification recently', () => {
     const now = moment('2018-04-11T12:50:42.000') // ~1 day ago

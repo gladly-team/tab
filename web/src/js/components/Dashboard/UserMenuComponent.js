@@ -84,6 +84,7 @@ class UserMenu extends React.Component {
       classes,
       user,
       isUserAnonymous,
+      onClickCampaignReopen,
       onClickSparklySearchIntroButton,
       showSparklySearchIntroButton,
     } = this.props
@@ -222,6 +223,7 @@ class UserMenu extends React.Component {
           <div
             data-test-id={'tree-campaign-reopen'}
             style={{ marginRight: 0, display: 'flex', flexDirection: 'row' }}
+            onClick={onClickCampaignReopen}
           >
             <Typography variant={'h2'} className={classes.treeText}>
               {numUsersRecruitedForCampaign}
@@ -330,6 +332,7 @@ UserMenu.propTypes = {
   ]).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
+  onClickCampaignReopen: PropTypes.func,
   onClickSparklySearchIntroButton: PropTypes.func,
   showSparklySearchIntroButton: PropTypes.bool,
   user: PropTypes.shape({
@@ -341,6 +344,7 @@ UserMenu.propTypes = {
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
+  onClickCampaignReopen: () => {},
   onClickSparklySearchIntroButton: () => {},
   showSparklySearchIntroButton: false,
 }
