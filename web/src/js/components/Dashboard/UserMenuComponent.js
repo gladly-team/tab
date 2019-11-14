@@ -33,12 +33,13 @@ import {
   UNSUPPORTED_BROWSER,
 } from 'js/constants'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import TreeIcon from 'mdi-material-ui/PineTree'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
 const defaultTheme = createMuiTheme(theme)
 
-const styles = {
+const styles = theme => ({
   circleIcon: {
     alignSelf: 'center',
     width: 5,
@@ -47,7 +48,19 @@ const styles = {
     marginLeft: 12,
     marginRight: 12,
   },
-}
+  treeText: {
+    transition: 'color 300ms ease-in',
+    fontWeight: 'normal',
+    userSelect: 'none',
+    cursor: 'pointer',
+  },
+  treeIcon: {
+    transition: 'color 300ms ease-in',
+    cursor: 'pointer',
+    paddingBottom: 0,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+})
 
 const menuFontSize = 24
 
@@ -200,6 +213,24 @@ class UserMenu extends React.Component {
               </ErrorBoundary>
             </div>
           ) : null}
+          {/* Remove when tree campaign is no longer live */}
+          <div
+            data-test-id={'tree-campaign-reopen'}
+            style={{ marginRight: 0, display: 'flex', flexDirection: 'row' }}
+          >
+            <Typography variant={'h2'} className={classes.treeText}>
+              2
+            </Typography>
+            <TreeIcon className={classes.treeIcon} />
+          </div>
+          <CircleIcon
+            style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+            }}
+            classes={{
+              root: classes.circleIcon,
+            }}
+          />
           <MoneyRaised
             app={app}
             dropdown={({ open, onClose, anchorElement }) => (

@@ -559,3 +559,15 @@ describe('User menu component: sparkly search intro button', () => {
     expect(mockProps.onClickSparklySearchIntroButton).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('User menu component: campaign reopen button', () => {
+  it('displays the campaign reopen button', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="tree-campaign-reopen"]').exists()).toBe(
+      true
+    )
+  })
+})
