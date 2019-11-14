@@ -48,7 +48,10 @@ import {
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
 } from 'js/utils/local-user-data-mgr'
-import { showGlobalNotification } from 'js/utils/feature-flags'
+import {
+  showGlobalNotification,
+  showSearchIntroductionMessage,
+} from 'js/utils/feature-flags'
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
@@ -658,6 +661,7 @@ describe('Dashboard component: search intro message', () => {
   beforeEach(() => {
     getUserExperimentGroup.mockReturnValue('none')
     hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
+    showSearchIntroductionMessage.mockReturnValue(true)
   })
 
   // Showing the intro globally now that the experiment is finished.
@@ -668,6 +672,19 @@ describe('Dashboard component: search intro message', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
+    )
+  })
+
+  it('does not show the search intro notification when the "search intro" feature flag is disabled', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+
+    // Disable the feature.
+    showSearchIntroductionMessage.mockReturnValue(false)
+
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
+      false
     )
   })
 
@@ -907,6 +924,7 @@ describe('Dashboard component: sparkly search intro button', () => {
     getUserExperimentGroup.mockReturnValue('none')
     hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+    showSearchIntroductionMessage.mockReturnValue(true)
   })
 
   it('shows the sparkly search intro button when the user has not already clicked it, has opened more than 150 tabs, and has not already searched', () => {
@@ -1018,6 +1036,23 @@ describe('Dashboard component: sparkly search intro button', () => {
     modifiedProps.user.tabs = 160
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find(UserMenu).prop('browser')).toEqual('firefox')
+  })
+
+  it('does not show the sparkly search intro button when the "search intro" feature flag is disabled', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+
+    // Disable the feature.
+    showSearchIntroductionMessage.mockReturnValue(false)
+
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 160
+    modifiedProps.user.searches = 0
+    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+      false
+    )
   })
 })
 
