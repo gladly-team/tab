@@ -19,6 +19,7 @@ import {
 } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import Link from 'js/components/General/Link'
+import TreeIcon from 'mdi-material-ui/PineTree'
 
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 jest.mock('js/components/Dashboard/HeartsContainer')
@@ -31,7 +32,11 @@ jest.mock('js/utils/logger')
 const getMockProps = () => {
   return {
     browser: 'chrome',
-    user: {},
+    user: {
+      recruits: {
+        recruitsWithAtLeastOneTab: 2,
+      },
+    },
     app: {},
     isUserAnonymous: false,
     showSparklySearchIntroButton: false,
@@ -302,10 +307,14 @@ describe('User menu component: Hearts dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.app = {
       hi: 'there',
+      campaign: {},
     }
     mockProps.user = {
       some: 'thing',
       abc: 123,
+      recruits: {
+        recruitsWithAtLeastOneTab: 1,
+      },
     }
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
@@ -569,5 +578,35 @@ describe('User menu component: campaign reopen button', () => {
     expect(wrapper.find('[data-test-id="tree-campaign-reopen"]').exists()).toBe(
       true
     )
+  })
+
+  it('displays the expected number of users recruited in the campaign reopen button text', () => {
+    const mockProps = getMockProps()
+    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="tree-campaign-reopen"]')
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('182')
+  })
+
+  it('displays the tree icon the campaign reopen button text', () => {
+    const mockProps = getMockProps()
+    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="tree-campaign-reopen"]')
+        .find(TreeIcon)
+        .exists()
+    ).toBe(true)
   })
 })

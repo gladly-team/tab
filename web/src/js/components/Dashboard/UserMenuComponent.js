@@ -87,6 +87,11 @@ class UserMenu extends React.Component {
       onClickSparklySearchIntroButton,
       showSparklySearchIntroButton,
     } = this.props
+    const numUsersRecruitedForCampaign = get(
+      user,
+      'recruits.recruitsWithAtLeastOneTab',
+      0
+    )
     return (
       <MuiThemeProvider
         theme={{
@@ -219,7 +224,7 @@ class UserMenu extends React.Component {
             style={{ marginRight: 0, display: 'flex', flexDirection: 'row' }}
           >
             <Typography variant={'h2'} className={classes.treeText}>
-              2
+              {numUsersRecruitedForCampaign}
             </Typography>
             <TreeIcon className={classes.treeIcon} />
           </div>
@@ -327,7 +332,11 @@ UserMenu.propTypes = {
   isUserAnonymous: PropTypes.bool,
   onClickSparklySearchIntroButton: PropTypes.func,
   showSparklySearchIntroButton: PropTypes.bool,
-  user: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({
+    recruits: PropTypes.shape({
+      recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
 }
 
 UserMenu.defaultProps = {
