@@ -20,7 +20,10 @@ describe('Campaign base component', () => {
   it('sets the dismiss time in local storage when clicking the "dismiss" button ', () => {
     const CampaignBase = require('js/components/Campaign/CampaignBase').default
     const mockProps = getMockProps()
-    const wrapper = shallow(<CampaignBase {...mockProps} />).dive()
+    const wrapper = shallow(<CampaignBase {...mockProps} />)
+      .dive()
+      .dive()
+      .dive()
     wrapper
       .find(IconButton)
       .first()
@@ -32,7 +35,10 @@ describe('Campaign base component', () => {
     const CampaignBase = require('js/components/Campaign/CampaignBase').default
     const mockProps = getMockProps()
     mockProps.onDismiss = jest.fn()
-    const wrapper = shallow(<CampaignBase {...mockProps} />).dive()
+    const wrapper = shallow(<CampaignBase {...mockProps} />)
+      .dive()
+      .dive()
+      .dive()
     wrapper
       .find(IconButton)
       .first()

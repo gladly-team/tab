@@ -237,4 +237,78 @@ describe('Invite friend component', () => {
     await onClickCallback()
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
+
+  it("allows overriding the TextField's helperText", () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.helperText = 'and do some good!'
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('helperText')
+    ).toBe(`and do some good!`)
+  })
+
+  it("allows overriding the TextField's label", () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.label = 'Share this!!1'
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('label')
+    ).toBe(`Share this!!1`)
+  })
+
+  it('merges the provided InputProps prop with the defaults', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.InputProps = {
+      style: {
+        color: 'red',
+      },
+    }
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('InputProps')
+    ).toEqual({
+      classes: expect.any(Object),
+      style: {
+        color: 'red',
+      },
+    })
+  })
+
+  it('merges the provided InputLabelProps prop with the defaults', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.InputLabelProps = {
+      style: {
+        color: 'blue',
+      },
+    }
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('InputLabelProps')
+    ).toEqual({
+      FormLabelClasses: expect.any(Object),
+      style: {
+        color: 'blue',
+      },
+    })
+  })
 })

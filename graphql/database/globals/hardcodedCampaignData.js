@@ -1,12 +1,14 @@
-const createCampaign = data => ({
-  campaignId: data.campaignId,
-  getNewUsersRedisKey() {
-    return `campaign:${this.campaignId}:newUsers`
-  },
-})
-
+// Hardcode campaign data here.
+// Note: currently, we need to hardcode campaign start and end times
+// both here and on the client side.
 const campaigns = {
-  testNov2019: createCampaign({ campaignId: 'testNov2019' }),
+  testNov2019: {
+    campaignId: 'testNov2019',
+    time: {
+      start: '2019-11-12T10:00:00.000Z',
+      end: '2020-01-10T20:00:00.000Z',
+    },
+  },
 }
 
 // Hardcode the currently-active campaign here.
@@ -24,7 +26,7 @@ const CURRENT_CAMPAIGN = campaigns.testNov2019
  *   users who joined during this campaign.
  */
 // eslint-disable-next-line import/prefer-default-export
-export const getCurrentCampaign = () => {
+export const getCurrentCampaignHardcodedData = () => {
   const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
   return {
     ...CURRENT_CAMPAIGN,

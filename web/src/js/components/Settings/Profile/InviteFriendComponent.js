@@ -50,7 +50,7 @@ class InviteFriend extends React.Component {
   }
 
   render() {
-    const { classes, user } = this.props
+    const { baseURL, classes, user, ...otherProps } = this.props
     const referralUrl = this.getReferralUrl()
 
     return (
@@ -67,18 +67,20 @@ class InviteFriend extends React.Component {
             ? `and you'll get 350 Hearts for every person who joins!`
             : `and have a bigger positive impact!`
         }
+        {...otherProps}
         InputProps={{
+          ...get(otherProps, 'InputProps', {}),
           classes: {
             underline: classes.inputUnderline,
           },
         }}
         InputLabelProps={{
+          ...get(otherProps, 'InputLabelProps', {}),
           FormLabelClasses: {
             root: classes.formLabelRoot,
             focused: classes.formLabelFocused,
           },
         }}
-        style={this.props.style}
       />
     )
   }

@@ -8,6 +8,7 @@ export default createFragmentContainer(Dashboard, {
     fragment DashboardContainer_app on App {
       campaign {
         isLive
+        numNewUsers # TODO: remove later. For testing Redis.
       }
       ...UserMenuContainer_app
     }

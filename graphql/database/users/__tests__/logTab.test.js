@@ -14,22 +14,23 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import { getCurrentCampaign } from '../../globals/getCampaignData'
+import { getCampaignObject } from '../../globals/getCampaign'
 import callRedis from '../../../utils/redis'
 
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
-jest.mock('../../globals/getCampaignData')
+jest.mock('../../globals/getCampaign')
 jest.mock('../../../utils/redis')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
-const getMockCurrentCampaign = ({
+const getMockCampaign = ({
   campaignId = 'someCampaign',
   ...otherProps
 } = {}) => ({
   campaignId,
+  isActive: jest.fn(() => true),
   isLive: false,
   getNewUsersRedisKey: jest.fn(() => `campaign:${campaignId}:newUsers`),
   ...otherProps,
@@ -43,7 +44,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  getCurrentCampaign.mockReturnValue(getMockCurrentCampaign())
+  getCampaignObject.mockReturnValue(getMockCampaign())
 })
 
 afterAll(() => {
@@ -477,7 +478,7 @@ describe('logTab', () => {
 })
 
 describe('counting campaign new users', () => {
-  it("calls Redis to increment the new user count when the user's tab count is exactly one and a campaign is live", async () => {
+  it("calls Redis to increment the new user count when the user's tab count is exactly one and a campaign is active", async () => {
     expect.assertions(1)
     const userId = userContext.id
 
@@ -489,9 +490,12 @@ describe('counting campaign new users', () => {
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is live.
-    getCurrentCampaign.mockReturnValue(
-      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    // Mock that a campaign is active.
+    getCampaignObject.mockReturnValue(
+      getMockCampaign({
+        campaignId: 'coolThing',
+        isActive: jest.fn(() => true),
+      })
     )
 
     await logTab(userContext, userId)
@@ -514,9 +518,12 @@ describe('counting campaign new users', () => {
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is live.
-    getCurrentCampaign.mockReturnValue(
-      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    // Mock that a campaign is active.
+    getCampaignObject.mockReturnValue(
+      getMockCampaign({
+        campaignId: 'coolThing',
+        isActive: jest.fn(() => true),
+      })
     )
 
     await logTab(userContext, userId)
@@ -536,9 +543,12 @@ describe('counting campaign new users', () => {
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is live.
-    getCurrentCampaign.mockReturnValue(
-      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    // Mock that a campaign is active.
+    getCampaignObject.mockReturnValue(
+      getMockCampaign({
+        campaignId: 'coolThing',
+        isActive: jest.fn(() => true),
+      })
     )
 
     await logTab(userContext, userId)
@@ -558,9 +568,12 @@ describe('counting campaign new users', () => {
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is NOT live.
-    getCurrentCampaign.mockReturnValue(
-      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: false })
+    // Mock that a campaign is NOT active.
+    getCampaignObject.mockReturnValue(
+      getMockCampaign({
+        campaignId: 'coolThing',
+        isActive: jest.fn(() => false),
+      })
     )
 
     await logTab(userContext, userId)
@@ -580,9 +593,12 @@ describe('counting campaign new users', () => {
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is live.
-    getCurrentCampaign.mockReturnValue(
-      getMockCurrentCampaign({ campaignId: 'coolThing', isLive: true })
+    // Mock that a campaign is active.
+    getCampaignObject.mockReturnValue(
+      getMockCampaign({
+        campaignId: 'coolThing',
+        isActive: jest.fn(() => true),
+      })
     )
 
     callRedis.mockRejectedValue("Well, that's not good.")

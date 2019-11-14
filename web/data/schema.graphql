@@ -709,6 +709,9 @@ type UserRecruitsConnection {
 
   """The count of users recruited who remained active for one day or more"""
   recruitsActiveForAtLeastOneDay: Int
+
+  """The count of users recruited who have opened one tab or more"""
+  recruitsWithAtLeastOneTab: Int
 }
 
 """An edge in a connection."""

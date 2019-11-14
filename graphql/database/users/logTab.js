@@ -3,7 +3,7 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import { getCurrentCampaign } from '../globals/getCampaignData'
+import { getCampaignObject } from '../globals/getCampaign'
 import callRedis from '../../utils/redis'
 
 /**
@@ -112,10 +112,11 @@ const logTab = async (userContext, userId, tabId = null) => {
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaign = getCurrentCampaign()
+      const campaign = getCampaignObject()
 
-      // If the campaign is live, increment the new user count.
-      if (campaign.isLive) {
+      // If the campaign is active (we are between the campaign's start
+      // and end times), increment the new user count.
+      if (campaign.isActive()) {
         await callRedis({
           operation: 'INCR',
           key: campaign.getNewUsersRedisKey(),

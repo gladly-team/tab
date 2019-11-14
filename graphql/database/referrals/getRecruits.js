@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { filter } from 'lodash/collection'
+import { filter, find } from 'lodash/collection'
 
 import { isValidISOString } from '../../utils/utils'
 import ReferralDataModel from './ReferralDataModel'
@@ -8,6 +8,7 @@ import {
   getPermissionsOverride,
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE,
 } from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
 
 const getRecruitsOverride = getPermissionsOverride(
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE
@@ -65,28 +66,32 @@ export const getRecruits = async (
     return []
   }
 
-  // Batch-get times of last tab opened for recruits of shape:
-  // [{ userId: 'timeOfLastTab' }]
-  const recruitsLastActiveTimes = await UserModel.getBatch(
-    getRecruitsOverride,
-    referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
-  ).then(recruits => {
-    const recruitsLastActiveMap = {}
-    recruits.forEach(user => {
-      recruitsLastActiveMap[user.id] = user.lastTabTimestamp || null
-    })
-    return recruitsLastActiveMap
-  })
-
+  // Return selected info about each recruited user.
   const recruitData = []
-  referralLogs.forEach(referralLog => {
-    // Do not include any sensitive user data about recruits, because
-    // this data is visible to the referrer.
-    recruitData.push({
-      recruitedAt: referralLog.created,
-      lastActive: recruitsLastActiveTimes[referralLog.userId] || null,
+  try {
+    // Batch-get recruited users.
+    const recruits = await UserModel.getBatch(
+      getRecruitsOverride,
+      referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
+    )
+
+    referralLogs.forEach(referralLog => {
+      const recruitedUser = find(recruits, { id: referralLog.userId })
+
+      if (recruitedUser) {
+        // Do not include any sensitive user data about recruits, because
+        // this data is visible to the referrer.
+        recruitData.push({
+          recruitedAt: referralLog.created,
+          lastActive: recruitedUser.lastTabTimestamp || null,
+          hasOpenedOneTab: recruitedUser.tabs > 0,
+        })
+      }
     })
-  })
+  } catch (e) {
+    logger.error(e)
+  }
+
   return recruitData
 }
 
@@ -100,6 +105,8 @@ export const getRecruits = async (
  *   when the recruited user joined
  * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
  *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
  * @return {integer} The total number of recruits in the returned set.
  */
 export const getTotalRecruitsCount = recruitsEdges => {
@@ -120,6 +127,8 @@ export const getTotalRecruitsCount = recruitsEdges => {
  *   when the recruited user joined
  * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
  *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
  * @return {integer} The number of recruits in the returned set who
  *   were active for at least one day.
  */
@@ -139,6 +148,30 @@ export const getRecruitsActiveForAtLeastOneDay = recruitsEdges => {
       ) >= 86400
     )
   }).length
+}
+
+/**
+ * Get the count of recruits returned from the `getRecruits` query
+ *   who have opened at least one tab.
+ * @param {Object[]} recruitsEdges - An array of edges returned by
+ *   the `getRecruits` query.
+ * @param {string} recruitsEdges.cursor - The edge's GraphQL cursor
+ * @param {Object} recruitsEdges.node - The GraphQL node
+ * @param {string} recruitsEdges.node.recruitedAt - The ISO timestamp of
+ *   when the recruited user joined
+ * @param {string|null} recruitsEdges.node.lastActive - The ISO timestamp of when
+ *   the recruited user last opened a tab
+ * @param {Boolean} recruitsEdges.node.hasOpenedOneTab - true if the user
+ *   has opened one or more tabs.
+ * @return {integer} The number of recruits in the returned set who
+ *   have opened one or more tabs.
+ */
+export const getRecruitsWithAtLeastOneTab = recruitsEdges => {
+  if (!recruitsEdges) {
+    return 0
+  }
+  return filter(recruitsEdges, recruitEdge => recruitEdge.node.hasOpenedOneTab)
+    .length
 }
 
 export default getRecruits

@@ -74,6 +74,7 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import getRecruits, {
   getTotalRecruitsCount,
   getRecruitsActiveForAtLeastOneDay,
+  getRecruitsWithAtLeastOneTab,
 } from '../database/referrals/getRecruits'
 
 import {
@@ -824,6 +825,12 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
         'The count of users recruited who remained active for one day or more',
       resolve: connection =>
         getRecruitsActiveForAtLeastOneDay(connection.edges),
+    },
+    recruitsWithAtLeastOneTab: {
+      type: GraphQLInt,
+      description:
+        'The count of users recruited who have opened one tab or more',
+      resolve: connection => getRecruitsWithAtLeastOneTab(connection.edges),
     },
   },
 })
