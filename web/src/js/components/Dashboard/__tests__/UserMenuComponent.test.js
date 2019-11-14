@@ -39,6 +39,7 @@ const getMockProps = () => {
     },
     app: {},
     isUserAnonymous: false,
+    showCampaignReopenButton: false,
     showSparklySearchIntroButton: false,
     onClickCampaignReopen: jest.fn(),
     onClickSparklySearchIntroButton: jest.fn(),
@@ -571,8 +572,9 @@ describe('User menu component: sparkly search intro button', () => {
 })
 
 describe('User menu component: campaign reopen button', () => {
-  it('displays the campaign reopen button', () => {
+  it('displays the campaign reopen button when the showCampaignReopenButton prop is true', () => {
     const mockProps = getMockProps()
+    mockProps.showCampaignReopenButton = true
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -581,8 +583,20 @@ describe('User menu component: campaign reopen button', () => {
     )
   })
 
+  it('does not display the campaign reopen button when the showCampaignReopenButton prop is false', () => {
+    const mockProps = getMockProps()
+    mockProps.showCampaignReopenButton = false
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="tree-campaign-reopen"]').exists()).toBe(
+      false
+    )
+  })
+
   it('displays the expected number of users recruited in the campaign reopen button text', () => {
     const mockProps = getMockProps()
+    mockProps.showCampaignReopenButton = true
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
@@ -599,6 +613,7 @@ describe('User menu component: campaign reopen button', () => {
 
   it('displays the tree icon the campaign reopen button text', () => {
     const mockProps = getMockProps()
+    mockProps.showCampaignReopenButton = true
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
@@ -613,6 +628,7 @@ describe('User menu component: campaign reopen button', () => {
 
   it('calls the onClickCampaignReopen prop when clicked', () => {
     const mockProps = getMockProps()
+    mockProps.showCampaignReopenButton = true
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default

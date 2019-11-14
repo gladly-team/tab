@@ -1298,6 +1298,16 @@ describe('Dashboard component: campaign reopen click', () => {
     hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
   })
 
+  it('passes showCampaignReopenButton === true to the UserMenu when hasUserDismissedCampaignRecently is true', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
+    expect(wrapper.find(UserMenu).prop('showCampaignReopenButton')).toBe(true)
+    wrapper.setState({ hasUserDismissedCampaignRecently: false })
+    expect(wrapper.find(UserMenu).prop('showCampaignReopenButton')).toBe(false)
+  })
+
   it('reopens the campaign when the UserMenu calls the onClickCampaignReopen function', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default

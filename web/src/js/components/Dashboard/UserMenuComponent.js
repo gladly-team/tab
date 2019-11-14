@@ -87,6 +87,7 @@ class UserMenu extends React.Component {
       onClickCampaignReopen,
       onClickSparklySearchIntroButton,
       showSparklySearchIntroButton,
+      showCampaignReopenButton,
     } = this.props
     const numUsersRecruitedForCampaign = get(
       user,
@@ -220,24 +221,32 @@ class UserMenu extends React.Component {
             </div>
           ) : null}
           {/* Remove when tree campaign is no longer live */}
-          <div
-            data-test-id={'tree-campaign-reopen'}
-            style={{ marginRight: 0, display: 'flex', flexDirection: 'row' }}
-            onClick={onClickCampaignReopen}
-          >
-            <Typography variant={'h2'} className={classes.treeText}>
-              {numUsersRecruitedForCampaign}
-            </Typography>
-            <TreeIcon className={classes.treeIcon} />
-          </div>
-          <CircleIcon
-            style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-            }}
-            classes={{
-              root: classes.circleIcon,
-            }}
-          />
+          {showCampaignReopenButton ? (
+            <>
+              <div
+                data-test-id={'tree-campaign-reopen'}
+                style={{
+                  marginRight: 0,
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}
+                onClick={onClickCampaignReopen}
+              >
+                <Typography variant={'h2'} className={classes.treeText}>
+                  {numUsersRecruitedForCampaign}
+                </Typography>
+                <TreeIcon className={classes.treeIcon} />
+              </div>
+              <CircleIcon
+                style={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                }}
+                classes={{
+                  root: classes.circleIcon,
+                }}
+              />
+            </>
+          ) : null}
           <MoneyRaised
             app={app}
             dropdown={({ open, onClose, anchorElement }) => (
