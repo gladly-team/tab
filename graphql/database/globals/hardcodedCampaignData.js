@@ -9,10 +9,17 @@ const campaigns = {
       end: '2020-01-10T20:00:00.000Z',
     },
   },
+  treePlanting2019: {
+    campaignId: 'treePlanting2019',
+    time: {
+      start: '2019-11-14T18:00:00.000Z',
+      end: '2020-01-10T24:00:00.000Z',
+    },
+  },
 }
 
 // Hardcode the currently-active campaign here.
-const CURRENT_CAMPAIGN = campaigns.testNov2019
+const CURRENT_CAMPAIGN = campaigns.treePlanting2019
 
 /**
  * Return the hardcoded campaign info for the current campaign.
