@@ -99,15 +99,14 @@ describe('getCampaign', () => {
     })
   })
 
-  // TODO: revert this after testing out Redis.
-  // it('does not call Redis when the campaign is not live', async () => {
-  //   expect.assertions(1)
-  //   getCurrentCampaignHardcodedData.mockReturnValue(
-  //     getMockHardcodedCampaignInfo({ isLive: false })
-  //   )
-  //   await getCampaign()
-  //   expect(callRedis).not.toHaveBeenCalled()
-  // })
+  it('does not call Redis when the campaign is not live', async () => {
+    expect.assertions(1)
+    getCurrentCampaignHardcodedData.mockReturnValue(
+      getMockHardcodedCampaignInfo({ isLive: false })
+    )
+    await getCampaign()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
 
   it('logs an error if Redis throws and return null for Redis items', async () => {
     expect.assertions(1)
