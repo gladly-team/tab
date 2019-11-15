@@ -299,7 +299,8 @@ describe('local user data manager', () => {
   })
 
   it('returns false if the user has not dismissed a notification recently', () => {
-    const now = moment('2018-04-01T12:50:42.000') // ~12 days ago
+    // const now = moment('2018-04-01T12:50:42.000') // ~12 days ago
+    const now = moment('2018-02-01T12:50:42.000') // ~2 months ago
     localStorageMgr.setItem(
       'tab.user.notifications.dismissTime',
       now.utc().toISOString()
@@ -389,6 +390,17 @@ describe('local user data manager', () => {
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.campaign.dismissTime',
       moment.utc().toISOString()
+    )
+  })
+
+  // removeCampaignDismissTime method
+  it('sets the notification dismiss time timestamp in localStorage', () => {
+    const {
+      removeCampaignDismissTime,
+    } = require('js/utils/local-user-data-mgr')
+    removeCampaignDismissTime()
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.user.campaign.dismissTime'
     )
   })
 

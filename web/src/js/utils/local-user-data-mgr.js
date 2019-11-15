@@ -210,7 +210,8 @@ export const hasUserDismissedNotificationRecently = () => {
   return (
     moment()
       .utc()
-      .diff(dismissTime, 'days') < 10
+      // TODO: revert this to 10 days after we end the tree planting campaign.
+      .diff(dismissTime, 'days') < 60
   )
 }
 
@@ -265,6 +266,14 @@ export const setCampaignDismissTime = () => {
     STORAGE_CAMPAIGN_DISMISS_TIME,
     moment.utc().toISOString()
   )
+}
+
+/**
+ * Deletes the time the user dismissed a campaign.
+ * @returns {undefined}
+ */
+export const removeCampaignDismissTime = () => {
+  localStorageMgr.removeItem(STORAGE_CAMPAIGN_DISMISS_TIME)
 }
 
 /**

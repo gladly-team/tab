@@ -31,6 +31,7 @@ import {
   setUserClickedNewTabSearchIntroNotif,
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
+  removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
   CHROME_BROWSER,
@@ -309,6 +310,13 @@ class Dashboard extends React.Component {
                   this.setState({
                     userClickedSearchIntroV2: true,
                   })
+                }}
+                showCampaignReopenButton={hasUserDismissedCampaignRecently}
+                onClickCampaignReopen={() => {
+                  this.setState({
+                    hasUserDismissedCampaignRecently: false,
+                  })
+                  removeCampaignDismissTime()
                 }}
               />
               {this.state.showNotification ? (
