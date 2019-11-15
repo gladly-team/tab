@@ -210,7 +210,8 @@ export const hasUserDismissedNotificationRecently = () => {
   return (
     moment()
       .utc()
-      .diff(dismissTime, 'days') < 10
+      // TODO: revert this to 10 days after we end the tree planting campaign.
+      .diff(dismissTime, 'days') < 60
   )
 }
 
