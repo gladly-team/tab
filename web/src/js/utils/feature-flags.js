@@ -19,3 +19,5 @@ export const isBingJSAdsProductionMode = () =>
   process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE === 'true'
 
 export const showSearchIntroductionMessage = () => false
+
+export const requestEUAdPersonalization = () => true
