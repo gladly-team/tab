@@ -19,3 +19,11 @@ export const isBingJSAdsProductionMode = () =>
   process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE === 'true'
 
 export const showSearchIntroductionMessage = () => false
+
+// Note: disabled until we resolve the cross-domain problems
+// for the consent data cookies with unset SameSite values.
+// The CMP fails to store cookies on the new tab page in Chrome,
+// because Chrome now requires the SameSite value to be set for
+// third-party cookies, and the new tab page is a different
+// domain.
+export const requestEUAdPersonalization = () => false

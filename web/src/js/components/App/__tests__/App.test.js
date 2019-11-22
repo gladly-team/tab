@@ -7,6 +7,7 @@ import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Helmet } from 'react-helmet'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
+import { requestEUAdPersonalization } from 'js/utils/feature-flags'
 
 jest.mock('js/components/Dashboard/DashboardView')
 jest.mock('js/utils/client-location')
@@ -14,6 +15,7 @@ jest.mock('js/components/General/QuantcastChoiceCMP')
 jest.mock('js/ads/consentManagement')
 jest.mock('js/analytics/withPageviewTracking', () => child => child)
 jest.mock('js/assets/logos/favicon.ico', () => '/tab-favicon.png')
+jest.mock('js/utils/feature-flags')
 
 const getMockProps = () => ({
   location: {
@@ -98,6 +100,26 @@ describe('App.js: general', () => {
 })
 
 describe('App.js: consent management logic', () => {
+  beforeEach(() => {
+    requestEUAdPersonalization.mockReturnValue(true)
+  })
+
+  it('renders the QuantcastChoiceCMP when the CMP feature is enabled', async () => {
+    requestEUAdPersonalization.mockReturnValue(true)
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
+    expect(wrapper.find(QuantcastChoiceCMP).exists()).toBe(true)
+  })
+
+  it('does not render the QuantcastChoiceCMP when the CMP feature is disabled', async () => {
+    requestEUAdPersonalization.mockReturnValue(false)
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
+    expect(wrapper.find(QuantcastChoiceCMP).exists()).toBe(false)
+  })
+
   it('wraps our CMP in an error boundary that ignores caught errors', async () => {
     const App = require('js/components/App/App').default
     const mockProps = getMockProps()
