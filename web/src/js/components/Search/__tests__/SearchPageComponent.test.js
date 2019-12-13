@@ -330,6 +330,18 @@ describe('Search page component', () => {
     })
   })
 
+  it('auto-focuses to the search input', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
+      .dive()
+      .dive()
+    expect(wrapper.find(Input).prop('autoFocus')).toBe(true)
+  })
+
   it('shows the search text in the box when loading a previous search', () => {
     isSearchPageEnabled.mockReturnValue(true)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
