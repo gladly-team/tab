@@ -366,6 +366,7 @@ class SearchPage extends React.Component {
                   // we may rapidly replace it with the query on first render.
                   mounted ? 'Search to raise money for charity...' : ''
                 }
+                autoFocus // In the future, we might want to blur when the query exists.
                 disableUnderline
                 fullWidth
                 classes={{
