@@ -39,15 +39,15 @@ describe('FirstSearchView', function() {
     expect(replaceUrl).toHaveBeenCalledWith('/search', expect.any(Object))
   })
 
-  it('sets the search query ("q" URL param) the expected first query for new users', () => {
-    const FirstSearchView = require('js/components/Search/FirstSearchView')
-      .default
-    detectSupportedBrowser.mockReturnValue('chrome')
-    shallow(<FirstSearchView {...getMockProps()} />)
-    expect(replaceUrl.mock.calls[0][1]).toMatchObject({
-      q: 'How many searches do people make every day?',
-    })
-  })
+  // it('sets the search query ("q" URL param) the expected first query for new users', () => {
+  //   const FirstSearchView = require('js/components/Search/FirstSearchView')
+  //     .default
+  //   detectSupportedBrowser.mockReturnValue('chrome')
+  //   shallow(<FirstSearchView {...getMockProps()} />)
+  //   expect(replaceUrl.mock.calls[0][1]).toMatchObject({
+  //     q: 'How many searches do people make every day?',
+  //   })
+  // })
 
   it('sets the "src" URL param to "chrome" when the browser is Chrome', () => {
     const FirstSearchView = require('js/components/Search/FirstSearchView')
