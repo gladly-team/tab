@@ -23,6 +23,8 @@ require('dotenv-extended').load({
 // eslint-disable-next-line no-unused-vars
 const fixIncorrectReferrerDec2019 = async () => {
   console.log('Fixing incorrect referrer data logs from December 2019.')
+
+  // eslint-disable-next-line import/no-unresolved
   const affectedIds = require('./DBActionHelpers').fixIncorrectReferrerDec2019AllIds()
   const logs = await ReferralDataModel.getBatch(adminAccess, affectedIds)
   console.log(`Number of logs: ${logs.length}`)
