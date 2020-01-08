@@ -20,16 +20,42 @@ require('dotenv-extended').load({
   defaults: path.join(__dirname, '../../', '.env'),
 })
 
+// eslint-disable-next-line no-unused-vars
 const fixIncorrectReferrerDec2019 = async () => {
   console.log('Fixing incorrect referrer data logs from December 2019.')
-  const testId = require('./DBActionHelpers').fixIncorrectReferrerDec2019TestId()
-  const info = await ReferralDataModel.get(adminAccess, testId)
-  console.log(info)
+  const affectedIds = require('./DBActionHelpers').fixIncorrectReferrerDec2019AllIds()
+  const logs = await ReferralDataModel.getBatch(adminAccess, affectedIds)
+  console.log(`Number of logs: ${logs.length}`)
+
+  // Update the referring channel.
+  try {
+    await Promise.all(
+      logs.map(async item => {
+        const updatedItem = {
+          ...item,
+          referringChannel: '305',
+        }
+        try {
+          await ReferralDataModel.update(adminAccess, updatedItem)
+        } catch (e) {
+          throw e
+        }
+      })
+    )
+  } catch (e) {
+    throw e
+  }
+
+  console.log('Finished.')
 }
 
-const main = () => {
-  // Modify this.
-  fixIncorrectReferrerDec2019()
+const main = async () => {
+  try {
+    // Add code here.
+    console.log('Add code to the `main` function to run a script.')
+  } catch (e) {
+    throw e
+  }
 }
 
 main()
