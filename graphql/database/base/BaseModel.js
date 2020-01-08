@@ -415,7 +415,7 @@ class BaseModel {
   /**
    * Update an item.
    * @param {Object} userContext - The authed user context
-   * @param {Object} item - The item to create
+   * @param {Object} item - The item to update
    * @param {(Object|null)} params - The update options, including conditional
    *   update expressions. See:
    *   http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html#Expressions.ConditionExpressions.SimpleComparisons

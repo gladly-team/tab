@@ -2,8 +2,9 @@ import { mapValues } from 'lodash/object'
 import config from '../config'
 
 const tableNameAppendix = config.DB_TABLE_NAME_APPENDIX
-  ? config.DB_TABLE_NAME_APPENDIX
-  : ''
+if (tableNameAppendix === undefined) {
+  throw new Error(`The env variable "DB_TABLE_NAME_APPENDIX" must be defined.`)
+}
 
 const tables = {
   users: 'Users',
