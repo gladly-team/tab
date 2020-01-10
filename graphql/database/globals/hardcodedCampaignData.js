@@ -29,7 +29,7 @@ const campaigns = {
 }
 
 // Hardcode the currently-active campaign here.
-const CURRENT_CAMPAIGN = campaigns.treePlanting2019
+const CURRENT_CAMPAIGN = campaigns.australiaJan2020
 
 /**
  * Return the hardcoded campaign info for the current campaign.
