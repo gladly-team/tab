@@ -578,9 +578,7 @@ describe('User menu component: campaign reopen button', () => {
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="tree-campaign-reopen"]').exists()).toBe(
-      true
-    )
+    expect(wrapper.find('[data-test-id="campaign-reopen"]').exists()).toBe(true)
   })
 
   it('does not display the campaign reopen button when the showCampaignReopenButton prop is false', () => {
@@ -589,41 +587,9 @@ describe('User menu component: campaign reopen button', () => {
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="tree-campaign-reopen"]').exists()).toBe(
+    expect(wrapper.find('[data-test-id="campaign-reopen"]').exists()).toBe(
       false
     )
-  })
-
-  it('displays the expected number of users recruited in the campaign reopen button text', () => {
-    const mockProps = getMockProps()
-    mockProps.showCampaignReopenButton = true
-    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find('[data-test-id="tree-campaign-reopen"]')
-        .find(Typography)
-        .first()
-        .render()
-        .text()
-    ).toEqual('182')
-  })
-
-  it('displays the tree icon the campaign reopen button text', () => {
-    const mockProps = getMockProps()
-    mockProps.showCampaignReopenButton = true
-    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find('[data-test-id="tree-campaign-reopen"]')
-        .find(TreeIcon)
-        .exists()
-    ).toBe(true)
   })
 
   it('calls the onClickCampaignReopen prop when clicked', () => {
@@ -634,7 +600,7 @@ describe('User menu component: campaign reopen button', () => {
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
     expect(mockProps.onClickCampaignReopen).not.toHaveBeenCalled()
-    wrapper.find('[data-test-id="tree-campaign-reopen"]').simulate('click')
+    wrapper.find('[data-test-id="campaign-reopen"]').simulate('click')
     expect(mockProps.onClickCampaignReopen).toHaveBeenCalledTimes(1)
   })
 })

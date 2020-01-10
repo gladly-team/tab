@@ -14,14 +14,6 @@ export default createFragmentContainer(UserMenu, {
     fragment UserMenuContainer_user on User {
       ...HeartsContainer_user
       ...HeartsDropdownContainer_user
-      # Remove this after the tree campaign ends.
-      recruits(
-        first: 5000
-        startTime: "2019-11-14T18:00:00.000Z"
-        endTime: "2020-01-10T24:00:00.000Z"
-      ) {
-        recruitsWithAtLeastOneTab
-      }
     }
   `,
 })
