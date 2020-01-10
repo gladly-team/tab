@@ -236,19 +236,20 @@ const CampaignBase = props => (
   <MuiThemeProvider
     theme={{
       ...defaultTheme,
-      palette: {
-        ...defaultTheme.palette,
-        primary: {
-          ...defaultTheme.palette.primary,
-          main: '#028502',
-          light: '#0aac0a',
-        },
-        secondary: {
-          ...defaultTheme.palette.secondary,
-          main: '#028502',
-          light: '#0aac0a',
-        },
-      },
+      // E.g., this is themed green.
+      // palette: {
+      //   ...defaultTheme.palette,
+      //   primary: {
+      //     ...defaultTheme.palette.primary,
+      //     main: '#028502',
+      //     light: '#0aac0a',
+      //   },
+      //   secondary: {
+      //     ...defaultTheme.palette.secondary,
+      //     main: '#028502',
+      //     light: '#0aac0a',
+      //   },
+      // },
     }}
   >
     <CampaignBaseContentWithTheme {...props} />
