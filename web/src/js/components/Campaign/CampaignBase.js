@@ -49,7 +49,7 @@ const CampaignBaseContent = props => {
                 marginTop: 4,
               }}
             >
-              Thank You for Supporting Australian Bushfire Relief
+              Thank You for Supporting Australia
             </Typography>
             <div
               style={{
@@ -58,35 +58,39 @@ const CampaignBaseContent = props => {
               }}
             >
               <Typography variant={'body2'} gutterBottom>
+                Thank you for helping provide some relief from the Australian
+                bushfires.
+              </Typography>
+              <Typography variant={'body2'} gutterBottom>
                 With your help, the Australian Red Cross and the World Wildlife
                 Foundation will work tirelessly to support the people, animals,
                 and environment affected by these catastrophic megafires.
               </Typography>
-              <Typography>
-                <span style={{ fontWeight: 'bold' }}>
-                  Your tabs, more causes:
-                </span>{' '}
-                Throughout 2019, we'll be highlighting the work of different
-                charities in this{' '}
-                <a
-                  href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={anchorStyle}
-                >
-                  Charity Spotlight
-                </a>
-                . Learn more and nominate your favorite charity{' '}
-                <a
-                  href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={anchorStyle}
-                >
-                  here
-                </a>
-                .
-              </Typography>
+              {/* <Typography> */}
+              {/*   <span style={{ fontWeight: 'bold' }}> */}
+              {/*     Your tabs, more causes: */}
+              {/*   </span>{' '} */}
+              {/*   Throughout 2019, we'll be highlighting the work of different */}
+              {/*   charities in this{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     Charity Spotlight */}
+              {/*   </a> */}
+              {/*   . Learn more and nominate your favorite charity{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     here */}
+              {/*   </a> */}
+              {/*   . */}
+              {/* </Typography> */}
             </div>
           </div>
         ),
