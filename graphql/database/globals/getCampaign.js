@@ -5,6 +5,7 @@ import logger from '../../utils/logger'
 
 const createCampaign = data => ({
   campaignId: data.campaignId,
+  countNewUsers: data.countNewUsers,
 
   /**
    * Return the Redis key used to store the new user count during this
@@ -54,16 +55,18 @@ const getCampaign = async () => {
   // Default to zero if the item doesn't exist or fails to
   // fetch.
   let numNewUsers = 0
-  try {
-    numNewUsers = await callRedis({
-      operation: 'GET',
-      key: campaign.getNewUsersRedisKey(),
-    })
-    if (!numNewUsers) {
-      numNewUsers = 0
+  if (campaign.countNewUsers) {
+    try {
+      numNewUsers = await callRedis({
+        operation: 'GET',
+        key: campaign.getNewUsersRedisKey(),
+      })
+      if (!numNewUsers) {
+        numNewUsers = 0
+      }
+    } catch (e) {
+      logger.error(e)
     }
-  } catch (e) {
-    logger.error(e)
   }
 
   return {

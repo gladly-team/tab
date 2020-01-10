@@ -4,6 +4,7 @@
 const campaigns = {
   testNov2019: {
     campaignId: 'testNov2019',
+    countNewUsers: true,
     time: {
       start: '2019-11-12T10:00:00.000Z',
       end: '2020-01-10T20:00:00.000Z',
@@ -11,9 +12,18 @@ const campaigns = {
   },
   treePlanting2019: {
     campaignId: 'treePlanting2019',
+    countNewUsers: true,
     time: {
       start: '2019-11-14T18:00:00.000Z',
       end: '2020-01-10T24:00:00.000Z',
+    },
+  },
+  australiaJan2020: {
+    campaignId: 'australiaJan2020',
+    countNewUsers: false,
+    time: {
+      start: '2020-01-21T20:00:00.000Z',
+      end: '2020-01-11T00:01:00.000Z',
     },
   },
 }

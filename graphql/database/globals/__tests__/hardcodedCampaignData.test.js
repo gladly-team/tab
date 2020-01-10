@@ -6,6 +6,7 @@ describe('getCurrentCampaignHardcodedData', () => {
     expect.assertions(1)
     expect(getCurrentCampaignHardcodedData()).toEqual({
       campaignId: expect.any(String),
+      countNewUsers: expect.any(Boolean),
       isLive: expect.any(Boolean),
       time: {
         start: expect.any(String),

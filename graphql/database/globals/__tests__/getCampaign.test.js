@@ -26,6 +26,7 @@ const getMockHardcodedCampaignInfo = ({
   ...otherProps
 } = {}) => ({
   campaignId,
+  countNewUsers: true,
   isLive: true,
   time: {
     start: '2019-11-12T10:00:00.000Z',
@@ -87,16 +88,33 @@ describe('getCampaign', () => {
     expect((await getCampaign()).id).toBeUndefined()
   })
 
-  it('calls Redis to get the "numNewUsers" value when the campaign is live', async () => {
+  it('calls Redis to get the "numNewUsers" value when the campaign is live and requires a new user count', async () => {
     expect.assertions(1)
     getCurrentCampaignHardcodedData.mockReturnValue(
-      getMockHardcodedCampaignInfo({ campaignId: 'foobar', isLive: true })
+      getMockHardcodedCampaignInfo({
+        campaignId: 'foobar',
+        countNewUsers: true,
+        isLive: true,
+      })
     )
     await getCampaign()
     expect(callRedis).toHaveBeenCalledWith({
       operation: 'GET',
       key: 'campaign:foobar:newUsers',
     })
+  })
+
+  it('does not call Redis to get the "numNewUsers" value when the campaign does not require a new user count', async () => {
+    expect.assertions(1)
+    getCurrentCampaignHardcodedData.mockReturnValue(
+      getMockHardcodedCampaignInfo({
+        campaignId: 'foobar',
+        countNewUsers: false,
+        isLive: true,
+      })
+    )
+    await getCampaign()
+    expect(callRedis).not.toHaveBeenCalled()
   })
 
   it('does not call Redis when the campaign is not live', async () => {
@@ -160,6 +178,7 @@ describe('getCampaignObject', () => {
     expect.assertions(1)
     expect(getCampaignObject()).toEqual({
       campaignId: expect.any(String),
+      countNewUsers: expect.any(Boolean),
       isLive: expect.any(Boolean),
       getNewUsersRedisKey: expect.any(Function),
       isActive: expect.any(Function),
