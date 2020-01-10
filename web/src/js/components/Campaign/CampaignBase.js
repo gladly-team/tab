@@ -39,7 +39,7 @@ const CampaignBaseContent = props => {
           start: moment(campaignStartTimeISO),
           end: moment(campaignEndTimeISO),
         },
-        heartsGoal: 5e6,
+        heartsGoal: 6e6,
         endContent: (
           <div>
             <Typography
@@ -49,7 +49,7 @@ const CampaignBaseContent = props => {
                 marginTop: 4,
               }}
             >
-              Thank You for Taking Climate Action!
+              Thank You for Supporting Australian Bushfire Relief
             </Typography>
             <div
               style={{
@@ -58,18 +58,9 @@ const CampaignBaseContent = props => {
               }}
             >
               <Typography variant={'body2'} gutterBottom>
-                With your help, the{' '}
-                <a
-                  href="https://www.rainforest-alliance.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={anchorStyle}
-                >
-                  Rainforest Alliance
-                </a>{' '}
-                will continue their work protecting Earth’s forests and climate
-                through improving supply chains, advocating for policy change,
-                and spreading sustainable agriculture practices.{' '}
+                With your help, the Australian Red Cross and the World Wildlife
+                Foundation will work tirelessly to support the people, animals,
+                and environment affected by these catastrophic megafires.
               </Typography>
               <Typography>
                 <span style={{ fontWeight: 'bold' }}>
@@ -109,7 +100,7 @@ const CampaignBaseContent = props => {
           marginTop: 4,
         }}
       >
-        September Spotlight: Rainforest Alliance
+        Australian Bushfire Emergency
       </Typography>
       <div
         style={{
@@ -118,43 +109,36 @@ const CampaignBaseContent = props => {
         }}
       >
         <Typography variant={'body2'} gutterBottom>
-          This month, Tabbers selected the{' '}
+          The fires in Australia are devastating – and the crisis is still
+          ongoing.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          More than 10 million hectares have been burnt, and this number
+          continues to climb. That’s the equivalent of 40% of the entire United
+          Kingdom. Lives, homes, and up to one billion animals have been
+          affected.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          To help, we will be supporting the efforts of the{' '}
           <a
-            href="https://www.rainforest-alliance.org"
+            href="https://www.redcross.org.au/news-and-media/news/bushfire-response-10-jan-2020"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            Rainforest Alliance
+            Australian Red Cross
           </a>{' '}
-          for our{' '}
+          and the{' '}
           <a
-            href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+            href="https://support.wwf.org.uk/australia-bushfires"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            Charity Spotlight
+            World Wildlife Foundation
           </a>
-          , a group of companies, farmers, foresters, and consumers committed to
-          creating a world where people and nature thrive in harmony.
-        </Typography>
-        <Typography variant={'body2'} gutterBottom>
-          Want to do more against the climate crisis? On Sept 20 and 27, people
-          are walking out of their schools and workplaces to join a youth-led{' '}
-          <a
-            href="https://globalclimatestrike.net"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={anchorStyle}
-          >
-            #ClimateStrike
-          </a>{' '}
-          demanding that leaders respond to this emergency.
-        </Typography>
-        <Typography variant={'body2'} gutterBottom>
-          Join us in supporting the Rainforest Alliance and action against
-          climate change!
+          . All hearts donated will be split 50/50 between the organizations.
+          Thanks!
         </Typography>
       </div>
     </HeartDonationCampaign>
