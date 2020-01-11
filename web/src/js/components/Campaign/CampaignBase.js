@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import { withTheme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
-import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
+import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import theme from 'js/theme/defaultV1'
@@ -23,9 +24,14 @@ const CampaignBaseContent = props => {
     campaignEndTimeISO,
   } = props
 
+  const anchorStyle = {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+  }
+
   // Hardcode campaign component here when running one.
   const currentCampaign = (
-    <TreePlantingCampaign
+    <HeartDonationCampaign
       app={app}
       user={user}
       campaign={{
@@ -33,10 +39,113 @@ const CampaignBaseContent = props => {
           start: moment(campaignStartTimeISO),
           end: moment(campaignEndTimeISO),
         },
-        treesPlantedGoal: 30000,
+        heartsGoal: 6e6,
+        endContent: (
+          <div>
+            <Typography
+              variant={'h6'}
+              style={{
+                textAlign: 'center',
+                marginTop: 4,
+              }}
+            >
+              Thank You for Supporting Australia
+            </Typography>
+            <div
+              style={{
+                margin: '14px 10px 20px',
+                textAlign: 'left',
+              }}
+            >
+              <Typography variant={'body2'} gutterBottom>
+                Thank you for helping provide some relief from the Australian
+                bushfires.
+              </Typography>
+              <Typography variant={'body2'} gutterBottom>
+                With your help, the Australian Red Cross and the World Wildlife
+                Foundation will work tirelessly to support the people, animals,
+                and environment affected by these catastrophic megafires.
+              </Typography>
+              {/* <Typography> */}
+              {/*   <span style={{ fontWeight: 'bold' }}> */}
+              {/*     Your tabs, more causes: */}
+              {/*   </span>{' '} */}
+              {/*   Throughout 2019, we'll be highlighting the work of different */}
+              {/*   charities in this{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     Charity Spotlight */}
+              {/*   </a> */}
+              {/*   . Learn more and nominate your favorite charity{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     here */}
+              {/*   </a> */}
+              {/*   . */}
+              {/* </Typography> */}
+            </div>
+          </div>
+        ),
       }}
       showError={props.showError}
-    />
+    >
+      <Typography
+        variant={'h6'}
+        style={{
+          textAlign: 'center',
+          marginTop: 4,
+        }}
+      >
+        Australian Bushfire Emergency
+      </Typography>
+      <div
+        style={{
+          margin: '14px 10px 20px',
+          textAlign: 'left',
+        }}
+      >
+        <Typography variant={'body2'} gutterBottom>
+          The fires in Australia are devastating – and the crisis is still
+          ongoing.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          More than 10 million hectares have been burnt, and this number
+          continues to climb. That’s the equivalent of 40% of the entire United
+          Kingdom. Lives, homes, and up to one billion animals have been
+          affected.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          To help, we will be supporting the efforts of the{' '}
+          <a
+            href="https://www.redcross.org.au/news-and-media/news/bushfire-response-10-jan-2020"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={anchorStyle}
+          >
+            Australian Red Cross
+          </a>{' '}
+          and the{' '}
+          <a
+            href="https://support.wwf.org.uk/australia-bushfires"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={anchorStyle}
+          >
+            World Wildlife Foundation
+          </a>
+          . All hearts donated will be split 50/50 between the organizations.
+          Thanks!
+        </Typography>
+      </div>
+    </HeartDonationCampaign>
   )
 
   return (
@@ -115,19 +224,20 @@ const CampaignBase = props => (
   <MuiThemeProvider
     theme={{
       ...defaultTheme,
-      palette: {
-        ...defaultTheme.palette,
-        primary: {
-          ...defaultTheme.palette.primary,
-          main: '#028502',
-          light: '#0aac0a',
-        },
-        secondary: {
-          ...defaultTheme.palette.secondary,
-          main: '#028502',
-          light: '#0aac0a',
-        },
-      },
+      // E.g., this is themed green.
+      // palette: {
+      //   ...defaultTheme.palette,
+      //   primary: {
+      //     ...defaultTheme.palette.primary,
+      //     main: '#028502',
+      //     light: '#0aac0a',
+      //   },
+      //   secondary: {
+      //     ...defaultTheme.palette.secondary,
+      //     main: '#028502',
+      //     light: '#0aac0a',
+      //   },
+      // },
     }}
   >
     <CampaignBaseContentWithTheme {...props} />

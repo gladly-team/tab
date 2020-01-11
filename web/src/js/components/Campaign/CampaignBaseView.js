@@ -11,9 +11,9 @@ class CampaignBaseView extends React.Component {
     const { authUser } = this.props
     const userId = authUser ? authUser.id : null
 
-    const CAMPAIGN_START_TIME_ISO = '2019-11-14T18:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2020-01-10T24:00:00.000Z'
-    // const CHARITY_ID = 'b92989f8-2771-421a-b170-a39d4e765dab'
+    const CAMPAIGN_START_TIME_ISO = '2020-01-10T22:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2020-01-21T20:00:00.000Z'
+    const CHARITY_ID = '8fe59fad-9055-4439-a1ea-2a4e734282ef'
 
     return (
       <QueryRendererWithUser
@@ -22,22 +22,22 @@ class CampaignBaseView extends React.Component {
         query={graphql`
           query CampaignBaseViewQuery(
             $userId: String!
-            # $charityId: String!
+            $charityId: String!
             $startTime: String!
             $endTime: String!
           ) {
             app {
-              ...TreePlantingCampaignContainer_app
+              ...HeartDonationCampaignContainer_app
+                @arguments(startTime: $startTime, endTime: $endTime)
             }
             user(userId: $userId) {
-              ...TreePlantingCampaignContainer_user
-                @arguments(startTime: $startTime, endTime: $endTime)
+              ...HeartDonationCampaignContainer_user
             }
           }
         `}
         variables={{
           userId: userId,
-          // charityId: CHARITY_ID,
+          charityId: CHARITY_ID,
           startTime: CAMPAIGN_START_TIME_ISO,
           endTime: CAMPAIGN_END_TIME_ISO,
         }}

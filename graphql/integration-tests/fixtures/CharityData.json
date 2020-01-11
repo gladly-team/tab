@@ -251,5 +251,19 @@
     "updated": "2019-09-20T10:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "8fe59fad-9055-4439-a1ea-2a4e734282ef",
+    "name": "Australian Bushfire Emergency Relief",
+    "category": "The Environment",
+    "logo": "placeholder.png",
+    "image": "australian-bushfire-relief.jpg",
+    "website": "https://support.wwf.org.uk/australia-bushfires",
+    "impact": "With your help, the Australian Red Cross and the World Wildlife Foundation will work tirelessly to support the people, animals, and environment affected by these catastrophic megafires. Thanks for your support!",
+    "description": "Responds to the Australian bushfire crisis",
+    "created": "2020-01-10T10:00:000Z",
+    "updated": "2020-01-10T10:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]

@@ -33,7 +33,7 @@ import {
   UNSUPPORTED_BROWSER,
 } from 'js/constants'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
-import TreeIcon from 'mdi-material-ui/PineTree'
+import StarIcon from '@material-ui/icons/Star'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -89,11 +89,6 @@ class UserMenu extends React.Component {
       showSparklySearchIntroButton,
       showCampaignReopenButton,
     } = this.props
-    const numUsersRecruitedForCampaign = get(
-      user,
-      'recruits.recruitsWithAtLeastOneTab',
-      0
-    )
     return (
       <MuiThemeProvider
         theme={{
@@ -220,11 +215,10 @@ class UserMenu extends React.Component {
               </ErrorBoundary>
             </div>
           ) : null}
-          {/* Remove when tree campaign is no longer live */}
           {showCampaignReopenButton ? (
             <>
               <div
-                data-test-id={'tree-campaign-reopen'}
+                data-test-id={'campaign-reopen'}
                 style={{
                   marginRight: 0,
                   display: 'flex',
@@ -232,10 +226,7 @@ class UserMenu extends React.Component {
                 }}
                 onClick={onClickCampaignReopen}
               >
-                <Typography variant={'h2'} className={classes.treeText}>
-                  {numUsersRecruitedForCampaign}
-                </Typography>
-                <TreeIcon className={classes.treeIcon} />
+                <StarIcon className={classes.treeIcon} />
               </div>
               <CircleIcon
                 style={{
@@ -345,11 +336,7 @@ UserMenu.propTypes = {
   onClickCampaignReopen: PropTypes.func,
   onClickSparklySearchIntroButton: PropTypes.func,
   showSparklySearchIntroButton: PropTypes.bool,
-  user: PropTypes.shape({
-    recruits: PropTypes.shape({
-      recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
-    }).isRequired,
-  }).isRequired,
+  user: PropTypes.shape({}).isRequired,
 }
 
 UserMenu.defaultProps = {
