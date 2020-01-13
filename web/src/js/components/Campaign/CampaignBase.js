@@ -141,8 +141,13 @@ const CampaignBaseContent = props => {
           >
             World Wildlife Foundation
           </a>
-          . All hearts donated will be split 50/50 between the organizations.
+          . All hearts donated will be split between the two organizations.
           Thanks!
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          <span style={{ fontWeight: 'bold' }}>Update:</span> We quickly
+          surpassed our initial goal (great job!), but heart donations are still
+          welcome.
         </Typography>
       </div>
     </HeartDonationCampaign>
