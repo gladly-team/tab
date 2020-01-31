@@ -323,11 +323,12 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Give us your thoughts!`}
-                  message={`
-                        As we look forward to 2020 and beyond, we'd love to hear about your Tab for a Cause experience and how we can make it better.`}
-                  buttonText={'Take the Survey'}
-                  buttonURL={'https://forms.gle/V9tMTrSa4rvhDHoS9'}
+                  title={`Nominate a Nonprofit`}
+                  message={`Have a charity you'd like us to feature in our monthly Charity Spotlight? Let us know!`}
+                  buttonText={'Nominate'}
+                  buttonURL={
+                    'https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/'
+                  }
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
