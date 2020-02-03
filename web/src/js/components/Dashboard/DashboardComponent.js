@@ -62,6 +62,7 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
+import { fetchAds } from 'tab-ads'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -113,6 +114,15 @@ class Dashboard extends React.Component {
     this.determineAnonymousStatus()
     this.setState({
       browser: detectSupportedBrowser(),
+    })
+
+    console.log('Fetching ads from tab-ads.')
+    fetchAds({
+      adUnits: [
+        {
+          adId: 'some-ad-id',
+        },
+      ],
     })
   }
 
