@@ -195,6 +195,7 @@
       googletag.cmd = googletag.cmd || []
       googletag.cmd.push(() => {
         googletag.pubads().disableInitialLoad()
+        googletag.pubads().setTagForChildDirectedTreatment(0)
       })
 
       var gads = document.createElement('script')
