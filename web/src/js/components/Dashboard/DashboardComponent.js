@@ -68,7 +68,7 @@ import { fetchAds } from 'tab-ads'
 // TODO: load this on mount, making sure the ads code behaves
 // appropriately for a SPA (it should not reload libraries but
 // should re-fetch ads).
-import 'js/ads/ads'
+// import 'js/ads/ads'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -116,7 +116,6 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
 
-    console.log('Fetching ads from tab-ads.')
     fetchAds({
       adUnits: [
         {
