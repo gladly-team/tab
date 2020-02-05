@@ -6,4 +6,8 @@ build-temp
 .env.local
 npm-debug.log
 
+# https://github.com/whitecolor/yalc#keep-it-out-of-git
+.yalc
+yalc.lock
+
 __generated__/
