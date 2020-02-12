@@ -210,7 +210,7 @@ export const hasUserDismissedNotificationRecently = () => {
   return (
     moment()
       .utc()
-      .diff(dismissTime, 'days') < 10
+      .diff(dismissTime, 'days') < 8
   )
 }
 
