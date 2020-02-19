@@ -6,7 +6,7 @@
   "dependencies": {
     "aws-sdk": "^2.457.0",
     "firebase-admin": "^7.3.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
