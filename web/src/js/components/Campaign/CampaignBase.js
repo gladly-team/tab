@@ -49,7 +49,7 @@ const CampaignBaseContent = props => {
                 marginTop: 4,
               }}
             >
-              Thank You for Supporting Australia
+              Thank You for Supporting Earthjustice!
             </Typography>
             <div
               style={{
@@ -58,39 +58,35 @@ const CampaignBaseContent = props => {
               }}
             >
               <Typography variant={'body2'} gutterBottom>
-                Thank you for helping provide some relief from the Australian
-                bushfires.
+                With your help, Earthjustice will continue their work preserving
+                land and wildlife, advancing clean energy, and fighting climate
+                change.
               </Typography>
-              <Typography variant={'body2'} gutterBottom>
-                With your help, the Australian Red Cross and the World Wildlife
-                Foundation will work tirelessly to support the people, animals,
-                and environment affected by these catastrophic megafires.
+              <Typography>
+                <span style={{ fontWeight: 'bold' }}>
+                  Your tabs, more causes:
+                </span>{' '}
+                Throughout 2020, we'll be highlighting the work of different
+                charities in this{' '}
+                <a
+                  href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={anchorStyle}
+                >
+                  Charity Spotlight
+                </a>
+                . Learn more and nominate your favorite charity{' '}
+                <a
+                  href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={anchorStyle}
+                >
+                  here
+                </a>
+                .
               </Typography>
-              {/* <Typography> */}
-              {/*   <span style={{ fontWeight: 'bold' }}> */}
-              {/*     Your tabs, more causes: */}
-              {/*   </span>{' '} */}
-              {/*   Throughout 2019, we'll be highlighting the work of different */}
-              {/*   charities in this{' '} */}
-              {/*   <a */}
-              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
-              {/*     target="_blank" */}
-              {/*     rel="noopener noreferrer" */}
-              {/*     style={anchorStyle} */}
-              {/*   > */}
-              {/*     Charity Spotlight */}
-              {/*   </a> */}
-              {/*   . Learn more and nominate your favorite charity{' '} */}
-              {/*   <a */}
-              {/*     href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/" */}
-              {/*     target="_blank" */}
-              {/*     rel="noopener noreferrer" */}
-              {/*     style={anchorStyle} */}
-              {/*   > */}
-              {/*     here */}
-              {/*   </a> */}
-              {/*   . */}
-              {/* </Typography> */}
             </div>
           </div>
         ),
@@ -104,7 +100,7 @@ const CampaignBaseContent = props => {
           marginTop: 4,
         }}
       >
-        Australian Bushfire Emergency
+        February Spotlight: Earthjustice
       </Typography>
       <div
         style={{
@@ -113,41 +109,27 @@ const CampaignBaseContent = props => {
         }}
       >
         <Typography variant={'body2'} gutterBottom>
-          The fires in Australia are devastating – and the crisis is still
-          ongoing.
-        </Typography>
-        <Typography variant={'body2'} gutterBottom>
-          More than 10 million hectares have been burnt, and this number
-          continues to climb. That’s the equivalent of 40% of the entire United
-          Kingdom. Lives, homes, and up to one billion animals have been
-          affected.
-        </Typography>
-        <Typography variant={'body2'} gutterBottom>
-          To help, we will be supporting the efforts of the{' '}
+          This month, Tabbers selected{' '}
           <a
-            href="https://www.redcross.org.au/news-and-media/news/bushfire-response-10-jan-2020"
+            href="https://earthjustice.org/"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            Australian Red Cross
+            Earthjustice
           </a>{' '}
-          and the{' '}
+          for our{' '}
           <a
-            href="https://support.wwf.org.uk/australia-bushfires"
+            href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            World Wildlife Foundation
+            Charity Spotlight
           </a>
-          . All hearts donated will be split between the two organizations.
-          Thanks!
-        </Typography>
-        <Typography variant={'body2'} gutterBottom>
-          <span style={{ fontWeight: 'bold' }}>Update:</span> We quickly
-          surpassed our initial goal (great job!), but heart donations are still
-          welcome.
+          . Earthjustice wields the power of law and the strength of partnership
+          to protect people's health, to preserve magnificent places and
+          wildlife, to advance clean energy, and to combat climate change.
         </Typography>
       </div>
     </HeartDonationCampaign>
