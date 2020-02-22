@@ -3,6 +3,11 @@ import fetch from 'node-fetch'
 import aws4 from 'aws4'
 import logger from './logger'
 
+// Note: for now, we manually deploy the Redis service whenever
+// we need it and then destroy it when it's unused to reduce costs.
+// To enable the Redis service, make sure it's deployed and active, then
+// provide GraphQL access to it in GraphQL's serverless.yml.
+
 const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
 
 // Key namespaces:
