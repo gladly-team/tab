@@ -11,7 +11,6 @@ import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageCont
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -659,7 +658,6 @@ class Dashboard extends React.Component {
           ) : null}
         </div>
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
-        {user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null}
         {user ? <LogConsentData user={user} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
