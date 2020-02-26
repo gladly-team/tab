@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
+import { isNil } from 'lodash/lang'
 import uuid from 'uuid/v4'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
@@ -61,6 +62,7 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 
 const NewUserTour = lazy(() =>
@@ -69,10 +71,6 @@ const NewUserTour = lazy(() =>
 const CampaignBase = lazy(() =>
   import('js/components/Campaign/CampaignBaseView')
 )
-
-const onAdDisplayed = bidResponse => {
-  console.log('Dashboard onAdDisplayed bid response:', bidResponse)
-}
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -178,6 +176,44 @@ class Dashboard extends React.Component {
       userClickedSearchIntroV1,
       userClickedSearchIntroV2,
     } = this.state
+
+    /*
+     * A handler for AdComponents' onAdDisplayed callbacks, which receives
+     * info about the displayed ad.
+     * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
+     *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
+     * @return {undefined}
+     */
+    const onAdDisplayed = displayedAdInfo => {
+      console.log('Dashboard onAdDisplayed bid response:', displayedAdInfo)
+
+      // No ad was shown.
+      if (!displayedAdInfo) {
+        return
+      }
+
+      const {
+        revenue,
+        encodedRevenue,
+        GAMAdvertiserId,
+        adSize,
+      } = displayedAdInfo
+
+      // Log the revenue from the ad.
+      LogUserRevenueMutation({
+        userId: user.id,
+        revenue,
+        encodedRevenue,
+        GAMAdvertiserId,
+        adSize,
+        // Only send aggregationOperation value if we have more than one
+        // revenue value
+        aggregationOperation:
+          !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
+        tabId,
+        adUnitCode: null, // TODO: pass this in DisplayedAdInfo
+      })
+    }
 
     // Whether or not a campaign should show on the dashboard
     const isCampaignLive = !!(app && app.campaign && app.campaign.isLive)
