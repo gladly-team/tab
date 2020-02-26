@@ -56,6 +56,7 @@ import {
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 
 jest.mock('js/analytics/logEvent')
@@ -68,6 +69,10 @@ jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
+jest.mock('js/mutations/LogUserRevenueMutation')
+jest.mock('uuid/v4', () =>
+  jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
+)
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -547,6 +552,107 @@ describe('Dashboard component: ads logic', () => {
       logLevel: 'debug',
       disableAds: false,
       useMockAds: true,
+    })
+  })
+
+  it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+    const thirdAd = wrapper.find(AdComponent).at(2)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'second-ad-here',
+      revenue: 0.082,
+      encodedRevenue: 'encoded-second-ad',
+      GAMAdvertiserId: 2222,
+      adSize: '300x250',
+    })
+    thirdAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'third-ad-here',
+      revenue: 0.0001472,
+      encodedRevenue: 'encoded-third-ad',
+      GAMAdvertiserId: 3333,
+      adSize: '300x250',
+    })
+
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: null,
+    })
+    expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.082,
+      encodedRevenue: 'encoded-second-ad',
+      GAMAdvertiserId: '2222',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: null,
+    })
+    expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0001472,
+      encodedRevenue: 'encoded-third-ad',
+      GAMAdvertiserId: '3333',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: null,
+    })
+  })
+
+  it('does not call LogUserRevenueMutation when the ad info is null', () => {
+    getNumberOfAdsToShow.mockReturnValue(2)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')(null) // no ad
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: null,
     })
   })
 

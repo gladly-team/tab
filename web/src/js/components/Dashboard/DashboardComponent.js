@@ -204,7 +204,7 @@ class Dashboard extends React.Component {
         userId: user.id,
         revenue,
         encodedRevenue,
-        GAMAdvertiserId,
+        GAMAdvertiserId: GAMAdvertiserId.toString(),
         adSize,
         // Only send aggregationOperation value if we have more than one
         // revenue value
