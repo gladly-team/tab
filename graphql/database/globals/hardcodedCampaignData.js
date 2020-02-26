@@ -26,6 +26,14 @@ const campaigns = {
       end: '2020-01-21T20:00:00.000Z',
     },
   },
+  earthjusticeFeb2020: {
+    campaignId: 'earthJusticeFeb2020',
+    countNewUsers: false,
+    time: {
+      start: '2020-02-22T23:00:00.000Z',
+      end: '2020-02-27T23:00:00.000Z',
+    },
+  },
 }
 
 // Hardcode the currently-active campaign here.
