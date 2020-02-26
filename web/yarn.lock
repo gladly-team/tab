@@ -4364,6 +4364,11 @@ create-react-context@^0.2.2:
     fbjs "^0.8.0"
     gud "^1.0.0"
 
+criteo-direct-rsa-validate@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/criteo-direct-rsa-validate/-/criteo-direct-rsa-validate-1.1.0.tgz#eb2fead0ff0bcbe4f6369213dd5eef455f0e53c4"
+  integrity sha512-7gQ3zX+d+hS/vOxzLrZ4aRAceB7qNJ0VzaGNpcWjDCmtOpASB50USJDupTik/H2nHgiSAA3VNZ3SFuONs8LR9Q==
+
 cross-env@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
@@ -4997,6 +5002,11 @@ discontinuous-range@1.0.0:
   resolved "https://registry.yarnpkg.com/discontinuous-range/-/discontinuous-range-1.0.0.tgz#e38331f0844bba49b9a9cb71c771585aab1bc65a"
   integrity sha1-44Mx8IRLukm5qctxx3FYWqsbxlo=
 
+dlv@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/dlv/-/dlv-1.1.3.tgz#5c198a8a11453596e751494d49874bc7732f2e79"
+  integrity sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==
+
 dns-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/dns-equal/-/dns-equal-1.0.0.tgz#b39e7f1da6eb0a75ba9c17324b34753c47e0654d"
@@ -5167,6 +5177,11 @@ download@^5.0.2:
     got "^6.3.0"
     mkdirp "^0.5.1"
     pify "^2.3.0"
+
+dset@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/dset/-/dset-2.0.1.tgz#a15fff3d1e4d60ac0c95634625cbd5441a76deb1"
+  integrity sha512-nI29OZMRYq36hOcifB6HTjajNAAiBKSXsyWZrq+VniusseuP2OpNlTiYgsaNRSGvpyq5Wjbc2gQLyBdTyWqhnQ==
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -5813,6 +5828,42 @@ express@4.16.4:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
+express@^4.15.4:
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
+  integrity sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g==
+  dependencies:
+    accepts "~1.3.7"
+    array-flatten "1.1.1"
+    body-parser "1.19.0"
+    content-disposition "0.5.3"
+    content-type "~1.0.4"
+    cookie "0.4.0"
+    cookie-signature "1.0.6"
+    debug "2.6.9"
+    depd "~1.1.2"
+    encodeurl "~1.0.2"
+    escape-html "~1.0.3"
+    etag "~1.8.1"
+    finalhandler "~1.1.2"
+    fresh "0.5.2"
+    merge-descriptors "1.0.1"
+    methods "~1.1.2"
+    on-finished "~2.3.0"
+    parseurl "~1.3.3"
+    path-to-regexp "0.1.7"
+    proxy-addr "~2.0.5"
+    qs "6.7.0"
+    range-parser "~1.2.1"
+    safe-buffer "5.1.2"
+    send "0.17.1"
+    serve-static "1.14.1"
+    setprototypeof "1.1.1"
+    statuses "~1.5.0"
+    type-is "~1.6.18"
+    utils-merge "1.0.1"
+    vary "~1.1.2"
+
 express@^4.16.2:
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.0.tgz#288af62228a73f4c8ea2990ba3b791bb87cd4438"
@@ -6384,6 +6435,13 @@ fsevents@^1.2.7:
   dependencies:
     nan "^2.12.1"
     node-pre-gyp "^0.12.0"
+
+fun-hooks@^0.9.5:
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/fun-hooks/-/fun-hooks-0.9.8.tgz#7103beb4a5011697343eabe7b2f92769789087ca"
+  integrity sha512-FZUHodONJBOCCETXnHTSvqnz+pLZiN2ZqbOZsjXIqJRI8AbvTqOJzDTEeMfPzFf8rPuSZnD5EPcbl7yZsEQ/NA==
+  dependencies:
+    typescript-tuple "^2.2.1"
 
 function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
@@ -8893,6 +8951,11 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+lodash@^4.17.15:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
 log-driver@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/log-driver/-/log-driver-1.2.7.tgz#63b95021f0702fedfa2c9bb0a24e7797d71871d8"
@@ -11031,6 +11094,23 @@ prebid.js@1.30.0:
     util-deprecate "^1.0.2"
     vlq "^1.0.0"
 
+prebid.js@^3.5.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/prebid.js/-/prebid.js-3.9.0.tgz#b0a82ee48ee6f93eaa8f87b1a38674ce723bb6bd"
+  integrity sha512-3tFMoBeOoJPgbkvkzApF9EQb0YqYqG8050HPNF/Fkh+TGD/FlbWbVgSJmHaOMs4isYIOjBfW4GVac8H81Nboig==
+  dependencies:
+    babel-plugin-transform-object-assign "^6.22.0"
+    core-js "^2.4.1"
+    criteo-direct-rsa-validate "^1.1.0"
+    crypto-js "^3.1.9-1"
+    deep-equal "^1.0.1"
+    dlv "1.1.3"
+    dset "2.0.1"
+    express "^4.15.4"
+    fun-hooks "^0.9.5"
+    jsencrypt "^3.0.0-rc.1"
+    just-clone "^1.0.2"
+
 prefix-style@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/prefix-style/-/prefix-style-2.0.1.tgz#66bba9a870cfda308a5dc20e85e9120932c95a06"
@@ -11777,15 +11857,6 @@ react@^16.10.1:
   version "16.10.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.10.1.tgz#967c1e71a2767dfa699e6ba702a00483e3b0573f"
   integrity sha512-2bisHwMhxQ3XQz4LiJJwG3360pY965pTl/MRrZYxIBKVj4fOHoDs5aZAkYXGxDRO1Li+SyjTAilQEbOmtQJHzA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-
-react@^16.12.0:
-  version "16.12.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.12.0.tgz#0c0a9c6a142429e3614834d5a778e18aa78a0b83"
-  integrity sha512-fglqy3k5E+81pA8s+7K0/T3DBCF0ZDOher1elBFzF7O6arXJgzyu/FW+COxFvAWXJoJN9KIZbT2LXlukwphYTA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -13301,13 +13372,13 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.0.1.tgz#3a2fda849eef7198bf30a771fc6579c880efe91a"
-  integrity sha512-wXsJxYTBO32aiwdWzjnW/eyTbGIv96Q6w7o7WRpm4qPtuvM59ZTzoZToBXURn9oV5F8yMa+rBb5pI3nKqdkpQg==
+tab-ads@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.1.0.tgz#923be8e9490ae57fc26c05d3b92ef7b673476c40"
+  integrity sha512-sdoH+ziPh8gyunIGVpHNYRqJOF+fpqSKyuOTl8t9G3aQlHzyNioiJAmS3fy0XypwJpfJfECPkO/GXK5AOesR6g==
   dependencies:
-    prop-types "^15.7.2"
-    react "^16.12.0"
+    lodash "^4.17.15"
+    prebid.js "^3.5.0"
 
 table@^5.2.3:
   version "5.3.3"
@@ -13719,6 +13790,25 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript-compare@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/typescript-compare/-/typescript-compare-0.0.2.tgz#7ee40a400a406c2ea0a7e551efd3309021d5f425"
+  integrity sha512-8ja4j7pMHkfLJQO2/8tut7ub+J3Lw2S3061eJLFQcvs3tsmJKp8KG5NtpLn7KcY2w08edF74BSVN7qJS0U6oHA==
+  dependencies:
+    typescript-logic "^0.0.0"
+
+typescript-logic@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/typescript-logic/-/typescript-logic-0.0.0.tgz#66ebd82a2548f2b444a43667bec120b496890196"
+  integrity sha512-zXFars5LUkI3zP492ls0VskH3TtdeHCqu0i7/duGt60i5IGPIpAHE/DWo5FqJ6EjQ15YKXrt+AETjv60Dat34Q==
+
+typescript-tuple@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/typescript-tuple/-/typescript-tuple-2.2.1.tgz#7d9813fb4b355f69ac55032e0363e8bb0f04dad2"
+  integrity sha512-Zcr0lbt8z5ZdEzERHAMAniTiIKerFCMgd7yjq1fPnDJ43et/k9twIFQMUYff9k5oXcsQ0WpvFcgzK2ZKASoW6Q==
+  dependencies:
+    typescript-compare "^0.0.2"
 
 typpy@2.3.11:
   version "2.3.11"

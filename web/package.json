@@ -64,7 +64,7 @@
     "react-transition-group": "^4.0.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.20.1",
-    "tab-ads": "file:.yalc/tab-ads",
+    "tab-ads": "^0.1.0",
     "tti-polyfill": "^0.2.2",
     "uuid": "^3.3.2"
   },
@@ -104,7 +104,9 @@
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
     "prebid:test-patches": "yarn run prebid:test-patches:explanation && cross-env NODE_PATH=node_modules/prebid.js/ react-scripts test --testMatch **/**/prebidPatches* --watchAll=false",
     "prebid:test-patches:explanation": "echo \"Testing Prebid patches. Be sure to run prebid:install first. Note this doesn't currently work because CRA doesn't support Jest's transformIgnorePatterns, which we need to transform Prebid source code.\"",
-    "sls:deploy": "serverless deploy -v"
+    "sls:deploy": "serverless deploy -v",
+    "dev:add-local-dep": "yalc add",
+    "dev:update-local-deps": "yalc update"
   },
   "proxy": "http://localhost:8080",
   "jest": {
