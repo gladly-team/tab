@@ -578,8 +578,11 @@ describe('Dashboard component: ads logic', () => {
     expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
       userId: 'abc-123',
       revenue: 0.0123,
-      encodedRevenue: 'encoded-first-ad',
-      GAMAdvertiserId: '1111',
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
       adSize: '728x90',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
@@ -588,8 +591,11 @@ describe('Dashboard component: ads logic', () => {
     expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
       userId: 'abc-123',
       revenue: 0.082,
-      encodedRevenue: 'encoded-second-ad',
-      GAMAdvertiserId: '2222',
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-second-ad',
+      },
+      dfpAdvertiserId: '2222',
       adSize: '300x250',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
@@ -598,8 +604,11 @@ describe('Dashboard component: ads logic', () => {
     expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
       userId: 'abc-123',
       revenue: 0.0001472,
-      encodedRevenue: 'encoded-third-ad',
-      GAMAdvertiserId: '3333',
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-third-ad',
+      },
+      dfpAdvertiserId: '3333',
       adSize: '300x250',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
@@ -631,8 +640,11 @@ describe('Dashboard component: ads logic', () => {
     expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
       userId: 'abc-123',
       revenue: 0.0123,
-      encodedRevenue: 'encoded-first-ad',
-      GAMAdvertiserId: '1111',
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
       adSize: '728x90',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
