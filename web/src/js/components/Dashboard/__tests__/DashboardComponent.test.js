@@ -9,7 +9,6 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
@@ -57,7 +56,7 @@ import {
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-import CampaignBase from 'js/components/Campaign/CampaignBaseView'
+import { AdComponent, fetchAds } from 'tab-ads'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -526,12 +525,37 @@ describe('Dashboard component: campaign / charity spotlight', () => {
 })
 
 describe('Dashboard component: ads logic', () => {
+  it('calls tab-ads fetchAds on mount', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds).toHaveBeenCalled()
+  })
+
+  it('provides the expected config to fetchAds', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0]).toEqual({
+      consent: {
+        isEU: expect.any(Function),
+      },
+      publisher: {
+        domain: 'tab.gladly.io',
+        pageUrl: 'https://tab.gladly.io/newtab/',
+      },
+      logLevel: 'debug',
+      disableAds: false,
+      useMockAds: true,
+    })
+  })
+
   it('does not render any ad components when 0 ads are enabled', () => {
     getNumberOfAdsToShow.mockReturnValue(0)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(0)
+    expect(wrapper.find(AdComponent).length).toBe(0)
   })
 
   it('renders the expected 1 ad component when 1 ad is enabled', () => {
@@ -539,8 +563,8 @@ describe('Dashboard component: ads logic', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(1)
-    const leaderboardAd = wrapper.find(Ad).at(0)
+    expect(wrapper.find(AdComponent).length).toBe(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(0)
     expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
   })
 
@@ -549,9 +573,9 @@ describe('Dashboard component: ads logic', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(2)
-    const rectangleAd = wrapper.find(Ad).at(0)
-    const leaderboardAd = wrapper.find(Ad).at(1)
+    expect(wrapper.find(AdComponent).length).toBe(2)
+    const rectangleAd = wrapper.find(AdComponent).at(0)
+    const leaderboardAd = wrapper.find(AdComponent).at(1)
     expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
     expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
   })
@@ -561,10 +585,10 @@ describe('Dashboard component: ads logic', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(3)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
+    expect(wrapper.find(AdComponent).length).toBe(3)
+    const rectangleAdNumberTwo = wrapper.find(AdComponent).at(0)
+    const rectangleAd = wrapper.find(AdComponent).at(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(2)
     expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
     expect(rectangleAdNumberTwo.prop('adId')).toBe(
       SECOND_VERTICAL_AD_SLOT_DOM_ID
@@ -577,9 +601,9 @@ describe('Dashboard component: ads logic', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
+    const rectangleAdNumberTwo = wrapper.find(AdComponent).at(0)
+    const rectangleAd = wrapper.find(AdComponent).at(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(2)
     expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
     expect(rectangleAd.prop('style').minWidth).toBe(300)
     expect(rectangleAdNumberTwo.prop('adId')).toBe(
