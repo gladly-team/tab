@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
@@ -62,13 +61,7 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-import { fetchAds } from 'tab-ads'
-
-// Include ads code.
-// TODO: load this on mount, making sure the ads code behaves
-// appropriately for a SPA (it should not reload libraries but
-// should re-fetch ads).
-// import 'js/ads/ads'
+import { AdComponent, fetchAds } from 'tab-ads'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -76,6 +69,10 @@ const NewUserTour = lazy(() =>
 const CampaignBase = lazy(() =>
   import('js/components/Campaign/CampaignBaseView')
 )
+
+const onAdDisplayed = bidResponse => {
+  console.log('Dashboard onAdDisplayed bid response:', bidResponse)
+}
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -117,11 +114,16 @@ class Dashboard extends React.Component {
     })
 
     fetchAds({
-      adUnits: [
-        {
-          adId: 'some-ad-id',
-        },
-      ],
+      consent: {
+        isEU: () => Promise.resolve(false),
+      },
+      publisher: {
+        domain: 'tab.gladly.io',
+        pageUrl: 'https://tab.gladly.io/newtab/',
+      },
+      logLevel: 'debug',
+      disableAds: false,
+      useMockAds: true,
     })
   }
 
@@ -526,8 +528,9 @@ class Dashboard extends React.Component {
             }}
           >
             {this.state.numAdsToShow > 2 ? (
-              <Ad
+              <AdComponent
                 adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+                onAdDisplayed={onAdDisplayed}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -536,8 +539,9 @@ class Dashboard extends React.Component {
               />
             ) : null}
             {this.state.numAdsToShow > 1 ? (
-              <Ad
+              <AdComponent
                 adId={VERTICAL_AD_SLOT_DOM_ID}
+                onAdDisplayed={onAdDisplayed}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -607,8 +611,9 @@ class Dashboard extends React.Component {
                   </div>
                 </FadeInDashboardAnimation>
               ) : null}
-              <Ad
+              <AdComponent
                 adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                onAdDisplayed={onAdDisplayed}
                 style={{
                   overflow: 'visible',
                   minWidth: 728,
