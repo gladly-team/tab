@@ -2,6 +2,7 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash/lang'
+import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
@@ -181,9 +182,13 @@ class Dashboard extends React.Component {
      * info about the displayed ad.
      * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
      *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
+     * @param {Object} context - Additional info to help with revenue logging
+     * @param {Object} context.user - The user object
+     * @param {String} context.user.id - The user ID
+     * @param {String} context.tabId - A UUID for this page load
      * @return {undefined}
      */
-    const onAdDisplayed = displayedAdInfo => {
+    const onAdDisplayed = (displayedAdInfo, context) => {
       console.log('Dashboard onAdDisplayed bid response:', displayedAdInfo)
 
       // No ad was shown.
@@ -200,7 +205,7 @@ class Dashboard extends React.Component {
 
       // Log the revenue from the ad.
       LogUserRevenueMutation({
-        userId: user.id,
+        userId: context.user.id,
         revenue,
         encodedRevenue: {
           encodingType: 'AMAZON_CPM',
@@ -212,7 +217,7 @@ class Dashboard extends React.Component {
         // revenue value
         aggregationOperation:
           !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
-        tabId,
+        tabId: context.tabId,
         adUnitCode: null, // TODO: pass this in DisplayedAdInfo
       })
     }
@@ -315,6 +320,12 @@ class Dashboard extends React.Component {
       default:
         break
     }
+
+    const adContext = {
+      user,
+      tabId,
+    }
+    const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
 
     return (
       <div
@@ -565,10 +576,12 @@ class Dashboard extends React.Component {
               overflow: 'visible',
             }}
           >
-            {this.state.numAdsToShow > 2 ? (
+            {this.state.numAdsToShow > 2 && adContextReady ? (
               <AdComponent
                 adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
-                onAdDisplayed={onAdDisplayed}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -576,10 +589,12 @@ class Dashboard extends React.Component {
                 }}
               />
             ) : null}
-            {this.state.numAdsToShow > 1 ? (
+            {this.state.numAdsToShow > 1 && adContextReady ? (
               <AdComponent
                 adId={VERTICAL_AD_SLOT_DOM_ID}
-                onAdDisplayed={onAdDisplayed}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -589,7 +604,7 @@ class Dashboard extends React.Component {
               />
             ) : null}
           </div>
-          {this.state.numAdsToShow > 0 ? (
+          {this.state.numAdsToShow > 0 && adContextReady ? (
             <div
               style={{
                 display: 'flex',
@@ -651,7 +666,9 @@ class Dashboard extends React.Component {
               ) : null}
               <AdComponent
                 adId={HORIZONTAL_AD_SLOT_DOM_ID}
-                onAdDisplayed={onAdDisplayed}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
                 style={{
                   overflow: 'visible',
                   minWidth: 728,

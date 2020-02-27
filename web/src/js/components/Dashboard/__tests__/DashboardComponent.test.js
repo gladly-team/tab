@@ -698,6 +698,44 @@ describe('Dashboard component: ads logic', () => {
     expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
   })
 
+  it('does not render any ad components until the user is defined', () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const mockPropsWithoutUser = {
+      ...mockProps,
+      user: null,
+    }
+    const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
+
+    // No ads rendered yet.
+    expect(wrapper.find(AdComponent).length).toBe(0)
+
+    // Now that the user is defined, the ads should load.
+    wrapper.setProps({
+      user: mockProps.user,
+    })
+    expect(wrapper.find(AdComponent).length).toBe(3)
+  })
+
+  it('does not render any ad components if the tabId is not set in state', () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    wrapper.setState({ tabId: null })
+
+    // No ads should be rendered.
+    expect(wrapper.find(AdComponent).length).toBe(0)
+
+    // Now that the tab ID is defined, the ads should load.
+    wrapper.setState({
+      tabId: 'abc-123',
+    })
+    expect(wrapper.find(AdComponent).length).toBe(3)
+  })
+
   it('the ads have expected IDs matched with their sizes', () => {
     getNumberOfAdsToShow.mockReturnValue(3)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
