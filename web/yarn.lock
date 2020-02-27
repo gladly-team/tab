@@ -13502,10 +13502,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.1.2.tgz#47c2517c070bc4d6c9f45523964b3b59cd26d127"
-  integrity sha512-aAgf8JYpPSnsJYUs/4m4kz14nwCvPjXcmFAOkzm1mzmNG8YLFpiR3UJx4w7x5NHMuGelLu1rK4fTmr/9uG1l/g==
+tab-ads@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.1.3.tgz#eac6639c78a2a9e672cf87e8e3daba86b9284b5f"
+  integrity sha512-1gJtaux6z9rQwrh2Owvaxb1IksNvLM9u1yqnsB8rsz8GJzofNZpVxsvYyV+GyE/cPpa5+59Swvxo0WVHCjU2+A==
   dependencies:
     lodash "^4.17.15"
     prebid.js "^3.9.0"
