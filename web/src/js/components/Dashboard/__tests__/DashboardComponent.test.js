@@ -652,6 +652,37 @@ describe('Dashboard component: ads logic', () => {
     })
   })
 
+  it('does not include encodedRevenue in the LogUserRevenueMutation when the encodedRevenue value is nil', () => {
+    getNumberOfAdsToShow.mockReturnValue(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: null, // no encodedRevenue
+      GAMAdvertiserId: 1111,
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      // no encodedRevenue value
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: null,
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: null,
+    })
+  })
+
   it('does not render any ad components when 0 ads are enabled', () => {
     getNumberOfAdsToShow.mockReturnValue(0)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')

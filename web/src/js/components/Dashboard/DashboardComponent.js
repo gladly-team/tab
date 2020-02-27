@@ -207,10 +207,12 @@ class Dashboard extends React.Component {
       LogUserRevenueMutation({
         userId: context.user.id,
         revenue,
-        encodedRevenue: {
-          encodingType: 'AMAZON_CPM',
-          encodedValue: encodedRevenue,
-        },
+        ...(encodedRevenue && {
+          encodedRevenue: {
+            encodingType: 'AMAZON_CPM',
+            encodedValue: encodedRevenue,
+          },
+        }),
         dfpAdvertiserId: GAMAdvertiserId.toString(),
         adSize,
         // Only send aggregationOperation value if we have more than one
