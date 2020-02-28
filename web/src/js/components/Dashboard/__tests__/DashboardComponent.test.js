@@ -1493,13 +1493,46 @@ describe('Dashboard component: campaign reopen click', () => {
     hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
   })
 
-  it('passes showCampaignReopenButton === true to the UserMenu when hasUserDismissedCampaignRecently is true', () => {
+  it('passes showCampaignReopenButton === true to the UserMenu when hasUserDismissedCampaignRecently is true and the campaign is live', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const mockPropsWithCampaignLive = {
+      ...mockProps,
+      app: {
+        ...mockProps.app,
+        campaign: {
+          ...mockProps.app.campaign,
+          isLive: true,
+        },
+      },
+    }
+    const wrapper = shallow(
+      <DashboardComponent {...mockPropsWithCampaignLive} />
+    )
     hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
     expect(wrapper.find(UserMenu).prop('showCampaignReopenButton')).toBe(true)
     wrapper.setState({ hasUserDismissedCampaignRecently: false })
+    expect(wrapper.find(UserMenu).prop('showCampaignReopenButton')).toBe(false)
+  })
+
+  it('passes showCampaignReopenButton === false to the UserMenu when hasUserDismissedCampaignRecently is true but the campaign is not live', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+
+    const mockPropsWithCampaignNotLive = {
+      ...mockProps,
+      app: {
+        ...mockProps.app,
+        campaign: {
+          ...mockProps.app.campaign,
+          isLive: false,
+        },
+      },
+    }
+    const wrapper = shallow(
+      <DashboardComponent {...mockPropsWithCampaignNotLive} />
+    )
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
     expect(wrapper.find(UserMenu).prop('showCampaignReopenButton')).toBe(false)
   })
 
