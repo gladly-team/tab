@@ -311,7 +311,9 @@ class Dashboard extends React.Component {
                     userClickedSearchIntroV2: true,
                   })
                 }}
-                showCampaignReopenButton={hasUserDismissedCampaignRecently}
+                showCampaignReopenButton={
+                  isCampaignLive && hasUserDismissedCampaignRecently
+                }
                 onClickCampaignReopen={() => {
                   this.setState({
                     hasUserDismissedCampaignRecently: false,
