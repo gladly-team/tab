@@ -113,15 +113,19 @@ class Dashboard extends React.Component {
 
     fetchAds({
       consent: {
+        // TODO: use real helper
         isEU: () => Promise.resolve(false),
       },
       publisher: {
+        // TODO: use window location
         domain: 'tab.gladly.io',
         pageUrl: 'https://tab.gladly.io/newtab/',
       },
       logLevel: 'debug',
+      // TODO: check if user's ad consumption is rate-limited
       disableAds: false,
-      useMockAds: true,
+      // TODO: use env var
+      useMockAds: false,
     })
   }
 

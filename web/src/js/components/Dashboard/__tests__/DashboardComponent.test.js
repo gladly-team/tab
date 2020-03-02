@@ -535,7 +535,7 @@ describe('Dashboard component: ads logic', () => {
       },
       logLevel: 'debug',
       disableAds: false,
-      useMockAds: true,
+      useMockAds: false,
     })
   })
 
