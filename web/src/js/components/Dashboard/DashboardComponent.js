@@ -51,7 +51,7 @@ import {
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'js/ads/adSettings'
+} from 'js/ads/adHelpers'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,

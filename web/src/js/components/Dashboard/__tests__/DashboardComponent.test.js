@@ -37,7 +37,7 @@ import {
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'js/ads/adSettings'
+} from 'js/ads/adHelpers'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedCampaignRecently,
@@ -62,7 +62,7 @@ jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
-jest.mock('js/ads/adSettings')
+jest.mock('js/ads/adHelpers')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
