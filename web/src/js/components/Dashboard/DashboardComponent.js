@@ -204,6 +204,7 @@ class Dashboard extends React.Component {
         revenue,
         encodedRevenue,
         GAMAdvertiserId,
+        GAMAdUnitId,
         adSize,
       } = displayedAdInfo
 
@@ -224,7 +225,7 @@ class Dashboard extends React.Component {
         aggregationOperation:
           !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
         tabId: context.tabId,
-        adUnitCode: null, // TODO: pass this in DisplayedAdInfo
+        adUnitCode: GAMAdUnitId,
       })
     }
 

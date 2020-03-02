@@ -553,6 +553,7 @@ describe('Dashboard component: ads logic', () => {
       revenue: 0.0123,
       encodedRevenue: 'encoded-first-ad',
       GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
       adSize: '728x90',
     }
 
@@ -564,6 +565,7 @@ describe('Dashboard component: ads logic', () => {
       revenue: 0.082,
       encodedRevenue: 'encoded-second-ad',
       GAMAdvertiserId: 2222,
+      GAMAdUnitId: '/12345/SecondAdThing',
       adSize: '300x250',
     })
     thirdAd.prop('onAdDisplayed')({
@@ -572,6 +574,7 @@ describe('Dashboard component: ads logic', () => {
       revenue: 0.0001472,
       encodedRevenue: 'encoded-third-ad',
       GAMAdvertiserId: 3333,
+      GAMAdUnitId: '/12345/ThirdAdHere',
       adSize: '300x250',
     })
 
@@ -586,7 +589,7 @@ describe('Dashboard component: ads logic', () => {
       adSize: '728x90',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
-      adUnitCode: null,
+      adUnitCode: '/12345/SomeAdUnit',
     })
     expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
       userId: 'abc-123',
@@ -599,7 +602,7 @@ describe('Dashboard component: ads logic', () => {
       adSize: '300x250',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
-      adUnitCode: null,
+      adUnitCode: '/12345/SecondAdThing',
     })
     expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
       userId: 'abc-123',
@@ -612,7 +615,7 @@ describe('Dashboard component: ads logic', () => {
       adSize: '300x250',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
-      adUnitCode: null,
+      adUnitCode: '/12345/ThirdAdHere',
     })
   })
 
@@ -629,6 +632,7 @@ describe('Dashboard component: ads logic', () => {
       revenue: 0.0123,
       encodedRevenue: 'encoded-first-ad',
       GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
       adSize: '728x90',
     }
 
@@ -648,7 +652,7 @@ describe('Dashboard component: ads logic', () => {
       adSize: '728x90',
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
-      adUnitCode: null,
+      adUnitCode: '/12345/SomeAdUnit',
     })
   })
 
@@ -664,6 +668,7 @@ describe('Dashboard component: ads logic', () => {
       revenue: 0.0123,
       encodedRevenue: null, // no encodedRevenue
       GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
       adSize: '728x90',
     }
 
@@ -679,7 +684,7 @@ describe('Dashboard component: ads logic', () => {
       adSize: '728x90',
       aggregationOperation: null,
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
-      adUnitCode: null,
+      adUnitCode: '/12345/SomeAdUnit',
     })
   })
 

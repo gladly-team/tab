@@ -13211,10 +13211,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.2.2.tgz#03416397bd1159221e6c6e46da5c1ea25c2fee39"
-  integrity sha512-c3SsizwUGELQMP1+nkGts9LOYd3K6BNHvUjctSitX7cXf63d1shlE/0NP4jOLnymzG9B/yBqriyYJW9A+pEQ6A==
+tab-ads@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.3.0.tgz#b9c4fb12c15877dab4e91ef4147a422e6506b55b"
+  integrity sha512-jYJIJZoUrian9bAMPZ8P7ELEBwikZcOlCZv/PpwG3Xvuv4q1fIj+BF16aqjaZhlmBtD/kStNyoMS+YSqUj/1pw==
   dependencies:
     lodash "^4.17.15"
 
