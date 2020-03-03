@@ -8,16 +8,18 @@ import { getAvailableAdUnits } from 'tab-ads'
 
 const newTabAdUnitOptions = getAvailableAdUnits()
 
-// TODO: use this internally; don't export
 /**
- * Get the number of banner ads to show on the new tab page.
- * @return {Number} The number of ads
+ * Determine if we should show only one ad. We'll show one ad to
+ * users for the first X hours after they join.
+ * @return {Boolean} Whether to show one ad.
  */
-export const getNumberOfAdsToShow = () => {
-  return shouldShowOneAd() ? 1 : 3
+const shouldShowOneAd = () => {
+  const installTime = getBrowserExtensionInstallTime()
+  const joinedRecently =
+    !!installTime && moment().diff(installTime, 'hours') < 24
+  return !!joinedRecently
 }
 
-// TODO: roll "getNumberOfAdsToShow" into this
 /**
  * Return an object of ad units we should display.
  * @return {Object} AdUnitsInfo
@@ -32,15 +34,23 @@ export const getNumberOfAdsToShow = () => {
  *   shouldn't show that ad unit
  */
 export const getAdUnits = () => {
+  let numberOfAdsToShow
+  if (!areAdsEnabled()) {
+    numberOfAdsToShow = 0
+  } else if (shouldShowOneAd()) {
+    numberOfAdsToShow = 1
+  } else {
+    numberOfAdsToShow = 3
+  }
   const {
     leaderboard,
     rectangleAdPrimary,
     rectangleAdSecondary,
   } = newTabAdUnitOptions
   return {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
+    ...(numberOfAdsToShow > 0 && { leaderboard }),
+    ...(numberOfAdsToShow > 1 && { rectangleAdPrimary }),
+    ...(numberOfAdsToShow > 2 && { rectangleAdSecondary }),
   }
 }
 
@@ -74,16 +84,4 @@ export const shouldShowAdExplanation = () => {
   const joinedRecently =
     !!installTime && moment().diff(installTime, 'hours') < hoursToShow
   return !!(joinedRecently && !hasUserDismissedAdExplanation())
-}
-
-/**
- * Determine if we should show only one ad. We'll show one ad to
- * users for the first X hours after they join.
- * @return {Boolean} Whether to show one ad.
- */
-const shouldShowOneAd = () => {
-  const installTime = getBrowserExtensionInstallTime()
-  const joinedRecently =
-    !!installTime && moment().diff(installTime, 'hours') < 24
-  return !!joinedRecently
 }
