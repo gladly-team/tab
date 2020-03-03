@@ -36,7 +36,7 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"}
   #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
@@ -74,7 +74,7 @@ provider:
       Resource: "LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:Modify"
+      Action: "Update:*"
       Resource: "LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
