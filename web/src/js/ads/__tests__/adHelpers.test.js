@@ -24,7 +24,8 @@ beforeEach(() => {
 
 afterEach(() => {
   MockDate.reset()
-  process.env.REACT_APP_ADS_ENABLED = adsEnabledEnv // Reset env var after tests
+  process.env.REACT_APP_ADS_ENABLED = adsEnabledEnv // Reset after tests
+  process.env.REACT_APP_USE_MOCK_ADS = 'false' // Reset after tests
 })
 
 describe('adHelpers: getAdUnits', () => {
@@ -59,7 +60,7 @@ describe('adHelpers: getAdUnits', () => {
     })
   })
 
-  it('returns the expected ad units when ads are disabled', () => {
+  it('returns ad units even when ads are disabled', () => {
     // Set up the conditions for this number of ads.
     process.env.REACT_APP_ADS_ENABLED = 'false' // ads disabled
     getBrowserExtensionInstallTime.mockReturnValue(
@@ -68,7 +69,26 @@ describe('adHelpers: getAdUnits', () => {
     getTabsOpenedToday.mockReturnValue(2) // user has not opened too many tabs
 
     const { getAdUnits } = require('js/ads/adHelpers')
-    expect(getAdUnits()).toEqual({})
+    expect(getAdUnits()).toEqual({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
   })
 
   it('returns the leaderboard ad unit when one ad is enabled (the user installed recently)', () => {
@@ -161,16 +181,29 @@ describe('adHelpers: areAdsEnabled', () => {
 
   it('disables ads when the user has opened more than the max number of tabs today', () => {
     process.env.REACT_APP_ADS_ENABLED = 'true'
-    getTabsOpenedToday.mockReturnValue(150)
+    getTabsOpenedToday.mockReturnValue(151)
     const { areAdsEnabled } = require('js/ads/adHelpers')
     expect(areAdsEnabled()).toBe(false)
   })
 })
 
 describe('adHelpers: showMockAds', () => {
-  it('does not show mock ads', () => {
+  it('does not show mock ads when process.env.REACT_APP_USE_MOCK_ADS === "false"', () => {
+    process.env.REACT_APP_USE_MOCK_ADS = 'false'
     const { showMockAds } = require('js/ads/adHelpers')
     expect(showMockAds()).toBe(false)
+  })
+
+  it('does not show mock ads when process.env.REACT_APP_USE_MOCK_ADS is undefined', () => {
+    process.env.REACT_APP_USE_MOCK_ADS = undefined
+    const { showMockAds } = require('js/ads/adHelpers')
+    expect(showMockAds()).toBe(false)
+  })
+
+  it('shows mock ads when process.env.REACT_APP_USE_MOCK_ADS === "true"', () => {
+    process.env.REACT_APP_USE_MOCK_ADS = 'true'
+    const { showMockAds } = require('js/ads/adHelpers')
+    expect(showMockAds()).toBe(true)
   })
 })
 

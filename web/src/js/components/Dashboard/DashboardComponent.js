@@ -61,6 +61,7 @@ import {
   areAdsEnabled,
   getAdUnits,
   shouldShowAdExplanation,
+  showMockAds,
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
@@ -121,8 +122,7 @@ class Dashboard extends React.Component {
       },
       logLevel: 'debug',
       disableAds: !areAdsEnabled(),
-      // TODO: use env var
-      useMockAds: false,
+      useMockAds: showMockAds(),
     })
   }
 

@@ -35,6 +35,7 @@ import {
   areAdsEnabled,
   getAdUnits,
   shouldShowAdExplanation,
+  showMockAds,
 } from 'js/ads/adHelpers'
 import {
   setUserDismissedAdExplanation,
@@ -119,6 +120,7 @@ beforeEach(() => {
 
   // Default to enabled ads.
   areAdsEnabled.mockReturnValue(true)
+  showMockAds.mockReturnValue(false)
 
   // Provide mock hostname and URL.
   getHostname.mockReturnValue('example.com')
@@ -624,6 +626,22 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0].disableAds).toBe(false)
+  })
+
+  it('passes showMockAds === true to the tab-ads config if adHelpers.showMockAds() returns true', () => {
+    showMockAds.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].useMockAds).toBe(true)
+  })
+
+  it('passes showMockAds === false to the tab-ads config if adHelpers.showMockAds() returns true', () => {
+    showMockAds.mockReturnValue(false)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].useMockAds).toBe(false)
   })
 
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {

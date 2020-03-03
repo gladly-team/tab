@@ -21,7 +21,8 @@ const shouldShowOneAd = () => {
 }
 
 /**
- * Return an object of ad units we should display.
+ * Return an object of ad units we should display. This returns ad units
+ * even if ads are disabled.
  * @return {Object} AdUnitsInfo
  * @return {Object|null} AdUnitsInfo.leaderboard - a tab-ads ad unit
  *   definition for the 728x90 ad, or null if we shouldn't show that
@@ -35,7 +36,7 @@ const shouldShowOneAd = () => {
  */
 export const getAdUnits = () => {
   let numberOfAdsToShow
-  if (!areAdsEnabled()) {
+  if (hasUserReachedMaxTabsToday()) {
     numberOfAdsToShow = 0
   } else if (shouldShowOneAd()) {
     numberOfAdsToShow = 1
@@ -54,29 +55,39 @@ export const getAdUnits = () => {
   }
 }
 
-export const areAdsEnabled = () => {
-  if (!(process.env.REACT_APP_ADS_ENABLED === 'true')) {
-    return false
-  }
-
+/**
+ * Determine if the user has viewed the maximum number of ads
+ * today, using tab count as a proxy.
+ * @return {Boolean} Whether the user has viewed the max ads today.
+ */
+const hasUserReachedMaxTabsToday = () => {
   // If the user has exceeded the daily tab maximum,
   // do not show ads.
   // https://github.com/gladly-team/tab/issues/202
   const MAX_TABS_WITH_ADS = 150
   const tabsOpenedToday = getTabsOpenedToday()
-  return tabsOpenedToday < MAX_TABS_WITH_ADS
+  return tabsOpenedToday > MAX_TABS_WITH_ADS
 }
 
-export const showMockAds = () => {
-  // TODO: use NODE_ENV and env var to enable in development
-  return false
-}
+/**
+ * Determine if we should fetch and display ads. Ads are disabled
+ * by env variable or if the user views a lot of ads in a single day.
+ * @return {Boolean} Whether ads are enabled.
+ */
+export const areAdsEnabled = () =>
+  process.env.REACT_APP_ADS_ENABLED === 'true' && !hasUserReachedMaxTabsToday()
+
+/**
+ * Return true if we want to show mock ads (for development only).
+ * @return {Boolean} Whether to show mock ads.
+ */
+export const showMockAds = () => process.env.REACT_APP_USE_MOCK_ADS === 'true'
 
 /**
  * Determine if we should show the explanation that the ads raise
  * money for charity. We'll show it to users for the first X hours
  * after they join.
- * @return {Boolean} Whether to show one ad.
+ * @return {Boolean} Whether to show the ad explanation.
  */
 export const shouldShowAdExplanation = () => {
   const hoursToShow = 4

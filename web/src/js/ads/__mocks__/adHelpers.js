@@ -3,6 +3,7 @@
 const adHelpers = jest.genMockFromModule('../adHelpers')
 
 adHelpers.areAdsEnabled = jest.fn(() => false)
+adHelpers.showMockAds = jest.fn(() => false)
 adHelpers.shouldShowAdExplanation = jest.fn(() => false)
 adHelpers.getAdUnits = jest.fn(() => ({
   leaderboard: {
