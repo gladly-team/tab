@@ -19,7 +19,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   # Let's be conservative and prevent any unexpected changes
@@ -34,7 +34,9 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayDeployment*"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"}
   #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
@@ -61,11 +63,19 @@ provider:
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/ApiGatewayRestApi" 
+      Resource: "LogicalResourceId/ApiGatewayRestApi"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/IamRoleLambdaExecution" 
+      Resource: "LogicalResourceId/IamRoleLambdaExecution"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html

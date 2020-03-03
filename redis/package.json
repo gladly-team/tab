@@ -19,7 +19,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
-    "serverless": "^1.55.1"
+    "serverless": "^1.65.0"
   },
   "scripts": {
     "build": "rm -rf ./build && cross-env NODE_ENV=production babel --out-dir='build' ./src/handler.js",
