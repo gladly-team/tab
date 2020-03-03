@@ -32,7 +32,8 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLogGroup"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLogGroup"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/gladlyLambdaEdgeRole"}
   #   ]}'
   # We could also set a temporary policy, but it's unclear how we'd
   # do this with the Serverless framework:
@@ -65,6 +66,10 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/gladlyLambdaEdgeRole"
 
 plugins:
   # https://github.com/claygregory/serverless-prune-plugin

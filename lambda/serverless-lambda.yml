@@ -30,7 +30,8 @@ provider:
   #   '{"Statement":[
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLogGroup"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
   #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
@@ -46,6 +47,10 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/FirebaseAuthorizerLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/IamRoleLambdaExecution"
 
 custom:
   stageDefault: dev
