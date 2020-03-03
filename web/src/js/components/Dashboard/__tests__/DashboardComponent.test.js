@@ -51,7 +51,11 @@ import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
+import { isInEuropeanUnion } from 'js/utils/client-location'
 
+jest.mock('uuid/v4', () =>
+  jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
+)
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
@@ -63,9 +67,7 @@ jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
-jest.mock('uuid/v4', () =>
-  jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
-)
+jest.mock('js/utils/client-location')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -573,6 +575,13 @@ describe('Dashboard component: ads logic', () => {
       disableAds: false,
       useMockAds: false,
     })
+  })
+
+  it('passes isInEuropeanUnion function to the tab-ads config property consent.isEU', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
   })
 
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {

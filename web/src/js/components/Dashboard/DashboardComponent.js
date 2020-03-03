@@ -58,6 +58,7 @@ import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActi
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
+import { isInEuropeanUnion } from 'js/utils/client-location'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -107,8 +108,7 @@ class Dashboard extends React.Component {
     fetchAds({
       adUnits: Object.values(getAdUnits()),
       consent: {
-        // TODO: use real helper
-        isEU: () => Promise.resolve(false),
+        isEU: isInEuropeanUnion,
       },
       publisher: {
         // TODO: use window location
