@@ -4,23 +4,45 @@ import {
   getBrowserExtensionInstallTime,
   hasUserDismissedAdExplanation,
 } from 'js/utils/local-user-data-mgr'
+import { getAvailableAdUnits } from 'tab-ads'
 
-const MAX_TABS_WITH_ADS = 150
+const newTabAdUnitOptions = getAvailableAdUnits()
 
-// "Vertical ad" = the ad that's typically rectangular
-// or taller than it is wide. Historically, the right-side
-// rectangle ad.
-export const VERTICAL_AD_UNIT_ID = '/43865596/HBTR'
-export const VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385742501-0'
+// TODO: use this internally; don't export
+/**
+ * Get the number of banner ads to show on the new tab page.
+ * @return {Number} The number of ads
+ */
+export const getNumberOfAdsToShow = () => {
+  return shouldShowOneAd() ? 1 : 3
+}
 
-// "Second vertical ad" = the extra rectangle ad.
-export const SECOND_VERTICAL_AD_UNIT_ID = '/43865596/HBTR2'
-export const SECOND_VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1539903223131-0'
-
-// "Horizontal ad" = the ad that's typically wider than
-// it is tall. Historically, the bottom long leaderboard ad.
-export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
-export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
+// TODO: roll "getNumberOfAdsToShow" into this
+/**
+ * Return an object of ad units we should display.
+ * @return {Object} AdUnitsInfo
+ * @return {Object|null} AdUnitsInfo.leaderboard - a tab-ads ad unit
+ *   definition for the 728x90 ad, or null if we shouldn't show that
+ *   ad unit
+ * @return {Object|null} AdUnitsInfo.rectangleAdPrimary - a tab-ads
+ *   ad unit definition for the first 300x250 ad, or null if we
+ *   shouldn't show that ad unit
+ * @return {Object|null} AdUnitsInfo.rectangleAdSecondary - a tab-ads
+ *   ad unit definition for the second 300x250 ad, or null if we
+ *   shouldn't show that ad unit
+ */
+export const getAdUnits = () => {
+  const {
+    leaderboard,
+    rectangleAdPrimary,
+    rectangleAdSecondary,
+  } = newTabAdUnitOptions
+  return {
+    leaderboard,
+    rectangleAdPrimary,
+    rectangleAdSecondary,
+  }
+}
 
 export const areAdsEnabled = () => {
   if (!(process.env.REACT_APP_ADS_ENABLED === 'true')) {
@@ -30,6 +52,7 @@ export const areAdsEnabled = () => {
   // If the user has exceeded the daily tab maximum,
   // do not show ads.
   // https://github.com/gladly-team/tab/issues/202
+  const MAX_TABS_WITH_ADS = 150
   const tabsOpenedToday = getTabsOpenedToday()
   return tabsOpenedToday < MAX_TABS_WITH_ADS
 }
@@ -63,12 +86,4 @@ const shouldShowOneAd = () => {
   const joinedRecently =
     !!installTime && moment().diff(installTime, 'hours') < 24
   return !!joinedRecently
-}
-
-/**
- * Get the number of banner ads to show on the new tab page.
- * @return {Number} The number of ads
- */
-export const getNumberOfAdsToShow = () => {
-  return shouldShowOneAd() ? 1 : 3
 }

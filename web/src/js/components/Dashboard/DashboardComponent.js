@@ -46,13 +46,6 @@ import {
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
 import {
-  getNumberOfAdsToShow,
-  shouldShowAdExplanation,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'js/ads/adHelpers'
-import {
   showGlobalNotification,
   showSearchIntroductionMessage,
 } from 'js/utils/feature-flags'
@@ -63,6 +56,7 @@ import {
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
+import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 
 const NewUserTour = lazy(() =>
@@ -86,7 +80,6 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour:
         localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
-      numAdsToShow: getNumberOfAdsToShow(),
       showAdExplanation: shouldShowAdExplanation(),
       // Whether to show a global announcement.
       showNotification:
@@ -112,6 +105,7 @@ class Dashboard extends React.Component {
     })
 
     fetchAds({
+      adUnits: Object.values(getAdUnits()),
       consent: {
         // TODO: use real helper
         isEU: () => Promise.resolve(false),
@@ -193,8 +187,6 @@ class Dashboard extends React.Component {
      * @return {undefined}
      */
     const onAdDisplayed = (displayedAdInfo, context) => {
-      console.log('Dashboard onAdDisplayed bid response:', displayedAdInfo)
-
       // No ad was shown.
       if (!displayedAdInfo) {
         return
@@ -333,6 +325,7 @@ class Dashboard extends React.Component {
       tabId,
     }
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
+    const adUnitsToShow = getAdUnits()
 
     return (
       <div
@@ -585,9 +578,9 @@ class Dashboard extends React.Component {
               overflow: 'visible',
             }}
           >
-            {this.state.numAdsToShow > 2 && adContextReady ? (
+            {adUnitsToShow.rectangleAdSecondary && adContextReady ? (
               <AdComponent
-                adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+                adId={adUnitsToShow.rectangleAdSecondary.adId}
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}
@@ -598,9 +591,9 @@ class Dashboard extends React.Component {
                 }}
               />
             ) : null}
-            {this.state.numAdsToShow > 1 && adContextReady ? (
+            {adUnitsToShow.rectangleAdPrimary && adContextReady ? (
               <AdComponent
-                adId={VERTICAL_AD_SLOT_DOM_ID}
+                adId={adUnitsToShow.rectangleAdPrimary.adId}
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}
@@ -613,7 +606,7 @@ class Dashboard extends React.Component {
               />
             ) : null}
           </div>
-          {this.state.numAdsToShow > 0 && adContextReady ? (
+          {adUnitsToShow.leaderboard && adContextReady ? (
             <div
               style={{
                 display: 'flex',
@@ -674,7 +667,7 @@ class Dashboard extends React.Component {
                 </FadeInDashboardAnimation>
               ) : null}
               <AdComponent
-                adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                adId={adUnitsToShow.leaderboard.adId}
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}

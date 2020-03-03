@@ -2,15 +2,27 @@
 
 const adHelpers = jest.genMockFromModule('../adHelpers')
 
-adHelpers.VERTICAL_AD_UNIT_ID = '/11223344/HBTR'
-adHelpers.VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1357913579-0'
-adHelpers.SECOND_VERTICAL_AD_UNIT_ID = '/44556677/HBTR2'
-adHelpers.SECOND_VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-11235813-0'
-adHelpers.HORIZONTAL_AD_UNIT_ID = '/99887766/HBTL'
-adHelpers.HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-24682468-0'
-
 adHelpers.areAdsEnabled = jest.fn(() => false)
 adHelpers.shouldShowAdExplanation = jest.fn(() => false)
-adHelpers.getNumberOfAdsToShow = jest.fn(() => 3)
+adHelpers.getAdUnits = jest.fn(() => ({
+  leaderboard: {
+    // The long leaderboard ad.
+    adId: 'div-gpt-ad-1464385677836-0',
+    adUnitId: '/43865596/HBTL',
+    sizes: [[728, 90]],
+  },
+  rectangleAdPrimary: {
+    // The primary rectangle ad (bottom-right).
+    adId: 'div-gpt-ad-1464385742501-0',
+    adUnitId: '/43865596/HBTR',
+    sizes: [[300, 250]],
+  },
+  rectangleAdSecondary: {
+    // The second rectangle ad (right side, above the first).
+    adId: 'div-gpt-ad-1539903223131-0',
+    adUnitId: '/43865596/HBTR2',
+    sizes: [[300, 250]],
+  },
+}))
 
 module.exports = adHelpers
