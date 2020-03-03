@@ -56,7 +56,11 @@ import {
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
-import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
+import {
+  areAdsEnabled,
+  getAdUnits,
+  shouldShowAdExplanation,
+} from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 
@@ -116,8 +120,7 @@ class Dashboard extends React.Component {
         pageUrl: 'https://tab.gladly.io/newtab/',
       },
       logLevel: 'debug',
-      // TODO: check if user's ad consumption is rate-limited
-      disableAds: false,
+      disableAds: !areAdsEnabled(),
       // TODO: use env var
       useMockAds: false,
     })

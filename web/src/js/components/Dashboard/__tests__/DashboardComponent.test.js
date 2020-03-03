@@ -31,7 +31,11 @@ import {
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
-import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
+import {
+  areAdsEnabled,
+  getAdUnits,
+  shouldShowAdExplanation,
+} from 'js/ads/adHelpers'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedCampaignRecently,
@@ -110,6 +114,9 @@ beforeEach(() => {
       sizes: [[300, 250]],
     },
   })
+
+  // Default to enabled ads.
+  areAdsEnabled.mockReturnValue(true)
 })
 
 afterEach(() => {
@@ -582,6 +589,22 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
+  })
+
+  it('passes disableAds === true to the tab-ads config if adHelpers.areAdsEnabled() returns false', () => {
+    areAdsEnabled.mockReturnValue(false)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].disableAds).toBe(true)
+  })
+
+  it('passes disableAds === false to the tab-ads config if adHelpers.areAdsEnabled() returns true', () => {
+    areAdsEnabled.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].disableAds).toBe(false)
   })
 
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
