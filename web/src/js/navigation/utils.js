@@ -52,3 +52,7 @@ export const externalRedirect = externalURL => {
 
 export const isAbsoluteURL = url =>
   !!(url.startsWith('http://') || url.startsWith('https://'))
+
+export const getHostname = () => window.location.hostname
+
+export const getCurrentURL = () => window.location.href

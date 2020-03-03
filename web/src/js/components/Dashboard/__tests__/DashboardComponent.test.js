@@ -56,6 +56,7 @@ import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActi
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
+import { getHostname, getCurrentURL } from 'js/navigation/utils'
 
 jest.mock('uuid/v4', () =>
   jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
@@ -72,6 +73,7 @@ jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
 jest.mock('js/utils/client-location')
+jest.mock('js/navigation/utils')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -117,6 +119,10 @@ beforeEach(() => {
 
   // Default to enabled ads.
   areAdsEnabled.mockReturnValue(true)
+
+  // Provide mock hostname and URL.
+  getHostname.mockReturnValue('example.com')
+  getCurrentURL.mockReturnValue('https://example.com/my-new-tab/')
 })
 
 afterEach(() => {
@@ -575,8 +581,8 @@ describe('Dashboard component: ads logic', () => {
         isEU: expect.any(Function),
       },
       publisher: {
-        domain: 'tab.gladly.io',
-        pageUrl: 'https://tab.gladly.io/newtab/',
+        domain: 'example.com',
+        pageUrl: 'https://example.com/my-new-tab/',
       },
       logLevel: 'debug',
       disableAds: false,
@@ -589,6 +595,19 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
+  })
+
+  it('passes the expected hostname and page URL to the tab-ads config', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getHostname.mockReturnValue('foo.com')
+    getCurrentURL.mockReturnValue('https://foo.com/hi/')
+    shallow(<DashboardComponent {...mockProps} />)
+
+    expect(fetchAds.mock.calls[0][0].publisher).toEqual({
+      domain: 'foo.com',
+      pageUrl: 'https://foo.com/hi/',
+    })
   })
 
   it('passes disableAds === true to the tab-ads config if adHelpers.areAdsEnabled() returns false', () => {

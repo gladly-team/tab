@@ -45,6 +45,7 @@ import {
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
+import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
@@ -115,9 +116,8 @@ class Dashboard extends React.Component {
         isEU: isInEuropeanUnion,
       },
       publisher: {
-        // TODO: use window location
-        domain: 'tab.gladly.io',
-        pageUrl: 'https://tab.gladly.io/newtab/',
+        domain: getHostname(),
+        pageUrl: getCurrentURL(),
       },
       logLevel: 'debug',
       disableAds: !areAdsEnabled(),
