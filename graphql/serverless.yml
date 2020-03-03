@@ -35,6 +35,7 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"}
   #   ]}'
   stackPolicy:
@@ -62,11 +63,15 @@ provider:
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/ApiGatewayRestApi" 
+      Resource: "LogicalResourceId/ApiGatewayRestApi"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/IamRoleLambdaExecution" 
+      Resource: "LogicalResourceId/IamRoleLambdaExecution"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
