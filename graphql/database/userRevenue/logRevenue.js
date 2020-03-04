@@ -172,6 +172,7 @@ const logRevenue = async (
   try {
     await createRevenueLogItem(ISOTimestamp)
   } catch (e) {
+    // TODO: make this more robust and rely on our custom exception.
     // An item already exists with these keys.
     // This happens when a user logs two revenue items at the exact
     // same millisecond. We had assumed user ID (hash key) and timestamp
