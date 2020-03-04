@@ -8,6 +8,7 @@ import ExampleModelRangeKey, {
 } from '../test-utils/ExampleModelRangeKey'
 import {
   addTimestampFieldsToItem,
+  ConditionalCheckFailedException,
   DatabaseOperation,
   getMockUserContext,
   mockDate,
@@ -664,7 +665,7 @@ describe('BaseModel queries', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      { code: 'ConditionalCheckFailedException' } // simple mock error
+      ConditionalCheckFailedException()
     )
     const dbGetQueryMock = setMockDBResponse(DatabaseOperation.GET, {
       Item: itemToGetOrCreate,
@@ -705,7 +706,7 @@ describe('BaseModel queries', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      { code: 'ConditionalCheckFailedException' } // simple mock error
+      ConditionalCheckFailedException()
     )
     return expect(
       ExampleModel.getOrCreate(user, itemToGetOrCreate)
