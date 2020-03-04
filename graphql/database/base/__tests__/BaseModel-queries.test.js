@@ -119,13 +119,11 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToGet = Object.assign({}, fixturesA[0])
-    const dbQueryMock = databaseClient.get.mockImplementation(
-      (params, callback) => {
-        callback(null, {
-          Item: null,
-        })
-      }
-    )
+    databaseClient.get.mockImplementation((params, callback) => {
+      callback(null, {
+        Item: null,
+      })
+    })
 
     return expect(ExampleModel.get(user, itemToGet.id)).rejects.toEqual(
       new DatabaseItemDoesNotExistException()
