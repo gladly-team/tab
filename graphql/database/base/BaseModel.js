@@ -13,8 +13,6 @@ import dbClient from '../databaseClient'
 import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
 import logger from '../../utils/logger'
 
-const Promise = require('bluebird')
-
 dynogels.documentClient(dbClient)
 
 class BaseModel {
@@ -229,7 +227,6 @@ class BaseModel {
   }
 
   static async get(userContext, hashKey, rangeKey) {
-    const self = this
     const keys = [hashKey]
     if (rangeKey) {
       keys.push(rangeKey)
@@ -238,17 +235,15 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       throw new UnauthorizedQueryException()
     }
-    return this.dynogelsModel
-      .getAsync(...keys)
-      .then(data => {
-        if (isNil(data)) {
-          throw new DatabaseItemDoesNotExistException()
-        }
-        return self.deserialize(data)
-      })
-      .catch(err => {
-        throw err
-      })
+    try {
+      const data = await this.dynogelsModel.getAsync(...keys)
+      if (isNil(data)) {
+        throw new DatabaseItemDoesNotExistException()
+      }
+      return this.deserialize(data)
+    } catch (e) {
+      throw e
+    }
   }
 
   // `keys` can be an array of hashKey strings or an array of objects
@@ -273,29 +268,29 @@ class BaseModel {
     if (authorizationError) {
       throw new UnauthorizedQueryException()
     }
-    return this.dynogelsModel
-      .getItemsAsync(keys)
-      .then(data => self.deserialize(data))
-      .catch(err => {
-        throw err
-      })
+    try {
+      const data = await this.dynogelsModel.getItemsAsync(keys)
+      return this.deserialize(data)
+    } catch (e) {
+      throw e
+    }
   }
 
   static async getAll(userContext) {
     // logger.debug(`Getting all objs in table ${this.tableName}.`)
-    const self = this
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
       throw new UnauthorizedQueryException()
     }
-    // https://github.com/clarkie/dynogels#scan
-    return this.dynogelsModel
-      .scan()
-      .loadAll()
-      .execAsync()
-      .then(data => self.deserialize(data.Items))
-      .catch(err => {
-        throw err
-      })
+    try {
+      // https://github.com/clarkie/dynogels#scan
+      const data = await this.dynogelsModel
+        .scan()
+        .loadAll()
+        .execAsync()
+      return this.deserialize(data.Items)
+    } catch (e) {
+      throw e
+    }
   }
 
   static query(userContext, hashKey) {
@@ -311,8 +306,6 @@ class BaseModel {
   }
 
   static async _execAsync(userContext, hashKey, queryObj) {
-    const self = this
-
     // See if this query is happening on an index.
     let indexName = null
     if (has(queryObj, 'request.IndexName')) {
@@ -331,12 +324,12 @@ class BaseModel {
       throw new UnauthorizedQueryException()
     }
 
-    return queryObj
-      .execAsync()
-      .then(data => self.deserialize(data.Items))
-      .catch(err => {
-        throw err
-      })
+    try {
+      const data = await queryObj.execAsync()
+      return this.deserialize(data.Items)
+    } catch (e) {
+      throw e
+    }
   }
 
   /**
@@ -349,7 +342,6 @@ class BaseModel {
    */
   static async create(userContext, item, overwrite = false) {
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
-    const self = this
     const hashKey = item[this.hashKey]
 
     // Add 'created' and 'updated' fields if they're not already set.
@@ -367,12 +359,14 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       throw new UnauthorizedQueryException()
     }
-    return this.dynogelsModel
-      .createAsync(item, { overwrite })
-      .then(data => self.deserialize(data))
-      .catch(err => {
-        throw err
+    try {
+      const createdItem = await this.dynogelsModel.createAsync(item, {
+        overwrite,
       })
+      return this.deserialize(createdItem)
+    } catch (e) {
+      throw e
+    }
   }
 
   /**
@@ -386,30 +380,27 @@ class BaseModel {
    *   already existed and `overwrite` is false)
    */
   static async getOrCreate(userContext, item) {
-    const self = this
-    return this.create(userContext, item, false)
-      .then(createdItem => ({
+    try {
+      const createdItem = await this.create(userContext, item, false)
+      return {
         created: true,
         item: createdItem,
-      }))
-      .catch(err => {
-        // Overwrite is false and the item already existed.
-        // Get the item and return it.
-        if (err.code === 'ConditionalCheckFailedException') {
-          const hashKey = item[self.hashKey]
-          return self
-            .get(userContext, hashKey)
-            .then(fetchedItem => ({
-              created: false,
-              item: fetchedItem,
-            }))
-            .catch(error => {
-              throw error
-            })
+      }
+    } catch (e) {
+      // Overwrite is false and the item already existed.
+      // Get the item and return it.
+      if (e.code === 'ConditionalCheckFailedException') {
+        const hashKey = item[this.hashKey]
+        const fetchedItem = await this.get(userContext, hashKey)
+        return {
+          created: false,
+          item: fetchedItem,
         }
-        // Unhandled error
-        throw err
-      })
+      }
+
+      // Some other error we can't handle.
+      throw e
+    }
   }
 
   /**
@@ -423,7 +414,6 @@ class BaseModel {
    */
   static async update(userContext, item, params = {}) {
     // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
-    const self = this
     const hashKeyValue = item[this.hashKey]
     const rangeKeyValue = item[this.rangeKey]
 
@@ -453,12 +443,12 @@ class BaseModel {
       : `attribute_exists(${this.hashKey})`
 
     const options = Object.assign({}, params, { ReturnValues: 'ALL_NEW' })
-    return this.dynogelsModel
-      .updateAsync(item, options)
-      .then(data => self.deserialize(data))
-      .catch(err => {
-        throw err
-      })
+    try {
+      const updatedItem = await this.dynogelsModel.updateAsync(item, options)
+      return this.deserialize(updatedItem)
+    } catch (e) {
+      throw e
+    }
   }
 
   /**
