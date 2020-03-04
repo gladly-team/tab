@@ -4,7 +4,7 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.457.0",
+    "aws-sdk": "^2.632.0",
     "firebase-admin": "^7.3.0",
     "lodash": "^4.17.13",
     "uuid": "^3.3.2"
@@ -35,7 +35,7 @@
     "nodemon": "^1.19.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.17.1",
-    "serverless": "^1.42.3",
+    "serverless": "^1.65.0",
     "serverless-plugin-include-dependencies": "^3.2.1",
     "serverless-prune-plugin": "^1.4.1",
     "yamljs": "^0.3.0"

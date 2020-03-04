@@ -29,7 +29,7 @@
     "relay-compiler": "^4.0.0",
     "relay-runtime": "^4.0.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
-    "serverless": "^1.42.3",
+    "serverless": "^1.65.0",
     "source-map-explorer": "^1.8.0"
   },
   "dependencies": {

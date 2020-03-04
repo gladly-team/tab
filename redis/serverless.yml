@@ -11,7 +11,7 @@ provider:
   name: aws
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   
   # Need the permissions in AWSLambdaVPCAccessExecutionRole so the
   # function can manage network connections to a VPC.
