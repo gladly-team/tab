@@ -236,7 +236,7 @@ class BaseModel {
     }
     // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
     return this.dynogelsModel
       .getAsync(...keys)
@@ -271,7 +271,7 @@ class BaseModel {
       }
     })
     if (authorizationError) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
     return this.dynogelsModel
       .getItemsAsync(keys)
@@ -285,7 +285,7 @@ class BaseModel {
     // logger.debug(`Getting all objs in table ${this.tableName}.`)
     const self = this
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
     // https://github.com/clarkie/dynogels#scan
     return this.dynogelsModel
@@ -328,7 +328,7 @@ class BaseModel {
         indexName
       )
     ) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
 
     return queryObj
@@ -365,7 +365,7 @@ class BaseModel {
     }
 
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
     return this.dynogelsModel
       .createAsync(item, { overwrite })
@@ -443,7 +443,7 @@ class BaseModel {
         item
       )
     ) {
-      return Promise.reject(new UnauthorizedQueryException())
+      throw new UnauthorizedQueryException()
     }
 
     // TODO: fix rule violation
