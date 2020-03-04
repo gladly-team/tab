@@ -65,6 +65,7 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
+import logger from 'js/utils/logger'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -111,19 +112,26 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
 
-    fetchAds({
-      adUnits: Object.values(getAdUnits()),
-      consent: {
-        isEU: isInEuropeanUnion,
-      },
-      publisher: {
-        domain: getHostname(),
-        pageUrl: getCurrentURL(),
-      },
-      logLevel: 'debug',
-      disableAds: !areAdsEnabled(),
-      useMockAds: showMockAds(),
-    })
+    try {
+      fetchAds({
+        adUnits: Object.values(getAdUnits()),
+        consent: {
+          isEU: isInEuropeanUnion,
+        },
+        publisher: {
+          domain: getHostname(),
+          pageUrl: getCurrentURL(),
+        },
+        logLevel: 'debug',
+        onError: e => {
+          logger.error(e)
+        },
+        disableAds: !areAdsEnabled(),
+        useMockAds: showMockAds(),
+      })
+    } catch (e) {
+      logger.error(e)
+    }
   }
 
   /**
@@ -222,6 +230,11 @@ class Dashboard extends React.Component {
         tabId: context.tabId,
         adUnitCode: GAMAdUnitId,
       })
+    }
+
+    // Logs any errors the occur in the ad components
+    const onAdError = e => {
+      logger.error(e)
     }
 
     // Whether or not a campaign should show on the dashboard
@@ -587,6 +600,7 @@ class Dashboard extends React.Component {
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}
+                onError={onAdError}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -600,6 +614,7 @@ class Dashboard extends React.Component {
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}
+                onError={onAdError}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -674,6 +689,7 @@ class Dashboard extends React.Component {
                 onAdDisplayed={displayedAdInfo => {
                   onAdDisplayed(displayedAdInfo, adContext)
                 }}
+                onError={onAdError}
                 style={{
                   overflow: 'visible',
                   minWidth: 728,

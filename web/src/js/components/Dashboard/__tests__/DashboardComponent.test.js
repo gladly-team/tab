@@ -58,6 +58,7 @@ import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
+import logger from 'js/utils/logger'
 
 jest.mock('uuid/v4', () =>
   jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
@@ -75,6 +76,7 @@ jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
 jest.mock('js/utils/client-location')
 jest.mock('js/navigation/utils')
+jest.mock('js/utils/logger')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -587,6 +589,7 @@ describe('Dashboard component: ads logic', () => {
         pageUrl: 'https://example.com/my-new-tab/',
       },
       logLevel: 'debug',
+      onError: expect.any(Function),
       disableAds: false,
       useMockAds: false,
     })
@@ -642,6 +645,27 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0].useMockAds).toBe(false)
+  })
+
+  it('calls logger.error when tab-ads calls the onError function', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    const mockErr = new Error('Ads are one of my 99 problems.')
+    const onErrHandler = fetchAds.mock.calls[0][0].onError
+    onErrHandler(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('calls logger.error if fetchAds throws', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const mockErr = new Error('Ads are one of my 99 problems.')
+    fetchAds.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
@@ -986,6 +1010,28 @@ describe('Dashboard component: ads logic', () => {
     expect(rectangleAdNumberTwo.prop('style').minWidth).toBe(300)
     expect(leaderboardAd.prop('adId')).toBe(getAdUnits().leaderboard.adId)
     expect(leaderboardAd.prop('style').minWidth).toBe(728)
+  })
+
+  it('calls logger.error when an AdComponent calls its onError prop', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+    const thirdAd = wrapper.find(AdComponent).at(2)
+
+    const mockErrA = new Error('Oops A')
+    const mockErrB = new Error('Oops B')
+    const mockErrC = new Error('Oops C')
+
+    firstAd.prop('onError')(mockErrA)
+    secondAd.prop('onError')(mockErrB)
+    thirdAd.prop('onError')(mockErrC)
+
+    expect(logger.error).toHaveBeenCalledTimes(3)
+    expect(logger.error).toHaveBeenCalledWith(mockErrA)
+    expect(logger.error).toHaveBeenCalledWith(mockErrB)
+    expect(logger.error).toHaveBeenCalledWith(mockErrC)
   })
 })
 
