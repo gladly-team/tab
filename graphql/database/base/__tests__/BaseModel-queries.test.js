@@ -9,16 +9,15 @@ import ExampleModelRangeKey, {
 import {
   addTimestampFieldsToItem,
   ConditionalCheckFailedException,
-  DatabaseOperation,
   getMockUserContext,
   mockDate,
-  setMockDBResponse,
   setModelPermissions,
 } from '../../test-utils'
 import {
   DatabaseItemDoesNotExistException,
   UnauthorizedQueryException,
 } from '../../../utils/exceptions'
+import databaseClient from '../../databaseClient'
 
 jest.mock('../../databaseClient')
 
@@ -40,7 +39,7 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.resetAllMocks()
+  jest.clearAllMocks()
 
   // For some reason, jest.resetModules is failing with
   // ExampleModel (even when using CommonJS requires), so just
@@ -60,9 +59,13 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.GET_ALL, {
-      Items: fixturesA,
-    })
+    const dbQueryMock = databaseClient.scan.mockImplementationOnce(
+      (params, callback) => {
+        callback(null, {
+          Items: fixturesA,
+        })
+      }
+    )
     const expectedDBParams = {
       TableName: ExampleModel.tableName,
     }
@@ -91,9 +94,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToGet = Object.assign({}, fixturesA[0])
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.GET, {
-      Item: itemToGet,
-    })
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: itemToGet,
+        })
+      }
+    )
     const expectedDBParams = {
       TableName: ExampleModel.tableName,
       Key: {
@@ -112,9 +119,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToGet = Object.assign({}, fixturesA[0])
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: null,
-    })
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: null,
+        })
+      }
+    )
 
     return expect(ExampleModel.get(user, itemToGet.id)).rejects.toEqual(
       new DatabaseItemDoesNotExistException()
@@ -128,9 +139,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToGet = Object.assign({}, fixturesRangeKeyA[0])
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.GET, {
-      Item: itemToGet,
-    })
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: itemToGet,
+        })
+      }
+    )
     const expectedDBParams = {
       TableName: ExampleModelRangeKey.tableName,
       Key: {
@@ -166,11 +181,15 @@ describe('BaseModel queries', () => {
     const keys = [itemsToGet[0].id, itemsToGet[1].id]
 
     // Set mock response from DB client.
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.GET_BATCH, {
-      Responses: {
-        [ExampleModel.tableName]: itemsToGet,
-      },
-    })
+    const dbQueryMock = databaseClient.batchGet.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Responses: {
+            [ExampleModel.tableName]: itemsToGet,
+          },
+        })
+      }
+    )
     const expectedDBParams = {
       RequestItems: {
         [ExampleModel.tableName]: {
@@ -207,11 +226,15 @@ describe('BaseModel queries', () => {
     ]
 
     // Set mock response from DB client.
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.GET_BATCH, {
-      Responses: {
-        [ExampleModelRangeKey.tableName]: itemsToGet,
-      },
-    })
+    const dbQueryMock = databaseClient.batchGet.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Responses: {
+            [ExampleModelRangeKey.tableName]: itemsToGet,
+          },
+        })
+      }
+    )
     const expectedDBParams = {
       RequestItems: {
         [ExampleModelRangeKey.tableName]: {
@@ -242,10 +265,14 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const item = Object.assign({}, fixturesA[0])
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
-      // https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html#output
-      Attributes: {},
-    })
+    const dbQueryMock = databaseClient.put.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          // https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html#output
+          Attributes: {},
+        })
+      }
+    )
 
     // 'created' and 'updated' field should be automatically added.
     const itemToCreate = removeCreatedAndUpdatedFields(item)
@@ -282,9 +309,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToCreate = {}
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
-      Attributes: {},
-    })
+    const dbQueryMock = databaseClient.put.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: {},
+        })
+      }
+    )
     const createdItem = await ExampleModel.create(user, itemToCreate)
 
     // Verify DB params.
@@ -336,9 +367,13 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     // 'updated' field should be automatically updated.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
@@ -378,9 +413,14 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
     const updatedItem = await ExampleModelRangeKey.update(user, itemToUpdate)
@@ -420,9 +460,13 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     // 'updated' field should be automatically updated.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
@@ -469,9 +513,13 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     // 'updated' field should be automatically updated.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
@@ -491,9 +539,13 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     // 'updated' field should be automatically updated.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
@@ -529,9 +581,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemsToGet = [fixturesRangeKeyA[0]]
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: itemsToGet,
-    })
+    const dbQueryMock = databaseClient.query.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Items: itemsToGet,
+        })
+      }
+    )
     const response = await ExampleModelRangeKey.query(
       user,
       itemsToGet[0].id
@@ -561,9 +617,13 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemsToGet = [fixturesRangeKeyA[0]]
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: itemsToGet,
-    })
+    const dbQueryMock = databaseClient.query.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Items: itemsToGet,
+        })
+      }
+    )
     const response = await ExampleModelRangeKey.query(user, itemsToGet[0].id)
       .where('age')
       .gt(30)
@@ -607,14 +667,18 @@ describe('BaseModel queries', () => {
 
     const itemToGetOrCreate = removeCreatedAndUpdatedFields(fixturesA[1])
 
-    const dbCreateQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
-      Attributes: {},
-    })
+    const dbQueryMock = databaseClient.put.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: {},
+        })
+      }
+    )
     const response = await ExampleModel.getOrCreate(user, itemToGetOrCreate)
     const createdItem = response.item
 
     // Verify DB params.
-    const dbParams = dbCreateQueryMock.mock.calls[0][0]
+    const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual({
       ConditionExpression: '(#id <> :id)',
       ExpressionAttributeNames: { '#id': 'id' },
@@ -643,14 +707,15 @@ describe('BaseModel queries', () => {
 
   it('fails with unauthorized `create` in `getOrCreate`', async () => {
     expect.assertions(1)
+    // console.log('===========')
     const itemToGetOrCreate = fixturesA[1]
     setModelPermissions(ExampleModel, {
       create: () => false,
       get: () => true,
     })
-    return expect(
+    await expect(
       ExampleModel.getOrCreate(user, itemToGetOrCreate)
-    ).rejects.toEqual(new UnauthorizedQueryException())
+    ).rejects.toThrow(new UnauthorizedQueryException())
   })
 
   it('correctly calls `get` from `getOrCreate` method', async () => {
@@ -662,14 +727,17 @@ describe('BaseModel queries', () => {
     const itemToGetOrCreate = removeCreatedAndUpdatedFields(fixturesA[1])
 
     // Mock that the item already exists.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      ConditionalCheckFailedException()
-    )
-    const dbGetQueryMock = setMockDBResponse(DatabaseOperation.GET, {
-      Item: itemToGetOrCreate,
+    databaseClient.put.mockImplementation((params, callback) => {
+      callback(ConditionalCheckFailedException(), null) // error
     })
+
+    const dbGetQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: itemToGetOrCreate,
+        })
+      }
+    )
     const response = await ExampleModel.getOrCreate(user, itemToGetOrCreate)
     const createdItem = response.item
 
@@ -703,11 +771,9 @@ describe('BaseModel queries', () => {
     const itemToGetOrCreate = fixturesA[1]
 
     // Mock that the item already exists.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      ConditionalCheckFailedException()
-    )
+    databaseClient.put.mockImplementation((params, callback) => {
+      callback(ConditionalCheckFailedException(), null) // error
+    })
     return expect(
       ExampleModel.getOrCreate(user, itemToGetOrCreate)
     ).rejects.toEqual(new UnauthorizedQueryException())
@@ -718,11 +784,13 @@ describe('BaseModel queries', () => {
       create: () => true,
     })
 
-    // Set mock response from DB client.
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
-      // https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html#output
-      Attributes: {},
-    })
+    const dbQueryMock = databaseClient.put.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: {},
+        })
+      }
+    )
 
     const item = Object.assign({}, fixturesA[0])
     const itemToCreate = removeCreatedAndUpdatedFields(item)
@@ -762,9 +830,13 @@ describe('BaseModel queries', () => {
     const expectedReturn = Object.assign({}, item, {
       updated: moment.utc().toISOString(),
     })
-    const dbQueryMock = setMockDBResponse(DatabaseOperation.UPDATE, {
-      Attributes: expectedReturn,
-    })
+    const dbQueryMock = databaseClient.update.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Attributes: expectedReturn,
+        })
+      }
+    )
 
     // Add our overridden updated" timestamp.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
