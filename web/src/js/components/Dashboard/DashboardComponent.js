@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
+import { isNil } from 'lodash/lang'
+import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
@@ -9,9 +11,7 @@ import Button from '@material-ui/core/Button'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -45,13 +45,7 @@ import {
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
-import {
-  getNumberOfAdsToShow,
-  shouldShowAdExplanation,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'js/ads/adSettings'
+import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
@@ -62,12 +56,16 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-
-// Include ads code.
-// TODO: load this on mount, making sure the ads code behaves
-// appropriately for a SPA (it should not reload libraries but
-// should re-fetch ads).
-import 'js/ads/ads'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
+import {
+  areAdsEnabled,
+  getAdUnits,
+  shouldShowAdExplanation,
+  showMockAds,
+} from 'js/ads/adHelpers'
+import { AdComponent, fetchAds } from 'tab-ads'
+import { isInEuropeanUnion } from 'js/utils/client-location'
+import logger from 'js/utils/logger'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -90,7 +88,6 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour:
         localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
-      numAdsToShow: getNumberOfAdsToShow(),
       showAdExplanation: shouldShowAdExplanation(),
       // Whether to show a global announcement.
       showNotification:
@@ -114,6 +111,27 @@ class Dashboard extends React.Component {
     this.setState({
       browser: detectSupportedBrowser(),
     })
+
+    try {
+      fetchAds({
+        adUnits: Object.values(getAdUnits()),
+        consent: {
+          isEU: isInEuropeanUnion,
+        },
+        publisher: {
+          domain: getHostname(),
+          pageUrl: getCurrentURL(),
+        },
+        logLevel: 'debug',
+        onError: e => {
+          logger.error(e)
+        },
+        disableAds: !areAdsEnabled(),
+        useMockAds: showMockAds(),
+      })
+    } catch (e) {
+      logger.error(e)
+    }
   }
 
   /**
@@ -167,6 +185,57 @@ class Dashboard extends React.Component {
       userClickedSearchIntroV1,
       userClickedSearchIntroV2,
     } = this.state
+
+    /*
+     * A handler for AdComponents' onAdDisplayed callbacks, which receives
+     * info about the displayed ad.
+     * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
+     *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
+     * @param {Object} context - Additional info to help with revenue logging
+     * @param {Object} context.user - The user object
+     * @param {String} context.user.id - The user ID
+     * @param {String} context.tabId - A UUID for this page load
+     * @return {undefined}
+     */
+    const onAdDisplayed = (displayedAdInfo, context) => {
+      // No ad was shown.
+      if (!displayedAdInfo) {
+        return
+      }
+
+      const {
+        revenue,
+        encodedRevenue,
+        GAMAdvertiserId,
+        GAMAdUnitId,
+        adSize,
+      } = displayedAdInfo
+
+      // Log the revenue from the ad.
+      LogUserRevenueMutation({
+        userId: context.user.id,
+        revenue,
+        ...(encodedRevenue && {
+          encodedRevenue: {
+            encodingType: 'AMAZON_CPM',
+            encodedValue: encodedRevenue,
+          },
+        }),
+        dfpAdvertiserId: GAMAdvertiserId.toString(),
+        adSize,
+        // Only send aggregationOperation value if we have more than one
+        // revenue value
+        aggregationOperation:
+          !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
+        tabId: context.tabId,
+        adUnitCode: GAMAdUnitId,
+      })
+    }
+
+    // Logs any errors the occur in the ad components
+    const onAdError = e => {
+      logger.error(e)
+    }
 
     // Whether or not a campaign should show on the dashboard
     const isCampaignLive = !!(app && app.campaign && app.campaign.isLive)
@@ -266,6 +335,13 @@ class Dashboard extends React.Component {
       default:
         break
     }
+
+    const adContext = {
+      user,
+      tabId,
+    }
+    const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
+    const adUnitsToShow = getAdUnits()
 
     return (
       <div
@@ -518,9 +594,13 @@ class Dashboard extends React.Component {
               overflow: 'visible',
             }}
           >
-            {this.state.numAdsToShow > 2 ? (
-              <Ad
-                adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+            {adUnitsToShow.rectangleAdSecondary && adContextReady ? (
+              <AdComponent
+                adId={adUnitsToShow.rectangleAdSecondary.adId}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
+                onError={onAdError}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -528,9 +608,13 @@ class Dashboard extends React.Component {
                 }}
               />
             ) : null}
-            {this.state.numAdsToShow > 1 ? (
-              <Ad
-                adId={VERTICAL_AD_SLOT_DOM_ID}
+            {adUnitsToShow.rectangleAdPrimary && adContextReady ? (
+              <AdComponent
+                adId={adUnitsToShow.rectangleAdPrimary.adId}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
+                onError={onAdError}
                 style={{
                   display: 'flex',
                   minWidth: 300,
@@ -540,7 +624,7 @@ class Dashboard extends React.Component {
               />
             ) : null}
           </div>
-          {this.state.numAdsToShow > 0 ? (
+          {adUnitsToShow.leaderboard && adContextReady ? (
             <div
               style={{
                 display: 'flex',
@@ -600,8 +684,12 @@ class Dashboard extends React.Component {
                   </div>
                 </FadeInDashboardAnimation>
               ) : null}
-              <Ad
-                adId={HORIZONTAL_AD_SLOT_DOM_ID}
+              <AdComponent
+                adId={adUnitsToShow.leaderboard.adId}
+                onAdDisplayed={displayedAdInfo => {
+                  onAdDisplayed(displayedAdInfo, adContext)
+                }}
+                onError={onAdError}
                 style={{
                   overflow: 'visible',
                   minWidth: 728,
@@ -611,7 +699,6 @@ class Dashboard extends React.Component {
           ) : null}
         </div>
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
-        {user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null}
         {user ? <LogConsentData user={user} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}

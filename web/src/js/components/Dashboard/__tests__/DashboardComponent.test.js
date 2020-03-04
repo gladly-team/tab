@@ -9,9 +9,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -34,12 +32,11 @@ import {
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
 import {
-  getNumberOfAdsToShow,
+  areAdsEnabled,
+  getAdUnits,
   shouldShowAdExplanation,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'js/ads/adSettings'
+  showMockAds,
+} from 'js/ads/adHelpers'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedCampaignRecently,
@@ -57,18 +54,29 @@ import {
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-import CampaignBase from 'js/components/Campaign/CampaignBaseView'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
+import { AdComponent, fetchAds } from 'tab-ads'
+import { isInEuropeanUnion } from 'js/utils/client-location'
+import { getHostname, getCurrentURL } from 'js/navigation/utils'
+import logger from 'js/utils/logger'
 
+jest.mock('uuid/v4', () =>
+  jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
+)
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
-jest.mock('js/ads/adSettings')
+jest.mock('js/ads/adHelpers')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
+jest.mock('js/mutations/LogUserRevenueMutation')
+jest.mock('js/utils/client-location')
+jest.mock('js/navigation/utils')
+jest.mock('js/utils/logger')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -89,6 +97,36 @@ beforeAll(() => {
 beforeEach(() => {
   detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
   LogUserExperimentActionsMutation.mockResolvedValue()
+
+  // Default to showing three ad units.
+  getAdUnits.mockReturnValue({
+    leaderboard: {
+      // The long leaderboard ad.
+      adId: 'div-gpt-ad-1464385677836-0',
+      adUnitId: '/43865596/HBTL',
+      sizes: [[728, 90]],
+    },
+    rectangleAdPrimary: {
+      // The primary rectangle ad (bottom-right).
+      adId: 'div-gpt-ad-1464385742501-0',
+      adUnitId: '/43865596/HBTR',
+      sizes: [[300, 250]],
+    },
+    rectangleAdSecondary: {
+      // The second rectangle ad (right side, above the first).
+      adId: 'div-gpt-ad-1539903223131-0',
+      adUnitId: '/43865596/HBTR2',
+      sizes: [[300, 250]],
+    },
+  })
+
+  // Default to enabled ads.
+  areAdsEnabled.mockReturnValue(true)
+  showMockAds.mockReturnValue(false)
+
+  // Provide mock hostname and URL.
+  getHostname.mockReturnValue('example.com')
+  getCurrentURL.mockReturnValue('https://example.com/my-new-tab/')
 })
 
 afterEach(() => {
@@ -149,13 +187,6 @@ describe('Dashboard component', () => {
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find(LogTab).length).toBe(1)
-  })
-
-  it('renders LogRevenue component', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(LogRevenue).length).toBe(1)
   })
 
   it('renders LogConsentData component', () => {
@@ -251,14 +282,6 @@ describe('Dashboard component', () => {
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
     expect(wrapper.find(LogTab).length).toBe(0)
-  })
-
-  it('does not render LogRevenue component until the "user" prop exists', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
-    const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
-    expect(wrapper.find(LogRevenue).length).toBe(0)
   })
 
   it('does not render LogConsentData component until the "user" prop exists', () => {
@@ -526,68 +549,489 @@ describe('Dashboard component: campaign / charity spotlight', () => {
 })
 
 describe('Dashboard component: ads logic', () => {
-  it('does not render any ad components when 0 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(0)
+  it('calls tab-ads fetchAds on mount', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds).toHaveBeenCalled()
+  })
+
+  it('provides the expected config to fetchAds', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0]).toEqual({
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+        {
+          // The second rectangle ad (right side, above the first).
+          adId: 'div-gpt-ad-1539903223131-0',
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      ],
+      consent: {
+        isEU: expect.any(Function),
+      },
+      publisher: {
+        domain: 'example.com',
+        pageUrl: 'https://example.com/my-new-tab/',
+      },
+      logLevel: 'debug',
+      onError: expect.any(Function),
+      disableAds: false,
+      useMockAds: false,
+    })
+  })
+
+  it('passes isInEuropeanUnion function to the tab-ads config property consent.isEU', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
+  })
+
+  it('passes the expected hostname and page URL to the tab-ads config', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getHostname.mockReturnValue('foo.com')
+    getCurrentURL.mockReturnValue('https://foo.com/hi/')
+    shallow(<DashboardComponent {...mockProps} />)
+
+    expect(fetchAds.mock.calls[0][0].publisher).toEqual({
+      domain: 'foo.com',
+      pageUrl: 'https://foo.com/hi/',
+    })
+  })
+
+  it('passes disableAds === true to the tab-ads config if adHelpers.areAdsEnabled() returns false', () => {
+    areAdsEnabled.mockReturnValue(false)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].disableAds).toBe(true)
+  })
+
+  it('passes disableAds === false to the tab-ads config if adHelpers.areAdsEnabled() returns true', () => {
+    areAdsEnabled.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].disableAds).toBe(false)
+  })
+
+  it('passes showMockAds === true to the tab-ads config if adHelpers.showMockAds() returns true', () => {
+    showMockAds.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].useMockAds).toBe(true)
+  })
+
+  it('passes showMockAds === false to the tab-ads config if adHelpers.showMockAds() returns true', () => {
+    showMockAds.mockReturnValue(false)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(fetchAds.mock.calls[0][0].useMockAds).toBe(false)
+  })
+
+  it('calls logger.error when tab-ads calls the onError function', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    const mockErr = new Error('Ads are one of my 99 problems.')
+    const onErrHandler = fetchAds.mock.calls[0][0].onError
+    onErrHandler(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('calls logger.error if fetchAds throws', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const mockErr = new Error('Ads are one of my 99 problems.')
+    fetchAds.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(0)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+    const thirdAd = wrapper.find(AdComponent).at(2)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'second-ad-here',
+      revenue: 0.082,
+      encodedRevenue: 'encoded-second-ad',
+      GAMAdvertiserId: 2222,
+      GAMAdUnitId: '/12345/SecondAdThing',
+      adSize: '300x250',
+    })
+    thirdAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'third-ad-here',
+      revenue: 0.0001472,
+      encodedRevenue: 'encoded-third-ad',
+      GAMAdvertiserId: 3333,
+      GAMAdUnitId: '/12345/ThirdAdHere',
+      adSize: '300x250',
+    })
+
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
+    expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.082,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-second-ad',
+      },
+      dfpAdvertiserId: '2222',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: '/12345/SecondAdThing',
+    })
+    expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0001472,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-third-ad',
+      },
+      dfpAdvertiserId: '3333',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: '/12345/ThirdAdHere',
+    })
+  })
+
+  it('does not call LogUserRevenueMutation when the ad info is null', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')(null) // no ad
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
+  })
+
+  it('does not include encodedRevenue in the LogUserRevenueMutation when the encodedRevenue value is nil', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: null, // no encodedRevenue
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'abc-123',
+      revenue: 0.0123,
+      // no encodedRevenue value
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: null,
+      tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
+  })
+
+  it('does not render any ad components when 0 ads are enabled', () => {
+    getAdUnits.mockReturnValue({})
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find(AdComponent).length).toBe(0)
   })
 
   it('renders the expected 1 ad component when 1 ad is enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(1)
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+    })
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(1)
-    const leaderboardAd = wrapper.find(Ad).at(0)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(wrapper.find(AdComponent).length).toBe(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(0)
+    expect(leaderboardAd.prop('adId')).toBe(getAdUnits().leaderboard.adId)
   })
 
   it('renders the expected 2 ad components when 2 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(2)
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+    })
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(2)
-    const rectangleAd = wrapper.find(Ad).at(0)
-    const leaderboardAd = wrapper.find(Ad).at(1)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(wrapper.find(AdComponent).length).toBe(2)
+    const rectangleAd = wrapper.find(AdComponent).at(0)
+    const leaderboardAd = wrapper.find(AdComponent).at(1)
+    expect(rectangleAd.prop('adId')).toBe(getAdUnits().rectangleAdPrimary.adId)
+    expect(leaderboardAd.prop('adId')).toBe(getAdUnits().leaderboard.adId)
   })
 
   it('renders the expected 3 ad components when 3 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(3)
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(3)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    expect(wrapper.find(AdComponent).length).toBe(3)
+    const rectangleAdNumberTwo = wrapper.find(AdComponent).at(0)
+    const rectangleAd = wrapper.find(AdComponent).at(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(2)
+    expect(rectangleAd.prop('adId')).toBe(getAdUnits().rectangleAdPrimary.adId)
     expect(rectangleAdNumberTwo.prop('adId')).toBe(
-      SECOND_VERTICAL_AD_SLOT_DOM_ID
+      getAdUnits().rectangleAdSecondary.adId
     )
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(leaderboardAd.prop('adId')).toBe(getAdUnits().leaderboard.adId)
+  })
+
+  it('does not render any ad components until the user is defined', () => {
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const mockPropsWithoutUser = {
+      ...mockProps,
+      user: null,
+    }
+    const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
+
+    // No ads rendered yet.
+    expect(wrapper.find(AdComponent).length).toBe(0)
+
+    // Now that the user is defined, the ads should load.
+    wrapper.setProps({
+      user: mockProps.user,
+    })
+    expect(wrapper.find(AdComponent).length).toBe(3)
+  })
+
+  it('does not render any ad components if the tabId is not set in state', () => {
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    wrapper.setState({ tabId: null })
+
+    // No ads should be rendered.
+    expect(wrapper.find(AdComponent).length).toBe(0)
+
+    // Now that the tab ID is defined, the ads should load.
+    wrapper.setState({
+      tabId: 'abc-123',
+    })
+    expect(wrapper.find(AdComponent).length).toBe(3)
   })
 
   it('the ads have expected IDs matched with their sizes', () => {
-    getNumberOfAdsToShow.mockReturnValue(3)
+    getAdUnits.mockReturnValue({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    const rectangleAdNumberTwo = wrapper.find(AdComponent).at(0)
+    const rectangleAd = wrapper.find(AdComponent).at(1)
+    const leaderboardAd = wrapper.find(AdComponent).at(2)
+    expect(rectangleAd.prop('adId')).toBe(getAdUnits().rectangleAdPrimary.adId)
     expect(rectangleAd.prop('style').minWidth).toBe(300)
     expect(rectangleAdNumberTwo.prop('adId')).toBe(
-      SECOND_VERTICAL_AD_SLOT_DOM_ID
+      getAdUnits().rectangleAdSecondary.adId
     )
     expect(rectangleAdNumberTwo.prop('style').minWidth).toBe(300)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(leaderboardAd.prop('adId')).toBe(getAdUnits().leaderboard.adId)
     expect(leaderboardAd.prop('style').minWidth).toBe(728)
+  })
+
+  it('calls logger.error when an AdComponent calls its onError prop', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+    const thirdAd = wrapper.find(AdComponent).at(2)
+
+    const mockErrA = new Error('Oops A')
+    const mockErrB = new Error('Oops B')
+    const mockErrC = new Error('Oops C')
+
+    firstAd.prop('onError')(mockErrA)
+    secondAd.prop('onError')(mockErrB)
+    thirdAd.prop('onError')(mockErrC)
+
+    expect(logger.error).toHaveBeenCalledTimes(3)
+    expect(logger.error).toHaveBeenCalledWith(mockErrA)
+    expect(logger.error).toHaveBeenCalledWith(mockErrB)
+    expect(logger.error).toHaveBeenCalledWith(mockErrC)
   })
 })
 
