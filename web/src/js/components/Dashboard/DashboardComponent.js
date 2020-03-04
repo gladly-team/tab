@@ -92,6 +92,7 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      adUnitsToShow: getAdUnits(),
       // Whether to show an introduction to Search for a Cause.
       showSearchIntroductionMessage: showSearchIntroductionMessage(),
       userClickedSearchIntroV1: hasUserClickedNewTabSearchIntroNotif(),
@@ -172,6 +173,7 @@ class Dashboard extends React.Component {
     // Props will be null on first render.
     const { user, app } = this.props
     const {
+      adUnitsToShow,
       browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
@@ -341,7 +343,6 @@ class Dashboard extends React.Component {
       tabId,
     }
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
-    const adUnitsToShow = getAdUnits()
 
     return (
       <div
