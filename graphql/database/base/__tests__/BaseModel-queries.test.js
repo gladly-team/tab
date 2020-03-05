@@ -8,7 +8,7 @@ import ExampleModelRangeKey, {
 } from '../test-utils/ExampleModelRangeKey'
 import {
   addTimestampFieldsToItem,
-  ConditionalCheckFailedException,
+  MockAWSConditionalCheckFailedError,
   getMockUserContext,
   mockDate,
   setModelPermissions,
@@ -726,7 +726,7 @@ describe('BaseModel queries', () => {
 
     // Mock that the item already exists.
     databaseClient.put.mockImplementation((params, callback) => {
-      callback(ConditionalCheckFailedException(), null) // error
+      callback(MockAWSConditionalCheckFailedError(), null) // error
     })
 
     const dbGetQueryMock = databaseClient.get.mockImplementation(
@@ -770,7 +770,7 @@ describe('BaseModel queries', () => {
 
     // Mock that the item already exists.
     databaseClient.put.mockImplementation((params, callback) => {
-      callback(ConditionalCheckFailedException(), null) // error
+      callback(MockAWSConditionalCheckFailedError(), null) // error
     })
     return expect(
       ExampleModel.getOrCreate(user, itemToGetOrCreate)

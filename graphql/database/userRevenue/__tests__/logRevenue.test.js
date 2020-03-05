@@ -5,7 +5,7 @@ import { random } from 'lodash/number'
 import UserRevenueModel from '../UserRevenueModel'
 import logRevenue from '../logRevenue'
 import {
-  ConditionalCheckFailedException,
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   setMockDBResponse,
   addTimestampFieldsToItem,
@@ -425,7 +425,7 @@ describe('logRevenue', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Control the random millisecond selection.
@@ -461,12 +461,12 @@ describe('logRevenue', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     await expect(

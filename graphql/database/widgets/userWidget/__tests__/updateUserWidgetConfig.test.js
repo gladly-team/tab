@@ -4,7 +4,7 @@ import moment from 'moment'
 import updateUserWidgetConfig from '../updateUserWidgetConfig'
 import UserWidgetModel from '../UserWidgetModel'
 import {
-  ConditionalCheckFailedException,
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
@@ -75,7 +75,7 @@ describe('updateUserWidgetConfig', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Set the return for the created object.
@@ -120,7 +120,7 @@ describe('updateUserWidgetConfig', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Set the return for the created object.
@@ -181,7 +181,7 @@ describe('updateUserWidgetConfig', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Set some error during creation.

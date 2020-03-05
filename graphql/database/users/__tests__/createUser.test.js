@@ -11,7 +11,7 @@ import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import logUserExperimentGroups from '../logUserExperimentGroups'
 import {
   addTimestampFieldsToItem,
-  ConditionalCheckFailedException,
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
@@ -556,7 +556,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
@@ -582,7 +582,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
     const userInfo = getMockUserInfo()
     const referralData = {
@@ -616,7 +616,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
@@ -655,7 +655,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
@@ -686,7 +686,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
@@ -734,7 +734,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
@@ -774,7 +774,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      ConditionalCheckFailedException()
+      MockAWSConditionalCheckFailedError()
     )
 
     // Mock database responses.
