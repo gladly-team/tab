@@ -3,6 +3,7 @@ import VCDonationModel from './VCDonationModel'
 import VCDonationByCharityModel from './VCDonationByCharityModel'
 import UserModel from '../users/UserModel'
 import addVcDonatedAllTime from '../users/addVcDonatedAllTime'
+import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import {
   getPermissionsOverride,
   ADD_VC_DONATED_BY_CHARITY,
@@ -43,7 +44,7 @@ export default async (userContext, userId, charityId, vc) => {
       )
     } catch (e) {
       // The user did not have sufficient VC.
-      if (e.code === 'ConditionalCheckFailedException') {
+      if (e.code === DatabaseConditionalCheckFailedException.code) {
         return {
           user: null,
           errors: [

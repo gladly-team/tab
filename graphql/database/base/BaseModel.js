@@ -454,6 +454,9 @@ class BaseModel {
       const updatedItem = await this.dynogelsModel.updateAsync(item, options)
       return this.deserialize(updatedItem)
     } catch (e) {
+      if (e.code === AWSConditionalCheckFailedErrorCode) {
+        throw new DatabaseConditionalCheckFailedException()
+      }
       throw e
     }
   }
