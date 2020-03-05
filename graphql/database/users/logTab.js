@@ -95,6 +95,7 @@ const logTab = async (userContext, userId, tabId = null) => {
       maxTabsDay: maxTabsDayVal,
     })
 
+    // TODO: handle duplicate timestamps
     // Log the tab for analytics whether a valid tab or not.
     await UserTabsLogModel.create(userContext, {
       userId,
