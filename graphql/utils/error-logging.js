@@ -39,8 +39,8 @@ export const formatError = graphQLError => ({
  */
 const shouldLogError = graphQLError => {
   const errorCodesToSkipLogging = [
-    USER_DOES_NOT_EXIST,
-    UnauthorizedQueryException.code,
+    USER_DOES_NOT_EXIST, // can happen during sign up
+    UnauthorizedQueryException.code, // can happen during logout (when storage is cleared)
   ]
   const errCode = get(graphQLError, 'originalError.code')
   return errorCodesToSkipLogging.indexOf(errCode) === -1
