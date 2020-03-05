@@ -5,6 +5,7 @@ import { random } from 'lodash/number'
 import UserRevenueModel from '../UserRevenueModel'
 import logRevenue from '../logRevenue'
 import {
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   setMockDBResponse,
   addTimestampFieldsToItem,
@@ -421,12 +422,14 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
 
     // Mock that the item already exists.
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
 
     // Control the random millisecond selection.
-    random.mockReturnValueOnce(7)
+    random.mockReturnValueOnce(12).mockReturnValueOnce(18)
 
     await logRevenue(userContext, userContext.id, 0.0172, '2468')
     expect(userRevenueCreate).toHaveBeenCalledTimes(2)
@@ -434,7 +437,7 @@ describe('logRevenue', () => {
       userContext,
       addTimestampFieldsToItem({
         userId: userContext.id,
-        timestamp: '2017-06-22T01:13:28.000Z',
+        timestamp: '2017-06-22T01:13:28.012Z',
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
       })
@@ -443,14 +446,50 @@ describe('logRevenue', () => {
       userContext,
       addTimestampFieldsToItem({
         userId: userContext.id,
-        timestamp: '2017-06-22T01:13:28.007Z', // Different time
+        timestamp: '2017-06-22T01:13:28.018Z', // Different time
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
       })
     )
   })
 
-  test('throws an error when a DB item already exists twice in a row', async () => {
+  test('retries three times when a DB item already exists', async () => {
+    expect.assertions(1)
+
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+
+    // Mock that the item already exists for the original and the
+    // retried "create" operations.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+
+    // Control the random millisecond selection.
+    random
+      .mockReturnValueOnce(12)
+      .mockReturnValueOnce(18)
+      .mockReturnValueOnce(3)
+
+    await logRevenue(userContext, userContext.id, 0.0172, '2468')
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userContext.id,
+        timestamp: '2017-06-22T01:13:28.003Z', // Different time
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468',
+      })
+    )
+  })
+
+  test('throws after 3 tries to log when a DB item already exists', async () => {
     expect.assertions(1)
 
     // Mock that the item already exists for the original and the
@@ -458,16 +497,17 @@ describe('logRevenue', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      new Error({
-        code: 'ConditionalCheckFailedException',
-      })
+      MockAWSConditionalCheckFailedError()
     )
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      new Error({
-        code: 'ConditionalCheckFailedException',
-      })
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
     )
 
     await expect(
@@ -480,9 +520,13 @@ describe('logRevenue', () => {
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'BadExampleError',
-    })
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      new Error({
+        code: 'BadExampleError',
+      })
+    )
 
     await expect(
       logRevenue(userContext, userContext.id, 0.0172, '2468')

@@ -26,6 +26,19 @@ class UnauthorizedQueryException extends ExtendableError {
   }
 }
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.MessagesAndCodes
+const DATABASE_CONDITIONAL_CHECK_FAILED = 'DATABASE_CONDITIONAL_CHECK_FAILED'
+class DatabaseConditionalCheckFailedException extends ExtendableError {
+  constructor() {
+    super('The conditional check failed when trying to modify a database item.')
+    this.code = DATABASE_CONDITIONAL_CHECK_FAILED
+  }
+
+  static get code() {
+    return DATABASE_CONDITIONAL_CHECK_FAILED
+  }
+}
+
 export const DATABASE_ITEM_DOES_NOT_EXIST = 'DATABASE_ITEM_DOES_NOT_EXIST'
 class DatabaseItemDoesNotExistException extends ExtendableError {
   constructor() {
@@ -66,6 +79,7 @@ class EmptyOperationStackException extends MockDatabaseException {
 export {
   NotImplementedException,
   UnauthorizedQueryException,
+  DatabaseConditionalCheckFailedException,
   DatabaseItemDoesNotExistException,
   UserReachedMaxLevelException,
   UserDoesNotExistException,
