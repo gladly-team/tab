@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import { random } from 'lodash/number'
 import uuid from 'uuid/v4'
 import UserModel from '../UserModel'
 import UserTabsLogModel from '../UserTabsLogModel'
@@ -232,7 +231,7 @@ describe('logTab', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    jest.spyOn(UserTabsLogModel, 'create')
 
     // Mock that the tab log already exists.
     setMockDBResponse(
