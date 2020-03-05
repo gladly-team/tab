@@ -1,4 +1,5 @@
 import UserWidgetModel from './UserWidgetModel'
+import { DatabaseConditionalCheckFailedException } from '../../../utils/exceptions'
 
 /**
  * Update widget data.
@@ -21,7 +22,7 @@ export default async (userContext, userId, widgetId, enabled) => {
     // The item likely does not exist. This might happen when a
     // user enables a widget they've never used.
     // Try to create the widget.
-    if (e.code === 'ConditionalCheckFailedException') {
+    if (e.code === DatabaseConditionalCheckFailedException.code) {
       try {
         userWidget = await UserWidgetModel.create(userContext, {
           userId,

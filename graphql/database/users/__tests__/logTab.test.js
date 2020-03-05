@@ -7,6 +7,7 @@ import UserTabsLogModel from '../UserTabsLogModel'
 import logTab from '../logTab'
 import addVc from '../addVc'
 import {
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   addTimestampFieldsToItem,
   getMockUserContext,
@@ -17,6 +18,7 @@ import {
 import { getCampaignObject } from '../../globals/getCampaign'
 import callRedis from '../../../utils/redis'
 
+jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../../globals/getCampaign')
@@ -147,6 +149,108 @@ describe('logTab', () => {
         timestamp: moment.utc().toISOString(),
       })
     )
+  })
+
+  test('it retries logging the tab if there is a key conflict with the timestamp', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+
+    // Mock that the tab log already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+      })
+    )
+  })
+
+  test('it retries logging the tab three times if there is a key conflict with the timestamp', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+
+    // Mock that the tab log already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+      })
+    )
+  })
+
+  test('it throws after 3 tries to log when a DB item already exists', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    jest.spyOn(UserTabsLogModel, 'create')
+
+    // Mock that the tab log already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+
+    await expect(logTab(userContext, userId)).rejects.toThrow()
   })
 
   test('it logs the tab ID when given', async () => {

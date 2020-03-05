@@ -4,6 +4,7 @@ import moment from 'moment'
 import updateUserWidgetConfig from '../updateUserWidgetConfig'
 import UserWidgetModel from '../UserWidgetModel'
 import {
+  MockAWSConditionalCheckFailedError,
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
@@ -71,9 +72,11 @@ describe('updateUserWidgetConfig', () => {
     const userWidgetCreate = jest.spyOn(UserWidgetModel, 'create')
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(DatabaseOperation.UPDATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
 
     // Set the return for the created object.
     const userWidget = new UserWidgetModel({
@@ -114,9 +117,11 @@ describe('updateUserWidgetConfig', () => {
     const userInfo = getMockUserInfo()
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(DatabaseOperation.UPDATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
 
     // Set the return for the created object.
     const userWidget = new UserWidgetModel({
@@ -176,9 +181,7 @@ describe('updateUserWidgetConfig', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      new Error({
-        code: 'ConditionalCheckFailedException',
-      })
+      MockAWSConditionalCheckFailedError()
     )
 
     // Set some error during creation.
