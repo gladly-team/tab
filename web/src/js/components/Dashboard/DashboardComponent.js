@@ -74,6 +74,44 @@ const CampaignBase = lazy(() =>
   import('js/components/Campaign/CampaignBaseView')
 )
 
+// Load ads immediately when we parse this file rather than
+// waiting for component mount. As a quick hack to make the
+// existing tests work without resetting this module, also
+// fetch ads component mount and provide a helper function
+// to reset module state.
+let calledLoadAds = false
+export const __resetAds = () => {
+  // This function is only a quick fix for tests.
+  calledLoadAds = false
+}
+const loadAds = () => {
+  if (calledLoadAds) {
+    return
+  }
+  calledLoadAds = true
+  try {
+    fetchAds({
+      adUnits: Object.values(getAdUnits()),
+      consent: {
+        isEU: isInEuropeanUnion,
+      },
+      publisher: {
+        domain: getHostname(),
+        pageUrl: getCurrentURL(),
+      },
+      logLevel: 'debug',
+      onError: e => {
+        logger.error(e)
+      },
+      disableAds: !areAdsEnabled(),
+      useMockAds: showMockAds(),
+    })
+  } catch (e) {
+    logger.error(e)
+  }
+}
+loadAds()
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -92,6 +130,7 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      adUnitsToShow: getAdUnits(),
       // Whether to show an introduction to Search for a Cause.
       showSearchIntroductionMessage: showSearchIntroductionMessage(),
       userClickedSearchIntroV1: hasUserClickedNewTabSearchIntroNotif(),
@@ -111,27 +150,7 @@ class Dashboard extends React.Component {
     this.setState({
       browser: detectSupportedBrowser(),
     })
-
-    try {
-      fetchAds({
-        adUnits: Object.values(getAdUnits()),
-        consent: {
-          isEU: isInEuropeanUnion,
-        },
-        publisher: {
-          domain: getHostname(),
-          pageUrl: getCurrentURL(),
-        },
-        logLevel: 'debug',
-        onError: e => {
-          logger.error(e)
-        },
-        disableAds: !areAdsEnabled(),
-        useMockAds: showMockAds(),
-      })
-    } catch (e) {
-      logger.error(e)
-    }
+    loadAds()
   }
 
   /**
@@ -172,6 +191,7 @@ class Dashboard extends React.Component {
     // Props will be null on first render.
     const { user, app } = this.props
     const {
+      adUnitsToShow,
       browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
@@ -341,7 +361,6 @@ class Dashboard extends React.Component {
       tabId,
     }
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
-    const adUnitsToShow = getAdUnits()
 
     return (
       <div
