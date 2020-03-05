@@ -133,6 +133,9 @@ afterEach(() => {
   localStorageMgr.clear()
   getUserExperimentGroup.mockReturnValue('none')
   jest.clearAllMocks()
+
+  const { __resetAds } = require('js/components/Dashboard/DashboardComponent')
+  __resetAds()
 })
 
 afterAll(() => {

@@ -74,6 +74,44 @@ const CampaignBase = lazy(() =>
   import('js/components/Campaign/CampaignBaseView')
 )
 
+// Load ads immediately when we parse this file rather than
+// waiting for component mount. As a quick hack to make the
+// existing tests work without resetting this module, also
+// fetch ads component mount and provide a helper function
+// to reset module state.
+let calledLoadAds = false
+export const __resetAds = () => {
+  // This function is only a quick fix for tests.
+  calledLoadAds = false
+}
+const loadAds = () => {
+  if (calledLoadAds) {
+    return
+  }
+  calledLoadAds = true
+  try {
+    fetchAds({
+      adUnits: Object.values(getAdUnits()),
+      consent: {
+        isEU: isInEuropeanUnion,
+      },
+      publisher: {
+        domain: getHostname(),
+        pageUrl: getCurrentURL(),
+      },
+      logLevel: 'debug',
+      onError: e => {
+        logger.error(e)
+      },
+      disableAds: !areAdsEnabled(),
+      useMockAds: showMockAds(),
+    })
+  } catch (e) {
+    logger.error(e)
+  }
+}
+loadAds()
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -112,27 +150,7 @@ class Dashboard extends React.Component {
     this.setState({
       browser: detectSupportedBrowser(),
     })
-
-    try {
-      fetchAds({
-        adUnits: Object.values(getAdUnits()),
-        consent: {
-          isEU: isInEuropeanUnion,
-        },
-        publisher: {
-          domain: getHostname(),
-          pageUrl: getCurrentURL(),
-        },
-        logLevel: 'debug',
-        onError: e => {
-          logger.error(e)
-        },
-        disableAds: !areAdsEnabled(),
-        useMockAds: showMockAds(),
-      })
-    } catch (e) {
-      logger.error(e)
-    }
+    loadAds()
   }
 
   /**
