@@ -84,7 +84,7 @@ export default async (userContext, userId, charityId, vc) => {
       })
     } catch (e) {
       // The item does not exist, so create it.
-      if (e.code === 'ConditionalCheckFailedException') {
+      if (e.code === DatabaseConditionalCheckFailedException.code) {
         try {
           await VCDonationByCharityModel.create(addVCDonatedByCharityOverride, {
             charityId,

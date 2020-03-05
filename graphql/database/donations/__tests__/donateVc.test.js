@@ -6,6 +6,7 @@ import VCDonationByCharityModel from '../VCDonationByCharityModel'
 import donateVc from '../donateVc'
 import UserModel from '../../users/UserModel'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
+import { DatabaseConditionalCheckFailedException } from '../../../utils/exceptions'
 import {
   MockAWSConditionalCheckFailedError,
   DatabaseOperation,
@@ -176,7 +177,7 @@ describe('donateVc', () => {
     jest
       .spyOn(VCDonationByCharityModel, 'update')
       .mockImplementation(() =>
-        Promise.reject(new MockAWSConditionalCheckFailedError())
+        Promise.reject(new DatabaseConditionalCheckFailedException())
       )
 
     const vcByHourCreateMethod = jest
@@ -221,7 +222,7 @@ describe('donateVc', () => {
     jest
       .spyOn(VCDonationByCharityModel, 'update')
       .mockImplementation(() =>
-        Promise.reject(new MockAWSConditionalCheckFailedError())
+        Promise.reject(new DatabaseConditionalCheckFailedException())
       )
 
     jest
