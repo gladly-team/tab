@@ -1,6 +1,8 @@
 import moment from 'moment'
+import { random } from 'lodash/number'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
+import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
 import { getCampaignObject } from '../globals/getCampaign'
@@ -36,6 +38,20 @@ const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
   const belowDailyHeartsLimit = tabsOpenedToday < MAX_DAILY_HEARTS_FROM_TABS
 
   return enoughTimeSinceLastTab && belowDailyHeartsLimit
+}
+
+/**
+ * Add a random number of milliseconds (between 1 and 20 ms) to an
+ * ISO string datetime.
+ * @param {String} ISODatetime - An ISO datetime string
+ * @return {String} An ISO datetime with the milliseconds up to
+ *   20ms greater than the provided ISODatetime.
+ */
+const addMillisecondsToISODatetime = ISODatetime => {
+  const msToAdd = random(1, 20)
+  return moment(ISODatetime)
+    .add(msToAdd, 'milliseconds')
+    .toISOString()
 }
 
 /**
@@ -94,16 +110,37 @@ const logTab = async (userContext, userId, tabId = null) => {
       lastTabTimestamp: moment.utc().toISOString(),
       maxTabsDay: maxTabsDayVal,
     })
-
-    // TODO: handle duplicate timestamps
-    // Log the tab for analytics whether a valid tab or not.
-    await UserTabsLogModel.create(userContext, {
-      userId,
-      timestamp: moment.utc().toISOString(),
-      ...(tabId && { tabId }),
-    })
   } catch (e) {
     throw e
+  }
+
+  // Log the tab for analytics whether a valid tab or not.
+  let i = 0
+  const maxTries = 2
+  const logTabTimestamp = moment.utc().toISOString()
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      await UserTabsLogModel.create(userContext, {
+        userId,
+        timestamp: addMillisecondsToISODatetime(logTabTimestamp),
+        ...(tabId && { tabId }),
+      })
+      break // successfully logged
+    } catch (e) {
+      i += 1
+      // If the DB conditional check, failed, an item already exists with these
+      // keys. In that case, try to log again with modified timestamps.
+      // This happens when a user opens two tabs that at identical times.
+      if (e.code === DatabaseConditionalCheckFailedException.code) {
+        if (i > maxTries) {
+          throw e
+        }
+      } else {
+        throw e
+      }
+    }
   }
 
   // Optionally, keep track of the number of new users who join during a

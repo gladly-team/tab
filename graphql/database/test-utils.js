@@ -31,6 +31,7 @@ const availableOperations = [
   'query',
 ]
 
+// Deprecated: use more explicit mocks (see BaseModel-queries.testjs for examples).
 /**
  * Set a mock return function for a call to the database client.
  * @param {string} operation - The database operation to override
@@ -55,6 +56,7 @@ export const setMockDBResponse = (
   )
 }
 
+// Deprecated: use more explicit mocks (see BaseModel-queries.testjs for examples).
 /**
  * Clear all mock implementations for database operations.
  * @return {undefined}
