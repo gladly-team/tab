@@ -5,6 +5,7 @@ import { isObject, isFunction, isNil } from 'lodash/lang'
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
 import {
+  DatabaseConditionalCheckFailedException,
   DatabaseItemDoesNotExistException,
   NotImplementedException,
   UnauthorizedQueryException,
@@ -14,6 +15,8 @@ import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
 import logger from '../../utils/logger'
 
 dynogels.documentClient(dbClient)
+
+const AWSConditionalCheckFailedErrorCode = 'ConditionalCheckFailedException'
 
 class BaseModel {
   constructor(obj) {
@@ -365,6 +368,10 @@ class BaseModel {
       })
       return this.deserialize(createdItem)
     } catch (e) {
+      if (e.code === AWSConditionalCheckFailedErrorCode) {
+        throw new DatabaseConditionalCheckFailedException()
+      }
+
       throw e
     }
   }
@@ -389,7 +396,7 @@ class BaseModel {
     } catch (e) {
       // Overwrite is false and the item already existed.
       // Get the item and return it.
-      if (e.code === 'ConditionalCheckFailedException') {
+      if (e.code === DatabaseConditionalCheckFailedException.code) {
         const hashKey = item[this.hashKey]
         const fetchedItem = await this.get(userContext, hashKey)
         return {

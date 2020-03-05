@@ -5,6 +5,7 @@ import { random } from 'lodash/number'
 import UserRevenueModel from '../UserRevenueModel'
 import logRevenue from '../logRevenue'
 import {
+  ConditionalCheckFailedException,
   DatabaseOperation,
   setMockDBResponse,
   addTimestampFieldsToItem,
@@ -421,9 +422,11 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
 
     // Mock that the item already exists.
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      ConditionalCheckFailedException()
+    )
 
     // Control the random millisecond selection.
     random.mockReturnValueOnce(7)
@@ -458,16 +461,12 @@ describe('logRevenue', () => {
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      new Error({
-        code: 'ConditionalCheckFailedException',
-      })
+      ConditionalCheckFailedException()
     )
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
-      new Error({
-        code: 'ConditionalCheckFailedException',
-      })
+      ConditionalCheckFailedException()
     )
 
     await expect(
@@ -480,9 +479,13 @@ describe('logRevenue', () => {
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'BadExampleError',
-    })
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      new Error({
+        code: 'BadExampleError',
+      })
+    )
 
     await expect(
       logRevenue(userContext, userContext.id, 0.0172, '2468')

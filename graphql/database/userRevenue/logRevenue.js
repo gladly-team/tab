@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { isNil } from 'lodash/lang'
 import { random } from 'lodash/number'
+import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import UserRevenueModel from './UserRevenueModel'
 import decodeAmazonCPM from './decodeAmazonCPM'
 
@@ -172,13 +173,14 @@ const logRevenue = async (
   try {
     await createRevenueLogItem(ISOTimestamp)
   } catch (e) {
-    // TODO: make this more robust and rely on our custom exception.
+    // TODO: make this more robust
+
     // An item already exists with these keys.
     // This happens when a user logs two revenue items at the exact
     // same millisecond. We had assumed user ID (hash key) and timestamp
     // (sort key) would be sufficiently unique, but that's not always true.
     // https://github.com/gladly-team/tab/issues/330
-    if (e.code === 'ConditionalCheckFailedException') {
+    if (e.code === DatabaseConditionalCheckFailedException.code) {
       try {
         // A messy but sufficient fix: modify the timestamp slightly.
         const newISOTimestamp = addMillisecondsToISODatetime(ISOTimestamp)
