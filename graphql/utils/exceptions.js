@@ -24,6 +24,10 @@ class UnauthorizedQueryException extends ExtendableError {
     super('Query not authorized.')
     this.code = UNAUTHORIZED_QUERY
   }
+
+  static get code() {
+    return UNAUTHORIZED_QUERY
+  }
 }
 
 export const DATABASE_ITEM_DOES_NOT_EXIST = 'DATABASE_ITEM_DOES_NOT_EXIST'
@@ -31,6 +35,10 @@ class DatabaseItemDoesNotExistException extends ExtendableError {
   constructor() {
     super('The database does not contain an item with these keys.')
     this.code = DATABASE_ITEM_DOES_NOT_EXIST
+  }
+
+  static get code() {
+    return DATABASE_ITEM_DOES_NOT_EXIST
   }
 }
 

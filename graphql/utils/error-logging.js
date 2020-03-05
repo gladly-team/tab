@@ -1,6 +1,6 @@
 import { get } from 'lodash/object'
 import logger from './logger'
-import { USER_DOES_NOT_EXIST } from './exceptions'
+import { USER_DOES_NOT_EXIST, UnauthorizedQueryException } from './exceptions'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -38,7 +38,10 @@ export const formatError = graphQLError => ({
  * @return {Boolean} Whether we should log the error.
  */
 const shouldLogError = graphQLError => {
-  const errorCodesToSkipLogging = [USER_DOES_NOT_EXIST]
+  const errorCodesToSkipLogging = [
+    USER_DOES_NOT_EXIST,
+    UnauthorizedQueryException.code,
+  ]
   const errCode = get(graphQLError, 'originalError.code')
   return errorCodesToSkipLogging.indexOf(errCode) === -1
 }
