@@ -8,7 +8,7 @@ import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
 import { getTodayTabCount, getTodaySearchCount } from './user-utils'
 import {
-  DATABASE_ITEM_DOES_NOT_EXIST,
+  DatabaseItemDoesNotExistException,
   UserDoesNotExistException,
 } from '../../utils/exceptions'
 
@@ -393,7 +393,7 @@ class User extends BaseModel {
       const response = await super.get(...args)
       return response
     } catch (e) {
-      if (e.code === DATABASE_ITEM_DOES_NOT_EXIST) {
+      if (e.code === DatabaseItemDoesNotExistException.code) {
         throw new UserDoesNotExistException()
       } else {
         throw e

@@ -10,15 +10,19 @@ class ExtendableError extends Error {
   }
 }
 
-export const METHOD_NOT_IMPLEMENTED = 'METHOD_NOT_IMPLEMENTED'
+const METHOD_NOT_IMPLEMENTED = 'METHOD_NOT_IMPLEMENTED'
 class NotImplementedException extends ExtendableError {
   constructor() {
     super('Required method is not implemented.')
     this.code = METHOD_NOT_IMPLEMENTED
   }
+
+  static get code() {
+    return METHOD_NOT_IMPLEMENTED
+  }
 }
 
-export const UNAUTHORIZED_QUERY = 'UNAUTHORIZED_QUERY'
+const UNAUTHORIZED_QUERY = 'UNAUTHORIZED_QUERY'
 class UnauthorizedQueryException extends ExtendableError {
   constructor() {
     super('Query not authorized.')
@@ -30,7 +34,7 @@ class UnauthorizedQueryException extends ExtendableError {
   }
 }
 
-export const DATABASE_ITEM_DOES_NOT_EXIST = 'DATABASE_ITEM_DOES_NOT_EXIST'
+const DATABASE_ITEM_DOES_NOT_EXIST = 'DATABASE_ITEM_DOES_NOT_EXIST'
 class DatabaseItemDoesNotExistException extends ExtendableError {
   constructor() {
     super('The database does not contain an item with these keys.')
@@ -42,32 +46,44 @@ class DatabaseItemDoesNotExistException extends ExtendableError {
   }
 }
 
-export const USER_REACHED_MAX_LEVEL = 'USER_REACHED_MAX_LEVEL'
+const USER_REACHED_MAX_LEVEL = 'USER_REACHED_MAX_LEVEL'
 class UserReachedMaxLevelException extends ExtendableError {
   constructor() {
     super('There are no more levels. The user is at the max level.')
     this.code = USER_REACHED_MAX_LEVEL
   }
+
+  static get code() {
+    return USER_REACHED_MAX_LEVEL
+  }
 }
 
-export const USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
+const USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
 class UserDoesNotExistException extends ExtendableError {
   constructor() {
     super('No user exists with this ID.')
     this.code = USER_DOES_NOT_EXIST
+  }
+
+  static get code() {
+    return USER_DOES_NOT_EXIST
   }
 }
 
 // For tests.
 class MockDatabaseException extends ExtendableError {}
 
-export const OPERATION_STACK_IS_EMPTY = 'OPERATION_STACK_IS_EMPTY'
+const OPERATION_STACK_IS_EMPTY = 'OPERATION_STACK_IS_EMPTY'
 class EmptyOperationStackException extends MockDatabaseException {
   constructor() {
     super(
       'Operation stack is empty. Check if you set your expected data in the test.'
     )
     this.code = OPERATION_STACK_IS_EMPTY
+  }
+
+  static get code() {
+    return OPERATION_STACK_IS_EMPTY
   }
 }
 
