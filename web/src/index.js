@@ -80,6 +80,9 @@ try {
   console.error(e)
 }
 
+// TODO: may need to wrap this in Sentry
+// TODO: test that Sentry captures logged exceptions
+// TODO: test that Sentry captures exceptions in component rendering
 initApp()
 
 // If you want your app to work offline and load faster, you can change
