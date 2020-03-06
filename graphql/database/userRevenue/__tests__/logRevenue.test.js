@@ -453,7 +453,7 @@ describe('logRevenue', () => {
     )
   })
 
-  test('retries three times when a DB item already exists', async () => {
+  test('retries five times when a DB item already exists', async () => {
     expect.assertions(1)
 
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
@@ -470,11 +470,23 @@ describe('logRevenue', () => {
       null,
       MockAWSConditionalCheckFailedError()
     )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
 
     // Control the random millisecond selection.
     random
       .mockReturnValueOnce(12)
       .mockReturnValueOnce(18)
+      .mockReturnValueOnce(17)
+      .mockReturnValueOnce(14)
       .mockReturnValueOnce(3)
 
     await logRevenue(userContext, userContext.id, 0.0172, '2468')
@@ -489,11 +501,21 @@ describe('logRevenue', () => {
     )
   })
 
-  test('throws after 3 tries to log when a DB item already exists', async () => {
+  test('throws after 5 tries to log when a DB item already exists', async () => {
     expect.assertions(1)
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      MockAWSConditionalCheckFailedError()
+    )
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,
