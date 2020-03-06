@@ -2,9 +2,9 @@
 
 import { handleError, formatError } from '../error-logging'
 import {
-  UNAUTHORIZED_QUERY,
-  UnauthorizedQueryException,
+  DatabaseItemDoesNotExistException,
   UserDoesNotExistException,
+  UnauthorizedQueryException,
 } from '../exceptions'
 import logger from '../logger'
 
@@ -38,13 +38,13 @@ describe('error-logging', () => {
   })
 
   test('formatError returns the expected format for a custom error with a code', () => {
-    const customErr = new UnauthorizedQueryException()
+    const customErr = new DatabaseItemDoesNotExistException()
     const mockGraphQLErr = new MockGraphQLError(customErr)
     const expectedFormattedErr = {
-      message: 'Query not authorized.',
+      message: 'The database does not contain an item with these keys.',
       locations: mockGraphQLErr.locations,
       path: mockGraphQLErr.path,
-      code: UNAUTHORIZED_QUERY,
+      code: DatabaseItemDoesNotExistException.code,
     }
     const formattedErr = formatError(mockGraphQLErr)
     expect(formattedErr).toEqual(expectedFormattedErr)
@@ -70,14 +70,22 @@ describe('error-logging', () => {
 
   test('handleError logs a custom error', () => {
     const mockGraphQLErr = new MockGraphQLError(
-      new UnauthorizedQueryException()
+      new DatabaseItemDoesNotExistException()
     )
     handleError(mockGraphQLErr)
     expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
   })
 
-  test('handleError does not log an error that should not be logged', () => {
+  test('handleError does not log a "user does not exist" error', () => {
     const mockGraphQLErr = new MockGraphQLError(new UserDoesNotExistException())
+    handleError(mockGraphQLErr)
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  test('handleError does not log an "query not authorized" error', () => {
+    const mockGraphQLErr = new MockGraphQLError(
+      new UnauthorizedQueryException()
+    )
     handleError(mockGraphQLErr)
     expect(logger.error).not.toHaveBeenCalled()
   })

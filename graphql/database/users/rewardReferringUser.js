@@ -8,7 +8,7 @@ import {
 } from '../../utils/permissions-overrides'
 import addVc from './addVc'
 import addUsersRecruited from './addUsersRecruited'
-import { DATABASE_ITEM_DOES_NOT_EXIST } from '../../utils/exceptions'
+import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
 const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 
@@ -37,7 +37,7 @@ const rewardReferringUser = async (userContext, userId) => {
     }
   } catch (e) {
     // Referral data may not exist.
-    if (e.code === DATABASE_ITEM_DOES_NOT_EXIST) {
+    if (e.code === DatabaseItemDoesNotExistException.code) {
       return false
     }
     throw e
