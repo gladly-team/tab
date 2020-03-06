@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 
-jest.mock('raven-js')
+jest.mock('@sentry/browser')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -16,78 +16,66 @@ describe('logger', () => {
     })
   })
 
-  test('logger calls Raven with an exception', () => {
+  test('logger calls Sentry with an exception', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theErr = new Error('A big problem')
     logger.error(theErr)
-    expect(Raven.captureException).toHaveBeenCalledWith(theErr, {
-      level: 'error',
-    })
-    expect(Raven.captureMessage).not.toHaveBeenCalled()
+    expect(Sentry.captureException).toHaveBeenCalledWith(theErr)
+    expect(Sentry.captureMessage).not.toHaveBeenCalled()
   })
 
-  test('logger.log calls Raven with "info" level', () => {
+  test('logger.log calls Sentry with "info" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'log').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'info')
   })
 
-  test('logger.debug calls Raven with "info" level', () => {
+  test('logger.debug calls Sentry with "info" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'debug').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.debug(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'info')
   })
 
-  test('logger.info calls Raven with "info" level', () => {
+  test('logger.info calls Sentry with "info" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'info').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.info(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'info')
   })
 
-  test('logger.warn calls Raven with "warning" level', () => {
+  test('logger.warn calls Sentry with "warning" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'warn').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'warning',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'warning')
   })
 
-  test('logger.error calls Raven with "error" level', () => {
+  test('logger.error calls Sentry with "error" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error',
-    })
-    expect(Raven.captureException).not.toHaveBeenCalled()
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'error')
+    expect(Sentry.captureException).not.toHaveBeenCalled()
   })
 
   test('logger.log logs to console', () => {
@@ -130,16 +118,14 @@ describe('logger', () => {
     expect(console.warn).toHaveBeenCalledWith(theMsg)
   })
 
-  test('logger.error calls Raven with "error" level', () => {
+  test('logger.error calls Sentry with "error" level', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
     const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
-    expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error',
-    })
-    expect(Raven.captureException).not.toHaveBeenCalled()
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'error')
+    expect(Sentry.captureException).not.toHaveBeenCalled()
   })
 })

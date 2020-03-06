@@ -1,5 +1,5 @@
 import { isError } from 'lodash/lang'
-import Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 
 const logLevels = {}
 logLevels.LOG = 'log'
@@ -58,13 +58,9 @@ const log = (msg, logLevel) => {
       level = 'error'
   }
   if (isError(msg)) {
-    Raven.captureException(msg, {
-      level: level,
-    })
+    Sentry.captureException(msg)
   } else {
-    Raven.captureMessage(msg, {
-      level: level,
-    })
+    Sentry.captureMessage(msg, level)
   }
 }
 

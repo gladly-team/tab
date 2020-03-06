@@ -1,4 +1,4 @@
-import Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import { hydrate, render } from 'react-dom'
 import Root from 'js/root'
@@ -12,12 +12,12 @@ const sentryDebug = process.env.REACT_APP_SENTRY_DEBUG === 'true'
 const sentryEnableAutoBreadcrumbs =
   process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
-  Raven.config(sentryDSN, {
+  Sentry.init({
+    dsn: sentryDSN,
     environment: process.env.REACT_APP_SENTRY_STAGE,
     debug: sentryDebug,
-    // https://github.com/getsentry/raven-js/issues/723
     // https://docs.sentry.io/clients/javascript/config/
-    autoBreadcrumbs: sentryEnableAutoBreadcrumbs,
+    maxBreadcrumbs: sentryEnableAutoBreadcrumbs ? 100 : 0,
     ignoreErrors: [/^AbortError/],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
@@ -28,7 +28,7 @@ try {
       /prod-tab2017\.gladly\.io\/search\/static/,
       /dev-tab2017\.gladly\.io\/search\/static/,
     ],
-  }).install()
+  })
 } catch (e) {
   console.error(e)
 }
@@ -38,7 +38,7 @@ try {
 try {
   const username = getUsername()
   if (username) {
-    Raven.setUserContext({
+    Sentry.setUser({
       username: username,
     })
   }
@@ -80,17 +80,7 @@ try {
   console.error(e)
 }
 
-try {
-  Raven.context(() => {
-    if (sentryDebug) {
-      console.log(`Initialized Raven for Sentry DSN ${sentryDSN}`)
-    }
-    initApp()
-  })
-} catch (e) {
-  console.error('Failed to wrap app in Raven.context', e)
-  initApp()
-}
+initApp()
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
