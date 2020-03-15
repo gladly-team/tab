@@ -87,10 +87,10 @@ const aggregateRevenues = (revenueObjs, aggregationOperation) => {
  * ISO string datetime.
  * @param {String} ISODatetime - An ISO datetime string
  * @return {String} An ISO datetime with the milliseconds up to
- *   20ms greater than the provided ISODatetime.
+ *   150ms greater than the provided ISODatetime.
  */
 const addMillisecondsToISODatetime = ISODatetime => {
-  const msToAdd = random(1, 20)
+  const msToAdd = random(1, 150)
   return moment(ISODatetime)
     .add(msToAdd, 'milliseconds')
     .toISOString()
@@ -172,7 +172,7 @@ const logRevenue = async (
   }
 
   let i = 0
-  const maxTries = 2
+  const maxTries = 4
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
