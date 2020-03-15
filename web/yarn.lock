@@ -14242,9 +14242,9 @@ symbol-tree@^3.2.2:
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
 tab-ads@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.6.0.tgz#553a4059e4c6bf26fa633a599d1689d9440ec922"
-  integrity sha512-IQ2ifQ/dOc7oGxqRK/5uN1wKsESU+Oth2BD3mmDwStUm2ENQbCWgmOGQfSWPNEfUatzClNZeHiXRNdL+YGPwhQ==
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-0.6.1.tgz#c22311e271acabc03c6f080a80cd196307b9376c"
+  integrity sha512-Qj3QinEfjLpYvQ21sRpQxTKtOKNwpiAe3kRepZfplxi0NpUJGCI0UyQCxg9NaP/IN3adtpxV8FWV3a/aSMw8CQ==
   dependencies:
     lodash "^4.17.15"
 
