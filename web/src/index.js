@@ -33,11 +33,11 @@ try {
   console.error(e)
 }
 
-// Add context to Sentry logs
-// https://docs.sentry.io/clients/javascript/usage/#tracking-users
+// Add context to Sentry logs.
 try {
   const username = getUsername()
   if (username) {
+    // https://docs.sentry.io/platforms/javascript/#capturing-the-user
     Sentry.setUser({
       username: username,
     })

@@ -9,7 +9,6 @@ import { exec } from 'child_process'
 
 import config from './config'
 import { handleError } from './utils/error-logging'
-import logger from './utils/logger'
 
 const graphQLPort = process.env.DEVELOPMENT_GRAPHQL_PORT
 
@@ -37,7 +36,7 @@ function startGraphQLServer(callback) {
     config.NODE_ENV === 'development' &&
     process.env.DEVELOPMENT_ENABLE_GRAPHIQL
   ) {
-    logger.info(`GraphiQL is enabled on port ${graphQLPort}.`)
+    console.info(`GraphiQL is enabled on port ${graphQLPort}.`)
     // https://github.com/graphql/express-graphql#options
     graphQLApp.use(
       '/',
@@ -62,7 +61,7 @@ function startGraphQLServer(callback) {
   }
 
   graphQLServer = graphQLApp.listen(graphQLPort, () => {
-    logger.info(
+    console.info(
       `GraphQL server is now running on http://localhost:${graphQLPort}`
     )
     if (callback) {
@@ -79,7 +78,7 @@ function startServer(callback) {
 
   // Compile the schema
   exec('yarn run update-schema', (error, stdout) => {
-    logger.info(stdout)
+    console.info(stdout)
     function handleTaskDone() {
       if (callback) {
         callback(new Error(error))
@@ -98,8 +97,8 @@ const watcher = chokidar.watch([
 ])
 
 watcher.on('change', path => {
-  logger.info(`\`${path}\` changed. Restarting.`)
-  startServer(() => logger.info('GraphQL server schema updated.'))
+  console.info(`\`${path}\` changed. Restarting.`)
+  startServer(() => console.info('GraphQL server schema updated.'))
 })
 
 startServer()

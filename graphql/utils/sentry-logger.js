@@ -8,9 +8,13 @@ import config from '../config'
  * @param {function} func - The function to wrap.
  */
 export const sentryContextWrapper = async (userContext, lambdaEvent, func) => {
-  Sentry.setUser({
-    id: userContext.id,
-    email: userContext.email,
+  // https://docs.sentry.io/platforms/node/#eventprocessors
+  Sentry.configureScope(scope => {
+    // https://docs.sentry.io/development/sdk-dev/unified-api/#scope
+    scope.setUser({
+      id: userContext.id,
+      email: userContext.email,
+    })
   })
   try {
     return await func(lambdaEvent)
