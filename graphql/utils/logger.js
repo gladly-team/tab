@@ -25,7 +25,7 @@ const logLevelsOrder = [
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const loggerContextWrapper = (userContext, lambdaEvent, func) => {
+export const loggerContextWrapper = async (userContext, lambdaEvent, func) => {
   switch (config.LOGGER) {
     case 'console':
       return func()
@@ -73,13 +73,9 @@ const log = (msg, logLevel) => {
       // Sentry expects 'warning', not 'warn'
       const level = logLevel === logLevels.WARN ? 'warning' : logLevel
       if (isError(msg)) {
-        Sentry.captureException(msg, {
-          level,
-        })
+        Sentry.captureException(msg)
       } else {
-        Sentry.captureMessage(msg, {
-          level,
-        })
+        Sentry.captureMessage(msg, level)
       }
       break
     }

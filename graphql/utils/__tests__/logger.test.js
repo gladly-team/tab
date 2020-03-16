@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-jest.mock('raven')
+jest.mock('@sentry/node')
 
 beforeEach(() => {
   jest.resetModules()
@@ -40,7 +40,8 @@ describe('logger', () => {
     expect(shouldLog('info', 'warn')).toBe(false)
   })
 
-  test('loggerContextWrapper calls the passed function and returns its value', () => {
+  test('loggerContextWrapper calls the passed function and returns its value', async () => {
+    expect.assertions(2)
     jest.mock('../../config', () => ({
       LOGGER: 'console',
       STAGE: 'test',
@@ -48,12 +49,13 @@ describe('logger', () => {
     const { loggerContextWrapper } = require('../logger')
     const testFunc = jest.fn(() => 'hi')
     const fakeLambdaEvent = { foo: 'bar' }
-    const response = loggerContextWrapper({}, fakeLambdaEvent, testFunc)
+    const response = await loggerContextWrapper({}, fakeLambdaEvent, testFunc)
     expect(testFunc).toHaveBeenCalled()
     expect(response).toBe('hi')
   })
 
-  test('loggerContextWrapper sets Raven context for Sentry logging', () => {
+  test('loggerContextWrapper sets context for Sentry logging', async () => {
+    expect.assertions(2)
     jest.mock('../../config', () => ({
       LOGGER: 'sentry',
       STAGE: 'test',
@@ -70,17 +72,14 @@ describe('logger', () => {
       extraneous: 'blah',
     }
     const fakeLambdaEvent = { foo: 'bar' }
-    const response = loggerContextWrapper(
+    const response = await loggerContextWrapper(
       userContext,
       fakeLambdaEvent,
       testFunc
     )
-    expect(Sentry.setContext).toHaveBeenCalledWith({
-      user: {
-        id: 'abc-123',
-        email: 'bob@example.com',
-      },
-      req: fakeLambdaEvent,
+    expect(Sentry.setUser).toHaveBeenCalledWith({
+      id: 'abc-123',
+      email: 'bob@example.com',
     })
     expect(response).toBe('hi')
   })
@@ -128,9 +127,7 @@ describe('logger', () => {
     const logger = require('../logger').default
     const theErr = new Error('A big problem')
     logger.error(theErr)
-    expect(Sentry.captureException).toHaveBeenCalledWith(theErr, {
-      level: 'error',
-    })
+    expect(Sentry.captureException).toHaveBeenCalledWith(theErr)
     expect(Sentry.captureMessage).not.toHaveBeenCalled()
   })
 
@@ -147,9 +144,7 @@ describe('logger', () => {
     const logger = require('../logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'error')
     expect(Sentry.captureException).not.toHaveBeenCalled()
   })
 
@@ -166,8 +161,6 @@ describe('logger', () => {
     const logger = require('../logger').default
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'warning',
-    })
+    expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, 'warning')
   })
 })
