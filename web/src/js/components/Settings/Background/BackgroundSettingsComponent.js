@@ -1,3 +1,6 @@
+/* eslint-disable */
+/* prettier-disable */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
@@ -191,6 +194,8 @@ class BackgroundSettings extends React.Component {
   }
 
   render() {
+    throw new Error('Fake BackgroundSettingsComponent error.')
+
     const { app, user, showError } = this.props
     if (!this.state.selected) {
       return null

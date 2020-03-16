@@ -1,3 +1,4 @@
+/* eslint-disable */
 import moment from 'moment'
 import { random } from 'lodash/number'
 import UserModel from './UserModel'
@@ -65,6 +66,8 @@ const addMillisecondsToISODatetime = ISODatetime => {
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const logTab = async (userContext, userId, tabId = null) => {
+  throw new Error('Fake logTab error.')
+
   // Check if it's a valid tab before incrementing user VC or
   // the user's valid tab count.
   let user
