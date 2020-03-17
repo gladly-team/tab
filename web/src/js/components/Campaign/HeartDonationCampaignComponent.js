@@ -77,7 +77,7 @@ class HeartDonationCampaign extends React.Component {
             )}
             <LinearProgress variant="determinate" value={progress} />
           </div>
-          <Typography variant={'caption'}>
+          <Typography variant={'caption'} style={{ display: 'none' }}>
             <CountdownClock
               campaignStartDatetime={time.start}
               campaignEndDatetime={time.end}
