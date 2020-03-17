@@ -1,4 +1,4 @@
-/* eslint import/no-extraneous-dependencies: 0 */
+/* eslint import/no-extraneous-dependencies: 0, no-console: 0 */
 import chokidar from 'chokidar'
 import cors from 'cors'
 import express from 'express'
@@ -6,8 +6,11 @@ import bodyParser from 'body-parser'
 import graphQLHTTP from 'express-graphql'
 import { clean } from 'require-clean'
 import { exec } from 'child_process'
-
-import config from './config'
+import {
+  createGraphQLContext,
+  getUserClaimsFromLambdaEvent,
+} from './utils/authorization-helpers'
+import { loggerContextWrapper } from './utils/logger'
 import { handleError } from './utils/error-logging'
 
 const graphQLPort = process.env.DEVELOPMENT_GRAPHQL_PORT
@@ -19,7 +22,6 @@ function startGraphQLServer(callback) {
   clean('./handler')
   clean('./utils/dev-tools')
   const { Schema } = require('./data/schema')
-  const { handler } = require('./handler')
   const {
     generateLambdaEventObjFromRequest,
     getGraphQLContextFromRequest,
@@ -30,35 +32,33 @@ function startGraphQLServer(callback) {
   graphQLApp.use(bodyParser.json())
   graphQLApp.use(bodyParser.urlencoded({ extended: true }))
 
-  // Use express-graphql in development if desired.
-  // Otherwise, just use our plain Lambda handler.
-  if (
-    config.NODE_ENV === 'development' &&
-    process.env.DEVELOPMENT_ENABLE_GRAPHIQL
-  ) {
+  const graphiQLEnabled = process.env.DEVELOPMENT_ENABLE_GRAPHIQL === 'true'
+  if (graphiQLEnabled) {
     console.info(`GraphiQL is enabled on port ${graphQLPort}.`)
-    // https://github.com/graphql/express-graphql#options
-    graphQLApp.use(
-      '/',
-      graphQLHTTP(req => {
-        const context = getGraphQLContextFromRequest(req)
+  } else {
+    console.info(`GraphiQL is disabled.`)
+  }
+
+  // https://github.com/graphql/express-graphql#options
+  graphQLApp.use(
+    '/',
+    graphQLHTTP(req => {
+      // Wrap our handler in a logger to match the logger setup
+      // we user in our production handler.
+      const event = generateLambdaEventObjFromRequest(req)
+      const claims = getUserClaimsFromLambdaEvent(event)
+      const context = createGraphQLContext(claims)
+      return loggerContextWrapper(context.user, event, () => {
         return {
-          graphiql: true,
+          graphiql: graphiQLEnabled,
           pretty: true,
           schema: Schema,
-          context,
+          context: getGraphQLContextFromRequest(req),
           customFormatErrorFn: handleError,
         }
       })
-    )
-  } else {
-    graphQLApp.post('/', (req, res) => {
-      const event = generateLambdaEventObjFromRequest(req)
-      handler(event)
-        // Use only the body (the rest is for use within an AWS Lambda context)
-        .then(response => res.send(response.body))
     })
-  }
+  )
 
   graphQLServer = graphQLApp.listen(graphQLPort, () => {
     console.info(
