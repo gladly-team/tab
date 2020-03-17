@@ -13,9 +13,9 @@ class CampaignBaseView extends React.Component {
 
     // Note: currently, we need to hardcode campaign start and end times
     // both here and server side.
-    const CAMPAIGN_START_TIME_ISO = '2020-02-22T23:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2020-02-27T23:00:00.000Z'
-    const CHARITY_ID = '8dcafeee-f743-4ed7-a958-8f1f1e19d0c1'
+    const CAMPAIGN_START_TIME_ISO = '2020-03-17T18:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2020-05-01T18:00:00.000Z'
+    const CHARITY_ID = '6667eb86-ea37-4d3d-9259-910bea0b5e38'
 
     return (
       <QueryRendererWithUser

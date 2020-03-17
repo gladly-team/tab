@@ -34,6 +34,14 @@ const campaigns = {
       end: '2020-02-27T23:00:00.000Z',
     },
   },
+  covid19March2020: {
+    campaignId: 'covid19March2020',
+    countNewUsers: false,
+    time: {
+      start: '2020-03-17T18:00:00.000Z',
+      end: '2020-05-01T18:00:00.000Z',
+    },
+  },
 }
 
 // Hardcode the currently-active campaign here.
