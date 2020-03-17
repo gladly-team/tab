@@ -210,3 +210,47 @@ export const getMockFetchResponse = () => ({
   type: 'cors',
   url: 'https://example.com/foo/',
 })
+
+/**
+ * Get mock AWS API Gateway event passed to AWS Lambda.
+ * @return {Object}
+ */
+export const getMockAPIGatewayEvent = () => ({
+  resource: '',
+  path: '/some-path/',
+  httpMethod: 'GET',
+  headers: [],
+  queryStringParameters: {
+    example: 'param-value',
+  },
+  pathParameters: {},
+  stageVariables: {},
+  requestContext: {
+    path: '/some-path/',
+    accountId: '123456789',
+    resourceId: 'abcdef',
+    stage: 'dev',
+    authorizer: {},
+    requestId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+    identity: {
+      cognitoIdentityPoolId: null,
+      accountId: null,
+      cognitoIdentityId: null,
+      caller: null,
+      apiKey: '',
+      sourceIp: '123.4.567.890',
+      accessKey: null,
+      cognitoAuthenticationType: null,
+      cognitoAuthenticationProvider: null,
+      userArn: null,
+      userAgent:
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36',
+      user: null,
+    },
+    resourcePath: '/some-path/',
+    httpMethod: 'GET',
+    apiId: 'abcdefghij',
+  },
+  body: '', // JSON
+  isBase64Encoded: false,
+})

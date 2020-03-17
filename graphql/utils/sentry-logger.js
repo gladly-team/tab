@@ -1,3 +1,4 @@
+import { get } from 'lodash/object'
 import * as Sentry from '@sentry/node'
 import config from '../config'
 
@@ -8,14 +9,31 @@ import config from '../config'
  * @param {function} func - The function to wrap.
  */
 export const sentryContextWrapper = async (userContext, lambdaEvent, func) => {
-  // https://docs.sentry.io/platforms/node/#eventprocessors
   Sentry.configureScope(scope => {
+    // Add the user to the log.
     // https://docs.sentry.io/development/sdk-dev/unified-api/#scope
     scope.setUser({
       id: userContext.id,
       email: userContext.email,
     })
+
+    // Add request info to the log.
+    // https://docs.sentry.io/platforms/node/#eventprocessors
+    // https://docs.sentry.io/development/sdk-dev/event-payloads/request/
+    scope.addEventProcessor(event => {
+      const modifiedEvent = {
+        ...event,
+        request: {
+          ...event.request,
+          url: get(lambdaEvent, 'path'),
+          data: JSON.parse(get(lambdaEvent, 'body'), ''),
+          method: get(lambdaEvent, 'httpMethod'),
+        },
+      }
+      return modifiedEvent
+    })
   })
+
   try {
     return await func(lambdaEvent)
   } catch (error) {

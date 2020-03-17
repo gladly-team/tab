@@ -1,9 +1,15 @@
 /* eslint-env jest */
 
+import { getMockAPIGatewayEvent } from '../../database/test-utils'
+
 jest.mock('@sentry/node')
 
 beforeEach(() => {
   jest.resetModules()
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('logger', () => {
@@ -121,6 +127,15 @@ describe('logger', () => {
   })
 })
 
+const getMockSentryScopeObj = () => ({
+  addEventProcessor: jest.fn(),
+  setUser: jest.fn(),
+})
+
+const getMockSentryEventObj = () => ({
+  request: undefined,
+})
+
 describe('loggerContextWrapper', () => {
   test('loggerContextWrapper calls the passed function and returns its value', async () => {
     expect.assertions(2)
@@ -130,13 +145,13 @@ describe('loggerContextWrapper', () => {
     }))
     const { loggerContextWrapper } = require('../logger')
     const testFunc = jest.fn(() => 'hi')
-    const fakeLambdaEvent = { foo: 'bar' }
+    const fakeLambdaEvent = getMockAPIGatewayEvent()
     const response = await loggerContextWrapper({}, fakeLambdaEvent, testFunc)
     expect(testFunc).toHaveBeenCalled()
     expect(response).toBe('hi')
   })
 
-  test('loggerContextWrapper sets scope for Sentry logging', async () => {
+  test('loggerContextWrapper sets user scope for Sentry logging', async () => {
     expect.assertions(2)
     jest.mock('../../config', () => ({
       LOGGER: 'sentry',
@@ -153,17 +168,59 @@ describe('loggerContextWrapper', () => {
       email: 'bob@example.com',
       extraneous: 'blah',
     }
-    const fakeLambdaEvent = { foo: 'bar' }
+    const fakeLambdaEvent = getMockAPIGatewayEvent()
     await loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
     expect(Sentry.configureScope).toHaveBeenCalledWith(expect.any(Function))
     const configureScopeFunc = Sentry.configureScope.mock.calls[0][0]
-    const mockScope = {
-      setUser: jest.fn(),
-    }
+    const mockScope = getMockSentryScopeObj()
     configureScopeFunc(mockScope)
     expect(mockScope.setUser).toHaveBeenCalledWith({
       id: 'abc-123',
       email: 'bob@example.com',
+    })
+  })
+
+  test('loggerContextWrapper sets the expected request scope for Sentry logging, using data in the event', async () => {
+    expect.assertions(1)
+    jest.mock('../../config', () => ({
+      LOGGER: 'sentry',
+      STAGE: 'test',
+      SENTRY_PUBLIC_KEY: 'abcdef',
+      SENTRY_PRIVATE_KEY: 'xyzxyz',
+      SENTRY_PROJECT_ID: '123456',
+    }))
+    const { loggerContextWrapper } = require('../logger')
+    const Sentry = require('../sentry-logger').default
+    const testFunc = jest.fn(() => 'hi')
+    const userContext = {
+      id: 'abc-123',
+      email: 'bob@example.com',
+      extraneous: 'blah',
+    }
+    const defaultFakeLambdaEvent = getMockAPIGatewayEvent()
+    const fakeLambdaEvent = {
+      ...defaultFakeLambdaEvent,
+      path: '/my-fake-path/',
+      httpMethod: 'POST',
+      body: JSON.stringify({
+        foo: 'bar',
+        my: ['data', 'here'],
+      }),
+    }
+    await loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
+    const configureScopeFunc = Sentry.configureScope.mock.calls[0][0]
+    const mockScope = getMockSentryScopeObj()
+    configureScopeFunc(mockScope)
+    const scopeAddEventFunc = mockScope.addEventProcessor.mock.calls[0][0]
+    const mockSentryEvent = getMockSentryEventObj()
+    const modifiedSentryEvent = scopeAddEventFunc(mockSentryEvent, {})
+    expect(modifiedSentryEvent.request).toEqual({
+      data: {
+        foo: 'bar',
+        my: ['data', 'here'],
+      },
+      method: 'POST',
+      url: '/my-fake-path/',
     })
   })
 })
