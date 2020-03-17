@@ -1,4 +1,5 @@
-import Raven from 'raven'
+import { get } from 'lodash/object'
+import * as Sentry from '@sentry/node'
 import config from '../config'
 
 /*
@@ -7,17 +8,41 @@ import config from '../config'
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const sentryContextWrapper = (userContext, lambdaEvent, func) =>
-  Raven.context(() => {
-    Raven.setContext({
-      user: {
-        id: userContext.id,
-        email: userContext.email,
-      },
-      req: lambdaEvent,
+export const sentryContextWrapper = async (userContext, lambdaEvent, func) => {
+  Sentry.configureScope(scope => {
+    // Add the user to the log.
+    // https://docs.sentry.io/development/sdk-dev/unified-api/#scope
+    scope.setUser({
+      id: userContext.id,
+      email: userContext.email,
     })
-    return func()
+
+    // Add request info to the log.
+    // https://docs.sentry.io/platforms/node/#eventprocessors
+    // https://docs.sentry.io/development/sdk-dev/event-payloads/request/
+    scope.addEventProcessor(event => {
+      const modifiedEvent = {
+        ...event,
+        request: {
+          ...event.request,
+          url: get(lambdaEvent, 'path'),
+          data: JSON.parse(get(lambdaEvent, 'body'), ''),
+          method: get(lambdaEvent, 'httpMethod'),
+        },
+      }
+      return modifiedEvent
+    })
   })
+
+  try {
+    return await func(lambdaEvent)
+  } catch (error) {
+    // https://docs.sentry.io/platforms/node/serverless/
+    Sentry.captureException(error)
+    await Sentry.flush(2000)
+    return error
+  }
+}
 
 /*
  * Return the Sentry DSN, or null if any environment variable
@@ -45,10 +70,9 @@ const getSentryDSN = () => {
 // Configure the Sentry logger instance.
 // https://docs.sentry.io/clients/node/config/
 const sentryDSN = getSentryDSN()
-Raven.config(sentryDSN, {
-  captureUnhandledRejections: true,
-  autoBreadcrumbs: false,
+Sentry.init({
+  dsn: sentryDSN,
   environment: config.SENTRY_STAGE,
-}).install()
+})
 
-export default Raven
+export default Sentry

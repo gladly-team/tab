@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.4.4",
+    "@sentry/node": "^5.14.2",
     "aws-sdk": "^2.632.0",
     "aws4": "^1.8.0",
     "bluebird": "^3.5.4",
@@ -18,7 +19,6 @@
     "lodash": "^4.17.13",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
-    "raven": "^2.6.4",
     "uuid": "3.3.2"
   },
   "devDependencies": {
