@@ -39,7 +39,7 @@ const CampaignBaseContent = props => {
           start: moment(campaignStartTimeISO),
           end: moment(campaignEndTimeISO),
         },
-        heartsGoal: 6e6,
+        heartsGoal: 10e6,
         endContent: (
           <div>
             <Typography
