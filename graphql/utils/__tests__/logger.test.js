@@ -54,7 +54,7 @@ describe('logger', () => {
     expect(response).toBe('hi')
   })
 
-  test('loggerContextWrapper sets context for Sentry logging', async () => {
+  test('loggerContextWrapper sets scope for Sentry logging', async () => {
     expect.assertions(2)
     jest.mock('../../config', () => ({
       LOGGER: 'sentry',
@@ -72,16 +72,17 @@ describe('logger', () => {
       extraneous: 'blah',
     }
     const fakeLambdaEvent = { foo: 'bar' }
-    const response = await loggerContextWrapper(
-      userContext,
-      fakeLambdaEvent,
-      testFunc
-    )
-    expect(Sentry.setUser).toHaveBeenCalledWith({
+    await loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
+    expect(Sentry.configureScope).toHaveBeenCalledWith(expect.any(Function))
+    const configureScopeFunc = Sentry.configureScope.mock.calls[0][0]
+    const mockScope = {
+      setUser: jest.fn(),
+    }
+    configureScopeFunc(mockScope)
+    expect(mockScope.setUser).toHaveBeenCalledWith({
       id: 'abc-123',
       email: 'bob@example.com',
     })
-    expect(response).toBe('hi')
   })
 
   test('logger calls console method as expected', () => {
