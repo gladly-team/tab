@@ -49,7 +49,7 @@ const CampaignBaseContent = props => {
                 marginTop: 4,
               }}
             >
-              Thank You for Supporting Earthjustice!
+              Thank You for Supporting the WHO
             </Typography>
             <div
               style={{
@@ -58,35 +58,34 @@ const CampaignBaseContent = props => {
               }}
             >
               <Typography variant={'body2'} gutterBottom>
-                With your help, Earthjustice will continue their work preserving
-                land and wildlife, advancing clean energy, and fighting climate
-                change.
+                With your help, the World Health Organization will continue to
+                provide COVID-19 relief, prevention, and detection.
               </Typography>
-              <Typography>
-                <span style={{ fontWeight: 'bold' }}>
-                  Your tabs, more causes:
-                </span>{' '}
-                Throughout 2020, we'll be highlighting the work of different
-                charities in this{' '}
-                <a
-                  href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={anchorStyle}
-                >
-                  Charity Spotlight
-                </a>
-                . Learn more and nominate your favorite charity{' '}
-                <a
-                  href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={anchorStyle}
-                >
-                  here
-                </a>
-                .
-              </Typography>
+              {/* <Typography> */}
+              {/*   <span style={{ fontWeight: 'bold' }}> */}
+              {/*     Your tabs, more causes: */}
+              {/*   </span>{' '} */}
+              {/*   Throughout 2020, we'll be highlighting the work of different */}
+              {/*   charities in this{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     Charity Spotlight */}
+              {/*   </a> */}
+              {/*   . Learn more and nominate your favorite charity{' '} */}
+              {/*   <a */}
+              {/*     href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/" */}
+              {/*     target="_blank" */}
+              {/*     rel="noopener noreferrer" */}
+              {/*     style={anchorStyle} */}
+              {/*   > */}
+              {/*     here */}
+              {/*   </a> */}
+              {/*   . */}
+              {/* </Typography> */}
             </div>
           </div>
         ),
@@ -100,7 +99,7 @@ const CampaignBaseContent = props => {
           marginTop: 4,
         }}
       >
-        February Spotlight: Earthjustice
+        COVID-19 Solidarity
       </Typography>
       <div
         style={{
@@ -109,27 +108,37 @@ const CampaignBaseContent = props => {
         }}
       >
         <Typography variant={'body2'} gutterBottom>
-          This month, Tabbers selected{' '}
+          The spread of COVID-19 has been swift and destructive. We need a
+          global response to support the health systems working to keep us all
+          safe. As a free, simple, and at-home way to raise money for important
+          causes, we will be running a special campaign for the foreseeable
+          future to raise funds for the response efforts.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          Donate your hearts to the COVID-19 solidarity fund and support the{' '}
           <a
-            href="https://earthjustice.org/"
+            href="https://www.who.int/"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            Earthjustice
+            World Health Organization
           </a>{' '}
-          for our{' '}
+          and their partners in a massive effort to help countries prevent,
+          detect, and manage the novel coronavirus—particularly where the needs
+          are the greatest.
+        </Typography>
+        <Typography variant={'body2'} gutterBottom>
+          Join us in supporting the{' '}
           <a
-            href="https://www.reddit.com/r/TabForACause/comments/ewsx5p/2020_tab_for_a_cause_charity_spotlight_nomination/"
+            href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate"
             target="_blank"
             rel="noopener noreferrer"
             style={anchorStyle}
           >
-            Charity Spotlight
+            COVID-19 Solidarity Response Fund
           </a>
-          . Earthjustice wields the power of law and the strength of partnership
-          to protect people's health, to preserve magnificent places and
-          wildlife, to advance clean energy, and to combat climate change.
+          .
         </Typography>
       </div>
     </HeartDonationCampaign>
