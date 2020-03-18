@@ -23,7 +23,7 @@ try {
     /^Failed to fetch$/,
     /^Network Error$/,
     /^NetworkError when attempting to fetch resource.$/,
-    /^A network error (such as timeout, interrupted connection or unreachable host)/,
+    /^A network error \(such as timeout, interrupted connection or unreachable host\)/,
     // SecurityError occurs on Firefox when localStorage isn't available
     // in the new tab page context. We should handle this but will ignore
     // for now.
