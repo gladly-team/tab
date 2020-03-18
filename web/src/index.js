@@ -21,9 +21,14 @@ try {
     // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
     ignoreErrors: [
       /^AbortError/,
+      // FIXME: we should refactor to better handle network errors.
       'Failed to fetch',
       'NetworkError when attempting to fetch resource.',
       /^A network error (such as timeout, interrupted connection or unreachable host)/,
+      // SecurityError occurs on Firefox when localStorage isn't available
+      // in the new tab page context. We should handle this but will ignore
+      // for now.
+      'SecurityError: The operation is insecure.',
     ],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
