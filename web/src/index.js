@@ -29,6 +29,9 @@ try {
       // in the new tab page context. We should handle this but will ignore
       // for now.
       'SecurityError: The operation is insecure.',
+      // Webpack chunk loading errors.
+      /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
+      /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
     ],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
