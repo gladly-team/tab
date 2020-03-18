@@ -94,7 +94,7 @@ try {
 const initApp = () => {
   require('./index.css')
   const rootElement = document.getElementById('root')
-  if (rootElement.hasChildNodes()) {
+  if (rootElement && rootElement.hasChildNodes()) {
     hydrate(<Root />, rootElement, () => {
       // Remove prerendered JSS.
       // https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
