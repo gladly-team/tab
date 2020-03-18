@@ -25,6 +25,7 @@ try {
       /^AbortError/,
       // FIXME: we should refactor to better handle network errors.
       'Failed to fetch',
+      'Network Error',
       'NetworkError when attempting to fetch resource.',
       /^A network error (such as timeout, interrupted connection or unreachable host)/,
       // SecurityError occurs on Firefox when localStorage isn't available
