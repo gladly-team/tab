@@ -17,17 +17,17 @@ try {
   // try filtering manually because Sentry's ignoreErrors might not
   // support Regex.
   // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
-  const errorsToIgnore = [
-    /^AbortError/,
+  const errorNamesToIgnore = [/^AbortError$'/]
+  const errorsMessagesToIgnore = [
     // FIXME: we should refactor to better handle network errors.
     /^Failed to fetch$/,
     /^Network Error$/,
     /^NetworkError when attempting to fetch resource.$/,
     /^A network error \(such as timeout, interrupted connection or unreachable host\)/,
-    // SecurityError occurs on Firefox when localStorage isn't available
+    // This SecurityError occurs on Firefox when localStorage isn't available
     // in the new tab page context. We should handle this but will ignore
     // for now.
-    /^SecurityError: The operation is insecure.$/,
+    /^The operation is insecure.$/,
     // Webpack chunk loading errors.
     /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
     /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
@@ -51,7 +51,12 @@ try {
 
       try {
         // Filter out ignored messages.
-        if (errorsToIgnore.some(ignoredErr => ignoredErr.test(error.message))) {
+        if (
+          errorNamesToIgnore.some(ignoredErr => ignoredErr.test(error.name)) ||
+          errorsMessagesToIgnore.some(ignoredErr =>
+            ignoredErr.test(error.message)
+          )
+        ) {
           return null
         }
       } catch (e) {
