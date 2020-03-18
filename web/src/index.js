@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/browser'
+import * as Integrations from '@sentry/integrations'
 import React from 'react'
 import { hydrate, render } from 'react-dom'
 import Root from 'js/root'
@@ -16,14 +17,24 @@ try {
     dsn: sentryDSN,
     environment: process.env.REACT_APP_SENTRY_STAGE,
     debug: sentryDebug,
+    integrations: [new Integrations.ExtraErrorData()],
     // https://docs.sentry.io/clients/javascript/config/
     maxBreadcrumbs: sentryEnableAutoBreadcrumbs ? 100 : 0,
     // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
     ignoreErrors: [
       /^AbortError/,
+      // FIXME: we should refactor to better handle network errors.
       'Failed to fetch',
+      'Network Error',
       'NetworkError when attempting to fetch resource.',
       /^A network error (such as timeout, interrupted connection or unreachable host)/,
+      // SecurityError occurs on Firefox when localStorage isn't available
+      // in the new tab page context. We should handle this but will ignore
+      // for now.
+      'SecurityError: The operation is insecure.',
+      // Webpack chunk loading errors.
+      /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
+      /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
     ],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
