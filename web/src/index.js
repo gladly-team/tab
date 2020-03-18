@@ -17,7 +17,7 @@ try {
   // try filtering manually because Sentry's ignoreErrors might not
   // support Regex.
   // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
-  const errorNamesToIgnore = [/^AbortError$'/]
+  const errorNamesToIgnore = [/^AbortError$/]
   const errorsMessagesToIgnore = [
     // FIXME: we should refactor to better handle network errors.
     /^Failed to fetch$/,
