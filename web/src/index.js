@@ -36,6 +36,16 @@ try {
       /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
       /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
     ],
+    // https://docs.sentry.io/error-reporting/configuration/filtering/?platform=browser#before-send
+    beforeSend(event, hint) {
+      const error = hint.originalException
+
+      // Filter out errors with an undefined message.
+      if (!error || !error.message) {
+        return null
+      }
+      return event
+    },
     // Only log errors that originate in our JS files.
     whitelistUrls: [
       /tab\.gladly\.io\/newtab\/static/,
