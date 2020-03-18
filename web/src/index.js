@@ -13,6 +13,26 @@ const sentryDebug = process.env.REACT_APP_SENTRY_DEBUG === 'true'
 const sentryEnableAutoBreadcrumbs =
   process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
+  // Sentry also supports an "ignoreErrors" config option. We'll
+  // try filtering manually because Sentry's ignoreErrors might not
+  // support Regex.
+  // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
+  const errorsToIgnore = [
+    /^AbortError/,
+    // FIXME: we should refactor to better handle network errors.
+    /^Failed to fetch$/,
+    /^Network Error$/,
+    /^NetworkError when attempting to fetch resource.$/,
+    /^A network error (such as timeout, interrupted connection or unreachable host)/,
+    // SecurityError occurs on Firefox when localStorage isn't available
+    // in the new tab page context. We should handle this but will ignore
+    // for now.
+    /^SecurityError: The operation is insecure.$/,
+    // Webpack chunk loading errors.
+    /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
+    /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
+  ]
+
   Sentry.init({
     dsn: sentryDSN,
     environment: process.env.REACT_APP_SENTRY_STAGE,
@@ -20,22 +40,6 @@ try {
     integrations: [new Integrations.ExtraErrorData()],
     // https://docs.sentry.io/clients/javascript/config/
     maxBreadcrumbs: sentryEnableAutoBreadcrumbs ? 100 : 0,
-    // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
-    ignoreErrors: [
-      /^AbortError/,
-      // FIXME: we should refactor to better handle network errors.
-      'Failed to fetch',
-      'Network Error',
-      'NetworkError when attempting to fetch resource.',
-      /^A network error (such as timeout, interrupted connection or unreachable host)/,
-      // SecurityError occurs on Firefox when localStorage isn't available
-      // in the new tab page context. We should handle this but will ignore
-      // for now.
-      'SecurityError: The operation is insecure.',
-      // Webpack chunk loading errors.
-      /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
-      /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
-    ],
     // https://docs.sentry.io/error-reporting/configuration/filtering/?platform=browser#before-send
     beforeSend(event, hint) {
       const error = hint.originalException
@@ -43,6 +47,15 @@ try {
       // Filter out errors with an undefined message.
       if (!error || !error.message) {
         return null
+      }
+
+      try {
+        // Filter out ignored messages.
+        if (errorsToIgnore.some(ignoredErr => ignoredErr.test(error.message))) {
+          return null
+        }
+      } catch (e) {
+        console.error(e)
       }
       return event
     },
