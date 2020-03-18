@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/browser'
+import * as Integrations from '@sentry/integrations'
 import React from 'react'
 import { hydrate, render } from 'react-dom'
 import Root from 'js/root'
@@ -16,6 +17,7 @@ try {
     dsn: sentryDSN,
     environment: process.env.REACT_APP_SENTRY_STAGE,
     debug: sentryDebug,
+    integrations: [new Integrations.ExtraErrorData()],
     // https://docs.sentry.io/clients/javascript/config/
     maxBreadcrumbs: sentryEnableAutoBreadcrumbs ? 100 : 0,
     // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
