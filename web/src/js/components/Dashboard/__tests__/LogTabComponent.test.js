@@ -48,11 +48,10 @@ describe('LogTabComponent', function() {
     jest.advanceTimersByTime(999)
     expect(LogTabMutation).not.toHaveBeenCalled()
     jest.advanceTimersByTime(1)
-    expect(LogTabMutation).toHaveBeenCalledWith(
-      mockRelayEnvironment,
-      mockUserData.id,
-      tabId
-    )
+    expect(LogTabMutation).toHaveBeenCalledWith({
+      userId: mockUserData.id,
+      tabId,
+    })
   })
 
   it('calls logger.error if LogTabMutation fails', async () => {
