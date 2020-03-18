@@ -2,6 +2,7 @@ import React from 'react'
 import LogTabMutation from 'js/mutations/LogTabMutation'
 import PropTypes from 'prop-types'
 import { incrementTabsOpenedToday } from 'js/utils/local-user-data-mgr'
+import logger from 'js/utils/logger'
 
 class LogTabComponent extends React.Component {
   componentDidMount() {
@@ -14,7 +15,9 @@ class LogTabComponent extends React.Component {
         this.props.relay.environment,
         this.props.user.id,
         this.props.tabId
-      )
+      ).catch(e => {
+        logger.error(e)
+      })
     }, LOG_TAB_DELAY)
 
     // Update today's tab count in localStorage.
