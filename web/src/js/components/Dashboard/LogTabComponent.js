@@ -11,11 +11,10 @@ class LogTabComponent extends React.Component {
     // * ads are more likely to have loaded
     const LOG_TAB_DELAY = 1000
     setTimeout(() => {
-      LogTabMutation(
-        this.props.relay.environment,
-        this.props.user.id,
-        this.props.tabId
-      ).catch(e => {
+      LogTabMutation({
+        userId: this.props.user.id,
+        tabId: this.props.tabId,
+      }).catch(e => {
         logger.error(e)
       })
     }, LOG_TAB_DELAY)
