@@ -18,7 +18,13 @@ try {
     debug: sentryDebug,
     // https://docs.sentry.io/clients/javascript/config/
     maxBreadcrumbs: sentryEnableAutoBreadcrumbs ? 100 : 0,
-    ignoreErrors: [/^AbortError/],
+    // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
+    ignoreErrors: [
+      /^AbortError/,
+      'Failed to fetch',
+      'NetworkError when attempting to fetch resource.',
+      /^A network error (such as timeout, interrupted connection or unreachable host)/,
+    ],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
       /tab\.gladly\.io\/newtab\/static/,
