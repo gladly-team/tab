@@ -23,6 +23,7 @@ try {
       /^AbortError/,
       'Failed to fetch',
       'NetworkError when attempting to fetch resource.',
+      /^A network error (such as timeout, interrupted connection or unreachable host)/,
     ],
     // Only log errors that originate in our JS files.
     whitelistUrls: [
