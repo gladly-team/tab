@@ -71,6 +71,8 @@ class Search extends React.Component {
         return 'https://www.google.com/search?q='
       case 'Bing':
         return 'https://www.bing.com/search?q='
+      case 'DuckDuckGo':
+        return 'https://duckduckgo.com/?q='
       case 'Ecosia':
         return 'https://www.ecosia.org/search?q='
       default:
