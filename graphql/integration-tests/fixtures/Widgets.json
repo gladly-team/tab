@@ -17,7 +17,7 @@
         "field": "engine",
         "type": "choices",
         "display": "Search engine",
-        "choices": ["Google", "Bing", "Ecosia"],
+        "choices": ["Google", "Bing", "DuckDuckGo", "Ecosia"],
         "defaultValue": "Google"
       }
     ]
