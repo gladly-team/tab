@@ -26,7 +26,7 @@ function getMockProps() {
       data: JSON.stringify({}),
       settings: JSON.stringify([
         {
-          choices: ['Google', 'Bing', 'Ecosia'],
+          choices: ['Google', 'Bing', 'DuckDuckGo', 'Ecosia'],
           defaultValue: 'Google',
           display: 'Search engine',
           field: 'engine',
@@ -102,6 +102,33 @@ describe('Search widget  component', () => {
     await flushAllPromises()
     expect(windowOpenMock).toHaveBeenCalledWith(
       'https://www.bing.com/search?q=yogurt',
+      '_top'
+    )
+  })
+
+  it('executes a DuckDuckGo search', async () => {
+    expect.assertions(1)
+
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockProps()
+    mockProps.widget.config = JSON.stringify({
+      engine: 'DuckDuckGo',
+    })
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    searchInput.simulate('click')
+    searchInput.instance().value = 'yogurt'
+    searchInput.simulate('keypress', { key: 'Enter' })
+    await flushAllPromises()
+    expect(windowOpenMock).toHaveBeenCalledWith(
+      'https://duckduckgo.com/?q=yogurt',
       '_top'
     )
   })
