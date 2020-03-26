@@ -12,6 +12,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
+import Markdown from 'js/components/General/Markdown'
 
 const styles = theme => ({
   root: {
@@ -19,7 +20,6 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -61,6 +61,12 @@ const styles = theme => ({
     marginTop: 8,
     marginBottom: 8,
     textAlign: 'center',
+  },
+  title: {
+    textAlign: 'center',
+  },
+  description: {
+    textAlign: 'left',
   },
   progressBarSection: {
     marginLeft: 10,
@@ -108,13 +114,17 @@ class CampaignGenericComponent extends React.Component {
             <div className={classes.campaignContent}>
               {!hasCampaignEnded ? (
                 <>
-                  <div>{content.title}</div>
-                  <div>{content.description}</div>
+                  <div className={classes.title}>{content.title}</div>
+                  <div className={classes.description}>
+                    <Markdown children={content.description} />
+                  </div>
                 </>
               ) : (
                 <>
-                  <div>{endContent.title}</div>
-                  <div>{endContent.description}</div>
+                  <div className={classes.title}>{endContent.title}</div>
+                  <div className={classes.description}>
+                    {endContent.description}
+                  </div>
                 </>
               )}
               {showHeartsDonationButton && !hasCampaignEnded ? (

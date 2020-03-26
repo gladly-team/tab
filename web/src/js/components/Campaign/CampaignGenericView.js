@@ -6,6 +6,23 @@ import withUser from 'js/components/General/withUser'
 import CampaignGeneric from 'js/components/Campaign/CampaignGenericComponent'
 import logger from 'js/utils/logger'
 
+const campaignDescription = `
+# This is Markdown
+
+#### You can edit me!
+
+[Markdown](http://daringfireball.net/projects/markdown/) lets you write content in a really natural way.
+
+  * You can have lists, like this one
+  * Make things **bold** or *italic*
+  * Embed snippets of \`code\`
+  * Create [links](/)
+  * ...
+
+<small>Sample content borrowed with thanks from [elm-markdown](http://elm-lang.org/examples/markdown) ❤️</small>
+
+`
+
 // This is an alternative approach to using CampaignGenericView.
 // This component aims to only rely on the API for content.
 class CampaignGenericView extends React.Component {
@@ -56,7 +73,7 @@ class CampaignGenericView extends React.Component {
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
             content: {
               title: 'Hi there!',
-              description: 'Here is some content :)',
+              description: campaignDescription,
             },
             endContent: {
               title: 'Things have ended',
