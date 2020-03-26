@@ -22,20 +22,35 @@ const options = {
         variant: 'h5',
       },
     },
-    h2: { component: Typography, props: { gutterBottom: true, variant: 'h6' } },
+    h2: {
+      component: Typography,
+      props: { gutterBottom: true, variant: 'h6' },
+    },
     h3: {
       component: Typography,
-      props: { gutterBottom: true, variant: 'subtitle1' },
+      props: {
+        gutterBottom: true,
+        variant: 'subtitle1',
+        style: { marginBottom: 12 },
+      },
     },
     h4: {
       component: Typography,
-      props: { gutterBottom: true, variant: 'body2', paragraph: true },
+      props: {
+        gutterBottom: true,
+        variant: 'body2',
+        paragraph: true,
+        style: { marginBottom: 10 },
+      },
     },
     h5: {
       component: Typography,
       props: { gutterBottom: true, variant: 'caption', paragraph: true },
     },
-    p: { component: Typography, props: { paragraph: true } },
+    p: {
+      component: Typography,
+      props: { paragraph: true },
+    },
     a: {
       component: Link,
       props: { target: '_blank', rel: 'noopener noreferrer' },

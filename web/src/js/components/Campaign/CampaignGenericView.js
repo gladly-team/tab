@@ -6,29 +6,14 @@ import withUser from 'js/components/General/withUser'
 import CampaignGeneric from 'js/components/Campaign/CampaignGenericComponent'
 import logger from 'js/utils/logger'
 
-const campaignTitle = '# COVID-19 Solidarity'
+const campaignTitle = '## COVID-19 Solidarity'
 
 const campaignDescription = `
-# One hashtag
+#### The spread of COVID-19 has been swift and destructive. We need a global response to support the health systems working to keep us all safe. As a free, simple, and at-home way to raise money for important causes, we will be running a special campaign for the foreseeable future to raise funds for the response efforts.
 
-## Two hashtags
-## Two hashtags, no space
+#### Donate your hearts to the COVID-19 solidarity fund and support the [World Health Organization](https://www.who.int/) and their partners in a massive effort to help countries prevent, detect, and manage the novel coronavirus—particularly where the needs are the greatest.
 
-### Three hashtags
-
-#### Four hashtags
-
-##### Five hashtags
-
-[Markdown](http://daringfireball.net/projects/markdown/) lets you write content in a really natural way.
-
-  * You can have lists, like this one
-  * Make things **bold** or *italic*
-  * Embed snippets of \`code\`
-  * Create [links](/)
-  * ...
-
-<small>Sample content borrowed with thanks from [elm-markdown](http://elm-lang.org/examples/markdown) ❤️</small>
+#### Join us in supporting the [COVID-19 Solidarity Response Fund](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate).
 `
 
 // This is an alternative approach to using CampaignGenericView.
@@ -88,10 +73,10 @@ class CampaignGenericView extends React.Component {
               description: 'Thanks! Here is some wonderful end content.',
             },
             goal: {
-              goalNumber: 6e3,
-              currentNumber: 2200,
-              goalWordSingular: 'meal',
-              goalWordPlural: 'meals',
+              goalNumber: 10e6,
+              currentNumber: 16.6e6,
+              goalWordSingular: 'Heart',
+              goalWordPlural: 'Hearts',
             },
             numNewUsers: undefined, // probably want to roll into generic goal
             showCountdownTimer: true,

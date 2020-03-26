@@ -69,6 +69,8 @@ const styles = theme => ({
     textAlign: 'center',
   },
   progressBarSection: {
+    marginTop: 8,
+    marginBottom: 8,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -160,7 +162,7 @@ class CampaignGenericComponent extends React.Component {
                       </Typography>
                     ) : null}
                     {!hasCampaignEnded ? (
-                      <span className={classes.progressBarLabelsContainer}>
+                      <div className={classes.progressBarLabelsContainer}>
                         <Typography variant={'caption'}>
                           {abbreviateNumber(currentNumber)}{' '}
                           {currentNumber === 1
@@ -171,7 +173,7 @@ class CampaignGenericComponent extends React.Component {
                         <Typography variant={'caption'}>
                           Goal: {abbreviateNumber(goalNumber)}
                         </Typography>
-                      </span>
+                      </div>
                     ) : null}
                     <LinearProgress variant="determinate" value={progress} />
                   </div>
