@@ -57,16 +57,16 @@ const styles = theme => ({
     paddingLeft: 12,
     paddingRight: 12,
   },
-  bottomContent: {
-    marginTop: 8,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
+  mainTextContainer: {},
   title: {
     textAlign: 'center',
   },
   description: {
+    margin: 14,
     textAlign: 'left',
+  },
+  bottomContent: {
+    textAlign: 'center',
   },
   progressBarSection: {
     marginLeft: 10,
@@ -112,25 +112,27 @@ class CampaignGenericComponent extends React.Component {
               <CloseIcon />
             </IconButton>
             <div className={classes.campaignContent}>
-              {!hasCampaignEnded ? (
-                <>
-                  <div className={classes.title}>
-                    <Markdown children={content.title} />
-                  </div>
-                  <div className={classes.description}>
-                    <Markdown children={content.description} />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={classes.title}>
-                    <Markdown children={endContent.title} />
-                  </div>
-                  <div className={classes.description}>
-                    <Markdown children={endContent.description} />
-                  </div>
-                </>
-              )}
+              <div className={classes.mainTextContainer}>
+                {!hasCampaignEnded ? (
+                  <>
+                    <div className={classes.title}>
+                      <Markdown children={content.title} />
+                    </div>
+                    <div className={classes.description}>
+                      <Markdown children={content.description} />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={classes.title}>
+                      <Markdown children={endContent.title} />
+                    </div>
+                    <div className={classes.description}>
+                      <Markdown children={endContent.description} />
+                    </div>
+                  </>
+                )}
+              </div>
               {showHeartsDonationButton && !hasCampaignEnded ? (
                 <DonateHeartsControls
                   charity={charity}
