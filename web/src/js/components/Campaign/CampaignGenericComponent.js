@@ -62,6 +62,15 @@ const styles = theme => ({
     marginBottom: 8,
     textAlign: 'center',
   },
+  progressBarSection: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  progressBarLabelsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 })
 
 class CampaignGenericComponent extends React.Component {
@@ -76,11 +85,12 @@ class CampaignGenericComponent extends React.Component {
       goal = {},
       showCountdownTimer,
       showHeartsDonationButton,
+      showProgressBar,
     } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
-    // const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
-    // const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
-    // const progress = (100 * app.charity.vcReceived) / heartsGoal
+    const { goalNumber, currentNumber, goalWordSingular, goalWordPlural } = goal
+    const progress = (100 * currentNumber) / goalNumber
+
     return (
       <div className={classes.root} data-test-id={`campaign-${campaignId}`}>
         <FadeInDashboardAnimation>
@@ -121,36 +131,35 @@ class CampaignGenericComponent extends React.Component {
                 />
               ) : null}
               <div className={classes.bottomContent}>
-                {/*   <div */}
-                {/*     style={{ */}
-                {/*       marginLeft: 10, */}
-                {/*       marginRight: 10, */}
-                {/*     }} */}
-                {/*   > */}
-                {/*     {hasCampaignEnded ? ( */}
-                {/*       <Typography variant={'caption'} gutterBottom> */}
-                {/*         Great job! Together, we donated {heartsDonatedAbbreviated}{' '} */}
-                {/*         Hearts of our {heartsGoalAbbreviated} goal. */}
-                {/*       </Typography> */}
-                {/*     ) : null} */}
-                {/*     {hasCampaignEnded ? null : ( */}
-                {/*       <span */}
-                {/*         style={{ */}
-                {/*           display: 'flex', */}
-                {/*           flexDirection: 'row', */}
-                {/*           justifyContent: 'space-between', */}
-                {/*         }} */}
-                {/*       > */}
-                {/*         <Typography variant={'caption'}> */}
-                {/*           {heartsDonatedAbbreviated} Hearts donated */}
-                {/*         </Typography> */}
-                {/*         <Typography variant={'caption'}> */}
-                {/*           Goal: {heartsGoalAbbreviated} */}
-                {/*         </Typography> */}
-                {/*       </span> */}
-                {/*     )} */}
-                {/*     <LinearProgress variant="determinate" value={progress} /> */}
-                {/*   </div> */}
+                {showProgressBar ? (
+                  <div className={classes.progressBarSection}>
+                    {hasCampaignEnded ? (
+                      <Typography variant={'caption'} gutterBottom>
+                        Great job! Together, we raised{' '}
+                        {abbreviateNumber(currentNumber)}{' '}
+                        {currentNumber === 1
+                          ? goalWordSingular
+                          : goalWordPlural}{' '}
+                        of our {abbreviateNumber(goalNumber)} goal.
+                      </Typography>
+                    ) : null}
+                    {!hasCampaignEnded ? (
+                      <span className={classes.progressBarLabelsContainer}>
+                        <Typography variant={'caption'}>
+                          {abbreviateNumber(currentNumber)}{' '}
+                          {currentNumber === 1
+                            ? goalWordSingular
+                            : goalWordPlural}{' '}
+                          raised
+                        </Typography>
+                        <Typography variant={'caption'}>
+                          Goal: {abbreviateNumber(goalNumber)}
+                        </Typography>
+                      </span>
+                    ) : null}
+                    <LinearProgress variant="determinate" value={progress} />
+                  </div>
+                ) : null}
                 {showCountdownTimer && !hasCampaignEnded ? (
                   <Typography variant={'caption'}>
                     <CountdownClock
@@ -185,7 +194,6 @@ CampaignGenericComponent.propTypes = {
       description: PropTypes.string.isRequired,
     }),
     goal: PropTypes.shape({
-      showProgressBar: PropTypes.bool,
       goalNumber: PropTypes.number,
       currentNumber: PropTypes.number,
       goalWordSingular: PropTypes.string,
@@ -194,6 +202,7 @@ CampaignGenericComponent.propTypes = {
     numNewUsers: PropTypes.number,
     showCountdownTimer: PropTypes.bool.isRequired,
     showHeartsDonationButton: PropTypes.bool.isRequired,
+    showProgressBar: PropTypes.bool.isRequired,
   }).isRequired,
   user: PropTypes.shape({
     vcCurrent: PropTypes.number,

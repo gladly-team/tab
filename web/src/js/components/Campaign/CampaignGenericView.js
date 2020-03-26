@@ -50,6 +50,7 @@ class CampaignGenericView extends React.Component {
             time: {
               start: '2020-03-25T18:00:00.000Z',
               end: '2020-05-01T18:00:00.000Z',
+              // end: '2020-03-26T00:00:00.000Z',
             },
             // Maybe use markdown:
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
@@ -58,19 +59,19 @@ class CampaignGenericView extends React.Component {
               description: 'Here is some content :)',
             },
             endContent: {
-              title: '',
-              description: '',
+              title: 'Things have ended',
+              description: 'Thanks! Here is some wonderful end content.',
             },
             goal: {
-              showProgressBar: true,
-              goalNumber: 6e4,
-              currentNumber: 220032,
+              goalNumber: 6e3,
+              currentNumber: 2200,
               goalWordSingular: 'meal',
               goalWordPlural: 'meals',
             },
             numNewUsers: undefined, // probably want to roll into generic goal
             showCountdownTimer: true,
             showHeartsDonationButton: true,
+            showProgressBar: true,
             charity: {
               id:
                 'Q2hhcml0eTo2NjY3ZWI4Ni1lYTM3LTRkM2QtOTI1OS05MTBiZWEwYjVlMzg=',
