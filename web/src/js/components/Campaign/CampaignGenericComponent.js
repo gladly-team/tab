@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
@@ -12,11 +13,56 @@ import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 
+const styles = theme => ({
+  root: {
+    zIndex: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    boxSizing: 'border-box',
+    pointerEvents: 'none',
+  },
+  paper: {
+    position: 'relative',
+    pointerEvents: 'all',
+    minWidth: 400,
+    margin: 0,
+    marginBottom: 100,
+    padding: 0,
+    background: '#FFF',
+    border: 'none',
+  },
+  borderTop: {
+    width: '100%',
+    height: 3,
+    borderTopLeftRadius: 2,
+    borderTopRightRadius: 2,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 2,
+  },
+  campaignContent: {
+    width: 480,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
+})
+
 class CampaignGenericComponent extends React.Component {
   render() {
-    const { campaign = {}, user, onDismiss } = this.props
+    const { campaign = {}, user, onDismiss, classes } = this.props
     const {
-      isLive,
       campaignId,
       time,
       content,
@@ -31,67 +77,20 @@ class CampaignGenericComponent extends React.Component {
     // const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
     // const progress = (100 * app.charity.vcReceived) / heartsGoal
     return (
-      <div
-        style={{
-          zIndex: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          boxSizing: 'border-box',
-          pointerEvents: 'none',
-        }}
-      >
+      <div className={classes.root}>
         <FadeInDashboardAnimation>
-          <Paper
-            elevation={1}
-            style={{
-              position: 'relative',
-              pointerEvents: 'all',
-              minWidth: 400,
-              margin: 0,
-              marginBottom: 100,
-              padding: 0,
-              background: '#FFF',
-              border: 'none',
-            }}
-          >
-            <div
-              style={{
-                width: '100%',
-                height: 3,
-                borderTopLeftRadius: 2,
-                borderTopRightRadius: 2,
-                backgroundColor: '#4a90e2',
-              }}
-            />
+          <Paper elevation={1} className={classes.paper}>
+            <div className={classes.borderTop} />
             <IconButton
               onClick={() => {
                 setCampaignDismissTime()
                 onDismiss()
               }}
-              style={{
-                position: 'absolute',
-                top: 5,
-                right: 2,
-              }}
+              className={classes.closeButton}
             >
               <CloseIcon />
             </IconButton>
-            <div
-              style={{
-                width: 480,
-                paddingTop: 8,
-                paddingBottom: 8,
-                paddingLeft: 12,
-                paddingRight: 12,
-              }}
-            >
+            <div className={classes.campaignContent}>
               {!hasCampaignEnded ? (
                 <>
                   <div>{content.title}</div>
@@ -171,7 +170,6 @@ class CampaignGenericComponent extends React.Component {
 
 CampaignGenericComponent.propTypes = {
   campaign: PropTypes.shape({
-    isLive: PropTypes.bool.isRequired,
     campaignId: PropTypes.string.isRequired,
     time: PropTypes.shape({
       start: PropTypes.string.isRequired,
@@ -202,4 +200,4 @@ CampaignGenericComponent.propTypes = {
   onDismiss: PropTypes.func.isRequired,
 }
 
-export default CampaignGenericComponent
+export default withStyles(styles)(CampaignGenericComponent)
