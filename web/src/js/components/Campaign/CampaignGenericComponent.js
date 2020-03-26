@@ -114,16 +114,20 @@ class CampaignGenericComponent extends React.Component {
             <div className={classes.campaignContent}>
               {!hasCampaignEnded ? (
                 <>
-                  <div className={classes.title}>{content.title}</div>
+                  <div className={classes.title}>
+                    <Markdown children={content.title} />
+                  </div>
                   <div className={classes.description}>
                     <Markdown children={content.description} />
                   </div>
                 </>
               ) : (
                 <>
-                  <div className={classes.title}>{endContent.title}</div>
+                  <div className={classes.title}>
+                    <Markdown children={endContent.title} />
+                  </div>
                   <div className={classes.description}>
-                    {endContent.description}
+                    <Markdown children={endContent.description} />
                   </div>
                 </>
               )}
