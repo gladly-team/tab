@@ -16,6 +16,12 @@ const campaignDescription = `
 #### Join us in supporting the [COVID-19 Solidarity Response Fund](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate).
 `
 
+const campaignEndTitle = '## Thank You for Supporting the WHO'
+
+const campaignEndDescription = `
+#### With your help, the World Health Organization will continue to provide COVID-19 relief, prevention, and detection.
+`
+
 // This is an alternative approach to using CampaignGenericView.
 // This component aims to only rely on the API for content.
 class CampaignGenericView extends React.Component {
@@ -59,8 +65,8 @@ class CampaignGenericView extends React.Component {
             campaignId: 'mock-id',
             time: {
               start: '2020-03-25T18:00:00.000Z',
-              end: '2020-05-01T18:00:00.000Z',
-              // end: '2020-03-26T00:00:00.000Z',
+              // end: '2020-05-01T18:00:00.000Z',
+              end: '2020-03-26T00:00:00.000Z',
             },
             // Maybe use markdown:
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
@@ -69,9 +75,8 @@ class CampaignGenericView extends React.Component {
               descriptionMarkdown: campaignDescription,
             },
             endContent: {
-              titleMarkdown: 'Things have ended',
-              descriptionMarkdown:
-                'Thanks! Here is some wonderful end content.',
+              titleMarkdown: campaignEndTitle,
+              descriptionMarkdown: campaignEndDescription,
             },
             goal: {
               goalNumber: 10e6,
