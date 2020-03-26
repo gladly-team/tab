@@ -682,6 +682,10 @@ const campaignType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'the ID of the campaign',
     },
+    charity: {
+      type: charityType,
+      description: 'The charity for this campaign',
+    },
     isLive: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether or not the campaign should currently show to users',

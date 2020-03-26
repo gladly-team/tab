@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
 import withUser from 'js/components/General/withUser'
-import CampaignBase from 'js/components/Campaign/CampaignBase'
+import CampaignGeneric from 'js/components/Campaign/CampaignGenericComponent'
 import logger from 'js/utils/logger'
 
 // This is an alternative approach to using CampaignGenericView.
@@ -44,13 +44,15 @@ class CampaignGenericView extends React.Component {
 
           // Mock data we need for the campaign to function.
           // This should come from the API.
-          app.campaign = {
+          const campaign = {
             isLive: true,
             campaignId: 'mock-id',
             time: {
               start: '2020-03-25T18:00:00.000Z',
               end: '2020-05-01T18:00:00.000Z',
             },
+            // Maybe use markdown:
+            // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
             content: {
               title: 'Hi there!',
               description: 'Here is some content :)',
@@ -71,7 +73,9 @@ class CampaignGenericView extends React.Component {
             showHeartsDonationButton: true,
           }
 
-          return <CampaignBase app={app} user={user} {...this.props} />
+          return (
+            <CampaignGeneric campaign={campaign} user={user} {...this.props} />
+          )
         }}
       />
     )

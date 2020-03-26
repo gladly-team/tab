@@ -70,6 +70,9 @@ type Campaign {
   """the ID of the campaign"""
   campaignId: String
 
+  """The charity for this campaign"""
+  charity: Charity
+
   """whether or not the campaign should currently show to users"""
   isLive: Boolean!
 
