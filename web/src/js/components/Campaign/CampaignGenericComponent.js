@@ -96,8 +96,14 @@ class CampaignGenericComponent extends React.Component {
       showProgressBar,
     } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
-    const { goalNumber, currentNumber, goalWordSingular, goalWordPlural } = goal
-    const progress = (100 * currentNumber) / goalNumber
+    const {
+      targetNumber,
+      currentNumber,
+      impactUnitSingular,
+      impactUnitPlural,
+      impactVerbPastTense,
+    } = goal
+    const progress = (100 * currentNumber) / targetNumber
 
     return (
       <div className={classes.root} data-test-id={`campaign-${campaignId}`}>
@@ -153,12 +159,12 @@ class CampaignGenericComponent extends React.Component {
                   <div className={classes.progressBarSection}>
                     {hasCampaignEnded ? (
                       <Typography variant={'caption'} gutterBottom>
-                        Great job! Together, we raised{' '}
+                        Great job! Together, we {impactVerbPastTense}{' '}
                         {abbreviateNumber(currentNumber)}{' '}
                         {currentNumber === 1
-                          ? goalWordSingular
-                          : goalWordPlural}{' '}
-                        of our {abbreviateNumber(goalNumber)} goal.
+                          ? impactUnitSingular
+                          : impactUnitPlural}{' '}
+                        of our {abbreviateNumber(targetNumber)} goal.
                       </Typography>
                     ) : null}
                     {!hasCampaignEnded ? (
@@ -166,12 +172,12 @@ class CampaignGenericComponent extends React.Component {
                         <Typography variant={'caption'}>
                           {abbreviateNumber(currentNumber)}{' '}
                           {currentNumber === 1
-                            ? goalWordSingular
-                            : goalWordPlural}{' '}
-                          raised
+                            ? impactUnitSingular
+                            : impactUnitPlural}{' '}
+                          {impactVerbPastTense}
                         </Typography>
                         <Typography variant={'caption'}>
-                          Goal: {abbreviateNumber(goalNumber)}
+                          Goal: {abbreviateNumber(targetNumber)}
                         </Typography>
                       </div>
                     ) : null}
@@ -212,10 +218,11 @@ CampaignGenericComponent.propTypes = {
       descriptionMarkdown: PropTypes.string.isRequired,
     }),
     goal: PropTypes.shape({
-      goalNumber: PropTypes.number,
-      currentNumber: PropTypes.number,
-      goalWordSingular: PropTypes.string,
-      goalWordPlural: PropTypes.string,
+      targetNumber: PropTypes.number.isRequired,
+      currentNumber: PropTypes.number.isRequired,
+      impactUnitSingular: PropTypes.string.isRequired,
+      impactUnitPlural: PropTypes.string.isRequired,
+      impactVerbPastTense: PropTypes.string.isRequired,
     }),
     numNewUsers: PropTypes.number,
     showCountdownTimer: PropTypes.bool.isRequired,

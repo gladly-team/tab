@@ -65,8 +65,8 @@ class CampaignGenericView extends React.Component {
             campaignId: 'mock-id',
             time: {
               start: '2020-03-25T18:00:00.000Z',
-              // end: '2020-05-01T18:00:00.000Z',
-              end: '2020-03-26T00:00:00.000Z',
+              end: '2020-05-01T18:00:00.000Z',
+              // end: '2020-03-26T00:00:00.000Z',
             },
             // Maybe use markdown:
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
@@ -79,10 +79,11 @@ class CampaignGenericView extends React.Component {
               descriptionMarkdown: campaignEndDescription,
             },
             goal: {
-              goalNumber: 10e6,
+              targetNumber: 10e6,
               currentNumber: 16.6e6,
-              goalWordSingular: 'Heart',
-              goalWordPlural: 'Hearts',
+              impactUnitSingular: 'Heart',
+              impactUnitPlural: 'Hearts',
+              impactVerbPastTense: 'donated',
             },
             numNewUsers: undefined, // probably want to roll into generic goal
             showCountdownTimer: false,
