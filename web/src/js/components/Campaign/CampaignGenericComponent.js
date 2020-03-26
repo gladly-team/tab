@@ -52,7 +52,7 @@ const styles = theme => ({
   },
   campaignContent: {
     width: 480,
-    paddingTop: 8,
+    paddingTop: 12,
     paddingBottom: 8,
     paddingLeft: 12,
     paddingRight: 12,

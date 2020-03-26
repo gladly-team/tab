@@ -29,10 +29,17 @@ const options = {
     },
     h4: {
       component: Typography,
+      props: { gutterBottom: true, variant: 'body2', paragraph: true },
+    },
+    h5: {
+      component: Typography,
       props: { gutterBottom: true, variant: 'caption', paragraph: true },
     },
     p: { component: Typography, props: { paragraph: true } },
-    a: { component: Link },
+    a: {
+      component: Link,
+      props: { target: '_blank', rel: 'noopener noreferrer' },
+    },
     li: {
       component: withStyles(styles)(({ classes, ...props }) => (
         <li className={classes.listItem}>

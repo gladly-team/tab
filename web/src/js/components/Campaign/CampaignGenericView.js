@@ -6,10 +6,19 @@ import withUser from 'js/components/General/withUser'
 import CampaignGeneric from 'js/components/Campaign/CampaignGenericComponent'
 import logger from 'js/utils/logger'
 
-const campaignDescription = `
-# This is Markdown
+const campaignTitle = '# COVID-19 Solidarity'
 
-#### You can edit me!
+const campaignDescription = `
+# One hashtag
+
+## Two hashtags
+## Two hashtags, no space
+
+### Three hashtags
+
+#### Four hashtags
+
+##### Five hashtags
 
 [Markdown](http://daringfireball.net/projects/markdown/) lets you write content in a really natural way.
 
@@ -20,7 +29,6 @@ const campaignDescription = `
   * ...
 
 <small>Sample content borrowed with thanks from [elm-markdown](http://elm-lang.org/examples/markdown) ❤️</small>
-
 `
 
 // This is an alternative approach to using CampaignGenericView.
@@ -72,7 +80,7 @@ class CampaignGenericView extends React.Component {
             // Maybe use markdown:
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
             content: {
-              title: 'Hi there!',
+              title: campaignTitle,
               description: campaignDescription,
             },
             endContent: {
