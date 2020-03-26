@@ -61,9 +61,10 @@ const styles = theme => ({
 
 class CampaignGenericComponent extends React.Component {
   render() {
-    const { campaign = {}, user, onDismiss, classes } = this.props
+    const { campaign = {}, user, onDismiss, showError, classes } = this.props
     const {
       campaignId,
+      charity,
       time,
       content,
       endContent,
@@ -77,7 +78,7 @@ class CampaignGenericComponent extends React.Component {
     // const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
     // const progress = (100 * app.charity.vcReceived) / heartsGoal
     return (
-      <div className={classes.root}>
+      <div className={classes.root} data-test-id={`campaign-${campaignId}`}>
         <FadeInDashboardAnimation>
           <Paper elevation={1} className={classes.paper}>
             <div className={classes.borderTop} />
@@ -102,19 +103,19 @@ class CampaignGenericComponent extends React.Component {
                   <div>{endContent.description}</div>
                 </>
               )}
-              {/* {hasCampaignEnded ? null : ( */}
-              {/*   <DonateHeartsControls */}
-              {/*     charity={app.charity} */}
-              {/*     user={user} */}
-              {/*     CampaignGenericComponent={{ */}
-              {/*       time: { */}
-              {/*         start: time.start, */}
-              {/*         end: time.end, */}
-              {/*       }, */}
-              {/*     }} */}
-              {/*     showError={showError} */}
-              {/*   /> */}
-              {/* )} */}
+              {showHeartsDonationButton && !hasCampaignEnded ? (
+                <DonateHeartsControls
+                  charity={charity}
+                  user={user}
+                  CampaignGenericComponent={{
+                    time: {
+                      start: time.start,
+                      end: time.end,
+                    },
+                  }}
+                  showError={showError}
+                />
+              ) : null}
               {/* <div */}
               {/*   style={{ */}
               {/*     marginTop: 8, */}
@@ -198,6 +199,7 @@ CampaignGenericComponent.propTypes = {
     vcCurrent: PropTypes.number,
   }),
   onDismiss: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(CampaignGenericComponent)

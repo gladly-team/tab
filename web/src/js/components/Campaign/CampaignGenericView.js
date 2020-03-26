@@ -10,7 +10,7 @@ import logger from 'js/utils/logger'
 // This component aims to only rely on the API for content.
 class CampaignGenericView extends React.Component {
   render() {
-    const { authUser } = this.props
+    const { authUser, onDismiss, showError } = this.props
     const userId = authUser ? authUser.id : null
 
     return (
@@ -71,10 +71,28 @@ class CampaignGenericView extends React.Component {
             numNewUsers: undefined, // probably want to roll into generic goal
             showCountdownTimer: true,
             showHeartsDonationButton: true,
+            charity: {
+              id:
+                'Q2hhcml0eTo2NjY3ZWI4Ni1lYTM3LTRkM2QtOTI1OS05MTBiZWEwYjVlMzg=',
+              image:
+                'https://prod-tab2017-media.gladly.io/img/charities/charity-post-donation-images/covid-19-solidarity.jpg',
+              imageCaption: null,
+              impact:
+                'With your help, the World Health Organization will continue to provide COVID-19 relief, prevention, and detection.',
+              name: 'COVID-19 Solidarity Response Fund',
+              vcReceived: 16474011,
+              website:
+                'https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate',
+            },
           }
 
           return (
-            <CampaignGeneric campaign={campaign} user={user} {...this.props} />
+            <CampaignGeneric
+              campaign={campaign}
+              user={user}
+              onDismiss={onDismiss}
+              showError={showError}
+            />
           )
         }}
       />
@@ -90,6 +108,7 @@ CampaignGenericView.propTypes = {
     isAnonymous: PropTypes.bool,
     emailVerified: PropTypes.bool,
   }).isRequired,
+  showError: PropTypes.func.isRequired,
 }
 CampaignGenericView.defaultProps = {}
 
