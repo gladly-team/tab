@@ -65,12 +65,13 @@ class CampaignGenericView extends React.Component {
             // Maybe use markdown:
             // https://github.com/mui-org/material-ui/issues/12290#issuecomment-453930042
             content: {
-              title: campaignTitle,
-              description: campaignDescription,
+              titleMarkdown: campaignTitle,
+              descriptionMarkdown: campaignDescription,
             },
             endContent: {
-              title: 'Things have ended',
-              description: 'Thanks! Here is some wonderful end content.',
+              titleMarkdown: 'Things have ended',
+              descriptionMarkdown:
+                'Thanks! Here is some wonderful end content.',
             },
             goal: {
               goalNumber: 10e6,
@@ -79,7 +80,7 @@ class CampaignGenericView extends React.Component {
               goalWordPlural: 'Hearts',
             },
             numNewUsers: undefined, // probably want to roll into generic goal
-            showCountdownTimer: true,
+            showCountdownTimer: false,
             showHeartsDonationButton: true,
             showProgressBar: true,
             charity: {

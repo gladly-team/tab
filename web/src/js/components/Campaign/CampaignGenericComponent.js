@@ -118,19 +118,19 @@ class CampaignGenericComponent extends React.Component {
                 {!hasCampaignEnded ? (
                   <>
                     <div className={classes.title}>
-                      <Markdown children={content.title} />
+                      <Markdown children={content.titleMarkdown} />
                     </div>
                     <div className={classes.description}>
-                      <Markdown children={content.description} />
+                      <Markdown children={content.descriptionMarkdown} />
                     </div>
                   </>
                 ) : (
                   <>
                     <div className={classes.title}>
-                      <Markdown children={endContent.title} />
+                      <Markdown children={endContent.titleMarkdown} />
                     </div>
                     <div className={classes.description}>
-                      <Markdown children={endContent.description} />
+                      <Markdown children={endContent.descriptionMarkdown} />
                     </div>
                   </>
                 )}
@@ -204,12 +204,12 @@ CampaignGenericComponent.propTypes = {
       end: PropTypes.string.isRequired,
     }).isRequired,
     content: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
+      titleMarkdown: PropTypes.string.isRequired,
+      descriptionMarkdown: PropTypes.string.isRequired,
     }),
     endContent: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
+      titleMarkdown: PropTypes.string.isRequired,
+      descriptionMarkdown: PropTypes.string.isRequired,
     }),
     goal: PropTypes.shape({
       goalNumber: PropTypes.number,
