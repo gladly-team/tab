@@ -57,6 +57,11 @@ const styles = theme => ({
     paddingLeft: 12,
     paddingRight: 12,
   },
+  bottomContent: {
+    marginTop: 8,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
 })
 
 class CampaignGenericComponent extends React.Component {
@@ -68,8 +73,7 @@ class CampaignGenericComponent extends React.Component {
       time,
       content,
       endContent,
-      goal,
-      numNewUsers,
+      goal = {},
       showCountdownTimer,
       showHeartsDonationButton,
     } = campaign
@@ -116,51 +120,47 @@ class CampaignGenericComponent extends React.Component {
                   showError={showError}
                 />
               ) : null}
-              {/* <div */}
-              {/*   style={{ */}
-              {/*     marginTop: 8, */}
-              {/*     marginBottom: 8, */}
-              {/*     textAlign: 'center', */}
-              {/*   }} */}
-              {/* > */}
-              {/*   <div */}
-              {/*     style={{ */}
-              {/*       marginLeft: 10, */}
-              {/*       marginRight: 10, */}
-              {/*     }} */}
-              {/*   > */}
-              {/*     {hasCampaignEnded ? ( */}
-              {/*       <Typography variant={'caption'} gutterBottom> */}
-              {/*         Great job! Together, we donated {heartsDonatedAbbreviated}{' '} */}
-              {/*         Hearts of our {heartsGoalAbbreviated} goal. */}
-              {/*       </Typography> */}
-              {/*     ) : null} */}
-              {/*     {hasCampaignEnded ? null : ( */}
-              {/*       <span */}
-              {/*         style={{ */}
-              {/*           display: 'flex', */}
-              {/*           flexDirection: 'row', */}
-              {/*           justifyContent: 'space-between', */}
-              {/*         }} */}
-              {/*       > */}
-              {/*         <Typography variant={'caption'}> */}
-              {/*           {heartsDonatedAbbreviated} Hearts donated */}
-              {/*         </Typography> */}
-              {/*         <Typography variant={'caption'}> */}
-              {/*           Goal: {heartsGoalAbbreviated} */}
-              {/*         </Typography> */}
-              {/*       </span> */}
-              {/*     )} */}
-              {/*     <LinearProgress variant="determinate" value={progress} /> */}
-              {/*   </div> */}
-              {/*   <Typography variant={'caption'} style={{ display: 'none' }}> */}
-              {/*     <CountdownClock */}
-              {/*       campaignStartDatetime={time.start} */}
-              {/*       campaignEndDatetime={time.end} */}
-              {/*     />{' '} */}
-              {/*     remaining */}
-              {/*   </Typography> */}
-              {/* </div> */}
+              <div className={classes.bottomContent}>
+                {/*   <div */}
+                {/*     style={{ */}
+                {/*       marginLeft: 10, */}
+                {/*       marginRight: 10, */}
+                {/*     }} */}
+                {/*   > */}
+                {/*     {hasCampaignEnded ? ( */}
+                {/*       <Typography variant={'caption'} gutterBottom> */}
+                {/*         Great job! Together, we donated {heartsDonatedAbbreviated}{' '} */}
+                {/*         Hearts of our {heartsGoalAbbreviated} goal. */}
+                {/*       </Typography> */}
+                {/*     ) : null} */}
+                {/*     {hasCampaignEnded ? null : ( */}
+                {/*       <span */}
+                {/*         style={{ */}
+                {/*           display: 'flex', */}
+                {/*           flexDirection: 'row', */}
+                {/*           justifyContent: 'space-between', */}
+                {/*         }} */}
+                {/*       > */}
+                {/*         <Typography variant={'caption'}> */}
+                {/*           {heartsDonatedAbbreviated} Hearts donated */}
+                {/*         </Typography> */}
+                {/*         <Typography variant={'caption'}> */}
+                {/*           Goal: {heartsGoalAbbreviated} */}
+                {/*         </Typography> */}
+                {/*       </span> */}
+                {/*     )} */}
+                {/*     <LinearProgress variant="determinate" value={progress} /> */}
+                {/*   </div> */}
+                {showCountdownTimer && !hasCampaignEnded ? (
+                  <Typography variant={'caption'}>
+                    <CountdownClock
+                      campaignStartDatetime={moment(time.start)}
+                      campaignEndDatetime={moment(time.end)}
+                    />{' '}
+                    remaining
+                  </Typography>
+                ) : null}
+              </div>
             </div>
           </Paper>
         </FadeInDashboardAnimation>
@@ -175,7 +175,7 @@ CampaignGenericComponent.propTypes = {
     time: PropTypes.shape({
       start: PropTypes.string.isRequired,
       end: PropTypes.string.isRequired,
-    }),
+    }).isRequired,
     content: PropTypes.shape({
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
@@ -192,8 +192,8 @@ CampaignGenericComponent.propTypes = {
       goalWordPlural: PropTypes.string,
     }),
     numNewUsers: PropTypes.number,
-    showCountdownTimer: PropTypes.bool,
-    showHeartsDonationButton: PropTypes.bool,
+    showCountdownTimer: PropTypes.bool.isRequired,
+    showHeartsDonationButton: PropTypes.bool.isRequired,
   }).isRequired,
   user: PropTypes.shape({
     vcCurrent: PropTypes.number,
