@@ -3,8 +3,8 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import createCampaignConfiguration from '../createCampaignConfiguration'
 import callRedis from '../../../utils/redis'
-// import CharityModel from '../../charities/CharityModel'
-// import logger from '../../../utils/logger'
+import CharityModel from '../../charities/CharityModel'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../../utils/redis')
 jest.mock('../../charities/CharityModel')
@@ -19,6 +19,7 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks()
   MockDate.reset()
+  CharityModel.get.mockReturnValue(null)
 })
 
 // Get an example of campaign config input.
@@ -171,5 +172,72 @@ describe('createCampaignConfiguration', () => {
     })
     await campaignConfig.incrementTabCount()
     expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('fetches the charity as expected when calling getCharityData', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.getCharityData(mockUserContext)
+    expect(CharityModel.get).toHaveBeenCalledWith(
+      mockUserContext,
+      'some-charity-id'
+    )
+  })
+
+  it('returns the expected charity data when calling getCharityData', async () => {
+    expect.assertions(1)
+    CharityModel.get.mockReturnValue({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    const charityData = await campaignConfig.getCharityData(mockUserContext)
+    expect(charityData).toEqual({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+  })
+
+  it('returns null charity data when no charityId is defined in the config', async () => {
+    expect.assertions(1)
+    CharityModel.get.mockReturnValue({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: null, // no charity ID defined
+    })
+    const mockUserContext = getMockUserContext()
+    const charityData = await campaignConfig.getCharityData(mockUserContext)
+    expect(charityData).toBeNull()
+  })
+
+  it('throws if fetching the charity thows', async () => {
+    expect.assertions(1)
+    const mockErr = new Error('The database has failed us.')
+    CharityModel.get.mockImplementation(() => {
+      throw mockErr
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    await expect(
+      campaignConfig.getCharityData(mockUserContext)
+    ).rejects.toEqual(mockErr)
   })
 })

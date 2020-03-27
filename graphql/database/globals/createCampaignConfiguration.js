@@ -2,7 +2,6 @@ import moment from 'moment'
 import { isNil, isNumber } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
-// import logger from '../../utils/logger'
 
 const WrongCampaignConfigError = ({ field, expectedType }) => {
   return new Error(
@@ -44,7 +43,7 @@ const createCampaignConfiguration = input => {
         count = 0
       }
     } catch (e) {
-      // logger.error(e) // TODO: re-enable
+      // Redis will log errors.
     }
     return count
   }
@@ -63,7 +62,7 @@ const createCampaignConfiguration = input => {
         count = 0
       }
     } catch (e) {
-      // logger.error(e) // TODO: re-enable
+      // Redis will log errors.
     }
     return count
   }
@@ -115,8 +114,6 @@ const createCampaignConfiguration = input => {
 
   return {
     campaignId,
-    // TODO: fetch the charity when getting the campaign
-    // charity: {}
     getCharityData: async userContext => {
       if (!charityId) {
         return null
