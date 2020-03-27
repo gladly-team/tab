@@ -27,8 +27,8 @@ const createCampaignConfiguration = input => {
 
   // TODO: input validation
 
-  const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
+  const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
 
   // Try to get the count of tabs opened during this campaign.
   // Default to zero if the item doesn't exist or fails to
@@ -134,12 +134,18 @@ const createCampaignConfiguration = input => {
       goal: configuredGoal,
     }),
     incrementNewUserCount: async () => {
-      // If not counting new users, ignore this.
-      if (!countNewUsers) {
+      // If not counting new users or the campaign is not active, ignore this.
+      if (!(countNewUsers && isActive())) {
         return
       }
-      // TODO: log to redis.
-      console.log('TODO', redisKeyNewUsers)
+      try {
+        await callRedis({
+          operation: 'INCR',
+          key: redisKeyNewUsers,
+        })
+      } catch (e) {
+        // Redis will log errors.
+      }
     },
     incrementTabCount: async () => {
       // If not counting tabs, ignore this.
