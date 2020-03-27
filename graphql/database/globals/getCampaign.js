@@ -94,10 +94,11 @@ const campaignEndDescription = `
 
 const getCampaignTemporary = () => ({
   isLive: true,
-  campaignId: 'mock-id',
+  campaignId: 'covid19March2020',
   time: {
     start: '2020-03-25T18:00:00.000Z',
     end: '2020-05-01T18:00:00.000Z',
+    // end: '2020-03-26T00:00:00.000Z',
   },
   content: {
     titleMarkdown: campaignTitle,
@@ -119,7 +120,7 @@ const getCampaignTemporary = () => ({
   showHeartsDonationButton: true,
   showProgressBar: true,
   charity: {
-    id: 'Q2hhcml0eTo2NjY3ZWI4Ni1lYTM3LTRkM2QtOTI1OS05MTBiZWEwYjVlMzg=',
+    id: '6667eb86-ea37-4d3d-9259-910bea0b5e38',
     image:
       'https://prod-tab2017-media.gladly.io/img/charities/charity-post-donation-images/covid-19-solidarity.jpg',
     imageCaption: null,

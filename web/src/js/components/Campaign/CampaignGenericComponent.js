@@ -83,9 +83,14 @@ const styles = theme => ({
 
 class CampaignGenericComponent extends React.Component {
   render() {
-    const { campaign = {}, user, onDismiss, showError, classes } = this.props
     const {
-      campaignId,
+      app: { campaign = {} } = {},
+      user,
+      onDismiss,
+      showError,
+      classes,
+    } = this.props
+    const {
       charity,
       time,
       content,
@@ -106,7 +111,7 @@ class CampaignGenericComponent extends React.Component {
     const progress = (100 * currentNumber) / targetNumber
 
     return (
-      <div className={classes.root} data-test-id={`campaign-${campaignId}`}>
+      <div className={classes.root}>
         <FadeInDashboardAnimation>
           <Paper elevation={1} className={classes.paper}>
             <div className={classes.borderTop} />
@@ -203,31 +208,32 @@ class CampaignGenericComponent extends React.Component {
 }
 
 CampaignGenericComponent.propTypes = {
-  campaign: PropTypes.shape({
-    campaignId: PropTypes.string.isRequired,
-    time: PropTypes.shape({
-      start: PropTypes.string.isRequired,
-      end: PropTypes.string.isRequired,
+  app: PropTypes.shape({
+    campaign: PropTypes.shape({
+      time: PropTypes.shape({
+        start: PropTypes.string.isRequired,
+        end: PropTypes.string.isRequired,
+      }).isRequired,
+      content: PropTypes.shape({
+        titleMarkdown: PropTypes.string.isRequired,
+        descriptionMarkdown: PropTypes.string.isRequired,
+      }),
+      endContent: PropTypes.shape({
+        titleMarkdown: PropTypes.string.isRequired,
+        descriptionMarkdown: PropTypes.string.isRequired,
+      }),
+      goal: PropTypes.shape({
+        targetNumber: PropTypes.number.isRequired,
+        currentNumber: PropTypes.number.isRequired,
+        impactUnitSingular: PropTypes.string.isRequired,
+        impactUnitPlural: PropTypes.string.isRequired,
+        impactVerbPastTense: PropTypes.string.isRequired,
+      }),
+      numNewUsers: PropTypes.number,
+      showCountdownTimer: PropTypes.bool.isRequired,
+      showHeartsDonationButton: PropTypes.bool.isRequired,
+      showProgressBar: PropTypes.bool.isRequired,
     }).isRequired,
-    content: PropTypes.shape({
-      titleMarkdown: PropTypes.string.isRequired,
-      descriptionMarkdown: PropTypes.string.isRequired,
-    }),
-    endContent: PropTypes.shape({
-      titleMarkdown: PropTypes.string.isRequired,
-      descriptionMarkdown: PropTypes.string.isRequired,
-    }),
-    goal: PropTypes.shape({
-      targetNumber: PropTypes.number.isRequired,
-      currentNumber: PropTypes.number.isRequired,
-      impactUnitSingular: PropTypes.string.isRequired,
-      impactUnitPlural: PropTypes.string.isRequired,
-      impactVerbPastTense: PropTypes.string.isRequired,
-    }),
-    numNewUsers: PropTypes.number,
-    showCountdownTimer: PropTypes.bool.isRequired,
-    showHeartsDonationButton: PropTypes.bool.isRequired,
-    showProgressBar: PropTypes.bool.isRequired,
   }).isRequired,
   user: PropTypes.shape({
     vcCurrent: PropTypes.number,
