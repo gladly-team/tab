@@ -872,7 +872,7 @@ const appType = new GraphQLObjectType({
     campaign: {
       type: campaignType,
       description: 'Campaigns (or "charity spotlights") shown to users.',
-      resolve: () => getCampaign(),
+      resolve: (_, args, context) => getCampaign(context.user),
     },
   }),
   interfaces: [nodeInterface],

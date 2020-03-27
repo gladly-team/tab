@@ -1,7 +1,7 @@
 import { isNil } from 'lodash/lang'
 import { getCurrentCampaignHardcodedData } from './hardcodedCampaignData'
 
-const createCampaignData = async campaignConfig => {
+const createCampaignData = async (userContext, campaignConfig) => {
   const {
     campaignId,
     content,
@@ -19,7 +19,7 @@ const createCampaignData = async campaignConfig => {
   } = campaignConfig
 
   // Fetch the charity.
-  const charity = await getCharityData()
+  const charity = await getCharityData(userContext)
 
   // If there is a goal, fetch the current goal number.
   let goalWithData
@@ -58,8 +58,8 @@ const createCampaignData = async campaignConfig => {
   }
 }
 
-const getCampaign = () => {
-  return createCampaignData(getCurrentCampaignHardcodedData())
+const getCampaign = async userContext => {
+  return createCampaignData(userContext, getCurrentCampaignHardcodedData())
 }
 
 export default getCampaign

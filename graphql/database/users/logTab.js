@@ -6,7 +6,6 @@ import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
 import getCampaign from '../globals/getCampaign'
-import callRedis from '../../utils/redis'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -150,7 +149,7 @@ const logTab = async (userContext, userId, tabId = null) => {
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaign = getCampaign()
+      const campaign = await getCampaign(userContext)
 
       // TODO: update tests.
 
