@@ -18,7 +18,6 @@ const createCampaignConfiguration = input => {
     countTabsOpened = false,
     content,
     endContent,
-    isLive,
     goal,
     showCountdownTimer,
     showHeartsDonationButton,
@@ -151,7 +150,6 @@ const createCampaignConfiguration = input => {
       console.log('TODO', redisKeyTabsOpened)
     },
     isActive,
-    isLive,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
