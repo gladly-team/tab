@@ -6,6 +6,8 @@ import { getCurrentCampaignHardcodedData } from '../hardcodedCampaignData'
 import callRedis from '../../../utils/redis'
 import logger from '../../../utils/logger'
 
+jest.mock('../hardcodedCampaignData')
+
 const mockNow = '2017-05-19T13:59:58.000Z'
 
 beforeEach(() => {
