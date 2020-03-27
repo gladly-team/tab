@@ -15,12 +15,12 @@ const covid19CampaignEndDescription = `
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
   campaignId: 'covid19March2020',
   charityId: '6667eb86-ea37-4d3d-9259-910bea0b5e38',
-  countNewUsers: false,
-  countTabsOpened: false,
   content: {
     titleMarkdown: covid19CampaignTitle,
     descriptionMarkdown: covid19CampaignDescription,
   },
+  countNewUsers: false,
+  countTabsOpened: false,
   endContent: {
     titleMarkdown: covid19CampaignEndTitle,
     descriptionMarkdown: covid19CampaignEndDescription,
@@ -31,7 +31,6 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'donated',
   },
-  isLive: process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false,
   showCountdownTimer: false,
   showHeartsDonationButton: true,
   showProgressBar: true,
@@ -54,5 +53,9 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
  */
 // eslint-disable-next-line import/prefer-default-export
 export const getCurrentCampaignHardcodedData = () => {
-  return CURRENT_CAMPAIGN
+  const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
+  return {
+    ...CURRENT_CAMPAIGN,
+    isLive,
+  }
 }
