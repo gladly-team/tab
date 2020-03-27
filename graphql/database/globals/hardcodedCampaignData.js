@@ -1,10 +1,10 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const covid19CampaignTitle = '## COVID-19 Solidarity'
+const covid19CampaignTitle = '## COVID-19 Solidarity.'
 const covid19CampaignDescription = `
 #### The spread of COVID-19 has been swift and destructive. We need a global response to support the health systems working to keep us all safe. As a free, simple, and at-home way to raise money for important causes, we will be running a special campaign for the foreseeable future to raise funds for the response efforts.
 #### Donate your hearts to the COVID-19 solidarity fund and support the [World Health Organization](https://www.who.int/) and their partners in a massive effort to help countries prevent, detect, and manage the novel coronavirus—particularly where the needs are the greatest.
-#### Join us in supporting the [COVID-19 Solidarity Response Fund](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate).
+#### Please join us in supporting the [COVID-19 Solidarity Response Fund](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate).
 `
 const covid19CampaignEndTitle = '## Thank You for Supporting the WHO'
 const covid19CampaignEndDescription = `
@@ -27,7 +27,6 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
   goal: {
     targetNumber: 10e6,
-    // currentNumber: 16.6e6,
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'donated',

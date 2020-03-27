@@ -105,7 +105,7 @@ const createCampaignConfiguration = input => {
         // else if (something) {}
         await getNewUserCount()
         // else throw
-        return 12e6
+        return 12.42e6
       },
       impactUnitSingular,
       impactUnitPlural,

@@ -1,7 +1,7 @@
 import { URL } from 'url'
 import fetch from 'node-fetch'
 import aws4 from 'aws4'
-import logger from './logger'
+// import logger from './logger'
 
 // Note: for now, we manually deploy the Redis service whenever
 // we need it and then destroy it when it's unused to reduce costs.
@@ -53,7 +53,7 @@ const callRedis = async data => {
       )
     }
   } catch (e) {
-    logger.error(e)
+    // logger.error(e) // TODO: reenable
     throw e
   }
 
