@@ -128,4 +128,48 @@ describe('createCampaignConfiguration', () => {
     await campaignConfig.incrementNewUserCount()
     expect(callRedis).not.toHaveBeenCalled()
   })
+
+  it('calls Redis as expected when calling incrementTabCount and countTabsOpened is true', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:tabsOpened',
+    })
+  })
+
+  it('does not call Redis when calling incrementTabCount and countTabsOpened is false', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: false,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementTabCount and the campaign is no longer active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-04-21T18:00:00.000Z',
+        end: '2020-04-28T18:00:00.000Z', // campaign has ended
+      },
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
 })

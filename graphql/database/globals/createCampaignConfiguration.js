@@ -148,12 +148,18 @@ const createCampaignConfiguration = input => {
       }
     },
     incrementTabCount: async () => {
-      // If not counting tabs, ignore this.
-      if (!countTabsOpened) {
+      // If not counting tabs or the campaign is not active, ignore this.
+      if (!(countTabsOpened && isActive())) {
         return
       }
-      // TODO: log to redis.
-      console.log('TODO', redisKeyTabsOpened)
+      try {
+        await callRedis({
+          operation: 'INCR',
+          key: redisKeyTabsOpened,
+        })
+      } catch (e) {
+        // Redis will log errors.
+      }
     },
     isActive,
     showCountdownTimer,
