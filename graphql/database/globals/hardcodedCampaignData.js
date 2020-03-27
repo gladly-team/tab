@@ -1,51 +1,46 @@
-// Hardcode campaign data here.
-// Note: currently, we need to hardcode campaign start and end times
-// both here and on the client side.
-const campaigns = {
-  testNov2019: {
-    campaignId: 'testNov2019',
-    countNewUsers: true,
-    time: {
-      start: '2019-11-12T10:00:00.000Z',
-      end: '2020-01-10T20:00:00.000Z',
-    },
-  },
-  treePlanting2019: {
-    campaignId: 'treePlanting2019',
-    countNewUsers: true,
-    time: {
-      start: '2019-11-14T18:00:00.000Z',
-      end: '2020-01-10T24:00:00.000Z',
-    },
-  },
-  australiaJan2020: {
-    campaignId: 'australiaJan2020',
-    countNewUsers: false,
-    time: {
-      start: '2020-01-10T22:00:00.000Z',
-      end: '2020-01-21T20:00:00.000Z',
-    },
-  },
-  earthjusticeFeb2020: {
-    campaignId: 'earthJusticeFeb2020',
-    countNewUsers: false,
-    time: {
-      start: '2020-02-22T23:00:00.000Z',
-      end: '2020-02-27T23:00:00.000Z',
-    },
-  },
-  covid19March2020: {
-    campaignId: 'covid19March2020',
-    countNewUsers: false,
-    time: {
-      start: '2020-03-17T18:00:00.000Z',
-      end: '2020-05-01T18:00:00.000Z',
-    },
-  },
-}
+import createCampaignConfiguration from './createCampaignConfiguration'
 
-// Hardcode the currently-active campaign here.
-const CURRENT_CAMPAIGN = campaigns.australiaJan2020
+const covid19CampaignTitle = '## COVID-19 Solidarity'
+const covid19CampaignDescription = `
+#### The spread of COVID-19 has been swift and destructive. We need a global response to support the health systems working to keep us all safe. As a free, simple, and at-home way to raise money for important causes, we will be running a special campaign for the foreseeable future to raise funds for the response efforts.
+#### Donate your hearts to the COVID-19 solidarity fund and support the [World Health Organization](https://www.who.int/) and their partners in a massive effort to help countries prevent, detect, and manage the novel coronavirus—particularly where the needs are the greatest.
+#### Join us in supporting the [COVID-19 Solidarity Response Fund](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate).
+`
+const covid19CampaignEndTitle = '## Thank You for Supporting the WHO'
+const covid19CampaignEndDescription = `
+#### With your help, the World Health Organization will continue to provide COVID-19 relief, prevention, and detection.
+`
+
+// Hardcode campaign data here.
+const CURRENT_CAMPAIGN = createCampaignConfiguration({
+  campaignId: 'covid19March2020',
+  charityId: '6667eb86-ea37-4d3d-9259-910bea0b5e38',
+  countNewUsers: false,
+  countTabsOpened: false,
+  content: {
+    titleMarkdown: covid19CampaignTitle,
+    descriptionMarkdown: covid19CampaignDescription,
+  },
+  endContent: {
+    titleMarkdown: covid19CampaignEndTitle,
+    descriptionMarkdown: covid19CampaignEndDescription,
+  },
+  goal: {
+    targetNumber: 10e6,
+    // currentNumber: 16.6e6,
+    impactUnitSingular: 'Heart',
+    impactUnitPlural: 'Hearts',
+    impactVerbPastTense: 'donated',
+  },
+  isLive: process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false,
+  showCountdownTimer: false,
+  showHeartsDonationButton: true,
+  showProgressBar: true,
+  time: {
+    start: '2020-03-25T18:00:00.000Z',
+    end: '2020-05-01T18:00:00.000Z',
+  },
+})
 
 /**
  * Return the hardcoded campaign info for the current campaign.
@@ -60,9 +55,5 @@ const CURRENT_CAMPAIGN = campaigns.australiaJan2020
  */
 // eslint-disable-next-line import/prefer-default-export
 export const getCurrentCampaignHardcodedData = () => {
-  const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
-  return {
-    ...CURRENT_CAMPAIGN,
-    isLive,
-  }
+  return CURRENT_CAMPAIGN
 }

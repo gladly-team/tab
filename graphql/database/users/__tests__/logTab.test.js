@@ -15,7 +15,7 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import { getCampaignObject } from '../../globals/getCampaign'
+import getCampaign from '../../globals/getCampaign'
 import callRedis from '../../../utils/redis'
 
 jest.mock('lodash/number')
@@ -46,7 +46,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  getCampaignObject.mockReturnValue(getMockCampaign())
+  getCampaign.mockReturnValue(getMockCampaign())
 })
 
 afterAll(() => {
@@ -595,7 +595,7 @@ describe('counting campaign new users', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
     // Mock that a campaign is active.
-    getCampaignObject.mockReturnValue(
+    getCampaign.mockReturnValue(
       getMockCampaign({
         campaignId: 'coolThing',
         isActive: jest.fn(() => true),
@@ -623,7 +623,7 @@ describe('counting campaign new users', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
     // Mock that a campaign is active.
-    getCampaignObject.mockReturnValue(
+    getCampaign.mockReturnValue(
       getMockCampaign({
         campaignId: 'coolThing',
         isActive: jest.fn(() => true),
@@ -648,7 +648,7 @@ describe('counting campaign new users', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
     // Mock that a campaign is active.
-    getCampaignObject.mockReturnValue(
+    getCampaign.mockReturnValue(
       getMockCampaign({
         campaignId: 'coolThing',
         isActive: jest.fn(() => true),
@@ -673,7 +673,7 @@ describe('counting campaign new users', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
     // Mock that a campaign is NOT active.
-    getCampaignObject.mockReturnValue(
+    getCampaign.mockReturnValue(
       getMockCampaign({
         campaignId: 'coolThing',
         isActive: jest.fn(() => false),
@@ -698,7 +698,7 @@ describe('counting campaign new users', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
     // Mock that a campaign is active.
-    getCampaignObject.mockReturnValue(
+    getCampaign.mockReturnValue(
       getMockCampaign({
         campaignId: 'coolThing',
         isActive: jest.fn(() => true),

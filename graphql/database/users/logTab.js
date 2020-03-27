@@ -5,7 +5,7 @@ import UserTabsLogModel from './UserTabsLogModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import { getCampaignObject } from '../globals/getCampaign'
+import getCampaign from '../globals/getCampaign'
 import callRedis from '../../utils/redis'
 
 /**
@@ -150,15 +150,14 @@ const logTab = async (userContext, userId, tabId = null) => {
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaign = getCampaignObject()
+      const campaign = getCampaign()
+
+      // TODO: update tests.
 
       // If the campaign is active (we are between the campaign's start
       // and end times), increment the new user count.
       if (campaign.isActive()) {
-        await callRedis({
-          operation: 'INCR',
-          key: campaign.getNewUsersRedisKey(),
-        })
+        await campaign.incrementTabCount()
       }
     } catch (e) {
       // The Redis caller handles error logging.
