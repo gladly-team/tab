@@ -95,7 +95,7 @@ class CampaignGenericComponent extends React.Component {
       time,
       content,
       endContent,
-      goal = {},
+      goal,
       showCountdownTimer,
       showHeartsDonationButton,
       showProgressBar,
@@ -107,8 +107,9 @@ class CampaignGenericComponent extends React.Component {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
-    } = goal
-    const progress = (100 * currentNumber) / targetNumber
+    } = goal || {}
+    const progress =
+      targetNumber && currentNumber ? (100 * currentNumber) / targetNumber : 0
 
     return (
       <div className={classes.root}>

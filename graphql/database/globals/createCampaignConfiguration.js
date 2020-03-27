@@ -120,7 +120,7 @@ const createCampaignConfiguration = input => {
     // charity: {}
     getCharityData: async userContext => {
       if (!charityId) {
-        throw new Error('Something') // TODO
+        return null
       }
       try {
         const charity = await CharityModel.get(userContext, charityId)
