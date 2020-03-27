@@ -674,25 +674,126 @@ const charityType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const campaignContentType = new GraphQLObjectType({
+  name: 'CampaignContent',
+  description: 'Text content for campaigns',
+  fields: () => ({
+    titleMarkdown: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'The campaign title, using markdown',
+    },
+    descriptionMarkdown: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The primary campaign text content (paragraphs, links, etc.), using markdown',
+    },
+  }),
+})
+
+const campaignTimeType = new GraphQLObjectType({
+  name: 'CampaignTime',
+  description: 'The start and end times (in ISO timestamps) for the campaign',
+  fields: () => ({
+    start: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'The start time of the campaign as an ISO timestamp',
+    },
+    end: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'The end time of the campaign as an ISO timestamp',
+    },
+  }),
+})
+
+const campaignGoalType = new GraphQLObjectType({
+  name: 'CampaignGoal',
+  description:
+    'Information on progress toward a target impact goal for the campaign',
+  fields: () => ({
+    targetNumber: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The goal number of whatever impact units the campaign is hoping to achieve',
+    },
+    currentNumber: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The current number of whatever impact units the campaign is hoping to achieve',
+    },
+    impactUnitSingular: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The English word for the impact unit, singular (e.g. Heart, dollar, puppy)',
+    },
+    impactUnitPlural: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The English word for the impact unit, plural (e.g. Hearts, dollars, puppies)',
+    },
+    impactVerbPastTense: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)',
+    },
+  }),
+})
+
 const campaignType = new GraphQLObjectType({
   name: 'Campaign',
   description: 'Campaigns (or "charity spotlights") shown to users.',
   fields: () => ({
     campaignId: {
       type: GraphQLString,
-      description: 'the ID of the campaign',
-    },
-    charity: {
-      type: charityType,
-      description: 'The charity for this campaign',
+      description: 'The ID of the campaign',
     },
     isLive: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      description: 'whether or not the campaign should currently show to users',
+      description: 'Whether or not the campaign should currently show to users',
     },
     numNewUsers: {
+      // deprecated
       type: GraphQLInt,
-      description: 'the number of new users who joined during this campaign',
+      description:
+        'Deprecated: use "goal" instead. The number of new users who joined during this campaign.',
+    },
+    time: {
+      type: new GraphQLNonNull(campaignTimeType),
+      description:
+        'The start and end times (in ISO timestamps) for the campaign',
+    },
+    content: {
+      type: new GraphQLNonNull(campaignContentType),
+      description:
+        'The text content for the campaign when it is still running (before the end time)',
+    },
+    endContent: {
+      type: campaignContentType,
+      description:
+        'The text content for the campaign when it has finished (passed hte end time)',
+    },
+    goal: {
+      type: campaignGoalType,
+      description:
+        'Information on progress toward a target impact goal for the campaign',
+    },
+    showCountdownTimer: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether to show a countdown timer for when the campaign will end',
+    },
+    showHeartsDonationButton: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether to show a button to donate hearts to the charity featured in the campaign -- which requires the "charity " field to be defined',
+    },
+    showProgressBar: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether to show a progress bar -- which requires the "goal" field to be defined',
+    },
+    charity: {
+      type: charityType,
+      description: 'The charity that this campaign features',
     },
   }),
 })

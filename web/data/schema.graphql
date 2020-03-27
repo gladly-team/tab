@@ -67,17 +67,97 @@ type BackgroundImageEdge {
 
 """Campaigns (or "charity spotlights") shown to users."""
 type Campaign {
-  """the ID of the campaign"""
+  """The ID of the campaign"""
   campaignId: String
 
-  """The charity for this campaign"""
-  charity: Charity
-
-  """whether or not the campaign should currently show to users"""
+  """Whether or not the campaign should currently show to users"""
   isLive: Boolean!
 
-  """the number of new users who joined during this campaign"""
+  """
+  Deprecated: use "goal" instead. The number of new users who joined during this campaign.
+  """
   numNewUsers: Int
+
+  """The start and end times (in ISO timestamps) for the campaign"""
+  time: CampaignTime!
+
+  """
+  The text content for the campaign when it is still running (before the end time)
+  """
+  content: CampaignContent!
+
+  """
+  The text content for the campaign when it has finished (passed hte end time)
+  """
+  endContent: CampaignContent
+
+  """Information on progress toward a target impact goal for the campaign"""
+  goal: CampaignGoal
+
+  """Whether to show a countdown timer for when the campaign will end"""
+  showCountdownTimer: Boolean!
+
+  """
+  Whether to show a button to donate hearts to the charity featured in the
+  campaign -- which requires the "charity " field to be defined
+  """
+  showHeartsDonationButton: Boolean!
+
+  """
+  Whether to show a progress bar -- which requires the "goal" field to be defined
+  """
+  showProgressBar: Boolean!
+
+  """The charity that this campaign features"""
+  charity: Charity
+}
+
+"""Text content for campaigns"""
+type CampaignContent {
+  """The campaign title, using markdown"""
+  titleMarkdown: String!
+
+  """
+  The primary campaign text content (paragraphs, links, etc.), using markdown
+  """
+  descriptionMarkdown: String!
+}
+
+"""Information on progress toward a target impact goal for the campaign"""
+type CampaignGoal {
+  """
+  The goal number of whatever impact units the campaign is hoping to achieve
+  """
+  targetNumber: Int!
+
+  """
+  The current number of whatever impact units the campaign is hoping to achieve
+  """
+  currentNumber: Int!
+
+  """
+  The English word for the impact unit, singular (e.g. Heart, dollar, puppy)
+  """
+  impactUnitSingular: String!
+
+  """
+  The English word for the impact unit, plural (e.g. Hearts, dollars, puppies)
+  """
+  impactUnitPlural: String!
+
+  """
+  The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)
+  """
+  impactVerbPastTense: String!
+}
+
+"""The start and end times (in ISO timestamps) for the campaign"""
+type CampaignTime {
+  """The start time of the campaign as an ISO timestamp"""
+  start: String!
+
+  """The end time of the campaign as an ISO timestamp"""
+  end: String!
 }
 
 """Fields on which to filter the list of charities."""
