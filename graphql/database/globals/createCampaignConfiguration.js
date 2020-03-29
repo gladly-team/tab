@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isNil, isNumber, isString } from 'lodash/lang'
+import { isNil, isBoolean, isNumber, isString } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 
@@ -55,6 +55,34 @@ const createCampaignConfiguration = input => {
     if (!isString(charityId)) {
       throw WrongCampaignConfigError('charityId', 'string')
     }
+  }
+
+  // Make sure various required flags are set.
+  if (!isBoolean(showCountdownTimer)) {
+    throw WrongCampaignConfigError('showCountdownTimer', 'boolean')
+  }
+  if (!isBoolean(showHeartsDonationButton)) {
+    throw WrongCampaignConfigError('showHeartsDonationButton', 'boolean')
+  }
+  if (!isBoolean(showProgressBar)) {
+    throw WrongCampaignConfigError('showProgressBar', 'boolean')
+  }
+
+  // Make sure the time is set with valid ISO timestamps.
+  if (isNil(time)) {
+    throw WrongCampaignConfigError('time', 'object')
+  }
+  if (isNil(time.start)) {
+    throw WrongCampaignConfigError('time.start', 'string')
+  }
+  if (isNil(time.end)) {
+    throw WrongCampaignConfigError('time.end', 'string')
+  }
+  if (!moment(time.start).isValid()) {
+    throw new Error('The "time.start" value must be a valid ISO timestamp.')
+  }
+  if (!moment(time.end).isValid()) {
+    throw new Error('The "time.end" value must be a valid ISO timestamp.')
   }
 
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`

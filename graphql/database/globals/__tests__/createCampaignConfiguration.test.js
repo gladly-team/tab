@@ -410,4 +410,163 @@ describe('createCampaignConfiguration', () => {
       'The campaign config requires the field "endContent.descriptionMarkdown" to be type "string".'
     )
   })
+
+  it('throws if "showCountdownTimer" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showCountdownTimer: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showCountdownTimer" to be type "boolean".'
+    )
+  })
+
+  it('throws if "showCountdownTimer" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showCountdownTimer: 0,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showCountdownTimer" to be type "boolean".'
+    )
+  })
+
+  it('throws if "showHeartsDonationButton" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showHeartsDonationButton: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showHeartsDonationButton" to be type "boolean".'
+    )
+  })
+
+  it('throws if "showHeartsDonationButton" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showHeartsDonationButton: 0,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showHeartsDonationButton" to be type "boolean".'
+    )
+  })
+
+  it('throws if "showProgressBar" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showProgressBar: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showProgressBar" to be type "boolean".'
+    )
+  })
+
+  it('throws if "showProgressBar" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showProgressBar: 0,
+      })
+    }).toThrow(
+      'The campaign config requires the field "showProgressBar" to be type "boolean".'
+    )
+  })
+
+  it('throws if "time" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "time" to be type "object".'
+    )
+  })
+
+  it('throws if "time.start" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: undefined,
+          end: '2020-05-01T18:00:00.000Z',
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "time.start" to be type "string".'
+    )
+  })
+
+  it('throws if "time.start" is not a valid ISO timestamp', async () => {
+    expect.assertions(1)
+
+    // Suppress expected moment.js complaint.
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2018-12-23 10am', // invalid
+          end: '2020-05-01T18:00:00.000Z',
+        },
+      })
+    }).toThrow('The "time.start" value must be a valid ISO timestamp.')
+  })
+
+  it('throws if "time.end" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2020-05-01T18:00:00.000Z',
+          end: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "time.end" to be type "string".'
+    )
+  })
+
+  it('throws if "time.end" is not a valid ISO timestamp', async () => {
+    expect.assertions(1)
+
+    // Suppress expected moment.js complaint.
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2020-05-01T18:00:00.000Z',
+          end: '2018-12-23 10am', // invalid
+        },
+      })
+    }).toThrow('The "time.end" value must be a valid ISO timestamp.')
+  })
 })
