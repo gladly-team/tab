@@ -113,6 +113,18 @@ describe('createCampaignConfiguration', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
+  it('does not call Redis when calling incrementNewUserCount and countNewUsers is undefined (it defaults to false)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: undefined,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
   it('does not call Redis when calling incrementNewUserCount and the campaign is no longer active', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -152,6 +164,18 @@ describe('createCampaignConfiguration', () => {
       ...mockCampaignInput,
       campaignId: 'myFunCampaign',
       countTabsOpened: false,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementTabCount and countTabsOpened is undefined (it defaults to false)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: undefined,
     })
     await campaignConfig.incrementTabCount()
     expect(callRedis).not.toHaveBeenCalled()
