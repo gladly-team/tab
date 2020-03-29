@@ -18,6 +18,8 @@ const createCampaignData = async (userContext, campaignConfig) => {
     time,
   } = campaignConfig
 
+  // TODO: we may not want to fetch this every time when
+  //   the requester may not need the data.
   // Fetch the charity.
   const charity = await getCharityData(userContext)
 
