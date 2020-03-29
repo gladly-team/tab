@@ -1,11 +1,11 @@
 import moment from 'moment'
-import { isNil, isNumber } from 'lodash/lang'
+import { isNil, isNumber, isString } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 
-const WrongCampaignConfigError = ({ field, expectedType }) => {
+const WrongCampaignConfigError = (field, expectedType) => {
   return new Error(
-    `The campaign config requires a field ${field} to be a ${expectedType}.`
+    `The campaign config requires the field "${field}" to be type "${expectedType}".`
   )
 }
 
@@ -24,7 +24,38 @@ const createCampaignConfiguration = input => {
     time,
   } = input
 
-  // TODO: input validation
+  // Makes sure the campaignId is set.
+  if (isNil(campaignId) || !isString(campaignId)) {
+    throw WrongCampaignConfigError('campaignId', 'string')
+  }
+
+  // Make sure the "content" value is set properly.
+  if (isNil(content)) {
+    throw WrongCampaignConfigError('content', 'object')
+  }
+  if (isNil(content.titleMarkdown)) {
+    throw WrongCampaignConfigError('content.titleMarkdown', 'string')
+  }
+  if (isNil(content.descriptionMarkdown)) {
+    throw WrongCampaignConfigError('content.descriptionMarkdown', 'string')
+  }
+
+  // Make sure "endContent" is set properly if it's defined.
+  if (!isNil(endContent)) {
+    if (isNil(endContent.titleMarkdown)) {
+      throw WrongCampaignConfigError('endContent.titleMarkdown', 'string')
+    }
+    if (isNil(endContent.descriptionMarkdown)) {
+      throw WrongCampaignConfigError('endContent.descriptionMarkdown', 'string')
+    }
+  }
+
+  // If the "charityId" is set, make sure it's a string.
+  if (!isNil(charityId)) {
+    if (!isString(charityId)) {
+      throw WrongCampaignConfigError('charityId', 'string')
+    }
+  }
 
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
   const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`

@@ -272,4 +272,142 @@ describe('createCampaignConfiguration', () => {
     })
     expect(campaignConfig.isActive()).toBe(false)
   })
+
+  it('throws if "campaignId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        campaignId: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "campaignId" to be type "string".'
+    )
+  })
+
+  it('throws if "campaignId" is not a string', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        campaignId: 1234,
+      })
+    }).toThrow(
+      'The campaign config requires the field "campaignId" to be type "string".'
+    )
+  })
+
+  it('does not throw if "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "charityId" is set to something other than a string', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: 1234,
+      })
+    }).toThrow(
+      'The campaign config requires the field "charityId" to be type "string".'
+    )
+  })
+
+  it('throws if "content" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        content: undefined,
+      })
+    }).toThrow(
+      'The campaign config requires the field "content" to be type "object".'
+    )
+  })
+
+  it('throws if "content.titleMarkdown" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        content: {
+          titleMarkdown: undefined,
+          descriptionMarkdown: '#### Something',
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "content.titleMarkdown" to be type "string".'
+    )
+  })
+
+  it('throws if "content.descriptionMarkdown" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        content: {
+          titleMarkdown: '## A title',
+          descriptionMarkdown: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "content.descriptionMarkdown" to be type "string".'
+    )
+  })
+
+  it('does not throw if "endContent" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endContent: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "endContent.titleMarkdown" is not defined when endContent is set', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endContent: {
+          titleMarkdown: undefined,
+          descriptionMarkdown: '#### Something',
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "endContent.titleMarkdown" to be type "string".'
+    )
+  })
+
+  it('throws if "endContent.descriptionMarkdown" is not defined when endContent is set', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endContent: {
+          titleMarkdown: '## A title',
+          descriptionMarkdown: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "endContent.descriptionMarkdown" to be type "string".'
+    )
+  })
 })
