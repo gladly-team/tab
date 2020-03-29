@@ -4,7 +4,7 @@ import { USER_REFERRAL_VC_REWARD } from '../constants'
 
 class Globals {
   constructor() {
-    // When updating these nubmers, also update them:
+    // When updating these numbers, also update them:
     // * in the tab-homepage repository
     // * in the search-homepage repository
     this.raised = 678810.0
