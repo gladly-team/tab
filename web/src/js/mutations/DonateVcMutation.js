@@ -31,6 +31,10 @@ export default (input, otherVars = {}) => {
       },
     },
     updater: store => {
+      // TODO: refetch/update the app.campaign.goal.currentNumber.
+      //   It will change if the campaign is based on hearts and if
+      //   the app.campaign.charityId matches the provided charityId.
+
       // Update the charity's "vcReceived" field to include the
       // VC this user just donated.
       // There may also be a "vcReceived" field with startTime and

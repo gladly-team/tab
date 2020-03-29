@@ -33,7 +33,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
       impactVerbPastTense,
       targetNumber,
     } = goal
-    const currentNumber = await getCurrentNumber()
+    const currentNumber = await getCurrentNumber(userContext)
     goalWithData = {
       currentNumber,
       impactUnitSingular,
