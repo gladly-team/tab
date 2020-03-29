@@ -85,6 +85,20 @@ const createCampaignConfiguration = input => {
     throw new Error('The "time.end" value must be a valid ISO timestamp.')
   }
 
+  // If we are showing a hearts donation button, we need a charity.
+  if (showHeartsDonationButton && isNil(charityId)) {
+    throw new Error(
+      'The campaign config requires a configured "charityId" when "showHeartsDonationButton" is set to true.'
+    )
+  }
+
+  // If we are showing a progress bar, we need a goal.
+  if (showProgressBar && isNil(goal)) {
+    throw new Error(
+      'The campaign config requires a configured "goal" when "showProgressBar" is set to true.'
+    )
+  }
+
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
   const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
 

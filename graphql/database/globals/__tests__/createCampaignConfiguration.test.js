@@ -217,6 +217,7 @@ describe('createCampaignConfiguration', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
+      showHeartsDonationButton: false, // required when charityId is null
       charityId: null, // no charity ID defined
     })
     const mockUserContext = getMockUserContext()
@@ -305,6 +306,7 @@ describe('createCampaignConfiguration', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
+        showHeartsDonationButton: false, // required when charityId is null
         charityId: undefined,
       })
     }).not.toThrow()
@@ -568,5 +570,33 @@ describe('createCampaignConfiguration', () => {
         },
       })
     }).toThrow('The "time.end" value must be a valid ISO timestamp.')
+  })
+
+  it('throws if "showHeartsDonationButton" is true but "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: undefined,
+        showHeartsDonationButton: true,
+      })
+    }).toThrow(
+      'The campaign config requires a configured "charityId" when "showHeartsDonationButton" is set to true.'
+    )
+  })
+
+  it('throws if "showProgressBar" is true but "goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
+        showProgressBar: true,
+      })
+    }).toThrow(
+      'The campaign config requires a configured "goal" when "showProgressBar" is set to true.'
+    )
   })
 })
