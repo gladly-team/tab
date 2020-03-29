@@ -623,4 +623,80 @@ describe('createCampaignConfiguration', () => {
       'The campaign config requires a configured "goal" when "showProgressBar" is set to true.'
     )
   })
+
+  it('does not throw if "goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
+        showProgressBar: false, // required if a goal is not defined
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "goal.impactUnitSingular" is not a string', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          impactUnitSingular: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.impactUnitSingular" to be type "string".'
+    )
+  })
+
+  it('throws if "goal.impactUnitPlural" is not a string', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          impactUnitPlural: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.impactUnitPlural" to be type "string".'
+    )
+  })
+
+  it('throws if "goal.impactVerbPastTense" is not a string', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          impactVerbPastTense: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.impactVerbPastTense" to be type "string".'
+    )
+  })
+
+  it('throws if "goal.targetNumber" is not a number', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          targetNumber: '100',
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.targetNumber" to be type "number".'
+    )
+  })
 })

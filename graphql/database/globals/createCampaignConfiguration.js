@@ -158,14 +158,23 @@ const createCampaignConfiguration = input => {
       impactVerbPastTense,
       targetNumber,
     } = goal
+
+    // Validate the goal config.
+    if (!isString(impactUnitSingular)) {
+      throw WrongCampaignConfigError('goal.impactUnitSingular', 'string')
+    }
+    if (!isString(impactUnitPlural)) {
+      throw WrongCampaignConfigError('goal.impactUnitPlural', 'string')
+    }
+    if (!isString(impactVerbPastTense)) {
+      throw WrongCampaignConfigError('goal.impactVerbPastTense', 'string')
+    }
     if (!isNumber(targetNumber)) {
       throw WrongCampaignConfigError('goal.targetNumber', 'number')
     }
 
-    // TODO: more validation
     configuredGoal = {
       targetNumber,
-      // currentNumber // set this when getting the campaign data
       // TODO: base this on other inputs about how to calculate impact
       getCurrentNumber: async () => {
         // E.g.: if relying on tabs, calculate current number from
