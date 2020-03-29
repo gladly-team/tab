@@ -243,7 +243,9 @@ describe('createCampaignConfiguration', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
+      goal: null, // cannot have a goal that relies on hearts when charityId is null
       showHeartsDonationButton: false, // required when charityId is null
+      showProgressBar: false, // this must be false because we set "goal" to null
       charityId: null, // no charity ID defined
     })
     const mockUserContext = getMockUserContext()
@@ -332,7 +334,9 @@ describe('createCampaignConfiguration', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
+        goal: null, // cannot have a goal that relies on hearts when charityId is null
         showHeartsDonationButton: false, // required when charityId is null
+        showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
       })
     }).not.toThrow()
@@ -604,6 +608,8 @@ describe('createCampaignConfiguration', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
+        goal: null, // cannot have a goal that relies on hearts when charityId is null
+        showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
         showHeartsDonationButton: true,
       })

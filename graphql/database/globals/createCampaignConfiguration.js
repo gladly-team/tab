@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { isNil, isBoolean, isFunction, isNumber, isString } from 'lodash/lang'
+import { get } from 'lodash/object'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 
@@ -28,6 +29,12 @@ const createCampaignConfiguration = input => {
     showProgressBar,
     time,
   } = input
+
+  // Possible values for the goal.numberSource.
+  const HEARTS = 'hearts'
+  const MONEY_RAISED = 'moneyRaised'
+  const NEW_USERS = 'newUsers'
+  const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS]
 
   // Makes sure the campaignId is set.
   if (isNil(campaignId) || !isString(campaignId)) {
@@ -88,6 +95,13 @@ const createCampaignConfiguration = input => {
   }
   if (!moment(time.end).isValid()) {
     throw new Error('The "time.end" value must be a valid ISO timestamp.')
+  }
+
+  // If the goal relies on hearts, we need a charity.
+  if (get(goal, 'numberSource') === HEARTS && isNil(charityId)) {
+    throw new Error(
+      'The campaign config requires a configured "charityId" when "goal.numberSource" is set to "hearts".'
+    )
   }
 
   // If we are showing a hearts donation button, we need a charity.
@@ -192,11 +206,6 @@ const createCampaignConfiguration = input => {
        */
       transformNumberSourceValue,
     } = goal
-
-    const HEARTS = 'hearts'
-    const MONEY_RAISED = 'moneyRaised'
-    const NEW_USERS = 'newUsers'
-    const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS]
 
     // Validate the goal config.
     if (!isString(impactUnitSingular)) {
