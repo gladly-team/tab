@@ -3,6 +3,11 @@ import { isNil, isBoolean, isNumber, isString } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 
+const getEstMoneyRaisedPerTab = () => {
+  // TODO: env var
+  return 0.01
+}
+
 const WrongCampaignConfigError = (field, expectedType) => {
   return new Error(
     `The campaign config requires the field "${field}" to be type "${expectedType}".`
@@ -140,6 +145,15 @@ const createCampaignConfiguration = input => {
     return count
   }
 
+  // Get an estimate of money raised for this campaign.
+  const getEstimatedMoneyRaised = async () => {
+    // Base money raised on number of tabs opened multiplied
+    // by the estimated money raised per tab.
+    const estMoneyRaisedPerTab = getEstMoneyRaisedPerTab()
+    const tabs = await getTabCount()
+    return tabs * estMoneyRaisedPerTab
+  }
+
   /**
    * Return whether the current time is between the campaign's start and
    * end times.
@@ -185,6 +199,8 @@ const createCampaignConfiguration = input => {
         // the new user count
         // else if (something) {}
         await getNewUserCount()
+        // Can rely on estimated money raised:
+        await getEstimatedMoneyRaised()
         // else throw
         return 12.42e6
       },
