@@ -152,6 +152,7 @@ const logTab = async (userContext, userId, tabId = null) => {
       const campaign = await getCampaign(userContext)
 
       // TODO: update tests.
+      // TODO: only increment the campaign tab count if the tab is valid.
 
       // If the campaign is active (we are between the campaign's start
       // and end times), increment the new user count.
