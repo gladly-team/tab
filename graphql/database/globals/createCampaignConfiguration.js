@@ -3,6 +3,7 @@ import { isNil, isBoolean, isFunction, isNumber, isString } from 'lodash/lang'
 import { get } from 'lodash/object'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
+import getCharityVcReceived from '../donations/getCharityVcReceived'
 
 const getEstMoneyRaisedPerTab = () => {
   // TODO: env var
@@ -121,6 +122,20 @@ const createCampaignConfiguration = input => {
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
   const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
 
+  const getVCDonated = async userContext => {
+    try {
+      const vcDonated = await getCharityVcReceived(
+        userContext,
+        charityId,
+        time.start,
+        time.end
+      )
+      return vcDonated
+    } catch (e) {
+      throw e
+    }
+  }
+
   // Try to get the count of tabs opened during this campaign.
   // Default to zero if the item doesn't exist or fails to
   // fetch.
@@ -238,20 +253,41 @@ const createCampaignConfiguration = input => {
 
     configuredGoal = {
       targetNumber,
-      // TODO: base this on other inputs about how to calculate impact
-      getCurrentNumber: async () => {
-        // E.g.: if relying on tabs, calculate current number from
-        // tab count.
-        // if (something) {}
-        await getTabCount()
-        // If relying on new users, caculate current number from
-        // the new user count
-        // else if (something) {}
-        await getNewUserCount()
-        // Can rely on estimated money raised:
-        await getEstimatedMoneyRaised()
-        // else throw
-        return 12.42e6
+      getCurrentNumber: async userContext => {
+        let currentNumber = 0
+        switch (numberSource) {
+          case HEARTS: {
+            currentNumber = await getVCDonated(userContext)
+            break
+          }
+          // TODO: fix and test
+          case MONEY_RAISED: {
+            currentNumber = await getEstimatedMoneyRaised()
+            break
+          }
+          // TODO: fix and test
+          case NEW_USERS: {
+            currentNumber = await getNewUserCount()
+            break
+          }
+          default: {
+            throw new Error(
+              `The "goal.numberSource" value must be one of: ${validNumberSourceVals.join(
+                ', '
+              )}`
+            )
+          }
+        }
+
+        // TODO: test
+        // If a number transform function was provided, calculate
+        // the transformed value.
+        if (transformNumberSourceValue) {
+          currentNumber = transformNumberSourceValue(currentNumber)
+        }
+
+        // TODO: round number down to an integer
+        return currentNumber
       },
       impactUnitSingular,
       impactUnitPlural,

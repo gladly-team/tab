@@ -4,10 +4,12 @@ import MockDate from 'mockdate'
 import createCampaignConfiguration from '../createCampaignConfiguration'
 import callRedis from '../../../utils/redis'
 import CharityModel from '../../charities/CharityModel'
+import getCharityVcReceived from '../../donations/getCharityVcReceived'
 import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../../utils/redis')
 jest.mock('../../charities/CharityModel')
+jest.mock('../../donations/getCharityVcReceived')
 jest.mock('../../../utils/logger')
 
 const mockNow = '2020-05-02T13:59:58.000Z'
@@ -780,5 +782,76 @@ describe('createCampaignConfiguration', () => {
     }).toThrow(
       'The campaign config requires the field "goal.transformNumberSourceValue" to be type "function".'
     )
+  })
+
+  it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "hearts"', async () => {
+    expect.assertions(1)
+
+    // Mock response for fetching VC donated to the charity.
+    getCharityVcReceived.mockResolvedValue(11235)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'hearts',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+    expect(currentNum).toEqual(11235)
+  })
+
+  it('calls getCharityVcReceived with the expected arguments', async () => {
+    expect.assertions(1)
+
+    // Mock response for fetching VC donated to the charity.
+    getCharityVcReceived.mockResolvedValue(11235)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'my-fake-charity-id',
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'hearts',
+      },
+      time: {
+        start: '2021-01-01T18:00:00.000Z',
+        end: '2021-01-05T18:00:00.000Z',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.goal.getCurrentNumber(mockUserContext)
+    expect(getCharityVcReceived).toHaveBeenCalledWith(
+      mockUserContext,
+      'my-fake-charity-id',
+      '2021-01-01T18:00:00.000Z',
+      '2021-01-05T18:00:00.000Z'
+    )
+  })
+
+  it('throws if getCharityVcReceived throws when calling "goal.getCurrentNumber"', async () => {
+    expect.assertions(1)
+
+    // Mock response for fetching VC donated to the charity.
+    const mockErr = new Error('Hearts? What Hearts?')
+    getCharityVcReceived.mockRejectedValue(mockErr)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'hearts',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    await expect(
+      campaignConfig.goal.getCurrentNumber(mockUserContext)
+    ).rejects.toEqual(mockErr)
   })
 })
