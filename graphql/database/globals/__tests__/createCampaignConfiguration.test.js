@@ -40,7 +40,9 @@ const getMockCampaignConfigInput = () => ({
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'raised',
+    numberSource: 'hearts',
     targetNumber: 10e6,
+    transformNumberSourceValue: undefined, // optional function
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
@@ -697,6 +699,80 @@ describe('createCampaignConfiguration', () => {
       })
     }).toThrow(
       'The campaign config requires the field "goal.targetNumber" to be type "number".'
+    )
+  })
+
+  it('does not throw if "goal.numberSource" is "hearts"', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          numberSource: 'hearts',
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "goal.numberSource" is "moneyRaised"', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          numberSource: 'moneyRaised',
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "goal.numberSource" is "newUsers"', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          numberSource: 'newUsers',
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "goal.numberSource" is not one of the valid strings', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          numberSource: 'pizza',
+        },
+      })
+    }).toThrow(
+      'The "goal.numberSource" value must be one of: hearts, moneyRaised, newUsers'
+    )
+  })
+
+  it('throws if "goal.transformNumberSourceValue" is defined but is not a function', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          transformNumberSourceValue: 0.12,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.transformNumberSourceValue" to be type "function".'
     )
   })
 })

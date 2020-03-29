@@ -26,10 +26,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     descriptionMarkdown: campaignEndDescription,
   },
   goal: {
-    targetNumber: 10e6,
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'donated',
+    numberSource: 'hearts',
+    targetNumber: 10e6,
   },
   showCountdownTimer: false,
   showHeartsDonationButton: true,

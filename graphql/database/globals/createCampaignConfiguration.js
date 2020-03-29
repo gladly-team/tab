@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isNil, isBoolean, isNumber, isString } from 'lodash/lang'
+import { isNil, isBoolean, isFunction, isNumber, isString } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 
@@ -167,11 +167,36 @@ const createCampaignConfiguration = input => {
   let configuredGoal = null
   if (!isNil(goal)) {
     const {
+      // The singular name of the things the goal is tracking (e.g. "new user",
+      // "heart", "meal")
       impactUnitSingular,
+      // The plural name of the things the goal is tracking (e.g. "new users",
+      // "hearts", "meals")
       impactUnitPlural,
+      // The verb we use to describe what we're doing with the impact units
+      // (e.g., "recruited", "donated", "raised")
       impactVerbPastTense,
+      // The internal source we are using to calculate the number of impact
+      // units. One of: "hearts", "newUsers", "moneyRaised"
+      numberSource,
+      // The target number of impact units this campaign could raise
       targetNumber,
+      /**
+       * An optional function to modify the value of the "numberSource" before
+       * using it as the current number value. For example, we can use this to
+       * change the estimated money raised into a measure of "meals given" by
+       * multiplying the money raised by the cost per meal.
+       * @param {Number} val – the current value from the "numberSource"; e.g.,
+       *   the estimated money raised for this campaign.
+       * @return {Number} The transformed number
+       */
+      transformNumberSourceValue,
     } = goal
+
+    const HEARTS = 'hearts'
+    const MONEY_RAISED = 'moneyRaised'
+    const NEW_USERS = 'newUsers'
+    const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS]
 
     // Validate the goal config.
     if (!isString(impactUnitSingular)) {
@@ -183,8 +208,23 @@ const createCampaignConfiguration = input => {
     if (!isString(impactVerbPastTense)) {
       throw WrongCampaignConfigError('goal.impactVerbPastTense', 'string')
     }
+    if (validNumberSourceVals.indexOf(numberSource) === -1) {
+      throw new Error(
+        `The "goal.numberSource" value must be one of: ${validNumberSourceVals.join(
+          ', '
+        )}`
+      )
+    }
     if (!isNumber(targetNumber)) {
       throw WrongCampaignConfigError('goal.targetNumber', 'number')
+    }
+    if (!isNil(transformNumberSourceValue)) {
+      if (!isFunction(transformNumberSourceValue)) {
+        throw WrongCampaignConfigError(
+          'goal.transformNumberSourceValue',
+          'function'
+        )
+      }
     }
 
     configuredGoal = {
