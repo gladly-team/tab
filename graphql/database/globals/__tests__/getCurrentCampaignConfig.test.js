@@ -1,5 +1,8 @@
 /* eslint-env jest */
 import getCurrentCampaignConfig from '../getCurrentCampaignConfig'
+import createCampaignConfiguration from '../createCampaignConfiguration'
+
+jest.mock('../createCampaignConfiguration')
 
 describe('getCurrentCampaignConfig', () => {
   it('returns an object with the expected required properties', () => {
@@ -39,5 +42,28 @@ describe('getCurrentCampaignConfig', () => {
     expect(getCurrentCampaignConfig()).toMatchObject({
       isLive: false,
     })
+  })
+})
+
+// Test the transformNumberSourceValue function, which is unique
+// to each campaign.
+describe('getCurrentCampaignConfig: transformNumberSourceValue', () => {
+  it('behaves as expected for the current campaign', () => {
+    getCurrentCampaignConfig()
+    const configInput = createCampaignConfiguration.mock.calls[0][0]
+    if (!configInput.goal || !configInput.goal.transformNumberSourceValue) {
+      // The input does not define a goal.transformNumberSourceValue,
+      // so there is no need to test it.
+      expect(true).toBe(true)
+      return
+    }
+    const transformFunc = configInput.goal.transformNumberSourceValue
+
+    // Test campaign-specific transform logic here.
+    expect(transformFunc(1.0)).toEqual(5)
+    expect(transformFunc(29)).toEqual(145)
+    expect(transformFunc(0.19)).toEqual(0)
+    expect(transformFunc(0.2)).toEqual(1)
+    expect(transformFunc(0.21)).toEqual(1)
   })
 })
