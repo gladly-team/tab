@@ -13,7 +13,7 @@ const MONEY_RAISED_PER_DAY = 450.0
  * Get an estimate of how much we've raised, using a combination of
  * the most recent manual entry and the estimated rate of money
  * raised over time.
- * @return {number}  A decimal rounded to two decimal places
+ * @return {String}  A stringified float, rounded to two decimal places
  */
 export const getMoneyRaised = () => {
   const daysSinceUpdatedMoneyRaised = moment().diff(
@@ -25,10 +25,23 @@ export const getMoneyRaised = () => {
   return raisedNow.toFixed(2)
 }
 
+/**
+ * Get an estimate of how much money we raise in any given day.
+ * @return {Number}
+ */
 export const getDollarsPerDayRate = () => MONEY_RAISED_PER_DAY
 
+/**
+ * Get the amount of virtual currency a user receives for
+ * recruiting a new user.
+ * @return {Number}
+ */
 export const getReferralVcReward = () => USER_REFERRAL_VC_REWARD
 
+/**
+ * Get an estimate of how much money is raised by a single valid tab.
+ * @return {Number}
+ */
 export const getEstimatedMoneyRaisedPerTab = () => {
   // TODO: env var
   return 0.01

@@ -6,6 +6,7 @@ import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
 import getCurrentCampaignConfig from '../globals/getCurrentCampaignConfig'
+import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -165,7 +166,9 @@ const logTab = async (userContext, userId, tabId = null) => {
       const campaignConfig = await getCurrentCampaignConfig(userContext)
       await campaignConfig.incrementTabCount()
 
-      // TODO: track estimated money raised
+      // Use estimated money raised per tab to track money raised during
+      // the campaign.
+      await campaignConfig.addMoneyRaised(getEstimatedMoneyRaisedPerTab())
     } catch (e) {
       throw e
     }

@@ -16,11 +16,13 @@ import {
   setMockDBResponse,
 } from '../../test-utils'
 import getCurrentCampaignConfig from '../../globals/getCurrentCampaignConfig'
+import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../../globals/getCurrentCampaignConfig')
+jest.mock('../../globals/globals')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -779,6 +781,105 @@ describe('campaign: counting tabs', () => {
     const mockCampaignConfig = {
       ...getMockCampaignConfiguration(),
       incrementTabCount: jest.fn(async () => {
+        throw mockErr
+      }),
+    }
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
+  })
+})
+
+describe('campaign: estimating money raised', () => {
+  it('adds to the money raised when the tab is valid', async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock the estimated money raised per valid tab.
+    getEstimatedMoneyRaisedPerTab.mockReturnValue(0.0081)
+
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+
+    await logTab(userContext, userId)
+    expect(mockCampaignConfig.addMoneyRaised).toHaveBeenCalledWith(0.0081)
+  })
+
+  it('does not add to the money raised when the tab is not valid', async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 152, // not valid: above daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+
+    await logTab(userContext, userId)
+    expect(mockCampaignConfig.addMoneyRaised).not.toHaveBeenCalled()
+  })
+
+  it('throws if adding to money raised throws', async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    // Mock that incrementing the tab count throws.
+    const mockErr = new Error('Yikes')
+    const mockCampaignConfig = {
+      ...getMockCampaignConfiguration(),
+      addMoneyRaised: jest.fn(async () => {
         throw mockErr
       }),
     }
