@@ -274,12 +274,10 @@ const createCampaignConfiguration = input => {
             currentNumber = await getEstimatedMoneyRaised()
             break
           }
-          // TODO: fix and test
           case NEW_USERS: {
             currentNumber = await getNewUserCount()
             break
           }
-          // TODO: test
           case TABS_OPENED: {
             currentNumber = await getTabCount()
             break

@@ -1004,6 +1004,98 @@ describe('createCampaignConfiguration: goal data', () => {
     })
   })
 
+  it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "newUsers"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(321)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      countNewUsers: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'newUsers',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+    expect(currentNum).toEqual(321)
+  })
+
+  it('calls Redis as expected when calling "goal.getCurrentNumber" when "goal.numberSource" === "newUsers"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(321)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myWonderfulCampaign',
+      countNewUsers: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'newUsers',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.goal.getCurrentNumber(mockUserContext)
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'GET',
+      key: 'campaign:myWonderfulCampaign:newUsers',
+    })
+  })
+
+  it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "tabsOpened"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(321)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      countTabsOpened: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'tabsOpened',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+    expect(currentNum).toEqual(321)
+  })
+
+  it('calls Redis as expected when calling "goal.getCurrentNumber" when "goal.numberSource" === "tabsOpened"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(321)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myWonderfulCampaign',
+      countTabsOpened: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'tabsOpened',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.goal.getCurrentNumber(mockUserContext)
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'GET',
+      key: 'campaign:myWonderfulCampaign:tabsOpened',
+    })
+  })
+
   it('returns the expected value from "goal.getCurrentNumber", using the "transformNumberSourceValue" function to modify it [test #1]', async () => {
     expect.assertions(1)
 
