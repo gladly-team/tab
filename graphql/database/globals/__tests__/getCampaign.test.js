@@ -60,7 +60,7 @@ afterEach(() => {
 })
 
 describe('getCampaign', () => {
-  it('is a placeholder', async () => {
+  it('returns the expected data', async () => {
     expect.assertions(1)
     const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
       .default
@@ -105,5 +105,35 @@ describe('getCampaign', () => {
         end: '2020-05-05T18:00:00.000Z',
       },
     })
+  })
+
+  it('does not include a "charity" value if getCharityData returns null', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      getCharityData: jest.fn(() => Promise.resolve(null)),
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign.charity).toBeUndefined()
+  })
+
+  it('does not include a "goal" value if goal is not defined in the campaign config', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      goal: undefined,
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign.goal).toBeUndefined()
   })
 })
