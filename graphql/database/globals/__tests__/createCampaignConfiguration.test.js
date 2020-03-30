@@ -56,7 +56,7 @@ const getMockCampaignConfigInput = () => ({
   },
 })
 
-describe('createCampaignConfiguration', () => {
+describe('createCampaignConfiguration: validation', () => {
   it('returns an object with the expected required properties', () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -90,294 +90,6 @@ describe('createCampaignConfiguration', () => {
         end: '2020-05-05T18:00:00.000Z',
       },
     })
-  })
-
-  it('calls Redis as expected when calling addMoneyRaised and countMoneyRaised is true', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countMoneyRaised: true,
-    })
-    const moneyToAdd = 0.0231
-    await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).toHaveBeenCalledWith({
-      operation: 'INCRBY',
-      key: 'campaign:myFunCampaign:moneyRaised',
-      amountToAdd: 23100000,
-    })
-  })
-
-  it('does not call Redis when calling addMoneyRaised if countMoneyRaised is false', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countMoneyRaised: false,
-    })
-    const moneyToAdd = 0.0231
-    await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling addMoneyRaised if countMoneyRaised is undefined (it defaults to false)', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countMoneyRaised: undefined,
-    })
-    const moneyToAdd = 0.0231
-    await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling addMoneyRaised if the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countMoneyRaised: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    const moneyToAdd = 0.0231
-    await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('calls Redis with a rounded money raised value if addMoneyRaised is called with a float beyond nano precision', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countMoneyRaised: true,
-    })
-    const moneyToAdd = 0.0231798231798231798 // super long
-    await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis.mock.calls[0][0].amountToAdd).toEqual(23179823)
-  })
-
-  it('calls Redis as expected when calling incrementNewUserCount and countNewUsers is true', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countNewUsers: true,
-    })
-    await campaignConfig.incrementNewUserCount()
-    expect(callRedis).toHaveBeenCalledWith({
-      operation: 'INCR',
-      key: 'campaign:myFunCampaign:newUsers',
-    })
-  })
-
-  it('does not call Redis when calling incrementNewUserCount and countNewUsers is false', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countNewUsers: false,
-    })
-    await campaignConfig.incrementNewUserCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling incrementNewUserCount and countNewUsers is undefined (it defaults to false)', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countNewUsers: undefined,
-    })
-    await campaignConfig.incrementNewUserCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling incrementNewUserCount and the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countNewUsers: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    await campaignConfig.incrementNewUserCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('calls Redis as expected when calling incrementTabCount and countTabsOpened is true', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-    })
-    await campaignConfig.incrementTabCount()
-    expect(callRedis).toHaveBeenCalledWith({
-      operation: 'INCR',
-      key: 'campaign:myFunCampaign:tabsOpened',
-    })
-  })
-
-  it('does not call Redis when calling incrementTabCount and countTabsOpened is false', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: false,
-    })
-    await campaignConfig.incrementTabCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling incrementTabCount and countTabsOpened is undefined (it defaults to false)', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: undefined,
-    })
-    await campaignConfig.incrementTabCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('does not call Redis when calling incrementTabCount and the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    await campaignConfig.incrementTabCount()
-    expect(callRedis).not.toHaveBeenCalled()
-  })
-
-  it('fetches the charity as expected when calling getCharityData', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      charityId: 'some-charity-id',
-    })
-    const mockUserContext = getMockUserContext()
-    await campaignConfig.getCharityData(mockUserContext)
-    expect(CharityModel.get).toHaveBeenCalledWith(
-      mockUserContext,
-      'some-charity-id'
-    )
-  })
-
-  it('returns the expected charity data when calling getCharityData', async () => {
-    expect.assertions(1)
-    CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
-      foo: 'bar',
-    })
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      charityId: 'some-charity-id',
-    })
-    const mockUserContext = getMockUserContext()
-    const charityData = await campaignConfig.getCharityData(mockUserContext)
-    expect(charityData).toEqual({
-      id: 'some-charity-id',
-      foo: 'bar',
-    })
-  })
-
-  it('returns null charity data when no charityId is defined in the config', async () => {
-    expect.assertions(1)
-    CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
-      foo: 'bar',
-    })
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      goal: null, // cannot have a goal that relies on hearts when charityId is null
-      showHeartsDonationButton: false, // required when charityId is null
-      showProgressBar: false, // this must be false because we set "goal" to null
-      charityId: null, // no charity ID defined
-    })
-    const mockUserContext = getMockUserContext()
-    const charityData = await campaignConfig.getCharityData(mockUserContext)
-    expect(charityData).toBeNull()
-  })
-
-  it('throws if fetching the charity thows', async () => {
-    expect.assertions(1)
-    const mockErr = new Error('The database has failed us.')
-    CharityModel.get.mockImplementation(() => {
-      throw mockErr
-    })
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      charityId: 'some-charity-id',
-    })
-    const mockUserContext = getMockUserContext()
-    await expect(
-      campaignConfig.getCharityData(mockUserContext)
-    ).rejects.toEqual(mockErr)
-  })
-
-  it('isActive() returns true if the campaign is still active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-05-01T18:00:00.000Z',
-        end: '2020-05-05T18:00:00.000Z', // campaign is still active
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(true)
-  })
-
-  it('isActive() returns false if the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(false)
   })
 
   it('throws if "campaignId" is not defined', async () => {
@@ -873,7 +585,307 @@ describe('createCampaignConfiguration', () => {
       'The campaign config requires the field "goal.transformNumberSourceValue" to be type "function".'
     )
   })
+})
 
+describe('createCampaignConfiguration: addMoneyRaised', () => {
+  it('calls Redis as expected when calling addMoneyRaised and countMoneyRaised is true', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: true,
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCRBY',
+      key: 'campaign:myFunCampaign:moneyRaised',
+      amountToAdd: 23100000,
+    })
+  })
+
+  it('does not call Redis when calling addMoneyRaised if countMoneyRaised is false', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: false,
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling addMoneyRaised if countMoneyRaised is undefined (it defaults to false)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: undefined,
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling addMoneyRaised if the campaign is no longer active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-04-21T18:00:00.000Z',
+        end: '2020-04-28T18:00:00.000Z', // campaign has ended
+      },
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('calls Redis with a rounded money raised value if addMoneyRaised is called with a float beyond nano precision', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: true,
+    })
+    const moneyToAdd = 0.0231798231798231798 // super long
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis.mock.calls[0][0].amountToAdd).toEqual(23179823)
+  })
+})
+
+describe('createCampaignConfiguration: incrementNewUserCount', () => {
+  it('calls Redis as expected when calling incrementNewUserCount and countNewUsers is true', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: true,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:newUsers',
+    })
+  })
+
+  it('does not call Redis when calling incrementNewUserCount and countNewUsers is false', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: false,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementNewUserCount and countNewUsers is undefined (it defaults to false)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: undefined,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementNewUserCount and the campaign is no longer active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-04-21T18:00:00.000Z',
+        end: '2020-04-28T18:00:00.000Z', // campaign has ended
+      },
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+})
+
+describe('createCampaignConfiguration: incrementTabCount', () => {
+  it('calls Redis as expected when calling incrementTabCount and countTabsOpened is true', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:tabsOpened',
+    })
+  })
+
+  it('does not call Redis when calling incrementTabCount and countTabsOpened is false', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: false,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementTabCount and countTabsOpened is undefined (it defaults to false)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: undefined,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementTabCount and the campaign is no longer active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-04-21T18:00:00.000Z',
+        end: '2020-04-28T18:00:00.000Z', // campaign has ended
+      },
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+})
+
+describe('createCampaignConfiguration: charity data', () => {
+  it('fetches the charity as expected when calling getCharityData', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.getCharityData(mockUserContext)
+    expect(CharityModel.get).toHaveBeenCalledWith(
+      mockUserContext,
+      'some-charity-id'
+    )
+  })
+
+  it('returns the expected charity data when calling getCharityData', async () => {
+    expect.assertions(1)
+    CharityModel.get.mockReturnValue({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    const charityData = await campaignConfig.getCharityData(mockUserContext)
+    expect(charityData).toEqual({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+  })
+
+  it('returns null charity data when no charityId is defined in the config', async () => {
+    expect.assertions(1)
+    CharityModel.get.mockReturnValue({
+      id: 'some-charity-id',
+      foo: 'bar',
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      goal: null, // cannot have a goal that relies on hearts when charityId is null
+      showHeartsDonationButton: false, // required when charityId is null
+      showProgressBar: false, // this must be false because we set "goal" to null
+      charityId: null, // no charity ID defined
+    })
+    const mockUserContext = getMockUserContext()
+    const charityData = await campaignConfig.getCharityData(mockUserContext)
+    expect(charityData).toBeNull()
+  })
+
+  it('throws if fetching the charity thows', async () => {
+    expect.assertions(1)
+    const mockErr = new Error('The database has failed us.')
+    CharityModel.get.mockImplementation(() => {
+      throw mockErr
+    })
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      charityId: 'some-charity-id',
+    })
+    const mockUserContext = getMockUserContext()
+    await expect(
+      campaignConfig.getCharityData(mockUserContext)
+    ).rejects.toEqual(mockErr)
+  })
+})
+
+describe('createCampaignConfiguration: isActive', () => {
+  it('isActive() returns true if the campaign is still active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z', // campaign is still active
+      },
+    })
+    expect(campaignConfig.isActive()).toBe(true)
+  })
+
+  it('isActive() returns false if the campaign is no longer active', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+      time: {
+        ...mockCampaignInput.time,
+        start: '2020-04-21T18:00:00.000Z',
+        end: '2020-04-28T18:00:00.000Z', // campaign has ended
+      },
+    })
+    expect(campaignConfig.isActive()).toBe(false)
+  })
+})
+
+describe('createCampaignConfiguration: goal data', () => {
   it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "hearts"', async () => {
     expect.assertions(1)
 
@@ -924,7 +936,7 @@ describe('createCampaignConfiguration', () => {
     )
   })
 
-  it('throws if getCharityVcReceived throws when calling "goal.getCurrentNumber"', async () => {
+  it('throws if getCharityVcReceived throws when calling "goal.getCurrentNumber" and "goal.numberSource" === "hearts"', async () => {
     expect.assertions(1)
 
     // Mock response for fetching VC donated to the charity.
