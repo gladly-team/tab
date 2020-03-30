@@ -15,8 +15,8 @@ const createCampaignConfiguration = input => {
   const {
     campaignId,
     charityId = null,
-    countNewUsers = false,
     countMoneyRaised = false,
+    countNewUsers = false,
     countTabsOpened = false,
     content,
     endContent,

@@ -19,6 +19,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
   },
+  countMoneyRaised: false,
   countNewUsers: false,
   countTabsOpened: false,
   endContent: {
