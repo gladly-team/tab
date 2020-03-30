@@ -23,7 +23,8 @@
   },
   "scripts": {
     "build": "rm -rf ./build && cross-env NODE_ENV=production babel --out-dir='build' ./src/handler.js",
-    "deploy": "yarn run build && serverless deploy -v",
+    "deploy": "echo \"Be sure to set AWS_ACCOUNT_ID=*** and set SLS_STAGE to dev or prod.\" && yarn run build && serverless deploy -v",
+    "remove": "echo \"Be sure to set AWS_ACCOUNT_ID=*** and set SLS_STAGE to dev or prod.\" && serverless remove",
     "format:fix": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
     "test": "jest"

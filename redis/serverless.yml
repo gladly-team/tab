@@ -9,7 +9,7 @@
 #   3. To use Redis locally, optionally set the REDIS_SERVICE_ENDPOINT env var in grapqhl/.env.
 # To destroy the service:
 #   1. In graphql/serverless.yml, comment out the REDIS_SERVICE_ENDPOINT stack reference.
-#   2. Run: `SLS_STAGE=dev serverless remove`, setting the stage as appropriate.
+#   2. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run remove`, setting the stage as appropriate.
 service: tab-redis
 
 # Based on:
