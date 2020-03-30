@@ -1,13 +1,18 @@
 /* eslint-env jest */
-import { getMoneyRaised, getReferralVcReward } from '../globals'
 
-describe('Globals Tests', () => {
-  it('should return the money raised', () => {
-    const moneyRaised = getMoneyRaised()
-    expect(moneyRaised > 0).toBe(true)
+describe('globals', () => {
+  it('returns the money raised', () => {
+    const { getMoneyRaised } = require('../globals')
+    expect(getMoneyRaised() > 0).toBe(true)
   })
 
   it('returns the expected user referral VC reward', () => {
+    const { getReferralVcReward } = require('../globals')
     expect(getReferralVcReward()).toBe(350)
+  })
+
+  it('returns the estimated money raised per tab', () => {
+    const { getEstimatedMoneyRaisedPerTab } = require('../globals')
+    expect(getEstimatedMoneyRaisedPerTab()).toBeGreaterThan(0)
   })
 })

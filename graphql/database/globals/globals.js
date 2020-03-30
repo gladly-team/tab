@@ -28,3 +28,8 @@ export const getMoneyRaised = () => {
 export const getDollarsPerDayRate = () => MONEY_RAISED_PER_DAY
 
 export const getReferralVcReward = () => USER_REFERRAL_VC_REWARD
+
+export const getEstimatedMoneyRaisedPerTab = () => {
+  // TODO: env var
+  return 0.01
+}
