@@ -52,11 +52,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
  *   a string of the Redis key value. The Redis item stores the number of new
  *   users who joined during this campaign.
  */
-// eslint-disable-next-line import/prefer-default-export
-export const getCurrentCampaignHardcodedData = () => {
+
+const getCurrentCampaignConfig = () => {
   const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
   return {
     ...CURRENT_CAMPAIGN,
     isLive,
   }
 }
+
+export default getCurrentCampaignConfig

@@ -1,5 +1,5 @@
 import { isNil } from 'lodash/lang'
-import { getCurrentCampaignHardcodedData } from './hardcodedCampaignData'
+import getCurrentCampaignConfig from './getCurrentCampaignConfig'
 
 const createCampaignData = async (userContext, campaignConfig) => {
   const {
@@ -61,7 +61,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
 }
 
 const getCampaign = async userContext => {
-  return createCampaignData(userContext, getCurrentCampaignHardcodedData())
+  return createCampaignData(userContext, getCurrentCampaignConfig())
 }
 
 export default getCampaign
