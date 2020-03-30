@@ -710,12 +710,12 @@ const campaignGoalType = new GraphQLObjectType({
     'Information on progress toward a target impact goal for the campaign',
   fields: () => ({
     targetNumber: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLFloat),
       description:
         'The goal number of whatever impact units the campaign is hoping to achieve',
     },
     currentNumber: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLFloat),
       description:
         'The current number of whatever impact units the campaign is hoping to achieve',
     },

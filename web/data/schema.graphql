@@ -127,12 +127,12 @@ type CampaignGoal {
   """
   The goal number of whatever impact units the campaign is hoping to achieve
   """
-  targetNumber: Int!
+  targetNumber: Float!
 
   """
   The current number of whatever impact units the campaign is hoping to achieve
   """
-  currentNumber: Int!
+  currentNumber: Float!
 
   """
   The English word for the impact unit, singular (e.g. Heart, dollar, puppy)
