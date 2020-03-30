@@ -176,6 +176,8 @@ const createCampaignConfiguration = input => {
 
   // Get an estimate of money raised for this campaign.
   const getEstimatedMoneyRaised = async () => {
+    // TODO: we may just want to use an estimate of money raised by day.
+
     // Base money raised on number of tabs opened multiplied
     // by the estimated money raised per tab.
     const estMoneyRaisedPerTab = getEstMoneyRaisedPerTab()
