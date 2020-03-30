@@ -12,6 +12,7 @@ const mockRedisClient = {
   getAsync: jest.fn(),
   setAsync: jest.fn(),
   incrAsync: jest.fn(),
+  incrbyAsync: jest.fn(),
   quitAsync: jest.fn(),
 }
 
@@ -137,6 +138,66 @@ describe('Redis Lambda handler', () => {
       body: JSON.stringify({
         code: 'MISSING_KEY',
         message: 'The "key" property is required for this operation.',
+      }),
+    })
+  })
+
+  it('calls INCRBY and returns the value as expected', async () => {
+    expect.assertions(2)
+    const eventData = getMockEventObj({
+      operation: 'INCRBY',
+      key: 'my-incrby-thing',
+      amountToAdd: 120,
+    })
+    mockRedisClient.incrbyAsync.mockResolvedValueOnce(490)
+
+    const response = await handler(eventData)
+    expect(mockRedisClient.incrbyAsync).toHaveBeenCalledWith(
+      'my-incrby-thing',
+      120
+    )
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({
+        data: 490,
+      }),
+    })
+  })
+
+  it('throws if no key is provided to the INCRBY operation', async () => {
+    expect.assertions(1)
+    const eventData = getMockEventObj({
+      operation: 'INCRBY',
+      // no key
+      amountToAdd: 120,
+    })
+    mockRedisClient.incrbyAsync.mockResolvedValueOnce(490)
+
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 400,
+      body: JSON.stringify({
+        code: 'MISSING_KEY',
+        message: 'The "key" property is required for this operation.',
+      }),
+    })
+  })
+
+  it('throws if no amountToAdd is provided to the INCRBY operation', async () => {
+    expect.assertions(1)
+    const eventData = getMockEventObj({
+      operation: 'INCRBY',
+      key: 'my-incrby-thing',
+      // amountToAdd: 120, // missing
+    })
+    mockRedisClient.incrbyAsync.mockResolvedValueOnce(490)
+
+    const response = await handler(eventData)
+    expect(response).toEqual({
+      statusCode: 400,
+      body: JSON.stringify({
+        code: 'MISSING_ADDITIONAL_DATA',
+        message: 'Additional data is required for this operation.',
       }),
     })
   })

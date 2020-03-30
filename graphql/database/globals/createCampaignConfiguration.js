@@ -172,21 +172,26 @@ const createCampaignConfiguration = input => {
     return count
   }
 
+  // TODO: test
   // Get an estimate of money raised for this campaign.
   const getEstimatedMoneyRaised = async () => {
-    let estMoneyRaised = 0
+    let estUSDMoneyRaised = 0
     try {
-      estMoneyRaised = await callRedis({
+      const nanoUSDMoneyRaised = await callRedis({
         operation: 'GET',
         key: redisKeyMoneyRaised,
       })
-      if (!estMoneyRaised) {
-        estMoneyRaised = 0
+      // Redis doesn't support large float precision, so we store
+      // revenue as an integer.
+      estUSDMoneyRaised = nanoUSDMoneyRaised * 1e-9
+
+      if (!estUSDMoneyRaised) {
+        estUSDMoneyRaised = 0
       }
     } catch (e) {
       // Redis will log errors.
     }
-    return estMoneyRaised
+    return estUSDMoneyRaised
   }
 
   /**
@@ -307,15 +312,21 @@ const createCampaignConfiguration = input => {
   }
 
   return {
-    addMoneyRaised: async () => {
+    // TODO: test
+    addMoneyRaised: async USDMoneyRaisedToAdd => {
+      // Redis doesn't support large float precision, so we store
+      // revenue as an integer.
+      const nanoUSDMoneyRaised = Math.round(USDMoneyRaisedToAdd * 1e9)
+
       // If not counting money raised or the campaign is not active, ignore this.
       if (!(countMoneyRaised && isActive())) {
         return
       }
       try {
         await callRedis({
-          operation: 'SUM', // FIXME: we need to support this
+          operation: 'INCRBY',
           key: redisKeyMoneyRaised,
+          amountToAdd: nanoUSDMoneyRaised,
         })
       } catch (e) {
         // Redis will log errors.
