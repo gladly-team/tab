@@ -172,7 +172,6 @@ const createCampaignConfiguration = input => {
     return count
   }
 
-  // TODO: test
   // Get an estimate of money raised for this campaign.
   const getEstimatedMoneyRaised = async () => {
     let estUSDMoneyRaised = 0
@@ -271,7 +270,6 @@ const createCampaignConfiguration = input => {
             currentNumber = await getVCDonated(userContext)
             break
           }
-          // TODO: fix and test
           case MONEY_RAISED: {
             currentNumber = await getEstimatedMoneyRaised()
             break

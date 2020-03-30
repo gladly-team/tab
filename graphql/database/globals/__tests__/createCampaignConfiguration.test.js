@@ -22,6 +22,7 @@ afterEach(() => {
   jest.clearAllMocks()
   MockDate.reset()
   CharityModel.get.mockReturnValue(null)
+  callRedis.mockResolvedValue(null)
 })
 
 // Get an example of campaign config input.
@@ -955,5 +956,51 @@ describe('createCampaignConfiguration: goal data', () => {
     await expect(
       campaignConfig.goal.getCurrentNumber(mockUserContext)
     ).rejects.toEqual(mockErr)
+  })
+
+  it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "moneyRaised"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(23147000) // nano $USD
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      countMoneyRaised: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'moneyRaised',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+    expect(currentNum).toEqual(0.023147)
+  })
+
+  it('calls Redis as expected when calling "goal.getCurrentNumber" when "goal.numberSource" === "moneyRaised"', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(23147000) // nano $USD
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myWonderfulCampaign',
+      countMoneyRaised: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'moneyRaised',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    await campaignConfig.goal.getCurrentNumber(mockUserContext)
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'GET',
+      key: 'campaign:myWonderfulCampaign:moneyRaised',
+    })
   })
 })
