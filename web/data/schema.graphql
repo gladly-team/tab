@@ -17,7 +17,6 @@ type App implements Node {
 
   """All the background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
-  isGlobalCampaignLive: Boolean
 
   """Campaigns (or "charity spotlights") shown to users."""
   campaign: Campaign

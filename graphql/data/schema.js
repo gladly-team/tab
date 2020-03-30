@@ -81,7 +81,6 @@ import {
   getMoneyRaised,
   getReferralVcReward,
   getDollarsPerDayRate,
-  isGlobalCampaignLive,
 } from '../database/globals/globals'
 import getCampaign from '../database/globals/getCampaign'
 
@@ -863,11 +862,6 @@ const appType = new GraphQLObjectType({
           BackgroundImageModel.getAll(context.user),
           args
         ),
-    },
-    // Deprecated. Use the campaign object.
-    isGlobalCampaignLive: {
-      type: GraphQLBoolean,
-      resolve: () => isGlobalCampaignLive(),
     },
     campaign: {
       type: campaignType,
