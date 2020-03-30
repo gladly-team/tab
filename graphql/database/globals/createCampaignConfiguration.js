@@ -293,14 +293,12 @@ const createCampaignConfiguration = input => {
           }
         }
 
-        // TODO: test
         // If a number transform function was provided, calculate
         // the transformed value.
         if (transformNumberSourceValue) {
           currentNumber = transformNumberSourceValue(currentNumber)
         }
 
-        // TODO: round number down to an integer
         return currentNumber
       },
       impactUnitSingular,

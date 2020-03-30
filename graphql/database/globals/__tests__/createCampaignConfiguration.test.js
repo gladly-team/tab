@@ -1003,4 +1003,79 @@ describe('createCampaignConfiguration: goal data', () => {
       key: 'campaign:myWonderfulCampaign:moneyRaised',
     })
   })
+
+  it('returns the expected value from "goal.getCurrentNumber", using the "transformNumberSourceValue" function to modify it [test #1]', async () => {
+    expect.assertions(1)
+
+    // Mock response for fetching VC donated to the charity.
+    getCharityVcReceived.mockResolvedValue(11235)
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'hearts',
+        transformNumberSourceValue: num => num * 2,
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+
+    // Without the transformNumberSourceValue function, we would
+    // expect this to return 11235.
+    expect(currentNum).toEqual(22470)
+  })
+
+  it('returns the expected value from "goal.getCurrentNumber", using the "transformNumberSourceValue" function to modify it [test #2]', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(8314224839892) // nano $USD
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      countMoneyRaised: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'moneyRaised',
+        transformNumberSourceValue: num => Math.round(num),
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+
+    // Without the transformNumberSourceValue function, we would
+    // expect this to return 8314.224839892.
+    expect(currentNum).toEqual(8314)
+  })
+
+  it('returns the expected value from "goal.getCurrentNumber", using the "transformNumberSourceValue" function to modify it [test #3]', async () => {
+    expect.assertions(1)
+
+    // Mock a response from Redis.
+    callRedis.mockResolvedValue(8314224839892) // nano $USD
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      countMoneyRaised: true,
+      goal: {
+        ...mockCampaignInput.goal,
+        numberSource: 'moneyRaised',
+        transformNumberSourceValue: () => 24681357, // just entirely ignore the source value
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const currentNum = await campaignConfig.goal.getCurrentNumber(
+      mockUserContext
+    )
+
+    expect(currentNum).toEqual(24681357)
+  })
 })
