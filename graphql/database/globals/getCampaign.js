@@ -18,8 +18,6 @@ const createCampaignData = async (userContext, campaignConfig) => {
     time,
   } = campaignConfig
 
-  // TODO: we may not want to fetch this every time when
-  //   the requester may not need the data.
   // Fetch the charity.
   const charity = await getCharityData(userContext)
 
@@ -60,6 +58,15 @@ const createCampaignData = async (userContext, campaignConfig) => {
   }
 }
 
+// If the caller doesn't need dynamic data (e.g. the charity or goal data), it
+// can use the CampaignConfiguration object from getCurrentCampaignConfig.js
+// rather than using this CampaignData object. Doing so saves additional hits
+// to the database.
+/**
+ * Return the CampaignData object for the current campaign.
+ * @return {Promise<Object>} campaignData - see createCampaignConfiguration for
+ *   structure.
+ */
 const getCampaign = async userContext => {
   return createCampaignData(userContext, getCurrentCampaignConfig())
 }

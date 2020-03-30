@@ -15,27 +15,56 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import getCampaign from '../../globals/getCampaign'
-import callRedis from '../../../utils/redis'
+import getCurrentCampaignConfig from '../../globals/getCurrentCampaignConfig'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
-jest.mock('../../globals/getCampaign')
-jest.mock('../../../utils/redis')
+jest.mock('../../globals/getCurrentCampaignConfig')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
-const getMockCampaign = ({
-  campaignId = 'someCampaign',
-  ...otherProps
-} = {}) => ({
-  campaignId,
-  isActive: jest.fn(() => true),
-  isLive: false,
-  getNewUsersRedisKey: jest.fn(() => `campaign:${campaignId}:newUsers`),
-  ...otherProps,
+// See createCampaignConfiguration.test.js.
+const getMockCampaignConfiguration = () => ({
+  addMoneyRaised: jest.fn(),
+  campaignId: 'myCoolCampaign',
+  content: {
+    titleMarkdown: '## Some title',
+    descriptionMarkdown: '#### A description goes here.',
+  },
+  endContent: {
+    titleMarkdown: '## Another title',
+    descriptionMarkdown: '#### Another description goes here.',
+  },
+  getCharityData: jest.fn(() =>
+    Promise.resolve({
+      id: 'some-charity-id',
+      image: 'https://cdn.example.com/some-image.jpg',
+      imageCaption: null,
+      impact: 'This is what we show after a user donates hearts.',
+      name: 'Some Charity',
+      vcReceived: 9876543,
+      website: 'https://foo.com',
+    })
+  ),
+  goal: {
+    getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
+    impactUnitSingular: 'Heart',
+    impactUnitPlural: 'Hearts',
+    impactVerbPastTense: 'raised',
+    targetNumber: 10e6,
+  },
+  incrementNewUserCount: jest.fn(),
+  incrementTabCount: jest.fn(),
+  isActive: jest.fn(),
+  showCountdownTimer: true,
+  showHeartsDonationButton: true,
+  showProgressBar: true,
+  time: {
+    start: '2020-05-01T18:00:00.000Z',
+    end: '2020-05-05T18:00:00.000Z',
+  },
 })
 
 beforeAll(() => {
@@ -46,7 +75,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  getCampaign.mockReturnValue(getMockCampaign())
+  getCurrentCampaignConfig.mockReturnValue(getMockCampaignConfiguration())
 })
 
 afterAll(() => {
@@ -581,8 +610,8 @@ describe('logTab', () => {
   })
 })
 
-describe('counting campaign new users', () => {
-  it("calls Redis to increment the new user count when the user's tab count is exactly one and a campaign is active", async () => {
+describe('campaign: counting new users', () => {
+  it("increments the new user count when the user's tab count is exactly one", async () => {
     expect.assertions(1)
     const userId = userContext.id
 
@@ -593,24 +622,15 @@ describe('counting campaign new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-
-    // Mock that a campaign is active.
-    getCampaign.mockReturnValue(
-      getMockCampaign({
-        campaignId: 'coolThing',
-        isActive: jest.fn(() => true),
-      })
-    )
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
 
     await logTab(userContext, userId)
 
-    expect(callRedis).toHaveBeenCalledWith({
-      operation: 'INCR',
-      key: 'campaign:coolThing:newUsers',
-    })
+    expect(mockCampaignConfig.incrementNewUserCount).toHaveBeenCalled()
   })
 
-  it("does not call Redis to increment the new user count when the user's tab count is zero", async () => {
+  it("does not increment the new user count when the user's tab count is zero", async () => {
     expect.assertions(1)
     const userId = userContext.id
 
@@ -621,18 +641,11 @@ describe('counting campaign new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-
-    // Mock that a campaign is active.
-    getCampaign.mockReturnValue(
-      getMockCampaign({
-        campaignId: 'coolThing',
-        isActive: jest.fn(() => true),
-      })
-    )
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
 
     await logTab(userContext, userId)
-
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(mockCampaignConfig.incrementNewUserCount).not.toHaveBeenCalled()
   })
 
   it("does not call Redis to increment the new user count when the user's tab count is two", async () => {
@@ -646,67 +659,130 @@ describe('counting campaign new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-
-    // Mock that a campaign is active.
-    getCampaign.mockReturnValue(
-      getMockCampaign({
-        campaignId: 'coolThing',
-        isActive: jest.fn(() => true),
-      })
-    )
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
 
     await logTab(userContext, userId)
-
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(mockCampaignConfig.incrementNewUserCount).not.toHaveBeenCalled()
   })
 
-  it("does not calls Redis to increment the new user count when the user's tab count is exactly one but a campaign is NOT live", async () => {
+  it('throws if incrementing the new user count throws', async () => {
     expect.assertions(1)
     const userId = userContext.id
 
     const mockUser = getMockUserInstance({
-      tabs: 1, // exactly one tab
+      tabs: 1,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is NOT active.
-    getCampaign.mockReturnValue(
-      getMockCampaign({
-        campaignId: 'coolThing',
-        isActive: jest.fn(() => false),
-      })
-    )
+    // Mock that incrementing the campaign new user count throws.
+    const mockErr = new Error('Yikes')
+    const mockCampaignConfig = {
+      ...getMockCampaignConfiguration(),
+      incrementNewUserCount: jest.fn(async () => {
+        throw mockErr
+      }),
+    }
 
-    await logTab(userContext, userId)
-
-    expect(callRedis).not.toHaveBeenCalled()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
+})
 
-  it('does not throw an error if Redis throws', async () => {
-    expect.assertions(0)
+describe('campaign: counting tabs', () => {
+  it('increments the tab count when the tab is valid', async () => {
+    expect.assertions(1)
     const userId = userContext.id
 
+    // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      tabs: 1, // exactly one tab
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+
+    await logTab(userContext, userId)
+    expect(mockCampaignConfig.incrementTabCount).toHaveBeenCalled()
+  })
+
+  it('does not increment the tab count when the tab is not valid', async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 152, // not valid: above daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+
+    await logTab(userContext, userId)
+    expect(mockCampaignConfig.incrementTabCount).not.toHaveBeenCalled()
+  })
+
+  it('throws if incrementing the tab count throws', async () => {
+    expect.assertions(1)
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
-    // Mock that a campaign is active.
-    getCampaign.mockReturnValue(
-      getMockCampaign({
-        campaignId: 'coolThing',
-        isActive: jest.fn(() => true),
-      })
-    )
-
-    callRedis.mockRejectedValue("Well, that's not good.")
-
-    await logTab(userContext, userId) // should not throw
+    // Mock that incrementing the tab count throws.
+    const mockErr = new Error('Yikes')
+    const mockCampaignConfig = {
+      ...getMockCampaignConfiguration(),
+      incrementTabCount: jest.fn(async () => {
+        throw mockErr
+      }),
+    }
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
 })

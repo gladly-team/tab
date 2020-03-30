@@ -41,18 +41,14 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
 })
 
+// We can call methods on this, instead of using the CampaignData object,
+// if we don't need dynamic data (e.g. the charity or goal data). This
+// saves additional hits to the database.
 /**
- * Return the hardcoded campaign info for the current campaign.
- * @return {Promise<Object>} campaign
- * @return {String|undefined} campaign.campaignId - the unique ID of the
- *   campaign.
- * @return {Boolean} campaign.isLive - whether we should show the campaign
- *   on the new tab page.
- * @return {Function} campaign.getNewUsersRedisKey - a function that returns
- *   a string of the Redis key value. The Redis item stores the number of new
- *   users who joined during this campaign.
+ * Return the CampaignConfiguration object for the current campaign.
+ * @return {Promise<Object>} campaignConfig- see createCampaignConfiguration
+ *   for structure.
  */
-
 const getCurrentCampaignConfig = () => {
   const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
   return {
