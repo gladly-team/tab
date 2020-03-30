@@ -1,4 +1,5 @@
 import moment from 'moment'
+import logger from '../../utils/logger'
 
 import { USER_REFERRAL_VC_REWARD } from '../constants'
 
@@ -43,6 +44,14 @@ export const getReferralVcReward = () => USER_REFERRAL_VC_REWARD
  * @return {Number}
  */
 export const getEstimatedMoneyRaisedPerTab = () => {
-  // TODO: env var
-  return 0.01
+  let moneyRaised = parseFloat(process.env.EST_MONEY_RAISED_PER_TAB)
+  if (Number.isNaN(moneyRaised)) {
+    moneyRaised = 0.0
+    logger.error(
+      `Could not parse float from money raised env var value ${
+        process.env.EST_MONEY_RAISED_PER_TAB
+      }`
+    )
+  }
+  return moneyRaised
 }

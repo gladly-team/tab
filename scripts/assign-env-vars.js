@@ -46,6 +46,7 @@ export const envVars = [
   { name: 'LAMBDA_FIREBASE_DATABASE_URL' },
   { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
+  { name: 'EST_MONEY_RAISED_PER_TAB' },
   // Endpoints, shared among services
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
