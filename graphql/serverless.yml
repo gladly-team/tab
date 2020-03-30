@@ -229,6 +229,7 @@ functions:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
     environment:
+      EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
       # @service/redis - Set the Redis endpoint if we re-launch the Redis service.
       # REDIS_SERVICE_ENDPOINT: ""
       REDIS_SERVICE_ENDPOINT: ""
