@@ -5,11 +5,6 @@ import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 import getCharityVcReceived from '../donations/getCharityVcReceived'
 
-const getEstMoneyRaisedPerTab = () => {
-  // TODO: env var
-  return 0.01
-}
-
 const WrongCampaignConfigError = (field, expectedType) => {
   return new Error(
     `The campaign config requires the field "${field}" to be type "${expectedType}".`
@@ -21,6 +16,7 @@ const createCampaignConfiguration = input => {
     campaignId,
     charityId = null,
     countNewUsers = false,
+    countMoneyRaised = false,
     countTabsOpened = false,
     content,
     endContent,
@@ -35,7 +31,8 @@ const createCampaignConfiguration = input => {
   const HEARTS = 'hearts'
   const MONEY_RAISED = 'moneyRaised'
   const NEW_USERS = 'newUsers'
-  const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS]
+  const TABS_OPENED = 'tabsOpened'
+  const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS, TABS_OPENED]
 
   // Makes sure the campaignId is set.
   if (isNil(campaignId) || !isString(campaignId)) {
@@ -120,6 +117,7 @@ const createCampaignConfiguration = input => {
   }
 
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
+  const redisKeyMoneyRaised = `campaign:${campaignId}:moneyRaised`
   const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
 
   const getVCDonated = async userContext => {
@@ -176,13 +174,19 @@ const createCampaignConfiguration = input => {
 
   // Get an estimate of money raised for this campaign.
   const getEstimatedMoneyRaised = async () => {
-    // TODO: we may just want to use an estimate of money raised by day.
-
-    // Base money raised on number of tabs opened multiplied
-    // by the estimated money raised per tab.
-    const estMoneyRaisedPerTab = getEstMoneyRaisedPerTab()
-    const tabs = await getTabCount()
-    return tabs * estMoneyRaisedPerTab
+    let estMoneyRaised = 0
+    try {
+      estMoneyRaised = await callRedis({
+        operation: 'GET',
+        key: redisKeyMoneyRaised,
+      })
+      if (!estMoneyRaised) {
+        estMoneyRaised = 0
+      }
+    } catch (e) {
+      // Redis will log errors.
+    }
+    return estMoneyRaised
   }
 
   /**
@@ -208,7 +212,7 @@ const createCampaignConfiguration = input => {
       // (e.g., "recruited", "donated", "raised")
       impactVerbPastTense,
       // The internal source we are using to calculate the number of impact
-      // units. One of: "hearts", "newUsers", "moneyRaised"
+      // units. One of: "hearts", "newUsers", "moneyRaised", "tabsOpened"
       numberSource,
       // The target number of impact units this campaign could raise
       targetNumber,
@@ -272,6 +276,11 @@ const createCampaignConfiguration = input => {
             currentNumber = await getNewUserCount()
             break
           }
+          // TODO: test
+          case TABS_OPENED: {
+            currentNumber = await getTabCount()
+            break
+          }
           default: {
             throw new Error(
               `The "goal.numberSource" value must be one of: ${validNumberSourceVals.join(
@@ -298,6 +307,20 @@ const createCampaignConfiguration = input => {
   }
 
   return {
+    addMoneyRaised: async () => {
+      // If not counting money raised or the campaign is not active, ignore this.
+      if (!(countMoneyRaised && isActive())) {
+        return
+      }
+      try {
+        await callRedis({
+          operation: 'SUM', // FIXME: we need to support this
+          key: redisKeyMoneyRaised,
+        })
+      } catch (e) {
+        // Redis will log errors.
+      }
+    },
     campaignId,
     getCharityData: async userContext => {
       if (!charityId) {

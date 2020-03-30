@@ -60,6 +60,7 @@ describe('createCampaignConfiguration', () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(createCampaignConfiguration(mockCampaignInput)).toEqual({
+      addMoneyRaised: expect.any(Function),
       campaignId: 'myCoolCampaign',
       content: {
         titleMarkdown: '## Some title',
@@ -752,6 +753,20 @@ describe('createCampaignConfiguration', () => {
     }).not.toThrow()
   })
 
+  it('does not throw if "goal.numberSource" is "tabsOpened"', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          numberSource: 'tabsOpened',
+        },
+      })
+    }).not.toThrow()
+  })
+
   it('throws if "goal.numberSource" is not one of the valid strings', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -764,7 +779,7 @@ describe('createCampaignConfiguration', () => {
         },
       })
     }).toThrow(
-      'The "goal.numberSource" value must be one of: hearts, moneyRaised, newUsers'
+      'The "goal.numberSource" value must be one of: hearts, moneyRaised, newUsers, tabsOpened'
     )
   })
 
