@@ -312,16 +312,16 @@ const createCampaignConfiguration = input => {
   }
 
   return {
-    // TODO: test
     addMoneyRaised: async USDMoneyRaisedToAdd => {
-      // Redis doesn't support large float precision, so we store
-      // revenue as an integer.
-      const nanoUSDMoneyRaised = Math.round(USDMoneyRaisedToAdd * 1e9)
-
       // If not counting money raised or the campaign is not active, ignore this.
       if (!(countMoneyRaised && isActive())) {
         return
       }
+
+      // Redis doesn't support large float precision, so we store
+      // revenue as an integer.
+      const nanoUSDMoneyRaised = Math.round(USDMoneyRaisedToAdd * 1e9)
+
       try {
         await callRedis({
           operation: 'INCRBY',

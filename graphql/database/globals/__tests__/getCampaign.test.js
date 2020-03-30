@@ -16,6 +16,7 @@ afterEach(() => {
 
 // See createCampaignConfiguration.test.js.
 const getMockCampaignConfiguration = () => ({
+  addMoneyRaised: jest.fn(),
   campaignId: 'myCoolCampaign',
   content: {
     titleMarkdown: '## Some title',
