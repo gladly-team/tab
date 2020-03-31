@@ -192,10 +192,15 @@ provider:
       Action:
         - "execute-api:Invoke"
       Resource:
-        Fn::Join:
-          - ""
-          - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
-            - "/POST/redis"
+        # Possible issue:
+        # https://github.com/serverless/serverless/issues/7310
+        Fn::Join: [
+          "",
+          [
+            { "Fn::ImportValue": "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID" },
+             "/POST/redis"
+          ]
+        ]
 
 plugins:
   # Include only the required node modules.
