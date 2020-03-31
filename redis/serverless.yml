@@ -2,13 +2,17 @@
 # we need it and then destroy it when it's unused to reduce costs.
 # At this point, any access to the service should gracefully handle
 # missing cache values or Redis downtime.
+# Note that we tag some relevant Redis code with the comment "@service/redis".
 # To deploy the service:
-#   1. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run deploy`,setting the stage as appropriate.
-#   2. In graphql/serverless.yml, enable the REDIS_SERVICE_ENDPOINT to use this
-#      stack's output.
-#   3. To use Redis locally, optionally set the REDIS_SERVICE_ENDPOINT env var in grapqhl/.env.
+#   1. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run deploy`,setting the stage as
+#      appropriate.
+#   2. In graphql/serverless.yml, give the GraphQL service permission to call the
+#      Redis endpoint in its IAM role statements.
+#   3. In graphql/serverless.yml, enable the REDIS_SERVICE_ENDPOINT to use this
+#   4. To use Redis locally, optionally set the REDIS_SERVICE_ENDPOINT env var in grapqhl/.env.
 # To destroy the service:
-#   1. In graphql/serverless.yml, comment out the REDIS_SERVICE_ENDPOINT stack reference.
+#   1. In graphql/serverless.yml, comment out the REDIS_SERVICE_ENDPOINT stack reference
+#      and the Redis-related IAM role statements.
 #   2. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run remove`, setting the stage as appropriate.
 service: tab-redis
 

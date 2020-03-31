@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import aws4 from 'aws4'
 import logger from './logger'
 
+// @service/redis
 // Note: for now, we manually deploy the Redis service whenever
 // we need it and then destroy it when it's unused to reduce costs.
 // To enable the Redis service, make sure it's deployed and active, then
