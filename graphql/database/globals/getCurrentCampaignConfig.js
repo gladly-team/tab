@@ -2,8 +2,9 @@ import createCampaignConfiguration from './createCampaignConfiguration'
 
 const campaignTitle = '## COVID-19 Food Bank Support'
 const campaignDescription = `
-#### Thanks to you, we raised thousands of dollars for the [World Health Organization](https://www.who.int/) over the last few days. In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
-#### During this campaign, tabs you open are providing meals for our compatriots in NYC. Together, we can feed thousands of people in need, so please open a few tabs and encourage your friends to do the same!
+#### Thanks to you, our community raised thousands of dollars for the [World Health Organization](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate) over the last few days.
+#### In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
+#### Right now, tabs you open are providing meals for our fellow humans in NYC. Together, we can feed thousands of people in need—so please open a few tabs and encourage your friends to do the same!
 `
 const campaignEndTitle = '## Thank You for Giving Food'
 const campaignEndDescription = `
