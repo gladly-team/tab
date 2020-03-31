@@ -1,56 +1,57 @@
 import moment from 'moment'
+import logger from '../../utils/logger'
 
 import { USER_REFERRAL_VC_REWARD } from '../constants'
 
-class Globals {
-  constructor() {
-    // When updating these nubmers, also update them:
-    // * in the tab-homepage repository
-    // * in the search-homepage repository
-    this.raised = 678810.0
-    this.raisedUpdateTime = moment('2019-01-11T18:02:00.000Z')
-    this.dollarsPerDayRate = 450.0
-  }
-}
-
-// Deprecated. Use the Campaign schema object.
-function isGlobalCampaignLive() {
-  return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
-}
+// When updating these numbers, also update them:
+// * in the tab-homepage repository
+// * in the search-homepage repository
+const MONEY_RAISED = 678810.0
+const MONEY_RAISED_UPDATE_TIME = moment('2019-01-11T18:02:00.000Z')
+const MONEY_RAISED_PER_DAY = 450.0
 
 /**
  * Get an estimate of how much we've raised, using a combination of
  * the most recent manual entry and the estimated rate of money
  * raised over time.
- * @return {number}  A decimal rounded to two decimal places
+ * @return {String}  A stringified float, rounded to two decimal places
  */
-function getMoneyRaised() {
-  const globals = new Globals()
-  const secsInDay = 60 * 60 * 24
-
-  const totalRaised = globals.raised
-  const datetimeOfLastEntry = globals.raisedUpdateTime
-  const moneyRaisedRate = globals.dollarsPerDayRate
-  const now = moment()
-  const diff = now.diff(datetimeOfLastEntry, 'seconds')
-  const secondsToDays = diff / secsInDay
-  const finalRaised = totalRaised + secondsToDays * moneyRaisedRate
-  return finalRaised.toFixed(2)
+export const getMoneyRaised = () => {
+  const daysSinceUpdatedMoneyRaised = moment().diff(
+    MONEY_RAISED_UPDATE_TIME,
+    'days'
+  )
+  const raisedNow =
+    MONEY_RAISED + daysSinceUpdatedMoneyRaised * MONEY_RAISED_PER_DAY
+  return raisedNow.toFixed(2)
 }
 
-function getDollarsPerDayRate() {
-  const globals = new Globals()
-  return globals.dollarsPerDayRate
-}
+/**
+ * Get an estimate of how much money we raise in any given day.
+ * @return {Number}
+ */
+export const getDollarsPerDayRate = () => MONEY_RAISED_PER_DAY
 
-function getReferralVcReward() {
-  return USER_REFERRAL_VC_REWARD
-}
+/**
+ * Get the amount of virtual currency a user receives for
+ * recruiting a new user.
+ * @return {Number}
+ */
+export const getReferralVcReward = () => USER_REFERRAL_VC_REWARD
 
-export {
-  Globals,
-  getMoneyRaised,
-  getDollarsPerDayRate,
-  getReferralVcReward,
-  isGlobalCampaignLive,
+/**
+ * Get an estimate of how much money is raised by a single valid tab.
+ * @return {Number}
+ */
+export const getEstimatedMoneyRaisedPerTab = () => {
+  let moneyRaised = parseFloat(process.env.EST_MONEY_RAISED_PER_TAB)
+  if (Number.isNaN(moneyRaised)) {
+    moneyRaised = 0.0
+    logger.error(
+      `Could not parse float from money raised env var value ${
+        process.env.EST_MONEY_RAISED_PER_TAB
+      }`
+    )
+  }
+  return moneyRaised
 }

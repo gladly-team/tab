@@ -134,7 +134,7 @@ describe('Redis outbound', () => {
       json: () =>
         Promise.resolve({
           code: 'SOME_ERROR',
-          message: 'Some error happened.',
+          Message: 'Some error happened.',
         }),
     })
     await expect(callRedis(mockInputData)).rejects.toThrow(

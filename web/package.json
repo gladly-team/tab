@@ -44,6 +44,7 @@
     "hex-to-rgba": "^1.0.2",
     "history": "^4.9.0",
     "lodash": "^4.17.11",
+    "markdown-to-jsx": "^6.11.0",
     "material-ui": "^0.19.4",
     "mdi-material-ui": "^5.11.0",
     "moment": "^2.24.0",

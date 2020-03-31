@@ -19,6 +19,10 @@ const errors = {
     code: 'MISSING_KEY',
     message: 'The "key" property is required for this operation.',
   },
+  MISSING_ADDITIONAL_DATA: {
+    code: 'MISSING_ADDITIONAL_DATA',
+    message: 'Additional data is required for this operation.',
+  },
   NO_DATA: {
     code: 'NO_DATA',
     message: 'No data provided in the request body.',
@@ -88,6 +92,16 @@ export const handler = async event => {
           return createBadRequestResponse(errors.MISSING_KEY)
         }
         responseData = await client.incrAsync(body.key)
+        break
+      // https://redis.io/commands/incrby
+      case 'INCRBY':
+        if (!body.key) {
+          return createBadRequestResponse(errors.MISSING_KEY)
+        }
+        if (!body.amountToAdd) {
+          return createBadRequestResponse(errors.MISSING_ADDITIONAL_DATA)
+        }
+        responseData = await client.incrbyAsync(body.key, body.amountToAdd)
         break
       default:
         return createBadRequestResponse(errors.UNSUPPORTED_OPERATION)

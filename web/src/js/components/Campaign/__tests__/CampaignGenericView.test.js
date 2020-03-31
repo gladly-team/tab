@@ -13,20 +13,20 @@ const getMockProps = () => ({
   onDismiss: () => {},
 })
 
-describe('Campaign base view', () => {
+describe('CampaignGenericView', () => {
   it('renders a QueryRenderer', () => {
-    const CampaignBaseView = require('js/components/Campaign/CampaignBaseView')
+    const CampaignGenericView = require('js/components/Campaign/CampaignGenericView')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<CampaignBaseView {...mockProps} />).dive()
+    const wrapper = shallow(<CampaignGenericView {...mockProps} />).dive()
     expect(wrapper.find(QueryRendererWithUser).length).toBe(1)
   })
 
   it("uses the authed user's user ID in the query", () => {
-    const CampaignBaseView = require('js/components/Campaign/CampaignBaseView')
+    const CampaignGenericView = require('js/components/Campaign/CampaignGenericView')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<CampaignBaseView {...mockProps} />).dive()
+    const wrapper = shallow(<CampaignGenericView {...mockProps} />).dive()
     const mockUserId = 'abc123xyz456' // from mocked `withUser` function
     expect(
       wrapper.find(QueryRendererWithUser).prop('variables')

@@ -70,8 +70,8 @@ import logger from 'js/utils/logger'
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
-const CampaignBase = lazy(() =>
-  import('js/components/Campaign/CampaignBaseView')
+const CampaignGeneric = lazy(() =>
+  import('js/components/Campaign/CampaignGenericView')
 )
 
 // Load ads immediately when we parse this file rather than
@@ -579,7 +579,7 @@ class Dashboard extends React.Component {
         {showCampaign ? (
           <FadeInDashboardAnimation>
             <Suspense fallback={null}>
-              <CampaignBase
+              <CampaignGeneric
                 onDismiss={() => {
                   this.setState({
                     hasUserDismissedCampaignRecently: true,

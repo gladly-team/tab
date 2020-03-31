@@ -5,8 +5,8 @@ import UserTabsLogModel from './UserTabsLogModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import { getCampaignObject } from '../globals/getCampaign'
-import callRedis from '../../utils/redis'
+import getCurrentCampaignConfig from '../globals/getCurrentCampaignConfig'
+import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -143,25 +143,34 @@ const logTab = async (userContext, userId, tabId = null) => {
     }
   }
 
-  // Optionally, keep track of the number of new users who join during a
-  // campaign. When a user logs their first tab, we know they signed up
-  // and verified their email address. Increment the campaign's user count
-  // in Redis.
+  // Keep track of the number of new users who join during a campaign.
+  // When a user logs their first tab, we know they signed up and
+  // verified their email address.
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaign = getCampaignObject()
+      const campaignConfig = await getCurrentCampaignConfig(userContext)
 
-      // If the campaign is active (we are between the campaign's start
-      // and end times), increment the new user count.
-      if (campaign.isActive()) {
-        await callRedis({
-          operation: 'INCR',
-          key: campaign.getNewUsersRedisKey(),
-        })
-      }
+      // The campaign config will ignore this if the campaign is
+      // no longer active or if we don't need to count new users.
+      await campaignConfig.incrementNewUserCount()
     } catch (e) {
-      // The Redis caller handles error logging.
+      throw e
+    }
+  }
+
+  // Track the number of valid tabs opened and estimated money raised
+  // during a campaign.
+  if (isValid) {
+    try {
+      const campaignConfig = await getCurrentCampaignConfig(userContext)
+      await campaignConfig.incrementTabCount()
+
+      // Use estimated money raised per tab to track money raised during
+      // the campaign.
+      await campaignConfig.addMoneyRaised(getEstimatedMoneyRaisedPerTab())
+    } catch (e) {
+      throw e
     }
   }
 

@@ -1,79 +1,74 @@
-import moment from 'moment'
-import { getCurrentCampaignHardcodedData } from './hardcodedCampaignData'
-import callRedis from '../../utils/redis'
-import logger from '../../utils/logger'
+import { isNil } from 'lodash/lang'
+import getCurrentCampaignConfig from './getCurrentCampaignConfig'
 
-const createCampaign = data => ({
-  campaignId: data.campaignId,
-  countNewUsers: data.countNewUsers,
+const createCampaignData = async (userContext, campaignConfig) => {
+  const {
+    campaignId,
+    content,
+    endContent,
+    getCharityData,
+    goal,
+    incrementNewUserCount,
+    incrementTabCount,
+    isActive,
+    isLive,
+    showCountdownTimer,
+    showHeartsDonationButton,
+    showProgressBar,
+    time,
+  } = campaignConfig
 
-  /**
-   * Return the Redis key used to store the new user count during this
-   * campaign.
-   * @return {String} the Redis key
-   */
-  getNewUsersRedisKey() {
-    return `campaign:${this.campaignId}:newUsers`
-  },
+  // Fetch the charity.
+  const charity = await getCharityData(userContext)
 
-  /**
-   * Return whether the current time is between the campaign's start and
-   * end times.
-   * @return {Boolean}
-   */
-  isActive() {
-    const timeInfo = data.time
-    return moment().isAfter(timeInfo.start) && moment().isBefore(timeInfo.end)
-  },
-
-  isLive: data.isLive,
-})
-
-export const getCampaignObject = () => {
-  return createCampaign(getCurrentCampaignHardcodedData())
-}
-
-/**
- * Return data about any currently-live campaign.
- * @return {Promise<Object>} campaign - a Promise that resolves into a
- *   Campaign object.
- * @return {String|undefined} campaign.campaignId - the unique ID of the campaign.
- *   This may be undefined if the campaign is not live.
- * @return {Boolean} campaign.isLive - whether we should show the campaign
- *   on the new tab page.
- */
-const getCampaign = async () => {
-  const campaign = getCampaignObject()
-
-  if (!campaign || !campaign.isLive) {
-    return {
-      isLive: false,
-    }
-  }
-
-  // Try to get the number of new users from this campaign.
-  // Default to zero if the item doesn't exist or fails to
-  // fetch.
-  let numNewUsers = 0
-  if (campaign.countNewUsers) {
-    try {
-      numNewUsers = await callRedis({
-        operation: 'GET',
-        key: campaign.getNewUsersRedisKey(),
-      })
-      if (!numNewUsers) {
-        numNewUsers = 0
-      }
-    } catch (e) {
-      logger.error(e)
+  // If there is a goal, fetch the current goal number.
+  let goalWithData
+  if (!isNil(goal)) {
+    const {
+      getCurrentNumber,
+      impactUnitSingular,
+      impactUnitPlural,
+      impactVerbPastTense,
+      targetNumber,
+    } = goal
+    const currentNumber = await getCurrentNumber(userContext)
+    goalWithData = {
+      currentNumber,
+      impactUnitSingular,
+      impactUnitPlural,
+      impactVerbPastTense,
+      targetNumber,
     }
   }
 
   return {
-    isLive: campaign.isLive,
-    campaignId: campaign.campaignId,
-    numNewUsers,
+    campaignId,
+    ...(charity && { charity }),
+    content,
+    ...(endContent && { endContent }),
+    ...(goalWithData && { goal: goalWithData }),
+    incrementNewUserCount,
+    incrementTabCount,
+    isActive,
+    isLive,
+    showCountdownTimer,
+    showHeartsDonationButton,
+    showProgressBar,
+    time,
   }
+}
+
+// If the caller doesn't need dynamic data (e.g. the charity or goal data), it
+// can use the CampaignConfiguration object from getCurrentCampaignConfig.js
+// rather than using this CampaignData object. Doing so saves additional hits
+// to the database.
+/**
+ * Return the CampaignData object for the current campaign.
+ * @return {Promise<Object>} campaignData - see createCampaignConfiguration for
+ *   structure.
+ */
+const getCampaign = async userContext => {
+  return createCampaignData(userContext, getCurrentCampaignConfig())
 }
 
 export default getCampaign
