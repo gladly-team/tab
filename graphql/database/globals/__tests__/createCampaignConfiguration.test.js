@@ -51,6 +51,12 @@ const getMockCampaignConfigInput = () => ({
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
+  theme: {
+    color: {
+      main: '#ff7314',
+      light: '#f6924e',
+    },
+  },
   time: {
     start: '2020-05-01T18:00:00.000Z',
     end: '2020-05-05T18:00:00.000Z',
@@ -86,6 +92,12 @@ describe('createCampaignConfiguration: validation', () => {
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      theme: {
+        color: {
+          main: '#ff7314',
+          light: '#f6924e',
+        },
+      },
       time: {
         start: '2020-05-01T18:00:00.000Z',
         end: '2020-05-05T18:00:00.000Z',
@@ -584,6 +596,66 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'The campaign config requires the field "goal.transformNumberSourceValue" to be type "function".'
+    )
+  })
+
+  it('does not throw if "theme" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        theme: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "theme" is an empty object', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        theme: {},
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "theme.color.main" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        theme: {
+          ...mockCampaignInput,
+          color: {
+            main: undefined,
+            light: '#f6924e',
+          },
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "theme.color.main" to be type "string".'
+    )
+  })
+
+  it('throws if "theme.color.light" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        theme: {
+          ...mockCampaignInput,
+          color: {
+            main: '#ff7314',
+            light: undefined,
+          },
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "theme.color.light" to be type "string".'
     )
   })
 })

@@ -50,6 +50,12 @@ const getMockCampaignConfiguration = () => ({
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
+  theme: {
+    color: {
+      main: '#ff7314',
+      light: '#f6924e',
+    },
+  },
   time: {
     start: '2020-05-01T18:00:00.000Z',
     end: '2020-05-05T18:00:00.000Z',
@@ -101,6 +107,12 @@ describe('getCampaign', () => {
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      theme: {
+        color: {
+          main: '#ff7314',
+          light: '#f6924e',
+        },
+      },
       time: {
         start: '2020-05-01T18:00:00.000Z',
         end: '2020-05-05T18:00:00.000Z',

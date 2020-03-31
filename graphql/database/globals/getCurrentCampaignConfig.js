@@ -39,6 +39,12 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showCountdownTimer: false,
   showHeartsDonationButton: false,
   showProgressBar: true,
+  theme: {
+    color: {
+      main: '#ff7314',
+      light: '#f6924e',
+    },
+  },
   time: {
     start: '2020-03-31T16:00:00.000Z',
     end: '2020-04-14T18:00:00.000Z',

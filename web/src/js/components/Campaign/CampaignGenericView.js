@@ -47,6 +47,12 @@ class CampaignGenericView extends React.Component {
                 showCountdownTimer
                 showHeartsDonationButton
                 showProgressBar
+                theme {
+                  color {
+                    main
+                    light
+                  }
+                }
                 time {
                   start
                   end
