@@ -232,5 +232,5 @@ functions:
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
       # @service/redis - Set the Redis endpoint if we re-launch the Redis service.
       # REDIS_SERVICE_ENDPOINT: ""
-      REDIS_SERVICE_ENDPOINT: ""
+      REDIS_SERVICE_ENDPOINT:
         "Fn::ImportValue": tab-redis-${self:provider.stage}-ServiceEndpoint
