@@ -30,7 +30,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitPlural: 'meals',
     impactVerbPastTense: 'given',
     numberSource: 'moneyRaised',
-    targetNumber: 1000,
+    targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)
