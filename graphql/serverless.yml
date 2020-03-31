@@ -196,8 +196,8 @@ provider:
       Resource:
         Fn::Join:
           - ""
-          - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
-            - /POST/redis
+          - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
+            - "/POST/redis"
 
 plugins:
   # Include only the required node modules.
