@@ -37,7 +37,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showHeartsDonationButton: true,
   showProgressBar: true,
   time: {
-    start: '2020-03-25T18:00:00.000Z',
+    start: '2020-03-17T18:00:00.000Z',
     end: '2020-05-01T18:00:00.000Z',
   },
 })
