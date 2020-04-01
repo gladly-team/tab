@@ -1,11 +1,25 @@
 /* eslint-env jest */
 
 import React from 'react'
+import moment from 'moment'
+import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
+import Markdown from 'js/components/General/Markdown'
 import IconButton from '@material-ui/core/IconButton'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
+jest.mock('js/components/General/Markdown')
 jest.mock('js/utils/local-user-data-mgr')
+
+const mockNow = '2020-04-02T18:00:00.000Z'
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
+
+afterEach(() => {
+  MockDate.reset()
+})
 
 const campaignTitle = '## Some Title'
 
@@ -76,25 +90,28 @@ const getMockProps = () => ({
   onDismiss: () => {},
 })
 
+// Dive past wrappers we don't want to test.
+const shallowRenderCampaign = component =>
+  shallow(component)
+    .dive()
+    .dive()
+    .dive()
+
 describe('CampaignGenericComponent', () => {
   it('renders without error', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<CampaignGenericComponent {...mockProps} />)
-      .dive()
-      .dive()
-      .dive()
+    shallowRenderCampaign(<CampaignGenericComponent {...mockProps} />)
   })
 
-  it('sets the dismiss time in local storage when clicking the "dismiss" button ', () => {
+  it('sets the dismiss time in local storage when clicking the "dismiss" button', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<CampaignGenericComponent {...mockProps} />)
-      .dive()
-      .dive()
-      .dive()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
     wrapper
       .find(IconButton)
       .first()
@@ -102,20 +119,89 @@ describe('CampaignGenericComponent', () => {
     expect(setCampaignDismissTime).toHaveBeenCalled()
   })
 
-  it('calls the onDismiss prop when clicking the "dismiss" button ', () => {
+  it('calls the onDismiss prop when clicking the "dismiss" button', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
-    const mockProps = getMockProps()
-    mockProps.onDismiss = jest.fn()
-    const wrapper = shallow(<CampaignGenericComponent {...mockProps} />)
-      .dive()
-      .dive()
-      .dive()
+    const mockProps = {
+      ...getMockProps(),
+      onDismiss: jest.fn(),
+    }
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
     wrapper
       .find(IconButton)
       .first()
       .simulate('click')
     expect(mockProps.onDismiss).toHaveBeenCalled()
+  })
+
+  it('displays the content.titleMarkdown when the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          content: {
+            ...defaultMockProps.app.campaign.content,
+            titleMarkdown: '## Hey, I am a title!',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Markdown)
+        .first()
+        .prop('children')
+    ).toEqual('## Hey, I am a title!')
+  })
+
+  it('displays the content.descriptionMarkdown when the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          content: {
+            ...defaultMockProps.app.campaign.content,
+            descriptionMarkdown: '#### Hey, I am a nice description.',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Markdown)
+        .at(1)
+        .prop('children')
+    ).toEqual('#### Hey, I am a nice description.')
   })
 
   // TODO: more tests
