@@ -207,13 +207,16 @@ provider:
     - Effect: "Allow"
       Action:
         - "execute-api:Invoke"
-      # Downgraded Serverless to deal with this possible issue:
+      # We may be dealing with this issue:
       # https://github.com/serverless/serverless/issues/7310
-      Resource:
-        Fn::Join:
-          - ""
-          - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
-            - /POST/redis
+      # Once it's fixed, try using the imported resource name instead
+      # of hardcoding the resource.
+      # Resource:
+      #   Fn::Join:
+      #     - ""
+      #     - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
+      #       - /POST/redis
+      Resource: "arn:aws:execute-api:*:*:08zhkosh4f/${self:provider.stage}/POST/redis"
 
 plugins:
   # Include only the required node modules.
