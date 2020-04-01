@@ -29,16 +29,16 @@ provider:
   #   aws cloudformation set-stack-policy --stack-name graphql-test --region us-west-2 --stack-policy-body \
   #   '{"Statement":[
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayDeployment*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlPost"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayResourceGraphql"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayRestApi"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlPost"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayResourceGraphql"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaPermissionApiGateway"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
   #   ]}'
   stackPolicy:
@@ -50,23 +50,23 @@ provider:
       Resource: "LogicalResourceId/ApiGatewayDeployment*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/ApiGatewayMethodGraphqlOptions" 
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/ApiGatewayMethodGraphqlPost" 
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/ApiGatewayResourceGraphql" 
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/ApiGatewayRestApi"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"
     - Effect: Allow
       Principal: "*"
@@ -74,7 +74,7 @@ provider:
       Resource: "LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/GraphqlLambdaFunction"
     - Effect: Allow
       Principal: "*"
@@ -86,7 +86,7 @@ provider:
       Resource: "LogicalResourceId/GraphqlLambdaVersion*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/GraphqlLogGroup"
     - Effect: Allow
       Principal: "*"
