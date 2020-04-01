@@ -204,16 +204,16 @@ provider:
     # @service/redis - Uncomment this if we re-launch the Redis service.
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-    - Effect: "Allow"
-      Action:
-        - "execute-api:Invoke"
-      # Downgraded Serverless to deal with this possible issue:
-      # https://github.com/serverless/serverless/issues/7310
-      Resource:
-        Fn::Join:
-          - ""
-          - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
-            - /POST/redis
+    # - Effect: "Allow"
+    #   Action:
+    #     - "execute-api:Invoke"
+    #   # Downgraded Serverless to deal with this possible issue:
+    #   # https://github.com/serverless/serverless/issues/7310
+    #   Resource:
+    #     Fn::Join:
+    #       - ""
+    #       - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
+    #         - /POST/redis
 
 plugins:
   # Include only the required node modules.
