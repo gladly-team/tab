@@ -36,10 +36,10 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaPermissionApiGateway"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaPermissionApiGateway"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
   #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
@@ -78,7 +78,7 @@ provider:
       Resource: "LogicalResourceId/GraphqlLambdaFunction"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:Modify"
+      Action: "Update:*"
       Resource: "LogicalResourceId/GraphqlLambdaPermissionApiGateway"
     - Effect: Allow
       Principal: "*"
@@ -90,7 +90,7 @@ provider:
       Resource: "LogicalResourceId/GraphqlLogGroup"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:Modify"
+      Action: "Update:*"
       Resource: "LogicalResourceId/IamRoleLambdaExecution"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
