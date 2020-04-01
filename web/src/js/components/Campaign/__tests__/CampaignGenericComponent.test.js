@@ -4,10 +4,11 @@ import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
-import Markdown from 'js/components/General/Markdown'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
+import Markdown from 'js/components/General/Markdown'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
@@ -862,5 +863,44 @@ describe('CampaignGenericComponent', () => {
       <CampaignGenericComponent {...mockProps} />
     )
     expect(wrapper.find(CountdownClock).exists()).toBe(false)
+  })
+})
+
+describe('CampaignGenericComponent: theme wrapper', () => {
+  it('renders an MuiThemeProvider', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<CampaignGenericComponent {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).exists()).toBe(true)
+  })
+
+  it('sets the color palette in the theme, if provided', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          theme: {
+            ...defaultMockProps.app.campaign.theme,
+            color: {
+              ...defaultMockProps.app.campaign.theme.color,
+              main: '#6fba23',
+              light: '#87de2f',
+            },
+          },
+        },
+      },
+    }
+    const wrapper = shallow(<CampaignGenericComponent {...mockProps} />)
+    const themeDefinition = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(themeDefinition.palette.primary.main).toEqual('#6fba23')
+    expect(themeDefinition.palette.primary.light).toEqual('#87de2f')
+    expect(themeDefinition.palette.secondary.main).toEqual('#6fba23')
+    expect(themeDefinition.palette.secondary.light).toEqual('#87de2f')
   })
 })
