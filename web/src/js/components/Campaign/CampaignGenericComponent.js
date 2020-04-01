@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
@@ -9,10 +10,14 @@ import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Markdown from 'js/components/General/Markdown'
+import theme from 'js/theme/defaultV1'
+
+const defaultTheme = createMuiTheme(theme)
 
 const styles = theme => ({
   root: {
@@ -205,7 +210,7 @@ class CampaignGenericComponent extends React.Component {
   }
 }
 
-CampaignGenericComponent.propTypes = {
+const propTypesCampaign = {
   app: PropTypes.shape({
     campaign: PropTypes.shape({
       time: PropTypes.shape({
@@ -231,6 +236,12 @@ CampaignGenericComponent.propTypes = {
       showCountdownTimer: PropTypes.bool.isRequired,
       showHeartsDonationButton: PropTypes.bool.isRequired,
       showProgressBar: PropTypes.bool.isRequired,
+      theme: PropTypes.shape({
+        color: PropTypes.shape({
+          main: PropTypes.string.isRequired,
+          light: PropTypes.string.isRequired,
+        }),
+      }),
     }).isRequired,
   }).isRequired,
   user: PropTypes.shape({
@@ -239,5 +250,44 @@ CampaignGenericComponent.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
 }
+const defaultPropsCampaign = {}
 
-export default withStyles(styles)(CampaignGenericComponent)
+CampaignGenericComponent.propTypes = propTypesCampaign
+CampaignGenericComponent.defaultProps = defaultPropsCampaign
+
+const CampaignGenericWithStyles = withStyles(styles, { withTheme: true })(
+  CampaignGenericComponent
+)
+
+// Separate component for theming logic.
+const CampaignGenericThemeWrapperComponent = props => {
+  const mainColor = get(props, 'app.campaign.theme.color.main', null)
+  const lightColor = get(props, 'app.campaign.theme.color.light', null)
+  return (
+    <MuiThemeProvider
+      theme={{
+        ...defaultTheme,
+        palette: {
+          ...defaultTheme.palette,
+          primary: {
+            ...defaultTheme.palette.primary,
+            ...(mainColor && { main: mainColor }),
+            ...(lightColor && { light: lightColor }),
+          },
+          secondary: {
+            ...defaultTheme.palette.secondary,
+            ...(mainColor && { main: mainColor }),
+            ...(lightColor && { light: lightColor }),
+          },
+        },
+      }}
+    >
+      <CampaignGenericWithStyles {...props} />
+    </MuiThemeProvider>
+  )
+}
+
+CampaignGenericThemeWrapperComponent.propTypes = propTypesCampaign
+CampaignGenericThemeWrapperComponent.defaultProps = defaultPropsCampaign
+
+export default CampaignGenericThemeWrapperComponent

@@ -15,6 +15,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    theme,
     time,
   } = campaignConfig
 
@@ -54,6 +55,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    theme,
     time,
   }
 }

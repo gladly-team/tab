@@ -28,30 +28,22 @@ provider:
   # Example to update policy:
   #   aws cloudformation set-stack-policy --stack-name graphql-test --region us-west-2 --stack-policy-body \
   #   '{"Statement":[
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayDeployment*"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlPost"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayResourceGraphql"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerApiGatewayAuthorizer"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaPermissionApiGateway"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
   #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/GraphqlLambdaFunction"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/GraphqlLambdaVersion*"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/GraphqlLogGroup"
+    # In alphabetical order by resource.
     - Effect: Allow
       Principal: "*"
       Action: "Update:*"
@@ -63,11 +55,15 @@ provider:
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/ApiGatewayRestApi"
+      Resource: "LogicalResourceId/ApiGatewayMethodGraphqlPost" 
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
-      Resource: "LogicalResourceId/IamRoleLambdaExecution"
+      Resource: "LogicalResourceId/ApiGatewayResourceGraphql" 
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/ApiGatewayRestApi"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
@@ -76,6 +72,26 @@ provider:
       Principal: "*"
       Action: "Update:*"
       Resource: "LogicalResourceId/FirebaseAuthorizerLambdaPermissionApiGateway"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/GraphqlLambdaPermissionApiGateway"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/GraphqlLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/IamRoleLambdaExecution"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html
@@ -188,14 +204,19 @@ provider:
     # @service/redis - Uncomment this if we re-launch the Redis service.
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-    # - Effect: "Allow"
-    #   Action:
-    #     - "execute-api:Invoke"
-    #   Resource:
-    #     Fn::Join:
-    #       - ""
-    #       - - "Fn::ImportValue": tab-redis-${self:provider.stage}-APIGatewayBaseResourceID
-    #         - /POST/redis
+    - Effect: "Allow"
+      Action:
+        - "execute-api:Invoke"
+      # We may be dealing with this issue:
+      # https://github.com/serverless/serverless/issues/7310
+      # Once it's fixed, try using the imported resource name instead of
+      # the generalized execute-api resource.
+      # Resource:
+      #   Fn::Join:
+      #     - ""
+      #     - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
+      #       - /POST/redis
+      Resource: "arn:aws:execute-api:${self:provider.region}:*:*/${self:provider.stage}/POST/redis"
 
 plugins:
   # Include only the required node modules.

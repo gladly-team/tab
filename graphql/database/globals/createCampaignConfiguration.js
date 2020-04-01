@@ -24,6 +24,7 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    theme,
     time,
   } = input
 
@@ -76,6 +77,18 @@ const createCampaignConfiguration = input => {
   }
   if (!isBoolean(showProgressBar)) {
     throw WrongCampaignConfigError('showProgressBar', 'boolean')
+  }
+
+  // Make sure "theme" is set properly if it's defined.
+  if (!isNil(theme)) {
+    if (!isNil(theme.color)) {
+      if (isNil(get(theme, 'color.main'))) {
+        throw WrongCampaignConfigError('theme.color.main', 'string')
+      }
+      if (isNil(get(theme, 'color.light'))) {
+        throw WrongCampaignConfigError('theme.color.light', 'string')
+      }
+    }
   }
 
   // Make sure the time is set with valid ISO timestamps.
@@ -375,6 +388,7 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    theme,
     time,
   }
 }

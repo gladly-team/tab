@@ -109,6 +109,9 @@ type Campaign {
 
   """The charity that this campaign features"""
   charity: Charity
+
+  """Theming/style for the campaign"""
+  theme: CampaignTheme
 }
 
 """Text content for campaigns"""
@@ -148,6 +151,23 @@ type CampaignGoal {
   The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)
   """
   impactVerbPastTense: String!
+}
+
+"""Theming/styling for the campaign"""
+type CampaignTheme {
+  """
+  The goal number of whatever impact units the campaign is hoping to achieve
+  """
+  color: CampaignThemeColor
+}
+
+"""Color theming for the campaign"""
+type CampaignThemeColor {
+  """The primary color for the theme"""
+  main: String!
+
+  """The lighter color for the theme"""
+  light: String!
 }
 
 """The start and end times (in ISO timestamps) for the campaign"""
