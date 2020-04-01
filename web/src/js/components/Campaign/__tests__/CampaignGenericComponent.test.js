@@ -204,5 +204,76 @@ describe('CampaignGenericComponent', () => {
     ).toEqual('#### Hey, I am a nice description.')
   })
 
+  it('displays the endContent.titleMarkdown when the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          endContent: {
+            ...defaultMockProps.app.campaign.endContent,
+            titleMarkdown: '## Hey, I am the ending title :)',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Markdown)
+        .first()
+        .prop('children')
+    ).toEqual('## Hey, I am the ending title :)')
+  })
+
+  it('displays the endContent.descriptionMarkdown when the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          endContent: {
+            ...defaultMockProps.app.campaign.endContent,
+            descriptionMarkdown:
+              '#### Hey, I am a nice description for the end of the campaign :)',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Markdown)
+        .at(1)
+        .prop('children')
+    ).toEqual(
+      '#### Hey, I am a nice description for the end of the campaign :)'
+    )
+  })
+
   // TODO: more tests
 })
