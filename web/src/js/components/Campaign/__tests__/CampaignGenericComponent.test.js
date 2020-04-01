@@ -6,6 +6,8 @@ import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import Markdown from 'js/components/General/Markdown'
 import IconButton from '@material-ui/core/IconButton'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Typography from '@material-ui/core/Typography'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
@@ -399,6 +401,384 @@ describe('CampaignGenericComponent', () => {
       <CampaignGenericComponent {...mockProps} />
     )
     expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
+  })
+
+  it('displays the progress bar when showProgressBar is true and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(LinearProgress).exists()).toBe(true)
+  })
+
+  it('displays the progress bar when showProgressBar is true, even if the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(LinearProgress).exists()).toBe(true)
+  })
+
+  it('displays the correct amount of progress in the progress bar', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(LinearProgress).prop('value')).toBeCloseTo(26.7833)
+  })
+
+  it('displays the current goal number text when showProgressBar is true and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === '3.2K puppies adopted'
+        })
+        .exists()
+    ).toBe(true)
+  })
+
+  it('does not display the current goal number text when showProgressBar is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: undefined,
+          showProgressBar: false, // not showing
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === '3.2K puppies adopted'
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('does not display the current goal number text when showProgressBar is true but the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === '3.2K puppies adopted'
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('displays the goal target text when showProgressBar is true and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === 'Goal: 12K'
+        })
+        .exists()
+    ).toBe(true)
+  })
+
+  it('does not display the goal target text when showProgressBar is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: undefined,
+          showProgressBar: false, // not showing
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === 'Goal: 12K'
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('does not display the goal target text when showProgressBar is true but the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === 'Goal: 12K'
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('displays the "end campaign" goal text when showProgressBar is true and the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 14812,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return (
+            n.render().text() ===
+            'Great job! Together, we adopted 14.8K puppies of our 12K goal.'
+          )
+        })
+        .exists()
+    ).toBe(true)
   })
 
   // TODO: more tests
