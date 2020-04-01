@@ -90,7 +90,7 @@ provider:
       Resource: "LogicalResourceId/GraphqlLogGroup"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/IamRoleLambdaExecution"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
