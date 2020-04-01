@@ -209,14 +209,14 @@ provider:
         - "execute-api:Invoke"
       # We may be dealing with this issue:
       # https://github.com/serverless/serverless/issues/7310
-      # Once it's fixed, try using the imported resource name instead
-      # of hardcoding the resource.
+      # Once it's fixed, try using the imported resource name instead of
+      # the generalized execute-api resource.
       # Resource:
       #   Fn::Join:
       #     - ""
       #     - - Fn::ImportValue: "tab-redis-${self:provider.stage}-APIGatewayBaseResourceID"
       #       - /POST/redis
-      Resource: "arn:aws:execute-api:*:*:08zhkosh4f/${self:provider.stage}/POST/redis"
+      Resource: "arn:aws:execute-api:${self:provider.region}:*:*/${self:provider.stage}/POST/redis"
 
 plugins:
   # Include only the required node modules.
