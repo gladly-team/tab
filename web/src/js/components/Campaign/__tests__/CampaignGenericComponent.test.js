@@ -8,9 +8,11 @@ import Markdown from 'js/components/General/Markdown'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
+import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
+jest.mock('js/components/Campaign/CountdownClockComponent')
 jest.mock('js/components/Donate/DonateHeartsControlsContainer')
 jest.mock('js/components/General/Markdown')
 jest.mock('js/utils/local-user-data-mgr')
@@ -781,5 +783,84 @@ describe('CampaignGenericComponent', () => {
     ).toBe(true)
   })
 
-  // TODO: more tests
+  it('displays the CountdownClock when showCountdownTimer is true and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          showCountdownTimer: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(CountdownClock).exists()).toBe(true)
+  })
+
+  it('passes the expected props to the CountdownClock', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          showCountdownTimer: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(CountdownClock).props()).toEqual({
+      campaignStartDatetime: moment('2020-03-25T18:00:00.000Z'),
+      campaignEndDatetime: moment('2020-05-01T18:00:00.000Z'),
+    })
+  })
+
+  it('does not display the CountdownClock when showCountdownTimer is true, but the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          showCountdownTimer: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(CountdownClock).exists()).toBe(false)
+  })
 })
