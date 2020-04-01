@@ -29,8 +29,7 @@ const styles = theme => ({
 })
 
 // TODO: may want to lazy-load the "thanks" dialog to avoid
-// loading it on every new tab when a HeartDonationCampaign
-// is active.
+// loading it on every new tab when a campaign is active.
 class DonateHeartsControls extends React.Component {
   constructor(props) {
     super(props)
@@ -87,11 +86,7 @@ class DonateHeartsControls extends React.Component {
     this.setState({
       donateInProgress: true,
     })
-    const {
-      charity,
-      user,
-      heartDonationCampaign: { time = {} } = {},
-    } = this.props
+    const { charity, user } = this.props
     const self = this
     return DonateVcMutation(
       {
@@ -99,18 +94,7 @@ class DonateHeartsControls extends React.Component {
         charityId: charity.id,
         vc: this.state.amountToDonate,
       },
-      Object.assign(
-        {},
-        // Optionally provided so we know which Relay record to
-        // update to increase the total VC this charity has received.
-        time.start &&
-          time.end && {
-            vcReceivedArgs: {
-              startTime: moment(time.start).toISOString(),
-              endTime: moment(time.end).toISOString(),
-            },
-          }
-      )
+      {}
     )
       .then(() => {
         self.setState({
@@ -311,14 +295,6 @@ DonateHeartsControls.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     vcCurrent: PropTypes.number.isRequired,
-  }),
-  // Provided so we know which Relay record to update
-  // to increase the Hearts donated to the campaign.
-  heartDonationCampaign: PropTypes.shape({
-    time: PropTypes.shape({
-      start: PropTypes.instanceOf(moment),
-      end: PropTypes.instanceOf(moment),
-    }),
   }),
   showError: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,

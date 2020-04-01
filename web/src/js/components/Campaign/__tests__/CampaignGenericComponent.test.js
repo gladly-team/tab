@@ -6,8 +6,10 @@ import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import Markdown from 'js/components/General/Markdown'
 import IconButton from '@material-ui/core/IconButton'
+import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
+jest.mock('js/components/Donate/DonateHeartsControlsContainer')
 jest.mock('js/components/General/Markdown')
 jest.mock('js/utils/local-user-data-mgr')
 
@@ -273,6 +275,130 @@ describe('CampaignGenericComponent', () => {
     ).toEqual(
       '#### Hey, I am a nice description for the end of the campaign :)'
     )
+  })
+
+  it('displays the DonateHeartsControls when showHeartsDonationButton is true and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          charity: {
+            ...defaultMockProps.app.campaign.charity,
+            id: 'some-charity-id',
+          },
+          showHeartsDonationButton: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(DonateHeartsControls).exists()).toBe(true)
+  })
+
+  it('passes the expected props to DonateHeartsControls', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          charity: {
+            ...defaultMockProps.app.campaign.charity,
+            id: 'some-charity-id',
+          },
+          showHeartsDonationButton: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(DonateHeartsControls).props()).toEqual({
+      user: mockProps.user,
+      charity: mockProps.app.campaign.charity,
+      showError: expect.any(Function),
+    })
+  })
+
+  it('does not display the DonateHeartsControls when showHeartsDonationButton is false and the campaign is active', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          charity: {
+            ...defaultMockProps.app.campaign.charity,
+            id: 'some-charity-id',
+          },
+          showHeartsDonationButton: false, // don't show
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
+  })
+
+  it('does not display the DonateHeartsControls when showHeartsDonationButton is true but the campaign has ended', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          charity: {
+            ...defaultMockProps.app.campaign.charity,
+            id: 'some-charity-id',
+          },
+          showHeartsDonationButton: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // has ended
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
   })
 
   // TODO: more tests

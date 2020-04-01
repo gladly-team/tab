@@ -153,12 +153,6 @@ class CampaignGenericComponent extends React.Component {
                 <DonateHeartsControls
                   charity={charity}
                   user={user}
-                  CampaignGenericComponent={{
-                    time: {
-                      start: time.start,
-                      end: time.end,
-                    },
-                  }}
                   showError={showError}
                 />
               ) : null}
