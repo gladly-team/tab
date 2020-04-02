@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.4.4",
+    "@hapi/joi": "^17.1.1",
     "@sentry/node": "^5.14.2",
     "aws-sdk": "^2.632.0",
     "aws4": "^1.8.0",
