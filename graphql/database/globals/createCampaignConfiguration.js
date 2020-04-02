@@ -83,11 +83,15 @@ const campaignConfigInputSchema = Joi.object({
   // and is otherwise not allowed.
   onEnd: Joi.object({
     content: configFields.extract('content').optional(),
-    goal: configFields.extract('goal').when('onEnd.showProgressBar', {
-      is: Joi.valid(true).required(),
-      then: Joi.required(),
-      otherwise: Joi.any().allow(null),
-    }),
+    goal: configFields.extract('goal').when(
+      // For references here, keys are relative to the current object.
+      'showProgressBar',
+      {
+        is: Joi.valid(true).required(),
+        then: Joi.required(),
+        otherwise: Joi.any().allow(null),
+      }
+    ),
     showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
     showHeartsDonationButton: configFields
       .extract('showHeartsDonationButton')

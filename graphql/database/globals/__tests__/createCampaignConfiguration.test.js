@@ -1063,21 +1063,31 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     )
   })
 
-  // FIXME
-  // it('throws if "onEnd.showProgressBar" is set to true but "onEnd.goal" is not defined', async () => {
-  //   expect.assertions(1)
-  //   const mockCampaignInput = getMockCampaignConfigInput()
-  //   expect(() => {
-  //     return createCampaignConfiguration({
-  //       ...mockCampaignInput,
-  //       onEnd: {
-  //         ...mockCampaignInput.onEnd,
-  //         goal: undefined,
-  //         showProgressBar: true,
-  //       },
-  //     })
-  //   }).toThrow('Campaign config validation error: "onEnd.goal" is required')
-  // })
+  it('throws if "onEnd.showProgressBar" is set to true but "onEnd.goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          impactUnitSingular: 'Heart',
+          impactUnitPlural: 'Hearts',
+          impactVerbPastTense: 'raised',
+          limitProgressToTargetMax: false,
+          numberSource: 'hearts',
+          targetNumber: 10e6,
+          transformNumberSourceValue: undefined, // optional function
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: undefined,
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).toThrow('Campaign config validation error: "onEnd.goal" is required')
+  })
 
   it('does not throw if "onEnd.theme" is not defined', async () => {
     expect.assertions(1)
