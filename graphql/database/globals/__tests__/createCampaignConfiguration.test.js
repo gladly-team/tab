@@ -44,6 +44,7 @@ const getMockCampaignConfigInput = () => ({
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'raised',
+    limitProgressToTargetMax: false,
     numberSource: 'hearts',
     targetNumber: 10e6,
     transformNumberSourceValue: undefined, // optional function
@@ -84,6 +85,7 @@ describe('createCampaignConfiguration: validation', () => {
         impactUnitSingular: 'Heart',
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
         targetNumber: 10e6,
       },
       incrementNewUserCount: expect.any(Function),
@@ -492,6 +494,22 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'The campaign config requires the field "goal.impactVerbPastTense" to be type "string".'
+    )
+  })
+
+  it('throws if "goal.limitProgressToTargetMax" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          limitProgressToTargetMax: undefined,
+        },
+      })
+    }).toThrow(
+      'The campaign config requires the field "goal.limitProgressToTargetMax" to be type "boolean".'
     )
   })
 

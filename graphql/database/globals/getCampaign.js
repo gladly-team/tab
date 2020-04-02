@@ -30,6 +30,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
+      limitProgressToTargetMax,
       targetNumber,
     } = goal
     const currentNumber = await getCurrentNumber(userContext)
@@ -38,6 +39,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
+      limitProgressToTargetMax,
       targetNumber,
     }
   }
