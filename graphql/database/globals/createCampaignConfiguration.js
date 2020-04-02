@@ -13,6 +13,7 @@ const TABS_OPENED = 'tabsOpened'
 // Campaign config input fields that the user can modify
 // on campaign end. This serves as shared schema between
 // the top-level config input and the "onEnd" ojbect.
+// https://hapi.dev/module/joi/api/?v=17.1.1#anyextractpath
 const configFields = Joi.object({
   content: Joi.object({
     titleMarkdown: Joi.string().required(),
@@ -40,79 +41,75 @@ const configFields = Joi.object({
   }),
 })
 
-// Re: concat:
-// https://github.com/hapijs/joi/issues/968#issuecomment-238250113
-const campaignConfigInputSchema = configFields
-  .concat(
-    Joi.object({
-      campaignId: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
+const campaignConfigInputSchema = Joi.object({
+  campaignId: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  // The "charityId" value is required when there is a hearts donation button.
+  charityId: Joi.any()
+    .when('showHeartsDonationButton', {
+      is: Joi.valid(true).required(),
+      then: Joi.string()
+        .guid()
         .required(),
-      // The "charityId" value is required when there is a hearts donation button.
-      charityId: Joi.any()
-        .when('showHeartsDonationButton', {
-          is: Joi.valid(true).required(),
-          then: Joi.string()
-            .guid()
-            .required(),
-          otherwise: Joi.string().allow(null),
-        })
-        .when('onEnd.showHeartsDonationButton', {
-          is: Joi.valid(true).required(),
-          then: Joi.string()
-            .guid()
-            .required(),
-          otherwise: Joi.string().allow(null),
-        }),
-      content: Joi.required(),
-      countNewUsers: Joi.boolean(),
-      countMoneyRaised: Joi.boolean(),
-      countTabsOpened: Joi.boolean(),
-      // The "endTriggers" value is required when "onEnd" is defined
-      // and is otherwise not allowed.
-      endTriggers: Joi.object({
-        whenGoalAchieved: Joi.boolean(),
-        whenTimeEnds: Joi.boolean(),
-      }),
-      // The "goal" value is required when there is a progress bar.
-      goal: Joi.when('showProgressBar', {
-        is: Joi.valid(true).required(),
-        then: Joi.required(),
-        otherwise: Joi.any().allow(null),
-      }),
-      // The "onEnd" value is required when "endTriggers" is defined
-      // and is otherwise not allowed.
-      onEnd: configFields.concat(
-        Joi.object({
-          content: Joi.optional(),
-          // goal: Joi.optional(),
-          goal: Joi.when('onEnd.showProgressBar', {
-            is: Joi.valid(true).required(),
-            then: Joi.required(),
-            otherwise: Joi.any().allow(null),
-          }),
-          showCountdownTimer: Joi.optional(),
-          showHeartsDonationButton: Joi.optional(),
-          showProgressBar: Joi.optional(),
-          theme: Joi.optional(),
-        })
-      ),
-      showCountdownTimer: Joi.required(),
-      showHeartsDonationButton: Joi.required(),
-      showProgressBar: Joi.required(),
-      theme: Joi.optional(),
-      time: Joi.object({
-        start: Joi.date()
-          .iso()
-          .required(),
-        end: Joi.date()
-          .iso()
-          .required(),
-      }).required(),
+      otherwise: Joi.string().allow(null),
     })
-  )
+    .when('onEnd.showHeartsDonationButton', {
+      is: Joi.valid(true).required(),
+      then: Joi.string()
+        .guid()
+        .required(),
+      otherwise: Joi.string().allow(null),
+    }),
+  content: configFields.extract('content').required(),
+  countNewUsers: Joi.boolean(),
+  countMoneyRaised: Joi.boolean(),
+  countTabsOpened: Joi.boolean(),
+  // The "endTriggers" value is required when "onEnd" is defined
+  // and is otherwise not allowed.
+  endTriggers: Joi.object({
+    whenGoalAchieved: Joi.boolean(),
+    whenTimeEnds: Joi.boolean(),
+  }),
+  // The "goal" value is required when there is a progress bar.
+  goal: configFields.extract('goal').when('showProgressBar', {
+    is: Joi.valid(true).required(),
+    then: Joi.required(),
+    otherwise: Joi.any().allow(null),
+  }),
+  // The "onEnd" value is required when "endTriggers" is defined
+  // and is otherwise not allowed.
+  onEnd: Joi.object({
+    content: configFields.extract('content').optional(),
+    goal: configFields.extract('goal').when('onEnd.showProgressBar', {
+      is: Joi.valid(true).required(),
+      then: Joi.required(),
+      otherwise: Joi.any().allow(null),
+    }),
+    showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
+    showHeartsDonationButton: configFields
+      .extract('showHeartsDonationButton')
+      .optional(),
+    showProgressBar: configFields.extract('showProgressBar').optional(),
+    theme: configFields.extract('theme').optional(),
+  }),
+  showCountdownTimer: configFields.extract('showCountdownTimer').required(),
+  showHeartsDonationButton: configFields
+    .extract('showHeartsDonationButton')
+    .required(),
+  showProgressBar: configFields.extract('showProgressBar').required(),
+  theme: configFields.extract('theme').optional(),
+  time: Joi.object({
+    start: Joi.date()
+      .iso()
+      .required(),
+    end: Joi.date()
+      .iso()
+      .required(),
+  }).required(),
+})
   .and('endTriggers', 'onEnd')
   .prefs({ convert: true }) // cast values if possible
 
