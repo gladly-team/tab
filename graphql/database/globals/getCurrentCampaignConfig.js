@@ -6,10 +6,10 @@ const campaignDescription = `
 #### In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
 #### Right now, tabs you open are providing meals for our fellow humans in NYC. Together, we can feed thousands of people in need—so please open a few tabs and encourage your friends to do the same!
 `
-const campaignEndTitle = '## Thank You for Giving Food'
-const campaignEndDescription = `
-#### With your help, we gave thousands of meals to people in New York City who have been hurt by the COVID-19 crisis.
-`
+// const campaignEndTitle = '## Thank You for Giving Food'
+// const campaignEndDescription = `
+// #### With your help, we gave thousands of meals to people in New York City who have been hurt by the COVID-19 crisis.
+// `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
@@ -22,15 +22,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countMoneyRaised: true,
   countNewUsers: false,
   countTabsOpened: false,
-  endContent: {
-    titleMarkdown: campaignEndTitle,
-    descriptionMarkdown: campaignEndDescription,
-  },
   // Logic on when to end the campaign.
-  end: {
-    whenGoalAchieved: true,
-    whenTimeEnds: false,
-  },
+  // end: {
+  //   whenGoalAchieved: true,
+  //   whenTimeEnds: false,
+  // },
   goal: {
     impactUnitSingular: 'meal',
     impactUnitPlural: 'meals',
@@ -45,12 +41,12 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
   // Modifications to the campaign when the campaign has
   // ended.
-  onEnd: {
-    content: {
-      titleMarkdown: campaignEndTitle,
-      descriptionMarkdown: campaignEndDescription,
-    },
-  },
+  // onEnd: {
+  //   content: {
+  //     titleMarkdown: campaignEndTitle,
+  //     descriptionMarkdown: campaignEndDescription,
+  //   },
+  // },
   showCountdownTimer: false,
   showHeartsDonationButton: false,
   showProgressBar: true,

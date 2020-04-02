@@ -5,7 +5,6 @@ const createCampaignData = async (userContext, campaignConfig) => {
   const {
     campaignId,
     content,
-    endContent,
     getCharityData,
     goal,
     incrementNewUserCount,
@@ -48,7 +47,6 @@ const createCampaignData = async (userContext, campaignConfig) => {
     campaignId,
     ...(charity && { charity }),
     content,
-    ...(endContent && { endContent }),
     ...(goalWithData && { goal: goalWithData }),
     incrementNewUserCount,
     incrementTabCount,

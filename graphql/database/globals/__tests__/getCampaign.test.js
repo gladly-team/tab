@@ -22,10 +22,6 @@ const getMockCampaignConfiguration = () => ({
     titleMarkdown: '## Some title',
     descriptionMarkdown: '#### A description goes here.',
   },
-  endContent: {
-    titleMarkdown: '## Another title',
-    descriptionMarkdown: '#### Another description goes here.',
-  },
   getCharityData: jest.fn(() =>
     Promise.resolve({
       id: 'some-charity-id',
@@ -90,10 +86,6 @@ describe('getCampaign', () => {
       content: {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
-      },
-      endContent: {
-        titleMarkdown: '## Another title',
-        descriptionMarkdown: '#### Another description goes here.',
       },
       goal: {
         currentNumber: 112358,

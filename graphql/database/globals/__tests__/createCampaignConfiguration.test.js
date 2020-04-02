@@ -36,10 +36,6 @@ const getMockCampaignConfigInput = () => ({
   countNewUsers: true,
   countMoneyRaised: true,
   countTabsOpened: true,
-  endContent: {
-    titleMarkdown: '## Another title',
-    descriptionMarkdown: '#### Another description goes here.',
-  },
   goal: {
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
@@ -74,10 +70,6 @@ describe('createCampaignConfiguration: validation', () => {
       content: {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
-      },
-      endContent: {
-        titleMarkdown: '## Another title',
-        descriptionMarkdown: '#### Another description goes here.',
       },
       getCharityData: expect.any(Function),
       goal: {
@@ -196,49 +188,6 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'Campaign config validation error: "content.descriptionMarkdown" is required'
-    )
-  })
-
-  it('does not throw if "endContent" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: undefined,
-      })
-    }).not.toThrow()
-  })
-
-  it('throws if "endContent.titleMarkdown" is not defined when endContent is set', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: {
-          titleMarkdown: undefined,
-          descriptionMarkdown: '#### Something',
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "endContent.titleMarkdown" is required'
-    )
-  })
-
-  it('throws if "endContent.descriptionMarkdown" is not defined when endContent is set', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: {
-          titleMarkdown: '## A title',
-          descriptionMarkdown: undefined,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "endContent.descriptionMarkdown" is required'
     )
   })
 

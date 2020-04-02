@@ -31,10 +31,6 @@ const campaignConfigInputSchema = Joi.object({
   countNewUsers: Joi.boolean(),
   countMoneyRaised: Joi.boolean(),
   countTabsOpened: Joi.boolean(),
-  endContent: Joi.object({
-    titleMarkdown: Joi.string().required(),
-    descriptionMarkdown: Joi.string().required(),
-  }),
   // The goal is required when there is a progress bar.
   goal: Joi.object({
     impactUnitSingular: Joi.string().required(),
