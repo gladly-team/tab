@@ -734,6 +734,11 @@ const campaignGoalType = new GraphQLObjectType({
       description:
         'The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)',
     },
+    limitProgressToTargetMax: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'If true, do not display a currentNumber greater than the targetNumber. Instead, limit goal progress to 100% of the target.',
+    },
   }),
 })
 

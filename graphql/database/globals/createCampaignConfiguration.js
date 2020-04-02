@@ -228,6 +228,9 @@ const createCampaignConfiguration = input => {
       // The verb we use to describe what we're doing with the impact units
       // (e.g., "recruited", "donated", "raised")
       impactVerbPastTense,
+      // If true, the client should not display a currentNumber greater than
+      // the targetNumber. Instead, limit goal progress to 100% of the target.
+      limitProgressToTargetMax,
       // The internal source we are using to calculate the number of impact
       // units. One of: "hearts", "newUsers", "moneyRaised", "tabsOpened"
       numberSource,
@@ -254,6 +257,9 @@ const createCampaignConfiguration = input => {
     }
     if (!isString(impactVerbPastTense)) {
       throw WrongCampaignConfigError('goal.impactVerbPastTense', 'string')
+    }
+    if (!isBoolean(limitProgressToTargetMax)) {
+      throw WrongCampaignConfigError('goal.limitProgressToTargetMax', 'boolean')
     }
     if (validNumberSourceVals.indexOf(numberSource) === -1) {
       throw new Error(
@@ -312,6 +318,7 @@ const createCampaignConfiguration = input => {
 
         return currentNumber
       },
+      limitProgressToTargetMax,
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,

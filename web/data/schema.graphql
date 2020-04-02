@@ -151,6 +151,11 @@ type CampaignGoal {
   The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)
   """
   impactVerbPastTense: String!
+
+  """
+  If true, do not display a currentNumber greater than the targetNumber. Instead, limit goal progress to 100% of the target.
+  """
+  limitProgressToTargetMax: Boolean!
 }
 
 """Theming/styling for the campaign"""

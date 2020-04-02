@@ -42,6 +42,7 @@ class CampaignGenericView extends React.Component {
                   impactUnitSingular
                   impactUnitPlural
                   impactVerbPastTense
+                  limitProgressToTargetMax
                 }
                 isLive
                 showCountdownTimer

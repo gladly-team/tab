@@ -30,6 +30,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitSingular: 'meal',
     impactUnitPlural: 'meals',
     impactVerbPastTense: 'given',
+    limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
     targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {

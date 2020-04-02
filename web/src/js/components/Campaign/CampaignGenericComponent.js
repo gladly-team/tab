@@ -109,9 +109,20 @@ class CampaignGenericComponent extends React.Component {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
+      limitProgressToTargetMax,
     } = goal || {}
-    const progress =
+
+    // If limitProgressToTargetMax is true, don't display a current
+    // number that's greater than the target number.
+    const currentGoalNumber =
+      limitProgressToTargetMax && currentNumber > targetNumber
+        ? targetNumber
+        : currentNumber
+    let progress =
       targetNumber && currentNumber ? (100 * currentNumber) / targetNumber : 0
+    if (progress > 100 && limitProgressToTargetMax) {
+      progress = 100.0
+    }
 
     return (
       <div className={classes.root}>
@@ -162,8 +173,8 @@ class CampaignGenericComponent extends React.Component {
                     {hasCampaignEnded ? (
                       <Typography variant={'caption'} gutterBottom>
                         Great job! Together, we {impactVerbPastTense}{' '}
-                        {abbreviateNumber(currentNumber)}{' '}
-                        {currentNumber === 1
+                        {abbreviateNumber(currentGoalNumber)}{' '}
+                        {currentGoalNumber === 1
                           ? impactUnitSingular
                           : impactUnitPlural}{' '}
                         of our {abbreviateNumber(targetNumber)} goal.
@@ -172,8 +183,8 @@ class CampaignGenericComponent extends React.Component {
                     {!hasCampaignEnded ? (
                       <div className={classes.progressBarLabelsContainer}>
                         <Typography variant={'caption'}>
-                          {abbreviateNumber(currentNumber)}{' '}
-                          {currentNumber === 1
+                          {abbreviateNumber(currentGoalNumber)}{' '}
+                          {currentGoalNumber === 1
                             ? impactUnitSingular
                             : impactUnitPlural}{' '}
                           {impactVerbPastTense}
@@ -225,6 +236,7 @@ const propTypesCampaign = {
         impactUnitSingular: PropTypes.string.isRequired,
         impactUnitPlural: PropTypes.string.isRequired,
         impactVerbPastTense: PropTypes.string.isRequired,
+        limitProgressToTargetMax: PropTypes.bool.isRequired,
       }),
       numNewUsers: PropTypes.number,
       showCountdownTimer: PropTypes.bool.isRequired,

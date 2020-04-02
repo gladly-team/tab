@@ -72,6 +72,7 @@ const getMockProps = () => ({
         impactUnitSingular: 'Heart',
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'donated',
+        limitProgressToTargetMax: false,
       },
       isLive: true,
       numNewUsers: undefined, // probably want to roll into generic goal
@@ -508,6 +509,76 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(LinearProgress).prop('value')).toBeCloseTo(26.7833)
   })
 
+  it('passes a progress bar value of >100% when limitProgressToTargetMax is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 18021,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: false,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(LinearProgress).prop('value')).toBeGreaterThan(100)
+  })
+
+  it('passes a progress bar value of exactly 100% when limitProgressToTargetMax is true', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 18021,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(LinearProgress).prop('value')).toEqual(100.0)
+  })
+
   it('displays the current goal number text when showProgressBar is true and the campaign is active', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
@@ -660,6 +731,90 @@ describe('CampaignGenericComponent', () => {
         .find(Typography)
         .filterWhere(n => {
           return n.render().text() === 'Goal: 12K'
+        })
+        .exists()
+    ).toBe(true)
+  })
+
+  it('displays the full current goal number text (exceeding target number) when limitProgressToTargetMax is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 18021,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: false,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === '18K puppies adopted'
+        })
+        .exists()
+    ).toBe(true)
+  })
+
+  it('displays the maximum goal number text (current number exceeds the target number) when limitProgressToTargetMax is true', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 18021,
+            impactUnitSingular: 'puppy',
+            impactUnitPlural: 'puppies',
+            impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return n.render().text() === '12K puppies adopted'
         })
         .exists()
     ).toBe(true)
