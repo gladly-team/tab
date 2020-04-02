@@ -820,31 +820,31 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     await campaignConfig.getCharityData(mockUserContext)
     expect(CharityModel.get).toHaveBeenCalledWith(
       mockUserContext,
-      'some-charity-id'
+      'fdb15917-ded3-4ea0-9eb9-82300cb464a0'
     )
   })
 
   it('returns the expected charity data when calling getCharityData', async () => {
     expect.assertions(1)
     CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     const charityData = await campaignConfig.getCharityData(mockUserContext)
     expect(charityData).toEqual({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
   })
@@ -852,7 +852,7 @@ describe('createCampaignConfiguration: charity data', () => {
   it('returns null charity data when no charityId is defined in the config', async () => {
     expect.assertions(1)
     CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -877,7 +877,7 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     await expect(
@@ -951,7 +951,7 @@ describe('createCampaignConfiguration: goal data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'my-fake-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'hearts',
@@ -965,7 +965,7 @@ describe('createCampaignConfiguration: goal data', () => {
     await campaignConfig.goal.getCurrentNumber(mockUserContext)
     expect(getCharityVcReceived).toHaveBeenCalledWith(
       mockUserContext,
-      'my-fake-charity-id',
+      'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       '2021-01-01T18:00:00.000Z',
       '2021-01-05T18:00:00.000Z'
     )
