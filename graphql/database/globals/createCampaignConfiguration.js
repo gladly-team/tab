@@ -135,7 +135,6 @@ const createCampaignConfiguration = input => {
     countNewUsers = false,
     countTabsOpened = false,
     content,
-    endContent,
     goal,
     showCountdownTimer,
     showHeartsDonationButton,
@@ -338,7 +337,6 @@ const createCampaignConfiguration = input => {
       }
     },
     content,
-    ...(endContent && { endContent }),
     ...(configuredGoal && {
       goal: configuredGoal,
     }),
