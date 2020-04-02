@@ -16,7 +16,7 @@ const campaignConfigInputSchema = Joi.object({
     .min(3)
     .max(30)
     .required(),
-  // The charityId is required when there is a hearts donation button.
+  // The "charityId" value is required when there is a hearts donation button.
   charityId: Joi.any().when('showHeartsDonationButton', {
     is: Joi.valid(true),
     then: Joi.string()
@@ -31,7 +31,13 @@ const campaignConfigInputSchema = Joi.object({
   countNewUsers: Joi.boolean(),
   countMoneyRaised: Joi.boolean(),
   countTabsOpened: Joi.boolean(),
-  // The goal is required when there is a progress bar.
+  // The "endTriggers" value is required when "onEnd" is defined
+  // and is otherwise not allowed.
+  endTriggers: Joi.object({
+    whenGoalAchieved: Joi.boolean(),
+    whenTimeEnds: Joi.boolean(),
+  }),
+  // The "goal" value is required when there is a progress bar.
   goal: Joi.object({
     impactUnitSingular: Joi.string().required(),
     impactUnitPlural: Joi.string().required(),
@@ -47,6 +53,9 @@ const campaignConfigInputSchema = Joi.object({
     then: Joi.required(),
     otherwise: Joi.allow(null),
   }),
+  // The "onEnd" value is required when "endTriggers" is defined
+  // and is otherwise not allowed.
+  onEnd: Joi.object({}).unknown(true), // TODO
   showCountdownTimer: Joi.boolean().required(),
   showHeartsDonationButton: Joi.boolean().required(),
   showProgressBar: Joi.boolean().required(),
@@ -64,7 +73,9 @@ const campaignConfigInputSchema = Joi.object({
       .iso()
       .required(),
   }).required(),
-}).prefs({ convert: true }) // cast values if possible
+})
+  .and('endTriggers', 'onEnd')
+  .prefs({ convert: true }) // cast values if possible
 
 const WrongCampaignConfigError = message => {
   return new Error(`Campaign config validation error: ${message}`)

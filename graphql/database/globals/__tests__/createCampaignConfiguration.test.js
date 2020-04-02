@@ -36,6 +36,10 @@ const getMockCampaignConfigInput = () => ({
   countNewUsers: true,
   countMoneyRaised: true,
   countTabsOpened: true,
+  endTriggers: {
+    whenGoalAchieved: false,
+    whenTimeEnds: true,
+  },
   goal: {
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
@@ -44,6 +48,12 @@ const getMockCampaignConfigInput = () => ({
     numberSource: 'hearts',
     targetNumber: 10e6,
     transformNumberSourceValue: undefined, // optional function
+  },
+  onEnd: {
+    content: {
+      titleMarkdown: '## Another title',
+      descriptionMarkdown: '#### Another description goes here.',
+    },
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
@@ -611,6 +621,56 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'Campaign config validation error: "theme.color.light" is required'
+    )
+  })
+
+  it('does not throw if both "endTriggers" and "onEnd" are not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: undefined,
+        onEnd: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "endTriggers" is defined but "onEnd" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: undefined,
+      })
+    }).toThrow(
+      'Campaign config validation error: "value" contains [endTriggers] without its required peers [onEnd]'
+    )
+  })
+
+  it('throws if "onEnd" is defined but "endTriggers" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: undefined,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            titleMarkdown: '## Some title',
+            descriptionMarkdown: '#### A description goes here.',
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "value" contains [onEnd] without its required peers [endTriggers]'
     )
   })
 })
