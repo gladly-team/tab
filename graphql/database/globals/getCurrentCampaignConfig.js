@@ -26,6 +26,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     titleMarkdown: campaignEndTitle,
     descriptionMarkdown: campaignEndDescription,
   },
+  // Logic on when to end the campaign.
+  end: {
+    whenGoalAchieved: true,
+    whenTimeEnds: false,
+  },
   goal: {
     impactUnitSingular: 'meal',
     impactUnitPlural: 'meals',
@@ -36,6 +41,14 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)
+    },
+  },
+  // Modifications to the campaign when the campaign has
+  // ended.
+  onEnd: {
+    content: {
+      titleMarkdown: campaignEndTitle,
+      descriptionMarkdown: campaignEndDescription,
     },
   },
   showCountdownTimer: false,
