@@ -54,6 +54,7 @@ const getMockCampaignConfigInput = () => ({
       titleMarkdown: '## Another title',
       descriptionMarkdown: '#### Another description goes here.',
     },
+    // ... can have other stuff here
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
@@ -1016,6 +1017,22 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     )
   })
 
+  it('throws if "onEnd.showHeartsDonationButton" is true (changed on campaign end) and "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: undefined,
+        showHeartsDonationButton: false, // charityId is not required before campaign end
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: true, // now, charityId is required
+        },
+      })
+    }).toThrow('Campaign config validation error: "charityId" is required')
+  })
+
   it('does not throw if "onEnd.showProgressBar" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1045,6 +1062,22 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
       'Campaign config validation error: "onEnd.showProgressBar" must be a boolean'
     )
   })
+
+  // FIXME
+  // it('throws if "onEnd.showProgressBar" is set to true but "onEnd.goal" is not defined', async () => {
+  //   expect.assertions(1)
+  //   const mockCampaignInput = getMockCampaignConfigInput()
+  //   expect(() => {
+  //     return createCampaignConfiguration({
+  //       ...mockCampaignInput,
+  //       onEnd: {
+  //         ...mockCampaignInput.onEnd,
+  //         goal: undefined,
+  //         showProgressBar: true,
+  //       },
+  //     })
+  //   }).toThrow('Campaign config validation error: "onEnd.goal" is required')
+  // })
 
   it('does not throw if "onEnd.theme" is not defined', async () => {
     expect.assertions(1)
