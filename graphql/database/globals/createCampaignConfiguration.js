@@ -1,17 +1,86 @@
+import Joi from '@hapi/joi'
 import moment from 'moment'
-import { isNil, isBoolean, isFunction, isNumber, isString } from 'lodash/lang'
-import { get } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 import getCharityVcReceived from '../donations/getCharityVcReceived'
 
-const WrongCampaignConfigError = (field, expectedType) => {
-  return new Error(
-    `The campaign config requires the field "${field}" to be type "${expectedType}".`
-  )
+const HEARTS = 'hearts'
+const MONEY_RAISED = 'moneyRaised'
+const NEW_USERS = 'newUsers'
+const TABS_OPENED = 'tabsOpened'
+
+const campaignConfigInputSchema = Joi.object({
+  campaignId: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  // The charityId is required when there is a hearts donation button.
+  charityId: Joi.any().when('showHeartsDonationButton', {
+    is: Joi.valid(true),
+    then: Joi.string()
+      .guid()
+      .required(),
+    otherwise: Joi.string().allow(null),
+  }),
+  content: Joi.object({
+    titleMarkdown: Joi.string().required(),
+    descriptionMarkdown: Joi.string().required(),
+  }).required(),
+  countNewUsers: Joi.boolean(),
+  countMoneyRaised: Joi.boolean(),
+  countTabsOpened: Joi.boolean(),
+  endContent: Joi.object({
+    titleMarkdown: Joi.string().required(),
+    descriptionMarkdown: Joi.string().required(),
+  }),
+  // The goal is required when there is a progress bar.
+  goal: Joi.object({
+    impactUnitSingular: Joi.string().required(),
+    impactUnitPlural: Joi.string().required(),
+    impactVerbPastTense: Joi.string().required(),
+    limitProgressToTargetMax: Joi.boolean().required(),
+    numberSource: Joi.any()
+      .valid(HEARTS, MONEY_RAISED, NEW_USERS, TABS_OPENED)
+      .required(),
+    targetNumber: Joi.number().required(),
+    transformNumberSourceValue: Joi.function(), // optional
+  }).when('showProgressBar', {
+    is: Joi.valid(true),
+    then: Joi.required(),
+    otherwise: Joi.allow(null),
+  }),
+  showCountdownTimer: Joi.boolean().required(),
+  showHeartsDonationButton: Joi.boolean().required(),
+  showProgressBar: Joi.boolean().required(),
+  theme: Joi.object({
+    color: Joi.object({
+      main: Joi.string().required(),
+      light: Joi.string().required(),
+    }),
+  }),
+  time: Joi.object({
+    start: Joi.date()
+      .iso()
+      .required(),
+    end: Joi.date()
+      .iso()
+      .required(),
+  }).required(),
+}).prefs({ convert: true }) // cast values if possible
+
+const WrongCampaignConfigError = message => {
+  return new Error(`Campaign config validation error: ${message}`)
 }
 
 const createCampaignConfiguration = input => {
+  try {
+    Joi.assert(input, campaignConfigInputSchema)
+  } catch (e) {
+    throw new WrongCampaignConfigError(e.details[0].message)
+  }
+
   const {
     campaignId,
     charityId = null,
@@ -27,107 +96,6 @@ const createCampaignConfiguration = input => {
     theme,
     time,
   } = input
-
-  // Possible values for the goal.numberSource.
-  const HEARTS = 'hearts'
-  const MONEY_RAISED = 'moneyRaised'
-  const NEW_USERS = 'newUsers'
-  const TABS_OPENED = 'tabsOpened'
-  const validNumberSourceVals = [HEARTS, MONEY_RAISED, NEW_USERS, TABS_OPENED]
-
-  // Makes sure the campaignId is set.
-  if (isNil(campaignId) || !isString(campaignId)) {
-    throw WrongCampaignConfigError('campaignId', 'string')
-  }
-
-  // Make sure the "content" value is set properly.
-  if (isNil(content)) {
-    throw WrongCampaignConfigError('content', 'object')
-  }
-  if (isNil(content.titleMarkdown)) {
-    throw WrongCampaignConfigError('content.titleMarkdown', 'string')
-  }
-  if (isNil(content.descriptionMarkdown)) {
-    throw WrongCampaignConfigError('content.descriptionMarkdown', 'string')
-  }
-
-  // Make sure "endContent" is set properly if it's defined.
-  if (!isNil(endContent)) {
-    if (isNil(endContent.titleMarkdown)) {
-      throw WrongCampaignConfigError('endContent.titleMarkdown', 'string')
-    }
-    if (isNil(endContent.descriptionMarkdown)) {
-      throw WrongCampaignConfigError('endContent.descriptionMarkdown', 'string')
-    }
-  }
-
-  // If the "charityId" is set, make sure it's a string.
-  if (!isNil(charityId)) {
-    if (!isString(charityId)) {
-      throw WrongCampaignConfigError('charityId', 'string')
-    }
-  }
-
-  // Make sure various required flags are set.
-  if (!isBoolean(showCountdownTimer)) {
-    throw WrongCampaignConfigError('showCountdownTimer', 'boolean')
-  }
-  if (!isBoolean(showHeartsDonationButton)) {
-    throw WrongCampaignConfigError('showHeartsDonationButton', 'boolean')
-  }
-  if (!isBoolean(showProgressBar)) {
-    throw WrongCampaignConfigError('showProgressBar', 'boolean')
-  }
-
-  // Make sure "theme" is set properly if it's defined.
-  if (!isNil(theme)) {
-    if (!isNil(theme.color)) {
-      if (isNil(get(theme, 'color.main'))) {
-        throw WrongCampaignConfigError('theme.color.main', 'string')
-      }
-      if (isNil(get(theme, 'color.light'))) {
-        throw WrongCampaignConfigError('theme.color.light', 'string')
-      }
-    }
-  }
-
-  // Make sure the time is set with valid ISO timestamps.
-  if (isNil(time)) {
-    throw WrongCampaignConfigError('time', 'object')
-  }
-  if (isNil(time.start)) {
-    throw WrongCampaignConfigError('time.start', 'string')
-  }
-  if (isNil(time.end)) {
-    throw WrongCampaignConfigError('time.end', 'string')
-  }
-  if (!moment(time.start).isValid()) {
-    throw new Error('The "time.start" value must be a valid ISO timestamp.')
-  }
-  if (!moment(time.end).isValid()) {
-    throw new Error('The "time.end" value must be a valid ISO timestamp.')
-  }
-
-  // If the goal relies on hearts, we need a charity.
-  if (get(goal, 'numberSource') === HEARTS && isNil(charityId)) {
-    throw new Error(
-      'The campaign config requires a configured "charityId" when "goal.numberSource" is set to "hearts".'
-    )
-  }
-
-  // If we are showing a hearts donation button, we need a charity.
-  if (showHeartsDonationButton && isNil(charityId)) {
-    throw new Error(
-      'The campaign config requires a configured "charityId" when "showHeartsDonationButton" is set to true.'
-    )
-  }
-
-  // If we are showing a progress bar, we need a goal.
-  if (showProgressBar && isNil(goal)) {
-    throw new Error(
-      'The campaign config requires a configured "goal" when "showProgressBar" is set to true.'
-    )
-  }
 
   const redisKeyNewUsers = `campaign:${campaignId}:newUsers`
   const redisKeyMoneyRaised = `campaign:${campaignId}:moneyRaised`
@@ -248,38 +216,6 @@ const createCampaignConfiguration = input => {
       transformNumberSourceValue,
     } = goal
 
-    // Validate the goal config.
-    if (!isString(impactUnitSingular)) {
-      throw WrongCampaignConfigError('goal.impactUnitSingular', 'string')
-    }
-    if (!isString(impactUnitPlural)) {
-      throw WrongCampaignConfigError('goal.impactUnitPlural', 'string')
-    }
-    if (!isString(impactVerbPastTense)) {
-      throw WrongCampaignConfigError('goal.impactVerbPastTense', 'string')
-    }
-    if (!isBoolean(limitProgressToTargetMax)) {
-      throw WrongCampaignConfigError('goal.limitProgressToTargetMax', 'boolean')
-    }
-    if (validNumberSourceVals.indexOf(numberSource) === -1) {
-      throw new Error(
-        `The "goal.numberSource" value must be one of: ${validNumberSourceVals.join(
-          ', '
-        )}`
-      )
-    }
-    if (!isNumber(targetNumber)) {
-      throw WrongCampaignConfigError('goal.targetNumber', 'number')
-    }
-    if (!isNil(transformNumberSourceValue)) {
-      if (!isFunction(transformNumberSourceValue)) {
-        throw WrongCampaignConfigError(
-          'goal.transformNumberSourceValue',
-          'function'
-        )
-      }
-    }
-
     configuredGoal = {
       targetNumber,
       getCurrentNumber: async userContext => {
@@ -302,11 +238,7 @@ const createCampaignConfiguration = input => {
             break
           }
           default: {
-            throw new Error(
-              `The "goal.numberSource" value must be one of: ${validNumberSourceVals.join(
-                ', '
-              )}`
-            )
+            throw new Error(`The "goal.numberSource" is invalid.`)
           }
         }
 

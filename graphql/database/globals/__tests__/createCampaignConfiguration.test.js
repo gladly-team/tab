@@ -115,9 +115,7 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         campaignId: undefined,
       })
-    }).toThrow(
-      'The campaign config requires the field "campaignId" to be type "string".'
-    )
+    }).toThrow('Campaign config validation error: "campaignId" is required')
   })
 
   it('throws if "campaignId" is not a string', async () => {
@@ -129,7 +127,7 @@ describe('createCampaignConfiguration: validation', () => {
         campaignId: 1234,
       })
     }).toThrow(
-      'The campaign config requires the field "campaignId" to be type "string".'
+      'Campaign config validation error: "campaignId" must be a string'
     )
   })
 
@@ -155,9 +153,7 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         charityId: 1234,
       })
-    }).toThrow(
-      'The campaign config requires the field "charityId" to be type "string".'
-    )
+    }).toThrow('Campaign config validation error: "charityId" must be a string')
   })
 
   it('throws if "content" is not defined', async () => {
@@ -168,9 +164,7 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         content: undefined,
       })
-    }).toThrow(
-      'The campaign config requires the field "content" to be type "object".'
-    )
+    }).toThrow('Campaign config validation error: "content" is required')
   })
 
   it('throws if "content.titleMarkdown" is not defined', async () => {
@@ -185,7 +179,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "content.titleMarkdown" to be type "string".'
+      'Campaign config validation error: "content.titleMarkdown" is required'
     )
   })
 
@@ -201,7 +195,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "content.descriptionMarkdown" to be type "string".'
+      'Campaign config validation error: "content.descriptionMarkdown" is required'
     )
   })
 
@@ -228,7 +222,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "endContent.titleMarkdown" to be type "string".'
+      'Campaign config validation error: "endContent.titleMarkdown" is required'
     )
   })
 
@@ -244,7 +238,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "endContent.descriptionMarkdown" to be type "string".'
+      'Campaign config validation error: "endContent.descriptionMarkdown" is required'
     )
   })
 
@@ -257,7 +251,7 @@ describe('createCampaignConfiguration: validation', () => {
         showCountdownTimer: undefined,
       })
     }).toThrow(
-      'The campaign config requires the field "showCountdownTimer" to be type "boolean".'
+      'Campaign config validation error: "showCountdownTimer" is required'
     )
   })
 
@@ -270,7 +264,7 @@ describe('createCampaignConfiguration: validation', () => {
         showCountdownTimer: 0,
       })
     }).toThrow(
-      'The campaign config requires the field "showCountdownTimer" to be type "boolean".'
+      'Campaign config validation error: "showCountdownTimer" must be a boolean'
     )
   })
 
@@ -283,7 +277,7 @@ describe('createCampaignConfiguration: validation', () => {
         showHeartsDonationButton: undefined,
       })
     }).toThrow(
-      'The campaign config requires the field "showHeartsDonationButton" to be type "boolean".'
+      'Campaign config validation error: "showHeartsDonationButton" is required'
     )
   })
 
@@ -296,7 +290,7 @@ describe('createCampaignConfiguration: validation', () => {
         showHeartsDonationButton: 0,
       })
     }).toThrow(
-      'The campaign config requires the field "showHeartsDonationButton" to be type "boolean".'
+      'Campaign config validation error: "showHeartsDonationButton" must be a boolean'
     )
   })
 
@@ -309,7 +303,7 @@ describe('createCampaignConfiguration: validation', () => {
         showProgressBar: undefined,
       })
     }).toThrow(
-      'The campaign config requires the field "showProgressBar" to be type "boolean".'
+      'Campaign config validation error: "showProgressBar" is required'
     )
   })
 
@@ -322,7 +316,7 @@ describe('createCampaignConfiguration: validation', () => {
         showProgressBar: 0,
       })
     }).toThrow(
-      'The campaign config requires the field "showProgressBar" to be type "boolean".'
+      'Campaign config validation error: "showProgressBar" must be a boolean'
     )
   })
 
@@ -334,9 +328,7 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         time: undefined,
       })
-    }).toThrow(
-      'The campaign config requires the field "time" to be type "object".'
-    )
+    }).toThrow('Campaign config validation error: "time" is required')
   })
 
   it('throws if "time.start" is not defined', async () => {
@@ -350,9 +342,7 @@ describe('createCampaignConfiguration: validation', () => {
           end: '2020-05-01T18:00:00.000Z',
         },
       })
-    }).toThrow(
-      'The campaign config requires the field "time.start" to be type "string".'
-    )
+    }).toThrow('Campaign config validation error: "time.start" is required')
   })
 
   it('throws if "time.start" is not a valid ISO timestamp', async () => {
@@ -370,7 +360,9 @@ describe('createCampaignConfiguration: validation', () => {
           end: '2020-05-01T18:00:00.000Z',
         },
       })
-    }).toThrow('The "time.start" value must be a valid ISO timestamp.')
+    }).toThrow(
+      'Campaign config validation error: "time.start" must be in ISO 8601 date format'
+    )
   })
 
   it('throws if "time.end" is not defined', async () => {
@@ -384,9 +376,7 @@ describe('createCampaignConfiguration: validation', () => {
           end: undefined,
         },
       })
-    }).toThrow(
-      'The campaign config requires the field "time.end" to be type "string".'
-    )
+    }).toThrow('Campaign config validation error: "time.end" is required')
   })
 
   it('throws if "time.end" is not a valid ISO timestamp', async () => {
@@ -404,7 +394,9 @@ describe('createCampaignConfiguration: validation', () => {
           end: '2018-12-23 10am', // invalid
         },
       })
-    }).toThrow('The "time.end" value must be a valid ISO timestamp.')
+    }).toThrow(
+      'Campaign config validation error: "time.end" must be in ISO 8601 date format'
+    )
   })
 
   it('throws if "showHeartsDonationButton" is true but "charityId" is not defined', async () => {
@@ -418,9 +410,7 @@ describe('createCampaignConfiguration: validation', () => {
         charityId: undefined,
         showHeartsDonationButton: true,
       })
-    }).toThrow(
-      'The campaign config requires a configured "charityId" when "showHeartsDonationButton" is set to true.'
-    )
+    }).toThrow('Campaign config validation error: "charityId" is required')
   })
 
   it('throws if "showProgressBar" is true but "goal" is not defined', async () => {
@@ -432,9 +422,7 @@ describe('createCampaignConfiguration: validation', () => {
         goal: undefined,
         showProgressBar: true,
       })
-    }).toThrow(
-      'The campaign config requires a configured "goal" when "showProgressBar" is set to true.'
-    )
+    }).toThrow('Campaign config validation error: "goal" is required')
   })
 
   it('does not throw if "goal" is not defined', async () => {
@@ -461,7 +449,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.impactUnitSingular" to be type "string".'
+      'Campaign config validation error: "goal.impactUnitSingular" is required'
     )
   })
 
@@ -477,7 +465,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.impactUnitPlural" to be type "string".'
+      'Campaign config validation error: "goal.impactUnitPlural" is required'
     )
   })
 
@@ -493,7 +481,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.impactVerbPastTense" to be type "string".'
+      'Campaign config validation error: "goal.impactVerbPastTense" is required'
     )
   })
 
@@ -509,7 +497,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.limitProgressToTargetMax" to be type "boolean".'
+      'Campaign config validation error: "goal.limitProgressToTargetMax" is required'
     )
   })
 
@@ -521,11 +509,11 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         goal: {
           ...mockCampaignInput.goal,
-          targetNumber: '100',
+          targetNumber: '100 thousand',
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.targetNumber" to be type "number".'
+      'Campaign config validation error: "goal.targetNumber" must be a number'
     )
   })
 
@@ -597,7 +585,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The "goal.numberSource" value must be one of: hearts, moneyRaised, newUsers, tabsOpened'
+      'Campaign config validation error: "goal.numberSource" must be one of [hearts, moneyRaised, newUsers, tabsOpened]'
     )
   })
 
@@ -613,7 +601,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "goal.transformNumberSourceValue" to be type "function".'
+      'Campaign config validation error: "goal.transformNumberSourceValue" must be of type function'
     )
   })
 
@@ -654,7 +642,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "theme.color.main" to be type "string".'
+      'Campaign config validation error: "theme.color.main" is required'
     )
   })
 
@@ -673,7 +661,7 @@ describe('createCampaignConfiguration: validation', () => {
         },
       })
     }).toThrow(
-      'The campaign config requires the field "theme.color.light" to be type "string".'
+      'Campaign config validation error: "theme.color.light" is required'
     )
   })
 })
@@ -876,31 +864,31 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     await campaignConfig.getCharityData(mockUserContext)
     expect(CharityModel.get).toHaveBeenCalledWith(
       mockUserContext,
-      'some-charity-id'
+      'fdb15917-ded3-4ea0-9eb9-82300cb464a0'
     )
   })
 
   it('returns the expected charity data when calling getCharityData', async () => {
     expect.assertions(1)
     CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     const charityData = await campaignConfig.getCharityData(mockUserContext)
     expect(charityData).toEqual({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
   })
@@ -908,7 +896,7 @@ describe('createCampaignConfiguration: charity data', () => {
   it('returns null charity data when no charityId is defined in the config', async () => {
     expect.assertions(1)
     CharityModel.get.mockReturnValue({
-      id: 'some-charity-id',
+      id: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       foo: 'bar',
     })
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -933,7 +921,7 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'some-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
     })
     const mockUserContext = getMockUserContext()
     await expect(
@@ -1007,7 +995,7 @@ describe('createCampaignConfiguration: goal data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      charityId: 'my-fake-charity-id',
+      charityId: 'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'hearts',
@@ -1021,7 +1009,7 @@ describe('createCampaignConfiguration: goal data', () => {
     await campaignConfig.goal.getCurrentNumber(mockUserContext)
     expect(getCharityVcReceived).toHaveBeenCalledWith(
       mockUserContext,
-      'my-fake-charity-id',
+      'fdb15917-ded3-4ea0-9eb9-82300cb464a0',
       '2021-01-01T18:00:00.000Z',
       '2021-01-05T18:00:00.000Z'
     )
