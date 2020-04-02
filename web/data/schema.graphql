@@ -69,29 +69,25 @@ type Campaign {
   """The ID of the campaign"""
   campaignId: String
 
-  """Whether or not the campaign should currently show to users"""
-  isLive: Boolean!
+  """The charity that this campaign features"""
+  charity: Charity
 
-  """
-  Deprecated: use "goal" instead. The number of new users who joined during this campaign.
-  """
-  numNewUsers: Int
-
-  """The start and end times (in ISO timestamps) for the campaign"""
-  time: CampaignTime!
-
-  """
-  The text content for the campaign when it is still running (before the end time)
-  """
+  """The text content for the campaign"""
   content: CampaignContent!
 
   """
-  The text content for the campaign when it has finished (passed hte end time)
+  The text content for the campaign when it has finished (past the end time)
   """
-  endContent: CampaignContent
+  endContent: CampaignContent @deprecated(reason: "The content returned by the server will automatically change when the campaign ends.")
+
+  """Whether or not the campaign should currently show to users"""
+  isLive: Boolean!
 
   """Information on progress toward a target impact goal for the campaign"""
   goal: CampaignGoal
+
+  """The number of new users who joined during this campaign."""
+  numNewUsers: Int @deprecated(reason: "Replaced by the generalized\"goal\" data.")
 
   """Whether to show a countdown timer for when the campaign will end"""
   showCountdownTimer: Boolean!
@@ -107,11 +103,11 @@ type Campaign {
   """
   showProgressBar: Boolean!
 
-  """The charity that this campaign features"""
-  charity: Charity
-
   """Theming/style for the campaign"""
   theme: CampaignTheme
+
+  """The start and end times (in ISO timestamps) for the campaign"""
+  time: CampaignTime!
 }
 
 """Text content for campaigns"""
