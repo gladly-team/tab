@@ -368,7 +368,6 @@ const createCampaignConfiguration = input => {
         // Redis will log errors.
       }
     },
-    isActive,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,

@@ -93,7 +93,6 @@ describe('createCampaignConfiguration: validation', () => {
       },
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
-      isActive: expect.any(Function),
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
@@ -1423,40 +1422,6 @@ describe('createCampaignConfiguration: charity data', () => {
     await expect(
       campaignConfig.getCharityData(mockUserContext)
     ).rejects.toEqual(mockErr)
-  })
-})
-
-describe('createCampaignConfiguration: isActive', () => {
-  it('isActive() returns true if the campaign is still active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-05-01T18:00:00.000Z',
-        end: '2020-05-05T18:00:00.000Z', // campaign is still active
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(true)
-  })
-
-  it('isActive() returns false if the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(false)
   })
 })
 

@@ -16,7 +16,6 @@ describe('getCurrentCampaignConfig', () => {
       getCharityData: expect.any(Function),
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
-      isActive: expect.any(Function),
       isLive: expect.any(Boolean),
       showCountdownTimer: expect.any(Boolean),
       showHeartsDonationButton: expect.any(Boolean),
