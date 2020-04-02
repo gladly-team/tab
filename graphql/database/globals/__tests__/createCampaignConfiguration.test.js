@@ -475,7 +475,7 @@ describe('createCampaignConfiguration: validation', () => {
         ...mockCampaignInput,
         goal: {
           ...mockCampaignInput.goal,
-          targetNumber: '100',
+          targetNumber: '100 thousand',
         },
       })
     }).toThrow()
