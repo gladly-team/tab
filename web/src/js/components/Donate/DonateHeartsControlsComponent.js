@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import sanitizeHtml from 'sanitize-html'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
