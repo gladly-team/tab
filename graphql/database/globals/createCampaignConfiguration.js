@@ -70,16 +70,15 @@ const campaignConfigInputSchema = Joi.object({
   }).required(),
 }).prefs({ convert: true }) // cast values if possible
 
-// const WrongCampaignConfigError = (field, expectedType) => {
-//   return new Error(
-//     `The campaign config requires the field "${field}" to be type "${expectedType}".`
-//   )
-// }
+const WrongCampaignConfigError = message => {
+  return new Error(`Campaign config validation error: ${message}`)
+}
 
 const createCampaignConfiguration = input => {
-  const { error } = campaignConfigInputSchema.validate(input)
-  if (error) {
-    throw error
+  try {
+    Joi.assert(input, campaignConfigInputSchema)
+  } catch (e) {
+    throw new WrongCampaignConfigError(e.details[0].message)
   }
 
   const {
