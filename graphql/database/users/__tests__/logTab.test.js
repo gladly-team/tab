@@ -15,6 +15,8 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
+// We use an export from the mock file.
+// eslint-disable-next-line import/named
 import getCampaign, { mockCampaign } from '../../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 
