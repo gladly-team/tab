@@ -59,7 +59,6 @@ const getMockCampaignConfiguration = () => ({
   },
   incrementNewUserCount: jest.fn(),
   incrementTabCount: jest.fn(),
-  isActive: jest.fn(),
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
