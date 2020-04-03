@@ -1389,7 +1389,7 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling addMoneyRaised if the campaign is no longer active', async () => {
+  it('still calls Redis when calling addMoneyRaised if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -1404,7 +1404,11 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
     })
     const moneyToAdd = 0.0231
     await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCRBY',
+      key: 'campaign:myFunCampaign:moneyRaised',
+      amountToAdd: 23100000,
+    })
   })
 
   it('calls Redis with a rounded money raised value if addMoneyRaised is called with a float beyond nano precision', async () => {
@@ -1461,7 +1465,7 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling incrementNewUserCount and the campaign is no longer active', async () => {
+  it('still calls Redis when calling incrementNewUserCount and the campaign if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -1475,7 +1479,10 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
       },
     })
     await campaignConfig.incrementNewUserCount()
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:newUsers',
+    })
   })
 })
 
@@ -1519,7 +1526,7 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling incrementTabCount and the campaign is no longer active', async () => {
+  it('still calls Redis when calling incrementTabCount and the campaign if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -1533,7 +1540,10 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
       },
     })
     await campaignConfig.incrementTabCount()
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:tabsOpened',
+    })
   })
 })
 

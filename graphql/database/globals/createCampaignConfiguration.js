@@ -226,17 +226,6 @@ const createCampaignConfiguration = input => {
     return estUSDMoneyRaised
   }
 
-  // TODO: update this to use more flexible campaign "endTriggers"
-  /**
-   * Return whether the current time is between the campaign's start and
-   * end times.
-   * @return {Boolean}
-   */
-  const isActive = () => {
-    const timeInfo = time
-    return moment().isAfter(timeInfo.start) && moment().isBefore(timeInfo.end)
-  }
-
   let configuredGoal = null
   if (!isNil(goal)) {
     const {
@@ -316,7 +305,7 @@ const createCampaignConfiguration = input => {
   return {
     addMoneyRaised: async USDMoneyRaisedToAdd => {
       // If not counting money raised or the campaign is not active, ignore this.
-      if (!(countMoneyRaised && isActive())) {
+      if (!countMoneyRaised) {
         return
       }
 
@@ -352,7 +341,7 @@ const createCampaignConfiguration = input => {
     }),
     incrementNewUserCount: async () => {
       // If not counting new users or the campaign is not active, ignore this.
-      if (!(countNewUsers && isActive())) {
+      if (!countNewUsers) {
         return
       }
       try {
@@ -366,7 +355,7 @@ const createCampaignConfiguration = input => {
     },
     incrementTabCount: async () => {
       // If not counting tabs or the campaign is not active, ignore this.
-      if (!(countTabsOpened && isActive())) {
+      if (!countTabsOpened) {
         return
       }
       try {
