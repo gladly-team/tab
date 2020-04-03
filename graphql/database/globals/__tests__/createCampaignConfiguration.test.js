@@ -1202,6 +1202,130 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
       'Campaign config validation error: "onEnd.theme.color.light" is required'
     )
   })
+
+  it('throws if "onEnd" includes "campaignId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          campaignId: 'my-different-campaign-id',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.campaignId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "charityId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          charityId: '5ae19457-a8a7-4c28-89ee-52179a2fb966',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.charityId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countNewUsers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countNewUsers: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countNewUsers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countMoneyRaised', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countMoneyRaised: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countMoneyRaised" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countTabsOpened', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countTabsOpened: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countTabsOpened" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "endTriggers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          endTriggers: {},
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.endTriggers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "onEnd', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          onEnd: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.onEnd" is not allowed')
+  })
+
+  it('throws if "onEnd" includes "time', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          time: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.time" is not allowed')
+  })
 })
 
 describe('createCampaignConfiguration: addMoneyRaised', () => {
