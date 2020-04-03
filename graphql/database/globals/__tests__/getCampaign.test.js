@@ -43,6 +43,9 @@ const getMockCampaignConfiguration = () => ({
   },
   incrementNewUserCount: jest.fn(),
   incrementTabCount: jest.fn(),
+  get isLive() {
+    return true
+  },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
@@ -72,6 +75,7 @@ describe('getCampaign', () => {
     const getCampaign = require('../getCampaign').default
     const campaign = await getCampaign(mockUserContext)
     expect(campaign).toEqual({
+      addMoneyRaised: expect.any(Function),
       campaignId: 'myCoolCampaign',
       charity: {
         id: 'some-charity-id',
@@ -96,6 +100,7 @@ describe('getCampaign', () => {
       },
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
+      isLive: true,
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,

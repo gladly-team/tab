@@ -15,58 +15,17 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import getCurrentCampaignConfig from '../../globals/getCurrentCampaignConfig'
+import getCampaign, { mockCampaign } from '../../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
-jest.mock('../../globals/getCurrentCampaignConfig')
+jest.mock('../../globals/getCampaign')
 jest.mock('../../globals/globals')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
-
-// See createCampaignConfiguration.test.js.
-const getMockCampaignConfiguration = () => ({
-  addMoneyRaised: jest.fn(),
-  campaignId: 'myCoolCampaign',
-  content: {
-    titleMarkdown: '## Some title',
-    descriptionMarkdown: '#### A description goes here.',
-  },
-  endContent: {
-    titleMarkdown: '## Another title',
-    descriptionMarkdown: '#### Another description goes here.',
-  },
-  getCharityData: jest.fn(() =>
-    Promise.resolve({
-      id: 'some-charity-id',
-      image: 'https://cdn.example.com/some-image.jpg',
-      imageCaption: null,
-      impact: 'This is what we show after a user donates hearts.',
-      name: 'Some Charity',
-      vcReceived: 9876543,
-      website: 'https://foo.com',
-    })
-  ),
-  goal: {
-    getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
-    impactUnitSingular: 'Heart',
-    impactUnitPlural: 'Hearts',
-    impactVerbPastTense: 'raised',
-    targetNumber: 10e6,
-  },
-  incrementNewUserCount: jest.fn(),
-  incrementTabCount: jest.fn(),
-  showCountdownTimer: true,
-  showHeartsDonationButton: true,
-  showProgressBar: true,
-  time: {
-    start: '2020-05-01T18:00:00.000Z',
-    end: '2020-05-05T18:00:00.000Z',
-  },
-})
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -75,8 +34,8 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
+  getCampaign.mockReturnValue(mockCampaign)
   jest.clearAllMocks()
-  getCurrentCampaignConfig.mockReturnValue(getMockCampaignConfiguration())
 })
 
 afterAll(() => {
@@ -623,12 +582,11 @@ describe('campaign: counting new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
 
-    expect(mockCampaignConfig.incrementNewUserCount).toHaveBeenCalled()
+    expect(mockCampaign.incrementNewUserCount).toHaveBeenCalled()
   })
 
   it("does not increment the new user count when the user's tab count is zero", async () => {
@@ -642,11 +600,10 @@ describe('campaign: counting new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.incrementNewUserCount).not.toHaveBeenCalled()
+    expect(mockCampaign.incrementNewUserCount).not.toHaveBeenCalled()
   })
 
   it("does not call Redis to increment the new user count when the user's tab count is two", async () => {
@@ -660,11 +617,10 @@ describe('campaign: counting new users', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.incrementNewUserCount).not.toHaveBeenCalled()
+    expect(mockCampaign.incrementNewUserCount).not.toHaveBeenCalled()
   })
 
   it('throws if incrementing the new user count throws', async () => {
@@ -681,14 +637,13 @@ describe('campaign: counting new users', () => {
 
     // Mock that incrementing the campaign new user count throws.
     const mockErr = new Error('Yikes')
-    const mockCampaignConfig = {
-      ...getMockCampaignConfiguration(),
+    getCampaign.mockReturnValue({
+      ...mockCampaign,
       incrementNewUserCount: jest.fn(async () => {
         throw mockErr
       }),
-    }
+    })
 
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
     await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
 })
@@ -716,11 +671,10 @@ describe('campaign: counting tabs', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.incrementTabCount).toHaveBeenCalled()
+    expect(mockCampaign.incrementTabCount).toHaveBeenCalled()
   })
 
   it('does not increment the tab count when the tab is not valid', async () => {
@@ -745,11 +699,10 @@ describe('campaign: counting tabs', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.incrementTabCount).not.toHaveBeenCalled()
+    expect(mockCampaign.incrementTabCount).not.toHaveBeenCalled()
   })
 
   it('throws if incrementing the tab count throws', async () => {
@@ -777,13 +730,13 @@ describe('campaign: counting tabs', () => {
 
     // Mock that incrementing the tab count throws.
     const mockErr = new Error('Yikes')
-    const mockCampaignConfig = {
-      ...getMockCampaignConfiguration(),
+
+    getCampaign.mockReturnValue({
+      ...mockCampaign,
       incrementTabCount: jest.fn(async () => {
         throw mockErr
       }),
-    }
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    })
     await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
 })
@@ -815,11 +768,10 @@ describe('campaign: estimating money raised', () => {
     // Mock the estimated money raised per valid tab.
     getEstimatedMoneyRaisedPerTab.mockReturnValue(0.0081)
 
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.addMoneyRaised).toHaveBeenCalledWith(0.0081)
+    expect(mockCampaign.addMoneyRaised).toHaveBeenCalledWith(0.0081)
   })
 
   it('does not add to the money raised when the tab is not valid', async () => {
@@ -844,11 +796,10 @@ describe('campaign: estimating money raised', () => {
       Item: mockUser,
     })
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-    const mockCampaignConfig = getMockCampaignConfiguration()
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    getCampaign.mockReturnValue(mockCampaign)
 
     await logTab(userContext, userId)
-    expect(mockCampaignConfig.addMoneyRaised).not.toHaveBeenCalled()
+    expect(mockCampaign.addMoneyRaised).not.toHaveBeenCalled()
   })
 
   it('throws if adding to money raised throws', async () => {
@@ -876,13 +827,13 @@ describe('campaign: estimating money raised', () => {
 
     // Mock that incrementing the tab count throws.
     const mockErr = new Error('Yikes')
-    const mockCampaignConfig = {
-      ...getMockCampaignConfiguration(),
+    getCampaign.mockReturnValue({
+      ...mockCampaign,
       addMoneyRaised: jest.fn(async () => {
         throw mockErr
       }),
-    }
-    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    })
+
     await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
 })

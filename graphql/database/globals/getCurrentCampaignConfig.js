@@ -62,9 +62,6 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
 })
 
-// We can call methods on this, instead of using the CampaignData object,
-// if we don't need dynamic data (e.g. the charity or goal data). This
-// saves additional hits to the database.
 /**
  * Return the CampaignConfiguration object for the current campaign.
  * @return {Promise<Object>} campaignConfig- see createCampaignConfiguration
@@ -72,4 +69,6 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
  */
 const getCurrentCampaignConfig = () => CURRENT_CAMPAIGN
 
+// Outside modules shouldn't use this config. Instead, they should
+// call getCampaign.js to get the CampaignData object.
 export default getCurrentCampaignConfig

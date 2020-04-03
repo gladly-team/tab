@@ -3,6 +3,7 @@ import getCurrentCampaignConfig from './getCurrentCampaignConfig'
 
 const createCampaignData = async (userContext, campaignConfig) => {
   const {
+    addMoneyRaised,
     campaignId,
     content,
     getCharityData,
@@ -42,7 +43,14 @@ const createCampaignData = async (userContext, campaignConfig) => {
     }
   }
 
+  // TODO: if one of the "endTriggers" is satisfied, the campaign
+  //   has ended. If that's the case:
+  //   - merge the "onEnd" campaign settings with the top-level settings
+  //   - use a no-op function for incrementNewUserCount,  incrementTabCount,
+  //     and addMoneyRaiseds
+
   return {
+    addMoneyRaised,
     campaignId,
     ...(charity && { charity }),
     content,
@@ -58,10 +66,6 @@ const createCampaignData = async (userContext, campaignConfig) => {
   }
 }
 
-// If the caller doesn't need dynamic data (e.g. the charity or goal data), it
-// can use the CampaignConfiguration object from getCurrentCampaignConfig.js
-// rather than using this CampaignData object. Doing so saves additional hits
-// to the database.
 /**
  * Return the CampaignData object for the current campaign.
  * @return {Promise<Object>} campaignData - see createCampaignConfiguration for

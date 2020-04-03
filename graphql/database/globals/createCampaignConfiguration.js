@@ -1,5 +1,4 @@
 import Joi from '@hapi/joi'
-import moment from 'moment'
 import { isNil } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
@@ -142,6 +141,7 @@ const createCampaignConfiguration = input => {
     countTabsOpened = false,
     content,
     goal,
+    onEnd,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
@@ -302,9 +302,6 @@ const createCampaignConfiguration = input => {
   const isCampaignLive = () =>
     process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
 
-  // TODO: if on of the "endTriggers" is satisfied, merge the
-  //   "onEnd" settings with the top-level settings.
-
   return {
     addMoneyRaised: async USDMoneyRaisedToAdd => {
       // If not counting money raised or the campaign is not active, ignore this.
@@ -373,6 +370,7 @@ const createCampaignConfiguration = input => {
     get isLive() {
       return isCampaignLive()
     },
+    onEnd,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,

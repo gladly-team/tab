@@ -52,8 +52,8 @@ const getMockCampaignConfigInput = () => ({
   },
   onEnd: {
     content: {
-      titleMarkdown: '## Another title',
-      descriptionMarkdown: '#### Another description goes here.',
+      titleMarkdown: '## The end title',
+      descriptionMarkdown: '#### The end description goes here.',
     },
     // ... can have other stuff here
   },
@@ -96,6 +96,12 @@ describe('createCampaignConfiguration: validation', () => {
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
       isLive: true,
+      onEnd: {
+        content: {
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
