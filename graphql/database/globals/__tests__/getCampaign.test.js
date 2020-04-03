@@ -159,7 +159,7 @@ describe('getCampaign', () => {
         },
         goal: {
           ...get(mockCampaignConfig, 'onEnd.goal', {}),
-          currentNumber: 112358,
+          getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
           impactUnitSingular: 'Heart!', // modified
           impactUnitPlural: 'Hearts!', // modified
           impactVerbPastTense: 'raised',
