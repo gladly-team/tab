@@ -140,6 +140,7 @@ const createCampaignConfiguration = input => {
     countNewUsers = false,
     countTabsOpened = false,
     content,
+    endTriggers,
     goal,
     onEnd,
     showCountdownTimer,
@@ -339,6 +340,7 @@ const createCampaignConfiguration = input => {
     ...(configuredGoal && {
       goal: configuredGoal,
     }),
+    endTriggers,
     incrementNewUserCount: async () => {
       // If not counting new users or the campaign is not active, ignore this.
       if (!(countNewUsers && isCampaignLive())) {

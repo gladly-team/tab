@@ -22,6 +22,10 @@ const getMockCampaignConfiguration = () => ({
     titleMarkdown: '## Some title',
     descriptionMarkdown: '#### A description goes here.',
   },
+  endTriggers: {
+    whenGoalAchieved: false,
+    whenTimeEnds: true,
+  },
   getCharityData: jest.fn(() =>
     Promise.resolve({
       id: 'some-charity-id',

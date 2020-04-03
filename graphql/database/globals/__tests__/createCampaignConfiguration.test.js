@@ -84,6 +84,10 @@ describe('createCampaignConfiguration: validation', () => {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
       },
+      endTriggers: {
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
       getCharityData: expect.any(Function),
       goal: {
         getCurrentNumber: expect.any(Function),
