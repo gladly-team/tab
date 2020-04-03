@@ -54,14 +54,14 @@ const campaignConfigInputSchema = Joi.object({
       then: Joi.string()
         .guid()
         .required(),
-      otherwise: Joi.string().allow(null),
+      otherwise: Joi.string(),
     })
     .when('onEnd.showHeartsDonationButton', {
       is: Joi.valid(true).required(),
       then: Joi.string()
         .guid()
         .required(),
-      otherwise: Joi.string().allow(null),
+      otherwise: Joi.string(),
     }),
   content: configFields.extract('content').required(),
   countNewUsers: Joi.boolean(),
@@ -77,7 +77,7 @@ const campaignConfigInputSchema = Joi.object({
   goal: configFields.extract('goal').when('showProgressBar', {
     is: Joi.valid(true).required(),
     then: Joi.required(),
-    otherwise: Joi.optional().allow(null),
+    otherwise: Joi.optional(),
   }),
   // The "onEnd" value is required when "endTriggers" is defined
   // and is otherwise not allowed.
@@ -92,11 +92,11 @@ const campaignConfigInputSchema = Joi.object({
         Joi.ref('/goal'),
         {
           is: Joi.required(),
-          then: Joi.optional().allow(null),
+          then: Joi.optional(),
           otherwise: Joi.required(),
         }
       ),
-      otherwise: Joi.optional().allow(null),
+      otherwise: Joi.optional(),
     }),
     showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
     showHeartsDonationButton: configFields

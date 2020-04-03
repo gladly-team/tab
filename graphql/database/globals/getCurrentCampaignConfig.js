@@ -14,7 +14,7 @@ const campaignEndDescription = `
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
   campaignId: 'NYCFoodBank2020',
-  charityId: null,
+  // charityId: undefined,
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,

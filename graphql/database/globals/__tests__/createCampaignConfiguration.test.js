@@ -139,7 +139,7 @@ describe('createCampaignConfiguration: validation', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
-        goal: null, // cannot have a goal that relies on hearts when charityId is null
+        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
         showHeartsDonationButton: false, // required when charityId is null
         showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
@@ -364,7 +364,7 @@ describe('createCampaignConfiguration: validation', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
-        goal: null, // cannot have a goal that relies on hearts when charityId is null
+        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
         showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
         showHeartsDonationButton: true,
@@ -1440,10 +1440,10 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      goal: null, // cannot have a goal that relies on hearts when charityId is null
+      goal: undefined, // cannot have a goal that relies on hearts when charityId is null
       showHeartsDonationButton: false, // required when charityId is null
       showProgressBar: false, // this must be false because we set "goal" to null
-      charityId: null, // no charity ID defined
+      charityId: undefined, // no charity ID defined
     })
     const mockUserContext = getMockUserContext()
     const charityData = await campaignConfig.getCharityData(mockUserContext)
