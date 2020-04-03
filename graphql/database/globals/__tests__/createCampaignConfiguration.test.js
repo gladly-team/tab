@@ -1389,6 +1389,20 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
+  it('does not call Redis when calling addMoneyRaised if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: true,
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
   it('still calls Redis when calling addMoneyRaised if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1465,6 +1479,19 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
+  it('does not call Redis when calling incrementNewUserCount if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: true,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
   it('still calls Redis when calling incrementNewUserCount and the campaign if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1521,6 +1548,19 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
       ...mockCampaignInput,
       campaignId: 'myFunCampaign',
       countTabsOpened: undefined,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('does not call Redis when calling incrementTabCount if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
     })
     await campaignConfig.incrementTabCount()
     expect(callRedis).not.toHaveBeenCalled()

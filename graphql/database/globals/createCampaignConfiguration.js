@@ -299,13 +299,16 @@ const createCampaignConfiguration = input => {
     }
   }
 
+  const isCampaignLive = () =>
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
+
   // TODO: if on of the "endTriggers" is satisfied, merge the
   //   "onEnd" settings with the top-level settings.
 
   return {
     addMoneyRaised: async USDMoneyRaisedToAdd => {
       // If not counting money raised or the campaign is not active, ignore this.
-      if (!countMoneyRaised) {
+      if (!(countMoneyRaised && isCampaignLive())) {
         return
       }
 
@@ -341,7 +344,7 @@ const createCampaignConfiguration = input => {
     }),
     incrementNewUserCount: async () => {
       // If not counting new users or the campaign is not active, ignore this.
-      if (!countNewUsers) {
+      if (!(countNewUsers && isCampaignLive())) {
         return
       }
       try {
@@ -355,7 +358,7 @@ const createCampaignConfiguration = input => {
     },
     incrementTabCount: async () => {
       // If not counting tabs or the campaign is not active, ignore this.
-      if (!countTabsOpened) {
+      if (!(countTabsOpened && isCampaignLive())) {
         return
       }
       try {
@@ -368,7 +371,7 @@ const createCampaignConfiguration = input => {
       }
     },
     get isLive() {
-      return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
+      return isCampaignLive()
     },
     showCountdownTimer,
     showHeartsDonationButton,
