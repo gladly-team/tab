@@ -26,22 +26,6 @@ describe('getCurrentCampaignConfig', () => {
       },
     })
   })
-
-  it('returns campaign.isLive === true when process.env.IS_GLOBAL_CAMPAIGN_LIVE is "true"', () => {
-    expect.assertions(1)
-    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
-    expect(getCurrentCampaignConfig()).toMatchObject({
-      isLive: true,
-    })
-  })
-
-  it('returns campaign.isLive === false when process.env.IS_GLOBAL_CAMPAIGN_LIVE is "false"', () => {
-    expect.assertions(1)
-    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false
-    expect(getCurrentCampaignConfig()).toMatchObject({
-      isLive: false,
-    })
-  })
 })
 
 // Test the transformNumberSourceValue function, which is unique

@@ -378,6 +378,9 @@ const createCampaignConfiguration = input => {
         // Redis will log errors.
       }
     },
+    get isLive() {
+      return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
+    },
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,

@@ -16,6 +16,7 @@ const mockNow = '2020-05-02T13:59:58.000Z'
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
+  process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
 })
 
 afterEach(() => {
@@ -74,6 +75,7 @@ const getMockCampaignConfigInput = () => ({
 describe('createCampaignConfiguration: validation', () => {
   it('returns an object with the expected required properties', () => {
     expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(createCampaignConfiguration(mockCampaignInput)).toEqual({
       addMoneyRaised: expect.any(Function),
@@ -93,6 +95,7 @@ describe('createCampaignConfiguration: validation', () => {
       },
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
+      isLive: true,
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
@@ -107,6 +110,20 @@ describe('createCampaignConfiguration: validation', () => {
         end: '2020-05-05T18:00:00.000Z',
       },
     })
+  })
+
+  it('returns isLive === false when process.env.IS_GLOBAL_CAMPAIGN_LIVE === "false"', () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(createCampaignConfiguration(mockCampaignInput).isLive).toBe(false)
+  })
+
+  it('returns isLive === true when process.env.IS_GLOBAL_CAMPAIGN_LIVE === "true"', () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(createCampaignConfiguration(mockCampaignInput).isLive).toBe(true)
   })
 
   it('throws if "campaignId" is not defined', async () => {

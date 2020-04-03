@@ -70,12 +70,6 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
  * @return {Promise<Object>} campaignConfig- see createCampaignConfiguration
  *   for structure.
  */
-const getCurrentCampaignConfig = () => {
-  const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
-  return {
-    ...CURRENT_CAMPAIGN,
-    isLive,
-  }
-}
+const getCurrentCampaignConfig = () => CURRENT_CAMPAIGN
 
 export default getCurrentCampaignConfig
