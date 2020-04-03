@@ -13,7 +13,6 @@ class CampaignGenericView extends React.Component {
     const { authUser, onDismiss, showError } = this.props
     const userId = authUser ? authUser.id : null
 
-    // TODO: don't fetch endContent
     return (
       <QueryRendererWithUser
         query={graphql`
@@ -30,10 +29,6 @@ class CampaignGenericView extends React.Component {
                   ...DonateHeartsControlsContainer_charity
                 }
                 content {
-                  titleMarkdown
-                  descriptionMarkdown
-                }
-                endContent {
                   titleMarkdown
                   descriptionMarkdown
                 }
