@@ -96,13 +96,11 @@ class CampaignGenericComponent extends React.Component {
       charity,
       time,
       content,
-      endContent,
       goal,
       showCountdownTimer,
       showHeartsDonationButton,
       showProgressBar,
     } = campaign
-    const hasCampaignEnded = moment().isAfter(time.end)
     const {
       targetNumber,
       currentNumber,
@@ -127,6 +125,9 @@ class CampaignGenericComponent extends React.Component {
     // TODO: don't use endContent
     // TODO: don't make assumptions about what to show at the end
     //   of a campaign. Let the API define it.
+    const endContent = {}
+    const hasCampaignEnded = false
+
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
@@ -226,10 +227,6 @@ const propTypesCampaign = {
         end: PropTypes.string.isRequired,
       }).isRequired,
       content: PropTypes.shape({
-        titleMarkdown: PropTypes.string.isRequired,
-        descriptionMarkdown: PropTypes.string.isRequired,
-      }),
-      endContent: PropTypes.shape({
         titleMarkdown: PropTypes.string.isRequired,
         descriptionMarkdown: PropTypes.string.isRequired,
       }),
