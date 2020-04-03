@@ -296,7 +296,7 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
   })
 
-  it('still displays the DonateHeartsControls when showHeartsDonationButton is true even when we are past the "time.end" time', () => {
+  it('still displays the DonateHeartsControls when showHeartsDonationButton is true, even when we are past the "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()

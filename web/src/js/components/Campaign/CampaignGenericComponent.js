@@ -122,11 +122,9 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
-    // TODO: don't use endContent
-    // TODO: don't make assumptions about what to show at the end
-    //   of a campaign. Let the API define it.
-    const endContent = {}
-    const hasCampaignEnded = false
+    // TODO: add these fields to the API
+    const showProgressBarLabel = true
+    const showProgressBarEndText = false
 
     return (
       <div className={classes.root}>
@@ -144,27 +142,14 @@ class CampaignGenericComponent extends React.Component {
             </IconButton>
             <div className={classes.campaignContent}>
               <div className={classes.mainTextContainer}>
-                {!hasCampaignEnded ? (
-                  <>
-                    <div className={classes.title}>
-                      <Markdown children={content.titleMarkdown} />
-                    </div>
-                    <div className={classes.description}>
-                      <Markdown children={content.descriptionMarkdown} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={classes.title}>
-                      <Markdown children={endContent.titleMarkdown} />
-                    </div>
-                    <div className={classes.description}>
-                      <Markdown children={endContent.descriptionMarkdown} />
-                    </div>
-                  </>
-                )}
+                <div className={classes.title}>
+                  <Markdown children={content.titleMarkdown} />
+                </div>
+                <div className={classes.description}>
+                  <Markdown children={content.descriptionMarkdown} />
+                </div>
               </div>
-              {showHeartsDonationButton && !hasCampaignEnded ? (
+              {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
                   user={user}
@@ -174,7 +159,7 @@ class CampaignGenericComponent extends React.Component {
               <div className={classes.bottomContent}>
                 {showProgressBar ? (
                   <div className={classes.progressBarSection}>
-                    {hasCampaignEnded ? (
+                    {showProgressBarEndText ? (
                       <Typography variant={'caption'} gutterBottom>
                         Great job! Together, we {impactVerbPastTense}{' '}
                         {abbreviateNumber(currentGoalNumber)}{' '}
@@ -184,7 +169,7 @@ class CampaignGenericComponent extends React.Component {
                         of our {abbreviateNumber(targetNumber)} goal.
                       </Typography>
                     ) : null}
-                    {!hasCampaignEnded ? (
+                    {showProgressBarLabel ? (
                       <div className={classes.progressBarLabelsContainer}>
                         <Typography variant={'caption'}>
                           {abbreviateNumber(currentGoalNumber)}{' '}
@@ -201,7 +186,7 @@ class CampaignGenericComponent extends React.Component {
                     <LinearProgress variant="determinate" value={progress} />
                   </div>
                 ) : null}
-                {showCountdownTimer && !hasCampaignEnded ? (
+                {showCountdownTimer ? (
                   <Typography variant={'caption'}>
                     <CountdownClock
                       campaignStartDatetime={moment(time.start)}
