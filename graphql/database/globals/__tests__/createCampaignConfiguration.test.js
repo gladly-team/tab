@@ -47,6 +47,8 @@ const getMockCampaignConfigInput = () => ({
     impactVerbPastTense: 'raised',
     limitProgressToTargetMax: false,
     numberSource: 'hearts',
+    showProgressBarLabel: true,
+    showProgressBarEndText: false,
     targetNumber: 10e6,
     transformNumberSourceValue: undefined, // optional function
   },
@@ -95,6 +97,8 @@ describe('createCampaignConfiguration: validation', () => {
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
         targetNumber: 10e6,
       },
       incrementNewUserCount: expect.any(Function),
@@ -1102,6 +1106,8 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
           impactVerbPastTense: 'raised',
           limitProgressToTargetMax: false,
           numberSource: 'hearts',
+          showProgressBarLabel: true,
+          showProgressBarEndText: false,
           targetNumber: 10e6,
           transformNumberSourceValue: undefined, // optional function
         },
@@ -1131,6 +1137,8 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
             impactVerbPastTense: 'raised',
             limitProgressToTargetMax: false,
             numberSource: 'hearts',
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
             targetNumber: 10e6,
             transformNumberSourceValue: undefined, // optional function
           },

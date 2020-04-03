@@ -26,6 +26,8 @@ const configFields = Joi.object({
     numberSource: Joi.any()
       .valid(HEARTS, MONEY_RAISED, NEW_USERS, TABS_OPENED)
       .required(),
+    showProgressBarLabel: Joi.boolean().required(),
+    showProgressBarEndText: Joi.boolean().required(),
     targetNumber: Joi.number().required(),
     transformNumberSourceValue: Joi.function(), // optional
   }),
@@ -245,6 +247,8 @@ const createCampaignConfiguration = input => {
       // The internal source we are using to calculate the number of impact
       // units. One of: "hearts", "newUsers", "moneyRaised", "tabsOpened"
       numberSource,
+      showProgressBarLabel,
+      showProgressBarEndText,
       // The target number of impact units this campaign could raise
       targetNumber,
       /**
@@ -297,6 +301,8 @@ const createCampaignConfiguration = input => {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
+      showProgressBarLabel,
+      showProgressBarEndText,
     }
   }
 

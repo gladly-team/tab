@@ -739,6 +739,16 @@ const campaignGoalType = new GraphQLObjectType({
       description:
         'If true, do not display a currentNumber greater than the targetNumber. Instead, limit goal progress to 100% of the target.',
     },
+    showProgressBarLabel: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether the progress bar should have labels of the current number and goal number',
+    },
+    showProgressBarEndText: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether the progress bar should have an end-of-campaign summary text of the progress',
+    },
   }),
 })
 

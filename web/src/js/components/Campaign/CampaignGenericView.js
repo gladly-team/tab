@@ -39,6 +39,8 @@ class CampaignGenericView extends React.Component {
                   impactUnitPlural
                   impactVerbPastTense
                   limitProgressToTargetMax
+                  showProgressBarLabel
+                  showProgressBarEndText
                 }
                 isLive
                 showCountdownTimer

@@ -152,6 +152,16 @@ type CampaignGoal {
   If true, do not display a currentNumber greater than the targetNumber. Instead, limit goal progress to 100% of the target.
   """
   limitProgressToTargetMax: Boolean!
+
+  """
+  Whether the progress bar should have labels of the current number and goal number
+  """
+  showProgressBarLabel: Boolean!
+
+  """
+  Whether the progress bar should have an end-of-campaign summary text of the progress
+  """
+  showProgressBarEndText: Boolean!
 }
 
 """Theming/styling for the campaign"""

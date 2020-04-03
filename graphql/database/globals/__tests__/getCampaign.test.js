@@ -44,6 +44,8 @@ const getMockCampaignConfiguration = () => ({
     impactUnitPlural: 'Hearts',
     impactVerbPastTense: 'raised',
     limitProgressToTargetMax: false,
+    showProgressBarLabel: true,
+    showProgressBarEndText: false,
     targetNumber: 10e6,
   },
   incrementNewUserCount: jest.fn(),
@@ -55,6 +57,16 @@ const getMockCampaignConfiguration = () => ({
     content: {
       titleMarkdown: '## The end title',
       descriptionMarkdown: '#### The end description goes here.',
+    },
+    goal: {
+      getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
+      impactUnitSingular: 'Heart',
+      impactUnitPlural: 'Hearts',
+      impactVerbPastTense: 'raised',
+      limitProgressToTargetMax: false,
+      showProgressBarLabel: false, // modified
+      showProgressBarEndText: true, // modified
+      targetNumber: 10e6,
     },
   },
   showCountdownTimer: true,
@@ -103,6 +115,8 @@ describe('getCampaign', () => {
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
         targetNumber: 10e6,
       },
       incrementNewUserCount: expect.any(Function),
@@ -150,6 +164,8 @@ describe('getCampaign', () => {
           impactUnitPlural: 'Hearts!', // modified
           impactVerbPastTense: 'raised',
           limitProgressToTargetMax: false,
+          showProgressBarLabel: false, // modified
+          showProgressBarEndText: true, // modified
           targetNumber: 10e6,
         },
         showCountdownTimer: false, // modified
@@ -184,6 +200,8 @@ describe('getCampaign', () => {
         impactUnitPlural: 'Hearts!', // modified
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: false, // modified
+        showProgressBarEndText: true, // modified
         targetNumber: 10e6,
       },
       showCountdownTimer: false, // modified

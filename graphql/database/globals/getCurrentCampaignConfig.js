@@ -11,6 +11,21 @@ const campaignEndDescription = `
 #### With your help, we gave thousands of meals to people in New York City who have been hurt by the COVID-19 crisis.
 `
 
+const goal = {
+  impactUnitSingular: 'meal',
+  impactUnitPlural: 'meals',
+  impactVerbPastTense: 'given',
+  limitProgressToTargetMax: true,
+  numberSource: 'moneyRaised',
+  showProgressBarLabel: true,
+  showProgressBarEndText: false,
+  targetNumber: 10000,
+  transformNumberSourceValue: moneyRaised => {
+    // The moneyRaised value is in $USD, and it costs $0.20 per meal.
+    return Math.floor(moneyRaised * 5)
+  },
+}
+
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
   campaignId: 'NYCFoodBank2020',
@@ -28,16 +43,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'meal',
-    impactUnitPlural: 'meals',
-    impactVerbPastTense: 'given',
-    limitProgressToTargetMax: true,
-    numberSource: 'moneyRaised',
-    targetNumber: 10000,
-    transformNumberSourceValue: moneyRaised => {
-      // The moneyRaised value is in $USD, and it costs $0.20 per meal.
-      return Math.floor(moneyRaised * 5)
-    },
+    ...goal,
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -45,6 +51,12 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     content: {
       titleMarkdown: campaignEndTitle,
       descriptionMarkdown: campaignEndDescription,
+    },
+    goal: {
+      ...goal,
+      // Replace the progress bar labels with the ending text.
+      showProgressBarLabel: true,
+      showProgressBarEndText: false,
     },
   },
   showCountdownTimer: false,

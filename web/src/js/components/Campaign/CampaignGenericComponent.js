@@ -108,6 +108,8 @@ class CampaignGenericComponent extends React.Component {
       impactUnitPlural,
       impactVerbPastTense,
       limitProgressToTargetMax,
+      showProgressBarLabel,
+      showProgressBarEndText,
     } = goal || {}
 
     // If limitProgressToTargetMax is true, don't display a current
@@ -121,10 +123,6 @@ class CampaignGenericComponent extends React.Component {
     if (progress > 100 && limitProgressToTargetMax) {
       progress = 100.0
     }
-
-    // TODO: add these fields to the API
-    const showProgressBarLabel = true
-    const showProgressBarEndText = false
 
     return (
       <div className={classes.root}>
@@ -222,6 +220,8 @@ const propTypesCampaign = {
         impactUnitPlural: PropTypes.string.isRequired,
         impactVerbPastTense: PropTypes.string.isRequired,
         limitProgressToTargetMax: PropTypes.bool.isRequired,
+        showProgressBarLabel: PropTypes.bool.isRequired,
+        showProgressBarEndText: PropTypes.bool.isRequired,
       }),
       numNewUsers: PropTypes.number,
       showCountdownTimer: PropTypes.bool.isRequired,

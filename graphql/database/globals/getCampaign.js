@@ -33,6 +33,8 @@ const createCampaignData = async (userContext, campaignConfig) => {
       impactUnitSingular,
       impactUnitPlural,
       impactVerbPastTense,
+      showProgressBarLabel,
+      showProgressBarEndText,
       limitProgressToTargetMax,
       targetNumber,
     } = goal
@@ -43,6 +45,8 @@ const createCampaignData = async (userContext, campaignConfig) => {
       impactUnitPlural,
       impactVerbPastTense,
       limitProgressToTargetMax,
+      showProgressBarLabel,
+      showProgressBarEndText,
       targetNumber,
     }
   }
