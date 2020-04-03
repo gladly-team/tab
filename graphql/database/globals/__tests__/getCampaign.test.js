@@ -1,12 +1,13 @@
 /* eslint-env jest */
 import moment from 'moment'
+import { get } from 'lodash/object'
 import MockDate from 'mockdate'
 import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../getCurrentCampaignConfig')
 
 beforeEach(() => {
-  const mockNow = '2017-05-19T13:59:58.000Z'
+  const mockNow = '2020-05-04T12:00:00.000Z'
   MockDate.set(moment(mockNow))
 })
 
@@ -50,6 +51,12 @@ const getMockCampaignConfiguration = () => ({
   get isLive() {
     return true
   },
+  onEnd: {
+    content: {
+      titleMarkdown: '## The end title',
+      descriptionMarkdown: '#### The end description goes here.',
+    },
+  },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
@@ -65,12 +72,8 @@ const getMockCampaignConfiguration = () => ({
   },
 })
 
-afterEach(() => {
-  jest.clearAllMocks()
-})
-
 describe('getCampaign', () => {
-  it('returns the expected data', async () => {
+  it('returns the expected data when the campaign has not ended', async () => {
     expect.assertions(1)
     const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
       .default
@@ -119,6 +122,344 @@ describe('getCampaign', () => {
         end: '2020-05-05T18:00:00.000Z',
       },
     })
+  })
+
+  it('uses "onEnd" config values if the campaign has ended due to "endTriggers.whenTimeEnds"', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+        goal: {
+          ...get(mockCampaignConfig, 'onEnd.goal', {}),
+          currentNumber: 112358,
+          impactUnitSingular: 'Heart!', // modified
+          impactUnitPlural: 'Hearts!', // modified
+          impactVerbPastTense: 'raised',
+          limitProgressToTargetMax: false,
+          targetNumber: 10e6,
+        },
+        showCountdownTimer: false, // modified
+        showHeartsDonationButton: false, // modified
+        showProgressBar: false, // modified
+        theme: {
+          ...get(mockCampaignConfig, 'onEnd.theme', {}),
+          color: {
+            ...get(mockCampaignConfig, 'onEnd.theme.color', {}),
+            main: '#000', // modified
+            light: '#FFF', // modified
+          },
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-03T18:00:00.000Z', // has ended
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        titleMarkdown: '## The end title',
+        descriptionMarkdown: '#### The end description goes here.',
+      },
+      goal: {
+        currentNumber: 112358,
+        impactUnitSingular: 'Heart!', // modified
+        impactUnitPlural: 'Hearts!', // modified
+        impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
+        targetNumber: 10e6,
+      },
+      showCountdownTimer: false, // modified
+      showHeartsDonationButton: false, // modified
+      showProgressBar: false, // modified
+      theme: {
+        color: {
+          main: '#000', // modified
+          light: '#FFF', // modified
+        },
+      },
+    })
+  })
+
+  it('uses "onEnd" config values if the campaign has ended due to "endTriggers.whenGoalAchieved"', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      goal: {
+        ...get(mockCampaignConfig, 'goal', {}),
+        getCurrentNumber: jest.fn(() => Promise.resolve(100)), // goal achieved
+        impactUnitSingular: 'Heart',
+        impactUnitPlural: 'Hearts',
+        impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
+        targetNumber: 100, // goal achieved
+      },
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: true,
+        whenTimeEnds: false,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        titleMarkdown: '## The end title',
+        descriptionMarkdown: '#### The end description goes here.',
+      },
+    })
+  })
+
+  it('does NOT use "onEnd" config values if the campaign has NOT ended with "endTriggers.whenTimeEnds"', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z', // has NOT ended
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        // Has not switched to the end content.
+        titleMarkdown: '## Some title',
+        descriptionMarkdown: '#### A description goes here.',
+      },
+    })
+  })
+
+  it('does NOT use "onEnd" config values if the campaign has NOT ended with "endTriggers.whenGoalAchieved"', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      goal: {
+        getCurrentNumber: jest.fn(() => Promise.resolve(99)), // goal NOT achieved
+        impactUnitSingular: 'Heart',
+        impactUnitPlural: 'Hearts',
+        impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
+        targetNumber: 100, // goal NOT achieved
+      },
+      endTriggers: {
+        whenGoalAchieved: true,
+        whenTimeEnds: false,
+      },
+      onEnd: {
+        content: {
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        // Has not switched to the end content.
+        titleMarkdown: '## Some title',
+        descriptionMarkdown: '#### A description goes here.',
+      },
+    })
+  })
+
+  it('calls the campaign config\'s "addMoneyRaised" when the campaign has not ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.addMoneyRaised(0.02)
+    expect(mockCampaignConfig.addMoneyRaised).toHaveBeenCalled()
+  })
+
+  it('calls the campaign config\'s "incrementNewUserCount" when the campaign has not ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.incrementNewUserCount(0.02)
+    expect(mockCampaignConfig.incrementNewUserCount).toHaveBeenCalled()
+  })
+
+  it('calls the campaign config\'s "incrementTabCount" when the campaign has not ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.incrementTabCount(0.02)
+    expect(mockCampaignConfig.incrementTabCount).toHaveBeenCalled()
+  })
+
+  it('does NOT call the campaign config\'s "addMoneyRaised" when the campaign has ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-03T18:00:00.000Z', // has ended
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.addMoneyRaised(0.02)
+    expect(mockCampaignConfig.addMoneyRaised).not.toHaveBeenCalled()
+  })
+
+  it('does NOT call the campaign config\'s "incrementNewUserCount" when the campaign has ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-03T18:00:00.000Z', // has ended
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.incrementNewUserCount()
+    expect(mockCampaignConfig.incrementNewUserCount).not.toHaveBeenCalled()
+  })
+
+  it('does NOT call the campaign config\'s "incrementTabCount" when the campaign has ended', async () => {
+    expect.assertions(1)
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-03T18:00:00.000Z', // has ended
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    campaign.incrementTabCount()
+    expect(mockCampaignConfig.incrementTabCount).not.toHaveBeenCalled()
   })
 
   it('does not include a "charity" value if getCharityData returns null', async () => {

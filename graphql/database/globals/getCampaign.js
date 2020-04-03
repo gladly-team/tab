@@ -1,3 +1,5 @@
+import moment from 'moment'
+import { get } from 'lodash/object'
 import { isNil } from 'lodash/lang'
 import getCurrentCampaignConfig from './getCurrentCampaignConfig'
 
@@ -6,11 +8,13 @@ const createCampaignData = async (userContext, campaignConfig) => {
     addMoneyRaised,
     campaignId,
     content,
+    endTriggers,
     getCharityData,
     goal,
     incrementNewUserCount,
     incrementTabCount,
     isLive,
+    onEnd,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
@@ -43,26 +47,40 @@ const createCampaignData = async (userContext, campaignConfig) => {
     }
   }
 
-  // TODO: if one of the "endTriggers" is satisfied, the campaign
-  //   has ended. If that's the case:
-  //   - merge the "onEnd" campaign settings with the top-level settings
-  //   - use a no-op function for incrementNewUserCount,  incrementTabCount,
-  //     and addMoneyRaiseds
+  // Determine if the campaign has ended.
+  let hasCampaignEnded = false
+  if (get(endTriggers, 'whenGoalAchieved', false)) {
+    if (goalWithData.currentNumber >= goalWithData.targetNumber) {
+      hasCampaignEnded = true
+    }
+  }
+  if (get(endTriggers, 'whenTimeEnds', false)) {
+    const { end } = time
+    if (moment().isAfter(end)) {
+      hasCampaignEnded = true
+    }
+  }
 
   return {
-    addMoneyRaised,
+    // Only update campaign stats if the campaign has not ended.
+    addMoneyRaised: !hasCampaignEnded ? addMoneyRaised : async () => {},
     campaignId,
     ...(charity && { charity }),
     content,
     ...(goalWithData && { goal: goalWithData }),
-    incrementNewUserCount,
-    incrementTabCount,
+    incrementNewUserCount: !hasCampaignEnded
+      ? incrementNewUserCount
+      : async () => {},
+    incrementTabCount: !hasCampaignEnded ? incrementTabCount : async () => {},
     isLive,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
     theme,
     time,
+    // If the campaign has ended, update the campaign data
+    // with the "onEnd" configuration.
+    ...(hasCampaignEnded && onEnd),
   }
 }
 
