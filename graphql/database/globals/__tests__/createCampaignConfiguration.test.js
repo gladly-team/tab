@@ -1062,7 +1062,7 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     )
   })
 
-  it('throws if "onEnd.showProgressBar" is set to true but "onEnd.goal" is not defined', async () => {
+  it('does not throw if "onEnd.showProgressBar" is set to true and "goal" is defined but "onEnd.goal" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -1078,6 +1078,49 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
           targetNumber: 10e6,
           transformNumberSourceValue: undefined, // optional function
         },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: undefined,
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "onEnd.showProgressBar" is set to true and "goal" is not defined but "onEnd.goal" is defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            ...(mockCampaignInput.onEnd.goal || {}),
+            impactUnitSingular: 'Heart',
+            impactUnitPlural: 'Hearts',
+            impactVerbPastTense: 'raised',
+            limitProgressToTargetMax: false,
+            numberSource: 'hearts',
+            targetNumber: 10e6,
+            transformNumberSourceValue: undefined, // optional function
+          },
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showProgressBar" is set to true but neither "goal" nor "onEnd.goal" is defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: undefined,

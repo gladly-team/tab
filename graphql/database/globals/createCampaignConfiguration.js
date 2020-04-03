@@ -77,21 +77,27 @@ const campaignConfigInputSchema = Joi.object({
   goal: configFields.extract('goal').when('showProgressBar', {
     is: Joi.valid(true).required(),
     then: Joi.required(),
-    otherwise: Joi.any().allow(null),
+    otherwise: Joi.optional().allow(null),
   }),
   // The "onEnd" value is required when "endTriggers" is defined
   // and is otherwise not allowed.
   onEnd: Joi.object({
     content: configFields.extract('content').optional(),
-    goal: configFields.extract('goal').when(
-      // For references here, keys are relative to the current object.
-      'showProgressBar',
-      {
-        is: Joi.valid(true).required(),
-        then: Joi.required(),
-        otherwise: Joi.any().allow(null),
-      }
-    ),
+    // The "onEnd.goal" is required if "onEnd.showProgressBar" is true
+    // and "goal" is not defined.
+    goal: configFields.extract('goal').when(Joi.ref('/onEnd.showProgressBar'), {
+      is: Joi.valid(true).required(),
+      then: Joi.any().when(
+        // Check the root "goal" value.
+        Joi.ref('/goal'),
+        {
+          is: Joi.required(),
+          then: Joi.optional().allow(null),
+          otherwise: Joi.required(),
+        }
+      ),
+      otherwise: Joi.optional().allow(null),
+    }),
     showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
     showHeartsDonationButton: configFields
       .extract('showHeartsDonationButton')
