@@ -220,6 +220,7 @@ const createCampaignConfiguration = input => {
     return estUSDMoneyRaised
   }
 
+  // TODO: update this to use more flexible campaign "endTriggers"
   /**
    * Return whether the current time is between the campaign's start and
    * end times.
@@ -302,6 +303,9 @@ const createCampaignConfiguration = input => {
       impactVerbPastTense,
     }
   }
+
+  // TODO: if on of the "endTriggers" is satisfied, merge the
+  //   "onEnd" settings with the top-level settings.
 
   return {
     addMoneyRaised: async USDMoneyRaisedToAdd => {

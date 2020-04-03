@@ -124,6 +124,9 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
+    // TODO: don't use endContent
+    // TODO: don't make assumptions about what to show at the end
+    //   of a campaign. Let the API define it.
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
