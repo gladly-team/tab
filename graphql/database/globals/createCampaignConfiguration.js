@@ -48,7 +48,8 @@ const campaignConfigInputSchema = Joi.object({
     .min(3)
     .max(30)
     .required(),
-  // The "charityId" value is required when there is a hearts donation button.
+  // The "charityId" value is required when there is a hearts donation
+  // button.
   charityId: Joi.any()
     .when('showHeartsDonationButton', {
       is: Joi.valid(true).required(),
@@ -84,9 +85,11 @@ const campaignConfigInputSchema = Joi.object({
       otherwise: Joi.optional(),
     }),
   }),
-  // The "onEnd" value is required when "endTriggers" is defined
-  // and is otherwise not allowed.
+  // The "onEnd" value is required when "endTriggers" is defined;
+  // otherwise, "onEnd" is not allowed.
   onEnd: Joi.object({
+    // The "onEnd.content" value will completely replace the
+    // "content" value. It is not merged.
     content: configFields.extract('content').optional(),
     // The "onEnd.goal" is only allowed if "goal" is defined.
     goal: configFields
@@ -94,8 +97,8 @@ const campaignConfigInputSchema = Joi.object({
       .concat(
         Joi.object({
           // Fields are optional because this will be merged with the
-          // top-level goal object. Some fields cannot be changed on
-          // campaign end.
+          // top-level goal object. Some fields are forbidden because
+          // they cannot be changed on campaign end.
           impactUnitSingular: Joi.optional(),
           impactUnitPlural: Joi.optional(),
           impactVerbPastTense: Joi.optional(),
@@ -117,6 +120,8 @@ const campaignConfigInputSchema = Joi.object({
       .extract('showHeartsDonationButton')
       .optional(),
     showProgressBar: configFields.extract('showProgressBar').optional(),
+    // The "onEnd.theme" value will completely replace the
+    // "theme" value. It is not merged.
     theme: configFields.extract('theme').optional(),
   }),
   showCountdownTimer: configFields.extract('showCountdownTimer').required(),
