@@ -21,6 +21,7 @@ const configFields = Joi.object({
   goal: Joi.object({
     impactUnitSingular: Joi.string().required(),
     impactUnitPlural: Joi.string().required(),
+    impactVerbPastParticiple: Joi.string().required(),
     impactVerbPastTense: Joi.string().required(),
     limitProgressToTargetMax: Joi.boolean().required(),
     numberSource: Joi.any()
@@ -101,6 +102,7 @@ const campaignConfigInputSchema = Joi.object({
           // they cannot be changed on campaign end.
           impactUnitSingular: Joi.optional(),
           impactUnitPlural: Joi.optional(),
+          impactVerbPastParticiple: Joi.optional(),
           impactVerbPastTense: Joi.optional(),
           limitProgressToTargetMax: Joi.optional(),
           numberSource: Joi.forbidden(),
@@ -257,7 +259,10 @@ const createCampaignConfiguration = input => {
       // "hearts", "meals")
       impactUnitPlural,
       // The verb we use to describe what we're doing with the impact units
-      // (e.g., "recruited", "donated", "raised")
+      // (e.g., "given", "donated", "raised")
+      impactVerbPastParticiple,
+      // The verb we use to describe what we're doing with the impact units
+      // (e.g., "gave", "donated", "raised")
       impactVerbPastTense,
       // If true, the client should not display a currentNumber greater than
       // the targetNumber. Instead, limit goal progress to 100% of the target.
@@ -318,6 +323,7 @@ const createCampaignConfiguration = input => {
       limitProgressToTargetMax,
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
       showProgressBarLabel,
       showProgressBarEndText,

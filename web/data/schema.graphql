@@ -144,7 +144,12 @@ type CampaignGoal {
   impactUnitPlural: String!
 
   """
-  The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)
+  The past-tense participle English verb that describes achieving the impact unit (e.g. given, raised, adopted)
+  """
+  impactVerbPastParticiple: String!
+
+  """
+  The simple past-tense English verb that describes achieving the impact unit (e.g. gave, raised, adopted)
   """
   impactVerbPastTense: String!
 

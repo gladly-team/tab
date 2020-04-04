@@ -44,6 +44,7 @@ const getMockCampaignConfigInput = () => ({
   goal: {
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
+    impactVerbPastParticiple: 'raised',
     impactVerbPastTense: 'raised',
     limitProgressToTargetMax: false,
     numberSource: 'hearts',
@@ -95,6 +96,7 @@ describe('createCampaignConfiguration: validation', () => {
         getCurrentNumber: expect.any(Function),
         impactUnitSingular: 'Heart',
         impactUnitPlural: 'Hearts',
+        impactVerbPastParticiple: 'raised',
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
         showProgressBarLabel: true,

@@ -41,27 +41,25 @@ const getMockProps = () => ({
     campaign: {
       campaignId: 'mock-id',
       charity: {
-        id: 'Q2hhcml0eTo2NjY3ZWI4Ni1lYTM3LTRkM2QtOTI1OS05MTBiZWEwYjVlMzg=',
-        image:
-          'https://prod-tab2017-media.gladly.io/img/charities/charity-post-donation-images/covid-19-solidarity.jpg',
+        id: 'some-charity-id',
+        image: 'https://example.com/img.png',
         imageCaption: null,
-        impact:
-          'With your help, the World Health Organization will continue to provide COVID-19 relief, prevention, and detection.',
-        name: 'COVID-19 Solidarity Response Fund',
+        impact: 'With your help, this charity will keep doing good things.',
+        name: 'The Charity Name',
         vcReceived: 16474011,
-        website:
-          'https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate',
+        website: 'https://example.com',
       },
       content: {
         titleMarkdown: campaignTitle,
         descriptionMarkdown: campaignDescription,
       },
       goal: {
-        targetNumber: 10e6,
-        currentNumber: 16.6e6,
-        impactUnitSingular: 'Heart',
-        impactUnitPlural: 'Hearts',
-        impactVerbPastTense: 'donated',
+        targetNumber: 5000,
+        currentNumber: 2468,
+        impactUnitSingular: 'meal',
+        impactUnitPlural: 'meals',
+        impactVerbPastParticiple: 'given',
+        impactVerbPastTense: 'gave',
         limitProgressToTargetMax: false,
         showProgressBarLabel: true,
         showProgressBarEndText: false,
@@ -344,7 +342,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -378,6 +380,7 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
           },
           showProgressBar: true,
@@ -412,7 +415,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -446,8 +453,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 18021,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
             limitProgressToTargetMax: false,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -481,8 +491,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 18021,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
             limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -514,9 +527,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -535,7 +552,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -551,7 +568,18 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          goal: undefined,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+          },
           showProgressBar: false, // not showing
           time: {
             ...defaultMockProps.app.campaign.time,
@@ -569,7 +597,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
     ).toBe(false)
@@ -589,9 +617,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -610,7 +642,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -630,9 +662,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -670,11 +706,14 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18021,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 18000,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
             limitProgressToTargetMax: false,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -693,7 +732,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '18K puppies adopted'
+          return n.render().text() === '18K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -712,11 +751,14 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18021,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 18000,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
             limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -735,7 +777,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '12K puppies adopted'
+          return n.render().text() === '12K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -751,7 +793,18 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          goal: undefined,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+          },
           showProgressBar: false, // not showing
           time: {
             ...defaultMockProps.app.campaign.time,
@@ -789,9 +842,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -816,8 +873,7 @@ describe('CampaignGenericComponent', () => {
     ).toBe(true)
   })
 
-  // FIXME: need a new field for this
-  it('does not display the "end campaign" goal even when we are past the "time.end" time', () => {
+  it('displays the "end campaign" goal text when "showProgressBarEndText" is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -830,10 +886,62 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 14812,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: false,
+            showProgressBarEndText: true,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return (
+            n.render().text() ===
+            'Great job! Together, we gave 14.8K hugs of our 12K goal.'
+          )
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('does not display the "end campaign" goal text even when we are past the "time.end" time if "showProgressBarEndText" is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -854,7 +962,7 @@ describe('CampaignGenericComponent', () => {
         .filterWhere(n => {
           return (
             n.render().text() ===
-            'Great job! Together, we adopted 14.8K puppies of our 12K goal.'
+            'Great job! Together, we gave 14.8K hugs of our 12K goal.'
           )
         })
         .exists()

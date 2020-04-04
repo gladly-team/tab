@@ -729,10 +729,15 @@ const campaignGoalType = new GraphQLObjectType({
       description:
         'The English word for the impact unit, plural (e.g. Hearts, dollars, puppies)',
     },
+    impactVerbPastParticiple: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The past-tense participle English verb that describes achieving the impact unit (e.g. given, raised, adopted)',
+    },
     impactVerbPastTense: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)',
+        'The simple past-tense English verb that describes achieving the impact unit (e.g. gave, raised, adopted)',
     },
     limitProgressToTargetMax: {
       type: new GraphQLNonNull(GraphQLBoolean),

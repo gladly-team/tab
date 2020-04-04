@@ -106,6 +106,7 @@ class CampaignGenericComponent extends React.Component {
       currentNumber,
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
       limitProgressToTargetMax,
       showProgressBarLabel,
@@ -174,7 +175,7 @@ class CampaignGenericComponent extends React.Component {
                           {currentGoalNumber === 1
                             ? impactUnitSingular
                             : impactUnitPlural}{' '}
-                          {impactVerbPastTense}
+                          {impactVerbPastParticiple}
                         </Typography>
                         <Typography variant={'caption'}>
                           Goal: {abbreviateNumber(targetNumber)}
@@ -218,6 +219,7 @@ const propTypesCampaign = {
         currentNumber: PropTypes.number.isRequired,
         impactUnitSingular: PropTypes.string.isRequired,
         impactUnitPlural: PropTypes.string.isRequired,
+        impactVerbPastParticiple: PropTypes.string.isRequired,
         impactVerbPastTense: PropTypes.string.isRequired,
         limitProgressToTargetMax: PropTypes.bool.isRequired,
         showProgressBarLabel: PropTypes.bool.isRequired,

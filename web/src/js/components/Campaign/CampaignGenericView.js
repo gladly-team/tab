@@ -37,6 +37,7 @@ class CampaignGenericView extends React.Component {
                   currentNumber
                   impactUnitSingular
                   impactUnitPlural
+                  impactVerbPastParticiple
                   impactVerbPastTense
                   limitProgressToTargetMax
                   showProgressBarLabel

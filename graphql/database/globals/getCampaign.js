@@ -58,6 +58,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
     const {
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
       showProgressBarLabel,
       showProgressBarEndText,
@@ -68,6 +69,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
       currentNumber: currentGoalNumber,
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
       limitProgressToTargetMax,
       showProgressBarLabel,
