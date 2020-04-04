@@ -6,9 +6,11 @@ const campaignDescription = `
 #### In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
 #### Right now, tabs you open are providing meals for our fellow humans in NYC. Together, we can feed thousands of people in need—so please open a few tabs and encourage your friends to do the same!
 `
-const campaignEndTitle = '## Thank You for Giving Food'
+const campaignEndTitle = '## 10,000 Meals: We Did It'
 const campaignEndDescription = `
-#### With your help, we gave thousands of meals to people in New York City who have been hurt by the COVID-19 crisis.
+#### With your help, our community just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. This is a challenging time, and we are **immensely** grateful for all of you who have stepped up to make a difference.
+#### This is still just the beginning of [our fight against this pandemic](https://tab.gladly.io/covid-19/)—more to come shortly.
+#### Can you get some friends on board? Share this incredible milestone:
 `
 
 // Hardcode campaign data here.
@@ -50,9 +52,9 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       descriptionMarkdown: campaignEndDescription,
     },
     goal: {
-      // Replace the progress bar labels with the ending text.
-      showProgressBarLabel: false,
-      showProgressBarEndText: true,
+      // Keep the progress bar label instead of the ending text.
+      showProgressBarLabel: true,
+      showProgressBarEndText: false,
     },
     showSocialSharing: true,
     socialSharing: {
