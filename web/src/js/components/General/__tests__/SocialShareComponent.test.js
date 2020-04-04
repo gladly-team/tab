@@ -3,6 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
+//
 const getMockProps = () => ({})
 
 afterEach(() => {
@@ -11,7 +12,8 @@ afterEach(() => {
 
 describe('SocialShare page component', () => {
   it('renders without error', () => {
-    const SocialShare = require('js/components/General/SocialShare').default
+    const SocialShare = require('js/components/General/SocialShareComponent')
+      .default
     const mockProps = getMockProps()
     shallow(<SocialShare {...mockProps} />)
   })
