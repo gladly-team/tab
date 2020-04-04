@@ -600,6 +600,64 @@ describe('validation: socialSharing and showSocialSharing', () => {
       'Campaign config validation error: "showSocialSharing" must be a boolean'
     )
   })
+
+  it('throws if "showSocialSharing" is true but "socialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: undefined,
+      })
+    }).toThrow('Campaign config validation error: "socialSharing" is required')
+  })
+
+  it('throws if "socialSharing" is missing a "url" property', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: {},
+      })
+    }).toThrow(
+      'Campaign config validation error: "socialSharing.url" is required'
+    )
+  })
+
+  it('does not throw if "socialSharing" includes expected data', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: {
+          url: 'https://example.com/share-me/',
+          EmailShareButtonProps: {
+            subject: 'Hi there',
+            body: 'This is where we say stuff!',
+          },
+          FacebookShareButtonProps: {
+            quote: 'This is my Facebook post text.',
+          },
+          RedditShareButtonProps: {
+            title: 'This is the title of the Reddit post.',
+          },
+          TumblrShareButtonProps: {
+            title: 'My Tumblr post title',
+            caption: 'This is where we say stuff!',
+          },
+          TwitterShareButtonProps: {
+            title: 'This is my Twitter post title',
+            related: ['@TabForACause'],
+          },
+        },
+      })
+    }).not.toThrow()
+  })
 })
 
 describe('validation: time', () => {
@@ -1291,6 +1349,107 @@ describe('[onEnd] validation: showProgressBar and goal', () => {
         showProgressBar: false,
       })
     }).toThrow('Campaign config validation error: "goal" is required')
+  })
+})
+
+describe('[onEnd] validation: socialSharing and showSocialSharing', () => {
+  it('does not throw if "onEnd.showSocialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onend.showSocialSharing" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showSocialSharing" must be a boolean'
+    )
+  })
+
+  it('throws if "onEndshowSocialSharing" is true but "onEnd.socialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: undefined,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.socialSharing" is required'
+    )
+  })
+
+  it('throws if "onEnd.socialSharing" is missing a "url" property', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: {},
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.socialSharing.url" is required'
+    )
+  })
+
+  it('does not throw if "onEnd.socialSharing" includes expected data', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: {
+            url: 'https://example.com/share-me/',
+            EmailShareButtonProps: {
+              subject: 'Hi there',
+              body: 'This is where we say stuff!',
+            },
+            FacebookShareButtonProps: {
+              quote: 'This is my Facebook post text.',
+            },
+            RedditShareButtonProps: {
+              title: 'This is the title of the Reddit post.',
+            },
+            TumblrShareButtonProps: {
+              title: 'My Tumblr post title',
+              caption: 'This is where we say stuff!',
+            },
+            TwitterShareButtonProps: {
+              title: 'This is my Twitter post title',
+              related: ['@TabForACause'],
+            },
+          },
+        },
+      })
+    }).not.toThrow()
   })
 })
 
