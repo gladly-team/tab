@@ -26,35 +26,22 @@ const createCampaignData = async (userContext, campaignConfig) => {
   const charity = await getCharityData(userContext)
 
   // If there is a goal, fetch the current goal number.
-  let goalWithData
+  let currentGoalNumber
+  let targetGoalNumber
   if (!isNil(goal)) {
-    const {
-      getCurrentNumber,
-      impactUnitSingular,
-      impactUnitPlural,
-      impactVerbPastTense,
-      showProgressBarLabel,
-      showProgressBarEndText,
-      limitProgressToTargetMax,
-      targetNumber,
-    } = goal
-    const currentNumber = await getCurrentNumber(userContext)
-    goalWithData = {
-      currentNumber,
-      impactUnitSingular,
-      impactUnitPlural,
-      impactVerbPastTense,
-      limitProgressToTargetMax,
-      showProgressBarLabel,
-      showProgressBarEndText,
-      targetNumber,
-    }
+    const { getCurrentNumber, targetNumber } = goal
+    targetGoalNumber = targetNumber
+    currentGoalNumber = await getCurrentNumber(userContext)
   }
 
   // Determine if the campaign has ended.
   let hasCampaignEnded = false
-  if (get(endTriggers, 'whenGoalAchieved', false)) {
-    if (goalWithData.currentNumber >= goalWithData.targetNumber) {
+  if (
+    get(endTriggers, 'whenGoalAchieved', false) &&
+    currentGoalNumber &&
+    targetGoalNumber
+  ) {
+    if (currentGoalNumber >= targetGoalNumber) {
       hasCampaignEnded = true
     }
   }
@@ -65,13 +52,44 @@ const createCampaignData = async (userContext, campaignConfig) => {
     }
   }
 
+  // Construct the goal data.
+  let goalWithData
+  if (!isNil(goal)) {
+    const {
+      impactUnitSingular,
+      impactUnitPlural,
+      impactVerbPastTense,
+      showProgressBarLabel,
+      showProgressBarEndText,
+      limitProgressToTargetMax,
+      targetNumber,
+    } = goal
+    goalWithData = {
+      currentNumber: currentGoalNumber,
+      impactUnitSingular,
+      impactUnitPlural,
+      impactVerbPastTense,
+      limitProgressToTargetMax,
+      showProgressBarLabel,
+      showProgressBarEndText,
+      targetNumber,
+      // If the campaign has ended, merge in the "onEnd"
+      // goal settings.
+      ...(hasCampaignEnded && get(onEnd, 'goal', {})),
+    }
+  }
+
+  // We manually merge goal data, so don't override the
+  // goal value on campaign end.
+  const { goal: goalRemovedFromOnEnd, ...onEndToMerge } = onEnd
+
   return {
     // Only update campaign stats if the campaign has not ended.
     addMoneyRaised: !hasCampaignEnded ? addMoneyRaised : async () => {},
     campaignId,
     ...(charity && { charity }),
     content,
-    ...(goalWithData && { goal: goalWithData }),
+    goal: goalWithData,
     incrementNewUserCount: !hasCampaignEnded
       ? incrementNewUserCount
       : async () => {},
@@ -84,7 +102,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
     time,
     // If the campaign has ended, update the campaign data
     // with the "onEnd" configuration.
-    ...(hasCampaignEnded && onEnd),
+    ...((hasCampaignEnded && onEndToMerge) || {}),
   }
 }
 

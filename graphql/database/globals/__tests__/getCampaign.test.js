@@ -59,14 +59,8 @@ const getMockCampaignConfiguration = () => ({
       descriptionMarkdown: '#### The end description goes here.',
     },
     goal: {
-      getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
-      impactUnitSingular: 'Heart',
-      impactUnitPlural: 'Hearts',
-      impactVerbPastTense: 'raised',
-      limitProgressToTargetMax: false,
-      showProgressBarLabel: false, // modified
-      showProgressBarEndText: true, // modified
-      targetNumber: 10e6,
+      showProgressBarLabel: false,
+      showProgressBarEndText: true,
     },
   },
   showCountdownTimer: true,
@@ -150,6 +144,16 @@ describe('getCampaign', () => {
         whenGoalAchieved: false,
         whenTimeEnds: true,
       },
+      goal: {
+        getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
+        impactUnitSingular: 'Heart',
+        impactUnitPlural: 'Hearts',
+        impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
+        targetNumber: 10e6,
+      },
       onEnd: {
         ...get(mockCampaignConfig, 'onEnd', {}),
         content: {
@@ -159,24 +163,20 @@ describe('getCampaign', () => {
         },
         goal: {
           ...get(mockCampaignConfig, 'onEnd.goal', {}),
-          getCurrentNumber: jest.fn(() => Promise.resolve(112358)),
-          impactUnitSingular: 'Heart!', // modified
-          impactUnitPlural: 'Hearts!', // modified
-          impactVerbPastTense: 'raised',
-          limitProgressToTargetMax: false,
-          showProgressBarLabel: false, // modified
-          showProgressBarEndText: true, // modified
-          targetNumber: 10e6,
+          impactUnitSingular: 'Heart!',
+          impactUnitPlural: 'Hearts!',
+          showProgressBarLabel: false,
+          showProgressBarEndText: true,
         },
-        showCountdownTimer: false, // modified
-        showHeartsDonationButton: false, // modified
-        showProgressBar: false, // modified
+        showCountdownTimer: false,
+        showHeartsDonationButton: false,
+        showProgressBar: false,
         theme: {
           ...get(mockCampaignConfig, 'onEnd.theme', {}),
           color: {
             ...get(mockCampaignConfig, 'onEnd.theme.color', {}),
-            main: '#000', // modified
-            light: '#FFF', // modified
+            main: '#000',
+            light: '#FFF',
           },
         },
       },
@@ -230,6 +230,8 @@ describe('getCampaign', () => {
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
         targetNumber: 100, // goal achieved
       },
       endTriggers: {
@@ -243,6 +245,10 @@ describe('getCampaign', () => {
           ...get(mockCampaignConfig, 'onEnd.content', {}),
           titleMarkdown: '## The end title',
           descriptionMarkdown: '#### The end description goes here.',
+        },
+        goal: {
+          showProgressBarLabel: false, // modified
+          showProgressBarEndText: true, // modified
         },
       },
       time: {
@@ -258,6 +264,16 @@ describe('getCampaign', () => {
       content: {
         titleMarkdown: '## The end title',
         descriptionMarkdown: '#### The end description goes here.',
+      },
+      goal: {
+        currentNumber: 100,
+        impactUnitSingular: 'Heart',
+        impactUnitPlural: 'Hearts',
+        impactVerbPastTense: 'raised',
+        limitProgressToTargetMax: false,
+        showProgressBarLabel: false, // modified
+        showProgressBarEndText: true, // modified
+        targetNumber: 100,
       },
     })
   })

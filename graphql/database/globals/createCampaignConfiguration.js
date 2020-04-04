@@ -78,27 +78,40 @@ const campaignConfigInputSchema = Joi.object({
   goal: configFields.extract('goal').when('showProgressBar', {
     is: Joi.valid(true).required(),
     then: Joi.required(),
-    otherwise: Joi.optional(),
+    otherwise: Joi.when(Joi.ref('/onEnd.showProgressBar'), {
+      is: Joi.valid(true).required(),
+      then: Joi.required(),
+      otherwise: Joi.optional(),
+    }),
   }),
   // The "onEnd" value is required when "endTriggers" is defined
   // and is otherwise not allowed.
   onEnd: Joi.object({
     content: configFields.extract('content').optional(),
-    // The "onEnd.goal" is required if "onEnd.showProgressBar" is true
-    // and "goal" is not defined.
-    goal: configFields.extract('goal').when(Joi.ref('/onEnd.showProgressBar'), {
-      is: Joi.valid(true).required(),
-      then: Joi.any().when(
-        // Check the root "goal" value.
-        Joi.ref('/goal'),
-        {
-          is: Joi.required(),
-          then: Joi.optional(),
-          otherwise: Joi.required(),
-        }
-      ),
-      otherwise: Joi.optional(),
-    }),
+    // The "onEnd.goal" is only allowed if "goal" is defined.
+    goal: configFields
+      .extract('goal')
+      .concat(
+        Joi.object({
+          // Fields are optional because this will be merged with the
+          // top-level goal object. Some fields cannot be changed on
+          // campaign end.
+          impactUnitSingular: Joi.optional(),
+          impactUnitPlural: Joi.optional(),
+          impactVerbPastTense: Joi.optional(),
+          limitProgressToTargetMax: Joi.optional(),
+          numberSource: Joi.forbidden(),
+          showProgressBarLabel: Joi.optional(),
+          showProgressBarEndText: Joi.optional(),
+          targetNumber: Joi.forbidden(),
+          transformNumberSourceValue: Joi.forbidden(),
+        })
+      )
+      .when(Joi.ref('/goal'), {
+        is: Joi.required(),
+        then: Joi.optional(),
+        otherwise: Joi.forbidden(),
+      }),
     showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
     showHeartsDonationButton: configFields
       .extract('showHeartsDonationButton')

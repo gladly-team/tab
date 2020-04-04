@@ -786,7 +786,7 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     }).not.toThrow()
   })
 
-  it('throws if "onEnd.goal.impactUnitSingular" is not a string', async () => {
+  it('does not throw if "onEnd.goal.impactUnitSingular" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -795,17 +795,14 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             impactUnitSingular: undefined,
           },
         },
       })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.goal.impactUnitSingular" is required'
-    )
+    }).not.toThrow()
   })
 
-  it('throws if "onEnd.goal.impactUnitPlural" is not a string', async () => {
+  it('does not throws if "onEnd.goal.impactUnitPlural" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -814,17 +811,14 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             impactUnitPlural: undefined,
           },
         },
       })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.goal.impactUnitPlural" is required'
-    )
+    }).not.toThrow()
   })
 
-  it('throws if "onEnd.goal.impactVerbPastTense" is not a string', async () => {
+  it('does not throw if "onEnd.goal.impactVerbPastTense" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -833,17 +827,14 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             impactVerbPastTense: undefined,
           },
         },
       })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.goal.impactVerbPastTense" is required'
-    )
+    }).not.toThrow()
   })
 
-  it('throws if "onEnd.goal.limitProgressToTargetMax" is not defined', async () => {
+  it('does not throw if "onEnd.goal.limitProgressToTargetMax" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -852,17 +843,14 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             limitProgressToTargetMax: undefined,
           },
         },
       })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.goal.limitProgressToTargetMax" is required'
-    )
+    }).not.toThrow()
   })
 
-  it('throws if "onEnd.goal.targetNumber" is not a number', async () => {
+  it('throws if "onEnd.goal.targetNumber" is set (it is not allowed)', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -871,17 +859,16 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             targetNumber: '100 thousand',
           },
         },
       })
     }).toThrow(
-      'Campaign config validation error: "onEnd.goal.targetNumber" must be a number'
+      'Campaign config validation error: "onEnd.goal.targetNumber" is not allowed'
     )
   })
 
-  it('does not throw if "onEnd.goal.numberSource" is "hearts"', async () => {
+  it('throws if "onEnd.goal.numberSource" is set (it is not allowed)', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -890,85 +877,16 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
             numberSource: 'hearts',
           },
         },
       })
-    }).not.toThrow()
-  })
-
-  it('does not throw if "onEnd.goal.numberSource" is "moneyRaised"', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          goal: {
-            ...mockCampaignInput.goal,
-            numberSource: 'moneyRaised',
-          },
-        },
-      })
-    }).not.toThrow()
-  })
-
-  it('does not throw if "onEnd.goal.numberSource" is "newUsers"', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          goal: {
-            ...mockCampaignInput.goal,
-            numberSource: 'newUsers',
-          },
-        },
-      })
-    }).not.toThrow()
-  })
-
-  it('does not throw if "onEnd.goal.numberSource" is "tabsOpened"', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          goal: {
-            ...mockCampaignInput.goal,
-            numberSource: 'tabsOpened',
-          },
-        },
-      })
-    }).not.toThrow()
-  })
-
-  it('throws if "onEnd.goal.numberSource" is not one of the valid strings', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          goal: {
-            ...mockCampaignInput.goal,
-            numberSource: 'pizza',
-          },
-        },
-      })
     }).toThrow(
-      'Campaign config validation error: "onEnd.goal.numberSource" must be one of [hearts, moneyRaised, newUsers, tabsOpened]'
+      'Campaign config validation error: "onEnd.goal.numberSource" is not allowed'
     )
   })
 
-  it('throws if "onEnd.goal.transformNumberSourceValue" is defined but is not a function', async () => {
+  it('throws if "onEnd.goal.transformNumberSourceValue" is set (it is not allowed)', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -977,13 +895,12 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            ...mockCampaignInput.goal,
-            transformNumberSourceValue: 0.12,
+            transformNumberSourceValue: num => num * 3,
           },
         },
       })
     }).toThrow(
-      'Campaign config validation error: "onEnd.goal.transformNumberSourceValue" must be of type function'
+      'Campaign config validation error: "onEnd.goal.transformNumberSourceValue" is not allowed'
     )
   })
 
@@ -1093,7 +1010,7 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     )
   })
 
-  it('does not throw if "onEnd.showProgressBar" is set to true and "goal" is defined but "onEnd.goal" is not defined', async () => {
+  it('does not throw if "goal" is defined but "onEnd.goal" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -1121,7 +1038,7 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     }).not.toThrow()
   })
 
-  it('does not throw if "onEnd.showProgressBar" is set to true and "goal" is not defined but "onEnd.goal" is defined', async () => {
+  it('throws if "goal" is not defined but "onEnd.goal" is defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -1146,10 +1063,10 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         },
         showProgressBar: false,
       })
-    }).not.toThrow()
+    }).toThrow('Campaign config validation error: "onEnd.goal" is not allowed')
   })
 
-  it('throws if "onEnd.showProgressBar" is set to true but neither "goal" nor "onEnd.goal" is defined', async () => {
+  it('throws if "onEnd.showProgressBar" is set to true but "goal" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(() => {
@@ -1163,7 +1080,7 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
         },
         showProgressBar: false,
       })
-    }).toThrow('Campaign config validation error: "onEnd.goal" is required')
+    }).toThrow('Campaign config validation error: "goal" is required')
   })
 
   it('does not throw if "onEnd.theme" is not defined', async () => {
