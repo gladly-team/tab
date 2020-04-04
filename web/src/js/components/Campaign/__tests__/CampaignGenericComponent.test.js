@@ -70,6 +70,28 @@ const getMockProps = () => ({
       showCountdownTimer: false,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      showSocialSharing: true,
+      socialSharing: {
+        url: 'https://tab.gladly.io/covid-19/',
+        EmailShareButtonProps: {
+          subject: 'Hi there',
+          body: 'This is where we say stuff!',
+        },
+        FacebookShareButtonProps: {
+          quote: 'This is my Facebook post text.',
+        },
+        RedditShareButtonProps: {
+          title: 'This is the title of the Reddit post.',
+        },
+        TumblrShareButtonProps: {
+          title: 'My Tumblr post title',
+          caption: 'This is where we say stuff!',
+        },
+        TwitterShareButtonProps: {
+          title: 'This is my Twitter post title',
+          related: ['@TabForACause'],
+        },
+      },
       theme: {
         color: {
           main: '#ff7314',
@@ -327,7 +349,6 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(DonateHeartsControls).exists()).toBe(true)
   })
 
-  // TODO: "showSocialSharing" setting
   it('displays the SocialShare component when "showSocialSharing" is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
@@ -338,7 +359,7 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          // showSocialSharing: true,
+          showSocialSharing: true,
         },
       },
     }
@@ -349,7 +370,6 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(SocialShare).exists()).toBe(true)
   })
 
-  // TODO: "showSocialSharing" setting and props
   it('passes the expected props to the SocialShare component', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
@@ -360,7 +380,7 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          // showSocialSharing: true,
+          showSocialSharing: true,
         },
       },
     }
@@ -389,6 +409,27 @@ describe('CampaignGenericComponent', () => {
         related: ['@TabForACause'],
       },
     })
+  })
+
+  it('does not display the SocialShare component when "showSocialSharing" is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          showSocialSharing: false,
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(SocialShare).exists()).toBe(false)
   })
 
   it('displays the progress bar when showProgressBar is true', () => {
