@@ -58,6 +58,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showCountdownTimer: false,
   showHeartsDonationButton: false,
   showProgressBar: true,
+  showSocialSharing: false,
   theme: {
     color: {
       main: '#ff7314',

@@ -58,11 +58,35 @@ const getMockCampaignConfigInput = () => ({
       titleMarkdown: '## The end title',
       descriptionMarkdown: '#### The end description goes here.',
     },
+    showSocialSharing: true,
+    socialSharing: {
+      url: 'https://example.com/share-me',
+      EmailShareButtonProps: {
+        subject: 'Hi there',
+        body: 'This is where we say stuff!',
+      },
+      FacebookShareButtonProps: {
+        quote: 'This is my Facebook post text.',
+      },
+      RedditShareButtonProps: {
+        title: 'This is the title of the Reddit post.',
+      },
+      TumblrShareButtonProps: {
+        title: 'My Tumblr post title',
+        caption: 'This is where we say stuff!',
+      },
+      TwitterShareButtonProps: {
+        title: 'This is my Twitter post title',
+        related: ['@TabForACause'],
+      },
+    },
     // ... can have other stuff here
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
+  showSocialSharing: false,
+  socialSharing: undefined,
   theme: {
     color: {
       main: '#ff7314',
@@ -76,7 +100,7 @@ const getMockCampaignConfigInput = () => ({
 })
 
 describe('createCampaignConfiguration: validation', () => {
-  it('returns an object with the expected required properties', () => {
+  it('returns the expected object', () => {
     expect.assertions(1)
     process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -111,10 +135,33 @@ describe('createCampaignConfiguration: validation', () => {
           titleMarkdown: '## The end title',
           descriptionMarkdown: '#### The end description goes here.',
         },
+        showSocialSharing: true,
+        socialSharing: {
+          url: 'https://example.com/share-me',
+          EmailShareButtonProps: {
+            subject: 'Hi there',
+            body: 'This is where we say stuff!',
+          },
+          FacebookShareButtonProps: {
+            quote: 'This is my Facebook post text.',
+          },
+          RedditShareButtonProps: {
+            title: 'This is the title of the Reddit post.',
+          },
+          TumblrShareButtonProps: {
+            title: 'My Tumblr post title',
+            caption: 'This is where we say stuff!',
+          },
+          TwitterShareButtonProps: {
+            title: 'This is my Twitter post title',
+            related: ['@TabForACause'],
+          },
+        },
       },
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      // showSocialSharing: false, // TODO
       theme: {
         color: {
           main: '#ff7314',
@@ -309,6 +356,32 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'Campaign config validation error: "showProgressBar" must be a boolean'
+    )
+  })
+
+  it('throws if "showSocialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: undefined,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showSocialSharing" is required'
+    )
+  })
+
+  it('throws if "showSocialSharing" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: 0,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showSocialSharing" must be a boolean'
     )
   })
 
