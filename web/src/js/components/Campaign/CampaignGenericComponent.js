@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
+import SocialShare from 'js/components/General/SocialShareComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Markdown from 'js/components/General/Markdown'
@@ -125,6 +126,20 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
+    // TODO: API field
+    // TODO: maybe move into a modal and use a button
+    const showSocialShare = true
+    const socialShareProps = {
+      url: 'https://tab.gladly.io/covid-19/',
+      EmailShareButtonProps: {
+        subject: 'Hi there',
+        body: 'This is where we say stuff!',
+      },
+      FacebookShareButtonProps: {
+        quote: 'This is where we say stuff!',
+      },
+    }
+
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
@@ -148,6 +163,7 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
+              {showSocialShare ? <SocialShare {...socialShareProps} /> : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}

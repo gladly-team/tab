@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import Markdown from 'js/components/General/Markdown'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
+import SocialShare from 'js/components/General/SocialShareComponent'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/components/Campaign/CountdownClockComponent')
@@ -324,6 +325,59 @@ describe('CampaignGenericComponent', () => {
       <CampaignGenericComponent {...mockProps} />
     )
     expect(wrapper.find(DonateHeartsControls).exists()).toBe(true)
+  })
+
+  // TODO: "showSocialSharing" setting
+  it('displays the SocialShare component when "showSocialSharing" is true', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          // showSocialSharing: true,
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(SocialShare).exists()).toBe(true)
+  })
+
+  // TODO: "showSocialSharing" setting and props
+  it('passes the expected props to the SocialShare component', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          // showSocialSharing: true,
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(wrapper.find(SocialShare).props()).toEqual({
+      url: 'https://tab.gladly.io/covid-19/',
+      EmailShareButtonProps: {
+        subject: 'Hi there',
+        body: 'This is where we say stuff!',
+      },
+      FacebookShareButtonProps: {
+        quote: 'This is where we say stuff!',
+      },
+    })
   })
 
   it('displays the progress bar when showProgressBar is true', () => {
