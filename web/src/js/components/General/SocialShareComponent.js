@@ -6,10 +6,12 @@ import {
   EmailShareButton,
   FacebookIcon,
   FacebookShareButton,
-  // PinterestShareButton,
-  // RedditShareButton,
-  // TumblrShareButton,
-  // TwitterShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TumblrIcon,
+  TumblrShareButton,
+  TwitterIcon,
+  TwitterShareButton,
 } from 'react-share'
 
 const styles = theme => ({
@@ -28,6 +30,9 @@ const SocialShare = props => {
     classes,
     EmailShareButtonProps,
     FacebookShareButtonProps,
+    RedditShareButtonProps,
+    TumblrShareButtonProps,
+    TwitterShareButtonProps,
     url,
   } = props
   const iconSize = 32
@@ -47,6 +52,27 @@ const SocialShare = props => {
           </FacebookShareButton>
         </div>
       ) : null}
+      {RedditShareButtonProps ? (
+        <div className={classes.button}>
+          <RedditShareButton {...RedditShareButtonProps} url={url}>
+            <RedditIcon size={iconSize} round />
+          </RedditShareButton>
+        </div>
+      ) : null}
+      {TumblrShareButtonProps ? (
+        <div className={classes.button}>
+          <TumblrShareButton {...TumblrShareButtonProps} url={url}>
+            <TumblrIcon size={iconSize} round />
+          </TumblrShareButton>
+        </div>
+      ) : null}
+      {TwitterShareButtonProps ? (
+        <div className={classes.button}>
+          <TwitterShareButton {...TwitterShareButtonProps} url={url}>
+            <TwitterIcon size={iconSize} round />
+          </TwitterShareButton>
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -62,6 +88,19 @@ SocialShare.propTypes = {
   FacebookShareButtonProps: PropTypes.shape({
     quote: PropTypes.string.isRequired,
     hashtag: PropTypes.string,
+  }),
+  RedditShareButtonProps: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }),
+  TumblrShareButtonProps: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    caption: PropTypes.string.isRequired,
+  }),
+  TwitterShareButtonProps: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    via: PropTypes.string,
+    hashtags: PropTypes.arrayOf(PropTypes.string),
+    related: PropTypes.arrayOf(PropTypes.string),
   }),
   url: PropTypes.string.isRequired,
 }

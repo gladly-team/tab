@@ -136,7 +136,18 @@ class CampaignGenericComponent extends React.Component {
         body: 'This is where we say stuff!',
       },
       FacebookShareButtonProps: {
-        quote: 'This is where we say stuff!',
+        quote: 'This is my Facebook post text.',
+      },
+      RedditShareButtonProps: {
+        title: 'This is the title of the Reddit post.',
+      },
+      TumblrShareButtonProps: {
+        title: 'My Tumblr post title',
+        caption: 'This is where we say stuff!',
+      },
+      TwitterShareButtonProps: {
+        title: 'This is my Twitter post title',
+        related: ['@TabForACause'],
       },
     }
 
