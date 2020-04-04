@@ -16,6 +16,7 @@ const mockNow = '2020-05-02T13:59:58.000Z'
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
+  process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
 })
 
 afterEach(() => {
@@ -36,18 +37,28 @@ const getMockCampaignConfigInput = () => ({
   countNewUsers: true,
   countMoneyRaised: true,
   countTabsOpened: true,
-  endContent: {
-    titleMarkdown: '## Another title',
-    descriptionMarkdown: '#### Another description goes here.',
+  endTriggers: {
+    whenGoalAchieved: false,
+    whenTimeEnds: true,
   },
   goal: {
     impactUnitSingular: 'Heart',
     impactUnitPlural: 'Hearts',
+    impactVerbPastParticiple: 'raised',
     impactVerbPastTense: 'raised',
     limitProgressToTargetMax: false,
     numberSource: 'hearts',
+    showProgressBarLabel: true,
+    showProgressBarEndText: false,
     targetNumber: 10e6,
     transformNumberSourceValue: undefined, // optional function
+  },
+  onEnd: {
+    content: {
+      titleMarkdown: '## The end title',
+      descriptionMarkdown: '#### The end description goes here.',
+    },
+    // ... can have other stuff here
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
@@ -67,6 +78,7 @@ const getMockCampaignConfigInput = () => ({
 describe('createCampaignConfiguration: validation', () => {
   it('returns an object with the expected required properties', () => {
     expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
     const mockCampaignInput = getMockCampaignConfigInput()
     expect(createCampaignConfiguration(mockCampaignInput)).toEqual({
       addMoneyRaised: expect.any(Function),
@@ -75,22 +87,31 @@ describe('createCampaignConfiguration: validation', () => {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
       },
-      endContent: {
-        titleMarkdown: '## Another title',
-        descriptionMarkdown: '#### Another description goes here.',
+      endTriggers: {
+        whenGoalAchieved: false,
+        whenTimeEnds: true,
       },
       getCharityData: expect.any(Function),
       goal: {
         getCurrentNumber: expect.any(Function),
         impactUnitSingular: 'Heart',
         impactUnitPlural: 'Hearts',
+        impactVerbPastParticiple: 'raised',
         impactVerbPastTense: 'raised',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
         targetNumber: 10e6,
       },
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
-      isActive: expect.any(Function),
+      isLive: true,
+      onEnd: {
+        content: {
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
@@ -105,6 +126,20 @@ describe('createCampaignConfiguration: validation', () => {
         end: '2020-05-05T18:00:00.000Z',
       },
     })
+  })
+
+  it('returns isLive === false when process.env.IS_GLOBAL_CAMPAIGN_LIVE === "false"', () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(createCampaignConfiguration(mockCampaignInput).isLive).toBe(false)
+  })
+
+  it('returns isLive === true when process.env.IS_GLOBAL_CAMPAIGN_LIVE === "true"', () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(createCampaignConfiguration(mockCampaignInput).isLive).toBe(true)
   })
 
   it('throws if "campaignId" is not defined', async () => {
@@ -137,7 +172,7 @@ describe('createCampaignConfiguration: validation', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
-        goal: null, // cannot have a goal that relies on hearts when charityId is null
+        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
         showHeartsDonationButton: false, // required when charityId is null
         showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
@@ -196,49 +231,6 @@ describe('createCampaignConfiguration: validation', () => {
       })
     }).toThrow(
       'Campaign config validation error: "content.descriptionMarkdown" is required'
-    )
-  })
-
-  it('does not throw if "endContent" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: undefined,
-      })
-    }).not.toThrow()
-  })
-
-  it('throws if "endContent.titleMarkdown" is not defined when endContent is set', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: {
-          titleMarkdown: undefined,
-          descriptionMarkdown: '#### Something',
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "endContent.titleMarkdown" is required'
-    )
-  })
-
-  it('throws if "endContent.descriptionMarkdown" is not defined when endContent is set', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        endContent: {
-          titleMarkdown: '## A title',
-          descriptionMarkdown: undefined,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "endContent.descriptionMarkdown" is required'
     )
   })
 
@@ -405,7 +397,7 @@ describe('createCampaignConfiguration: validation', () => {
     expect(() => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
-        goal: null, // cannot have a goal that relies on hearts when charityId is null
+        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
         showProgressBar: false, // this must be false because we set "goal" to null
         charityId: undefined,
         showHeartsDonationButton: true,
@@ -634,7 +626,7 @@ describe('createCampaignConfiguration: validation', () => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
         theme: {
-          ...mockCampaignInput,
+          ...mockCampaignInput.theme,
           color: {
             main: undefined,
             light: '#f6924e',
@@ -653,7 +645,7 @@ describe('createCampaignConfiguration: validation', () => {
       return createCampaignConfiguration({
         ...mockCampaignInput,
         theme: {
-          ...mockCampaignInput,
+          ...mockCampaignInput.theme,
           color: {
             main: '#ff7314',
             light: undefined,
@@ -663,6 +655,630 @@ describe('createCampaignConfiguration: validation', () => {
     }).toThrow(
       'Campaign config validation error: "theme.color.light" is required'
     )
+  })
+
+  it('does not throw if both "endTriggers" and "onEnd" are not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: undefined,
+        onEnd: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "endTriggers" is defined but "onEnd" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: undefined,
+      })
+    }).toThrow(
+      'Campaign config validation error: "value" contains [endTriggers] without its required peers [onEnd]'
+    )
+  })
+
+  it('throws if "onEnd" is defined but "endTriggers" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: undefined,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            titleMarkdown: '## Some title',
+            descriptionMarkdown: '#### A description goes here.',
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "value" contains [onEnd] without its required peers [endTriggers]'
+    )
+  })
+})
+
+describe('createCampaignConfiguration: "onEnd" validation', () => {
+  it('does not throw if "onEnd" is an empty object', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {},
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.content.titleMarkdown" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            ...mockCampaignInput.onEnd.content,
+            titleMarkdown: undefined,
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.content.titleMarkdown" is required'
+    )
+  })
+
+  it('throws if "onEnd.content.descriptionMarkdown" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            ...mockCampaignInput.onEnd.content,
+            descriptionMarkdown: undefined,
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.content.descriptionMarkdown" is required'
+    )
+  })
+
+  it('does not throw if "onEnd.goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: undefined,
+          showProgressBar: false, // required if a goal is not defined
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "onEnd.goal.impactUnitSingular" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            impactUnitSingular: undefined,
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throws if "onEnd.goal.impactUnitPlural" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            impactUnitPlural: undefined,
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "onEnd.goal.impactVerbPastTense" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            impactVerbPastTense: undefined,
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "onEnd.goal.limitProgressToTargetMax" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            limitProgressToTargetMax: undefined,
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.goal.targetNumber" is set (it is not allowed)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            targetNumber: '100 thousand',
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.goal.targetNumber" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd.goal.numberSource" is set (it is not allowed)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            numberSource: 'hearts',
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.goal.numberSource" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd.goal.transformNumberSourceValue" is set (it is not allowed)', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            transformNumberSourceValue: num => num * 3,
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.goal.transformNumberSourceValue" is not allowed'
+    )
+  })
+
+  it('does not throw if "onEnd.showCountdownTimer" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showCountdownTimer: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showCountdownTimer" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showCountdownTimer: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showCountdownTimer" must be a boolean'
+    )
+  })
+
+  it('does not throw if "onEnd.showHeartsDonationButton" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showHeartsDonationButton" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showHeartsDonationButton" must be a boolean'
+    )
+  })
+
+  it('throws if "onEnd.showHeartsDonationButton" is true (changed on campaign end) and "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: undefined,
+        showHeartsDonationButton: false, // charityId is not required before campaign end
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: true, // now, charityId is required
+        },
+      })
+    }).toThrow('Campaign config validation error: "charityId" is required')
+  })
+
+  it('does not throw if "onEnd.showProgressBar" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showProgressBar: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showProgressBar" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showProgressBar: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showProgressBar" must be a boolean'
+    )
+  })
+
+  it('does not throw if "goal" is defined but "onEnd.goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: {
+          ...mockCampaignInput.goal,
+          impactUnitSingular: 'Heart',
+          impactUnitPlural: 'Hearts',
+          impactVerbPastTense: 'raised',
+          limitProgressToTargetMax: false,
+          numberSource: 'hearts',
+          showProgressBarLabel: true,
+          showProgressBarEndText: false,
+          targetNumber: 10e6,
+          transformNumberSourceValue: undefined, // optional function
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: undefined,
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "goal" is not defined but "onEnd.goal" is defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: {
+            ...(mockCampaignInput.onEnd.goal || {}),
+            impactUnitSingular: 'Heart',
+            impactUnitPlural: 'Hearts',
+            impactVerbPastTense: 'raised',
+            limitProgressToTargetMax: false,
+            numberSource: 'hearts',
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+            targetNumber: 10e6,
+            transformNumberSourceValue: undefined, // optional function
+          },
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).toThrow('Campaign config validation error: "onEnd.goal" is not allowed')
+  })
+
+  it('throws if "onEnd.showProgressBar" is set to true but "goal" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          goal: undefined,
+          showProgressBar: true,
+        },
+        showProgressBar: false,
+      })
+    }).toThrow('Campaign config validation error: "goal" is required')
+  })
+
+  it('does not throw if "onEnd.theme" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          theme: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "onEnd.theme" is an empty object', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          theme: {},
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.theme.color.main" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          theme: {
+            ...mockCampaignInput.onEnd.theme,
+            color: {
+              main: undefined,
+              light: '#f6924e',
+            },
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.theme.color.main" is required'
+    )
+  })
+
+  it('throws if "onEnd.theme.color.light" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          theme: {
+            ...mockCampaignInput.onEnd.theme,
+            color: {
+              main: '#ff7314',
+              light: undefined,
+            },
+          },
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.theme.color.light" is required'
+    )
+  })
+
+  it('throws if "onEnd" includes "campaignId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          campaignId: 'my-different-campaign-id',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.campaignId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "charityId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          charityId: '5ae19457-a8a7-4c28-89ee-52179a2fb966',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.charityId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countNewUsers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countNewUsers: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countNewUsers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countMoneyRaised', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countMoneyRaised: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countMoneyRaised" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countTabsOpened', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countTabsOpened: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countTabsOpened" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "endTriggers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          endTriggers: {},
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.endTriggers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "onEnd', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          onEnd: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.onEnd" is not allowed')
+  })
+
+  it('throws if "onEnd" includes "time', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          time: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.time" is not allowed')
   })
 })
 
@@ -710,7 +1326,21 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling addMoneyRaised if the campaign is no longer active', async () => {
+  it('does not call Redis when calling addMoneyRaised if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countMoneyRaised: true,
+    })
+    const moneyToAdd = 0.0231
+    await campaignConfig.addMoneyRaised(moneyToAdd)
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('still calls Redis when calling addMoneyRaised if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -725,7 +1355,11 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
     })
     const moneyToAdd = 0.0231
     await campaignConfig.addMoneyRaised(moneyToAdd)
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCRBY',
+      key: 'campaign:myFunCampaign:moneyRaised',
+      amountToAdd: 23100000,
+    })
   })
 
   it('calls Redis with a rounded money raised value if addMoneyRaised is called with a float beyond nano precision', async () => {
@@ -782,7 +1416,20 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling incrementNewUserCount and the campaign is no longer active', async () => {
+  it('does not call Redis when calling incrementNewUserCount if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countNewUsers: true,
+    })
+    await campaignConfig.incrementNewUserCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('still calls Redis when calling incrementNewUserCount and the campaign if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -796,7 +1443,10 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
       },
     })
     await campaignConfig.incrementNewUserCount()
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:newUsers',
+    })
   })
 })
 
@@ -840,7 +1490,20 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
     expect(callRedis).not.toHaveBeenCalled()
   })
 
-  it('does not call Redis when calling incrementTabCount and the campaign is no longer active', async () => {
+  it('does not call Redis when calling incrementTabCount if the campaign is no longer live', async () => {
+    expect.assertions(1)
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false // campaign is not live
+    const mockCampaignInput = getMockCampaignConfigInput()
+    const campaignConfig = createCampaignConfiguration({
+      ...mockCampaignInput,
+      campaignId: 'myFunCampaign',
+      countTabsOpened: true,
+    })
+    await campaignConfig.incrementTabCount()
+    expect(callRedis).not.toHaveBeenCalled()
+  })
+
+  it('still calls Redis when calling incrementTabCount and the campaign if we passed the campaign end time', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
@@ -854,7 +1517,10 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
       },
     })
     await campaignConfig.incrementTabCount()
-    expect(callRedis).not.toHaveBeenCalled()
+    expect(callRedis).toHaveBeenCalledWith({
+      operation: 'INCR',
+      key: 'campaign:myFunCampaign:tabsOpened',
+    })
   })
 })
 
@@ -902,10 +1568,10 @@ describe('createCampaignConfiguration: charity data', () => {
     const mockCampaignInput = getMockCampaignConfigInput()
     const campaignConfig = createCampaignConfiguration({
       ...mockCampaignInput,
-      goal: null, // cannot have a goal that relies on hearts when charityId is null
+      goal: undefined, // cannot have a goal that relies on hearts when charityId is null
       showHeartsDonationButton: false, // required when charityId is null
       showProgressBar: false, // this must be false because we set "goal" to null
-      charityId: null, // no charity ID defined
+      charityId: undefined, // no charity ID defined
     })
     const mockUserContext = getMockUserContext()
     const charityData = await campaignConfig.getCharityData(mockUserContext)
@@ -927,40 +1593,6 @@ describe('createCampaignConfiguration: charity data', () => {
     await expect(
       campaignConfig.getCharityData(mockUserContext)
     ).rejects.toEqual(mockErr)
-  })
-})
-
-describe('createCampaignConfiguration: isActive', () => {
-  it('isActive() returns true if the campaign is still active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-05-01T18:00:00.000Z',
-        end: '2020-05-05T18:00:00.000Z', // campaign is still active
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(true)
-  })
-
-  it('isActive() returns false if the campaign is no longer active', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    const campaignConfig = createCampaignConfiguration({
-      ...mockCampaignInput,
-      campaignId: 'myFunCampaign',
-      countTabsOpened: true,
-      time: {
-        ...mockCampaignInput.time,
-        start: '2020-04-21T18:00:00.000Z',
-        end: '2020-04-28T18:00:00.000Z', // campaign has ended
-      },
-    })
-    expect(campaignConfig.isActive()).toBe(false)
   })
 })
 

@@ -14,7 +14,7 @@ const campaignEndDescription = `
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
   campaignId: 'NYCFoodBank2020',
-  charityId: null,
+  // charityId: undefined,
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -22,20 +22,37 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countMoneyRaised: true,
   countNewUsers: false,
   countTabsOpened: false,
-  endContent: {
-    titleMarkdown: campaignEndTitle,
-    descriptionMarkdown: campaignEndDescription,
+  // Logic on when to end the campaign.
+  endTriggers: {
+    whenGoalAchieved: true,
+    whenTimeEnds: false,
   },
   goal: {
     impactUnitSingular: 'meal',
     impactUnitPlural: 'meals',
-    impactVerbPastTense: 'given',
+    impactVerbPastParticiple: 'given',
+    impactVerbPastTense: 'gave',
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
+    showProgressBarLabel: true,
+    showProgressBarEndText: false,
     targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)
+    },
+  },
+  // Modifications to the campaign when the campaign has
+  // ended.
+  onEnd: {
+    content: {
+      titleMarkdown: campaignEndTitle,
+      descriptionMarkdown: campaignEndDescription,
+    },
+    goal: {
+      // Replace the progress bar labels with the ending text.
+      showProgressBarLabel: false,
+      showProgressBarEndText: true,
     },
   },
   showCountdownTimer: false,
@@ -53,20 +70,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
 })
 
-// We can call methods on this, instead of using the CampaignData object,
-// if we don't need dynamic data (e.g. the charity or goal data). This
-// saves additional hits to the database.
 /**
  * Return the CampaignConfiguration object for the current campaign.
  * @return {Promise<Object>} campaignConfig- see createCampaignConfiguration
  *   for structure.
  */
-const getCurrentCampaignConfig = () => {
-  const isLive = process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
-  return {
-    ...CURRENT_CAMPAIGN,
-    isLive,
-  }
-}
+const getCurrentCampaignConfig = () => CURRENT_CAMPAIGN
 
+// Outside modules shouldn't use this config. Instead, they should
+// call getCampaign.js to get the CampaignData object.
 export default getCurrentCampaignConfig

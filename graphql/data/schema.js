@@ -729,15 +729,30 @@ const campaignGoalType = new GraphQLObjectType({
       description:
         'The English word for the impact unit, plural (e.g. Hearts, dollars, puppies)',
     },
+    impactVerbPastParticiple: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The past-tense participle English verb that describes achieving the impact unit (e.g. given, raised, adopted)',
+    },
     impactVerbPastTense: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'The past-tense English verb that describes achieving the impact unit (e.g. donated, raised, adopted)',
+        'The simple past-tense English verb that describes achieving the impact unit (e.g. gave, raised, adopted)',
     },
     limitProgressToTargetMax: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description:
         'If true, do not display a currentNumber greater than the targetNumber. Instead, limit goal progress to 100% of the target.',
+    },
+    showProgressBarLabel: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether the progress bar should have labels of the current number and goal number',
+    },
+    showProgressBarEndText: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'Whether the progress bar should have an end-of-campaign summary text of the progress',
     },
   }),
 })
@@ -775,35 +790,36 @@ const campaignType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The ID of the campaign',
     },
-    isLive: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-      description: 'Whether or not the campaign should currently show to users',
-    },
-    numNewUsers: {
-      // deprecated
-      type: GraphQLInt,
-      description:
-        'Deprecated: use "goal" instead. The number of new users who joined during this campaign.',
-    },
-    time: {
-      type: new GraphQLNonNull(campaignTimeType),
-      description:
-        'The start and end times (in ISO timestamps) for the campaign',
+    charity: {
+      type: charityType,
+      description: 'The charity that this campaign features',
     },
     content: {
       type: new GraphQLNonNull(campaignContentType),
-      description:
-        'The text content for the campaign when it is still running (before the end time)',
+      description: 'The text content for the campaign',
     },
+    // Deprecated.
     endContent: {
       type: campaignContentType,
+      deprecationReason:
+        'The content returned by the server will automatically change when the campaign ends.',
       description:
-        'The text content for the campaign when it has finished (passed hte end time)',
+        'The text content for the campaign when it has finished (past the end time)',
+    },
+    isLive: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'Whether or not the campaign should currently show to users',
     },
     goal: {
       type: campaignGoalType,
       description:
         'Information on progress toward a target impact goal for the campaign',
+    },
+    // Deprecated.
+    numNewUsers: {
+      type: GraphQLInt,
+      deprecationReason: 'Replaced by the generalized"goal" data.',
+      description: 'The number of new users who joined during this campaign.',
     },
     showCountdownTimer: {
       type: new GraphQLNonNull(GraphQLBoolean),
@@ -820,13 +836,14 @@ const campaignType = new GraphQLObjectType({
       description:
         'Whether to show a progress bar -- which requires the "goal" field to be defined',
     },
-    charity: {
-      type: charityType,
-      description: 'The charity that this campaign features',
-    },
     theme: {
       type: campaignThemeType,
       description: 'Theming/style for the campaign',
+    },
+    time: {
+      type: new GraphQLNonNull(campaignTimeType),
+      description:
+        'The start and end times (in ISO timestamps) for the campaign',
     },
   }),
 })

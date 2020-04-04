@@ -96,20 +96,21 @@ class CampaignGenericComponent extends React.Component {
       charity,
       time,
       content,
-      endContent,
       goal,
       showCountdownTimer,
       showHeartsDonationButton,
       showProgressBar,
     } = campaign
-    const hasCampaignEnded = moment().isAfter(time.end)
     const {
       targetNumber,
       currentNumber,
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
       limitProgressToTargetMax,
+      showProgressBarLabel,
+      showProgressBarEndText,
     } = goal || {}
 
     // If limitProgressToTargetMax is true, don't display a current
@@ -140,27 +141,14 @@ class CampaignGenericComponent extends React.Component {
             </IconButton>
             <div className={classes.campaignContent}>
               <div className={classes.mainTextContainer}>
-                {!hasCampaignEnded ? (
-                  <>
-                    <div className={classes.title}>
-                      <Markdown children={content.titleMarkdown} />
-                    </div>
-                    <div className={classes.description}>
-                      <Markdown children={content.descriptionMarkdown} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={classes.title}>
-                      <Markdown children={endContent.titleMarkdown} />
-                    </div>
-                    <div className={classes.description}>
-                      <Markdown children={endContent.descriptionMarkdown} />
-                    </div>
-                  </>
-                )}
+                <div className={classes.title}>
+                  <Markdown children={content.titleMarkdown} />
+                </div>
+                <div className={classes.description}>
+                  <Markdown children={content.descriptionMarkdown} />
+                </div>
               </div>
-              {showHeartsDonationButton && !hasCampaignEnded ? (
+              {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
                   user={user}
@@ -170,7 +158,7 @@ class CampaignGenericComponent extends React.Component {
               <div className={classes.bottomContent}>
                 {showProgressBar ? (
                   <div className={classes.progressBarSection}>
-                    {hasCampaignEnded ? (
+                    {showProgressBarEndText ? (
                       <Typography variant={'caption'} gutterBottom>
                         Great job! Together, we {impactVerbPastTense}{' '}
                         {abbreviateNumber(currentGoalNumber)}{' '}
@@ -180,14 +168,14 @@ class CampaignGenericComponent extends React.Component {
                         of our {abbreviateNumber(targetNumber)} goal.
                       </Typography>
                     ) : null}
-                    {!hasCampaignEnded ? (
+                    {showProgressBarLabel ? (
                       <div className={classes.progressBarLabelsContainer}>
                         <Typography variant={'caption'}>
                           {abbreviateNumber(currentGoalNumber)}{' '}
                           {currentGoalNumber === 1
                             ? impactUnitSingular
                             : impactUnitPlural}{' '}
-                          {impactVerbPastTense}
+                          {impactVerbPastParticiple}
                         </Typography>
                         <Typography variant={'caption'}>
                           Goal: {abbreviateNumber(targetNumber)}
@@ -197,7 +185,7 @@ class CampaignGenericComponent extends React.Component {
                     <LinearProgress variant="determinate" value={progress} />
                   </div>
                 ) : null}
-                {showCountdownTimer && !hasCampaignEnded ? (
+                {showCountdownTimer ? (
                   <Typography variant={'caption'}>
                     <CountdownClock
                       campaignStartDatetime={moment(time.start)}
@@ -226,17 +214,16 @@ const propTypesCampaign = {
         titleMarkdown: PropTypes.string.isRequired,
         descriptionMarkdown: PropTypes.string.isRequired,
       }),
-      endContent: PropTypes.shape({
-        titleMarkdown: PropTypes.string.isRequired,
-        descriptionMarkdown: PropTypes.string.isRequired,
-      }),
       goal: PropTypes.shape({
         targetNumber: PropTypes.number.isRequired,
         currentNumber: PropTypes.number.isRequired,
         impactUnitSingular: PropTypes.string.isRequired,
         impactUnitPlural: PropTypes.string.isRequired,
+        impactVerbPastParticiple: PropTypes.string.isRequired,
         impactVerbPastTense: PropTypes.string.isRequired,
         limitProgressToTargetMax: PropTypes.bool.isRequired,
+        showProgressBarLabel: PropTypes.bool.isRequired,
+        showProgressBarEndText: PropTypes.bool.isRequired,
       }),
       numNewUsers: PropTypes.number,
       showCountdownTimer: PropTypes.bool.isRequired,

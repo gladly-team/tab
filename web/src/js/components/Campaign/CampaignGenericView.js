@@ -32,17 +32,16 @@ class CampaignGenericView extends React.Component {
                   titleMarkdown
                   descriptionMarkdown
                 }
-                endContent {
-                  titleMarkdown
-                  descriptionMarkdown
-                }
                 goal {
                   targetNumber
                   currentNumber
                   impactUnitSingular
                   impactUnitPlural
+                  impactVerbPastParticiple
                   impactVerbPastTense
                   limitProgressToTargetMax
+                  showProgressBarLabel
+                  showProgressBarEndText
                 }
                 isLive
                 showCountdownTimer

@@ -16,7 +16,6 @@ describe('getCurrentCampaignConfig', () => {
       getCharityData: expect.any(Function),
       incrementNewUserCount: expect.any(Function),
       incrementTabCount: expect.any(Function),
-      isActive: expect.any(Function),
       isLive: expect.any(Boolean),
       showCountdownTimer: expect.any(Boolean),
       showHeartsDonationButton: expect.any(Boolean),
@@ -25,22 +24,6 @@ describe('getCurrentCampaignConfig', () => {
         start: expect.any(String),
         end: expect.any(String),
       },
-    })
-  })
-
-  it('returns campaign.isLive === true when process.env.IS_GLOBAL_CAMPAIGN_LIVE is "true"', () => {
-    expect.assertions(1)
-    process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
-    expect(getCurrentCampaignConfig()).toMatchObject({
-      isLive: true,
-    })
-  })
-
-  it('returns campaign.isLive === false when process.env.IS_GLOBAL_CAMPAIGN_LIVE is "false"', () => {
-    expect.assertions(1)
-    process.env.IS_GLOBAL_CAMPAIGN_LIVE = false
-    expect(getCurrentCampaignConfig()).toMatchObject({
-      isLive: false,
     })
   })
 })

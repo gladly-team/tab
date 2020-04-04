@@ -1,5 +1,4 @@
 import Joi from '@hapi/joi'
-import moment from 'moment'
 import { isNil } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
@@ -10,56 +9,129 @@ const MONEY_RAISED = 'moneyRaised'
 const NEW_USERS = 'newUsers'
 const TABS_OPENED = 'tabsOpened'
 
-const campaignConfigInputSchema = Joi.object({
-  campaignId: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
-  // The charityId is required when there is a hearts donation button.
-  charityId: Joi.any().when('showHeartsDonationButton', {
-    is: Joi.valid(true),
-    then: Joi.string()
-      .guid()
-      .required(),
-    otherwise: Joi.string().allow(null),
-  }),
+// Campaign config input fields that the user can modify
+// on campaign end. This serves as shared schema between
+// the top-level config input and the "onEnd" ojbect.
+// https://hapi.dev/module/joi/api/?v=17.1.1#anyextractpath
+const configFields = Joi.object({
   content: Joi.object({
     titleMarkdown: Joi.string().required(),
     descriptionMarkdown: Joi.string().required(),
-  }).required(),
-  countNewUsers: Joi.boolean(),
-  countMoneyRaised: Joi.boolean(),
-  countTabsOpened: Joi.boolean(),
-  endContent: Joi.object({
-    titleMarkdown: Joi.string().required(),
-    descriptionMarkdown: Joi.string().required(),
   }),
-  // The goal is required when there is a progress bar.
   goal: Joi.object({
     impactUnitSingular: Joi.string().required(),
     impactUnitPlural: Joi.string().required(),
+    impactVerbPastParticiple: Joi.string().required(),
     impactVerbPastTense: Joi.string().required(),
     limitProgressToTargetMax: Joi.boolean().required(),
     numberSource: Joi.any()
       .valid(HEARTS, MONEY_RAISED, NEW_USERS, TABS_OPENED)
       .required(),
+    showProgressBarLabel: Joi.boolean().required(),
+    showProgressBarEndText: Joi.boolean().required(),
     targetNumber: Joi.number().required(),
     transformNumberSourceValue: Joi.function(), // optional
-  }).when('showProgressBar', {
-    is: Joi.valid(true),
-    then: Joi.required(),
-    otherwise: Joi.allow(null),
   }),
-  showCountdownTimer: Joi.boolean().required(),
-  showHeartsDonationButton: Joi.boolean().required(),
-  showProgressBar: Joi.boolean().required(),
+  showCountdownTimer: Joi.boolean(),
+  showHeartsDonationButton: Joi.boolean(),
+  showProgressBar: Joi.boolean(),
   theme: Joi.object({
     color: Joi.object({
       main: Joi.string().required(),
       light: Joi.string().required(),
     }),
   }),
+})
+
+const campaignConfigInputSchema = Joi.object({
+  campaignId: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  // The "charityId" value is required when there is a hearts donation
+  // button.
+  charityId: Joi.any()
+    .when('showHeartsDonationButton', {
+      is: Joi.valid(true).required(),
+      then: Joi.string()
+        .guid()
+        .required(),
+      otherwise: Joi.string(),
+    })
+    .when('onEnd.showHeartsDonationButton', {
+      is: Joi.valid(true).required(),
+      then: Joi.string()
+        .guid()
+        .required(),
+      otherwise: Joi.string(),
+    }),
+  content: configFields.extract('content').required(),
+  countNewUsers: Joi.boolean(),
+  countMoneyRaised: Joi.boolean(),
+  countTabsOpened: Joi.boolean(),
+  // The "endTriggers" value is required when "onEnd" is defined
+  // and is otherwise not allowed.
+  endTriggers: Joi.object({
+    whenGoalAchieved: Joi.boolean(),
+    whenTimeEnds: Joi.boolean(),
+  }),
+  // The "goal" value is required when there is a progress bar.
+  goal: configFields.extract('goal').when('showProgressBar', {
+    is: Joi.valid(true).required(),
+    then: Joi.required(),
+    otherwise: Joi.when(Joi.ref('/onEnd.showProgressBar'), {
+      is: Joi.valid(true).required(),
+      then: Joi.required(),
+      otherwise: Joi.optional(),
+    }),
+  }),
+  // The "onEnd" value is required when "endTriggers" is defined;
+  // otherwise, "onEnd" is not allowed.
+  onEnd: Joi.object({
+    // The "onEnd.content" value will completely replace the
+    // "content" value. It is not merged.
+    content: configFields.extract('content').optional(),
+    // The "onEnd.goal" is only allowed if "goal" is defined.
+    goal: configFields
+      .extract('goal')
+      .concat(
+        Joi.object({
+          // Fields are optional because this will be merged with the
+          // top-level goal object. Some fields are forbidden because
+          // they cannot be changed on campaign end.
+          impactUnitSingular: Joi.optional(),
+          impactUnitPlural: Joi.optional(),
+          impactVerbPastParticiple: Joi.optional(),
+          impactVerbPastTense: Joi.optional(),
+          limitProgressToTargetMax: Joi.optional(),
+          numberSource: Joi.forbidden(),
+          showProgressBarLabel: Joi.optional(),
+          showProgressBarEndText: Joi.optional(),
+          targetNumber: Joi.forbidden(),
+          transformNumberSourceValue: Joi.forbidden(),
+        })
+      )
+      .when(Joi.ref('/goal'), {
+        is: Joi.required(),
+        then: Joi.optional(),
+        otherwise: Joi.forbidden(),
+      }),
+    showCountdownTimer: configFields.extract('showCountdownTimer').optional(),
+    showHeartsDonationButton: configFields
+      .extract('showHeartsDonationButton')
+      .optional(),
+    showProgressBar: configFields.extract('showProgressBar').optional(),
+    // The "onEnd.theme" value will completely replace the
+    // "theme" value. It is not merged.
+    theme: configFields.extract('theme').optional(),
+  }),
+  showCountdownTimer: configFields.extract('showCountdownTimer').required(),
+  showHeartsDonationButton: configFields
+    .extract('showHeartsDonationButton')
+    .required(),
+  showProgressBar: configFields.extract('showProgressBar').required(),
+  theme: configFields.extract('theme').optional(),
   time: Joi.object({
     start: Joi.date()
       .iso()
@@ -68,7 +140,9 @@ const campaignConfigInputSchema = Joi.object({
       .iso()
       .required(),
   }).required(),
-}).prefs({ convert: true }) // cast values if possible
+})
+  .and('endTriggers', 'onEnd')
+  .prefs({ convert: true }) // cast values if possible
 
 const WrongCampaignConfigError = message => {
   return new Error(`Campaign config validation error: ${message}`)
@@ -88,8 +162,9 @@ const createCampaignConfiguration = input => {
     countNewUsers = false,
     countTabsOpened = false,
     content,
-    endContent,
+    endTriggers,
     goal,
+    onEnd,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
@@ -174,16 +249,6 @@ const createCampaignConfiguration = input => {
     return estUSDMoneyRaised
   }
 
-  /**
-   * Return whether the current time is between the campaign's start and
-   * end times.
-   * @return {Boolean}
-   */
-  const isActive = () => {
-    const timeInfo = time
-    return moment().isAfter(timeInfo.start) && moment().isBefore(timeInfo.end)
-  }
-
   let configuredGoal = null
   if (!isNil(goal)) {
     const {
@@ -194,7 +259,10 @@ const createCampaignConfiguration = input => {
       // "hearts", "meals")
       impactUnitPlural,
       // The verb we use to describe what we're doing with the impact units
-      // (e.g., "recruited", "donated", "raised")
+      // (e.g., "given", "donated", "raised")
+      impactVerbPastParticiple,
+      // The verb we use to describe what we're doing with the impact units
+      // (e.g., "gave", "donated", "raised")
       impactVerbPastTense,
       // If true, the client should not display a currentNumber greater than
       // the targetNumber. Instead, limit goal progress to 100% of the target.
@@ -202,6 +270,8 @@ const createCampaignConfiguration = input => {
       // The internal source we are using to calculate the number of impact
       // units. One of: "hearts", "newUsers", "moneyRaised", "tabsOpened"
       numberSource,
+      showProgressBarLabel,
+      showProgressBarEndText,
       // The target number of impact units this campaign could raise
       targetNumber,
       /**
@@ -253,14 +323,20 @@ const createCampaignConfiguration = input => {
       limitProgressToTargetMax,
       impactUnitSingular,
       impactUnitPlural,
+      impactVerbPastParticiple,
       impactVerbPastTense,
+      showProgressBarLabel,
+      showProgressBarEndText,
     }
   }
+
+  const isCampaignLive = () =>
+    process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
 
   return {
     addMoneyRaised: async USDMoneyRaisedToAdd => {
       // If not counting money raised or the campaign is not active, ignore this.
-      if (!(countMoneyRaised && isActive())) {
+      if (!(countMoneyRaised && isCampaignLive())) {
         return
       }
 
@@ -291,13 +367,13 @@ const createCampaignConfiguration = input => {
       }
     },
     content,
-    ...(endContent && { endContent }),
     ...(configuredGoal && {
       goal: configuredGoal,
     }),
+    endTriggers,
     incrementNewUserCount: async () => {
       // If not counting new users or the campaign is not active, ignore this.
-      if (!(countNewUsers && isActive())) {
+      if (!(countNewUsers && isCampaignLive())) {
         return
       }
       try {
@@ -311,7 +387,7 @@ const createCampaignConfiguration = input => {
     },
     incrementTabCount: async () => {
       // If not counting tabs or the campaign is not active, ignore this.
-      if (!(countTabsOpened && isActive())) {
+      if (!(countTabsOpened && isCampaignLive())) {
         return
       }
       try {
@@ -323,7 +399,10 @@ const createCampaignConfiguration = input => {
         // Redis will log errors.
       }
     },
-    isActive,
+    get isLive() {
+      return isCampaignLive()
+    },
+    onEnd,
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,

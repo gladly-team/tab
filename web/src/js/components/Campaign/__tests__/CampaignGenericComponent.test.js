@@ -36,43 +36,33 @@ const campaignDescription = `
 #### And more description here.
 `
 
-const campaignEndTitle = '## The End Title'
-
-const campaignEndDescription = `
-#### Some end description.
-`
-
 const getMockProps = () => ({
   app: {
     campaign: {
       campaignId: 'mock-id',
       charity: {
-        id: 'Q2hhcml0eTo2NjY3ZWI4Ni1lYTM3LTRkM2QtOTI1OS05MTBiZWEwYjVlMzg=',
-        image:
-          'https://prod-tab2017-media.gladly.io/img/charities/charity-post-donation-images/covid-19-solidarity.jpg',
+        id: 'some-charity-id',
+        image: 'https://example.com/img.png',
         imageCaption: null,
-        impact:
-          'With your help, the World Health Organization will continue to provide COVID-19 relief, prevention, and detection.',
-        name: 'COVID-19 Solidarity Response Fund',
+        impact: 'With your help, this charity will keep doing good things.',
+        name: 'The Charity Name',
         vcReceived: 16474011,
-        website:
-          'https://www.who.int/emergencies/diseases/novel-coronavirus-2019/donate',
+        website: 'https://example.com',
       },
       content: {
         titleMarkdown: campaignTitle,
         descriptionMarkdown: campaignDescription,
       },
-      endContent: {
-        titleMarkdown: campaignEndTitle,
-        descriptionMarkdown: campaignEndDescription,
-      },
       goal: {
-        targetNumber: 10e6,
-        currentNumber: 16.6e6,
-        impactUnitSingular: 'Heart',
-        impactUnitPlural: 'Hearts',
-        impactVerbPastTense: 'donated',
+        targetNumber: 5000,
+        currentNumber: 2468,
+        impactUnitSingular: 'meal',
+        impactUnitPlural: 'meals',
+        impactVerbPastParticiple: 'given',
+        impactVerbPastTense: 'gave',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
       },
       isLive: true,
       numNewUsers: undefined, // probably want to roll into generic goal
@@ -212,78 +202,7 @@ describe('CampaignGenericComponent', () => {
     ).toEqual('#### Hey, I am a nice description.')
   })
 
-  it('displays the endContent.titleMarkdown when the campaign has ended', () => {
-    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
-      .default
-    const defaultMockProps = getMockProps()
-    const mockProps = {
-      ...defaultMockProps,
-      app: {
-        ...defaultMockProps.app,
-        campaign: {
-          ...defaultMockProps.app.campaign,
-          endContent: {
-            ...defaultMockProps.app.campaign.endContent,
-            titleMarkdown: '## Hey, I am the ending title :)',
-          },
-          time: {
-            ...defaultMockProps.app.campaign.time,
-            start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
-          },
-        },
-      },
-    }
-    mockProps.onDismiss = jest.fn()
-    const wrapper = shallowRenderCampaign(
-      <CampaignGenericComponent {...mockProps} />
-    )
-    expect(
-      wrapper
-        .find(Markdown)
-        .first()
-        .prop('children')
-    ).toEqual('## Hey, I am the ending title :)')
-  })
-
-  it('displays the endContent.descriptionMarkdown when the campaign has ended', () => {
-    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
-      .default
-    const defaultMockProps = getMockProps()
-    const mockProps = {
-      ...defaultMockProps,
-      app: {
-        ...defaultMockProps.app,
-        campaign: {
-          ...defaultMockProps.app.campaign,
-          endContent: {
-            ...defaultMockProps.app.campaign.endContent,
-            descriptionMarkdown:
-              '#### Hey, I am a nice description for the end of the campaign :)',
-          },
-          time: {
-            ...defaultMockProps.app.campaign.time,
-            start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
-          },
-        },
-      },
-    }
-    mockProps.onDismiss = jest.fn()
-    const wrapper = shallowRenderCampaign(
-      <CampaignGenericComponent {...mockProps} />
-    )
-    expect(
-      wrapper
-        .find(Markdown)
-        .at(1)
-        .prop('children')
-    ).toEqual(
-      '#### Hey, I am a nice description for the end of the campaign :)'
-    )
-  })
-
-  it('displays the DonateHeartsControls when showHeartsDonationButton is true and the campaign is active', () => {
+  it('displays the DonateHeartsControls when showHeartsDonationButton is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -347,7 +266,7 @@ describe('CampaignGenericComponent', () => {
     })
   })
 
-  it('does not display the DonateHeartsControls when showHeartsDonationButton is false and the campaign is active', () => {
+  it('does not display the DonateHeartsControls when showHeartsDonationButton is false', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -377,7 +296,7 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
   })
 
-  it('does not display the DonateHeartsControls when showHeartsDonationButton is true but the campaign has ended', () => {
+  it('still displays the DonateHeartsControls when showHeartsDonationButton is true, even when we are past the "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -395,7 +314,7 @@ describe('CampaignGenericComponent', () => {
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-03-28T18:00:00.000Z', // we passed this
           },
         },
       },
@@ -404,10 +323,10 @@ describe('CampaignGenericComponent', () => {
     const wrapper = shallowRenderCampaign(
       <CampaignGenericComponent {...mockProps} />
     )
-    expect(wrapper.find(DonateHeartsControls).exists()).toBe(false)
+    expect(wrapper.find(DonateHeartsControls).exists()).toBe(true)
   })
 
-  it('displays the progress bar when showProgressBar is true and the campaign is active', () => {
+  it('displays the progress bar when showProgressBar is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -423,7 +342,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -441,7 +364,7 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(LinearProgress).exists()).toBe(true)
   })
 
-  it('displays the progress bar when showProgressBar is true, even if the campaign has ended', () => {
+  it('displays the progress bar when showProgressBar is true, even if we are past the  campaign "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -457,13 +380,14 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
           },
           showProgressBar: true,
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-03-28T18:00:00.000Z', // we passed this
           },
         },
       },
@@ -491,7 +415,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 3214,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -525,8 +453,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 18021,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
             limitProgressToTargetMax: false,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -560,8 +491,11 @@ describe('CampaignGenericComponent', () => {
             currentNumber: 18021,
             impactUnitSingular: 'puppy',
             impactUnitPlural: 'puppies',
+            impactVerbPastParticiple: 'adopted',
             impactVerbPastTense: 'adopted',
             limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -579,7 +513,7 @@ describe('CampaignGenericComponent', () => {
     expect(wrapper.find(LinearProgress).prop('value')).toEqual(100.0)
   })
 
-  it('displays the current goal number text when showProgressBar is true and the campaign is active', () => {
+  it('displays the current goal number text when showProgressBar is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -593,9 +527,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -614,7 +552,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -630,7 +568,18 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          goal: undefined,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+          },
           showProgressBar: false, // not showing
           time: {
             ...defaultMockProps.app.campaign.time,
@@ -648,13 +597,13 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
     ).toBe(false)
   })
 
-  it('does not display the current goal number text when showProgressBar is true but the campaign has ended', () => {
+  it('still displays the current goal number text when showProgressBar is true, even when we are past the "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -668,15 +617,19 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-03-28T18:00:00.000Z', // we passed this
           },
         },
       },
@@ -689,13 +642,13 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K puppies adopted'
+          return n.render().text() === '3.2K hugs given'
         })
         .exists()
-    ).toBe(false)
+    ).toBe(true)
   })
 
-  it('displays the goal target text when showProgressBar is true and the campaign is active', () => {
+  it('displays the goal target text when showProgressBar is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -709,9 +662,13 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -749,11 +706,14 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18021,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 18000,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
             limitProgressToTargetMax: false,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -772,7 +732,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '18K puppies adopted'
+          return n.render().text() === '18K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -791,11 +751,14 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18021,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 18000,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
             limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
@@ -814,7 +777,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '12K puppies adopted'
+          return n.render().text() === '12K hugs given'
         })
         .exists()
     ).toBe(true)
@@ -830,7 +793,18 @@ describe('CampaignGenericComponent', () => {
         ...defaultMockProps.app,
         campaign: {
           ...defaultMockProps.app.campaign,
-          goal: undefined,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+          },
           showProgressBar: false, // not showing
           time: {
             ...defaultMockProps.app.campaign.time,
@@ -854,7 +828,7 @@ describe('CampaignGenericComponent', () => {
     ).toBe(false)
   })
 
-  it('does not display the goal target text when showProgressBar is true but the campaign has ended', () => {
+  it('still displays the goal target text when showProgressBar is true, even when we are past the "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -868,15 +842,19 @@ describe('CampaignGenericComponent', () => {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
             currentNumber: 3214,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
           },
           showProgressBar: true,
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-03-28T18:00:00.000Z', // we passed this
           },
         },
       },
@@ -892,10 +870,10 @@ describe('CampaignGenericComponent', () => {
           return n.render().text() === 'Goal: 12K'
         })
         .exists()
-    ).toBe(false)
+    ).toBe(true)
   })
 
-  it('displays the "end campaign" goal text when showProgressBar is true and the campaign has ended', () => {
+  it('displays the "end campaign" goal text when "showProgressBarEndText" is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -908,16 +886,20 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 14812,
-            impactUnitSingular: 'puppy',
-            impactUnitPlural: 'puppies',
-            impactVerbPastTense: 'adopted',
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: false,
+            showProgressBarEndText: true,
           },
           showProgressBar: true,
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-05-01T18:00:00.000Z',
           },
         },
       },
@@ -932,14 +914,62 @@ describe('CampaignGenericComponent', () => {
         .filterWhere(n => {
           return (
             n.render().text() ===
-            'Great job! Together, we adopted 14.8K puppies of our 12K goal.'
+            'Great job! Together, we gave 14.8K hugs of our 12K goal.'
           )
         })
         .exists()
-    ).toBe(true)
+    ).toBe(false)
   })
 
-  it('displays the CountdownClock when showCountdownTimer is true and the campaign is active', () => {
+  it('does not display the "end campaign" goal text even when we are past the "time.end" time if "showProgressBarEndText" is false', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          goal: {
+            ...defaultMockProps.app.campaign.goal,
+            targetNumber: 12000,
+            currentNumber: 3214,
+            impactUnitSingular: 'hug',
+            impactUnitPlural: 'hugs',
+            impactVerbPastParticiple: 'given',
+            impactVerbPastTense: 'gave',
+            limitProgressToTargetMax: true,
+            showProgressBarLabel: true,
+            showProgressBarEndText: false,
+          },
+          showProgressBar: true,
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-03-28T18:00:00.000Z', // we passed this
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(n => {
+          return (
+            n.render().text() ===
+            'Great job! Together, we gave 14.8K hugs of our 12K goal.'
+          )
+        })
+        .exists()
+    ).toBe(false)
+  })
+
+  it('displays the CountdownClock when showCountdownTimer is true', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -994,7 +1024,7 @@ describe('CampaignGenericComponent', () => {
     })
   })
 
-  it('does not display the CountdownClock when showCountdownTimer is true, but the campaign has ended', () => {
+  it('still displays the CountdownClock when showCountdownTimer is true, even when we are past the "time.end" time', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -1008,7 +1038,7 @@ describe('CampaignGenericComponent', () => {
           time: {
             ...defaultMockProps.app.campaign.time,
             start: '2020-03-25T18:00:00.000Z',
-            end: '2020-03-28T18:00:00.000Z', // has ended
+            end: '2020-03-28T18:00:00.000Z', // we passed this
           },
         },
       },
@@ -1017,7 +1047,7 @@ describe('CampaignGenericComponent', () => {
     const wrapper = shallowRenderCampaign(
       <CampaignGenericComponent {...mockProps} />
     )
-    expect(wrapper.find(CountdownClock).exists()).toBe(false)
+    expect(wrapper.find(CountdownClock).exists()).toBe(true)
   })
 })
 

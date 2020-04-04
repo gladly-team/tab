@@ -5,7 +5,7 @@ import UserTabsLogModel from './UserTabsLogModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
-import getCurrentCampaignConfig from '../globals/getCurrentCampaignConfig'
+import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 
 /**
@@ -149,11 +149,11 @@ const logTab = async (userContext, userId, tabId = null) => {
   if (user.tabs === 1) {
     try {
       // Get the currently-active campaign.
-      const campaignConfig = await getCurrentCampaignConfig(userContext)
+      const campaign = await getCampaign(userContext)
 
       // The campaign config will ignore this if the campaign is
       // no longer active or if we don't need to count new users.
-      await campaignConfig.incrementNewUserCount()
+      await campaign.incrementNewUserCount()
     } catch (e) {
       throw e
     }
@@ -163,12 +163,12 @@ const logTab = async (userContext, userId, tabId = null) => {
   // during a campaign.
   if (isValid) {
     try {
-      const campaignConfig = await getCurrentCampaignConfig(userContext)
-      await campaignConfig.incrementTabCount()
+      const campaign = await getCampaign(userContext)
+      await campaign.incrementTabCount()
 
       // Use estimated money raised per tab to track money raised during
       // the campaign.
-      await campaignConfig.addMoneyRaised(getEstimatedMoneyRaisedPerTab())
+      await campaign.addMoneyRaised(getEstimatedMoneyRaisedPerTab())
     } catch (e) {
       throw e
     }
