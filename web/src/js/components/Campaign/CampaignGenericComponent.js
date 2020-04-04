@@ -101,6 +101,8 @@ class CampaignGenericComponent extends React.Component {
       showCountdownTimer,
       showHeartsDonationButton,
       showProgressBar,
+      showSocialSharing,
+      socialSharing,
     } = campaign
     const {
       targetNumber,
@@ -126,31 +128,6 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
-    // TODO: API field
-    // TODO: maybe move into a modal and use a button
-    const showSocialShare = true
-    const socialShareProps = {
-      url: 'https://tab.gladly.io/covid-19/',
-      EmailShareButtonProps: {
-        subject: 'Hi there',
-        body: 'This is where we say stuff!',
-      },
-      FacebookShareButtonProps: {
-        quote: 'This is my Facebook post text.',
-      },
-      RedditShareButtonProps: {
-        title: 'This is the title of the Reddit post.',
-      },
-      TumblrShareButtonProps: {
-        title: 'My Tumblr post title',
-        caption: 'This is where we say stuff!',
-      },
-      TwitterShareButtonProps: {
-        title: 'This is my Twitter post title',
-        related: ['@TabForACause'],
-      },
-    }
-
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
@@ -174,7 +151,7 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
-              {showSocialShare ? <SocialShare {...socialShareProps} /> : null}
+              {showSocialSharing ? <SocialShare {...socialSharing} /> : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
@@ -256,6 +233,32 @@ const propTypesCampaign = {
       showCountdownTimer: PropTypes.bool.isRequired,
       showHeartsDonationButton: PropTypes.bool.isRequired,
       showProgressBar: PropTypes.bool.isRequired,
+      showSocialSharing: PropTypes.bool.isRequired,
+      socialSharing: PropTypes.shape({
+        EmailShareButtonProps: PropTypes.shape({
+          subject: PropTypes.string.isRequired,
+          body: PropTypes.string.isRequired,
+          separator: PropTypes.string,
+        }),
+        FacebookShareButtonProps: PropTypes.shape({
+          quote: PropTypes.string.isRequired,
+          hashtag: PropTypes.string,
+        }),
+        RedditShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+        }),
+        TumblrShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          caption: PropTypes.string.isRequired,
+        }),
+        TwitterShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          via: PropTypes.string,
+          hashtags: PropTypes.arrayOf(PropTypes.string),
+          related: PropTypes.arrayOf(PropTypes.string),
+        }),
+        url: PropTypes.string.isRequired,
+      }),
       theme: PropTypes.shape({
         color: PropTypes.shape({
           main: PropTypes.string.isRequired,

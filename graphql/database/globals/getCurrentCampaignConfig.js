@@ -58,7 +58,28 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showCountdownTimer: false,
   showHeartsDonationButton: false,
   showProgressBar: true,
-  showSocialSharing: false,
+  showSocialSharing: true,
+  socialSharing: {
+    url: 'https://tab.gladly.io/covid-19/',
+    EmailShareButtonProps: {
+      subject: 'HELLO!',
+      body: 'This is where we say stuff!',
+    },
+    FacebookShareButtonProps: {
+      quote: 'HELLO! This is my Facebook post text.',
+    },
+    RedditShareButtonProps: {
+      title: 'HELLO! This is the title of the Reddit post.',
+    },
+    TumblrShareButtonProps: {
+      title: 'HELLO! My Tumblr post title',
+      caption: 'This is where we say stuff!',
+    },
+    TwitterShareButtonProps: {
+      title: 'HELLO! This is my Twitter post title',
+      related: ['@TabForACause'],
+    },
+  },
   theme: {
     color: {
       main: '#ff7314',
