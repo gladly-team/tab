@@ -161,7 +161,8 @@ describe('validation: general', () => {
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
-      // showSocialSharing: false, // TODO
+      showSocialSharing: false,
+      socialSharing: undefined,
       theme: {
         color: {
           main: '#ff7314',

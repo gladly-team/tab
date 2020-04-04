@@ -211,6 +211,8 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
   } = input
@@ -449,6 +451,8 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
   }
