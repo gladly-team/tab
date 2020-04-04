@@ -36,18 +36,29 @@ const SocialShare = props => {
     url,
   } = props
   const iconSize = 32
+
+  // Note: hashtags for Facebook and Twitter are hardcoded.
+  // We may want to move them server-side if we use them often.
   return (
     <div className={classes.root}>
       {FacebookShareButtonProps ? (
         <div className={classes.button}>
-          <FacebookShareButton {...FacebookShareButtonProps} url={url}>
+          <FacebookShareButton
+            {...FacebookShareButtonProps}
+            url={url}
+            hashtag={'tabsTransformed'}
+          >
             <FacebookIcon size={iconSize} round />
           </FacebookShareButton>
         </div>
       ) : null}
       {TwitterShareButtonProps ? (
         <div className={classes.button}>
-          <TwitterShareButton {...TwitterShareButtonProps} url={url}>
+          <TwitterShareButton
+            {...TwitterShareButtonProps}
+            url={url}
+            hashtags={['tabsTransformed']}
+          >
             <TwitterIcon size={iconSize} round />
           </TwitterShareButton>
         </div>
