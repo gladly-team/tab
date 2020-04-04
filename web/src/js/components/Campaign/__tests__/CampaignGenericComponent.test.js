@@ -63,6 +63,8 @@ const getMockProps = () => ({
         impactUnitPlural: 'Hearts',
         impactVerbPastTense: 'donated',
         limitProgressToTargetMax: false,
+        showProgressBarLabel: true,
+        showProgressBarEndText: false,
       },
       isLive: true,
       numNewUsers: undefined, // probably want to roll into generic goal
