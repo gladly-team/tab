@@ -81,7 +81,7 @@ describe('SocialShare component', () => {
     expect(wrapper.find(EmailShareButton).exists()).toBe(false)
   })
 
-  it('renders an FacebookShareButton and FacebookIcon when FacebookShareButtonProps is provided', () => {
+  it('renders a FacebookShareButton and FacebookIcon when FacebookShareButtonProps is provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -97,10 +97,11 @@ describe('SocialShare component', () => {
       ...mockProps.FacebookShareButtonProps,
       children: expect.any(Object),
       url: mockProps.url,
+      hashtag: 'tabsTransformed',
     })
   })
 
-  it('does not render an FacebookShareButton or FacebookIcon when FacebookShareButtonProps is not provided', () => {
+  it('does not render a FacebookShareButton or FacebookIcon when FacebookShareButtonProps is not provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -112,7 +113,7 @@ describe('SocialShare component', () => {
     expect(wrapper.find(FacebookShareButton).exists()).toBe(false)
   })
 
-  it('renders an RedditShareButton and RedditIcon when RedditShareButtonProps is provided', () => {
+  it('renders a RedditShareButton and RedditIcon when RedditShareButtonProps is provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -131,7 +132,7 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render an RedditShareButton or RedditIcon when RedditShareButtonProps is not provided', () => {
+  it('does not render a RedditShareButton or RedditIcon when RedditShareButtonProps is not provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -143,7 +144,7 @@ describe('SocialShare component', () => {
     expect(wrapper.find(RedditShareButton).exists()).toBe(false)
   })
 
-  it('renders an TumblrShareButton and TumblrIcon when TumblrShareButtonProps is provided', () => {
+  it('renders a TumblrShareButton and TumblrIcon when TumblrShareButtonProps is provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -163,7 +164,7 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render an TumblrShareButton or TumblrIcon when TumblrShareButtonProps is not provided', () => {
+  it('does not render a TumblrShareButton or TumblrIcon when TumblrShareButtonProps is not provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -175,7 +176,7 @@ describe('SocialShare component', () => {
     expect(wrapper.find(TumblrShareButton).exists()).toBe(false)
   })
 
-  it('renders an TwitterShareButton and TwitterIcon when TwitterShareButtonProps is provided', () => {
+  it('renders a TwitterShareButton and TwitterIcon when TwitterShareButtonProps is provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
@@ -192,10 +193,11 @@ describe('SocialShare component', () => {
       ...mockProps.TwitterShareButtonProps,
       children: expect.any(Object),
       url: mockProps.url,
+      hashtags: ['tabsTransformed'],
     })
   })
 
-  it('does not render an TwitterShareButton or TwitterIcon when TwitterShareButtonProps is not provided', () => {
+  it('does not render a TwitterShareButton or TwitterIcon when TwitterShareButtonProps is not provided', () => {
     const SocialShare = require('js/components/General/SocialShareComponent')
       .default
     const mockProps = {
