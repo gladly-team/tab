@@ -38,18 +38,18 @@ const SocialShare = props => {
   const iconSize = 32
   return (
     <div className={classes.root}>
-      {EmailShareButtonProps ? (
-        <div className={classes.button}>
-          <EmailShareButton {...EmailShareButtonProps} url={url}>
-            <EmailIcon size={iconSize} round />
-          </EmailShareButton>
-        </div>
-      ) : null}
       {FacebookShareButtonProps ? (
         <div className={classes.button}>
           <FacebookShareButton {...FacebookShareButtonProps} url={url}>
             <FacebookIcon size={iconSize} round />
           </FacebookShareButton>
+        </div>
+      ) : null}
+      {TwitterShareButtonProps ? (
+        <div className={classes.button}>
+          <TwitterShareButton {...TwitterShareButtonProps} url={url}>
+            <TwitterIcon size={iconSize} round />
+          </TwitterShareButton>
         </div>
       ) : null}
       {RedditShareButtonProps ? (
@@ -66,11 +66,11 @@ const SocialShare = props => {
           </TumblrShareButton>
         </div>
       ) : null}
-      {TwitterShareButtonProps ? (
+      {EmailShareButtonProps ? (
         <div className={classes.button}>
-          <TwitterShareButton {...TwitterShareButtonProps} url={url}>
-            <TwitterIcon size={iconSize} round />
-          </TwitterShareButton>
+          <EmailShareButton {...EmailShareButtonProps} url={url}>
+            <EmailIcon size={iconSize} round />
+          </EmailShareButton>
         </div>
       ) : null}
     </div>
