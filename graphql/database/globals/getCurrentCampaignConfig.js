@@ -35,8 +35,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    // targetNumber: 10000,
-    targetNumber: 35,
+    targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)
@@ -51,8 +50,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
     goal: {
       // Replace the progress bar labels with the ending text.
-      showProgressBarLabel: true,
-      showProgressBarEndText: false,
+      showProgressBarLabel: false,
+      showProgressBarEndText: true,
     },
   },
   showCountdownTimer: false,
