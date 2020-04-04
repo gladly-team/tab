@@ -31,6 +31,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitSingular: 'meal',
     impactUnitPlural: 'meals',
     impactVerbPastTense: 'given',
+    // impactVerbPastTense: 'gave', // TODO
+    // impactVerbPastParticiple: 'given', // TODO
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
