@@ -147,7 +147,7 @@ const campaignConfigInputSchema = Joi.object({
     showSocialSharing: configFields.extract('showSocialSharing').optional(),
     // The "onEnd.socialSharing" field is required when
     // "onEnd.showSocialSharing" is true. This value will completely
-    // replace teh "socailSharing" value. It is not merged.
+    // replace the "socialSharing" value (t is not merged).
     socialSharing: configFields
       .extract('socialSharing')
       .when('showSocialSharing', {
