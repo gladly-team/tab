@@ -39,8 +39,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 30, // FIXME: reenable correct targetNumber
-    // targetNumber: 10000,
+    targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)
