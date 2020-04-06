@@ -686,6 +686,11 @@ const campaignContentType = new GraphQLObjectType({
       description:
         'The primary campaign text content (paragraphs, links, etc.), using markdown',
     },
+    descriptionMarkdownTwo: {
+      type: GraphQLString,
+      description:
+        'Additional campaign text content (paragraphs, links, etc.), using markdown',
+    },
   }),
 })
 

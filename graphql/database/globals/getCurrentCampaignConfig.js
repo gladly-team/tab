@@ -11,6 +11,8 @@ const campaignEndDescription = `
 #### With your help, we just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. Thank you for stepping up to make a difference.
 #### Can you get some friends on board? Share this incredible milestone:
 `
+const campaignEndDescriptionTwo =
+  '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come shortly.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
@@ -50,6 +52,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     content: {
       titleMarkdown: campaignEndTitle,
       descriptionMarkdown: campaignEndDescription,
+      descriptionMarkdownTwo: campaignEndDescriptionTwo,
     },
     goal: {
       // Keep the progress bar label instead of the ending text.

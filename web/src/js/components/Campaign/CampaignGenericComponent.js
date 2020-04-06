@@ -131,9 +131,6 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
-    const descriptionMarkdown2 =
-      '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come shortly.'
-
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
@@ -169,9 +166,9 @@ class CampaignGenericComponent extends React.Component {
                   showError={showError}
                 />
               ) : null}
-              {descriptionMarkdown2 ? (
+              {content.descriptionMarkdownTwo ? (
                 <div className={classes.description}>
-                  <Markdown children={descriptionMarkdown2} />
+                  <Markdown children={content.descriptionMarkdownTwo} />
                 </div>
               ) : null}
               <div className={classes.bottomContent}>
@@ -232,6 +229,7 @@ const propTypesCampaign = {
       content: PropTypes.shape({
         titleMarkdown: PropTypes.string.isRequired,
         descriptionMarkdown: PropTypes.string.isRequired,
+        descriptionMarkdownTwo: PropTypes.string,
       }),
       goal: PropTypes.shape({
         targetNumber: PropTypes.number.isRequired,

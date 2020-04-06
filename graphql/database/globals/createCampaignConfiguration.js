@@ -17,6 +17,10 @@ const configFields = Joi.object({
   content: Joi.object({
     titleMarkdown: Joi.string().required(),
     descriptionMarkdown: Joi.string().required(),
+    // If we need more flexibility in where text goes, we
+    // should add a field to define the flex order of campaign
+    // content/widgets.
+    descriptionMarkdownTwo: Joi.string().optional(),
   }),
   goal: Joi.object({
     impactUnitSingular: Joi.string().required(),

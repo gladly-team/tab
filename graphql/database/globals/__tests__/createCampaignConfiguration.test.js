@@ -33,6 +33,7 @@ const getMockCampaignConfigInput = () => ({
   content: {
     titleMarkdown: '## Some title',
     descriptionMarkdown: '#### A description goes here.',
+    descriptionMarkdownTwo: '#### Something else',
   },
   countNewUsers: true,
   countMoneyRaised: true,
@@ -110,6 +111,7 @@ describe('validation: general', () => {
       content: {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
+        descriptionMarkdownTwo: '#### Something else',
       },
       endTriggers: {
         whenGoalAchieved: false,
@@ -324,6 +326,36 @@ describe('validation: content', () => {
     }).toThrow(
       'Campaign config validation error: "content.descriptionMarkdown" is required'
     )
+  })
+
+  it('does not throw if "content.descriptionMarkdownTwo" is defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        content: {
+          titleMarkdown: '## A title',
+          descriptionMarkdown: '#### Something',
+          descriptionMarkdownTwo: '#### Something else',
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "content.descriptionMarkdownTwo" is NOT defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        content: {
+          titleMarkdown: '## A title',
+          descriptionMarkdown: '#### Something',
+          descriptionMarkdownTwo: undefined,
+        },
+      })
+    }).not.toThrow()
   })
 })
 
@@ -1112,6 +1144,50 @@ describe('[onEnd] validation: content', () => {
     }).toThrow(
       'Campaign config validation error: "onEnd.content.descriptionMarkdown" is required'
     )
+  })
+
+  it('does not throw if "onEnd.content.descriptionMarkdownTwo" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            ...mockCampaignInput.onEnd.content,
+            descriptionMarkdownTwo: undefined,
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('does not throw if "content.descriptionMarkdownTwo" is defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: {
+            ...mockCampaignInput.onEnd.content,
+            descriptionMarkdownTwo: '#### Something else',
+          },
+        },
+      })
+    }).not.toThrow()
   })
 })
 
