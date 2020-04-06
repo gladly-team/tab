@@ -8,8 +8,7 @@ const campaignDescription = `
 `
 const campaignEndTitle = '## 10,000 Meals: We Did It'
 const campaignEndDescription = `
-#### With your help, our community just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. This is a challenging time, and we are **immensely** grateful for all of you who have stepped up to make a difference.
-#### This is still just the beginning of [our fight against this pandemic](https://tab.gladly.io/covid-19/)—more to come shortly.
+#### With your help, we just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. Thank you for stepping up to make a difference.
 #### Can you get some friends on board? Share this incredible milestone:
 `
 
@@ -38,7 +37,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10000,
+    targetNumber: 30, // FIXME: reenable correct targetNumber
+    // targetNumber: 10000,
     transformNumberSourceValue: moneyRaised => {
       // The moneyRaised value is in $USD, and it costs $0.20 per meal.
       return Math.floor(moneyRaised * 5)

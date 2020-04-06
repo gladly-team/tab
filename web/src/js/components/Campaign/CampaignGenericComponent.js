@@ -82,6 +82,9 @@ const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  socialSharing: {
+    padding: 4,
+  },
 })
 
 class CampaignGenericComponent extends React.Component {
@@ -128,6 +131,9 @@ class CampaignGenericComponent extends React.Component {
       progress = 100.0
     }
 
+    const descriptionMarkdown2 =
+      '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come shortly.'
+
     return (
       <div className={classes.root}>
         <FadeInDashboardAnimation>
@@ -151,13 +157,22 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
-              {showSocialSharing ? <SocialShare {...socialSharing} /> : null}
+              {showSocialSharing ? (
+                <div className={classes.socialSharing}>
+                  <SocialShare {...socialSharing} />
+                </div>
+              ) : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
                   user={user}
                   showError={showError}
                 />
+              ) : null}
+              {descriptionMarkdown2 ? (
+                <div className={classes.description}>
+                  <Markdown children={descriptionMarkdown2} />
+                </div>
               ) : null}
               <div className={classes.bottomContent}>
                 {showProgressBar ? (

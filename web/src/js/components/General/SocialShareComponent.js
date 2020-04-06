@@ -18,7 +18,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
-    padding: 8,
+    padding: 0,
   },
   button: {
     padding: 4,
