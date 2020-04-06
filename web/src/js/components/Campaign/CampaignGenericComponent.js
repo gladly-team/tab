@@ -82,6 +82,9 @@ const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  socialSharing: {
+    padding: 4,
+  },
 })
 
 class CampaignGenericComponent extends React.Component {
@@ -151,13 +154,22 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
-              {showSocialSharing ? <SocialShare {...socialSharing} /> : null}
+              {showSocialSharing ? (
+                <div className={classes.socialSharing}>
+                  <SocialShare {...socialSharing} />
+                </div>
+              ) : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
                   user={user}
                   showError={showError}
                 />
+              ) : null}
+              {content.descriptionMarkdownTwo ? (
+                <div className={classes.description}>
+                  <Markdown children={content.descriptionMarkdownTwo} />
+                </div>
               ) : null}
               <div className={classes.bottomContent}>
                 {showProgressBar ? (
@@ -217,6 +229,7 @@ const propTypesCampaign = {
       content: PropTypes.shape({
         titleMarkdown: PropTypes.string.isRequired,
         descriptionMarkdown: PropTypes.string.isRequired,
+        descriptionMarkdownTwo: PropTypes.string,
       }),
       goal: PropTypes.shape({
         targetNumber: PropTypes.number.isRequired,

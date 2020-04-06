@@ -22,6 +22,7 @@ const getMockCampaignConfiguration = () => ({
   content: {
     titleMarkdown: '## Some title',
     descriptionMarkdown: '#### A description goes here.',
+    descriptionMarkdownTwo: '#### Other optional text here.',
   },
   endTriggers: {
     whenGoalAchieved: false,
@@ -58,6 +59,7 @@ const getMockCampaignConfiguration = () => ({
     content: {
       titleMarkdown: '## The end title',
       descriptionMarkdown: '#### The end description goes here.',
+      descriptionMarkdownTwo: '#### Other optional end text here.',
     },
     goal: {
       showProgressBarLabel: false,
@@ -147,6 +149,7 @@ describe('getCampaign', () => {
       content: {
         titleMarkdown: '## Some title',
         descriptionMarkdown: '#### A description goes here.',
+        descriptionMarkdownTwo: '#### Other optional text here.',
       },
       goal: {
         currentNumber: 112358,
@@ -228,6 +231,7 @@ describe('getCampaign', () => {
           ...get(mockCampaignConfig, 'onEnd.content', {}),
           titleMarkdown: '## The end title',
           descriptionMarkdown: '#### The end description goes here.',
+          descriptionMarkdownTwo: '#### Other optional end text here.',
         },
         goal: {
           ...get(mockCampaignConfig, 'onEnd.goal', {}),
@@ -283,6 +287,7 @@ describe('getCampaign', () => {
       content: {
         titleMarkdown: '## The end title',
         descriptionMarkdown: '#### The end description goes here.',
+        descriptionMarkdownTwo: '#### Other optional end text here.',
       },
       goal: {
         currentNumber: 112358,

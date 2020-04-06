@@ -53,6 +53,7 @@ const getMockProps = () => ({
       content: {
         titleMarkdown: campaignTitle,
         descriptionMarkdown: campaignDescription,
+        descriptionMarkdownTwo: undefined, // optional additional markdown
       },
       goal: {
         targetNumber: 5000,
@@ -191,7 +192,7 @@ describe('CampaignGenericComponent', () => {
     ).toEqual('## Hey, I am a title!')
   })
 
-  it('displays the content.descriptionMarkdown when the campaign is active', () => {
+  it('displays the content.descriptionMarkdown', () => {
     const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
       .default
     const defaultMockProps = getMockProps()
@@ -223,6 +224,89 @@ describe('CampaignGenericComponent', () => {
         .at(1)
         .prop('children')
     ).toEqual('#### Hey, I am a nice description.')
+  })
+
+  it('displays the content.descriptionMarkdownTwo when provided', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          content: {
+            ...defaultMockProps.app.campaign.content,
+            descriptionMarkdownTwo: '#### I am another nice description.',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Markdown)
+        .at(2) // after the descriptionMarkdown
+        .prop('children')
+    ).toEqual('#### I am another nice description.')
+  })
+
+  it('does not display the content.descriptionMarkdownTwo when not provided', () => {
+    const CampaignGenericComponent = require('js/components/Campaign/CampaignGenericComponent')
+      .default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        campaign: {
+          ...defaultMockProps.app.campaign,
+          content: {
+            ...defaultMockProps.app.campaign.content,
+            descriptionMarkdownTwo: '#### I am another nice description.',
+          },
+          time: {
+            ...defaultMockProps.app.campaign.time,
+            start: '2020-03-25T18:00:00.000Z',
+            end: '2020-05-01T18:00:00.000Z',
+          },
+        },
+      },
+    }
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallowRenderCampaign(
+      <CampaignGenericComponent {...mockProps} />
+    )
+
+    // GEt the number of Markdown elements.
+    const numMarkdowns = wrapper.find(Markdown).length
+
+    // Remove descriptionMarkdownTwo.
+    wrapper.setProps({
+      ...mockProps,
+      app: {
+        ...mockProps.app,
+        campaign: {
+          ...mockProps.app.campaign,
+          content: {
+            ...mockProps.app.campaign.content,
+            descriptionMarkdownTwo: undefined,
+          },
+        },
+      },
+    })
+
+    // There should be one fewer Markdown elements.
+    expect(wrapper.find(Markdown).length).toEqual(numMarkdowns - 1)
   })
 
   it('displays the DonateHeartsControls when showHeartsDonationButton is true', () => {

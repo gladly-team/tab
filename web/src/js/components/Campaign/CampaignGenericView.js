@@ -31,6 +31,7 @@ class CampaignGenericView extends React.Component {
                 content {
                   titleMarkdown
                   descriptionMarkdown
+                  descriptionMarkdownTwo
                 }
                 goal {
                   targetNumber
