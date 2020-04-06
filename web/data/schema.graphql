@@ -103,6 +103,12 @@ type Campaign {
   """
   showProgressBar: Boolean!
 
+  """Whether to show social sharing buttons"""
+  showSocialSharing: Boolean!
+
+  """Social sharing buttons"""
+  socialSharing: CampaignSocialSharing
+
   """Theming/style for the campaign"""
   theme: CampaignTheme
 
@@ -167,6 +173,66 @@ type CampaignGoal {
   Whether the progress bar should have an end-of-campaign summary text of the progress
   """
   showProgressBarEndText: Boolean!
+}
+
+"""Information on progress toward a target impact goal for the campaign"""
+type CampaignSocialSharing {
+  """The URL to share"""
+  url: String!
+
+  """Props for the email social sharing button"""
+  EmailShareButtonProps: CampaignSocialSharingEmailProps
+
+  """Props for the Facebook social sharing button"""
+  FacebookShareButtonProps: CampaignSocialSharingFacebookProps
+
+  """Props for the Reddit social sharing button"""
+  RedditShareButtonProps: CampaignSocialSharingRedditProps
+
+  """Props for the Tumblr social sharing button"""
+  TumblrShareButtonProps: CampaignSocialSharingTumblrProps
+
+  """Props for the Twitter social sharing button"""
+  TwitterShareButtonProps: CampaignSocialSharingTwitterProps
+}
+
+"""Props for the email social sharing button"""
+type CampaignSocialSharingEmailProps {
+  """The email subject"""
+  subject: String!
+
+  """The email body"""
+  body: String!
+}
+
+"""Props for the Facebook social sharing button"""
+type CampaignSocialSharingFacebookProps {
+  """The text to share to Facebook"""
+  quote: String!
+}
+
+"""Props for the Reddit social sharing button"""
+type CampaignSocialSharingRedditProps {
+  """The text to share to Reddit"""
+  title: String!
+}
+
+"""Props for the Tumblr social sharing button"""
+type CampaignSocialSharingTumblrProps {
+  """The Tumblr title"""
+  title: String!
+
+  """The Tumblr caption"""
+  caption: String!
+}
+
+"""Props for the Twitter social sharing button"""
+type CampaignSocialSharingTwitterProps {
+  """The text to share to Twitter"""
+  title: String!
+
+  """A list of Twitter handles that relate to the post"""
+  related: [String]!
 }
 
 """Theming/styling for the campaign"""

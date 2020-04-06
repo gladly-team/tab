@@ -63,10 +63,54 @@ const getMockCampaignConfiguration = () => ({
       showProgressBarLabel: false,
       showProgressBarEndText: true,
     },
+    showSocialSharing: true,
+    socialSharing: {
+      url: 'https://example.com/something-else/',
+      EmailShareButtonProps: {
+        subject: 'Things have ended',
+        body: 'This is a way we say, "the end".',
+      },
+      FacebookShareButtonProps: {
+        quote: 'Things have ended, and here is my post!',
+      },
+      RedditShareButtonProps: {
+        title: 'Things have ended, and here is my post!',
+      },
+      TumblrShareButtonProps: {
+        title: 'Things have ended',
+        caption: 'This is a way we say, "the end".',
+      },
+      TwitterShareButtonProps: {
+        title: 'Things have ended, and here is my post!',
+        related: ['@TabForACause'],
+      },
+    },
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
+  showSocialSharing: true,
+  socialSharing: {
+    url: 'https://example.com/share-me/',
+    EmailShareButtonProps: {
+      subject: 'Hi there',
+      body: 'This is where we say stuff!',
+    },
+    FacebookShareButtonProps: {
+      quote: 'This is my Facebook post text.',
+    },
+    RedditShareButtonProps: {
+      title: 'This is the title of the Reddit post.',
+    },
+    TumblrShareButtonProps: {
+      title: 'My Tumblr post title',
+      caption: 'This is where we say stuff!',
+    },
+    TwitterShareButtonProps: {
+      title: 'This is my Twitter post title',
+      related: ['@TabForACause'],
+    },
+  },
   theme: {
     color: {
       main: '#ff7314',
@@ -121,6 +165,28 @@ describe('getCampaign', () => {
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      showSocialSharing: true,
+      socialSharing: {
+        url: 'https://example.com/share-me/',
+        EmailShareButtonProps: {
+          subject: 'Hi there',
+          body: 'This is where we say stuff!',
+        },
+        FacebookShareButtonProps: {
+          quote: 'This is my Facebook post text.',
+        },
+        RedditShareButtonProps: {
+          title: 'This is the title of the Reddit post.',
+        },
+        TumblrShareButtonProps: {
+          title: 'My Tumblr post title',
+          caption: 'This is where we say stuff!',
+        },
+        TwitterShareButtonProps: {
+          title: 'This is my Twitter post title',
+          related: ['@TabForACause'],
+        },
+      },
       theme: {
         color: {
           main: '#ff7314',
@@ -169,6 +235,28 @@ describe('getCampaign', () => {
           impactUnitPlural: 'Hearts!',
           showProgressBarLabel: false,
           showProgressBarEndText: true,
+          showSocialSharing: true,
+          socialSharing: {
+            url: 'https://example.com/something-else/',
+            EmailShareButtonProps: {
+              subject: 'Things have ended',
+              body: 'This is a way we say, "the end".',
+            },
+            FacebookShareButtonProps: {
+              quote: 'Things have ended, and here is my post!',
+            },
+            RedditShareButtonProps: {
+              title: 'Things have ended, and here is my post!',
+            },
+            TumblrShareButtonProps: {
+              title: 'Things have ended',
+              caption: 'This is a way we say, "the end".',
+            },
+            TwitterShareButtonProps: {
+              title: 'Things have ended, and here is my post!',
+              related: ['@TabForACause'],
+            },
+          },
         },
         showCountdownTimer: false,
         showHeartsDonationButton: false,
@@ -209,6 +297,28 @@ describe('getCampaign', () => {
       showCountdownTimer: false, // modified
       showHeartsDonationButton: false, // modified
       showProgressBar: false, // modified
+      showSocialSharing: true,
+      socialSharing: {
+        url: 'https://example.com/something-else/',
+        EmailShareButtonProps: {
+          subject: 'Things have ended',
+          body: 'This is a way we say, "the end".',
+        },
+        FacebookShareButtonProps: {
+          quote: 'Things have ended, and here is my post!',
+        },
+        RedditShareButtonProps: {
+          title: 'Things have ended, and here is my post!',
+        },
+        TumblrShareButtonProps: {
+          title: 'Things have ended',
+          caption: 'This is a way we say, "the end".',
+        },
+        TwitterShareButtonProps: {
+          title: 'Things have ended, and here is my post!',
+          related: ['@TabForACause'],
+        },
+      },
       theme: {
         color: {
           main: '#000', // modified
@@ -252,6 +362,28 @@ describe('getCampaign', () => {
           showProgressBarLabel: false, // modified
           showProgressBarEndText: true, // modified
         },
+        showSocialSharing: true,
+        socialSharing: {
+          url: 'https://example.com/something-else/',
+          EmailShareButtonProps: {
+            subject: 'Things have ended',
+            body: 'This is a way we say, "the end".',
+          },
+          FacebookShareButtonProps: {
+            quote: 'Things have ended, and here is my post!',
+          },
+          RedditShareButtonProps: {
+            title: 'Things have ended, and here is my post!',
+          },
+          TumblrShareButtonProps: {
+            title: 'Things have ended',
+            caption: 'This is a way we say, "the end".',
+          },
+          TwitterShareButtonProps: {
+            title: 'Things have ended, and here is my post!',
+            related: ['@TabForACause'],
+          },
+        },
       },
       time: {
         ...get(mockCampaignConfig, 'time', {}),
@@ -276,6 +408,28 @@ describe('getCampaign', () => {
         showProgressBarLabel: false, // modified
         showProgressBarEndText: true, // modified
         targetNumber: 100,
+      },
+      showSocialSharing: true,
+      socialSharing: {
+        url: 'https://example.com/something-else/',
+        EmailShareButtonProps: {
+          subject: 'Things have ended',
+          body: 'This is a way we say, "the end".',
+        },
+        FacebookShareButtonProps: {
+          quote: 'Things have ended, and here is my post!',
+        },
+        RedditShareButtonProps: {
+          title: 'Things have ended, and here is my post!',
+        },
+        TumblrShareButtonProps: {
+          title: 'Things have ended',
+          caption: 'This is a way we say, "the end".',
+        },
+        TwitterShareButtonProps: {
+          title: 'Things have ended, and here is my post!',
+          related: ['@TabForACause'],
+        },
       },
     })
   })

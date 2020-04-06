@@ -18,6 +18,8 @@ const createCampaignData = async (userContext, campaignConfig) => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
   } = campaignConfig
@@ -100,6 +102,8 @@ const createCampaignData = async (userContext, campaignConfig) => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
     // If the campaign has ended, update the campaign data

@@ -58,11 +58,35 @@ const getMockCampaignConfigInput = () => ({
       titleMarkdown: '## The end title',
       descriptionMarkdown: '#### The end description goes here.',
     },
+    showSocialSharing: true,
+    socialSharing: {
+      url: 'https://example.com/share-me',
+      EmailShareButtonProps: {
+        subject: 'Hi there',
+        body: 'This is where we say stuff!',
+      },
+      FacebookShareButtonProps: {
+        quote: 'This is my Facebook post text.',
+      },
+      RedditShareButtonProps: {
+        title: 'This is the title of the Reddit post.',
+      },
+      TumblrShareButtonProps: {
+        title: 'My Tumblr post title',
+        caption: 'This is where we say stuff!',
+      },
+      TwitterShareButtonProps: {
+        title: 'This is my Twitter post title',
+        related: ['@TabForACause'],
+      },
+    },
     // ... can have other stuff here
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
+  showSocialSharing: false,
+  socialSharing: undefined,
   theme: {
     color: {
       main: '#ff7314',
@@ -75,8 +99,8 @@ const getMockCampaignConfigInput = () => ({
   },
 })
 
-describe('createCampaignConfiguration: validation', () => {
-  it('returns an object with the expected required properties', () => {
+describe('validation: general', () => {
+  it('returns the expected object', () => {
     expect.assertions(1)
     process.env.IS_GLOBAL_CAMPAIGN_LIVE = true
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -111,10 +135,34 @@ describe('createCampaignConfiguration: validation', () => {
           titleMarkdown: '## The end title',
           descriptionMarkdown: '#### The end description goes here.',
         },
+        showSocialSharing: true,
+        socialSharing: {
+          url: 'https://example.com/share-me',
+          EmailShareButtonProps: {
+            subject: 'Hi there',
+            body: 'This is where we say stuff!',
+          },
+          FacebookShareButtonProps: {
+            quote: 'This is my Facebook post text.',
+          },
+          RedditShareButtonProps: {
+            title: 'This is the title of the Reddit post.',
+          },
+          TumblrShareButtonProps: {
+            title: 'My Tumblr post title',
+            caption: 'This is where we say stuff!',
+          },
+          TwitterShareButtonProps: {
+            title: 'This is my Twitter post title',
+            related: ['@TabForACause'],
+          },
+        },
       },
       showCountdownTimer: true,
       showHeartsDonationButton: true,
       showProgressBar: true,
+      showSocialSharing: false,
+      socialSharing: undefined,
       theme: {
         color: {
           main: '#ff7314',
@@ -165,7 +213,9 @@ describe('createCampaignConfiguration: validation', () => {
       'Campaign config validation error: "campaignId" must be a string'
     )
   })
+})
 
+describe('validation: charityId and showHeartsDonationButton', () => {
   it('does not throw if "charityId" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -191,6 +241,48 @@ describe('createCampaignConfiguration: validation', () => {
     }).toThrow('Campaign config validation error: "charityId" must be a string')
   })
 
+  it('throws if "showHeartsDonationButton" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showHeartsDonationButton: undefined,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showHeartsDonationButton" is required'
+    )
+  })
+
+  it('throws if "showHeartsDonationButton" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showHeartsDonationButton: 0,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showHeartsDonationButton" must be a boolean'
+    )
+  })
+
+  it('throws if "showHeartsDonationButton" is true but "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
+        showProgressBar: false, // this must be false because we set "goal" to null
+        charityId: undefined,
+        showHeartsDonationButton: true,
+      })
+    }).toThrow('Campaign config validation error: "charityId" is required')
+  })
+})
+
+describe('validation: content', () => {
   it('throws if "content" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -233,7 +325,9 @@ describe('createCampaignConfiguration: validation', () => {
       'Campaign config validation error: "content.descriptionMarkdown" is required'
     )
   })
+})
 
+describe('validation: showCountdownTimer', () => {
   it('throws if "showCountdownTimer" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -259,33 +353,9 @@ describe('createCampaignConfiguration: validation', () => {
       'Campaign config validation error: "showCountdownTimer" must be a boolean'
     )
   })
+})
 
-  it('throws if "showHeartsDonationButton" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        showHeartsDonationButton: undefined,
-      })
-    }).toThrow(
-      'Campaign config validation error: "showHeartsDonationButton" is required'
-    )
-  })
-
-  it('throws if "showHeartsDonationButton" is set to a non-boolean value', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        showHeartsDonationButton: 0,
-      })
-    }).toThrow(
-      'Campaign config validation error: "showHeartsDonationButton" must be a boolean'
-    )
-  })
-
+describe('validation: showProgressBar and goal', () => {
   it('throws if "showProgressBar" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -310,99 +380,6 @@ describe('createCampaignConfiguration: validation', () => {
     }).toThrow(
       'Campaign config validation error: "showProgressBar" must be a boolean'
     )
-  })
-
-  it('throws if "time" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        time: undefined,
-      })
-    }).toThrow('Campaign config validation error: "time" is required')
-  })
-
-  it('throws if "time.start" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        time: {
-          start: undefined,
-          end: '2020-05-01T18:00:00.000Z',
-        },
-      })
-    }).toThrow('Campaign config validation error: "time.start" is required')
-  })
-
-  it('throws if "time.start" is not a valid ISO timestamp', async () => {
-    expect.assertions(1)
-
-    // Suppress expected moment.js complaint.
-    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
-
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        time: {
-          start: '2018-12-23 10am', // invalid
-          end: '2020-05-01T18:00:00.000Z',
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "time.start" must be in ISO 8601 date format'
-    )
-  })
-
-  it('throws if "time.end" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        time: {
-          start: '2020-05-01T18:00:00.000Z',
-          end: undefined,
-        },
-      })
-    }).toThrow('Campaign config validation error: "time.end" is required')
-  })
-
-  it('throws if "time.end" is not a valid ISO timestamp', async () => {
-    expect.assertions(1)
-
-    // Suppress expected moment.js complaint.
-    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
-
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        time: {
-          start: '2020-05-01T18:00:00.000Z',
-          end: '2018-12-23 10am', // invalid
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "time.end" must be in ISO 8601 date format'
-    )
-  })
-
-  it('throws if "showHeartsDonationButton" is true but "charityId" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        goal: undefined, // cannot have a goal that relies on hearts when charityId is null
-        showProgressBar: false, // this must be false because we set "goal" to null
-        charityId: undefined,
-        showHeartsDonationButton: true,
-      })
-    }).toThrow('Campaign config validation error: "charityId" is required')
   })
 
   it('throws if "showProgressBar" is true but "goal" is not defined', async () => {
@@ -596,7 +573,176 @@ describe('createCampaignConfiguration: validation', () => {
       'Campaign config validation error: "goal.transformNumberSourceValue" must be of type function'
     )
   })
+})
 
+describe('validation: socialSharing and showSocialSharing', () => {
+  it('throws if "showSocialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: undefined,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showSocialSharing" is required'
+    )
+  })
+
+  it('throws if "showSocialSharing" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: 0,
+      })
+    }).toThrow(
+      'Campaign config validation error: "showSocialSharing" must be a boolean'
+    )
+  })
+
+  it('throws if "showSocialSharing" is true but "socialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: undefined,
+      })
+    }).toThrow('Campaign config validation error: "socialSharing" is required')
+  })
+
+  it('throws if "socialSharing" is missing a "url" property', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: {},
+      })
+    }).toThrow(
+      'Campaign config validation error: "socialSharing.url" is required'
+    )
+  })
+
+  it('does not throw if "socialSharing" includes expected data', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        showSocialSharing: true,
+        socialSharing: {
+          url: 'https://example.com/share-me/',
+          EmailShareButtonProps: {
+            subject: 'Hi there',
+            body: 'This is where we say stuff!',
+          },
+          FacebookShareButtonProps: {
+            quote: 'This is my Facebook post text.',
+          },
+          RedditShareButtonProps: {
+            title: 'This is the title of the Reddit post.',
+          },
+          TumblrShareButtonProps: {
+            title: 'My Tumblr post title',
+            caption: 'This is where we say stuff!',
+          },
+          TwitterShareButtonProps: {
+            title: 'This is my Twitter post title',
+            related: ['@TabForACause'],
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+})
+
+describe('validation: time', () => {
+  it('throws if "time" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: undefined,
+      })
+    }).toThrow('Campaign config validation error: "time" is required')
+  })
+
+  it('throws if "time.start" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: undefined,
+          end: '2020-05-01T18:00:00.000Z',
+        },
+      })
+    }).toThrow('Campaign config validation error: "time.start" is required')
+  })
+
+  it('throws if "time.start" is not a valid ISO timestamp', async () => {
+    expect.assertions(1)
+
+    // Suppress expected moment.js complaint.
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2018-12-23 10am', // invalid
+          end: '2020-05-01T18:00:00.000Z',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "time.start" must be in ISO 8601 date format'
+    )
+  })
+
+  it('throws if "time.end" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2020-05-01T18:00:00.000Z',
+          end: undefined,
+        },
+      })
+    }).toThrow('Campaign config validation error: "time.end" is required')
+  })
+
+  it('throws if "time.end" is not a valid ISO timestamp', async () => {
+    expect.assertions(1)
+
+    // Suppress expected moment.js complaint.
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        time: {
+          start: '2020-05-01T18:00:00.000Z',
+          end: '2018-12-23 10am', // invalid
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "time.end" must be in ISO 8601 date format'
+    )
+  })
+})
+
+describe('validation: theme', () => {
   it('does not throw if "theme" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -656,7 +802,9 @@ describe('createCampaignConfiguration: validation', () => {
       'Campaign config validation error: "theme.color.light" is required'
     )
   })
+})
 
+describe('validation: endTriggers and onEnd', () => {
   it('does not throw if both "endTriggers" and "onEnd" are not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -708,7 +856,7 @@ describe('createCampaignConfiguration: validation', () => {
   })
 })
 
-describe('createCampaignConfiguration: "onEnd" validation', () => {
+describe('[onEnd] validation: general', () => {
   it('does not throw if "onEnd" is an empty object', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -721,6 +869,199 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
           whenTimeEnds: true,
         },
         onEnd: {},
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd" includes "campaignId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          campaignId: 'my-different-campaign-id',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.campaignId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "charityId', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          charityId: '5ae19457-a8a7-4c28-89ee-52179a2fb966',
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.charityId" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countNewUsers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countNewUsers: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countNewUsers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countMoneyRaised', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countMoneyRaised: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countMoneyRaised" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "countTabsOpened', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          countTabsOpened: false,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.countTabsOpened" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "endTriggers', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          endTriggers: {},
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.endTriggers" is not allowed'
+    )
+  })
+
+  it('throws if "onEnd" includes "onEnd', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          onEnd: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.onEnd" is not allowed')
+  })
+
+  it('throws if "onEnd" includes "time', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          time: {},
+        },
+      })
+    }).toThrow('Campaign config validation error: "onEnd.time" is not allowed')
+  })
+})
+
+describe('[onEnd] validation: showHeartsDonationButton', () => {
+  it('does not throw if "onEnd.showHeartsDonationButton" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showHeartsDonationButton" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showHeartsDonationButton" must be a boolean'
+    )
+  })
+
+  it('throws if "onEnd.showHeartsDonationButton" is true (changed on campaign end) and "charityId" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        charityId: undefined,
+        showHeartsDonationButton: false, // charityId is not required before campaign end
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showHeartsDonationButton: true, // now, charityId is required
+        },
+      })
+    }).toThrow('Campaign config validation error: "charityId" is required')
+  })
+})
+
+describe('[onEnd] validation: content', () => {
+  it('does not throws if "onEnd.content" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        endTriggers: {
+          ...mockCampaignInput.endTriggers,
+          whenGoalAchieved: false,
+          whenTimeEnds: true,
+        },
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          content: undefined,
+        },
       })
     }).not.toThrow()
   })
@@ -772,7 +1113,9 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
       'Campaign config validation error: "onEnd.content.descriptionMarkdown" is required'
     )
   })
+})
 
+describe('[onEnd] validation: showProgressBar and goal', () => {
   it('does not throw if "onEnd.goal" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -906,82 +1249,6 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
     )
   })
 
-  it('does not throw if "onEnd.showCountdownTimer" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          showCountdownTimer: undefined,
-        },
-      })
-    }).not.toThrow()
-  })
-
-  it('throws if "onEnd.showCountdownTimer" is set to a non-boolean value', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          showCountdownTimer: 0,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.showCountdownTimer" must be a boolean'
-    )
-  })
-
-  it('does not throw if "onEnd.showHeartsDonationButton" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          showHeartsDonationButton: undefined,
-        },
-      })
-    }).not.toThrow()
-  })
-
-  it('throws if "onEnd.showHeartsDonationButton" is set to a non-boolean value', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          showHeartsDonationButton: 0,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.showHeartsDonationButton" must be a boolean'
-    )
-  })
-
-  it('throws if "onEnd.showHeartsDonationButton" is true (changed on campaign end) and "charityId" is not defined', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        charityId: undefined,
-        showHeartsDonationButton: false, // charityId is not required before campaign end
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          showHeartsDonationButton: true, // now, charityId is required
-        },
-      })
-    }).toThrow('Campaign config validation error: "charityId" is required')
-  })
-
   it('does not throw if "onEnd.showProgressBar" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1084,7 +1351,142 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
       })
     }).toThrow('Campaign config validation error: "goal" is required')
   })
+})
 
+describe('[onEnd] validation: socialSharing and showSocialSharing', () => {
+  it('does not throw if "onEnd.showSocialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onend.showSocialSharing" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showSocialSharing" must be a boolean'
+    )
+  })
+
+  it('throws if "onEndshowSocialSharing" is true but "onEnd.socialSharing" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: undefined,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.socialSharing" is required'
+    )
+  })
+
+  it('throws if "onEnd.socialSharing" is missing a "url" property', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: {},
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.socialSharing.url" is required'
+    )
+  })
+
+  it('does not throw if "onEnd.socialSharing" includes expected data', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showSocialSharing: true,
+          socialSharing: {
+            url: 'https://example.com/share-me/',
+            EmailShareButtonProps: {
+              subject: 'Hi there',
+              body: 'This is where we say stuff!',
+            },
+            FacebookShareButtonProps: {
+              quote: 'This is my Facebook post text.',
+            },
+            RedditShareButtonProps: {
+              title: 'This is the title of the Reddit post.',
+            },
+            TumblrShareButtonProps: {
+              title: 'My Tumblr post title',
+              caption: 'This is where we say stuff!',
+            },
+            TwitterShareButtonProps: {
+              title: 'This is my Twitter post title',
+              related: ['@TabForACause'],
+            },
+          },
+        },
+      })
+    }).not.toThrow()
+  })
+})
+
+describe('[onEnd] validation: showCountdownTimer', () => {
+  it('does not throw if "onEnd.showCountdownTimer" is not defined', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showCountdownTimer: undefined,
+        },
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if "onEnd.showCountdownTimer" is set to a non-boolean value', async () => {
+    expect.assertions(1)
+    const mockCampaignInput = getMockCampaignConfigInput()
+    expect(() => {
+      return createCampaignConfiguration({
+        ...mockCampaignInput,
+        onEnd: {
+          ...mockCampaignInput.onEnd,
+          showCountdownTimer: 0,
+        },
+      })
+    }).toThrow(
+      'Campaign config validation error: "onEnd.showCountdownTimer" must be a boolean'
+    )
+  })
+})
+
+describe('[onEnd] validation: theme', () => {
   it('does not throw if "onEnd.theme" is not defined', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1156,133 +1558,9 @@ describe('createCampaignConfiguration: "onEnd" validation', () => {
       'Campaign config validation error: "onEnd.theme.color.light" is required'
     )
   })
-
-  it('throws if "onEnd" includes "campaignId', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          campaignId: 'my-different-campaign-id',
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.campaignId" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "charityId', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          charityId: '5ae19457-a8a7-4c28-89ee-52179a2fb966',
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.charityId" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "countNewUsers', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          countNewUsers: false,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.countNewUsers" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "countMoneyRaised', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          countMoneyRaised: false,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.countMoneyRaised" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "countTabsOpened', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          countTabsOpened: false,
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.countTabsOpened" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "endTriggers', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          endTriggers: {},
-        },
-      })
-    }).toThrow(
-      'Campaign config validation error: "onEnd.endTriggers" is not allowed'
-    )
-  })
-
-  it('throws if "onEnd" includes "onEnd', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          onEnd: {},
-        },
-      })
-    }).toThrow('Campaign config validation error: "onEnd.onEnd" is not allowed')
-  })
-
-  it('throws if "onEnd" includes "time', async () => {
-    expect.assertions(1)
-    const mockCampaignInput = getMockCampaignConfigInput()
-    expect(() => {
-      return createCampaignConfiguration({
-        ...mockCampaignInput,
-        onEnd: {
-          ...mockCampaignInput.onEnd,
-          time: {},
-        },
-      })
-    }).toThrow('Campaign config validation error: "onEnd.time" is not allowed')
-  })
 })
 
-describe('createCampaignConfiguration: addMoneyRaised', () => {
+describe('addMoneyRaised', () => {
   it('calls Redis as expected when calling addMoneyRaised and countMoneyRaised is true', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1376,7 +1654,7 @@ describe('createCampaignConfiguration: addMoneyRaised', () => {
   })
 })
 
-describe('createCampaignConfiguration: incrementNewUserCount', () => {
+describe('incrementNewUserCount', () => {
   it('calls Redis as expected when calling incrementNewUserCount and countNewUsers is true', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1450,7 +1728,7 @@ describe('createCampaignConfiguration: incrementNewUserCount', () => {
   })
 })
 
-describe('createCampaignConfiguration: incrementTabCount', () => {
+describe('incrementTabCount', () => {
   it('calls Redis as expected when calling incrementTabCount and countTabsOpened is true', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1524,7 +1802,7 @@ describe('createCampaignConfiguration: incrementTabCount', () => {
   })
 })
 
-describe('createCampaignConfiguration: charity data', () => {
+describe('charity data (getCharityData)', () => {
   it('fetches the charity as expected when calling getCharityData', async () => {
     expect.assertions(1)
     const mockCampaignInput = getMockCampaignConfigInput()
@@ -1596,7 +1874,7 @@ describe('createCampaignConfiguration: charity data', () => {
   })
 })
 
-describe('createCampaignConfiguration: goal data', () => {
+describe('goal data (goal.getCurrentNumber)', () => {
   it('returns the expected value from "goal.getCurrentNumber" when "goal.numberSource" === "hearts"', async () => {
     expect.assertions(1)
 

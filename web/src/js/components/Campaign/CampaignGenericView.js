@@ -47,6 +47,28 @@ class CampaignGenericView extends React.Component {
                 showCountdownTimer
                 showHeartsDonationButton
                 showProgressBar
+                showSocialSharing
+                socialSharing {
+                  url
+                  EmailShareButtonProps {
+                    subject
+                    body
+                  }
+                  FacebookShareButtonProps {
+                    quote
+                  }
+                  RedditShareButtonProps {
+                    title
+                  }
+                  TumblrShareButtonProps {
+                    title
+                    caption
+                  }
+                  TwitterShareButtonProps {
+                    title
+                    related
+                  }
+                }
                 theme {
                   color {
                     main

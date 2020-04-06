@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
+import SocialShare from 'js/components/General/SocialShareComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Markdown from 'js/components/General/Markdown'
@@ -100,6 +101,8 @@ class CampaignGenericComponent extends React.Component {
       showCountdownTimer,
       showHeartsDonationButton,
       showProgressBar,
+      showSocialSharing,
+      socialSharing,
     } = campaign
     const {
       targetNumber,
@@ -148,6 +151,7 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
+              {showSocialSharing ? <SocialShare {...socialSharing} /> : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
@@ -229,6 +233,32 @@ const propTypesCampaign = {
       showCountdownTimer: PropTypes.bool.isRequired,
       showHeartsDonationButton: PropTypes.bool.isRequired,
       showProgressBar: PropTypes.bool.isRequired,
+      showSocialSharing: PropTypes.bool.isRequired,
+      socialSharing: PropTypes.shape({
+        EmailShareButtonProps: PropTypes.shape({
+          subject: PropTypes.string.isRequired,
+          body: PropTypes.string.isRequired,
+          separator: PropTypes.string,
+        }),
+        FacebookShareButtonProps: PropTypes.shape({
+          quote: PropTypes.string.isRequired,
+          hashtag: PropTypes.string,
+        }),
+        RedditShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+        }),
+        TumblrShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          caption: PropTypes.string.isRequired,
+        }),
+        TwitterShareButtonProps: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          via: PropTypes.string,
+          hashtags: PropTypes.arrayOf(PropTypes.string),
+          related: PropTypes.arrayOf(PropTypes.string),
+        }),
+        url: PropTypes.string.isRequired,
+      }),
       theme: PropTypes.shape({
         color: PropTypes.shape({
           main: PropTypes.string.isRequired,

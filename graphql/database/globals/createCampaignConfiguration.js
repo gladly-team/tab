@@ -35,6 +35,28 @@ const configFields = Joi.object({
   showCountdownTimer: Joi.boolean(),
   showHeartsDonationButton: Joi.boolean(),
   showProgressBar: Joi.boolean(),
+  showSocialSharing: Joi.boolean(),
+  socialSharing: Joi.object({
+    url: Joi.string().required(),
+    EmailShareButtonProps: Joi.object({
+      subject: Joi.string().required(),
+      body: Joi.string().required(),
+    }),
+    FacebookShareButtonProps: Joi.object({
+      quote: Joi.string().required(),
+    }),
+    RedditShareButtonProps: Joi.object({
+      title: Joi.string().required(),
+    }),
+    TumblrShareButtonProps: Joi.object({
+      title: Joi.string().required(),
+      caption: Joi.string().required(),
+    }),
+    TwitterShareButtonProps: Joi.object({
+      title: Joi.string().required(),
+      related: Joi.array(),
+    }),
+  }),
   theme: Joi.object({
     color: Joi.object({
       main: Joi.string().required(),
@@ -122,6 +144,17 @@ const campaignConfigInputSchema = Joi.object({
       .extract('showHeartsDonationButton')
       .optional(),
     showProgressBar: configFields.extract('showProgressBar').optional(),
+    showSocialSharing: configFields.extract('showSocialSharing').optional(),
+    // The "onEnd.socialSharing" field is required when
+    // "onEnd.showSocialSharing" is true. This value will completely
+    // replace the "socialSharing" value (t is not merged).
+    socialSharing: configFields
+      .extract('socialSharing')
+      .when('showSocialSharing', {
+        is: Joi.valid(true).required(),
+        then: Joi.required(),
+        otherwise: Joi.optional(),
+      }),
     // The "onEnd.theme" value will completely replace the
     // "theme" value. It is not merged.
     theme: configFields.extract('theme').optional(),
@@ -131,6 +164,16 @@ const campaignConfigInputSchema = Joi.object({
     .extract('showHeartsDonationButton')
     .required(),
   showProgressBar: configFields.extract('showProgressBar').required(),
+  showSocialSharing: configFields.extract('showSocialSharing').required(),
+  // The "socialSharing" field is required when "showSocialSharing"
+  // is true.
+  socialSharing: configFields
+    .extract('socialSharing')
+    .when('showSocialSharing', {
+      is: Joi.valid(true).required(),
+      then: Joi.required(),
+      otherwise: Joi.optional(),
+    }),
   theme: configFields.extract('theme').optional(),
   time: Joi.object({
     start: Joi.date()
@@ -168,6 +211,8 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
   } = input
@@ -406,6 +451,8 @@ const createCampaignConfiguration = input => {
     showCountdownTimer,
     showHeartsDonationButton,
     showProgressBar,
+    showSocialSharing,
+    socialSharing,
     theme,
     time,
   }
