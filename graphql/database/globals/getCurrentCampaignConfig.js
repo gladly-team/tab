@@ -12,7 +12,7 @@ const campaignEndDescription = `
 #### Can you get some friends on board? Share this incredible milestone:
 `
 const campaignEndDescriptionTwo =
-  '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come shortly.'
+  '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis. [Vote](https://forms.gle/Peghpbb28YsWJHMi8) on where our efforts should go next.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
