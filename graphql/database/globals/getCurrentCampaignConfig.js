@@ -61,11 +61,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     showSocialSharing: true,
     socialSharing: {
       url: 'https://tab.gladly.io/covid-19/',
-      EmailShareButtonProps: {
-        subject: 'Opening tabs for COVID-19 relief',
-        body:
-          "Hey!\n\nI've been opening tabs for COVID-19 relief on Tab for a Cause (https://tab.gladly.io), and we just gave 10,000 meals to the Food Bank for NYC.\n\nIt's free (all you need to do is open tabs in your browser). Join in as we continue to fight this pandemic!",
-      },
+      // EmailShareButtonProps: {
+      //   subject: 'Opening tabs for COVID-19 relief',
+      //   body:
+      //     "Hey!\n\nI've been opening tabs for COVID-19 relief on Tab for a Cause (https://tab.gladly.io), and we just gave 10,000 meals to the Food Bank for NYC.\n\nIt's free (all you need to do is open tabs in your browser). Join in as we continue to fight this pandemic!",
+      // },
       FacebookShareButtonProps: {
         quote:
           'Our community just gave 10,000 meals to the Food Bank for NYC for COVID-19 relief—just by opening browser tabs.',
