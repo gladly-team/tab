@@ -17,12 +17,13 @@ const MONEY_RAISED_PER_DAY = 450.0
  * @return {String}  A stringified float, rounded to two decimal places
  */
 export const getMoneyRaised = () => {
-  const daysSinceUpdatedMoneyRaised = moment().diff(
+  const secondsInDay = 60 * 60 * 24
+  const secondsSinceUpdatedMoneyRaised = moment().diff(
     MONEY_RAISED_UPDATE_TIME,
-    'days'
+    'seconds'
   )
-  const raisedNow =
-    MONEY_RAISED + daysSinceUpdatedMoneyRaised * MONEY_RAISED_PER_DAY
+  const daysSinceUpdated = secondsSinceUpdatedMoneyRaised / secondsInDay
+  const raisedNow = MONEY_RAISED + daysSinceUpdated * MONEY_RAISED_PER_DAY
   return raisedNow.toFixed(2)
 }
 
