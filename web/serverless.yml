@@ -36,11 +36,6 @@ custom:
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
-  # How long Cloudfront should cache no-cache objects, such
-  # as HTML, at edge locations.
-  CloudfrontNonStaticCachingSeconds: 60
-  # The max time Cloudfront should cache static files.
-  CloudfrontMaxLongLivedCachingSeconds: 63115200 # two years
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
 
@@ -176,7 +171,7 @@ resources:
               # This is effectively how long we keep the HTML page in
               # edge caches.
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html
-              ErrorCachingMinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              ErrorCachingMinTTL: 60
           # How CloudFront determines cache behavior:
           #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
           # CloudFront guide to CacheBehavior:
@@ -190,9 +185,10 @@ resources:
             - PathPattern: 'newtab*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 0
+              DefaultTTL: 86400
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET
@@ -228,9 +224,10 @@ resources:
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 60
+              DefaultTTL: 86400
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET
@@ -271,8 +268,9 @@ resources:
             # Next.js app on ZEIT Now
             - PathPattern: 'v4*'
               MinTTL: 0
-              MaxTTL: 0
               DefaultTTL: 0
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - DELETE
@@ -294,8 +292,8 @@ resources:
             # Next.js app static files
             - PathPattern: '_next*'
               MinTTL: 0
-              MaxTTL: 31536000
               DefaultTTL: 86400
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET
@@ -308,11 +306,10 @@ resources:
               ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our homepage
             - PathPattern: '*'
-              # Short caching of non-static files for some speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 0
+              DefaultTTL: 0
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET
