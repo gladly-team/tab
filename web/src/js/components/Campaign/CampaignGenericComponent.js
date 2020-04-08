@@ -187,7 +187,7 @@ class CampaignGenericComponent extends React.Component {
                     {showProgressBarLabel ? (
                       <div className={classes.progressBarLabelsContainer}>
                         <Typography variant={'caption'}>
-                          {abbreviateNumber(currentGoalNumber)}{' '}
+                          {abbreviateNumber(currentGoalNumber, 1, 1e6)}{' '}
                           {currentGoalNumber === 1
                             ? impactUnitSingular
                             : impactUnitPlural}{' '}

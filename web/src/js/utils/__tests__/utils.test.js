@@ -286,6 +286,10 @@ describe('number utils', () => {
     // Handles bad values
     expect(abbreviateNumber(undefined)).toBe('0')
     expect(abbreviateNumber(null)).toBe('0')
+
+    // Test "startAt"
+    expect(abbreviateNumber(460932, 2, 1e6)).toBe('460,932')
+    expect(abbreviateNumber(460932, 1, 1e5)).toBe('460.9K')
   })
 })
 
