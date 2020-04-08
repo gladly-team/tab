@@ -1,22 +1,22 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Food Bank Support'
+const campaignTitle = '## COVID-19 Relief: Evidence Action'
 const campaignDescription = `
-#### Thanks to you, our community [raised thousands of dollars](https://tab.gladly.io/covid-19/) for the World Health Organization over the last few days.
-#### In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
-#### Right now, tabs you open are providing meals for our fellow humans in NYC. Together, we can feed thousands of people in need—so please open a few tabs and encourage your friends to do the same!
+#### Thanks to you, our community [provided 10,000 meals](https://tab.gladly.io/covid-19/) through the Food Bank for New York City to help keep families fed during this crisis.
+#### In our next phase of relief, we will be providing access to clean water and sanitation through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/). COVID-19's impact on low-income countries is likely to be devastating. Evidence Action has the supplies and network to provide these vital resources where they are most needed.
+#### Open a few tabs, spread the word, and help us provide 2,000 people with access to clean water.
 `
-const campaignEndTitle = '## 10,000 Meals: We Did It'
+const campaignEndTitle = '## 2,000 People with Clean Water'
 const campaignEndDescription = `
-#### With your help, we just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. Thank you for stepping up to make a difference.
-#### Can you get some friends on board? Share this incredible milestone:
+#### With your help, we just provided a year of clean water 2,000 people through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/).
+#### Share this milestone to spread the word:
 `
 const campaignEndDescriptionTwo =
-  '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis. [Vote](https://forms.gle/Peghpbb28YsWJHMi8) on where our efforts should go next.'
+  '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'NYCFoodBank2020',
+  campaignId: 'EvidenceActionApril2020',
   // charityId: undefined,
   content: {
     titleMarkdown: campaignTitle,
@@ -31,18 +31,18 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'meal',
-    impactUnitPlural: 'meals',
-    impactVerbPastParticiple: 'given',
-    impactVerbPastTense: 'gave',
+    impactUnitSingular: 'year of clean water',
+    impactUnitPlural: 'years of clean water',
+    impactVerbPastParticiple: 'provided',
+    impactVerbPastTense: 'provided',
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10000,
+    targetNumber: 2000,
     transformNumberSourceValue: moneyRaised => {
-      // The moneyRaised value is in $USD, and it costs $0.20 per meal.
-      return Math.floor(moneyRaised * 5)
+      // It costs $USD 1.28 for 1 year of clean water for one person.
+      return Math.floor(moneyRaised / 1.28)
     },
   },
   // Modifications to the campaign when the campaign has
@@ -92,8 +92,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#ff7314',
-      light: '#f6924e',
+      main: '#fe6f87',
+      light: '#5e5f5f',
     },
   },
   time: {
