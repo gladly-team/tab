@@ -1,22 +1,23 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Food Bank Support'
+const campaignTitle = '## COVID-19 Relief: Clean Water for 2,000'
 const campaignDescription = `
-#### Thanks to you, our community [raised thousands of dollars](https://tab.gladly.io/covid-19/) for the World Health Organization over the last few days.
-#### In addition to health systems, COVID-19 has strained the ability of food banks to take care of people in need. The next phase of our support will help the [Food Bank for New York City](https://www.foodbanknyc.org/covid-19/) keep families fed during this crisis.
-#### Right now, tabs you open are providing meals for our fellow humans in NYC. Together, we can feed thousands of people in need—so please open a few tabs and encourage your friends to do the same!
+#### The pandemic's impact on low-income countries will likely be devastating, especially where people do not have access to clean water, soap, or an adequate health system.
+#### This phase of our relief efforts supports [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/) as they rapidly provide access to clean water and sanitation to people who need it most.
+#### Spread the word and open a few tabs to help give **2,000 people access to clean water** for a year.
+##### *COVID-19 relief continues: last week, we [gave 10,000 meals](https://tab.gladly.io/covid-19/) to families in NYC.*
 `
-const campaignEndTitle = '## 10,000 Meals: We Did It'
+const campaignEndTitle = '## Clean Water for 2,000 People'
 const campaignEndDescription = `
-#### With your help, we just gave 10,000 meals to [people in New York City](https://www.foodbanknyc.org/covid-19/) who have been hurt by the COVID-19 crisis. Thank you for stepping up to make a difference.
-#### Can you get some friends on board? Share this incredible milestone:
+#### With your help, we provided **clean water access to 2,000 people** for one year through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/)! Thank you for providing critical resources to vulnerable communities to bolster their efforts against COVID-19.
+#### Share this important milestone:
 `
 const campaignEndDescriptionTwo =
-  '#### This is just the beginning of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis. [Vote](https://forms.gle/Peghpbb28YsWJHMi8) on where our efforts should go next.'
+  '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'NYCFoodBank2020',
+  campaignId: 'EvidenceActionApril2020',
   // charityId: undefined,
   content: {
     titleMarkdown: campaignTitle,
@@ -31,18 +32,18 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'meal',
-    impactUnitPlural: 'meals',
-    impactVerbPastParticiple: 'given',
-    impactVerbPastTense: 'gave',
+    impactUnitSingular: 'year of clean water',
+    impactUnitPlural: 'years of clean water',
+    impactVerbPastParticiple: 'provided',
+    impactVerbPastTense: 'provided',
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10000,
+    targetNumber: 2000,
     transformNumberSourceValue: moneyRaised => {
-      // The moneyRaised value is in $USD, and it costs $0.20 per meal.
-      return Math.floor(moneyRaised * 5)
+      // It costs $USD 1.28 for 1 year of clean water for one person.
+      return Math.floor(moneyRaised / 1.28)
     },
   },
   // Modifications to the campaign when the campaign has
@@ -61,26 +62,21 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     showSocialSharing: true,
     socialSharing: {
       url: 'https://tab.gladly.io/covid-19/',
-      // EmailShareButtonProps: {
-      //   subject: 'Opening tabs for COVID-19 relief',
-      //   body:
-      //     "Hey!\n\nI've been opening tabs for COVID-19 relief on Tab for a Cause (https://tab.gladly.io), and we just gave 10,000 meals to the Food Bank for NYC.\n\nIt's free (all you need to do is open tabs in your browser). Join in as we continue to fight this pandemic!",
-      // },
       FacebookShareButtonProps: {
         quote:
-          'Our community just gave 10,000 meals to the Food Bank for NYC for COVID-19 relief—just by opening browser tabs.',
+          'Fighting COVID-19 is hard without clean water. On Tab for a Cause, we just gave 2,000 people access to a year of clean water—just by opening browser tabs.',
       },
       RedditShareButtonProps: {
-        title: 'Tabs transformed into 10,000 meals for the Food Bank for NYC',
+        title: 'Tabs transformed into a year of clean water for 2,000 people',
       },
       TumblrShareButtonProps: {
-        title: 'Tabs transformed into 10,000 meals COVID-19',
+        title: 'Tabs transformed into a year of clean water for 2,000 people',
         caption:
-          'Our community just gave 10,000 meals to the Food Bank for NYC for COVID-19 relief—just by opening browser tabs. Join in!',
+          'We just gave 2,000 people access to a year of clean water—just by opening browser tabs. Join in!',
       },
       TwitterShareButtonProps: {
         title:
-          'Our community just gave 10,000 meals to the Food Bank for NYC for COVID-19 relief—just by opening browser tabs. Join in!',
+          'Fighting #COVID19 is hard without clean water. On @TabForACause, we just gave 2,000 people access to a year of clean water via @EvidenceAction.',
         related: ['@TabForACause'],
       },
     },
@@ -92,13 +88,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#ff7314',
-      light: '#f6924e',
+      main: '#fe6f87',
+      light: '#5e5f5f',
     },
   },
   time: {
-    start: '2020-03-31T16:00:00.000Z',
-    end: '2020-04-14T18:00:00.000Z',
+    start: '2020-04-08T16:00:00.000Z',
+    end: '2020-04-21T18:00:00.000Z',
   },
 })
 

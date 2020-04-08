@@ -167,9 +167,15 @@ export const currencyFormatted = amount => {
  * Abbreviate a number to a string with a power suffix (e.g. 248345 to 248.3K)
  * @param {number} num - A number
  * @param {number} decimalPlaces - The maximum number of decimal places to show
+ * @param {number} startAt - The number at which to start abbreviating. Before
+ *   that, just return comma-formatted numbers.
  * @return {string} The abbreviated number
  */
-export const abbreviateNumber = (num, decimalPlaces = 1) => {
+export const abbreviateNumber = (num, decimalPlaces = 1, startAt = null) => {
+  if (startAt && num < startAt) {
+    return commaFormatted(num)
+  }
+
   // From: https://stackoverflow.com/a/32638472/1332513
   // Alternative, more flexible library if needed:
   //   http://numeraljs.com/
