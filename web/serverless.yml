@@ -201,7 +201,14 @@ resources:
               ForwardedValues:
                 QueryString: false
                 Cookies:
-                  Forward: none
+                  # Send the cookies required to load /newtab/ from the
+                  # beta Next.js app.
+                  Forward: whitelist
+                  WhitelistedNames:
+                    - tabWebSession
+                    - tabWebSession.sig
+                    - tabV4OptIn
+                    - tabV4OptIn.sig
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               # When CloudFront calls our origin, this function rewrites all
