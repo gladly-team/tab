@@ -108,7 +108,7 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     expect(request.origin).toMatchObject(originalOrigin)
   })
 
-  it('changes the origin to ZEIT NOw when the v4 beta opt-in cookie is passed in request.headers.cookie', () => {
+  it('changes the origin to ZEIT Now when the v4 beta opt-in cookie is passed in request.headers.cookie', () => {
     const { handler } = require('../newtab-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.headers.cookie = [
@@ -144,5 +144,19 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     handler(event, context, callback)
     const request = callback.mock.calls[0][1]
     expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('does not modify the request path when using the custom ZEIT Now origin', () => {
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'something=here' },
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    event.Records[0].cf.request.uri = '/newtab/'
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.uri).toEqual('/newtab/')
   })
 })

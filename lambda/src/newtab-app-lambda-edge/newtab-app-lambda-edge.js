@@ -13,6 +13,7 @@ exports.handler = (event, context, callback) => {
   // the Tab V4 origin hosted on ZEIT Now.
   // https://aws.amazon.com/blogs/networking-and-content-delivery/dynamically-route-viewer-requests-to-any-origin-using-lambdaedge/
   // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-content-based-custom-origin-request-trigger
+  let isTabV4OptIn = false
   const request = event.Records[0].cf.request
   const headers = request.headers
   if (headers.cookie) {
@@ -33,13 +34,16 @@ exports.handler = (event, context, callback) => {
           },
         }
         request.headers.host = [{ key: 'host', value: 'tab-web.now.sh' }]
+        isTabV4OptIn = true
         break
       }
     }
   }
 
-  if (!path.extname(request.uri)) {
-    request.uri = '/newtab/index.html'
+  if (!isTabV4OptIn) {
+    if (!path.extname(request.uri)) {
+      request.uri = '/newtab/index.html'
+    }
   }
   callback(null, request)
 }
