@@ -10,8 +10,14 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name web-dev --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"*"}
+  #   ]}'
   stackPolicy:
-    - Effect: Deny
+    # TODO: revert to deny
+    - Effect: Allow
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
