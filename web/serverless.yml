@@ -193,15 +193,10 @@ resources:
               MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
               # Allow the origin to set long-lived caching on files.
               MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
-              # Including methods needed for the Next.js app API at `/newtab/api/`.
               AllowedMethods:
                 - HEAD
-                - DELETE
-                - POST
                 - GET
                 - OPTIONS
-                - PUT
-                - PATCH
               TargetOriginId: ${self:custom.webAppName}
               ForwardedValues:
                 QueryString: false
