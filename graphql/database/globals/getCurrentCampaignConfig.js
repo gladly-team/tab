@@ -9,7 +9,7 @@ const campaignDescription = `
 `
 const campaignEndTitle = '## Clean Water for 2,000 People'
 const campaignEndDescription = `
-#### With your help, we provided **clean water access to 2,000 people** for one year through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/)! Thank you for providing critical resources to communities that already face daunting challenges to their health systems.
+#### With your help, we provided **clean water access to 2,000 people** for one year through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/)! Thank you for providing critical resources to vulnerable communities to bolster their efforts against COVID-19.
 #### Share this important milestone:
 `
 const campaignEndDescriptionTwo =
