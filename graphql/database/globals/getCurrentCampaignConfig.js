@@ -4,7 +4,7 @@ const campaignTitle = '## COVID-19 Relief: Clean Water for 2,000'
 const campaignDescription = `
 #### The pandemic's impact on low-income countries will likely be devastating, especially where people do not have access to clean water, soap, or an adequate health system.
 #### This phase of our relief efforts supports [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/) as they rapidly provide access to clean water and sanitation to people who need it most.
-#### Spread the word and open a few tabs to help give **2,000 people access to clean water**.
+#### Spread the word and open a few tabs to help give **2,000 people access to clean water** for a year.
 ##### *COVID-19 relief continues: last week, we [gave 10,000 meals](https://tab.gladly.io/covid-19/) to families in NYC.*
 `
 const campaignEndTitle = '## Clean Water for 2,000 People'
