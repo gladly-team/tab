@@ -149,8 +149,12 @@ functions:
   # CloudFront stack. Unfortunately, serverless-plugin-cloudfront-lambda-edge
   # does not support cross-service references:
   # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge/issues/1
-  # Perhaps Serverless will support this in the future:
+  # Note that Serverless now supports this, so we can likely update our
+  # stack and remove the plugin:
   # https://github.com/serverless/serverless/issues/3944
+  # Until then, new releases of these function require us to change the
+  # function version environment variables (see the references in the web
+  # serverless.yml).
   newtabAppLambdaEdge:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
   searchAppLambdaEdge:
