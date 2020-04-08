@@ -742,7 +742,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K hugs given'
+          return n.render().text() === '3,214 hugs given'
         })
         .exists()
     ).toBe(true)
@@ -787,7 +787,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K hugs given'
+          return n.render().text() === '3,214 hugs given'
         })
         .exists()
     ).toBe(false)
@@ -832,7 +832,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '3.2K hugs given'
+          return n.render().text() === '3,214 hugs given'
         })
         .exists()
     ).toBe(true)
@@ -896,7 +896,7 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18000,
+            currentNumber: 18011,
             impactUnitSingular: 'hug',
             impactUnitPlural: 'hugs',
             impactVerbPastParticiple: 'given',
@@ -922,7 +922,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '18K hugs given'
+          return n.render().text() === '18,011 hugs given'
         })
         .exists()
     ).toBe(true)
@@ -941,7 +941,7 @@ describe('CampaignGenericComponent', () => {
           goal: {
             ...defaultMockProps.app.campaign.goal,
             targetNumber: 12000,
-            currentNumber: 18000,
+            currentNumber: 18011,
             impactUnitSingular: 'hug',
             impactUnitPlural: 'hugs',
             impactVerbPastParticiple: 'given',
@@ -967,7 +967,7 @@ describe('CampaignGenericComponent', () => {
       wrapper
         .find(Typography)
         .filterWhere(n => {
-          return n.render().text() === '12K hugs given'
+          return n.render().text() === '12,000 hugs given'
         })
         .exists()
     ).toBe(true)
