@@ -189,10 +189,15 @@ resources:
               DefaultTTL: 86400
               # Allow the origin to set long-lived caching on files.
               MaxTTL: 63115200 # two years
+              # Including methods needed for the Next.js app API at `/newtab/api/`.
               AllowedMethods:
                 - HEAD
+                - DELETE
+                - POST
                 - GET
                 - OPTIONS
+                - PUT
+                - PATCH
               TargetOriginId: ${self:custom.webAppName}
               ForwardedValues:
                 QueryString: false
