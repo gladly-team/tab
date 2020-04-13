@@ -181,30 +181,6 @@ resources:
           # We enforce a minimum, short CF cache for objects that aren't
           # browser-cached.
           CacheBehaviors:
-            # Beta opt-in page that routes to ZEIT Now. Putting it
-            # on the /newtab/* base path allows registering and unregistering
-            # the service worker at /newtab/service-worker.js.
-            - PathPattern: 'newtab/beta-opt-in'
-              MinTTL: 0
-              DefaultTTL: 86400
-              MaxTTL: 63115200 # two years
-              # Including methods needed for the Next.js app API at `/newtab/api/`.
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: nextjs-tab-web.now.sh
-              ForwardedValues:
-                QueryString: true
-                Cookies:
-                  Forward: whitelist
-                  WhitelistedNames:
-                    - tabWebSession
-                    - tabWebSession.sig
-                    - tabV4OptIn
-                    - tabV4OptIn.sig
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
             # New tab app
             - PathPattern: 'newtab*'
               MinTTL: 0
