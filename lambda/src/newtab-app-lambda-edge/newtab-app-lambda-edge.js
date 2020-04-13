@@ -23,7 +23,7 @@ exports.handler = (event, context, callback) => {
       if (headers.cookie[i].value.indexOf(`${cookieName}=${enabledVal}`) >= 0) {
         request.origin = {
           custom: {
-            domainName: 'tab-web.now.sh',
+            domainName: 'tab-web.now.sh', // TODO: env var
             port: 443,
             protocol: 'https',
             path: '',

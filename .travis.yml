@@ -186,6 +186,7 @@ env:
   # react-snap does not yet support absolute URLs:
   # https://github.com/stereobooster/react-snap/issues/157
   - PROD_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
+  # TODO: after deploying to prod, use the latest function version here.
   - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1
   - PROD_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=38
   - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
