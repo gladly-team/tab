@@ -10,8 +10,14 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name web-dev --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"*"}
+  #   ]}'
   stackPolicy:
-    - Effect: Deny
+    # TODO: revert to deny
+    - Effect: Allow
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
@@ -30,13 +36,9 @@ custom:
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
-  # How long Cloudfront should cache no-cache objects, such
-  # as HTML, at edge locations.
-  CloudfrontNonStaticCachingSeconds: 60
-  # The max time Cloudfront should cache static files.
-  CloudfrontMaxLongLivedCachingSeconds: 63115200 # two years
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
+  tabV4Host: ${env:LAMBDA_TAB_V4_HOST}
 
 resources:
   Resources:
@@ -145,6 +147,14 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
+            # Next.js app on ZEIT Now.
+            - DomainName: ${self:custom.tabV4Host}
+              # An identifier for the origin. This must be unique within the distribution.
+              Id: nextjs-tab-web.now.sh
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
           Enabled: true
           Comment: ${self:custom.stage} new tab app, search app, and homepage
           # No default root object; our website (landing page) app handles it.
@@ -162,7 +172,7 @@ resources:
               # This is effectively how long we keep the HTML page in
               # edge caches.
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html
-              ErrorCachingMinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              ErrorCachingMinTTL: 60
           # How CloudFront determines cache behavior:
           #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
           # CloudFront guide to CacheBehavior:
@@ -174,20 +184,31 @@ resources:
           CacheBehaviors:
             # New tab app
             - PathPattern: 'newtab*'
-              # Short caching of non-static files for some speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 0
+              DefaultTTL: 86400
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
+              # Including methods needed for the Next.js app API at `/newtab/api/`.
               AllowedMethods:
                 - HEAD
+                - DELETE
+                - POST
                 - GET
                 - OPTIONS
+                - PUT
+                - PATCH
               TargetOriginId: ${self:custom.webAppName}
               ForwardedValues:
                 QueryString: false
                 Cookies:
-                  Forward: none
+                  # Send the cookies required to load /newtab/ from the
+                  # beta Next.js app.
+                  Forward: whitelist
+                  WhitelistedNames:
+                    - tabWebSession
+                    - tabWebSession.sig
+                    - tabV4OptIn
+                    - tabV4OptIn.sig
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               # When CloudFront calls our origin, this function rewrites all
@@ -207,9 +228,10 @@ resources:
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 60
+              DefaultTTL: 86400
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET
@@ -247,13 +269,51 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
+            # Next.js app on ZEIT Now
+            - PathPattern: 'v4*'
+              MinTTL: 0
+              DefaultTTL: 0
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: 63115200 # two years
+              AllowedMethods:
+                - HEAD
+                - DELETE
+                - POST
+                - GET
+                - OPTIONS
+                - PUT
+                - PATCH
+              TargetOriginId: nextjs-tab-web.now.sh
+              ForwardedValues:
+                # Cannot use '*', as that sends the Host header:
+                # https://stackoverflow.com/a/32825414 
+                Headers:
+                  - Authorization
+                QueryString: true
+                Cookies:
+                  Forward: all
+              ViewerProtocolPolicy: redirect-to-https
+            # Next.js app static files
+            - PathPattern: '_next*'
+              MinTTL: 0
+              DefaultTTL: 86400
+              MaxTTL: 63115200 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: nextjs-tab-web.now.sh
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our homepage
             - PathPattern: '*'
-              # Short caching of non-static files for some speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              MinTTL: 0
+              DefaultTTL: 0
               # Allow the origin to set long-lived caching on files.
-              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
+              MaxTTL: 63115200 # two years
               AllowedMethods:
                 - HEAD
                 - GET

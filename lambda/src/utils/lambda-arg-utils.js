@@ -38,6 +38,18 @@ export const getMockCloudFrontEventObject = () => ({
               },
             ],
           },
+          origin: {
+            custom: {
+              customHeaders: {},
+              domainName: 'example.com',
+              keepaliveTimeout: 5,
+              path: '',
+              port: 443,
+              protocol: 'https',
+              readTimeout: 30,
+              sslProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2'],
+            },
+          },
         },
       },
     },
