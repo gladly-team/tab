@@ -15,5 +15,11 @@
         "LAMBDA_TAB_V4_HOST"
       ]
     }]
+  ],
+  "ignore": [
+    "build",
+    "**/coverage",
+    "**/__mocks__",
+    "**/__tests__"
   ]
 }
