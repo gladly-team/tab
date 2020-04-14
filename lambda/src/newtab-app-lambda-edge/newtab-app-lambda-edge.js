@@ -2,12 +2,6 @@
 
 const path = require('path')
 
-const tabV4Host = process.env.LAMBDA_TAB_V4_HOST
-
-if (!tabV4Host) {
-  throw new Error('The LAMBDA_TAB_V4_HOST env variable must be set.')
-}
-
 // This function rewrites all CloudFront HTML requests
 // to return the origin's /newtab/index.html item.
 // Examples of Lambda@Edge functions:
@@ -27,6 +21,10 @@ exports.handler = (event, context, callback) => {
     const enabledVal = 'enabled'
     for (let i = 0; i < headers.cookie.length; i += 1) {
       if (headers.cookie[i].value.indexOf(`${cookieName}=${enabledVal}`) >= 0) {
+        const tabV4Host = process.env.LAMBDA_TAB_V4_HOST
+        if (!tabV4Host) {
+          throw new Error('The LAMBDA_TAB_V4_HOST env variable must be set.')
+        }
         request.origin = {
           custom: {
             domainName: tabV4Host,
