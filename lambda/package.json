@@ -54,6 +54,9 @@
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\""
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladly-team/tab.git"
