@@ -7,9 +7,16 @@ import {
 
 const callback = jest.fn()
 
+beforeEach(() => {
+  process.env.LAMBDA_TAB_V4_HOST = 'example.com'
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
+
+// TODO: fix/add tests
 
 describe('newtab app Lambda@Edge function on origin-request', () => {
   it('modifies the path for the /newtab/ URI', () => {
