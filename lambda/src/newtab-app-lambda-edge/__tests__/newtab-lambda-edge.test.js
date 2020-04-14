@@ -16,8 +16,6 @@ afterEach(() => {
   jest.resetModules()
 })
 
-// TODO: fix/add tests
-
 describe('newtab app Lambda@Edge function on origin-request', () => {
   it('modifies the path for the /newtab/ URI', () => {
     const { handler } = require('../newtab-app-lambda-edge')
@@ -116,6 +114,7 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
   })
 
   it('changes the origin to ZEIT Now when the v4 beta opt-in cookie is passed in request.headers.cookie', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'my.example.com'
     const { handler } = require('../newtab-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.headers.cookie = [
@@ -127,7 +126,7 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     const request = callback.mock.calls[0][1]
     expect(request.origin).toMatchObject({
       custom: {
-        domainName: 'tab-web.now.sh',
+        domainName: 'my.example.com',
         port: 443,
         protocol: 'https',
         path: '',
@@ -151,6 +150,36 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     handler(event, context, callback)
     const request = callback.mock.calls[0][1]
     expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('changes the request host header to the ZEIT Now origin when the v4 beta opt-in cookie is passed in request.headers.cookie', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.headers.host).toEqual([
+      { key: 'host', value: 'foo.example.com' },
+    ])
+  })
+
+  it('does not change the request host header to the ZEIT Now origin when the v4 beta opt-in cookie is not passed in request.headers.cookie', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'blah=hi' },
+    ]
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.headers.host).not.toEqual([
+      { key: 'host', value: 'foo.example.com' },
+    ])
   })
 
   it('does not modify the request path when using the custom ZEIT Now origin', () => {
