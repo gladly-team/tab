@@ -38,6 +38,7 @@ custom:
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
+  tabV4Host: ${env:LAMBDA_TAB_V4_HOST}
 
 resources:
   Resources:
@@ -146,9 +147,8 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
-            # TODO: env var to allow for a dev domain for dev deployments
             # Next.js app on ZEIT Now.
-            - DomainName: tab-web.now.sh
+            - DomainName: ${self:custom.tabV4Host}
               # An identifier for the origin. This must be unique within the distribution.
               Id: nextjs-tab-web.now.sh
               CustomOriginConfig:
