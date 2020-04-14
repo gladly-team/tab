@@ -11,4 +11,8 @@ require('dotenv-extended').load({
 
 process.env.NODE_ENV = 'production'
 
-spawnSync('babel', ['--out-dir=build', './src/'])
+spawnSync('babel', [
+  '--out-dir=build',
+  "--ignore='build,**/coverage,**/__mocks__,**/__tests__",
+  './src/',
+])
