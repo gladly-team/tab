@@ -16,8 +16,7 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"*"}
   #   ]}'
   stackPolicy:
-    # TODO: revert to deny
-    - Effect: Allow
+    - Effect: Deny
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
