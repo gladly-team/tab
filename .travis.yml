@@ -66,7 +66,7 @@ env:
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=test-search.gladly.io
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=798
+  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=803
   - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=139
   - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
@@ -116,6 +116,10 @@ env:
   - DEV_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  # Important: changing this requires updating the Lambda@Edge function
+  # version associated with the /newtab* cache behavior, because
+  # Lambda@Edge does not support environment variables and thus the
+  # host is hardcoded in deploys.
   - DEV_LAMBDA_TAB_V4_HOST=tab-web-git-dev.gladly-team.now.sh
   # Endpoints
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
@@ -129,7 +133,7 @@ env:
   - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=dev-search.gladly.io
   - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=739
+  - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=743
   - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=133
   - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
@@ -174,6 +178,10 @@ env:
   - PROD_LAMBDA_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
   - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
   - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
+  # Important: changing this requires updating the Lambda@Edge function
+  # version associated with the /newtab* cache behavior, because
+  # Lambda@Edge does not support environment variables and thus the
+  # host is hardcoded in deploys.
   - PROD_LAMBDA_TAB_V4_HOST=tab-web.now.sh
   # Endpoints
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
