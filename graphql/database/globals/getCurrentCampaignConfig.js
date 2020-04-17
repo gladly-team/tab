@@ -63,19 +63,19 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       url: 'https://tab.gladly.io/covid-19/',
       FacebookShareButtonProps: {
         quote:
-          'Fighting COVID-19 is hard without clean water. On Tab for a Cause, we just gave 2,000 people access to a year of clean water—just by opening browser tabs.',
+          'We just gave 25,000 meals to vulnerable kids hurt by school closures via No Kid Hungry. And all we did was open browser tabs.',
       },
       RedditShareButtonProps: {
-        title: 'Tabs transformed into a year of clean water for 2,000 people',
+        title: 'Tabs transformed into a 25,000 meals for kids',
       },
       TumblrShareButtonProps: {
-        title: 'Tabs transformed into a year of clean water for 2,000 people',
+        title: 'Tabs transformed into a 25,000 meals for kids',
         caption:
-          'We just gave 2,000 people access to a year of clean water—just by opening browser tabs. Join in!',
+          'We just gave 25,000 meals to vulnerable kids hurt by school closures via No Kid Hungry. And all we did was open browser tabs.',
       },
       TwitterShareButtonProps: {
         title:
-          'Fighting #COVID19 is hard without clean water. On @TabForACause, we just gave 2,000 people access to a year of clean water via @EvidenceAction.',
+          'On @TabForACause, we just gave 25,000 meals to vulnerable kids via @nokidhungry. #COVID19 shouldn’t mean children go hungry.',
         related: ['@TabForACause'],
       },
     },
