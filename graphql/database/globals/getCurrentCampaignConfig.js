@@ -1,23 +1,22 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Relief: Clean Water for 2,000'
+const campaignTitle = '## COVID-19 Relief: No Kid Hungry'
 const campaignDescription = `
-#### The pandemic's impact on low-income countries will likely be devastating, especially where people do not have access to clean water, soap, or an adequate health system.
-#### This phase of our relief efforts supports [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/) as they rapidly provide access to clean water and sanitation to people who need it most.
-#### Spread the word and open a few tabs to help give **2,000 people access to clean water** for a year.
-##### *COVID-19 relief continues: last week, we [gave 10,000 meals](https://tab.gladly.io/covid-19/) to families in NYC.*
+#### Nearly 22 million low-income kids rely on the free and reduced-price meals they receive at school. With schools closed, children may be left without that critical lifeline to healthy meals.
+#### In this phase of our [COVID-19 relief](https://tab.gladly.io/covid-19/), we're supporting [No Kid Hungry](https://www.nokidhungry.org/coronavirus) to make sure all children have access to nutritious meals throughout the crisis.
+#### During this campaign, funds will be automatically directed toward this cause. Open some tabs, encourage your friends to do the same, and help us provide 25,000 meals to kids in need.
 `
-const campaignEndTitle = '## Clean Water for 2,000 People'
+const campaignEndTitle = '## COVID-19 Relief: We Gave 25,000 Meals'
 const campaignEndDescription = `
-#### With your help, we provided **clean water access to 2,000 people** for one year through [Evidence Action](https://www.evidenceaction.org/responding-to-covid-19/)! Thank you for providing critical resources to vulnerable communities to bolster their efforts against COVID-19.
-#### Share this important milestone:
+#### With your help, we gave **25,000 meals** to hungry children via [No Kid Hungry](https://www.nokidhungry.org/coronavirus)! Thank you for helping vulnerable kids access food in this crisis.
+#### Share this achievement:
 `
 const campaignEndDescriptionTwo =
   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'EvidenceActionApril2020',
+  campaignId: 'NoKidHungryApril2020',
   // charityId: undefined,
   content: {
     titleMarkdown: campaignTitle,
@@ -32,18 +31,18 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'person',
-    impactUnitPlural: 'people',
-    impactVerbPastParticiple: 'provided access to clean water',
-    impactVerbPastTense: 'provided access to clean water',
+    impactUnitSingular: 'meal',
+    impactUnitPlural: 'meals',
+    impactVerbPastParticiple: 'given',
+    impactVerbPastTense: 'given',
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised',
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 2000,
+    targetNumber: 25000,
     transformNumberSourceValue: moneyRaised => {
-      // It costs $USD 1.28 for 1 year of clean water for one person.
-      return Math.floor(moneyRaised / 1.28)
+      // It costs $USD 1 for 10 meals.
+      return Math.floor(moneyRaised / 10)
     },
   },
   // Modifications to the campaign when the campaign has
@@ -88,8 +87,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#fe6f87',
-      light: '#5e5f5f',
+      main: '#f26e2b',
+      light: '#94989e',
     },
   },
   time: {
