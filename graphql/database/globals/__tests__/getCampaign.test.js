@@ -9,6 +9,7 @@ jest.mock('../getCurrentCampaignConfig')
 beforeEach(() => {
   const mockNow = '2020-05-04T12:00:00.000Z'
   MockDate.set(moment(mockNow))
+  process.env.CAMPAIGN_END_OVERRIDE = undefined
 })
 
 afterEach(() => {
@@ -435,6 +436,84 @@ describe('getCampaign', () => {
           title: 'Things have ended, and here is my post!',
           related: ['@TabForACause'],
         },
+      },
+    })
+  })
+
+  it('uses the "onEnd" config values if process.env.CAMPAIGN_END_OVERRIDE === "true"', async () => {
+    expect.assertions(1)
+    process.env.CAMPAIGN_END_OVERRIDE = 'true' // override
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: false,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        // Switched to the end content.
+        titleMarkdown: '## The end title',
+        descriptionMarkdown: '#### The end description goes here.',
+      },
+    })
+  })
+
+  it('does NOT use "onEnd" config values if process.env.CAMPAIGN_END_OVERRIDE === "false"', async () => {
+    expect.assertions(1)
+    process.env.CAMPAIGN_END_OVERRIDE = 'false' // no override
+    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
+      .default
+    const mockCampaignConfig = getMockCampaignConfiguration()
+    getCurrentCampaignConfig.mockReturnValue({
+      ...mockCampaignConfig,
+      endTriggers: {
+        ...get(mockCampaignConfig, 'endTriggers', {}),
+        whenGoalAchieved: false,
+        whenTimeEnds: false,
+      },
+      onEnd: {
+        ...get(mockCampaignConfig, 'onEnd', {}),
+        content: {
+          ...get(mockCampaignConfig, 'onEnd.content', {}),
+          titleMarkdown: '## The end title',
+          descriptionMarkdown: '#### The end description goes here.',
+        },
+      },
+      time: {
+        ...get(mockCampaignConfig, 'time', {}),
+        start: '2020-05-01T18:00:00.000Z',
+        end: '2020-05-05T18:00:00.000Z',
+      },
+    })
+    const mockUserContext = getMockUserContext()
+    const getCampaign = require('../getCampaign').default
+    const campaign = await getCampaign(mockUserContext)
+    expect(campaign).toMatchObject({
+      content: {
+        // Has not switched to the end content.
+        titleMarkdown: '## Some title',
+        descriptionMarkdown: '#### A description goes here.',
       },
     })
   })

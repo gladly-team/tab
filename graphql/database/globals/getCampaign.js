@@ -53,6 +53,11 @@ const createCampaignData = async (userContext, campaignConfig) => {
       hasCampaignEnded = true
     }
   }
+  // Useful for reviewing the end of the campaign in our
+  // staging environment.
+  if (process.env.CAMPAIGN_END_OVERRIDE === 'true') {
+    hasCampaignEnded = true
+  }
 
   // Construct the goal data.
   let goalWithData
