@@ -42,7 +42,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     targetNumber: 25000,
     transformNumberSourceValue: moneyRaised => {
       // It costs $USD 1 for 10 meals.
-      return Math.floor(moneyRaised / 10)
+      return Math.floor(moneyRaised / 0.1)
     },
   },
   // Modifications to the campaign when the campaign has
