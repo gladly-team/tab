@@ -293,5 +293,19 @@
     "updated": "2020-03-17T18:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "8f92a859-057f-462f-bb99-ad68a7caf5de",
+    "name": "Doctors Without Borders",
+    "category": "Health",
+    "logo": "placeholder.png",
+    "image": "doctors-without-borders.jpg",
+    "website": "https://www.doctorswithoutborders.org/",
+    "impact": "Thanks for supporting the efforts of Doctors Without Borders in providing health services around the world.",
+    "description": "Provides lifesaving medical humanitarian care",
+    "created": "2020-04-27T18:00:00.000Z",
+    "updated": "2020-04-27T18:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
