@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
+import { darken } from '@material-ui/core/styles/colorManipulator'
 import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
@@ -307,12 +308,18 @@ const CampaignGenericThemeWrapperComponent = props => {
           ...defaultTheme.palette,
           primary: {
             ...defaultTheme.palette.primary,
-            ...(mainColor && { main: mainColor }),
+            ...(mainColor && {
+              main: mainColor,
+              dark: darken(mainColor, 0.15),
+            }),
             ...(lightColor && { light: lightColor }),
           },
           secondary: {
             ...defaultTheme.palette.secondary,
-            ...(mainColor && { main: mainColor }),
+            ...(mainColor && {
+              main: mainColor,
+              dark: darken(mainColor, 0.15),
+            }),
             ...(lightColor && { light: lightColor }),
           },
         },
