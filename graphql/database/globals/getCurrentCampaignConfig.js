@@ -1,14 +1,13 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Relief: No Kid Hungry'
+const campaignTitle = '## COVID-19 Relief: Doctors Without Borders'
 const campaignDescription = `
-#### Nearly 22 million low-income kids rely on the free and reduced-price meals they receive at school. With schools closed, children may be left without that critical lifeline to healthy meals.
-#### In this phase of our [COVID-19 relief](https://tab.gladly.io/covid-19/), we're supporting [No Kid Hungry](https://www.nokidhungry.org/coronavirus) to make sure all children have access to nutritious meals throughout the crisis.
-#### During this campaign, funds will be automatically directed toward this cause. Open some tabs, encourage your friends to do the same, and help us provide 25,000 meals to kids in need.
+#### As COVID-19 continues to spread, it will stress health systems around the globe. In this phase of our [COVID-19 relief](https://tab.gladly.io/covid-19/), we're supporting [Doctors Without Borders](https://www.doctorswithoutborders.org/covid19) and their efforts to ensure access to quality healthcare around the world.
+#### In response to COVID-19, Doctors Without Borders is fighting on multiple fronts—caring for patients, offering health education and mental health support, and providing training for vital infection control measures in health facilities around the world. Join us as we support their vital services by opening tabs and donating hearts.
 `
-const campaignEndTitle = '## COVID-19 Relief: We Gave 25,000 Meals'
+const campaignEndTitle = '## Support for Doctors Without Borders'
 const campaignEndDescription = `
-#### With your help, we gave **25,000 meals** to hungry children via [No Kid Hungry](https://www.nokidhungry.org/coronavirus)! Thank you for helping vulnerable kids access food in this crisis.
+#### With your help, we raised thousands of dollars to provide medical services through [Doctors Without Borders](https://www.doctorswithoutborders.org/covid19)! Thank you for helping health systems in their fight against COVID-19.
 #### Share this achievement:
 `
 const campaignEndDescriptionTwo =
@@ -16,13 +15,13 @@ const campaignEndDescriptionTwo =
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'NoKidHungryApril2020',
-  // charityId: undefined,
+  campaignId: 'MSFApril2020',
+  charityId: '8f92a859-057f-462f-bb99-ad68a7caf5de',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
   },
-  countMoneyRaised: true,
+  countMoneyRaised: false,
   countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
@@ -31,19 +30,18 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'meal',
-    impactUnitPlural: 'meals',
-    impactVerbPastParticiple: 'given',
-    impactVerbPastTense: 'given',
+    impactUnitSingular: 'heart',
+    impactUnitPlural: 'hearts',
+    impactVerbPastParticiple: 'donated',
+    impactVerbPastTense: 'donated',
     limitProgressToTargetMax: true,
-    numberSource: 'moneyRaised',
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 25000,
-    transformNumberSourceValue: moneyRaised => {
-      // It costs $USD 1 for 10 meals.
-      return Math.floor(moneyRaised / 0.1)
-    },
+    targetNumber: 20e6,
+    // transformNumberSourceValue: moneyRaised => {
+    //   return Math.floor(moneyRaised / 0.1)
+    // },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -58,42 +56,43 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       showProgressBarLabel: true,
       showProgressBarEndText: false,
     },
+    showHeartsDonationButton: false,
     showSocialSharing: true,
     socialSharing: {
       url: 'https://tab.gladly.io/covid-19/',
       FacebookShareButtonProps: {
         quote:
-          'We just gave 25,000 meals to vulnerable kids hurt by school closures via No Kid Hungry. And all we did was open browser tabs.',
+          'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs.',
       },
       RedditShareButtonProps: {
-        title: 'Tabs transformed into a 25,000 meals for kids',
+        title: 'Tabs transformed into vital healthcare',
       },
       TumblrShareButtonProps: {
-        title: 'Tabs transformed into a 25,000 meals for kids',
+        title: 'Tabs transformed into healthcare',
         caption:
-          'We just gave 25,000 meals to vulnerable kids hurt by school closures via No Kid Hungry. And all we did was open browser tabs.',
+          'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs',
       },
       TwitterShareButtonProps: {
         title:
-          'On @TabForACause, we just gave 25,000 meals to vulnerable kids via @nokidhungry. #COVID19 shouldn’t mean children go hungry.',
+          'On @TabForACause, We just raised thousands of dollars for Doctors Without Borders (@MSF_USA). And all we did was open browser tabs. #tabsTransformed',
         related: ['@TabForACause'],
       },
     },
   },
   showCountdownTimer: false,
-  showHeartsDonationButton: false,
+  showHeartsDonationButton: true,
   showProgressBar: true,
   showSocialSharing: false,
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#f26e2b',
+      main: '#e00',
       light: '#94989e',
     },
   },
   time: {
-    start: '2020-04-08T16:00:00.000Z',
-    end: '2020-04-21T18:00:00.000Z',
+    start: '2020-04-27T16:00:00.000Z',
+    end: '2020-05-11T18:00:00.000Z',
   },
 })
 
