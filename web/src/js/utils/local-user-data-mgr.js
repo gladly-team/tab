@@ -13,6 +13,7 @@ import {
   STORAGE_CAMPAIGN_DISMISS_TIME,
   STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO,
   STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO_V2,
+  STORAGE_NEW_USER_IS_TAB_V4_BETA,
 } from 'js/constants'
 
 /**
@@ -331,3 +332,12 @@ export const setBingClientID = bingClientID => {
  */
 export const getBingClientID = () =>
   localStorageMgr.getItem(SEARCH_STORAGE_USER_BING_CLIENT_ID) || null
+
+/**
+ * Gets whether the user has dismissed the ad explanation.
+ * @returns {Boolean} Whether the user has dismissed the ad
+ *   explanation.
+ */
+export const isTabV4BetaUser = () => {
+  return localStorageMgr.getItem(STORAGE_NEW_USER_IS_TAB_V4_BETA) === 'true'
+}

@@ -294,7 +294,7 @@ describe('getUserToken tests', () => {
   })
 
   it('removes some localStorage items on logout', async () => {
-    expect.assertions(14)
+    expect.assertions(15)
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     const logout = require('js/authentication/user').logout
     await logout()
@@ -335,7 +335,10 @@ describe('getUserToken tests', () => {
     expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
       'tab.experiments.anonUser'
     )
-    expect(localStorageMgr.removeItem).toHaveBeenCalledTimes(13)
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.newUser.isTabV4Enabled'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledTimes(14)
   })
 })
 

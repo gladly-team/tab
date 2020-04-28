@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
+import { get } from 'lodash/object'
 import Paper from '@material-ui/core/Paper'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -37,6 +38,7 @@ import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
+import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -164,8 +166,10 @@ class Authentication extends React.Component {
     return createNewUser()
       .then(async createdOrFetchedUser => {
         // If needed, opt the user into Tab v4.
-        const isTabV4 = true // TODO
-        if (isTabV4) {
+        const enableTabV4 =
+          get(createdOrFetchedUser, 'createNewUser.isTabV4BetaUser') ||
+          isTabV4BetaUser()
+        if (enableTabV4) {
           await optIntoV4Beta()
         }
 

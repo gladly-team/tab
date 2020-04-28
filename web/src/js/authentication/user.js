@@ -15,6 +15,7 @@ import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_EXPERIMENT_ANON_USER,
+  STORAGE_NEW_USER_IS_TAB_V4_BETA,
 } from 'js/constants'
 import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
@@ -206,6 +207,7 @@ const clearAuthLocalStorageItems = () => {
   localStorageMgr.removeItem(STORAGE_EXTENSION_INSTALL_ID)
   localStorageMgr.removeItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME)
   localStorageMgr.removeItem(STORAGE_EXPERIMENT_ANON_USER)
+  localStorageMgr.removeItem(STORAGE_NEW_USER_IS_TAB_V4_BETA)
 }
 
 /**
