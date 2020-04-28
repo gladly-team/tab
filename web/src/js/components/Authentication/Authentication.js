@@ -36,6 +36,7 @@ import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
+import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -161,7 +162,13 @@ class Authentication extends React.Component {
     // database, because this is when we add their email address
     // and email verification status to their profile.
     return createNewUser()
-      .then(createdOrFetchedUser => {
+      .then(async createdOrFetchedUser => {
+        // If needed, opt the user into Tab v4.
+        const isTabV4 = true // TODO
+        if (isTabV4) {
+          await optIntoV4Beta()
+        }
+
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
         // email verification:

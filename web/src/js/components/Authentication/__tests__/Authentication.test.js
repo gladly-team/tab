@@ -24,6 +24,7 @@ import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGrou
 import Logo from 'js/components/Logo/Logo'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
+import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -34,6 +35,7 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 jest.mock('js/components/Logo/Logo')
 jest.mock('js/components/Authentication/EnterUsernameForm')
+jest.mock('js/utils/v4-beta-opt-in')
 
 const mockFetchUser = jest.fn()
 
@@ -365,6 +367,50 @@ describe('Authentication.js tests', function() {
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
+  })
+
+  it('after sign-in, it opts the user into Tab v4 beta if the user is a v4 beta user', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: true,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
