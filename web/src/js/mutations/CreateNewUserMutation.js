@@ -1,6 +1,7 @@
 import graphql from 'babel-plugin-relay/macro'
 import { commitMutation } from 'react-relay'
 
+// TODO: fetch if the user is in the Tab v4 beta
 const mutation = graphql`
   mutation CreateNewUserMutation($input: CreateNewUserInput!) {
     createNewUser(input: $input) {
