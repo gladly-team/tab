@@ -55,6 +55,13 @@ const MockProps = () => {
   }
 }
 
+const mockCreateNewUserResponse = () => ({
+  id: 'abc123',
+  email: 'foo@bar.com',
+  username: null,
+  justCreated: false,
+})
+
 const mockNow = '2017-05-19T13:59:58.000Z'
 
 beforeEach(() => {
@@ -395,6 +402,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -443,6 +451,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -526,6 +535,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -573,6 +583,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -621,6 +632,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -669,6 +681,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -717,6 +730,7 @@ describe('Authentication.js tests', function() {
     const mockFirebaseDefaultRedirectURL = ''
 
     createNewUser.mockResolvedValue({
+      ...mockCreateNewUserResponse(),
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
