@@ -28,6 +28,7 @@ import {
   searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import searchFavicon from 'js/assets/logos/search-favicon.png'
 import tabFavicon from 'js/assets/logos/favicon.ico'
@@ -111,7 +112,7 @@ class Authentication extends React.Component {
     return nextURL ? nextURL : mainAppDestination
   }
 
-  navigateToAuthStep() {
+  async navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
     if (this.isAuthActionURL()) {
@@ -132,8 +133,22 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
+      // If needed, opt the user into Tab v4. We need to
+      // do this *after* all of the auth logic on this app
+      // because v4 does not yet have a complete auth flow.
+      const enableTabV4 = get(user, 'isTabV4BetaUser') || isTabV4BetaUser()
       const destinationURL = this.getNextURLAfterSignIn()
-      replaceUrl(destinationURL)
+      if (enableTabV4) {
+        try {
+          await optIntoV4Beta()
+        } catch (e) {
+          // TODO: show error to user / handle error more gracefully
+          logger.error(e)
+        }
+        externalRedirect(destinationURL)
+      } else {
+        replaceUrl(destinationURL)
+      }
     }
   }
 
@@ -165,14 +180,6 @@ class Authentication extends React.Component {
     // and email verification status to their profile.
     return createNewUser()
       .then(async createdOrFetchedUser => {
-        // If needed, opt the user into Tab v4.
-        const enableTabV4 =
-          get(createdOrFetchedUser, 'createNewUser.isTabV4BetaUser') ||
-          isTabV4BetaUser()
-        if (enableTabV4) {
-          await optIntoV4Beta()
-        }
-
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
         // email verification:

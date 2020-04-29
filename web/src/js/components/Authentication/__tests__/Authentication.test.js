@@ -286,6 +286,47 @@ describe('Authentication.js tests', function() {
     expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL)
   })
 
+  it('opts in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
+    expect.assertions(1)
+
+    // Set that the user's local storage is flagged to use
+    // the Tab V4 beta.
+    isTabV4BetaUser.mockReturnValue(true)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    shallow(<Authentication {...mockProps} />)
+
+    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
+  })
+
+  it('does NOT opt in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
+    expect.assertions(1)
+
+    // Set that the user's local storage is NOT flagged to use
+    // the Tab V4 beta.
+    isTabV4BetaUser.mockReturnValue(false)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    shallow(<Authentication {...mockProps} />)
+
+    expect(optIntoV4Beta).not.toHaveBeenCalled()
+  })
+
+  // TODO: test v4 user profile flag
+  // TODO: test setting the v4 user profile flag when it's not yet set
+
   it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
     expect.assertions(1)
 
@@ -376,107 +417,6 @@ describe('Authentication.js tests', function() {
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
   })
-
-  it('after sign-in, it opts the user into Tab v4 beta if the user is a v4 beta user (based on local storage)', async () => {
-    expect.assertions(1)
-
-    // Set that the user's local storage is flagged to use
-    // the Tab V4 beta.
-    isTabV4BetaUser.mockReturnValue(true)
-
-    // Args for onSignInSuccess
-    const mockFirebaseUserInstance = {
-      displayName: '',
-      email: 'foo@bar.com',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      phoneNumber: null,
-      photoURL: null,
-      providerData: {},
-      providerId: 'some-id',
-      refreshToken: 'xyzxyz',
-      uid: 'abc123',
-    }
-    const mockFirebaseCredential = {}
-    const mockFirebaseDefaultRedirectURL = ''
-
-    createNewUser.mockResolvedValue({
-      ...mockCreateNewUserResponse(),
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-    })
-
-    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
-
-    const Authentication = require('js/components/Authentication/Authentication')
-      .default
-    const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-    const component = wrapper.instance()
-
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(
-      mockFirebaseUserInstance,
-      mockFirebaseCredential,
-      mockFirebaseDefaultRedirectURL
-    )
-
-    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
-  })
-
-  it('after sign-in, it does NOT opt the user into Tab v4 beta if the user is not a v4 beta user (based on local storage)', async () => {
-    expect.assertions(1)
-
-    // Set that the user's local storage is NOT flagged to use
-    // the Tab V4 beta.
-    isTabV4BetaUser.mockReturnValue(false)
-
-    // Args for onSignInSuccess
-    const mockFirebaseUserInstance = {
-      displayName: '',
-      email: 'foo@bar.com',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      phoneNumber: null,
-      photoURL: null,
-      providerData: {},
-      providerId: 'some-id',
-      refreshToken: 'xyzxyz',
-      uid: 'abc123',
-    }
-    const mockFirebaseCredential = {}
-    const mockFirebaseDefaultRedirectURL = ''
-
-    createNewUser.mockResolvedValue({
-      ...mockCreateNewUserResponse(),
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-    })
-
-    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
-
-    const Authentication = require('js/components/Authentication/Authentication')
-      .default
-    const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-    const component = wrapper.instance()
-
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(
-      mockFirebaseUserInstance,
-      mockFirebaseCredential,
-      mockFirebaseDefaultRedirectURL
-    )
-
-    expect(optIntoV4Beta).not.toHaveBeenCalled()
-  })
-
-  // TODO: test v4 user profile flag
-  // TODO: test setting the v4 user profile flag when it's not yet set
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
     const Authentication = require('js/components/Authentication/Authentication')
