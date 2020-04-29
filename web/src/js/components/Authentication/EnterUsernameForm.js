@@ -85,6 +85,8 @@ class EnterUsernameForm extends React.Component {
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
 
+    // FIXME: need to set Tab V4 beta data here, too
+
     // Go to the app.
     goTo(nextURL)
   }
