@@ -101,6 +101,10 @@ class User extends BaseModel {
         .integer()
         .forbidden() // only set in deserializer
         .description(`How many tabs the user has opened today (UTC day).`),
+      v4BetaEnabled: types
+        .boolean()
+        .default(self.fieldDefaults.v4BetaEnabled)
+        .description(`If true, serve the new Tab V4 app.`),
       validTabs: types
         .number()
         .integer()
@@ -365,6 +369,7 @@ class User extends BaseModel {
           numSearches: 0,
         },
       }),
+      v4BetaEnabled: false,
     }
   }
 

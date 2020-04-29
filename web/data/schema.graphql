@@ -828,6 +828,9 @@ type User implements Node {
   """User's vc"""
   level: Int
 
+  """If true, serve the new Tab V4 app."""
+  v4BetaEnabled: Boolean
+
   """Remaing hearts until next level."""
   heartsUntilNextLevel: Int
 

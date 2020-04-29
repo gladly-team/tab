@@ -461,6 +461,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: "User's vc",
     },
+    v4BetaEnabled: {
+      type: GraphQLBoolean,
+      description: 'If true, serve the new Tab V4 app.',
+    },
     // TODO: change to heartsForNextLevel to be able to get progress
     heartsUntilNextLevel: {
       type: GraphQLInt,
