@@ -26,6 +26,8 @@ import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
+import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -37,6 +39,7 @@ jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 jest.mock('js/components/Logo/Logo')
 jest.mock('js/components/Authentication/EnterUsernameForm')
 jest.mock('js/utils/v4-beta-opt-in')
+jest.mock('js/mutations/SetV4BetaMutation')
 
 const mockFetchUser = jest.fn()
 
@@ -347,7 +350,7 @@ describe('Authentication.js tests', function() {
       ...defaultMockProps,
       user: {
         ...defaultMockProps,
-        v4BetaEnabled: true, // not enabled on user profile
+        v4BetaEnabled: true, // enabled on user profile
       },
     }
 
@@ -366,7 +369,62 @@ describe('Authentication.js tests', function() {
     expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
   })
 
-  // TODO: test setting the v4 user profile flag when it's not yet set
+  it('calls SetV4BetaMutation to enable Tab V4 when the user profile field is not set but local storage is set', async () => {
+    expect.assertions(1)
+
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: false, // not enabled on user profile
+      },
+    }
+
+    // Set that the user's local storage is flagged to use
+    // the Tab V4 beta.
+    isTabV4BetaUser.mockReturnValue(true)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    shallow(<Authentication {...mockProps} />)
+
+    await flushAllPromises()
+    expect(SetV4BetaMutation).toHaveBeenCalledWith({
+      userId: mockProps.user.id,
+      enabled: true,
+    })
+  })
+
+  it('does not call SetV4BetaMutation when the user profile field is already set', async () => {
+    expect.assertions(1)
+
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: true, // not enabled on user profile
+      },
+    }
+
+    // Set that the user's local storage is NOT flagged to use
+    // the Tab V4 beta.
+    isTabV4BetaUser.mockReturnValue(false)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    shallow(<Authentication {...mockProps} />)
+
+    await flushAllPromises()
+    expect(SetV4BetaMutation).not.toHaveBeenCalled()
+  })
 
   it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
     expect.assertions(1)

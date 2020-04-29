@@ -606,6 +606,7 @@ type Mutation {
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
+  setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
 }
 
 """An object with an ID"""
@@ -727,6 +728,17 @@ input SetUsernameInput {
 type SetUsernamePayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetV4BetaInput {
+  userId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type SetV4BetaPayload {
+  user: User
   clientMutationId: String
 }
 

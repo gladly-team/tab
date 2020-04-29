@@ -40,6 +40,7 @@ import searchTheme from 'js/theme/searchTheme'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
+import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -63,8 +64,8 @@ import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
-  componentDidMount() {
-    this.navigateToAuthStep()
+  async componentDidMount() {
+    await this.navigateToAuthStep()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -145,6 +146,16 @@ class Authentication extends React.Component {
           // TODO: show error to user / handle error more gracefully
           logger.error(e)
         }
+
+        // If the local storage value is set to V4 but the user's
+        // profile is not, update the user's profile.
+        if (!get(user, 'v4BetaEnabled')) {
+          await SetV4BetaMutation({
+            userId: user.id,
+            enabled: true,
+          })
+        }
+
         externalRedirect(destinationURL)
       } else {
         replaceUrl(destinationURL)
