@@ -7,7 +7,6 @@ import UsernameField from 'js/components/General/UsernameField'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { goTo } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
 
@@ -57,7 +56,7 @@ class EnterUsernameForm extends React.Component {
   }
 
   onMutationCompleted(response) {
-    const { nextURL } = this.props
+    const { onCompleted } = this.props
     this.setState({
       savingUsernameInProgress: false,
     })
@@ -85,10 +84,8 @@ class EnterUsernameForm extends React.Component {
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
 
-    // FIXME: need to set Tab V4 beta data here, too
-
     // Go to the app.
-    goTo(nextURL)
+    onCompleted()
   }
 
   onMutationError(response) {
@@ -174,7 +171,7 @@ class EnterUsernameForm extends React.Component {
 
 EnterUsernameForm.propTypes = {
   app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
-  nextURL: PropTypes.string.isRequired,
+  onCompleted: PropTypes.func.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),

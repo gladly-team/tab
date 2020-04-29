@@ -1047,49 +1047,69 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
-  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is set', () => {
+  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it goes to the new tab page when invoked', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    mockProps.location.search =
-      '?app=search&next=https%3A%2F%2Fexample.gladly.io%2Fnewtab%2Ffoo%2F'
     const wrapper = shallow(<Authentication {...mockProps} />)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
     const RenderedComponent = routeElem.prop('render')
-    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual(
-      'https://example.gladly.io/newtab/foo/'
+    const onCompletedCallback = shallow(<RenderedComponent />).prop(
+      'onCompleted'
     )
+    onCompletedCallback()
+    expect(replaceUrl).toHaveBeenCalledWith('/newtab/')
   })
 
-  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is NOT set and app === "tab"', () => {
+  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it calls to enable Tab v4 when invoked and the user has v4BetaEnabled === true', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    const mockProps = MockProps()
-    mockProps.location.search = '?app=tab'
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps.user,
+        v4BetaEnabled: true,
+      },
+    }
     const wrapper = shallow(<Authentication {...mockProps} />)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
     const RenderedComponent = routeElem.prop('render')
-    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual('/newtab/')
+    const onCompletedCallback = shallow(<RenderedComponent />).prop(
+      'onCompleted'
+    )
+    onCompletedCallback()
+    expect(optIntoV4Beta).toHaveBeenCalled()
   })
 
-  it('passes the expected "nextURL" to the EnterUsernameForm when the "next" URL parameter is NOT set and app === "search"', () => {
+  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it does not call to enable Tab v4 when the user has v4BetaEnabled === false', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    const mockProps = MockProps()
-    mockProps.location.search = '?app=search'
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps.user,
+        v4BetaEnabled: false,
+      },
+    }
     const wrapper = shallow(<Authentication {...mockProps} />)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
     const RenderedComponent = routeElem.prop('render')
-    expect(shallow(<RenderedComponent />).prop('nextURL')).toEqual('/search')
+    const onCompletedCallback = shallow(<RenderedComponent />).prop(
+      'onCompleted'
+    )
+    onCompletedCallback()
+    expect(optIntoV4Beta).not.toHaveBeenCalled()
   })
 
   it('passes "search" to the to the SignInIframeMessage "app" prop when the URL param value === "search"', () => {

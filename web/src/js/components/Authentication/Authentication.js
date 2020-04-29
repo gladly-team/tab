@@ -113,6 +113,40 @@ class Authentication extends React.Component {
     return nextURL ? nextURL : mainAppDestination
   }
 
+  // What we should do after the auth process is finished,
+  // after account creation, email verifcatiion, and username
+  // creation.
+  async onAuthProcessCompleted() {
+    const { user } = this.props
+
+    // If needed, opt the user into Tab v4. We need to
+    // do this *after* all of the auth logic on this app
+    // because v4 does not yet have a complete auth flow.
+    const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
+    const destinationURL = this.getNextURLAfterSignIn()
+    if (enableTabV4) {
+      try {
+        await optIntoV4Beta()
+      } catch (e) {
+        // TODO: show error to user / handle error more gracefully
+        logger.error(e)
+      }
+
+      // If the local storage value is set to V4 but the user's
+      // profile is not, update the user's profile.
+      if (!get(user, 'v4BetaEnabled')) {
+        await SetV4BetaMutation({
+          userId: user.id,
+          enabled: true,
+        })
+      }
+
+      externalRedirect(destinationURL)
+    } else {
+      replaceUrl(destinationURL)
+    }
+  }
+
   async navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
@@ -134,32 +168,7 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      // If needed, opt the user into Tab v4. We need to
-      // do this *after* all of the auth logic on this app
-      // because v4 does not yet have a complete auth flow.
-      const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
-      const destinationURL = this.getNextURLAfterSignIn()
-      if (enableTabV4) {
-        try {
-          await optIntoV4Beta()
-        } catch (e) {
-          // TODO: show error to user / handle error more gracefully
-          logger.error(e)
-        }
-
-        // If the local storage value is set to V4 but the user's
-        // profile is not, update the user's profile.
-        if (!get(user, 'v4BetaEnabled')) {
-          await SetV4BetaMutation({
-            userId: user.id,
-            enabled: true,
-          })
-        }
-
-        externalRedirect(destinationURL)
-      } else {
-        replaceUrl(destinationURL)
-      }
+      await this.onAuthProcessCompleted()
     }
   }
 
@@ -327,7 +336,7 @@ class Authentication extends React.Component {
                       {...props}
                       user={user}
                       app={app}
-                      nextURL={nextURL}
+                      onCompleted={this.onAuthProcessCompleted.bind(this)}
                     />
                   )}
                 />
