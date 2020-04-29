@@ -136,7 +136,7 @@ class Authentication extends React.Component {
       // If needed, opt the user into Tab v4. We need to
       // do this *after* all of the auth logic on this app
       // because v4 does not yet have a complete auth flow.
-      const enableTabV4 = get(user, 'isTabV4BetaUser') || isTabV4BetaUser()
+      const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
       const destinationURL = this.getNextURLAfterSignIn()
       if (enableTabV4) {
         try {
@@ -425,6 +425,7 @@ Authentication.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string,
     username: PropTypes.string,
+    v4BetaEnabled: PropTypes.bool,
   }),
 }
 

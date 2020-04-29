@@ -50,6 +50,7 @@ const MockProps = () => {
     user: {
       id: null,
       username: null,
+      v4BetaEnabled: false,
     },
     fetchUser: mockFetchUser,
   }
@@ -293,20 +294,62 @@ describe('Authentication.js tests', function() {
     // the Tab V4 beta.
     isTabV4BetaUser.mockReturnValue(true)
 
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: false, // not enabled on user profile
+      },
+    }
+
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    const mockProps = MockProps()
-    mockProps.location.search = ''
     shallow(<Authentication {...mockProps} />)
 
     expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
   })
 
-  it('does NOT opt in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
+  it('does NOT opt in to Tab V4 (based on local storage and user profiel flags) before redirecting to the app when the user is fully authenticated', () => {
     expect.assertions(1)
+
+    // Set that the user's local storage is NOT flagged to use
+    // the Tab V4 beta.
+    isTabV4BetaUser.mockReturnValue(false)
+
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: false, // not enabled on user profile
+      },
+    }
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    shallow(<Authentication {...mockProps} />)
+
+    expect(optIntoV4Beta).not.toHaveBeenCalled()
+  })
+
+  it('opts in to Tab V4 (based on user profile field) before redirecting to the app when the user is fully authenticated', () => {
+    expect.assertions(1)
+
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: true, // not enabled on user profile
+      },
+    }
 
     // Set that the user's local storage is NOT flagged to use
     // the Tab V4 beta.
@@ -317,14 +360,12 @@ describe('Authentication.js tests', function() {
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    const mockProps = MockProps()
     mockProps.location.search = ''
     shallow(<Authentication {...mockProps} />)
 
-    expect(optIntoV4Beta).not.toHaveBeenCalled()
+    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
   })
 
-  // TODO: test v4 user profile flag
   // TODO: test setting the v4 user profile flag when it's not yet set
 
   it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
