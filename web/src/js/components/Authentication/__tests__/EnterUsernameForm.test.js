@@ -9,7 +9,6 @@ import UsernameField from 'js/components/General/UsernameField'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import { goTo } from 'js/navigation/navigation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 
 jest.mock('js/mutations/SetUsernameMutation')
@@ -20,7 +19,7 @@ jest.mock('js/authentication/user')
 
 const getMockProps = () => ({
   app: 'tab',
-  nextURL: 'https://tab.gladly.io/newtab/profile/donate/?foo=bar',
+  onCompleted: () => {},
   user: {
     id: 'abc-123',
   },
@@ -298,11 +297,13 @@ describe('EnterUsernameForm tests', () => {
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('AirplaneLover')
   })
 
-  it('redirects to the "nextURL" prop value after saving the username', () => {
+  it('calls the "onCompleted" prop value after saving the username', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
-    const mockProps = getMockProps()
-    mockProps.nextURL = 'https://tab.gladly.io/newtab/profile/donate/?foo=bar'
+    const mockProps = {
+      ...getMockProps(),
+      onCompleted: jest.fn(),
+    }
     const wrapper = mount(<EnterUsernameForm {...mockProps} />)
 
     // Enter a username
@@ -323,8 +324,6 @@ describe('EnterUsernameForm tests', () => {
       },
     })
 
-    expect(goTo).toHaveBeenCalledWith(
-      'https://tab.gladly.io/newtab/profile/donate/?foo=bar'
-    )
+    expect(mockProps.onCompleted).toHaveBeenCalled()
   })
 })

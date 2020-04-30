@@ -493,4 +493,16 @@ describe('local user data manager', () => {
     localStorageMgr.setItem('search.user.bingClientID', 'blah')
     expect(getBingClientID()).toBe('blah')
   })
+
+  // isTabV4BetaUser
+  it('returns whether the user is a Tab V4 beta user based on localStorage', () => {
+    localStorageMgr.setItem('tab.newUser.clickedNewTabSearchIntroV2', 'true')
+    const { isTabV4BetaUser } = require('js/utils/local-user-data-mgr')
+    localStorageMgr.setItem('tab.newUser.isTabV4Enabled', 'true')
+    expect(isTabV4BetaUser()).toBe(true)
+    localStorageMgr.setItem('tab.newUser.isTabV4Enabled', 'blah')
+    expect(isTabV4BetaUser()).toBe(false)
+    localStorageMgr.removeItem('tab.newUser.clickedNewTabSearchIntroV2')
+    expect(isTabV4BetaUser()).toBe(false)
+  })
 })

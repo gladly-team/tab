@@ -606,6 +606,7 @@ type Mutation {
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
+  setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
 }
 
 """An object with an ID"""
@@ -730,6 +731,17 @@ type SetUsernamePayload {
   clientMutationId: String
 }
 
+input SetV4BetaInput {
+  userId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type SetV4BetaPayload {
+  user: User
+  clientMutationId: String
+}
+
 input UpdateUserExperimentGroupsInput {
   userId: String!
   experimentGroups: ExperimentGroups
@@ -827,6 +839,9 @@ type User implements Node {
 
   """User's vc"""
   level: Int
+
+  """If true, serve the new Tab V4 app."""
+  v4BetaEnabled: Boolean
 
   """Remaing hearts until next level."""
   heartsUntilNextLevel: Int

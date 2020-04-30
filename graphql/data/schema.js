@@ -61,6 +61,7 @@ import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 import logUserExperimentActions from '../database/users/logUserExperimentActions'
 import constructExperimentActionsType from '../database/users/constructExperimentActionsType'
 import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
+import setV4Enabled from '../database/users/setV4Enabled'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -460,6 +461,10 @@ const userType = new GraphQLObjectType({
     level: {
       type: GraphQLInt,
       description: "User's vc",
+    },
+    v4BetaEnabled: {
+      type: GraphQLBoolean,
+      description: 'If true, serve the new Tab V4 app.',
     },
     // TODO: change to heartsForNextLevel to be able to get progress
     heartsUntilNextLevel: {
@@ -1679,6 +1684,26 @@ const logUserDataConsentMutation = mutationWithClientMutationId({
 })
 
 /**
+ * Enable or disable the Tab V4 beta app for this user.
+ */
+const setV4BetaMutation = mutationWithClientMutationId({
+  name: 'SetV4Beta',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    enabled: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+    },
+  },
+  mutateAndGetPayload: ({ userId, enabled }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setV4Enabled(context.user, { userId: userGlobalObj.id, enabled })
+  },
+})
+
+/**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
@@ -1733,6 +1758,7 @@ const mutationType = new GraphQLObjectType({
     setUsername: setUsernameMutation,
     updateUserExperimentGroups: updateUserExperimentGroupsMutation,
     logUserExperimentActions: logUserExperimentActionsMutation,
+    setV4Beta: setV4BetaMutation,
   }),
 })
 

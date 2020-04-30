@@ -73,6 +73,7 @@ export const STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO =
   'tab.newUser.clickedNewTabSearchIntro'
 export const STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO_V2 =
   'tab.newUser.clickedNewTabSearchIntroV2'
+export const STORAGE_NEW_USER_IS_TAB_V4_BETA = 'tab.newUser.isTabV4Enabled'
 
 // tab.experiments: values related to split-testing features
 // We may assign other values to localStorage with the tab.experiments.*

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
+import { get } from 'lodash/object'
 import Paper from '@material-ui/core/Paper'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -27,6 +28,7 @@ import {
   searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import searchFavicon from 'js/assets/logos/search-favicon.png'
 import tabFavicon from 'js/assets/logos/favicon.ico'
@@ -36,6 +38,9 @@ import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
+import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
+import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
+import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -59,8 +64,8 @@ import { SEARCH_APP, TAB_APP } from 'js/constants'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
-  componentDidMount() {
-    this.navigateToAuthStep()
+  async componentDidMount() {
+    await this.navigateToAuthStep()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,7 +113,41 @@ class Authentication extends React.Component {
     return nextURL ? nextURL : mainAppDestination
   }
 
-  navigateToAuthStep() {
+  // What we should do after the auth process is finished,
+  // after account creation, email verifcatiion, and username
+  // creation.
+  async onAuthProcessCompleted() {
+    const { user } = this.props
+
+    // If needed, opt the user into Tab v4. We need to
+    // do this *after* all of the auth logic on this app
+    // because v4 does not yet have a complete auth flow.
+    const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
+    const destinationURL = this.getNextURLAfterSignIn()
+    if (enableTabV4) {
+      try {
+        await optIntoV4Beta()
+      } catch (e) {
+        // TODO: show error to user / handle error more gracefully
+        logger.error(e)
+      }
+
+      // If the local storage value is set to V4 but the user's
+      // profile is not, update the user's profile.
+      if (!get(user, 'v4BetaEnabled')) {
+        await SetV4BetaMutation({
+          userId: user.id,
+          enabled: true,
+        })
+      }
+
+      externalRedirect(destinationURL)
+    } else {
+      replaceUrl(destinationURL)
+    }
+  }
+
+  async navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
     if (this.isAuthActionURL()) {
@@ -129,8 +168,7 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      const destinationURL = this.getNextURLAfterSignIn()
-      replaceUrl(destinationURL)
+      await this.onAuthProcessCompleted()
     }
   }
 
@@ -161,7 +199,7 @@ class Authentication extends React.Component {
     // database, because this is when we add their email address
     // and email verification status to their profile.
     return createNewUser()
-      .then(createdOrFetchedUser => {
+      .then(async createdOrFetchedUser => {
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
         // email verification:
@@ -227,7 +265,6 @@ class Authentication extends React.Component {
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
-    const nextURL = this.getNextURLAfterSignIn()
 
     return (
       <MuiThemeProvider theme={defaultTheme}>
@@ -298,7 +335,7 @@ class Authentication extends React.Component {
                       {...props}
                       user={user}
                       app={app}
-                      nextURL={nextURL}
+                      onCompleted={this.onAuthProcessCompleted.bind(this)}
                     />
                   )}
                 />
@@ -407,6 +444,7 @@ Authentication.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string,
     username: PropTypes.string,
+    v4BetaEnabled: PropTypes.bool,
   }),
 }
 
