@@ -6,9 +6,9 @@ import { USER_REFERRAL_VC_REWARD } from '../constants'
 // When updating these numbers, also update them:
 // * in the tab-homepage repository
 // * in the search-homepage repository
-const MONEY_RAISED = 678810.0
-const MONEY_RAISED_UPDATE_TIME = moment('2019-01-11T18:02:00.000Z')
-const MONEY_RAISED_PER_DAY = 450.0
+const MONEY_RAISED = 898100.0
+const MONEY_RAISED_UPDATE_TIME = moment('2020-05-12T23:30:00.000Z')
+const MONEY_RAISED_PER_DAY = 315.0
 
 /**
  * Get an estimate of how much we've raised, using a combination of
