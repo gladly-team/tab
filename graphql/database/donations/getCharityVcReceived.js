@@ -49,6 +49,7 @@ const getCharityVcReceived = async (
     )
       .where('timestamp')
       .between(startTimeRoundedISO, endTimeRoundedISO)
+      .loadAll()
       .execute()
     const totalVc = hourlyVcReceivedItems.reduce(
       (acc, vcDonationItem) => acc + vcDonationItem.vcDonated,
