@@ -1,25 +1,32 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Relief: Doctors Without Borders'
+const campaignTitle = '## Support Justice: NAACP Legal Defense Fund'
 const campaignDescription = `
-#### As COVID-19 continues to spread, it will stress health systems around the globe. In this phase of our [COVID-19 relief](https://tab.gladly.io/covid-19/), we're supporting [Doctors Without Borders](https://www.doctorswithoutborders.org/covid19) and their efforts to ensure access to quality healthcare around the world.
-#### In response to COVID-19, Doctors Without Borders is fighting on multiple fronts—caring for patients, offering health education and mental health support, and providing training for vital infection control measures in health facilities around the world. Join us as we support their vital services by opening tabs and donating hearts.
+#### As much as ever, we need to demand justice and wellbeing for people of color.
+#### Through litigation, advocacy, and public education, the [NAACP Legal Defense Fund](https://www.naacpldf.org/) seeks structural changes to expand democracy, eliminate disparities, and achieve racial justice.
+#### Join us in supporting the NAACP LDF's efforts to fulfill the promise of equality for all Americans.
 `
-const campaignEndTitle = '## Support for Doctors Without Borders'
+const campaignDescriptionTwo = `
+##### Want to do more? [Learn how else you can help.](http://www.bit.ly/AllyGuideBLM)
+`
+
+const campaignEndTitle = '## Thanks for Supporting Racial Justice'
 const campaignEndDescription = `
-#### With your help, we raised thousands of dollars to provide medical services through [Doctors Without Borders](https://www.doctorswithoutborders.org/covid19)! Thank you for helping health systems in their fight against COVID-19.
-#### Share this achievement:
+#### With your help, we raised thousands of dollars for the [NAACP Legal Defense Fund's](https://www.naacpldf.org/) fight for racial justice.
+
+#### [Read more here](http://www.bit.ly/AllyGuideBLM) about other ways you can support people of color with donations, time, and your voice.
 `
-const campaignEndDescriptionTwo =
-  '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
+// const campaignEndDescriptionTwo =
+//   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'MSFApril2020',
-  charityId: '8f92a859-057f-462f-bb99-ad68a7caf5de',
+  campaignId: 'NAACPLDFJune2020',
+  charityId: '3539509f-2c67-4dcc-b4e9-568606bd087e',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
+    descriptionMarkdownTwo: campaignDescriptionTwo,
   },
   countMoneyRaised: false,
   countNewUsers: false,
@@ -38,7 +45,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 20e6,
+    targetNumber: 10e6,
     // transformNumberSourceValue: moneyRaised => {
     //   return Math.floor(moneyRaised / 0.1)
     // },
@@ -49,7 +56,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     content: {
       titleMarkdown: campaignEndTitle,
       descriptionMarkdown: campaignEndDescription,
-      descriptionMarkdownTwo: campaignEndDescriptionTwo,
+      // descriptionMarkdownTwo: campaignEndDescriptionTwo,
     },
     goal: {
       // Keep the progress bar label instead of the ending text.
@@ -57,27 +64,27 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       showProgressBarEndText: false,
     },
     showHeartsDonationButton: false,
-    showSocialSharing: true,
-    socialSharing: {
-      url: 'https://tab.gladly.io/covid-19/',
-      FacebookShareButtonProps: {
-        quote:
-          'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs.',
-      },
-      RedditShareButtonProps: {
-        title: 'Tabs transformed into vital healthcare',
-      },
-      TumblrShareButtonProps: {
-        title: 'Tabs transformed into healthcare',
-        caption:
-          'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs',
-      },
-      TwitterShareButtonProps: {
-        title:
-          'On @TabForACause, We just raised thousands of dollars for Doctors Without Borders (@MSF_USA). And all we did was open browser tabs. #tabsTransformed',
-        related: ['@TabForACause'],
-      },
-    },
+    showSocialSharing: false,
+    // socialSharing: {
+    //   url: 'https://tab.gladly.io/covid-19/',
+    //   FacebookShareButtonProps: {
+    //     quote:
+    //       'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs.',
+    //   },
+    //   RedditShareButtonProps: {
+    //     title: 'Tabs transformed into vital healthcare',
+    //   },
+    //   TumblrShareButtonProps: {
+    //     title: 'Tabs transformed into healthcare',
+    //     caption:
+    //       'We just raised thousands of dollars for Doctors Without Borders. And all we did was open browser tabs',
+    //   },
+    //   TwitterShareButtonProps: {
+    //     title:
+    //       'On @TabForACause, We just raised thousands of dollars for Doctors Without Borders (@MSF_USA). And all we did was open browser tabs. #tabsTransformed',
+    //     related: ['@TabForACause'],
+    //   },
+    // },
   },
   showCountdownTimer: false,
   showHeartsDonationButton: true,
@@ -86,13 +93,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#e00',
+      main: '#003f4e',
       light: '#94989e',
     },
   },
   time: {
-    start: '2020-04-27T16:00:00.000Z',
-    end: '2020-08-20T18:00:00.000Z',
+    start: '2020-06-02T18:00:00.000Z',
+    end: '2020-10-20T18:00:00.000Z',
   },
 })
 
