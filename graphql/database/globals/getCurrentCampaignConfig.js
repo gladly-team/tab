@@ -1,15 +1,6 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
 const campaignTitle = '## Support Justice: NAACP Legal Defense Fund'
-// const campaignDescription = `
-// #### As much as ever, we need to support people of color to seek justice and thrive.
-// #### Through litigation, advocacy, and public education, the [NAACP Legal Defense Fund](https://www.naacpldf.org/) seeks structural changes to expand democracy, eliminate disparities, and achieve racial justice in a society that fulfills the promise of equality for all Americans.
-// #### Join us in supporting the NAACP LDF's efforts to fight for criminal, economic, educational, and political justice.
-// `
-// const campaignDescriptionTwo = `
-// #### *Want to do more? [Learn how else you can help.](https://www.naacpldf.org/)*
-// `
-
 const campaignDescription = `
 #### As much as ever, we need to demand justice and wellbeing for people of color.
 #### Through litigation, advocacy, and public education, the [NAACP Legal Defense Fund](https://www.naacpldf.org/) seeks structural changes to expand democracy, eliminate disparities, and achieve racial justice.
