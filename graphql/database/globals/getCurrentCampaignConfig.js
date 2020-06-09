@@ -5,6 +5,7 @@ const campaignDescription = `
 #### As much as ever, we need to demand justice and wellbeing for people of color.
 #### Through litigation, advocacy, and public education, the [NAACP Legal Defense Fund](https://www.naacpldf.org/) seeks structural changes to expand democracy, eliminate disparities, and achieve racial justice.
 #### Join us in supporting the NAACP LDF's efforts to fulfill the promise of equality for all Americans.
+##### *Update: we've increased our goal—thanks for your enthusiastic support!*
 `
 const campaignDescriptionTwo = `
 ##### Want to do more? [Learn how else you can help.](http://www.bit.ly/AllyGuideBLM)
@@ -45,7 +46,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10e6,
+    targetNumber: 15e6,
     // transformNumberSourceValue: moneyRaised => {
     //   return Math.floor(moneyRaised / 0.1)
     // },
