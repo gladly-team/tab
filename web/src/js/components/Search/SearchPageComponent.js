@@ -30,6 +30,7 @@ import Logo from 'js/components/Logo/Logo'
 import { makePromiseCancelable, parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
+import SearchResultsQueryCodefuel from 'js/components/Search/SearchResultsQueryCodefuel'
 import {
   getSearchProvider,
   isReactSnapClient,
@@ -47,6 +48,8 @@ import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
 import {
   SEARCH_PROVIDER_BING,
+  SEARCH_PROVIDER_CODEFUEL,
+  SEARCH_PROVIDER_YAHOO,
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   SEARCH_APP,
@@ -590,7 +593,28 @@ class SearchPage extends React.Component {
                   }}
                 />
               </ErrorBoundarySearchResults>
-            ) : (
+            ) : null}
+            {(searchProvider || defaultSearchProvider) ===
+            SEARCH_PROVIDER_CODEFUEL ? (
+              <ErrorBoundarySearchResults>
+                <SearchResultsQueryCodefuel
+                  query={query}
+                  page={page}
+                  onPageChange={newPageIndex => {
+                    modifyURLParams({
+                      page: newPageIndex,
+                    })
+                  }}
+                  searchSource={searchSource}
+                  style={{
+                    maxWidth: 600,
+                    marginBottom: 40,
+                  }}
+                />
+              </ErrorBoundarySearchResults>
+            ) : null}
+            {(searchProvider || defaultSearchProvider) ===
+            SEARCH_PROVIDER_YAHOO ? (
               <SearchResults
                 query={query}
                 page={page}
@@ -606,7 +630,7 @@ class SearchPage extends React.Component {
                   marginBottom: 40,
                 }}
               />
-            )}
+            ) : null}
           </div>
           <div
             data-test-id={'search-sidebar'}

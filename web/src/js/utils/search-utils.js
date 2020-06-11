@@ -1,5 +1,9 @@
 import { get, set } from 'lodash/object'
-import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_YAHOO } from 'js/constants'
+import {
+  SEARCH_PROVIDER_BING,
+  SEARCH_PROVIDER_CODEFUEL,
+  SEARCH_PROVIDER_YAHOO,
+} from 'js/constants'
 import { getUrlParameters } from 'js/utils/utils'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import {
@@ -29,6 +33,8 @@ export const getSearchProvider = () => {
   switch (envSearchProvider) {
     case SEARCH_PROVIDER_BING:
       return SEARCH_PROVIDER_BING
+    case SEARCH_PROVIDER_CODEFUEL:
+      return SEARCH_PROVIDER_CODEFUEL
     case SEARCH_PROVIDER_YAHOO:
       return SEARCH_PROVIDER_YAHOO
     default:
