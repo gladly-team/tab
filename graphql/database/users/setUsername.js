@@ -48,6 +48,30 @@ const setUsername = async (userContext, userId, username) => {
       }
     }
 
+    // Return validation errors if the username is too short or too long.
+    if (username.length < 2) {
+      return {
+        user: null,
+        errors: [
+          {
+            code: 'USERNAME_TOO_SHORT',
+            message: 'Username is too short',
+          },
+        ],
+      }
+    }
+    if (username.length > 30) {
+      return {
+        user: null,
+        errors: [
+          {
+            code: 'USERNAME_TOO_LONG',
+            message: 'Username is too long',
+          },
+        ],
+      }
+    }
+
     // Update the username.
     const userInstance = await UserModel.update(userContext, {
       id: userId,

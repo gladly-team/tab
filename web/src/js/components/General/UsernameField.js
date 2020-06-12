@@ -46,6 +46,10 @@ class UsernameField extends React.Component {
             this.setErrorMessage('Must be at least two characters.')
             break
           }
+          case 'TOO_LONG': {
+            this.setErrorMessage('Must be shorter than 30 characters.')
+            break
+          }
           case 'NO_SPACES': {
             this.setErrorMessage('Cannot contain spaces.')
             break

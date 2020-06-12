@@ -23,6 +23,12 @@ export const validateUsername = username => {
       reason: 'TOO_SHORT',
     }
   }
+  if (username.length > 30) {
+    return {
+      isValid: false,
+      reason: 'TOO_LONG',
+    }
+  }
   // This validation rule added 2019 June 7.
   if (username.indexOf('@') > -1) {
     return {
