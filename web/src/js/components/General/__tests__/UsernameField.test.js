@@ -85,6 +85,23 @@ describe('UsernameField tests', function() {
     expect(textFieldElem.prop('error')).toBe(true)
   })
 
+  it('shows an error on validation if the username is longer than 30 characters', function() {
+    const UsernameField = require('js/components/General/UsernameField').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<UsernameField {...mockProps} />)
+    wrapper
+      .find(TextField)
+      .find('input')
+      .instance().value = 'abcdefghijklmnopqrstuvwxyz12345'
+    wrapper.instance().validate()
+    wrapper.update()
+    const textFieldElem = wrapper.find(TextField)
+    expect(textFieldElem.prop('helperText')).toEqual(
+      'Must be shorter than 30 characters.'
+    )
+    expect(textFieldElem.prop('error')).toBe(true)
+  })
+
   it('shows an error on validation if the username contains a space', function() {
     const UsernameField = require('js/components/General/UsernameField').default
     const mockProps = getMockProps()

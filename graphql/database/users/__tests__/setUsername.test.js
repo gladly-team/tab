@@ -61,4 +61,44 @@ describe('setUsername', () => {
     // We should not set the username for this user
     expect(updateQuery).not.toHaveBeenCalled()
   })
+
+  it('returns an error when the username is too short', async () => {
+    // Mock that no user with this username exists.
+    jest.mock('../getUserByUsername', () => jest.fn(() => null))
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+    const username = 'x'
+    const setUsername = require('../setUsername').default
+    const response = await setUsername(userContext, userContext.id, username)
+
+    expect(response.user).toBeNull()
+    expect(response.errors).toContainEqual({
+      code: 'USERNAME_TOO_SHORT',
+      message: 'Username is too short',
+    })
+
+    // We should not set the username for this user
+    expect(updateQuery).not.toHaveBeenCalled()
+  })
+
+  it('returns an error when the username is too long', async () => {
+    // Mock that no user with this username exists.
+    jest.mock('../getUserByUsername', () => jest.fn(() => null))
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+    const username = 'abcdefghijklmnopqrstuvwxyz12345'
+    const setUsername = require('../setUsername').default
+    const response = await setUsername(userContext, userContext.id, username)
+
+    expect(response.user).toBeNull()
+    expect(response.errors).toContainEqual({
+      code: 'USERNAME_TOO_LONG',
+      message: 'Username is too long',
+    })
+
+    // We should not set the username for this user
+    expect(updateQuery).not.toHaveBeenCalled()
+  })
 })
