@@ -49,6 +49,7 @@ const setUsername = async (userContext, userId, username) => {
     }
 
     // Return validation errors if the username is too short or too long.
+    // These validation rules added 2020 June 12.
     if (username.length < 2) {
       return {
         user: null,

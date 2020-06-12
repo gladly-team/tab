@@ -23,6 +23,8 @@ export const validateUsername = username => {
       reason: 'TOO_SHORT',
     }
   }
+
+  // This validation rule added 2020 June 12.
   if (username.length > 30) {
     return {
       isValid: false,
