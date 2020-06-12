@@ -38,6 +38,15 @@ describe('validating username', () => {
     })
   })
 
+  it('rejects usernames that are too long', () => {
+    const validateUsername = require('js/utils/utils').validateUsername
+    const username = 'abcdefghijklmnopqrstuvwxyz12345'
+    expect(validateUsername(username)).toEqual({
+      isValid: false,
+      reason: 'TOO_LONG',
+    })
+  })
+
   it('rejects usernames with "@"', () => {
     const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('@@')).toEqual({
