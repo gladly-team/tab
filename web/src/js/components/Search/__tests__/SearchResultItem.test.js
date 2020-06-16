@@ -64,18 +64,6 @@ describe('SearchResultItem: web page item', () => {
     expect(wrapper.at(0).type()).toEqual(WebPageSearchResult)
   })
 
-  it('uses the item ID as a key for a WebPageSearchResult', () => {
-    const SearchResultItem = require('js/components/Search/SearchResultItem')
-      .default
-    const mockProps = getMockProps()
-    mockProps.type = 'WebPages'
-    mockProps.itemData = getMockBingWebPageResult({
-      id: 'my-nice-id',
-    })
-    const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).key()).toEqual('my-nice-id')
-  })
-
   it('does not strip HTML from the display URL for a WebPageSearchResult', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
@@ -142,18 +130,6 @@ describe('SearchResultItem: computation result', () => {
     expect(wrapper.at(0).type()).toEqual(ComputationSearchResult)
   })
 
-  it('uses the item ID as a key for a ComputationSearchResult', () => {
-    const SearchResultItem = require('js/components/Search/SearchResultItem')
-      .default
-    const mockProps = getMockProps()
-    mockProps.type = 'Computation'
-    mockProps.itemData = getMockBingComputationResult({
-      id: 'my-nice-id',
-    })
-    const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).key()).toEqual('my-nice-id')
-  })
-
   it('passes extra props to the child', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
@@ -175,18 +151,6 @@ describe('SearchResultItem: time zone result', () => {
     mockProps.itemData = getMockBingTimeZoneResult()
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(TimeZoneSearchResult)
-  })
-
-  it('uses the item ID as a key for a TimeZoneSearchResult', () => {
-    const SearchResultItem = require('js/components/Search/SearchResultItem')
-      .default
-    const mockProps = getMockProps()
-    mockProps.type = 'TimeZone'
-    mockProps.itemData = getMockBingTimeZoneResult({
-      id: 'my-nice-id',
-    })
-    const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).key()).toEqual('my-nice-id')
   })
 
   it('passes extra props to the child', () => {
@@ -213,19 +177,6 @@ describe('SearchResultItem: news items', () => {
     ]
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(NewsSearchResults)
-  })
-
-  it('uses a "news-results" key for a NewsSearchResults', () => {
-    const SearchResultItem = require('js/components/Search/SearchResultItem')
-      .default
-    const mockProps = getMockProps()
-    mockProps.type = 'News'
-    mockProps.itemData = [
-      getMockBingNewsArticleResult(),
-      getMockBingNewsArticleResult(),
-    ]
-    const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).key()).toEqual('news-results')
   })
 
   it('does not strip HTML from the description for a NewsSearchResults', () => {
@@ -328,19 +279,6 @@ describe('SearchResultItem: video items', () => {
     ]
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(VideoSearchResults)
-  })
-
-  it('uses a "video-results" key for a VideoSearchResults', () => {
-    const SearchResultItem = require('js/components/Search/SearchResultItem')
-      .default
-    const mockProps = getMockProps()
-    mockProps.type = 'Videos'
-    mockProps.itemData = [
-      getMockBingNewsArticleResult(),
-      getMockBingNewsArticleResult(),
-    ]
-    const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).key()).toEqual('video-results')
   })
 
   it('passes extra props to the child', () => {
