@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -13,25 +12,6 @@ import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { SEARCH_INTRO_QUERY_ENGLISH } from 'js/constants'
-import { showBingJSAds } from 'js/utils/feature-flags'
-
-// Pings Bing when the search results page loads.
-class BingPageLoadPing extends React.Component {
-  componentDidMount() {
-    const { pageLoadPingUrl } = this.props
-    if (pageLoadPingUrl) {
-      fetch(pageLoadPingUrl).catch(e => {})
-    }
-  }
-
-  render() {
-    return null
-  }
-}
-
-BingPageLoadPing.propTypes = {
-  pageLoadPingUrl: PropTypes.string.isRequired,
-}
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -81,7 +61,7 @@ const styles = theme => ({
   },
 })
 
-const SearchResultsBing = props => {
+const SearchResultsCodefuel = props => {
   const {
     classes,
     data,
@@ -107,15 +87,12 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 3, MIN_PAGE + 5))
   )
 
-  const pageLoadPingUrl = get(data, 'instrumentation.pageLoadPingUrl')
   const noSearchResultsReturned = queryReturned && !data.results.mainline.length
   const noResultsToDisplay =
     isEmptyQuery ||
     !data.results.mainline.length ||
     isQueryInProgress ||
     isError
-
-  const SHOW_BING_JS_ADS = showBingJSAds()
 
   return (
     <div
@@ -164,12 +141,6 @@ const SearchResultsBing = props => {
           visibility: noResultsToDisplay ? 'hidden' : 'visible',
         }}
       >
-        {!noResultsToDisplay && pageLoadPingUrl ? (
-          <BingPageLoadPing
-            key={pageLoadPingUrl}
-            pageLoadPingUrl={pageLoadPingUrl}
-          />
-        ) : null}
         {data.resultsCount ? (
           <Typography
             data-test-id={'search-results-count'}
@@ -208,26 +179,6 @@ const SearchResultsBing = props => {
             </Paper>
           </ErrorBoundary>
         ) : null}
-        {/* Important: this needs to prerender into HTML so the container
-             exists for the ads JS code even when there isn't search data. */
-        SHOW_BING_JS_ADS ? (
-          <ErrorBoundary ignoreErrors>
-            <div
-              id="bing-js-ads-container"
-              style={{
-                marginLeft: -10, // to deal with unwanted padding
-              }}
-              // Prevent rerendering the container during hydration,
-              // which can break 3rd-party Bing JS:
-              // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
-              // https://github.com/facebook/react/issues/10923#issuecomment-338715787
-              dangerouslySetInnerHTML={{
-                __html: '',
-              }}
-              suppressHydrationWarning
-            />
-          </ErrorBoundary>
-        ) : null}
         {data.results.mainline.map(searchResultItemData => {
           return (
             <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
@@ -235,7 +186,6 @@ const SearchResultsBing = props => {
                 key={searchResultItemData.key}
                 type={searchResultItemData.type}
                 itemData={searchResultItemData.value}
-                instrumentation={data.instrumentation}
               />
             </ErrorBoundary>
           )
@@ -315,14 +265,9 @@ const SearchResultsBing = props => {
   )
 }
 
-SearchResultsBing.propTypes = {
+SearchResultsCodefuel.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
-    instrumentation: PropTypes.shape({
-      _type: PropTypes.string,
-      pageLoadPingUrl: PropTypes.string,
-      pingUrlBase: PropTypes.string,
-    }),
     resultsCount: PropTypes.number,
     results: PropTypes.shape({
       pole: PropTypes.arrayOf(
@@ -362,6 +307,6 @@ SearchResultsBing.propTypes = {
   theme: PropTypes.object.isRequired,
 }
 
-SearchResultsBing.defaultProps = {}
+SearchResultsCodefuel.defaultProps = {}
 
-export default withStyles(styles, { withTheme: true })(SearchResultsBing)
+export default withStyles(styles, { withTheme: true })(SearchResultsCodefuel)
