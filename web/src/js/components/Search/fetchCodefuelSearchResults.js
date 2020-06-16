@@ -9,10 +9,12 @@ const PLACEMENT_SIDEBAR = 'Sidebar'
 // CodeFuel's top-level keys for each result type.
 const CODEFUEL_RESULT_TYPE_KEY_WEBPAGE = 'OrganicResults'
 const CODEFUEL_RESULT_TYPE_KEY_VIDEO = 'VideoResults'
+const CODEFUEL_RESULT_TYPE_NEWS = 'NewsResults'
 
 // Result types used internally in components.
 const RESULT_TYPE_WEBPAGES = 'WebPages'
 const RESULT_TYPE_VIDEOS = 'Videos'
+const RESULT_TYPE_NEWS = 'News'
 
 // Create a generic search result object
 const createSearchResult = ({
@@ -114,6 +116,71 @@ const createVideoResults = (data = []) => {
   })
 }
 
+// Takes an array (all news, raw CodeFuel data) and returns
+// our news results object.
+const createNewsResults = (data = []) => {
+  if (!data.length) {
+    return []
+  }
+  const firstItem = data[0]
+  return createSearchResult({
+    type: RESULT_TYPE_NEWS,
+    key: firstItem.TargetedUrl,
+    pixelUrl: firstItem.PixelUrl, // TODO: utilize this in the result component
+    placement: firstItem.PlacementHint, // all items have the same placement
+    rank: firstItem.Rank, // all items have the same rank
+    value: data.map(newsItem => ({
+      // category: '',
+      // clusteredArticles: [],
+      // contractualRules: [
+      //   {
+      //     text: '',
+      //   },
+      // ],
+      datePublished: newsItem.DatePublished,
+      description: newsItem.Description,
+      // headline: false,
+      // id: '', // might not exist
+      image: {
+        thumbnail: {
+          contentUrl: newsItem.ThumbnailUrl,
+          height: newsItem.ThumbnailHeight,
+          width: newsItem.ThumbnailWidth,
+        },
+      },
+      // mentions: [
+      //   {
+      //     name: '',
+      //   },
+      // ],
+      name: newsItem.Title,
+      provider: [
+        {
+          // _type: '',
+          name: newsItem.Provider,
+          // image: {
+          //   thumbnail: {
+          //     contentUrl: '',
+          //   },
+          // },
+        },
+      ],
+      url: newsItem.TargetedUrl,
+      // video: {
+      //   allowHttpsEmbed: false,
+      //   embedHtml: '',
+      //   motionThumbnailUrl: '',
+      //   name: '',
+      //   thumbnail: {
+      //     height: 123,
+      //     width: 123,
+      //   },
+      //   thumbnailUrl: '',
+      // },
+    })),
+  })
+}
+
 const formatSearchResults = rawSearchResults => {
   console.log('raw search results:', rawSearchResults)
 
@@ -134,7 +201,14 @@ const formatSearchResults = rawSearchResults => {
     get(rawSearchResults, [CODEFUEL_RESULT_TYPE_KEY_VIDEO, ITEMS], [])
   )
 
-  const allResults = [].concat(webpageResults).concat(videoResults)
+  const newsResults = createNewsResults(
+    get(rawSearchResults, [CODEFUEL_RESULT_TYPE_NEWS, ITEMS], [])
+  )
+
+  const allResults = []
+    .concat(webpageResults)
+    .concat(videoResults)
+    .concat(newsResults)
   allResults.forEach(item => {
     switch (item.placement) {
       case PLACEMENT_POLE: {
