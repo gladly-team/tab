@@ -278,15 +278,6 @@ SearchResultsCodefuel.propTypes = {
   data: PropTypes.shape({
     resultsCount: PropTypes.number,
     results: PropTypes.shape({
-      pole: PropTypes.arrayOf(
-        PropTypes.shape({
-          type: PropTypes.string.isRequired,
-          key: PropTypes.string.isRequired,
-          rank: PropTypes.number.isRequired,
-          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-            .isRequired,
-        })
-      ).isRequired,
       mainline: PropTypes.arrayOf(
         PropTypes.shape({
           type: PropTypes.string.isRequired,
@@ -296,6 +287,7 @@ SearchResultsCodefuel.propTypes = {
             .isRequired,
         })
       ).isRequired,
+      // TODO: render sidebar content if we need it (primarily for ads).
       sidebar: PropTypes.arrayOf(
         PropTypes.shape({
           type: PropTypes.string.isRequired,

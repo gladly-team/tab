@@ -2,7 +2,6 @@ import { get } from 'lodash/object'
 import getMockCodefuelSearchResults from 'js/components/Search/getMockCodefuelSearchResults'
 
 const ITEMS = 'Items'
-const PLACEMENT_POLE = 'Pole'
 const PLACEMENT_MAINLINE = 'Mainline'
 const PLACEMENT_SIDEBAR = 'Sidebar'
 
@@ -184,7 +183,6 @@ const createNewsResults = (data = []) => {
 const formatSearchResults = rawSearchResults => {
   console.log('raw search results:', rawSearchResults)
 
-  const poleResults = []
   const mainlineResults = []
   const sidebarResults = []
 
@@ -211,10 +209,6 @@ const formatSearchResults = rawSearchResults => {
     .concat(newsResults)
   allResults.forEach(item => {
     switch (item.placement) {
-      case PLACEMENT_POLE: {
-        poleResults.push(item)
-        break
-      }
       case PLACEMENT_MAINLINE: {
         mainlineResults.push(item)
         break
@@ -233,7 +227,6 @@ const formatSearchResults = rawSearchResults => {
       'NumResults',
     ]),
     results: {
-      pole: poleResults,
       mainline: mainlineResults,
       sidebar: sidebarResults,
     },

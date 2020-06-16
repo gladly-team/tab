@@ -16,7 +16,6 @@ class SearchResultsQueryBing extends React.Component {
       searchResultsData: {
         resultsCount: undefined,
         results: {
-          pole: [],
           mainline: [],
           sidebar: [],
         },
