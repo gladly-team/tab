@@ -22,6 +22,11 @@ const styles = theme => ({
   searchResultsContainer: {
     marginTop: 6,
   },
+  searchResultsContent: {
+    marginTop: 6,
+    display: 'flex', // Important: we use "order" to rank search results.
+    flexDirection: 'column',
+  },
   paginationContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -135,9 +140,6 @@ const SearchResultsCodefuel = props => {
         data-test-id={'search-results'}
         className={classes.searchResultsContainer}
         style={{
-          // Note: this cannot be "display: 'none'" when using the Bing JS ads,
-          // because the ads JS needs to be able to measure the iframe
-          // dimensions.
           visibility: noResultsToDisplay ? 'hidden' : 'visible',
         }}
       >
@@ -179,17 +181,23 @@ const SearchResultsCodefuel = props => {
             </Paper>
           </ErrorBoundary>
         ) : null}
-        {data.results.mainline.map(searchResultItemData => {
-          return (
-            <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
-              <SearchResultItem
-                key={searchResultItemData.key}
-                type={searchResultItemData.type}
-                itemData={searchResultItemData.value}
-              />
-            </ErrorBoundary>
-          )
-        })}
+        <div className={classes.searchResultsContent}>
+          {data.results.mainline.map(searchResultItemData => {
+            return (
+              <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
+                <div
+                  key={searchResultItemData.key}
+                  style={{ order: searchResultItemData.rank || 1 }}
+                >
+                  <SearchResultItem
+                    type={searchResultItemData.type}
+                    itemData={searchResultItemData.value}
+                  />
+                </div>
+              </ErrorBoundary>
+            )
+          })}
+        </div>
         <div
           data-test-id={'search-results-attribution'}
           className={classes.resultsAttributionContainer}
@@ -274,6 +282,7 @@ SearchResultsCodefuel.propTypes = {
         PropTypes.shape({
           type: PropTypes.string.isRequired,
           key: PropTypes.string.isRequired,
+          rank: PropTypes.number.isRequired,
           value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
             .isRequired,
         })
@@ -282,6 +291,7 @@ SearchResultsCodefuel.propTypes = {
         PropTypes.shape({
           type: PropTypes.string.isRequired,
           key: PropTypes.string.isRequired,
+          rank: PropTypes.number.isRequired,
           value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
             .isRequired,
         })
@@ -290,6 +300,7 @@ SearchResultsCodefuel.propTypes = {
         PropTypes.shape({
           type: PropTypes.string.isRequired,
           key: PropTypes.string.isRequired,
+          rank: PropTypes.number.isRequired,
           value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
             .isRequired,
         })
