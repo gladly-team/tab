@@ -22,14 +22,25 @@ const createSearchResult = ({
   placement,
   rank,
   value,
-}) => ({
-  type,
-  key,
-  pixelUrl,
-  placement,
-  rank,
-  value,
-})
+}) => {
+  if (!key) {
+    throw new Error(`Search result expected a "key" value.`)
+  }
+  if (!placement) {
+    throw new Error(`Search result expected a "placement" value.`)
+  }
+  if (!rank) {
+    throw new Error(`Search result expected a "rank" value.`)
+  }
+  return {
+    type,
+    key,
+    pixelUrl,
+    placement,
+    rank,
+    value,
+  }
+}
 
 // Takes an object (raw CodeFuel organic webpage data) and returns our
 // internal webpage result object.
@@ -55,8 +66,8 @@ const createWebpageResult = data => {
   })
 }
 
-// Takes an array (all videos, raw CodeFuel data) and returns an array
-// of our video result objects.
+// Takes an array (all videos, raw CodeFuel data) and returns our
+// our video results object.
 const createVideoResults = (data = []) => {
   if (!data.length) {
     return []
@@ -67,9 +78,10 @@ const createVideoResults = (data = []) => {
     key: firstItem.TargetedUrl,
     pixelUrl: firstItem.PixelUrl, // TODO: utilize this in the result component
     placement: firstItem.PlacementHint, // all items have the same placement
+    rank: firstItem.Rank, // all items have the same rank
     value: data.map(videoItem => ({
-      allowHttpsEmbed: videoItem.AllowHttpsEmbed,
-      allowMobileEmbed: videoItem.AllowMobileEmbed,
+      allowHttpsEmbed: !!videoItem.AllowHttpsEmbed,
+      allowMobileEmbed: !!videoItem.AllowMobileEmbed,
       // contentUrl: undefined,
       datePublished: videoItem.DatePublished,
       description: videoItem.Description,
