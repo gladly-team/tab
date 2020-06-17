@@ -1,5 +1,8 @@
+import qs from 'qs'
 import { get } from 'lodash/object'
 import getMockCodefuelSearchResults from 'js/components/Search/getMockCodefuelSearchResults'
+import { getUrlParameters } from 'js/utils/utils'
+import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 
 const ITEMS = 'Items'
 const PLACEMENT_MAINLINE = 'Mainline'
@@ -233,9 +236,98 @@ const formatSearchResults = rawSearchResults => {
   }
 }
 
-const fetchCodefuelSearchResults = async () => {
+const fetchCodefuelSearchResults = async ({
+  query: providedQuery = null,
+  page,
+} = {}) => {
   console.log('Fetch CodeFuel search results.')
-  const rawSearchResults = await getMockCodefuelSearchResults()
+
+  // If no query value is provided, try to get it from the "q"
+  // URL parameter.
+  const urlParams = getUrlParameters()
+  const query = providedQuery || urlParams.q || null
+
+  if (!query) {
+    throw new Error(`Search query must be a non-empty string.`)
+  }
+
+  let rawSearchResults
+
+  // Return mock search results as needed in development.
+  if (
+    process.env.NODE_ENV === 'development' &&
+    process.env.REACT_APP_MOCK_SEARCH_RESULTS === 'true'
+  ) {
+    // Mock search results, including network delay.
+    rawSearchResults = await new Promise(resolve => {
+      setTimeout(() => resolve(getMockCodefuelSearchResults()), 400)
+    })
+  } else {
+    try {
+      // Determine the search results page number, using the "page"
+      // query parameter if not provided.
+      let pageNumber = 0
+      if (page && page > 0) {
+        pageNumber = page - 1
+      } else {
+        const paramPageNum = parseInt(urlParams.page, 10)
+        if (!isNaN(paramPageNum) && paramPageNum > 0) {
+          pageNumber = paramPageNum - 1
+        }
+      }
+
+      const endpoint = 'https://feed.cf-se.com/v2/Search/'
+      const codeFuelPublisherId = 'SY1002309' // unique to our page
+
+      const searchURL = `${endpoint}?${qs.stringify({
+        q: query.slice(0, 200), // limited to 200 characters
+        gd: codeFuelPublisherId,
+        NumOrganic: getSearchResultCountPerPage(), // number of non-ad results
+        NumAds: 3, // ads: mainline count
+        NumSidebar: 0, // ads: sidebar count
+        Sitelinks: true, // ads: "deep links"
+        EnhancedSitelinks: true, // ads: "deep links" with descriptions
+        Rating: false, // ads: star ratings for advertisers
+        mobileApp: false, // ads: links to app stores for app installs
+        adImage: false, // ads: get an image of the product/service
+        adsMultiImages: false, // ads: get multiple images of the product/service
+        adPrice: false, // ads: get a list of product/services with prices
+        consumerRatings: false, // ads: survey ratings for the advertiser
+        Localad: false, // ads: include local addresses or phone numbers
+        Images: false, // organic result type
+        news: true, // organic result type
+        videos: true, // organic result type
+        PageIndex: pageNumber, // zero-based results page
+        // N: 'abcd', // reporting (e.g. traffic sources)
+        // L: 500, // reporting (e.g. traffic sources)
+        // M: 500, // reporting (e.g. traffic sources)
+        // D: 'MMDDYY', // user install date
+        af: 1, // content filter: 0 = off, 1 = moderate, 2 = strict
+        Relatedsearches: false, // organic result type
+        // UserAgent: '', // required only for server-to-server calls
+        // UserIp: '', // required only for server-to-server calls
+        // Mkt: 'en-US' // useful primarily for server-to-server calls
+        Format: 'JSON', // JSON or XML
+        url: `${window.location.origin}${window.location.pathname}`, // URL of the hosting page
+        EnableProductAds: false,
+      })}`
+
+      const response = await fetch(searchURL, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+      rawSearchResults = await response.json()
+    } catch (e) {
+      throw e
+    }
+  }
+
   const formattedSearchResults = formatSearchResults(rawSearchResults)
   return formattedSearchResults
 }
