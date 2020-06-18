@@ -251,6 +251,11 @@ const fetchCodefuelSearchResults = async ({
     throw new Error(`Search query must be a non-empty string.`)
   }
 
+  const endpoint = process.env.REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL
+  if (!endpoint) {
+    throw new Error('Search query endpoint is not defined.')
+  }
+
   let rawSearchResults
 
   // Return mock search results as needed in development.
@@ -276,12 +281,9 @@ const fetchCodefuelSearchResults = async ({
         }
       }
 
-      const endpoint = 'https://feed.cf-se.com/v2/Search/'
-      const codeFuelPublisherId = 'SY1002309' // unique to our page
-
       const searchURL = `${endpoint}?${qs.stringify({
         q: query.slice(0, 200), // limited to 200 characters
-        gd: codeFuelPublisherId,
+        // gd: 'some-id', // added server-side
         NumOrganic: getSearchResultCountPerPage(), // number of non-ad results
         NumAds: 3, // ads: mainline count
         NumSidebar: 0, // ads: sidebar count
@@ -306,7 +308,7 @@ const fetchCodefuelSearchResults = async ({
         Relatedsearches: false, // organic result type
         // UserAgent: '', // required only for server-to-server calls
         // UserIp: '', // required only for server-to-server calls
-        // Mkt: 'en-US' // useful primarily for server-to-server calls
+        // Mkt: 'en-US' // TODO
         Format: 'JSON', // JSON or XML
         url: `${window.location.origin}${window.location.pathname}`, // URL of the hosting page
         EnableProductAds: false,
