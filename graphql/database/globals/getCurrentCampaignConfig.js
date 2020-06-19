@@ -46,7 +46,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 15e6,
+    targetNumber: 18e6,
     // transformNumberSourceValue: moneyRaised => {
     //   return Math.floor(moneyRaised / 0.1)
     // },
