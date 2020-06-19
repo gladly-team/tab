@@ -137,86 +137,85 @@ const SearchResultsCodefuel = props => {
           <span style={{ fontWeight: 'bold' }}>{query}</span>
         </Typography>
       ) : null}
-      <div
-        data-test-id={'search-results'}
-        className={classes.searchResultsContainer}
-        style={{
-          visibility: noResultsToDisplay ? 'hidden' : 'visible',
-        }}
-      >
-        {data.resultsCount ? (
-          <Typography
-            data-test-id={'search-results-count'}
-            variant={'caption'}
-            className={classes.resultsCountText}
-          >
-            {commaFormatted(data.resultsCount)} results
-          </Typography>
-        ) : null}
-        {// If this is the first query, show our intro card
-        !noResultsToDisplay && query === SEARCH_INTRO_QUERY_ENGLISH ? (
-          <ErrorBoundary ignoreErrors>
-            <Paper
-              data-test-id={'first-search-card'}
-              className={classes.firstSearchCardContainer}
-              elevation={1}
-            >
-              <div>
-                <Typography
-                  variant={'h4'}
-                  data-test-id={'first-search-card-value'}
-                  gutterBottom
-                >
-                  Over 3.5 billion
-                </Typography>
-                <Typography
-                  variant={'body2'}
-                  data-test-id={'first-search-card-text'}
-                  gutterBottom
-                >
-                  With Search for a Cause, those searches could give 500,000
-                  people access to clean water or protect 430 square miles of
-                  rainforest each day!
-                </Typography>
-              </div>
-            </Paper>
-          </ErrorBoundary>
-        ) : null}
-        <div className={classes.searchResultsContent}>
-          {data.results.mainline.map(searchResultItemData => {
-            return (
-              <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
-                <div
-                  key={searchResultItemData.key}
-                  style={{ order: searchResultItemData.rank || 1 }}
-                >
-                  <SearchResultItem
-                    type={searchResultItemData.type}
-                    itemData={searchResultItemData.value}
-                  />
-                </div>
-              </ErrorBoundary>
-            )
-          })}
-        </div>
+      {noResultsToDisplay ? null : (
         <div
-          data-test-id={'search-results-attribution'}
-          className={classes.resultsAttributionContainer}
+          data-test-id={'search-results'}
+          className={classes.searchResultsContainer}
         >
-          <Link
-            to={'https://privacy.microsoft.com/privacystatement'}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          {data.resultsCount ? (
             <Typography
+              data-test-id={'search-results-count'}
               variant={'caption'}
-              className={classes.resultsAttribution}
+              className={classes.resultsCountText}
             >
-              Results by Microsoft
+              {commaFormatted(data.resultsCount)} results
             </Typography>
-          </Link>
+          ) : null}
+          {// If this is the first query, show our intro card
+          !noResultsToDisplay && query === SEARCH_INTRO_QUERY_ENGLISH ? (
+            <ErrorBoundary ignoreErrors>
+              <Paper
+                data-test-id={'first-search-card'}
+                className={classes.firstSearchCardContainer}
+                elevation={1}
+              >
+                <div>
+                  <Typography
+                    variant={'h4'}
+                    data-test-id={'first-search-card-value'}
+                    gutterBottom
+                  >
+                    Over 3.5 billion
+                  </Typography>
+                  <Typography
+                    variant={'body2'}
+                    data-test-id={'first-search-card-text'}
+                    gutterBottom
+                  >
+                    With Search for a Cause, those searches could give 500,000
+                    people access to clean water or protect 430 square miles of
+                    rainforest each day!
+                  </Typography>
+                </div>
+              </Paper>
+            </ErrorBoundary>
+          ) : null}
+          <div className={classes.searchResultsContent}>
+            {data.results.mainline.map(searchResultItemData => {
+              return (
+                <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
+                  <div
+                    key={searchResultItemData.key}
+                    style={{ order: searchResultItemData.rank || 1 }}
+                  >
+                    <SearchResultItem
+                      type={searchResultItemData.type}
+                      itemData={searchResultItemData.value}
+                    />
+                  </div>
+                </ErrorBoundary>
+              )
+            })}
+          </div>
+          <div
+            data-test-id={'search-results-attribution'}
+            className={classes.resultsAttributionContainer}
+          >
+            <Link
+              to={'https://privacy.microsoft.com/privacystatement'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Typography
+                variant={'caption'}
+                className={classes.resultsAttribution}
+              >
+                Results by Microsoft
+              </Typography>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
       {!!page && SHOW_PAGINATION && !noResultsToDisplay ? (
         <div
           data-test-id={'pagination-container'}
