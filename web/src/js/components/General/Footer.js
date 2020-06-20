@@ -53,13 +53,6 @@ export { FooterLink }
 
 // Footer component
 const styles = theme => ({
-  container: {
-    background: 'rgba(128, 128, 128, 0.04)',
-    paddingTop: 1,
-    paddingBottom: 20,
-    paddingLeft: 40,
-    paddingRight: 40,
-  },
   divider: {
     width: '100%',
     marginBottom: 20,
@@ -85,7 +78,19 @@ class Footer extends React.Component {
     // Currently only for Search for a Cause. Customize if used
     // for other apps.
     return (
-      <div style={style} className={classes.container}>
+      <div
+        style={Object.assign(
+          {},
+          {
+            background: 'rgba(128, 128, 128, 0.04)',
+            paddingTop: 1,
+            paddingBottom: 20,
+            paddingLeft: 40,
+            paddingRight: 40,
+          },
+          style
+        )}
+      >
         <Divider className={classes.divider} />
         <div className={classes.contentContainer}>
           <Link to={searchHomeURL}>
