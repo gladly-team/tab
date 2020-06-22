@@ -99,7 +99,6 @@ const SearchResultsCodefuel = props => {
     isQueryInProgress ||
     isError
 
-  // TODO: fix the prerendering error with the footer
   return (
     <div
       className={classes.searchResultsParentContainer}

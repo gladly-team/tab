@@ -33,6 +33,17 @@ const FirstSearchView = lazy(() =>
 
 const muiTheme = createMuiTheme(defaultSearchTheme)
 
+// Use random class names in JSS. See:
+// https://github.com/stereobooster/react-snap/issues/99#issue-286236612
+// The search results page is rendered into HTML at build time
+// using react-snap, and we have to avoid mismatched JSS
+// class names.
+// Another approach is to remove the server-rendered styles:
+// https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
+// https://material-ui.com/guides/server-rendering/#the-client-side
+// In Material UI v4, we can probably remove the jss and react-jss
+// dependencies:
+// https://material-ui.com/styles/api/#stylesprovider
 const createGenerateClassName = () => {
   let counter = 0
   return (rule, sheet) =>
