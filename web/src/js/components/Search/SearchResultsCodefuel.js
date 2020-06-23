@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
+import CodeFuelPixel from 'js/components/Search/CodeFuelPixel'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
@@ -191,6 +192,12 @@ const SearchResultsCodefuel = props => {
                       type={searchResultItemData.type}
                       itemData={searchResultItemData.value}
                     />
+                    {/*
+                      This will fire pixel URLs for all results except for
+                      ad extensions like SiteLinks, which have to handle firing
+                      each of them.
+                     */}
+                    <CodeFuelPixel url={searchResultItemData.pixelUrl} />
                   </div>
                 </ErrorBoundary>
               )
@@ -281,6 +288,7 @@ SearchResultsCodefuel.propTypes = {
         PropTypes.shape({
           type: PropTypes.string.isRequired,
           key: PropTypes.string.isRequired,
+          pixelUrl: PropTypes.string,
           rank: PropTypes.number.isRequired,
           value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
             .isRequired,
@@ -291,6 +299,7 @@ SearchResultsCodefuel.propTypes = {
         PropTypes.shape({
           type: PropTypes.string.isRequired,
           key: PropTypes.string.isRequired,
+          pixelUrl: PropTypes.string,
           rank: PropTypes.number.isRequired,
           value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
             .isRequired,

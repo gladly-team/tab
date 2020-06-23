@@ -56,7 +56,7 @@ const createWebpageResult = data => {
   return createSearchResult({
     type: RESULT_TYPE_WEBPAGES,
     key: data.TargetedUrl, // assume unique
-    pixelUrl: data.PixelUrl, // TODO: utilize this in the result component
+    pixelUrl: data.PixelUrl,
     placement: data.PlacementHint,
     rank: data.Rank,
     value: {
@@ -84,7 +84,7 @@ const createVideoResults = (data = []) => {
   return createSearchResult({
     type: RESULT_TYPE_VIDEOS,
     key: firstItem.TargetedUrl,
-    pixelUrl: firstItem.PixelUrl, // TODO: utilize this in the result component
+    pixelUrl: firstItem.PixelUrl,
     placement: firstItem.PlacementHint, // all items have the same placement
     rank: firstItem.Rank, // all items have the same rank
     value: data.map(videoItem => ({
@@ -132,7 +132,7 @@ const createNewsResults = (data = []) => {
   return createSearchResult({
     type: RESULT_TYPE_NEWS,
     key: firstItem.TargetedUrl,
-    pixelUrl: firstItem.PixelUrl, // TODO: utilize this in the result component
+    pixelUrl: firstItem.PixelUrl,
     placement: firstItem.PlacementHint, // all items have the same placement
     rank: firstItem.Rank, // all items have the same rank
     value: data.map(newsItem => ({
@@ -193,7 +193,7 @@ const createTextAdResult = data => {
   return createSearchResult({
     type: RESULT_TYPE_ADS,
     key: data.TargetedUrl, // assume unique
-    pixelUrl: data.PixelUrl, // TODO: utilize this in the result component
+    pixelUrl: data.PixelUrl,
     placement: data.PlacementHint,
     rank: data.Rank,
     value: {
@@ -208,6 +208,7 @@ const createTextAdResult = data => {
             descriptionLine1: siteLink.DescriptionLine1,
             descriptionLine2: siteLink.DescriptionLine2,
             link: siteLink.TargetedUrl,
+            pixelUrl: siteLink.PixelUrl,
             text: siteLink.Text,
           })),
         },
@@ -225,8 +226,6 @@ const createTextAdResult = data => {
 }
 
 const formatSearchResults = rawSearchResults => {
-  console.log('raw search results:', rawSearchResults)
-
   const mainlineResults = []
   const sidebarResults = []
 
@@ -286,8 +285,6 @@ const fetchCodefuelSearchResults = async ({
   query: providedQuery = null,
   page,
 } = {}) => {
-  console.log('Fetch CodeFuel search results.')
-
   // If no query value is provided, try to get it from the "q"
   // URL parameter.
   const urlParams = getUrlParameters()

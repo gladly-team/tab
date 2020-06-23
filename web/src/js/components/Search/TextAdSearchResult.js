@@ -8,12 +8,20 @@ import {
   linkColor,
   linkColorVisited,
 } from 'js/components/Search/searchResultsStyles'
+import CodeFuelPixel from 'js/components/Search/CodeFuelPixel'
 
 export const SiteLink = props => {
   const {
     classes,
     instrumentation,
-    item: { text, descriptionLine1, descriptionLine2, link, pingUrlSuffix },
+    item: {
+      text,
+      descriptionLine1,
+      descriptionLine2,
+      link,
+      pixelUrl,
+      pingUrlSuffix,
+    },
   } = props
 
   return (
@@ -37,6 +45,7 @@ export const SiteLink = props => {
           {descriptionLine1} {descriptionLine2}
         </div>
       ) : null}
+      <CodeFuelPixel url={pixelUrl} />
     </div>
   )
 }
@@ -47,6 +56,7 @@ SiteLink.propTypes = {
     descriptionLine1: PropTypes.string,
     descriptionLine2: PropTypes.string,
     link: PropTypes.string.isRequired,
+    pixelUrl: PropTypes.string,
     pingUrlSuffix: PropTypes.string,
     text: PropTypes.string.isRequired,
   }).isRequired,
@@ -55,6 +65,9 @@ SiteLink.propTypes = {
     pageLoadPingUrl: PropTypes.string.isRequired,
     pingUrlBase: PropTypes.string.isRequired,
   }),
+}
+SiteLink.defaultProps = {
+  pixelUrl: null,
 }
 
 const styles = () => ({
