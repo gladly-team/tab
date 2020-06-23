@@ -12,11 +12,15 @@ const PLACEMENT_SIDEBAR = 'Sidebar'
 const CODEFUEL_RESULT_TYPE_KEY_WEBPAGE = 'OrganicResults'
 const CODEFUEL_RESULT_TYPE_KEY_VIDEO = 'VideoResults'
 const CODEFUEL_RESULT_TYPE_NEWS = 'NewsResults'
+const CODEFUEL_RESULT_TYPE_ADS = 'SponsoredResults'
 
 // Result types used internally in components.
 const RESULT_TYPE_WEBPAGES = 'WebPages'
 const RESULT_TYPE_VIDEOS = 'Videos'
 const RESULT_TYPE_NEWS = 'News'
+const RESULT_TYPE_ADS = 'Ads'
+const RESULT_SUBTYPE_ADS_TEXT = 'Ads/TextAd'
+const RESULT_SUBTYPE_ADS_SITE_LINK = 'Ads/SiteLinkExtension'
 
 // Create a generic search result object
 const createSearchResult = ({
@@ -183,6 +187,43 @@ const createNewsResults = (data = []) => {
   })
 }
 
+// Takes an object (raw CodeFuel text addata) and returns our
+// internal text ad result object.
+const createTextAdResult = data => {
+  return createSearchResult({
+    type: RESULT_TYPE_ADS,
+    key: data.TargetedUrl, // assume unique
+    pixelUrl: data.PixelUrl, // TODO: utilize this in the result component
+    placement: data.PlacementHint,
+    rank: data.Rank,
+    value: {
+      _type: RESULT_SUBTYPE_ADS_TEXT, // matches Bing API for ease of use with existing components
+      // businessName: '',
+      description: data.Description,
+      displayUrl: data.DisplayUrl,
+      extensions: [
+        {
+          _type: RESULT_SUBTYPE_ADS_SITE_LINK,
+          sitelinks: get(data, 'SiteLinks', []).map(siteLink => ({
+            descriptionLine1: siteLink.DescriptionLine1,
+            descriptionLine2: siteLink.DescriptionLine2,
+            link: siteLink.TargetedUrl,
+            text: siteLink.Text,
+          })),
+        },
+      ],
+      id: data.TargetedUrl, // assume unique
+      // isAdult: false,
+      // phoneNumber: '',
+      // position: 'Mainline',
+      // rank: 2,
+      title: data.Title,
+      url: data.TargetedUrl,
+      // urlPingSuffix: '',
+    },
+  })
+}
+
 const formatSearchResults = rawSearchResults => {
   console.log('raw search results:', rawSearchResults)
 
@@ -192,24 +233,29 @@ const formatSearchResults = rawSearchResults => {
   // Iterate through result data, formatting each result's data
   // and assigning them to the appropriate position (mainline,
   // sidebar, etc).
+  // The data is restructured to match Bing's result types for
+  // ease of use with existing components.
   const webpageResults = get(
     rawSearchResults,
     [CODEFUEL_RESULT_TYPE_KEY_WEBPAGE, ITEMS],
     []
   ).map(item => createWebpageResult(item))
-
   const videoResults = createVideoResults(
     get(rawSearchResults, [CODEFUEL_RESULT_TYPE_KEY_VIDEO, ITEMS], [])
   )
-
   const newsResults = createNewsResults(
     get(rawSearchResults, [CODEFUEL_RESULT_TYPE_NEWS, ITEMS], [])
   )
-
+  const adResults = get(
+    rawSearchResults,
+    [CODEFUEL_RESULT_TYPE_ADS, ITEMS],
+    []
+  ).map(item => createTextAdResult(item))
   const allResults = []
     .concat(webpageResults)
     .concat(videoResults)
     .concat(newsResults)
+    .concat(adResults)
   allResults.forEach(item => {
     switch (item.placement) {
       case PLACEMENT_MAINLINE: {
