@@ -54,7 +54,7 @@ SiteLink.propTypes = {
     _type: PropTypes.string,
     pageLoadPingUrl: PropTypes.string.isRequired,
     pingUrlBase: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
 }
 
 const styles = () => ({
@@ -173,7 +173,7 @@ const TextAdSearchResult = props => {
           {description}
         </span>
       </div>
-      {siteLinks ? (
+      {siteLinks && siteLinks.length ? (
         <div
           data-test-id={'search-result-webpage-deep-link-container'}
           className={classes.siteLinkContainer}
@@ -215,7 +215,7 @@ TextAdSearchResult.propTypes = {
     _type: PropTypes.string,
     pageLoadPingUrl: PropTypes.string.isRequired,
     pingUrlBase: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
 }
 
 TextAdSearchResult.defaultProps = {}
