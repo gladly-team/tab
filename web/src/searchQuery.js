@@ -1,3 +1,7 @@
+// TODO: allow fetching different search partner. Likely
+// make the prefetch below generalized and switch based
+// on env var.
+
 // This is a second entry point to speed up our query
 // to fetch search results.
 // We've patched react-scripts to add this as another entry

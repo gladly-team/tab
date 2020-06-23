@@ -14,26 +14,14 @@ const SearchResultItem = props => {
   // Render a different component depending on the result type.
   switch (type) {
     case 'WebPages': {
-      return (
-        <WebPageSearchResult
-          key={itemData.id}
-          item={itemData}
-          {...otherProps}
-        />
-      )
+      return <WebPageSearchResult item={itemData} {...otherProps} />
     }
     case 'News': {
       if (!itemData.length) {
         console.error(`No news items found for:`, itemData)
         return null
       }
-      return (
-        <NewsSearchResults
-          key={'news-results'}
-          newsItems={itemData}
-          {...otherProps}
-        />
-      )
+      return <NewsSearchResults newsItems={itemData} {...otherProps} />
     }
     case 'Ads': {
       const adType = itemData._type
@@ -45,13 +33,7 @@ const SearchResultItem = props => {
       // Determine which type of ad to render.
       switch (adType) {
         case 'Ads/TextAd': {
-          return (
-            <TextAdSearchResult
-              key={itemData.id}
-              item={itemData}
-              {...otherProps}
-            />
-          )
+          return <TextAdSearchResult item={itemData} {...otherProps} />
         }
         default: {
           console.error(`Could not render an ad with unhandled type ${adType}.`)
@@ -60,31 +42,13 @@ const SearchResultItem = props => {
       }
     }
     case 'Computation': {
-      return (
-        <ComputationSearchResult
-          key={itemData.id}
-          item={itemData}
-          {...otherProps}
-        />
-      )
+      return <ComputationSearchResult item={itemData} {...otherProps} />
     }
     case 'TimeZone': {
-      return (
-        <TimeZoneSearchResult
-          key={itemData.id}
-          item={itemData}
-          {...otherProps}
-        />
-      )
+      return <TimeZoneSearchResult item={itemData} {...otherProps} />
     }
     case 'Videos': {
-      return (
-        <VideoSearchResults
-          key={'video-results'}
-          videoItems={itemData}
-          {...otherProps}
-        />
-      )
+      return <VideoSearchResults videoItems={itemData} {...otherProps} />
     }
     default: {
       // console.log(`Could not render item of type ${type}.`)

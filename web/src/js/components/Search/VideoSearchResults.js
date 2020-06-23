@@ -200,7 +200,7 @@ VideoSearchItem.propTypes = {
   item: PropTypes.shape({
     allowHttpsEmbed: PropTypes.bool,
     allowMobileEmbed: PropTypes.bool,
-    contentUrl: PropTypes.string.isRequired,
+    contentUrl: PropTypes.string,
     datePublished: PropTypes.string,
     description: PropTypes.string,
     duration: PropTypes.string,

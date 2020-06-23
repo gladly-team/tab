@@ -223,6 +223,9 @@ resources:
                 # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
                 - EventType: origin-request
                   LambdaFunctionARN: ${self:custom.newTabAppLambdaEdgeFunctionARN}
+            # TODO: add search API routing to avoid preflight requests.
+            # Search API
+            # - PathPattern: 'search/api*'
             # Search app
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
