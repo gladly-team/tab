@@ -38,7 +38,7 @@ custom:
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
   tabV4Host: ${env:LAMBDA_TAB_V4_HOST}
-  searchAPIOriginDomain: ${env:SEARCH_API_ORIGIN_DOMAIN} # TODO: add env var
+  searchAPIOriginDomain: ${env:DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN}
 
 resources:
   Resources:

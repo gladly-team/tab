@@ -68,6 +68,7 @@ export const envVars = [
   { name: 'DEPLOYMENT_LANDING_PAGE_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_PATH' },
+  { name: 'DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN' },
   // End-to-end testing
   { name: 'SELENIUM_DRIVER_TYPE', optional: true },
   { name: 'SELENIUM_HOST', optional: true },
