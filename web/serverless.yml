@@ -38,6 +38,7 @@ custom:
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
   tabV4Host: ${env:LAMBDA_TAB_V4_HOST}
+  searchAPIOriginDomain: ${env:SEARCH_API_ORIGIN_DOMAIN} # TODO: add env var
 
 resources:
   Resources:
@@ -154,6 +155,13 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
+            # Search API service.
+            - DomainName: ${self:custom.searchAPIOriginDomain}
+              Id: SearchAPI
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
           Enabled: true
           Comment: ${self:custom.stage} new tab app, search app, and homepage
           # No default root object; our website (landing page) app handles it.
@@ -223,9 +231,33 @@ resources:
                 # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
                 - EventType: origin-request
                   LambdaFunctionARN: ${self:custom.newTabAppLambdaEdgeFunctionARN}
-            # TODO: add search API routing to avoid preflight requests.
-            # Search API
-            # - PathPattern: 'search/api*'
+            # Search API: routing through the same domain avoids
+            # preflight requests.
+            - PathPattern: 'search/api*'
+              MinTTL: 0
+              MaxTTL: 0
+              DefaultTTL: 0
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: SearchAPI
+              ForwardedValues:
+                # Cannot use '*', as that sends the Host header:
+                # https://stackoverflow.com/a/32825414 
+                Headers:
+                  - Accept
+                  - Accept-Charset
+                  - Access-Control-Request-Headers
+                  - Access-Control-Request-Method
+                  - CloudFront-Forwarded-Proto
+                  - Origin
+                  - Referer
+                  - User-Agent
+                QueryString: true
+                Cookies:
+                  Forward: none
+              ViewerProtocolPolicy: redirect-to-https
             # Search app
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
