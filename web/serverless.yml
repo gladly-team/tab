@@ -13,7 +13,7 @@ provider:
   # Example to update policy:
   #   aws cloudformation set-stack-policy --stack-name web-dev --region us-west-2 --stack-policy-body \
   #   '{"Statement":[
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"*"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/WebAppCloudFrontDistribution"}
   #   ]}'
   stackPolicy:
     - Effect: Deny
