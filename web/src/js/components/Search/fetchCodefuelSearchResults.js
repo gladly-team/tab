@@ -1,8 +1,16 @@
 import qs from 'qs'
-import { get } from 'lodash/object'
+import { get, set } from 'lodash/object'
 import getMockCodefuelSearchResults from 'js/components/Search/getMockCodefuelSearchResults'
 import { getUrlParameters } from 'js/utils/utils'
-import { getSearchResultCountPerPage } from 'js/utils/search-utils'
+import {
+  getSearchGlobal,
+  getSearchResultCountPerPage,
+} from 'js/utils/search-utils'
+
+const DEBUG = true
+const eventNameResultsFetched = 'SearchResultsFetched'
+const QUERY_IN_PROGRESS = 'IN_PROGRESS'
+const QUERY_COMPLETE = 'COMPLETE'
 
 const ITEMS = 'Items'
 const PLACEMENT_MAINLINE = 'Mainline'
@@ -288,19 +296,158 @@ const formatSearchResults = rawSearchResults => {
  * @return {undefined}
  */
 export const prefetchSearchResults = async () => {
-  // TODO
+  if (DEBUG) {
+    console.log('[search-debug] Prefetch: started')
+  }
+  // Mark that a search query is in progress.
+  const searchGlobalObj = getSearchGlobal()
+  set(searchGlobalObj, 'queryRequest.status', QUERY_IN_PROGRESS)
+
+  let query = null
+  try {
+    const urlParams = getUrlParameters()
+    const query = urlParams.q || null
+    set(searchGlobalObj, 'queryRequest.query', query)
+  } catch (e) {}
+
+  // Fetch search results.
+  let results = null
+  try {
+    results = await fetchCodefuelSearchResults({
+      query,
+      ignoreStoredData: true,
+    })
+    if (DEBUG) {
+      console.log('[search-debug] Prefetch: complete')
+    }
+  } catch (e) {
+    // console.error(e)
+  }
+
+  // Store the search response. Used to retrieve data that's
+  // fetched before our app code loads.
+  set(searchGlobalObj, 'queryRequest.responseData', results)
+
+  // Dispatch an event if the app code's loaded and waiting
+  // for search results.
+  window.dispatchEvent(new CustomEvent(eventNameResultsFetched))
+
+  // Mark the request as complete.
+  set(searchGlobalObj, 'queryRequest.status', QUERY_COMPLETE)
+}
+
+/**
+ * Return data from any previously-completed or pending search results
+ * requests. The previous request may happen via another JS entry point
+ * that we prioritize to speed up fetching the search results. If there
+ * is no valid data, return null.
+ * @param {Object} options
+ * @param {String} options.query - The search query, unencoded.
+ * @return {Promise<Object|null>}
+ */
+const getPreviouslyFetchedData = async ({ query = null }) => {
+  if (DEBUG) {
+    console.log('[search-debug] App fetch: getting previously-fetched data')
+  }
+  const searchGlobalObj = getSearchGlobal()
+  const queryRequest = get(searchGlobalObj, 'queryRequest')
+
+  // If we don't have any info in the global object, then we
+  // have no previously-fetched search data.
+  if (!queryRequest) {
+    return null
+  }
+
+  // If we already used the search results data, don't re-use it.
+  // Return null so we fetch fresh data.
+  else if (queryRequest.displayedResults) {
+    return null
+  }
+
+  // If this query is different from the query in stored results,
+  // don't use the stored results.
+  else if (query !== queryRequest.query) {
+    return null
+  }
+
+  // Else, if a search query is in progress, wait for it. Listen
+  // for an event to know when it's completed.
+  else if (queryRequest.status === QUERY_IN_PROGRESS) {
+    if (DEBUG) {
+      console.log('[search-debug] App fetch: waiting for in-progress request')
+    }
+
+    // Resolve when we receive search result data or we time out.
+    return new Promise(resolve => {
+      function queryCompleteHandler() {
+        window.removeEventListener(
+          eventNameResultsFetched,
+          queryCompleteHandler,
+          false
+        )
+        resolve(get(getSearchGlobal(), 'queryRequest.responseData'))
+      }
+
+      // Listen for the dispatched event when we receive results.
+      window.addEventListener(
+        eventNameResultsFetched,
+        queryCompleteHandler,
+        false
+      )
+    })
+  }
+
+  // Else, if a search query is complete, use its data.
+  else if (
+    queryRequest.status === QUERY_COMPLETE &&
+    !!queryRequest.responseData
+  ) {
+    if (DEBUG) {
+      console.log(
+        '[search-debug] App fetch: prefetched data was complete, using it'
+      )
+    }
+    return queryRequest.responseData
+  }
+
+  // For any other situation, return no data.
+  else {
+    return null
+  }
 }
 
 const fetchCodefuelSearchResults = async ({
   query: providedQuery = null,
   page,
+  ignoreStoredData = false,
 } = {}) => {
-  console.log('Fetch codefuel')
-
   // If no query value is provided, try to get it from the "q"
   // URL parameter.
   const urlParams = getUrlParameters()
   const query = providedQuery || urlParams.q || null
+
+  // If the search results request is already complete or in
+  // progress, use that request's data.
+  if (!ignoreStoredData) {
+    try {
+      const priorFetchedData = await getPreviouslyFetchedData({ query })
+      if (priorFetchedData) {
+        // Save that we've used this data already so that we fetch fresh
+        // data the next time the user queries.
+        const searchGlobalObj = getSearchGlobal()
+        set(searchGlobalObj, 'queryRequest.displayedResults', true)
+        return priorFetchedData
+      } else {
+        if (DEBUG) {
+          console.log(
+            '[search-debug] App fetch: not using previously-fetched data'
+          )
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   if (!query) {
     throw new Error(`Search query must be a non-empty string.`)
