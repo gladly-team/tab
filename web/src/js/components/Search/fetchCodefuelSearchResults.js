@@ -21,6 +21,7 @@ const CODEFUEL_RESULT_TYPE_KEY_WEBPAGE = 'OrganicResults'
 const CODEFUEL_RESULT_TYPE_KEY_VIDEO = 'VideoResults'
 const CODEFUEL_RESULT_TYPE_NEWS = 'NewsResults'
 const CODEFUEL_RESULT_TYPE_ADS = 'SponsoredResults'
+const CODEFUEL_RESULT_TYPE_COMPUTATION = 'computation'
 
 // Result types used internally in components.
 const RESULT_TYPE_WEBPAGES = 'WebPages'
@@ -29,6 +30,7 @@ const RESULT_TYPE_NEWS = 'News'
 const RESULT_TYPE_ADS = 'Ads'
 const RESULT_SUBTYPE_ADS_TEXT = 'Ads/TextAd'
 const RESULT_SUBTYPE_ADS_SITE_LINK = 'Ads/SiteLinkExtension'
+const RESULT_TYPE_COMPUTATION = 'Computation'
 
 // Create a generic search result object
 const createSearchResult = ({
@@ -45,7 +47,7 @@ const createSearchResult = ({
   if (!placement) {
     throw new Error(`Search result expected a "placement" value.`)
   }
-  if (!rank) {
+  if (!rank && rank !== 0) {
     throw new Error(`Search result expected a "rank" value.`)
   }
   return {
@@ -78,6 +80,23 @@ const createWebpageResult = data => {
       name: data.Title,
       snippet: data.Description,
       url: data.TargetedUrl,
+    },
+  })
+}
+
+// Takes an object (raw CodeFuel organic computation data) and returns our
+// internal computation result object.
+const createComputationResult = data => {
+  return createSearchResult({
+    type: RESULT_TYPE_COMPUTATION,
+    // Note different casing for keys in this result type.
+    key: data.pixelUrl, // assume unique
+    pixelUrl: data.pixelUrl,
+    placement: PLACEMENT_MAINLINE,
+    rank: 0, // should always be at the top
+    value: {
+      expression: data.expression,
+      value: data.value,
     },
   })
 }
@@ -258,11 +277,22 @@ const formatSearchResults = rawSearchResults => {
     [CODEFUEL_RESULT_TYPE_ADS, ITEMS],
     []
   ).map(item => createTextAdResult(item))
+  const computationResults = get(
+    rawSearchResults,
+    CODEFUEL_RESULT_TYPE_COMPUTATION
+  )
+    ? [
+        createComputationResult(
+          get(rawSearchResults, CODEFUEL_RESULT_TYPE_COMPUTATION)
+        ),
+      ]
+    : []
   const allResults = []
     .concat(webpageResults)
     .concat(videoResults)
     .concat(newsResults)
     .concat(adResults)
+    .concat(computationResults)
   allResults.forEach(item => {
     switch (item.placement) {
       case PLACEMENT_MAINLINE: {
