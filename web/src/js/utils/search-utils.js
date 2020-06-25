@@ -38,7 +38,7 @@ export const getSearchProvider = () => {
     case SEARCH_PROVIDER_YAHOO:
       return SEARCH_PROVIDER_YAHOO
     default:
-      return SEARCH_PROVIDER_YAHOO
+      return SEARCH_PROVIDER_CODEFUEL
   }
 }
 
