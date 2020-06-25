@@ -39,8 +39,6 @@ if (
         } = require('js/components/Search/fetchBingSearchResults')
         prefetchSearchResultsBing()
       } else if (searchProvider === SEARCH_PROVIDER_CODEFUEL) {
-        // TODO
-        console.log('Prefetch codefuel')
         const {
           prefetchSearchResults: prefetchSearchResultsCodeFuel,
         } = require('js/components/Search/fetchCodefuelSearchResults')
