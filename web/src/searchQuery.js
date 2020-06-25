@@ -24,21 +24,7 @@ if (
   process.env.REACT_APP_WHICH_APP === 'search' &&
   process.env.NODE_ENV === 'production'
 ) {
-  // Override the default search provider on the CodeFuel
-  // testing page.
-  // TODO: once CodeFuel is the default, revert to:
-  // const searchProvider = getSearchProvider()
-  let searchProvider
-  if (
-    ['/search/codefuel/', '/search/codefuel'].indexOf(
-      window.location.pathname
-    ) > -1
-  ) {
-    searchProvider = SEARCH_PROVIDER_CODEFUEL
-  } else {
-    searchProvider = getSearchProvider()
-  }
-
+  const searchProvider = getSearchProvider()
   const getSearchResults = () => {
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc
