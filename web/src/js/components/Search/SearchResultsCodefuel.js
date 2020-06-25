@@ -102,6 +102,7 @@ const SearchResultsCodefuel = props => {
 
   return (
     <div
+      data-test-id={'search-results'}
       className={classes.searchResultsParentContainer}
       style={Object.assign(
         {},
@@ -138,10 +139,7 @@ const SearchResultsCodefuel = props => {
         </Typography>
       ) : null}
       {noResultsToDisplay ? null : (
-        <div
-          data-test-id={'search-results'}
-          className={classes.searchResultsContainer}
-        >
+        <div className={classes.searchResultsContainer}>
           {data.resultsCount ? (
             <Typography
               data-test-id={'search-results-count'}

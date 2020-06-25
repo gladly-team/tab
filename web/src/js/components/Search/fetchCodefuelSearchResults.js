@@ -7,7 +7,7 @@ import {
   getSearchResultCountPerPage,
 } from 'js/utils/search-utils'
 
-const DEBUG = true
+const DEBUG = false
 const eventNameResultsFetched = 'SearchResultsFetched'
 const QUERY_IN_PROGRESS = 'IN_PROGRESS'
 const QUERY_COMPLETE = 'COMPLETE'
