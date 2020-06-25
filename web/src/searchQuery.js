@@ -14,6 +14,9 @@
 // For this to be meaningful, we have to make sure we inject
 // this script first, before all other app code.
 
+import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_CODEFUEL } from 'js/constants'
+import { getSearchProvider } from 'js/utils/search-utils'
+
 // Return an empty script when building the newtab app.
 // The newtab app will still build this entry point because
 // we share Webpack configs.
@@ -21,14 +24,24 @@ if (
   process.env.REACT_APP_WHICH_APP === 'search' &&
   process.env.NODE_ENV === 'production'
 ) {
+  const searchProvider = getSearchProvider()
   const {
-    prefetchSearchResults,
+    prefetchSearchResults: prefetchSearchResultsBing,
   } = require('js/components/Search/fetchBingSearchResults')
   const getSearchResults = () => {
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc
-    if (['/search', '/search/'].indexOf(window.location.pathname) > -1) {
-      prefetchSearchResults()
+    if (
+      ['/search', '/search/', '/search/codefuel/', '/search/codefuel'].indexOf(
+        window.location.pathname
+      ) > -1
+    ) {
+      if (searchProvider === SEARCH_PROVIDER_BING) {
+        prefetchSearchResultsBing()
+      } else if (searchProvider === SEARCH_PROVIDER_CODEFUEL) {
+        // TODO
+        console.log('Prefetch codefuel')
+      }
     }
   }
 
