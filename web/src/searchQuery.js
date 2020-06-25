@@ -25,9 +25,6 @@ if (
   process.env.NODE_ENV === 'production'
 ) {
   const searchProvider = getSearchProvider()
-  const {
-    prefetchSearchResults: prefetchSearchResultsBing,
-  } = require('js/components/Search/fetchBingSearchResults')
   const getSearchResults = () => {
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc
@@ -37,10 +34,17 @@ if (
       ) > -1
     ) {
       if (searchProvider === SEARCH_PROVIDER_BING) {
+        const {
+          prefetchSearchResults: prefetchSearchResultsBing,
+        } = require('js/components/Search/fetchBingSearchResults')
         prefetchSearchResultsBing()
       } else if (searchProvider === SEARCH_PROVIDER_CODEFUEL) {
         // TODO
         console.log('Prefetch codefuel')
+        const {
+          prefetchSearchResults: prefetchSearchResultsCodeFuel,
+        } = require('js/components/Search/fetchCodefuelSearchResults')
+        prefetchSearchResultsCodeFuel()
       }
     }
   }

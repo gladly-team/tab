@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 jest.mock('js/components/Search/fetchBingSearchResults')
+jest.mock('js/components/Search/fetchCodefuelSearchResults')
 jest.mock('js/utils/search-utils')
 
 beforeEach(() => {
@@ -23,12 +24,16 @@ afterAll(() => {
   delete process.env.REACT_APP_WHICH_APP
 })
 
-// TODO
 describe('searchQuery entry point: CodeFuel prefetching', () => {
+  beforeEach(() => {
+    const { getSearchProvider } = require('js/utils/search-utils')
+    getSearchProvider.mockReturnValue('codefuel')
+  })
+
   it('calls prefetchSearchResults on load', () => {
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).toHaveBeenCalled()
   })
@@ -40,7 +45,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
     })
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).toHaveBeenCalled()
   })
@@ -52,7 +57,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
     })
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).not.toHaveBeenCalled()
   })
@@ -63,7 +68,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
 
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     prefetchSearchResults.mockImplementationOnce(() => {
       throw new Error('Eek!')
     })
@@ -78,7 +83,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
 
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     const mockErr = new Error('Eek!')
     prefetchSearchResults.mockImplementationOnce(() => {
       throw mockErr
@@ -91,7 +96,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
     process.env.REACT_APP_WHICH_APP = 'newtab'
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).not.toHaveBeenCalled()
   })
@@ -100,7 +105,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
     delete process.env.REACT_APP_WHICH_APP
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).not.toHaveBeenCalled()
   })
@@ -109,7 +114,7 @@ describe('searchQuery entry point: CodeFuel prefetching', () => {
     process.env.NODE_ENV = 'development'
     const {
       prefetchSearchResults,
-    } = require('js/components/Search/fetchBingSearchResults')
+    } = require('js/components/Search/fetchCodefuelSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).not.toHaveBeenCalled()
   })

@@ -281,10 +281,22 @@ const formatSearchResults = rawSearchResults => {
   }
 }
 
+/**
+ * Make a request for search results potentially prior to our app
+ * initializing, and store those results in a window variable.
+ * This relies on URL parameter values for the search query, etc.
+ * @return {undefined}
+ */
+export const prefetchSearchResults = async () => {
+  // TODO
+}
+
 const fetchCodefuelSearchResults = async ({
   query: providedQuery = null,
   page,
 } = {}) => {
+  console.log('Fetch codefuel')
+
   // If no query value is provided, try to get it from the "q"
   // URL parameter.
   const urlParams = getUrlParameters()
