@@ -53,16 +53,16 @@ describe('getSearchProvider', () => {
     expect(getSearchProvider()).toEqual('yahoo')
   })
 
-  it('returns "yahoo" when the search provider env var is NOT set', () => {
+  it('returns "codefuel" when the search provider env var is NOT set', () => {
     delete process.env.REACT_APP_SEARCH_PROVIDER
     const { getSearchProvider } = require('js/utils/search-utils')
-    expect(getSearchProvider()).toEqual('yahoo')
+    expect(getSearchProvider()).toEqual('codefuel')
   })
 
-  it('returns "yahoo" when the search provider env var is set to an invalid value', () => {
+  it('returns "codefuel" when the search provider env var is set to an invalid value', () => {
     process.env.REACT_APP_SEARCH_PROVIDER = 'boop'
     const { getSearchProvider } = require('js/utils/search-utils')
-    expect(getSearchProvider()).toEqual('yahoo')
+    expect(getSearchProvider()).toEqual('codefuel')
   })
 })
 
