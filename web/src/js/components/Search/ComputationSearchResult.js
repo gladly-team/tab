@@ -52,7 +52,7 @@ const ComputationSearchResult = props => {
 ComputationSearchResult.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
     expression: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   }).isRequired,

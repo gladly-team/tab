@@ -184,7 +184,7 @@ const SearchResultsCodefuel = props => {
                 <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
                   <div
                     key={searchResultItemData.key}
-                    style={{ order: searchResultItemData.rank || 1 }}
+                    style={{ order: searchResultItemData.rank }}
                   >
                     <SearchResultItem
                       type={searchResultItemData.type}
