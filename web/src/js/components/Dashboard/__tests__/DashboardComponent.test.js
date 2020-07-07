@@ -1119,7 +1119,9 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('none')
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1132,7 +1134,9 @@ describe('Dashboard component: search intro message', () => {
     // Disable the feature.
     showSearchIntroductionMessage.mockReturnValue(false)
 
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       false
     )
@@ -1143,7 +1147,9 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('noIntro')
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1153,7 +1159,9 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('introA')
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.exists()).toBe(true)
     expect(elem.prop('title')).toEqual(`We're working on Search for a Cause`)
@@ -1163,7 +1171,9 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('introHomepage')
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.exists()).toBe(true)
     expect(elem.prop('title')).toEqual(`We're working on Search for a Cause`)
@@ -1173,6 +1183,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     modifiedProps.user.tabs = 2
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
@@ -1189,11 +1200,11 @@ describe('Dashboard component: search intro message', () => {
     )
   })
 
-  it('does not render the search intro notification when the user has opened more than 99 tabs', () => {
+  it('does not render the search intro notification when the user has joined more than 6 weeks ago', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 99
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
@@ -1201,7 +1212,7 @@ describe('Dashboard component: search intro message', () => {
     wrapper.setProps({
       user: {
         ...modifiedProps.user,
-        tabs: 100,
+        joined: '2018-03-12T10:30:00.000', // two months ago
       },
     })
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
@@ -1213,6 +1224,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     modifiedProps.user.searches = 1
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
@@ -1223,6 +1235,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     modifiedProps.user.experimentActions.searchIntro = 'CLICK'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
@@ -1233,6 +1246,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     modifiedProps.user.experimentActions.searchIntro = 'DISMISS'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
@@ -1243,6 +1257,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     modifiedProps.user.experimentActions.searchIntro = 'NONE'
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
@@ -1254,6 +1269,7 @@ describe('Dashboard component: search intro message', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.exists()).toBe(false)
@@ -1262,7 +1278,9 @@ describe('Dashboard component: search intro message', () => {
   it('hides the search intro when the onClick callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1275,7 +1293,9 @@ describe('Dashboard component: search intro message', () => {
   it('saves the search intro click action to local storage when the onClick callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1286,7 +1306,9 @@ describe('Dashboard component: search intro message', () => {
   it('hides the search intro when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1299,7 +1321,9 @@ describe('Dashboard component: search intro message', () => {
   it('saves the search intro click action to local storage when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find('[data-test-id="search-intro-notif"]').exists()).toBe(
       true
     )
@@ -1312,7 +1336,9 @@ describe('Dashboard component: search intro message', () => {
     detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(
       wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
     ).toEqual(searchChromeExtensionPage)
@@ -1323,7 +1349,9 @@ describe('Dashboard component: search intro message', () => {
     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(
       wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
     ).toEqual(searchFirefoxExtensionPage)
@@ -1334,7 +1362,9 @@ describe('Dashboard component: search intro message', () => {
     detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(
       wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
     ).toEqual(searchChromeExtensionPage)
@@ -1344,7 +1374,9 @@ describe('Dashboard component: search intro message', () => {
     expect.assertions(1)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
     expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
   })
@@ -1353,7 +1385,9 @@ describe('Dashboard component: search intro message', () => {
     expect.assertions(1)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     await wrapper
       .find('[data-test-id="search-intro-notif"]')
       .prop('onDismiss')()
@@ -1363,148 +1397,161 @@ describe('Dashboard component: search intro message', () => {
   it('does not set the "useGlobalDismissalTime" on the experiment notification', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.prop('useGlobalDismissalTime')).toBe(false)
   })
 })
 
-describe('Dashboard component: sparkly search intro button', () => {
-  beforeEach(() => {
-    getUserExperimentGroup.mockReturnValue('none')
-    hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
-    showSearchIntroductionMessage.mockReturnValue(true)
-  })
+// Disabled for now.
 
-  it('shows the sparkly search intro button when the user has not already clicked it, has opened more than 150 tabs, and has not already searched', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    modifiedProps.user.searches = 0
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      true
-    )
-  })
-
-  it('does not shows the sparkly search intro button when the user has already searched', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    modifiedProps.user.searches = 1
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-  })
-
-  it('does not show the sparkly search intro button when the user has opened fewer than 151 tabs', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 150
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-    wrapper.setProps({
-      user: {
-        ...modifiedProps.user,
-        tabs: 151,
-      },
-    })
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      true
-    )
-  })
-
-  it('does not show the search intro button when the user has previously clicked it', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(true)
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-  })
-
-  it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      true
-    )
-    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
-    wrapper.update()
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-  })
-
-  it('saves the search intro click action to local storage when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
-    expect(setUserClickedNewTabSearchIntroNotifV2).toHaveBeenCalledTimes(1)
-  })
-
-  it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      true
-    )
-    wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-  })
-
-  it('passes the browser name to the UserMenu component', async () => {
-    expect.assertions(1)
-    detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('browser')).toEqual('firefox')
-  })
-
-  it('does not show the sparkly search intro button when the "search intro" feature flag is disabled', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-
-    // Disable the feature.
-    showSearchIntroductionMessage.mockReturnValue(false)
-
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.user.tabs = 160
-    modifiedProps.user.searches = 0
-    hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
-      false
-    )
-  })
-})
+// describe('Dashboard component: sparkly search intro button', () => {
+//   beforeEach(() => {
+//     getUserExperimentGroup.mockReturnValue('none')
+//     hasUserClickedNewTabSearchIntroNotif.mockReturnValue(false)
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+//     showSearchIntroductionMessage.mockReturnValue(true)
+//   })
+//
+//   it('shows the sparkly search intro button when the user has not already clicked it, has opened more than 150 tabs, and has not already searched', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     modifiedProps.user.searches = 0
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       true
+//     )
+//   })
+//
+//   it('does not shows the sparkly search intro button when the user has already searched', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     modifiedProps.user.searches = 1
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//   })
+//
+//   it('does not show the sparkly search intro button when the user has opened fewer than 151 tabs', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 150
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//     wrapper.setProps({
+//       user: {
+//         ...modifiedProps.user,
+//         tabs: 151,
+//       },
+//     })
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       true
+//     )
+//   })
+//
+//   it('does not show the search intro button when the user has previously clicked it', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(true)
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//   })
+//
+//   it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       true
+//     )
+//     wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+//     wrapper.update()
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//   })
+//
+//   it('saves the search intro click action to local storage when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+//     expect(setUserClickedNewTabSearchIntroNotifV2).toHaveBeenCalledTimes(1)
+//   })
+//
+//   it('hides the search intro button when the UserMenu onClickSparklySearchIntroButton callback is called', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       true
+//     )
+//     wrapper.find(UserMenu).prop('onClickSparklySearchIntroButton')()
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//   })
+//
+//   it('passes the browser name to the UserMenu component', async () => {
+//     expect.assertions(1)
+//     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('browser')).toEqual('firefox')
+//   })
+//
+//   it('does not show the sparkly search intro button when the "search intro" feature flag is disabled', () => {
+//     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+//       .default
+//
+//     // Disable the feature.
+//     showSearchIntroductionMessage.mockReturnValue(false)
+//
+//     const modifiedProps = cloneDeep(mockProps)
+//     modifiedProps.user.joined = '2018-05-12T10:30:00.000' // two days ago
+//     modifiedProps.user.tabs = 160
+//     modifiedProps.user.searches = 0
+//     hasUserClickedNewTabSearchIntroNotifV2.mockReturnValue(false)
+//     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+//     expect(wrapper.find(UserMenu).prop('showSparklySearchIntroButton')).toBe(
+//       false
+//     )
+//   })
+// })
 
 describe('Dashboard component: referral notification experiment', () => {
   it('[referral-notification-experiment] does not render the notification when the user is not in the experiment', () => {

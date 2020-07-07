@@ -18,7 +18,7 @@ export const showBingJSAds = () =>
 export const isBingJSAdsProductionMode = () =>
   process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE === 'true'
 
-export const showSearchIntroductionMessage = () => false
+export const showSearchIntroductionMessage = () => true
 
 // Note: disabled until we resolve the cross-domain problems
 // for the consent data cookies with unset SameSite values.
