@@ -279,7 +279,8 @@ class Dashboard extends React.Component {
     // * haven't already searched
     // * haven't already clicked the intro message
     // * haven't already interacted with the intro in our previous experiment
-    // * have opened at least three tabs but fewer than 100 tabs
+    // * have opened at least three tabs
+    // * have joined in the past 6 weeks
     const showSearchIntro =
       showSearchIntroductionMessage &&
       user &&
@@ -290,20 +291,23 @@ class Dashboard extends React.Component {
         user.experimentActions.searchIntro === 'DISMISS'
       ) &&
       user.tabs > 3 &&
-      user.tabs < 100
+      moment()
+        .utc()
+        .diff(moment(user.joined), 'weeks') < 6
 
     // Show the sparkly search introduction button to all users who:
     // * haven't already searched
     // * aren't seeing the search intro message
     // * haven't already clicked the intro button
     // * have opened at least 150 tabs
-    const showSparklySearchIntroButton =
-      showSearchIntroductionMessage &&
-      user &&
-      user.searches < 1 &&
-      !showSearchIntro &&
-      !userClickedSearchIntroV2 &&
-      user.tabs > 150
+    // const showSparklySearchIntroButton =
+    //   showSearchIntroductionMessage &&
+    //   user &&
+    //   user.searches < 1 &&
+    //   !showSearchIntro &&
+    //   !userClickedSearchIntroV2 &&
+    //   user.tabs > 150
+    const showSparklySearchIntroButton = false
 
     // Determine if the user is in an experimental group for
     // the "referral notification" experiment.
