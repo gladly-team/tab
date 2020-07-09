@@ -13,6 +13,7 @@ const styles = () => ({
     marginBottom: 26,
   },
   titleLink: {
+    display: 'inline-block',
     textDecoration: 'none',
     color: linkColor,
     '&:hover': {
