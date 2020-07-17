@@ -4,7 +4,7 @@ const campaignTitle = '## COVID-19 Relief: Cool Earth'
 const campaignDescription = `
 #### The COVID-19  pandemic has created new stresses on households and habitats in the rainforest.
 #### As a long-term partner with many rainforest communities, [Cool Earth](https://www.coolearth.org/rainforest-resilience-fund/) is working to provide food and hygiene equipment to keep people safe and healthy, along with resources like seeds and tools to prepare for the coming months.
-#### Join us in giving food, first-aid, and sanitation supplies to 100 families of 6. During this campaign, funds will be automatically directed toward this cause. So please, open some tabs and encourage your friends to do the same!
+#### During this campaign, funds will automatically be directed toward supplying 100 families of 6. So please, open some tabs and encourage your friends to do the same!
 `
 // const campaignDescriptionTwo = ``
 
