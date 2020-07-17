@@ -43,10 +43,9 @@ describe('getCurrentCampaignConfig: transformNumberSourceValue', () => {
     const transformFunc = configInput.goal.transformNumberSourceValue
 
     // Test campaign-specific transform logic here.
-    expect(transformFunc(1.0)).toEqual(10)
-    expect(transformFunc(29)).toEqual(290)
-    expect(transformFunc(1.29)).toEqual(12)
-    expect(transformFunc(1.3)).toEqual(13)
-    expect(transformFunc(2321)).toEqual(23210)
+    expect(transformFunc(0)).toEqual(1) // starts at 1
+    expect(transformFunc(49)).toEqual(1)
+    expect(transformFunc(232)).toEqual(4)
+    expect(transformFunc(4731)).toEqual(100)
   })
 })

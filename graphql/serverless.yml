@@ -250,7 +250,7 @@ functions:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
     environment:
-      IS_GLOBAL_CAMPAIGN_LIVE: true # TODO: remove after new campaign is live
+      IS_GLOBAL_CAMPAIGN_LIVE: false
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
       # @service/redis - Set the Redis endpoint if we re-launch the Redis service.
       # REDIS_SERVICE_ENDPOINT: ""

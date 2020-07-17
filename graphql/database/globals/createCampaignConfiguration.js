@@ -3,6 +3,7 @@ import { isNil } from 'lodash/lang'
 import callRedis from '../../utils/redis'
 import CharityModel from '../charities/CharityModel'
 import getCharityVcReceived from '../donations/getCharityVcReceived'
+import logger from '../../utils/logger'
 
 const HEARTS = 'hearts'
 const MONEY_RAISED = 'moneyRaised'
@@ -293,7 +294,7 @@ const createCampaignConfiguration = input => {
         estUSDMoneyRaised = 0
       }
     } catch (e) {
-      // Redis will log errors.
+      logger.error(e)
     }
     return estUSDMoneyRaised
   }
