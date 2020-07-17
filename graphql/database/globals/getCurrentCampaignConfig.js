@@ -1,6 +1,7 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Relief: Cool Earth'
+const campaignTitle =
+  '## [COVID-19 Relief](https://tab.gladly.io/covid-19/): Cool Earth'
 const campaignDescription = `
 #### The COVID-19  pandemic has created new stresses on households and habitats in the rainforest.
 #### As a long-term partner with many rainforest communities, [Cool Earth](https://www.coolearth.org/rainforest-resilience-fund/) is working to provide food and hygiene equipment to keep people safe and healthy, along with resources like seeds and tools to prepare for the coming months.
