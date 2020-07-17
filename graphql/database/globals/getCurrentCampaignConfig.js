@@ -27,7 +27,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     descriptionMarkdown: campaignDescription,
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
-  countMoneyRaised: false,
+  countMoneyRaised: true,
   countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
