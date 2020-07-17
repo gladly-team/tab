@@ -203,7 +203,7 @@ class Dashboard extends React.Component {
       errorMessage,
       errorOpen,
       userClickedSearchIntroV1,
-      userClickedSearchIntroV2,
+      // userClickedSearchIntroV2,
     } = this.state
 
     /*
