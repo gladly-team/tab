@@ -47,7 +47,9 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     targetNumber: 100,
     transformNumberSourceValue: moneyRaised => {
       // $47.31 provides 1 family with supplies.
-      return Math.floor(moneyRaised / 47.31)
+      // Start at 1 family.
+      const num = Math.floor(moneyRaised / 47.31)
+      return num < 1 ? 1 : num
     },
   },
   // Modifications to the campaign when the campaign has
