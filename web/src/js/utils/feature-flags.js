@@ -20,6 +20,7 @@ export const isBingJSAdsProductionMode = () =>
 
 export const showSearchIntroductionMessage = () => true
 
+// TODO: enable or remove this feature flag
 // Note: disabled until we resolve the cross-domain problems
 // for the consent data cookies with unset SameSite values.
 // The CMP fails to store cookies on the new tab page in Chrome,

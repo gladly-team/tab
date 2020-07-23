@@ -1,3 +1,4 @@
+// TODO: use or remove this component
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
