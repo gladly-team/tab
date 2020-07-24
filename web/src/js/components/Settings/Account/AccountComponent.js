@@ -6,7 +6,7 @@ import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { isInEuropeanUnion } from 'js/utils/client-location'
-import { displayConsentUI } from 'js/ads/consentManagement'
+// import { displayConsentUI } from 'js/ads/consentManagement'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
@@ -63,7 +63,7 @@ class Account extends React.Component {
   }
 
   reviewDataPrivacy() {
-    displayConsentUI()
+    // displayConsentUI()
   }
 
   render() {
