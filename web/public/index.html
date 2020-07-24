@@ -88,8 +88,13 @@
     // API docs:
     // https://help.quantcast.com/hc/en-us/articles/360047078534-Choice-CMP2-CCPA-API-Index-TCF-v2-0-
     (function() {
-      // TODO: use dev host during local development
       var host = window.location.hostname;
+
+      // In local development, use the dev host.
+      if (host === 'localhost') {
+        host = 'dev-tab2017.gladly.io'
+      }
+
       var element = document.createElement('script');
       var firstScript = document.getElementsByTagName('script')[0];
       var url = 'https://quantcast.mgr.consensu.org'
