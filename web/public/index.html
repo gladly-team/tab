@@ -79,7 +79,16 @@
       Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0)
     -->
     <script type="text/javascript" async=true>
+    // Gladly edited tag code to:
+    // - handle new tab page iframe
+    // - use dev host when on localhost for local development
+    // https://github.com/gladly-team/tab/issues/810
+    // Help docs:
+    // https://help.quantcast.com/hc/en-us/categories/360002940873-Quantcast-Choice
+    // API docs:
+    // https://help.quantcast.com/hc/en-us/articles/360047078534-Choice-CMP2-CCPA-API-Index-TCF-v2-0-
     (function() {
+      // TODO: use dev host during local development
       var host = window.location.hostname;
       var element = document.createElement('script');
       var firstScript = document.getElementsByTagName('script')[0];
@@ -193,6 +202,7 @@
             }
           } catch (ignore) {}
 
+          // TODO: try to fix iframe problems
           if (win === window.top) {
             break;
           }
