@@ -382,6 +382,24 @@ class Dashboard extends React.Component {
         data-test-id={'app-dashboard'}
         key={'dashboard-key'}
       >
+        <div
+          style={{ position: 'absolute', top: 200, left: 30, zIndex: 30000 }}
+        >
+          <button
+            onClick={() => {
+              window.__tcfapi('displayConsentUi', 2, function() {})
+            }}
+          >
+            Open TCF options
+          </button>
+          <button
+            onClick={() => {
+              window.__uspapi('displayUspUi')
+            }}
+          >
+            Open CCPA options
+          </button>
+        </div>
         <UserBackgroundImage
           user={user}
           showError={this.showError.bind(this)}
