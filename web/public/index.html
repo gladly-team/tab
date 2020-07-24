@@ -90,6 +90,7 @@
     (function() {
       var host = window.location.hostname;
 
+      // Gladly added:
       // In local development, use the dev host.
       if (host === 'localhost') {
         host = 'dev-tab2017.gladly.io'
@@ -199,20 +200,29 @@
           }
         }
 
-        while (win) {
-          try {
-            if (win.frames[TCF_LOCATOR_NAME]) {
-              cmpFrame = win;
-              break;
-            }
-          } catch (ignore) {}
-
-          // TODO: try to fix iframe problems
-          if (win === window.top) {
-            break;
+        // Gladly modified:
+        // Don't try to use the parent frame, which may be the
+        // new tab page.
+        try {
+          if (win.frames[TCF_LOCATOR_NAME]) {
+            cmpFrame = win;
           }
-          win = win.parent;
-        }
+        } catch (ignore) {}
+        // while (win) {
+        //   try {
+        //     if (win.frames[TCF_LOCATOR_NAME]) {
+        //       console.log('===== found CMP parent frame =====')
+        //       cmpFrame = win;
+        //       break;
+        //     }
+        //   } catch (ignore) {}
+        // 
+        //   if (win === window.top) {
+        //     break;
+        //   }
+        //   console.log('===== win.parent =====')
+        //   win = win.parent;
+        // }
         if (!cmpFrame) {
           addFrame();
           win.__tcfapi = tcfAPIHandler;
