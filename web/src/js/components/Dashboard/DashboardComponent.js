@@ -99,7 +99,7 @@ const loadAds = () => {
         domain: getHostname(),
         pageUrl: getCurrentURL(),
       },
-      logLevel: 'debug',
+      logLevel: 'error',
       onError: e => {
         logger.error(e)
       },
