@@ -591,7 +591,7 @@ describe('Dashboard component: ads logic', () => {
         domain: 'example.com',
         pageUrl: 'https://example.com/my-new-tab/',
       },
-      logLevel: 'debug',
+      logLevel: expect.any(String),
       onError: expect.any(Function),
       disableAds: false,
       useMockAds: false,
