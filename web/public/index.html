@@ -80,6 +80,7 @@
     -->
     <script type="text/javascript" async=true>
     // Gladly edited tag code to:
+    // - not load the remote QC CMP JS, which we will host ourselves
     // - handle new tab page iframe
     // - use dev host when on localhost for local development
     // https://github.com/gladly-team/tab/issues/810
@@ -96,17 +97,17 @@
         host = 'dev-tab2017.gladly.io'
       }
 
-      var element = document.createElement('script');
-      var firstScript = document.getElementsByTagName('script')[0];
-      var url = 'https://quantcast.mgr.consensu.org'
-        .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
+      // Gladly modified:
+      // var element = document.createElement('script');
+      // var firstScript = document.getElementsByTagName('script')[0];
+      // var url = 'https://quantcast.mgr.consensu.org'
+      //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
+      // element.async = true;
+      // element.type = 'text/javascript';
+      // element.src = url;
+      // firstScript.parentNode.insertBefore(element, firstScript);
       var uspTries = 0;
       var uspTriesLimit = 3;
-      element.async = true;
-      element.type = 'text/javascript';
-      element.src = url;
-
-      firstScript.parentNode.insertBefore(element, firstScript);
 
       function makeStub() {
         var TCF_LOCATOR_NAME = '__tcfapiLocator';
@@ -200,6 +201,7 @@
           }
         }
 
+        // TODO: possibly revert
         // Gladly modified:
         // Don't try to use the parent frame, which may be the
         // new tab page.

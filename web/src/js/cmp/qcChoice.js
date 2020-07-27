@@ -3,15 +3,13 @@
   The dev-tab2017.gladly.io version of Quantcast Choice.
   Source:
   https://quantcast.mgr.consensu.org/choice/FPBLJYpJgR9Zu/dev-tab2017.gladly.io/choice.js
+  Modified:
+  - Removed script tag creation to load QC CMP JS, which we will
+    host ourselves.
 */
 ;(function() {
   ;(function() {
-    var cmpScriptElement = document.createElement('script')
     var firstScript = document.getElementsByTagName('script')[0]
-    cmpScriptElement.async = true
-    cmpScriptElement.type = 'text/javascript'
-    var cmpVersion = 'https://quantcast.mgr.consensu.org/tcfv2/7/cmp2.js'
-    cmpScriptElement.src = cmpVersion
     window._qevents = window._qevents || []
     ;(function() {
       var elem = document.createElement('script')
@@ -38,7 +36,6 @@
     div.appendChild(img)
     cmpNoScriptElement.appendChild(div)
     firstScript.parentNode.insertBefore(cmpNoScriptElement, firstScript)
-    firstScript.parentNode.insertBefore(cmpScriptElement, firstScript)
   })()
   ;(function() {
     var css = ''

@@ -23,6 +23,10 @@ import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import { requestEUAdPersonalization } from 'js/utils/feature-flags'
 
+import('js/cmp/cmp').then(cmp => {
+  console.log('CMP code loaded.')
+})
+
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
 )

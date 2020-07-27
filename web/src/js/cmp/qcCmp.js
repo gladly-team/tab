@@ -3,6 +3,8 @@
   The dev-tab2017.gladly.io version of Quantcast Choice.
   Source:
   https://quantcast.mgr.consensu.org/tcfv2/7/cmp2.js
+  Modified:
+  - Set cookie SameSite to "None" (from "Lax").
 */
 /*! For license information please see cmp2.js.LICENSE */
 !(function(e) {
@@ -33609,7 +33611,7 @@
           t +
           ';domain=' +
           mr.coreConfig.cookieDomain +
-          ';SameSite=Lax;secure'
+          ';SameSite=None;secure'
       },
       ao = function(e) {
         return Tr.TCString.encode(e)
