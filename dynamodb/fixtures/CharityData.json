@@ -316,9 +316,23 @@
     "image": "naacp-ldf.jpg",
     "website": "https://www.naacpldf.org/",
     "impact": "Thanks for supporting the NAACP Legal Defense Fund’s fight for racial justice.",
-    "description": "Provides lifesaving medical humanitarian care",
+    "description": "",
     "created": "2020-06-02T18:00:00.000Z",
     "updated": "2020-06-02T18:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
+  },
+  {
+    "id": "43872478-a195-415a-b4ba-fdc824db7ab4",
+    "name": "Equal Justice Initiative",
+    "category": "Human Rights",
+    "logo": "placeholder.png",
+    "image": "eji.jpg",
+    "website": "https://eji.org/",
+    "impact": "Thanks for supporting the fight for racial justice. Pictured here: the <a href='https://museumandmemorial.eji.org/memorial' target='_blank' rel='noopener noreferrer'>The National Memorial for Peace and Justice</a>, the nation's first memorial dedicated to the legacy of enslaved Black people.",
+    "description": "Works to end mass incarceration and confront racial and economic injustice",
+    "created": "2020-08-03T18:00:00.000Z",
+    "updated": "2020-08-03T18:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
   }
