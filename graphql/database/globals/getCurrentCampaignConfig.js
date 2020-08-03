@@ -1,27 +1,25 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle =
-  '## [COVID-19 Relief](https://tab.gladly.io/covid-19/): Cool Earth'
+const campaignTitle = '## Support Racial Justice: Equal Justice Initiative'
 const campaignDescription = `
-#### The COVID-19  pandemic has created new stresses on households and habitats in the rainforest.
-#### As a long-term partner with many rainforest communities, [Cool Earth](https://www.coolearth.org/rainforest-resilience-fund/) is working to provide food and hygiene equipment to keep people safe and healthy, along with resources like seeds and tools to prepare for the coming months.
-#### During this campaign, funds will automatically be directed toward supplying 100 families of 6. So please, open some tabs and encourage your friends to do the same!
+#### Now, as much as ever, we need to support people of color to seek justice and thrive.
+#### The [Equal Justice Initiative](https://eji.org/) is committed to ending mass incarceration and excessive punishment in the United States, to challenging racial and economic injustice, and to protecting basic human rights for the most vulnerable people in American society.
+#### Join us in supporting the Equal Justice Initiative's efforts to fight for criminal and economic justice.
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## COVID-19 Relief: We Supported 100 families'
+const campaignEndTitle = '## Thanks for supporting racial justice'
 const campaignEndDescription = `
-#### With your help, we gave supplies to **100 indigenous and isolated families** via [Cool Earth](https://www.coolearth.org/rainforest-resilience-fund/)! Thank you for helping protect rainforest communities.
-
-#### Share this achievement:
+#### With your help, we raised thousands of dollars for the Equal Justice Initiative's fight for racial justice. 
+#### There are many ways to continue your support with donations, time, and your voice. [Learn more here.](http://www.bit.ly/AllyGuideBLM)
 `
-const campaignEndDescriptionTwo =
-  '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
+// const campaignEndDescriptionTwo =
+//   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'CoolEarthJuly2020',
-  // charityId: '',
+  campaignId: 'EJIAug2020',
+  charityId: '43872478-a195-415a-b4ba-fdc824db7ab4',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -36,21 +34,18 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: false,
   },
   goal: {
-    impactUnitSingular: 'family',
-    impactUnitPlural: 'families',
-    impactVerbPastParticiple: 'given vital supplies',
-    impactVerbPastTense: 'given vital supplies',
+    impactUnitSingular: 'heart',
+    impactUnitPlural: 'hearts',
+    impactVerbPastParticiple: 'donated',
+    impactVerbPastTense: 'donated',
     limitProgressToTargetMax: true,
-    numberSource: 'moneyRaised', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 100,
-    transformNumberSourceValue: moneyRaised => {
-      // $47.31 provides 1 family with supplies.
-      // Start at 1 family.
-      const num = Math.floor(moneyRaised / 47.31)
-      return num < 1 ? 1 : num
-    },
+    targetNumber: 10e6,
+    // transformNumberSourceValue: num => {
+    //   return num
+    // },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -58,7 +53,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     content: {
       titleMarkdown: campaignEndTitle,
       descriptionMarkdown: campaignEndDescription,
-      descriptionMarkdownTwo: campaignEndDescriptionTwo,
+      // descriptionMarkdownTwo: campaignEndDescriptionTwo,
     },
     goal: {
       // Keep the progress bar label instead of the ending text.
@@ -66,43 +61,43 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       showProgressBarEndText: false,
     },
     showHeartsDonationButton: false,
-    showSocialSharing: true,
-    socialSharing: {
-      url: 'https://tab.gladly.io/covid-19/',
-      FacebookShareButtonProps: {
-        quote:
-          'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-      },
-      RedditShareButtonProps: {
-        title:
-          'Tabs transformed into vital supplies for 100 families in rainforest communities',
-      },
-      TumblrShareButtonProps: {
-        title:
-          'Tabs transformed into vital supplies for 100 families in rainforest communities',
-        caption:
-          'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-      },
-      TwitterShareButtonProps: {
-        title:
-          'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
-        related: ['@TabForACause'],
-      },
-    },
+    showSocialSharing: false,
+    // socialSharing: {
+    //   url: 'https://tab.gladly.io/covid-19/',
+    //   FacebookShareButtonProps: {
+    //     quote:
+    //       'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
+    //   },
+    //   RedditShareButtonProps: {
+    //     title:
+    //       'Tabs transformed into vital supplies for 100 families in rainforest communities',
+    //   },
+    //   TumblrShareButtonProps: {
+    //     title:
+    //       'Tabs transformed into vital supplies for 100 families in rainforest communities',
+    //     caption:
+    //       'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
+    //   },
+    //   TwitterShareButtonProps: {
+    //     title:
+    //       'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
+    //     related: ['@TabForACause'],
+    //   },
+    // },
   },
   showCountdownTimer: false,
-  showHeartsDonationButton: false,
+  showHeartsDonationButton: true,
   showProgressBar: true,
   showSocialSharing: false,
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#003f4e',
+      main: '#ea0029',
       light: '#94989e',
     },
   },
   time: {
-    start: '2020-07-17T10:00:00.000Z',
+    start: '2020-08-03T10:00:00.000Z',
     end: '2020-12-01T18:00:00.000Z',
   },
 })
