@@ -71,7 +71,7 @@ const getSearchLogs = async (userContext, userId, time = {}) => {
  *   One of: ONE_MINUTE_MAX, FIVE_MINUTE_MAX, DAILY_MAX, or NONE (if
  *   limitReached is false).
  * @param {Boolean} checkIfHuman - Whether it's possible the user is a
- *   bot, and we should chec,k
+ *   bot, and we should verify the user is human.
  */
 const checkSearchRateLimit = async (userContext, userId) => {
   // Validate the required parameters.
