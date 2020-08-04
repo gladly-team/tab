@@ -1,3 +1,4 @@
+// TODO: consider removing this (and MaxMind script) if unused.
 import moment from 'moment'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {

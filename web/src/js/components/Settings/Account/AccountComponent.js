@@ -5,9 +5,9 @@ import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+
+// TODO: consider using CMP to know when to show privacy options
 import { isInEuropeanUnion } from 'js/utils/client-location'
-// import { displayConsentUI } from 'js/ads/consentManagement'
-import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
@@ -63,6 +63,7 @@ class Account extends React.Component {
   }
 
   reviewDataPrivacy() {
+    // TODO
     // displayConsentUI()
   }
 
@@ -101,7 +102,6 @@ class Account extends React.Component {
                 </Button>
               }
             />
-            {user ? <LogConsentData user={user} /> : null}
           </span>
         ) : null}
         <ErrorBoundary ignoreErrors>

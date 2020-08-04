@@ -1,3 +1,4 @@
 /* eslint-env jest */
 
-module.exports = jest.fn()
+const mockTabCMP = jest.genMockFromModule('tab-cmp')
+module.exports = mockTabCMP

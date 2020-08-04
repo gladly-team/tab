@@ -10,7 +10,6 @@ import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageCont
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-// import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
@@ -192,13 +191,6 @@ describe('Dashboard component', () => {
     expect(wrapper.find(LogTab).length).toBe(1)
   })
 
-  // it('renders LogConsentData component', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const wrapper = shallow(<DashboardComponent {...mockProps} />)
-  //   expect(wrapper.find(LogConsentData).length).toBe(1)
-  // })
-
   it('renders LogAccountCreation component', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -286,14 +278,6 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
     expect(wrapper.find(LogTab).length).toBe(0)
   })
-
-  // it('does not render LogConsentData component until the "user" prop exists', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
-  //   const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
-  //   expect(wrapper.find(LogConsentData).length).toBe(0)
-  // })
 
   it('does not render LogAccountCreation component until the "user" prop exists', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')

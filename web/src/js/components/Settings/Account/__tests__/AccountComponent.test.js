@@ -85,39 +85,6 @@ describe('Account component', () => {
     expect(containsDataPrivacyOption).toBe(false)
   })
 
-  it('contains the LogConsentData component when the client is in the EU', async () => {
-    // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(true)
-
-    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
-      .default
-    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
-    await wrapper.instance().componentDidMount()
-    wrapper.update()
-
-    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer')
-      .default
-    expect(wrapper.find(LogConsentData).length > 0).toBe(true)
-  })
-
-  it('does not contain the LogConsentData component when the client is not in the EU', async () => {
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(false)
-
-    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
-      .default
-    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
-    await wrapper.instance().componentDidMount()
-    wrapper.update()
-
-    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer')
-      .default
-    expect(wrapper.find(LogConsentData).length > 0).toBe(false)
-  })
-
   it('displays the username', () => {
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
