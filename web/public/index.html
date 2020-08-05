@@ -188,19 +188,28 @@
           }
         }
 
-        while (win) {
-          try {
-            if (win.frames[TCF_LOCATOR_NAME]) {
-              cmpFrame = win;
-              break;
-            }
-          } catch (ignore) {}
+        // Gladly modified:
+        // Don't try to use the parent frame, which may be the
+        // new tab page.
+        try {
+          if (win.frames[TCF_LOCATOR_NAME]) {
+            cmpFrame = win;
+        catch (ignore) {}
+        
+        // while (win) {
+        //   try {
+        //     if (win.frames[TCF_LOCATOR_NAME]) {
+        //       cmpFrame = win;
+        //       break;
+        //     }
+        //   } catch (ignore) {}
+        // 
+        //   if (win === window.top) {
+        //     break;
+        //   }
+        //   win = win.parent;
+        // }
 
-          if (win === window.top) {
-            break;
-          }
-          win = win.parent;
-        }
         if (!cmpFrame) {
           addFrame();
           win.__tcfapi = tcfAPIHandler;
