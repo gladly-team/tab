@@ -83,6 +83,11 @@
     <!-- Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <script type="text/javascript" async=true>
     (function() {
+      // TODO: remove after using for testing.
+      window.tabCMP = window.tabCMP || {}
+      window.tabCMP.doesGDPRApply = false
+      window.tabCMP.doesCCPAApply = true
+
       // Gladly modified: don't load the QC Choice script.
       // We'll import it ourselves.
       // var host = window.location.hostname;
