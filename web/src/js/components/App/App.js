@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import Cookies from 'js-cookie'
 import defaultTheme from 'js/theme/defaultV1'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
@@ -34,6 +35,46 @@ const muiTheme = createMuiTheme(defaultTheme)
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 
 class App extends React.Component {
+  componentDidMount() {
+    window.foo = Cookies
+
+    // TCF v2
+    // Can use this to modify the cookie on change.
+    window.__tcfapi('addEventListener', 2, function(tcData, listenerSuccess) {
+      if (listenerSuccess) {
+        // "useractioncomplete" == "the UX was shown to the user and the
+        // consent string was created or updated"
+        // https://help.quantcast.com/hc/en-us/articles/360047078534-Choice-CMP2-CCPA-API-Index-TCF-v2-0-
+        if (tcData.eventStatus === 'useractioncomplete') {
+          console.log('===== TCF user modified =====', tcData)
+          console.log(
+            '===== euprivacy-v2 cookie =====',
+            Cookies.get('euprivacy-v2')
+          )
+        }
+      }
+    })
+
+    // CCPA
+    // Use this to set default data
+    if (typeof window.__uspapi === 'function') {
+      window.__uspapi('uspPing', 1, function(obj, status) {
+        if (
+          status &&
+          obj.mode.includes('USP') &&
+          obj.jurisdiction.includes(obj.location.toUpperCase())
+        ) {
+          window.__uspapi('setUspDftData', 1, function(obj, status) {
+            if (!status) {
+              console.log('Error: USP string not updated!')
+            }
+            console.log('=====  Set default USP string. =====')
+          })
+        }
+      })
+    }
+  }
+
   render() {
     // Get the app for branding purposes (e.g. we use the auth flow for
     // multiple apps).
