@@ -5,7 +5,6 @@ import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
-import Cookies from 'js-cookie'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -395,23 +394,6 @@ class Dashboard extends React.Component {
           <button
             onClick={() => {
               window.__uspapi('displayUspUi')
-
-              let interval
-              const origCookieVal = Cookies.get('usprivacy')
-              const pollForCCPACookieChange = () => {
-                window.__uspapi('getUSPData', 1, function(uspData, success) {
-                  console.log('cmp responded:', uspData, success)
-
-                  let curCookieVal = Cookies.get('usprivacy')
-                  if (curCookieVal !== origCookieVal) {
-                    console.log('===== CCPA cookie modified =====')
-                    if (interval) {
-                      clearInterval(interval)
-                    }
-                  }
-                })
-              }
-              interval = setInterval(pollForCCPACookieChange, 3000)
             }}
           >
             Open CCPA options
