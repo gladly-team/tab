@@ -73,10 +73,6 @@ const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
 
-import('tab-cmp').then(tabCMP => {
-  tabCMP.initializeCMP({ some: 'options' })
-})
-
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
 // existing tests work without resetting this module, also

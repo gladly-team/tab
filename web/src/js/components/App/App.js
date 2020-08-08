@@ -15,6 +15,10 @@ import tabFavicon from 'js/assets/logos/favicon.ico'
 import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 
+import('tab-cmp').then(tabCMP => {
+  tabCMP.initializeCMP({ some: 'options' })
+})
+
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
 )
