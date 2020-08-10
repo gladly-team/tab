@@ -18,6 +18,7 @@ export const envVars = [
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
   { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
   { name: 'REACT_APP_ADS_ENABLED' },
+  { name: 'REACT_APP_CMP_ENABLED' },
   { name: 'REACT_APP_FIREBASE_API_KEY' },
   { name: 'REACT_APP_FIREBASE_AUTH_DOMAIN' },
   { name: 'REACT_APP_FIREBASE_DATABASE_URL' },

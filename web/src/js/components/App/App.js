@@ -17,7 +17,7 @@ import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 
 // Disable the CMP in the test environment. It currently breaks
 // acceptance tests.
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.REACT_APP_CMP_ENABLED === 'true') {
   import('tab-cmp').then(tabCMP => {
     tabCMP.initializeCMP({ some: 'options' })
   })
