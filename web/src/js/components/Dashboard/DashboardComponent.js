@@ -65,6 +65,7 @@ import {
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import logger from 'js/utils/logger'
+import { openCCPAConsentDialog, openTCFConsentDialog } from 'tab-cmp'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -386,14 +387,14 @@ class Dashboard extends React.Component {
         >
           <button
             onClick={() => {
-              window.__tcfapi('displayConsentUi', 2, function() {})
+              openTCFConsentDialog()
             }}
           >
             Open TCF options
           </button>
           <button
             onClick={() => {
-              window.__uspapi('displayUspUi')
+              openCCPAConsentDialog()
             }}
           >
             Open CCPA options
