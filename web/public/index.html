@@ -74,184 +74,188 @@
     -->
     <base target="_top">
 
+    <!-- Begin tab-cmp -->
     <!-- MaxMind for determining user country location. -->
     <script src="//geoip-js.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
-    <!--
-      @gladly-customization:
-      Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0).
-      Gladly edited tag to not load the remote QC CMP JS, which we
-      host ourselves.
-    -->
     <!-- Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <script type="text/javascript" async=true>
-    (function() {
-      // Gladly modified: don't load the QC Choice script.
-      // We'll import it ourselves.
-      // var host = window.location.hostname;
-      // var element = document.createElement('script');
-      // var firstScript = document.getElementsByTagName('script')[0];
-      // var url = 'https://quantcast.mgr.consensu.org'
-      //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
-      var uspTries = 0;
-      var uspTriesLimit = 3;
-      // element.async = true;
-      // element.type = 'text/javascript';
-      // element.src = url;
+    // Gladly modified: add try/catch.
+    try {
+      (function() {
+        // Gladly modified: create window object.
+        window.tabCMP = window.tabCMP || {}
 
-      // firstScript.parentNode.insertBefore(element, firstScript);
+        // Gladly modified: don't load the QC Choice script.
+        // We'll import it ourselves.
+        // var host = window.location.hostname;
+        // var element = document.createElement('script');
+        // var firstScript = document.getElementsByTagName('script')[0];
+        // var url = 'https://quantcast.mgr.consensu.org'
+        //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
+        var uspTries = 0;
+        var uspTriesLimit = 3;
+        // element.async = true;
+        // element.type = 'text/javascript';
+        // element.src = url;
 
-      function makeStub() {
-        var TCF_LOCATOR_NAME = '__tcfapiLocator';
-        var queue = [];
-        var win = window;
-        var cmpFrame;
+        // firstScript.parentNode.insertBefore(element, firstScript);
 
-        function addFrame() {
-          var doc = win.document;
-          var otherCMP = !!(win.frames[TCF_LOCATOR_NAME]);
+        function makeStub() {
+          var TCF_LOCATOR_NAME = '__tcfapiLocator';
+          var queue = [];
+          var win = window;
+          var cmpFrame;
 
-          if (!otherCMP) {
-            if (doc.body) {
-              var iframe = doc.createElement('iframe');
+          function addFrame() {
+            var doc = win.document;
+            var otherCMP = !!(win.frames[TCF_LOCATOR_NAME]);
 
-              iframe.style.cssText = 'display:none';
-              iframe.name = TCF_LOCATOR_NAME;
-              doc.body.appendChild(iframe);
-            } else {
-              setTimeout(addFrame, 5);
-            }
-          }
-          return !otherCMP;
-        }
+            if (!otherCMP) {
+              if (doc.body) {
+                var iframe = doc.createElement('iframe');
 
-        function tcfAPIHandler() {
-          var gdprApplies;
-          var args = arguments;
-
-          if (!args.length) {
-            return queue;
-          } else if (args[0] === 'setGdprApplies') {
-            if (
-              args.length > 3 &&
-              args[2] === 2 &&
-              typeof args[3] === 'boolean'
-            ) {
-              gdprApplies = args[3];
-              if (typeof args[2] === 'function') {
-                args[2]('set', true);
+                iframe.style.cssText = 'display:none';
+                iframe.name = TCF_LOCATOR_NAME;
+                doc.body.appendChild(iframe);
+              } else {
+                setTimeout(addFrame, 5);
               }
             }
-          } else if (args[0] === 'ping') {
-            var retr = {
-              gdprApplies: gdprApplies,
-              cmpLoaded: false,
-              cmpStatus: 'stub'
-            };
-
-            if (typeof args[2] === 'function') {
-              args[2](retr);
-            }
-          } else {
-            queue.push(args);
+            return !otherCMP;
           }
-        }
 
-        function postMessageEventHandler(event) {
-          var msgIsString = typeof event.data === 'string';
-          var json = {};
+          function tcfAPIHandler() {
+            var gdprApplies;
+            var args = arguments;
 
-          try {
-            if (msgIsString) {
-              json = JSON.parse(event.data);
+            if (!args.length) {
+              return queue;
+            } else if (args[0] === 'setGdprApplies') {
+              if (
+                args.length > 3 &&
+                args[2] === 2 &&
+                typeof args[3] === 'boolean'
+              ) {
+                gdprApplies = args[3];
+                if (typeof args[2] === 'function') {
+                  args[2]('set', true);
+                }
+              }
+            } else if (args[0] === 'ping') {
+              var retr = {
+                gdprApplies: gdprApplies,
+                cmpLoaded: false,
+                cmpStatus: 'stub'
+              };
+
+              if (typeof args[2] === 'function') {
+                args[2](retr);
+              }
             } else {
-              json = event.data;
+              queue.push(args);
+            }
+          }
+
+          function postMessageEventHandler(event) {
+            var msgIsString = typeof event.data === 'string';
+            var json = {};
+
+            try {
+              if (msgIsString) {
+                json = JSON.parse(event.data);
+              } else {
+                json = event.data;
+              }
+            } catch (ignore) {}
+
+            var payload = json.__tcfapiCall;
+
+            if (payload) {
+              window.__tcfapi(
+                payload.command,
+                payload.version,
+                function(retValue, success) {
+                  var returnMsg = {
+                    __tcfapiReturn: {
+                      returnValue: retValue,
+                      success: success,
+                      callId: payload.callId
+                    }
+                  };
+                  if (msgIsString) {
+                    returnMsg = JSON.stringify(returnMsg);
+                  }
+                  event.source.postMessage(returnMsg, '*');
+                },
+                payload.parameter
+              );
+            }
+          }
+
+          // Gladly modified:
+          // Don't try to use the parent frame, which may be the
+          // new tab page.
+          try {
+            if (win.frames[TCF_LOCATOR_NAME]) {
+              cmpFrame = win;
             }
           } catch (ignore) {}
 
-          var payload = json.__tcfapiCall;
+          // while (win) {
+          //   try {
+          //     if (win.frames[TCF_LOCATOR_NAME]) {
+          //       cmpFrame = win;
+          //       break;
+          //     }
+          //   } catch (ignore) {}
+          // 
+          //   if (win === window.top) {
+          //     break;
+          //   }
+          //   win = win.parent;
+          // }
 
-          if (payload) {
-            window.__tcfapi(
-              payload.command,
-              payload.version,
-              function(retValue, success) {
-                var returnMsg = {
-                  __tcfapiReturn: {
-                    returnValue: retValue,
-                    success: success,
-                    callId: payload.callId
-                  }
-                };
-                if (msgIsString) {
-                  returnMsg = JSON.stringify(returnMsg);
-                }
-                event.source.postMessage(returnMsg, '*');
-              },
-              payload.parameter
-            );
+          if (!cmpFrame) {
+            addFrame();
+            win.__tcfapi = tcfAPIHandler;
+            win.addEventListener('message', postMessageEventHandler, false);
           }
-        }
+        };
 
-        // Gladly modified:
-        // Don't try to use the parent frame, which may be the
-        // new tab page.
-        try {
-          if (win.frames[TCF_LOCATOR_NAME]) {
-            cmpFrame = win;
+        makeStub();
+
+        var uspStubFunction = function() {
+          var arg = arguments;
+          if (typeof window.__uspapi !== uspStubFunction) {
+            setTimeout(function() {
+              if (typeof window.__uspapi !== 'undefined') {
+                window.__uspapi.apply(window.__uspapi, arg);
+              }
+            }, 500);
           }
-        } catch (ignore) {}
+        };
 
-        // while (win) {
-        //   try {
-        //     if (win.frames[TCF_LOCATOR_NAME]) {
-        //       cmpFrame = win;
-        //       break;
-        //     }
-        //   } catch (ignore) {}
-        // 
-        //   if (win === window.top) {
-        //     break;
-        //   }
-        //   win = win.parent;
-        // }
+        var checkIfUspIsReady = function() {
+          uspTries++;
+          if (window.__uspapi === uspStubFunction && uspTries < uspTriesLimit) {
+            // Gladly modified: add [tab-cmp] prefix.
+            console.warn('[tab-cmp] USP is not accessible.');
+          } else {
+            clearInterval(uspInterval);
+          }
+        };
 
-        if (!cmpFrame) {
-          addFrame();
-          win.__tcfapi = tcfAPIHandler;
-          win.addEventListener('message', postMessageEventHandler, false);
+        if (typeof window.__uspapi === 'undefined') {
+          window.__uspapi = uspStubFunction;
+          var uspInterval = setInterval(checkIfUspIsReady, 6000);
         }
-      };
-
-      makeStub();
-
-      var uspStubFunction = function() {
-        var arg = arguments;
-        if (typeof window.__uspapi !== uspStubFunction) {
-          setTimeout(function() {
-            if (typeof window.__uspapi !== 'undefined') {
-              window.__uspapi.apply(window.__uspapi, arg);
-            }
-          }, 500);
-        }
-      };
-
-      var checkIfUspIsReady = function() {
-        uspTries++;
-        if (window.__uspapi === uspStubFunction && uspTries < uspTriesLimit) {
-          console.warn('USP is not accessible');
-        } else {
-          clearInterval(uspInterval);
-        }
-      };
-
-      if (typeof window.__uspapi === 'undefined') {
-        window.__uspapi = uspStubFunction;
-        var uspInterval = setInterval(checkIfUspIsReady, 6000);
-      }
-    })();
+      })();
+    } catch (e) {
+      console.error('[tab-cmp] Head tag errored:', e);
+    }
     </script>
     <!-- End Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
-
+    <!-- End tab-cmp -->
 
     <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
     <!--
