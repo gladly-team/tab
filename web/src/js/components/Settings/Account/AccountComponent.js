@@ -6,11 +6,6 @@ import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
-// TODO: consider using CMP to know when to show privacy options
-import { isInEuropeanUnion } from 'js/utils/client-location'
-import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
-import ErrorBoundary from 'js/components/General/ErrorBoundary'
-
 export const AccountItem = props => (
   <div
     style={{
@@ -43,28 +38,29 @@ class Account extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDataPrivacyOption: false,
+      doesGDPRApply: false,
     }
   }
 
   async componentDidMount() {
-    // See if we should show the data privacy choices option
-    var isInEU
-    try {
-      isInEU = await isInEuropeanUnion()
-    } catch (e) {
-      isInEU = false
-    }
-    if (isInEU) {
+    // Determine if any data privacy frameworks apply.
+    const setGDPRApplies = () => {
       this.setState({
-        showDataPrivacyOption: true,
+        doesGDPRApply: true,
       })
     }
+    import('tab-cmp').then(async tabCMPModule => {
+      const doesGDPRApply = await tabCMPModule.doesGDPRApply()
+      if (doesGDPRApply) {
+        setGDPRApplies()
+      }
+    })
   }
 
-  reviewDataPrivacy() {
-    // TODO
-    // displayConsentUI()
+  async openTCFConsentDialog() {
+    import('tab-cmp').then(async tabCMPModule => {
+      await tabCMPModule.openTCFConsentDialog()
+    })
   }
 
   render() {
@@ -87,7 +83,7 @@ class Account extends React.Component {
           name={'Email'}
           value={user.email ? user.email : 'Not signed in'}
         />
-        {this.state.showDataPrivacyOption ? (
+        {this.state.doesGDPRApply ? (
           <span>
             <Divider />
             <AccountItem
@@ -96,7 +92,7 @@ class Account extends React.Component {
                 <Button
                   color={'primary'}
                   variant={'contained'}
-                  onClick={this.reviewDataPrivacy}
+                  onClick={this.openTCFConsentDialog}
                 >
                   Review choices
                 </Button>
@@ -104,9 +100,6 @@ class Account extends React.Component {
             />
           </span>
         ) : null}
-        <ErrorBoundary ignoreErrors>
-          <QuantcastChoiceCMP />
-        </ErrorBoundary>
       </Paper>
     )
   }
