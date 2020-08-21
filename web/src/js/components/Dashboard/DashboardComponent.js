@@ -65,7 +65,6 @@ import {
 import { AdComponent, fetchAds } from 'tab-ads'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import logger from 'js/utils/logger'
-import { openCCPAConsentDialog, openTCFConsentDialog } from 'tab-cmp'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -382,24 +381,6 @@ class Dashboard extends React.Component {
         data-test-id={'app-dashboard'}
         key={'dashboard-key'}
       >
-        <div
-          style={{ position: 'absolute', top: 200, left: 30, zIndex: 30000 }}
-        >
-          <button
-            onClick={() => {
-              openTCFConsentDialog()
-            }}
-          >
-            Open TCF options
-          </button>
-          <button
-            onClick={() => {
-              openCCPAConsentDialog()
-            }}
-          >
-            Open CCPA options
-          </button>
-        </div>
         <UserBackgroundImage
           user={user}
           showError={this.showError.bind(this)}
