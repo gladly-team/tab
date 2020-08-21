@@ -122,15 +122,33 @@ class Account extends React.Component {
             <AccountItem
               name={'Ad personalization choices'}
               actionButton={
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a onClick={this.openCCPAConsentDialog}>
+                <div>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a onClick={this.openCCPAConsentDialog}>
+                    <Typography
+                      variant={'body2'}
+                      style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                      gutterBottom
+                    >
+                      Do Not Sell My Info
+                    </Typography>
+                  </a>
                   <Typography
-                    variant={'body2'}
-                    style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                    variant={'caption'}
+                    style={{
+                      lineHeight: '1.16',
+                      color: 'rgba(0, 0, 0, 0.54)',
+                      maxWidth: '80%',
+                    }}
                   >
-                    Do Not Sell My Info
+                    This preference sets whether advertisers on the new tab page
+                    can personalize ads to you. Personalized ads can be more
+                    interesting and often raise more money for charity. We{' '}
+                    <span style={{ fontWeight: 'bold' }}>never</span> sell
+                    personal information like email addresses, nor do we collect
+                    your browsing history.
                   </Typography>
-                </a>
+                </div>
               }
             />
           </span>
