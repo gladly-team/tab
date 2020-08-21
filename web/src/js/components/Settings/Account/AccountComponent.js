@@ -120,15 +120,17 @@ class Account extends React.Component {
           <span>
             <Divider />
             <AccountItem
-              name={'Data privacy choices'}
+              name={'Ad personalization choices'}
               actionButton={
-                <Button
-                  color={'default'}
-                  variant={'contained'}
-                  onClick={this.openCCPAConsentDialog}
-                >
-                  Do Not Sell My Data
-                </Button>
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                <a onClick={this.openCCPAConsentDialog}>
+                  <Typography
+                    variant={'body2'}
+                    style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  >
+                    Do Not Sell My Info
+                  </Typography>
+                </a>
               }
             />
           </span>

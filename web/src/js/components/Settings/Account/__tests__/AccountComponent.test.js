@@ -149,14 +149,14 @@ describe('Account component', () => {
     const accountItems = wrapper.find(AccountItem)
     var containsDataPrivacyOption = false
     accountItems.forEach(item => {
-      if (item.prop('name') === 'Data privacy choices') {
+      if (item.prop('name') === 'Ad personalization choices') {
         containsDataPrivacyOption = true
       }
     })
     expect(containsDataPrivacyOption).toBe(true)
   })
 
-  it('opens the CCPA dialog when clicking the CCPA data privacy button', async () => {
+  it('opens the CCPA dialog when clicking the CCPA data privacy link', async () => {
     expect.assertions(2)
 
     // Mock that the client is in the US
@@ -178,10 +178,10 @@ describe('Account component', () => {
       .find(AccountItem)
       .last()
       .dive()
-    const button = dataPrivacyAccountItem.find(Button).first()
+    const link = dataPrivacyAccountItem.find('a').first()
 
     expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
-    button.simulate('click')
+    link.simulate('click')
     await flushAllPromises()
     expect(tabCMP.openCCPAConsentDialog).toHaveBeenCalled()
   })
@@ -207,7 +207,7 @@ describe('Account component', () => {
     const accountItems = wrapper.find(AccountItem)
     var containsDataPrivacyOption = false
     accountItems.forEach(item => {
-      if (item.prop('name') === 'Data privacy choices') {
+      if (item.prop('name') === 'Ad personalization choices') {
         containsDataPrivacyOption = true
       }
     })
