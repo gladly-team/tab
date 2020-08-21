@@ -63,7 +63,6 @@ import {
   showMockAds,
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
-import { isInEuropeanUnion } from 'js/utils/client-location'
 import logger from 'js/utils/logger'
 
 const NewUserTour = lazy(() =>
@@ -91,8 +90,9 @@ const loadAds = () => {
   try {
     fetchAds({
       adUnits: Object.values(getAdUnits()),
+      // TODO: update tab-ads and remove this
       consent: {
-        isEU: isInEuropeanUnion,
+        isEU: async () => false,
       },
       publisher: {
         domain: getHostname(),

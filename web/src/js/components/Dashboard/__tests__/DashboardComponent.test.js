@@ -42,8 +42,6 @@ import {
   hasUserDismissedNotificationRecently,
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
-  hasUserClickedNewTabSearchIntroNotifV2,
-  setUserClickedNewTabSearchIntroNotifV2,
   removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -55,7 +53,6 @@ import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
-import { isInEuropeanUnion } from 'js/utils/client-location'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
 
@@ -73,7 +70,6 @@ jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
-jest.mock('js/utils/client-location')
 jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
 
@@ -580,13 +576,6 @@ describe('Dashboard component: ads logic', () => {
       disableAds: false,
       useMockAds: false,
     })
-  })
-
-  it('passes isInEuropeanUnion function to the tab-ads config property consent.isEU', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    shallow(<DashboardComponent {...mockProps} />)
-    expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
   })
 
   it('passes the expected hostname and page URL to the tab-ads config', () => {
