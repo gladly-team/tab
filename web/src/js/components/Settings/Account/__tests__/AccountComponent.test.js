@@ -4,6 +4,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('tab-cmp')
@@ -69,6 +70,36 @@ describe('Account component', () => {
     expect(containsDataPrivacyOption).toBe(true)
   })
 
+  it('opens the GDPR dialog when clicking the GDPR data privacy button', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const dataPrivacyAccountItem = wrapper
+      .find(AccountItem)
+      .last()
+      .dive()
+    const button = dataPrivacyAccountItem.find(Button).first()
+
+    expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
+    button.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openTCFConsentDialog).toHaveBeenCalled()
+  })
+
   it('does not show the GDPR data privacy button when the client is not in the EU', async () => {
     expect.assertions(1)
 
@@ -123,6 +154,36 @@ describe('Account component', () => {
       }
     })
     expect(containsDataPrivacyOption).toBe(true)
+  })
+
+  it('opens the CCPA dialog when clicking the CCPA data privacy button', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const dataPrivacyAccountItem = wrapper
+      .find(AccountItem)
+      .last()
+      .dive()
+    const button = dataPrivacyAccountItem.find(Button).first()
+
+    expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
+    button.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openCCPAConsentDialog).toHaveBeenCalled()
   })
 
   it('does not show the CCPA data privacy button when the client is not in the US', async () => {
