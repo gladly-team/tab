@@ -4,5 +4,3 @@ build
 data
 __generated__
 src/js/ads/prebid/prebid.js
-src/js/cmp/qcChoice.js
-src/js/cmp/qcCmp.js
