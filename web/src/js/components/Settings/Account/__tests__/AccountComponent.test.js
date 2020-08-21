@@ -4,7 +4,9 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-jest.mock('js/utils/client-location')
+import { flushAllPromises } from 'js/utils/test-utils'
+
+jest.mock('tab-cmp')
 
 const getMockUserData = () => {
   return {
@@ -13,6 +15,10 @@ const getMockUserData = () => {
     username: 'somebody123',
   }
 }
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 describe('Account component', () => {
   it('renders without error', () => {
@@ -35,16 +41,19 @@ describe('Account component', () => {
     ).toEqual('Account')
   })
 
-  it('shows data privacy choices when the client is in the EU', async () => {
+  it('shows the GDPR data privacy button when the client is in the EU', async () => {
+    expect.assertions(1)
+
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(true)
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
     // Find the data privacy choices setting
@@ -60,16 +69,75 @@ describe('Account component', () => {
     expect(containsDataPrivacyOption).toBe(true)
   })
 
-  it('does not show data privacy choices when the client is not in the EU', async () => {
-    // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(false)
+  it('does not show the GDPR data privacy button when the client is not in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the EU or US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Try to find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const accountItems = wrapper.find(AccountItem)
+    var containsDataPrivacyOption = false
+    accountItems.forEach(item => {
+      if (item.prop('name') === 'Data privacy choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(false)
+  })
+
+  it('shows the CCPA data privacy button when the client is in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const accountItems = wrapper.find(AccountItem)
+    var containsDataPrivacyOption = false
+    accountItems.forEach(item => {
+      if (item.prop('name') === 'Data privacy choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(true)
+  })
+
+  it('does not show the CCPA data privacy button when the client is not in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the US or EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
     // Try to find the data privacy choices setting
