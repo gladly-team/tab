@@ -39,6 +39,7 @@ class Account extends React.Component {
     super(props)
     this.state = {
       doesGDPRApply: false,
+      doesCCPAApply: false,
     }
   }
 
@@ -49,10 +50,19 @@ class Account extends React.Component {
         doesGDPRApply: true,
       })
     }
+    const setCCPAApplies = () => {
+      this.setState({
+        doesCCPAApply: true,
+      })
+    }
     import('tab-cmp').then(async tabCMPModule => {
       const doesGDPRApply = await tabCMPModule.doesGDPRApply()
       if (doesGDPRApply) {
         setGDPRApplies()
+      }
+      const doesCCPAApply = await tabCMPModule.doesCCPAApply()
+      if (doesCCPAApply) {
+        setCCPAApplies()
       }
     })
   }
@@ -60,6 +70,12 @@ class Account extends React.Component {
   async openTCFConsentDialog() {
     import('tab-cmp').then(async tabCMPModule => {
       await tabCMPModule.openTCFConsentDialog()
+    })
+  }
+
+  async openCCPAConsentDialog() {
+    import('tab-cmp').then(async tabCMPModule => {
+      await tabCMPModule.openCCPAConsentDialog()
     })
   }
 
@@ -90,11 +106,28 @@ class Account extends React.Component {
               name={'Data privacy choices'}
               actionButton={
                 <Button
-                  color={'primary'}
+                  color={'default'}
                   variant={'contained'}
                   onClick={this.openTCFConsentDialog}
                 >
                   Review choices
+                </Button>
+              }
+            />
+          </span>
+        ) : null}
+        {this.state.doesCCPAApply ? (
+          <span>
+            <Divider />
+            <AccountItem
+              name={'Data privacy choices'}
+              actionButton={
+                <Button
+                  color={'default'}
+                  variant={'contained'}
+                  onClick={this.openCCPAConsentDialog}
+                >
+                  Do Not Sell My Data
                 </Button>
               }
             />
