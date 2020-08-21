@@ -22,7 +22,7 @@ import logger from 'js/utils/logger'
 if (process.env.REACT_APP_CMP_ENABLED === 'true') {
   import('tab-cmp').then(tabCMP => {
     tabCMP.initializeCMP({
-      debug: true,
+      debug: true, // TODO: set to false
       displayPersistentConsentLink: false,
       onError: err => {
         logger.error(err)
