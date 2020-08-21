@@ -141,12 +141,12 @@ class Account extends React.Component {
                       maxWidth: '80%',
                     }}
                   >
-                    This preference sets whether advertisers on the new tab page
-                    can personalize ads to you. Personalized ads can be more
-                    interesting and often raise more money for charity. We{' '}
+                    This preference sets whether advertisers can personalize ads
+                    to you. Personalized ads can be more interesting and often
+                    raise more money for charity. We{' '}
                     <span style={{ fontWeight: 'bold' }}>never</span> sell
                     personal information like email addresses, nor do we collect
-                    your browsing history.
+                    your browsing history on other sites.
                   </Typography>
                 </div>
               }
