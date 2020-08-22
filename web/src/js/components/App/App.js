@@ -16,21 +16,20 @@ import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import tabLogoWithText from 'js/assets/logos/logo-with-text.svg'
 import logger from 'js/utils/logger'
+import tabCMP from 'tab-cmp'
 
 // Disable the CMP in the test environment. It currently breaks
 // acceptance tests.
 if (process.env.REACT_APP_CMP_ENABLED === 'true') {
-  import('tab-cmp').then(tabCMP => {
-    tabCMP.initializeCMP({
-      debug: true, // TODO: set to false
-      displayPersistentConsentLink: false,
-      onError: err => {
-        logger.error(err)
-      },
-      primaryButtonColor: '#9d4ba3',
-      publisherName: 'Tab for a Cause',
-      publisherLogo: tabLogoWithText,
-    })
+  tabCMP.initializeCMP({
+    debug: true, // TODO: set to false
+    displayPersistentConsentLink: false,
+    onError: err => {
+      logger.error(err)
+    },
+    primaryButtonColor: '#9d4ba3',
+    publisherName: 'Tab for a Cause',
+    publisherLogo: tabLogoWithText,
   })
 }
 

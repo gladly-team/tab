@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import tabCMP from 'tab-cmp'
 
 export const AccountItem = props => (
   <div
@@ -45,38 +46,26 @@ class Account extends React.Component {
 
   async componentDidMount() {
     // Determine if any data privacy frameworks apply.
-    const setGDPRApplies = () => {
+    const doesGDPRApply = await tabCMP.doesGDPRApply()
+    if (doesGDPRApply) {
       this.setState({
         doesGDPRApply: true,
       })
     }
-    const setCCPAApplies = () => {
+    const doesCCPAApply = await tabCMP.doesCCPAApply()
+    if (doesCCPAApply) {
       this.setState({
         doesCCPAApply: true,
       })
     }
-    import('tab-cmp').then(async tabCMPModule => {
-      const doesGDPRApply = await tabCMPModule.doesGDPRApply()
-      if (doesGDPRApply) {
-        setGDPRApplies()
-      }
-      const doesCCPAApply = await tabCMPModule.doesCCPAApply()
-      if (doesCCPAApply) {
-        setCCPAApplies()
-      }
-    })
   }
 
   async openTCFConsentDialog() {
-    import('tab-cmp').then(async tabCMPModule => {
-      await tabCMPModule.openTCFConsentDialog()
-    })
+    await tabCMP.openTCFConsentDialog()
   }
 
   async openCCPAConsentDialog() {
-    import('tab-cmp').then(async tabCMPModule => {
-      await tabCMPModule.openCCPAConsentDialog()
-    })
+    await tabCMP.openCCPAConsentDialog()
   }
 
   render() {
