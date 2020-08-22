@@ -564,9 +564,6 @@ describe('Dashboard component: ads logic', () => {
           sizes: [[300, 250]],
         },
       ],
-      consent: {
-        isEU: expect.any(Function),
-      },
       publisher: {
         domain: 'example.com',
         pageUrl: 'https://example.com/my-new-tab/',

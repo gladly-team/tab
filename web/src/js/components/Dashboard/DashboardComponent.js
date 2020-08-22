@@ -90,10 +90,6 @@ const loadAds = () => {
   try {
     fetchAds({
       adUnits: Object.values(getAdUnits()),
-      // TODO: update tab-ads and remove this
-      consent: {
-        isEU: async () => false,
-      },
       publisher: {
         domain: getHostname(),
         pageUrl: getCurrentURL(),
