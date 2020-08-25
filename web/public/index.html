@@ -124,9 +124,53 @@
             return !otherCMP;
           }
 
+          // Gladly modified.
+          // Add debug logging.
+          let debug = false
+          try {
+            const urlStr = window.location.href
+            const url = new URL(urlStr)
+            const tabCMPDebug = url.searchParams.get('tabCMPDebug')
+            debug = tabCMPDebug === 'true'
+          } catch (e) {}
+          const logDebugging = (...args) => {
+            if (debug) {
+              const prefix = [
+                '%ctab-cmp',
+                'background: #7c7c7c; color: #fff; border-radius: 2px; padding: 2px 6px',
+                '[head script]'
+              ]
+              console.log(...prefix, ...args)
+            }
+          }
+
           function tcfAPIHandler() {
             var gdprApplies;
             var args = arguments;
+
+            // Gladly modified.
+            try {
+              if (!args.length) {
+                return queue
+              }
+              // Our modified code should handle some API calls for TCF v2.
+              const shouldHandle =
+                ['getTCData', 'ping', 'addEventListener'].indexOf(args[0]) > -1 &&
+                args[1] === 2 &&
+                typeof args[2] === 'function'
+              if (shouldHandle) {
+                logDebugging('Using our modified CMP stub code.')
+
+                // This item is set and updated in tab-cmp.
+                const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
+                const cb = args[2]
+                logDebugging(`Responding to TCF call "${args[0]}" with stored TCF data:`, storedTCFData)
+                cb(storedTCFData, true)
+                return
+              } 
+            } catch (e) {
+              console.error('[tab-cmp]', e)
+            }
 
             if (!args.length) {
               return queue;
