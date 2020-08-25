@@ -88,6 +88,7 @@ const loadAds = () => {
   }
   calledLoadAds = true
   try {
+    // Debugging can be enabled with URL param tabAdsDebug=true.
     fetchAds({
       adUnits: Object.values(getAdUnits()),
       publisher: {

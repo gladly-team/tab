@@ -22,7 +22,8 @@ import tabCMP from 'tab-cmp'
 // acceptance tests.
 if (process.env.REACT_APP_CMP_ENABLED === 'true') {
   tabCMP.initializeCMP({
-    debug: true, // TODO: set to false
+    // Debugging can be enabled with URL param tabCMPDebug=true.
+    debug: false,
     displayPersistentConsentLink: false,
     onError: err => {
       logger.error(err)
