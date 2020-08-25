@@ -153,6 +153,7 @@
               if (!args.length) {
                 return queue
               }
+              logDebugging(`Received TCF stub call "${args[0]}"`)
               // Our modified code should handle some API calls for TCF v2.
               const shouldHandle =
                 ['getTCData', 'ping', 'addEventListener'].indexOf(args[0]) > -1 &&
