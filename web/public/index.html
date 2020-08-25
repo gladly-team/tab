@@ -160,7 +160,7 @@
                 args[1] === 2 &&
                 typeof args[2] === 'function'
               if (shouldHandle) {
-                logDebugging('Using our modified CMP stub code.')
+                logDebugging('Using our modified TCF API stub code.')
 
                 // This item is set and updated in tab-cmp.
                 const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
@@ -271,6 +271,33 @@
 
         var uspStubFunction = function() {
           var arg = arguments;
+
+          // Gladly modified.
+          try {
+            if (!arg.length) {
+              return queue
+            }
+            logDebugging(`Received USP stub call "${arg[0]}"`)
+
+            // Our modified code should handle some API calls for USP v1.
+            const shouldHandle =
+              arg[0] === 'getUSPData' &&
+              arg[1] === 1 &&
+              typeof arg[2] === 'function'
+            if (shouldHandle) {
+              logDebugging('Using our modified USP API stub code.')
+
+              // This item is set and updated in tab-cmp.
+              const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
+              const cb = arg[2]
+              logDebugging(`Responding to USP call "${arg[0]}" with stored USP data:`, storedUSPData)
+              cb(storedUSPData, true)
+              return
+            }
+          } catch (e) {
+            console.error('[tab-cmp]', e)
+          }
+
           if (typeof window.__uspapi !== uspStubFunction) {
             setTimeout(function() {
               if (typeof window.__uspapi !== 'undefined') {
