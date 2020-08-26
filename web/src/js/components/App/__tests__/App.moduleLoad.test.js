@@ -24,7 +24,6 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  jest.useFakeTimers()
   jest.clearAllMocks()
   process.env.REACT_APP_CMP_ENABLED = 'true'
 })
@@ -48,5 +47,23 @@ describe('App.js: tab-cmp', () => {
     jest.advanceTimersByTime(300)
     await flushAllPromises()
     expect(tabCMP.initializeCMP).toHaveBeenCalled()
+  })
+
+  it('calls tabCMP.initializeCMP with the expected configuration', async () => {
+    expect.assertions(1)
+    const tabCMP = require('tab-cmp').default
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    shallow(<App {...mockProps} />)
+    await flushAllPromises()
+    jest.runAllTimers()
+    expect(tabCMP.initializeCMP).toHaveBeenCalledWith({
+      debug: expect.any(Boolean),
+      displayPersistentConsentLink: false,
+      onError: expect.any(Function),
+      primaryButtonColor: '#9d4ba3',
+      publisherName: 'Tab for a Cause',
+      publisherLogo: expect.any(String),
+    })
   })
 })
