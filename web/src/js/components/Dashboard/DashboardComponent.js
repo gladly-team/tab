@@ -91,6 +91,14 @@ const loadAds = () => {
     // Debugging can be enabled with URL param tabAdsDebug=true.
     fetchAds({
       adUnits: Object.values(getAdUnits()),
+      auctionTimeout: 1000,
+      consent: {
+        // Time to wait for the consent management platform (CMP) to respond.
+        // If the CMP does not respond in this time, ad auctions may be cancelled.
+        // The tab-cmp package aims to make the CMP respond much more quickly
+        // than this after the user's first page load.
+        timeout: 500,
+      },
       publisher: {
         domain: getHostname(),
         pageUrl: getCurrentURL(),
