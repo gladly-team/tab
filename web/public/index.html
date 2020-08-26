@@ -159,13 +159,16 @@
                 args[1] === 2 &&
                 typeof args[2] === 'function'
               if (shouldHandle) {
-
                 // This item is set and updated in tab-cmp.
                 const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
-                const cb = args[2]
-                logDebugging(`Responding to modified TCF API call "${args[0]}" with stored TCF data:`, storedTCFData)
-                cb(storedTCFData, true)
-                return
+                if (storedTCFData) {
+                  const cb = args[2]
+                  logDebugging(`Responding to modified TCF API call "${args[0]}" with stored TCF data:`, storedTCFData)
+                  cb(storedTCFData, true)
+                  return
+                } else {
+                  logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${args[0]}"`)
+                }
               } 
             } catch (e) {
               console.error('[tab-cmp]', e)
@@ -283,10 +286,16 @@
             if (shouldHandle) {
               // This item is set and updated in tab-cmp.
               const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
-              const cb = arg[2]
-              logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
-              cb(storedUSPData, true)
-              return
+              if (storedUSPData) {
+                const cb = arg[2]
+                logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
+                cb(storedUSPData, true)
+                return
+              } else {
+                logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+              }
+            } else {
+              logDebugging(`Modified USP stub is not handling a call to "${arg[0]}".`)
             }
           } catch (e) {
             console.error('[tab-cmp]', e)
