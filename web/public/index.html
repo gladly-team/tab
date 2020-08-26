@@ -109,14 +109,14 @@
           const tabCMPDebug = url.searchParams.get('tabCMPDebug')
           debug = tabCMPDebug === 'true'
         } catch (e) {}
-        const logDebugging = (...args) => {
-          if (debug) {
-            const prefix = [
+        const logPrefix = [
               '%ctab-cmp',
               'background: #7c7c7c; color: #fff; border-radius: 2px; padding: 2px 6px',
               '[head script]'
             ]
-            console.log(...prefix, ...args)
+        const logDebugging = (...args) => {
+          if (debug) {
+            console.log(...logPrefix, ...args)
           }
         }
 
@@ -314,7 +314,7 @@
           uspTries++;
           if (window.__uspapi === uspStubFunction && uspTries < uspTriesLimit) {
             // Gladly modified: add [tab-cmp] prefix.
-            console.warn('[tab-cmp] USP is not accessible.');
+            console.error(...logPrefix, 'USP is not accessible.');
           } else {
             clearInterval(uspInterval);
           }
