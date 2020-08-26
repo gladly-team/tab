@@ -153,19 +153,17 @@
               if (!args.length) {
                 return queue
               }
-              logDebugging(`Received TCF stub call "${args[0]}"`)
               // Our modified code should handle some API calls for TCF v2.
               const shouldHandle =
                 ['getTCData', 'ping', 'addEventListener'].indexOf(args[0]) > -1 &&
                 args[1] === 2 &&
                 typeof args[2] === 'function'
               if (shouldHandle) {
-                logDebugging('Using our modified TCF API stub code.')
 
                 // This item is set and updated in tab-cmp.
                 const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
                 const cb = args[2]
-                logDebugging(`Responding to TCF call "${args[0]}" with stored TCF data:`, storedTCFData)
+                logDebugging(`Responding to modified TCF API call "${args[0]}" with stored TCF data:`, storedTCFData)
                 cb(storedTCFData, true)
                 return
               } 
@@ -277,20 +275,16 @@
             if (!arg.length) {
               return queue
             }
-            logDebugging(`Received USP stub call "${arg[0]}"`)
-
             // Our modified code should handle some API calls for USP v1.
             const shouldHandle =
               arg[0] === 'getUSPData' &&
               arg[1] === 1 &&
               typeof arg[2] === 'function'
             if (shouldHandle) {
-              logDebugging('Using our modified USP API stub code.')
-
               // This item is set and updated in tab-cmp.
               const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
               const cb = arg[2]
-              logDebugging(`Responding to USP call "${arg[0]}" with stored USP data:`, storedUSPData)
+              logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
               cb(storedUSPData, true)
               return
             }
