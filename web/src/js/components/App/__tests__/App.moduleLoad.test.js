@@ -66,4 +66,16 @@ describe('App.js: tab-cmp', () => {
       publisherLogo: expect.any(String),
     })
   })
+
+  it('does not call tabCMP.initializeCMP when process.env.REACT_APP_CMP_ENABLED is not "true"', async () => {
+    expect.assertions(1)
+    process.env.REACT_APP_CMP_ENABLED = 'false'
+    const tabCMP = require('tab-cmp').default
+    const App = require('js/components/App/App').default
+    const mockProps = getMockProps()
+    shallow(<App {...mockProps} />)
+    await flushAllPromises()
+    jest.runAllTimers()
+    expect(tabCMP.initializeCMP).not.toHaveBeenCalled()
+  })
 })
