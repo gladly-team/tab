@@ -544,6 +544,10 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0]).toEqual({
+      auctionTimeout: expect.any(Number),
+      consent: {
+        timeout: expect.any(Number),
+      },
       adUnits: [
         {
           // The long leaderboard ad.
