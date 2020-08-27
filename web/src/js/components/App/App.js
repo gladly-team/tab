@@ -17,6 +17,10 @@ import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import tabLogoWithText from 'js/assets/logos/logo-with-text.svg'
 import logger from 'js/utils/logger'
 
+// FIXME: if we delay init, we need to also delay calling
+// any other methods on the account page. Or, we only delay
+// init on the dashboard (due to ads).
+
 // Delaying the CMP initialization avoids delaying any CMP
 // responses needed for our ad partner bid requests.
 // Our modified CMP API stubs are quick to respond, but the
