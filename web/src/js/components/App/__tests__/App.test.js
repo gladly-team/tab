@@ -10,6 +10,7 @@ import ErrorBoundary from 'js/components/General/ErrorBoundary'
 jest.mock('js/components/Dashboard/DashboardView')
 jest.mock('js/analytics/withPageviewTracking', () => child => child)
 jest.mock('js/assets/logos/favicon.ico', () => '/tab-favicon.png')
+jest.mock('js/utils/initializeCMP')
 
 const getMockProps = () => ({
   location: {

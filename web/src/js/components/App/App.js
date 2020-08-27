@@ -14,8 +14,7 @@ import DashboardView from 'js/components/Dashboard/DashboardView'
 import tabFavicon from 'js/assets/logos/favicon.ico'
 import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
-import tabLogoWithText from 'js/assets/logos/logo-with-text.svg'
-import logger from 'js/utils/logger'
+import initializeCMP from 'js/utils/initializeCMP'
 
 // FIXME: if we delay init, we need to also delay calling
 // any other methods on the account page. Or, we only delay
@@ -26,26 +25,10 @@ import logger from 'js/utils/logger'
 // Our modified CMP API stubs are quick to respond, but the
 // core CMP JS, which replaces the stubs and is out of our
 // control, may be slower to respond.
-import('tab-cmp').then(tabCMP => {
-  const initCMP = () => {
-    // Disable the CMP in the test environment. It currently breaks
-    // acceptance tests.
-    if (process.env.REACT_APP_CMP_ENABLED === 'true') {
-      tabCMP.initializeCMP({
-        // Debugging can be enabled with URL param tabCMPDebug=true.
-        debug: false,
-        displayPersistentConsentLink: false,
-        onError: err => {
-          logger.error(err)
-        },
-        primaryButtonColor: '#9d4ba3',
-        publisherName: 'Tab for a Cause',
-        publisherLogo: tabLogoWithText,
-      })
-    }
-  }
-  setTimeout(initCMP, 1000)
-})
+const initCMP = () => {
+  initializeCMP()
+}
+setTimeout(initCMP, 1000)
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
