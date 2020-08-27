@@ -16,15 +16,15 @@ import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import initializeCMP from 'js/utils/initializeCMP'
 
-// FIXME: if we delay init, we need to also delay calling
-// any other methods on the account page. Or, we only delay
-// init on the dashboard (due to ads).
-
 // Delaying the CMP initialization avoids delaying any CMP
 // responses needed for our ad partner bid requests.
 // Our modified CMP API stubs are quick to respond, but the
 // core CMP JS, which replaces the stubs and is out of our
 // control, may be slower to respond.
+// Note that because we delay CMP initialization by default,
+// any pages that rely on other CMP methods, such as the
+// account page, should initialize the CMP before calling
+// those methods.
 const initCMP = () => {
   initializeCMP()
 }

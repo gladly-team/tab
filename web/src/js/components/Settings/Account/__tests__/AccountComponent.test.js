@@ -6,8 +6,10 @@ import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { flushAllPromises } from 'js/utils/test-utils'
+import initializeCMP from 'js/utils/initializeCMP'
 
 jest.mock('tab-cmp')
+jest.mock('js/utils/initializeCMP')
 
 const getMockUserData = () => {
   return {
@@ -40,6 +42,16 @@ describe('Account component', () => {
         .first()
         .text()
     ).toEqual('Account')
+  })
+
+  it('calls initializeCMP on mount', async () => {
+    expect.assertions(1)
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    expect(initializeCMP).toHaveBeenCalled()
   })
 
   it('shows the GDPR data privacy button when the client is in the EU', async () => {
