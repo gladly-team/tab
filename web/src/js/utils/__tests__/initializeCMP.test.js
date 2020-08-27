@@ -17,7 +17,7 @@ describe('initializeCMP', () => {
   it('calls tabCMP.initializeCMP with the expected configuration', async () => {
     expect.assertions(1)
     const tabCMP = require('tab-cmp').default
-    initializeCMP()
+    await initializeCMP()
     expect(tabCMP.initializeCMP).toHaveBeenCalledWith({
       debug: expect.any(Boolean),
       displayPersistentConsentLink: false,
@@ -32,7 +32,7 @@ describe('initializeCMP', () => {
     expect.assertions(1)
     process.env.REACT_APP_CMP_ENABLED = 'false'
     const tabCMP = require('tab-cmp').default
-    initializeCMP()
+    await initializeCMP()
     expect(tabCMP.initializeCMP).not.toHaveBeenCalled()
   })
 })
