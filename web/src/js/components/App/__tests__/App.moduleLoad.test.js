@@ -32,7 +32,7 @@ afterEach(() => {
 })
 
 describe('App.js: tab-cmp', () => {
-  it('calls tabCMP.initializeCMP after a 1000ms timeout', async () => {
+  it('calls tabCMP.initializeCMP after a ~2000ms timeout', async () => {
     expect.assertions(3)
     const initializeCMP = require('js/utils/initializeCMP').default
     const App = require('js/components/App/App').default
@@ -40,10 +40,10 @@ describe('App.js: tab-cmp', () => {
     shallow(<App {...mockProps} />)
     await flushAllPromises()
     expect(initializeCMP).not.toHaveBeenCalled()
-    jest.advanceTimersByTime(800)
+    jest.advanceTimersByTime(900)
     await flushAllPromises()
     expect(initializeCMP).not.toHaveBeenCalled()
-    jest.advanceTimersByTime(300)
+    jest.advanceTimersByTime(1400)
     await flushAllPromises()
     expect(initializeCMP).toHaveBeenCalled()
   })

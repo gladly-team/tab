@@ -83,7 +83,9 @@
     try {
       (function() {
         // Gladly modified: create window object.
-        window.tabCMP = window.tabCMP || {}
+        window.tabCMP = window.tabCMP || {
+          uspStubFunction: undefined
+        }
 
         // Gladly modified: don't load the QC Choice script.
         // We'll import it ourselves.
@@ -154,22 +156,41 @@
                 return queue
               }
               // Our modified code should handle some API calls for TCF v2.
+              const cmd = args[0]
               const shouldHandle =
-                ['getTCData', 'ping', 'addEventListener'].indexOf(args[0]) > -1 &&
+                ['getTCData', 'ping', 'addEventListener', 'removeEventListener'].indexOf(cmd) > -1 &&
                 args[1] === 2 &&
                 typeof args[2] === 'function'
               if (shouldHandle) {
-                // This item is set and updated in tab-cmp.
-                const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
-                if (storedTCFData) {
-                  const cb = args[2]
-                  logDebugging(`Responding to modified TCF API call "${args[0]}" with stored TCF data:`, storedTCFData)
-                  cb(storedTCFData, true)
+                if (cmd === 'removeEventListener') {
+                  // Our stubbed "addEventListener" logic doesn't add a
+                  // listener, so we don't need to remove anything.
+                  logDebugging(`Handled TCF API call "removeEventListener" by taking no action.`)
                   return
                 } else {
-                  logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${args[0]}"`)
+                  // This item is set and updated in tab-cmp.
+                  const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
+                  if (storedTCFData) {
+                    const cb = args[2]
+                    const data = {
+                      ...storedTCFData,
+                      // Google Ad Manager will consider the CMP failed if the
+                      // "addEventListener" response doesn't contain a listenerId
+                      // value, which is null in the response to "getTCData".
+                      ...(cmd === 'addEventListener' && {
+                        listenerId: 1, // a fake ID our stub won't use
+                      }) 
+                    }
+                    logDebugging(`Responding to modified TCF API call "${cmd}" with TCF data:`, data)
+                    cb(data, true)
+                    return
+                  } else {
+                    logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${cmd}"`)
+                  }
                 }
-              } 
+              } else {
+                logDebugging(`Modified TCF stub is not handling a call to "${cmd}".`)
+              }
             } catch (e) {
               console.error('[tab-cmp]', e)
             }
@@ -279,23 +300,36 @@
               return queue
             }
             // Our modified code should handle some API calls for USP v1.
+            const cmd = arg[0]
             const shouldHandle =
-              arg[0] === 'getUSPData' &&
+              ['getUSPData', 'uspPing'].indexOf(cmd) > -1 &&
               arg[1] === 1 &&
               typeof arg[2] === 'function'
             if (shouldHandle) {
-              // This item is set and updated in tab-cmp.
-              const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
-              if (storedUSPData) {
-                const cb = arg[2]
-                logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
-                cb(storedUSPData, true)
-                return
-              } else {
-                logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+              // These items are set and updated in tab-cmp.
+              if (cmd === 'getUSPData') {
+                const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
+                if (storedUSPData) {
+                  const cb = arg[2]
+                  logDebugging(`Responding to modified USP API call "${cmd}" with stored USP data:`, storedUSPData)
+                  cb(storedUSPData, true)
+                  return
+                } else {
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${cmd}"`)
+                }
+              } else if (cmd === 'uspPing') {
+                const storedUSPPingData = JSON.parse(localStorage.getItem('tabCMP.uspPing.data'))
+                if (storedUSPPingData) {
+                  const cb = arg[2]
+                  logDebugging(`Responding to modified USP API call "${cmd}" with stored USP ping data:`, storedUSPPingData)
+                  cb(storedUSPPingData, true)
+                  return
+                } else {
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${cmd}"`)
+                }
               }
             } else {
-              logDebugging(`Modified USP stub is not handling a call to "${arg[0]}".`)
+              logDebugging(`Modified USP stub is not handling a call to "${cmd}".`)
             }
           } catch (e) {
             console.error('[tab-cmp]', e)
@@ -309,6 +343,10 @@
             }, 500);
           }
         };
+
+        // Gladly modified: store the stub function so we know when
+        // Quantcast Choice has finished initializing.
+        window.tabCMP.uspStubFunction = uspStubFunction
 
         var checkIfUspIsReady = function() {
           uspTries++;
