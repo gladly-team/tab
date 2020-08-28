@@ -156,20 +156,28 @@
                 return queue
               }
               // Our modified code should handle some API calls for TCF v2.
+              const cmd = args[0]
               const shouldHandle =
-                ['getTCData', 'ping', 'addEventListener'].indexOf(args[0]) > -1 &&
+                ['getTCData', 'ping', 'addEventListener', 'removeEventListener'].indexOf(cmd) > -1 &&
                 args[1] === 2 &&
                 typeof args[2] === 'function'
               if (shouldHandle) {
-                // This item is set and updated in tab-cmp.
-                const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
-                if (storedTCFData) {
-                  const cb = args[2]
-                  logDebugging(`Responding to modified TCF API call "${args[0]}" with stored TCF data:`, storedTCFData)
-                  cb(storedTCFData, true)
+                if (cmd === 'removeEventListener') {
+                  // Our stubbed addEventListener logic doesn't add a
+                  // listener, so we don't need to remove anything.
+                  logDebugging(`Handled TCF API call "removeEventListener" by taking no action.`)
                   return
                 } else {
-                  logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${args[0]}"`)
+                  // This item is set and updated in tab-cmp.
+                  const storedTCFData = JSON.parse(localStorage.getItem('tabCMP.tcfv2.data'))
+                  if (storedTCFData) {
+                    const cb = args[2]
+                    logDebugging(`Responding to modified TCF API call "${cmd}" with stored TCF data:`, storedTCFData)
+                    cb(storedTCFData, true)
+                    return
+                  } else {
+                    logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${args[0]}"`)
+                  }
                 }
               } else {
                 logDebugging(`Modified TCF stub is not handling a call to "${args[0]}".`)
