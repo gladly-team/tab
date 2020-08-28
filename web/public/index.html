@@ -83,7 +83,9 @@
     try {
       (function() {
         // Gladly modified: create window object.
-        window.tabCMP = window.tabCMP || {}
+        window.tabCMP = window.tabCMP || {
+          uspStubFunction: undefined
+        }
 
         // Gladly modified: don't load the QC Choice script.
         // We'll import it ourselves.
@@ -279,20 +281,33 @@
               return queue
             }
             // Our modified code should handle some API calls for USP v1.
+            const cmd = arg[0]
             const shouldHandle =
-              arg[0] === 'getUSPData' &&
+              ['getUSPData', 'uspPing'].indexOf(cmd) > -1 &&
               arg[1] === 1 &&
               typeof arg[2] === 'function'
             if (shouldHandle) {
-              // This item is set and updated in tab-cmp.
-              const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
-              if (storedUSPData) {
-                const cb = arg[2]
-                logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
-                cb(storedUSPData, true)
-                return
-              } else {
-                logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+              // These items are set and updated in tab-cmp.
+              if (cmd === 'getUSPData') {
+                const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
+                if (storedUSPData) {
+                  const cb = arg[2]
+                  logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
+                  cb(storedUSPData, true)
+                  return
+                } else {
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+                }
+              } else if (cmd === 'uspPing') {
+                const storedUSPPingData = JSON.parse(localStorage.getItem('tabCMP.uspPing.data'))
+                if (storedUSPPingData) {
+                  const cb = arg[2]
+                  logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP ping data:`, storedUSPPingData)
+                  cb(storedUSPPingData, true)
+                  return
+                } else {
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+                }
               }
             } else {
               logDebugging(`Modified USP stub is not handling a call to "${arg[0]}".`)
@@ -309,6 +324,10 @@
             }, 500);
           }
         };
+
+        // Gladly modified: store the stub function so we know when
+        // Quantcast Choice has finished initializing.
+        window.tabCMP.uspStubFunction = uspStubFunction
 
         var checkIfUspIsReady = function() {
           uspTries++;
