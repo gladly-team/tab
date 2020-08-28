@@ -163,7 +163,7 @@
                 typeof args[2] === 'function'
               if (shouldHandle) {
                 if (cmd === 'removeEventListener') {
-                  // Our stubbed addEventListener logic doesn't add a
+                  // Our stubbed "addEventListener" logic doesn't add a
                   // listener, so we don't need to remove anything.
                   logDebugging(`Handled TCF API call "removeEventListener" by taking no action.`)
                   return
@@ -175,7 +175,7 @@
                     const data = {
                       ...storedTCFData,
                       // Google Ad Manager will consider the CMP failed if the
-                      // addEventListener response doesn't contain a listenerId
+                      // "addEventListener" response doesn't contain a listenerId
                       // value, which is null in the response to "getTCData".
                       ...(cmd === 'addEventListener' && {
                         listenerId: 1, // a fake ID our stub won't use
@@ -311,25 +311,25 @@
                 const storedUSPData = JSON.parse(localStorage.getItem('tabCMP.usp.data'))
                 if (storedUSPData) {
                   const cb = arg[2]
-                  logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP data:`, storedUSPData)
+                  logDebugging(`Responding to modified USP API call "${cmd}" with stored USP data:`, storedUSPData)
                   cb(storedUSPData, true)
                   return
                 } else {
-                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${cmd}"`)
                 }
               } else if (cmd === 'uspPing') {
                 const storedUSPPingData = JSON.parse(localStorage.getItem('tabCMP.uspPing.data'))
                 if (storedUSPPingData) {
                   const cb = arg[2]
-                  logDebugging(`Responding to modified USP API call "${arg[0]}" with stored USP ping data:`, storedUSPPingData)
+                  logDebugging(`Responding to modified USP API call "${cmd}" with stored USP ping data:`, storedUSPPingData)
                   cb(storedUSPPingData, true)
                   return
                 } else {
-                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${arg[0]}"`)
+                  logDebugging(`No stored USP data. Modified USP stub is not handling a call to "${cmd}"`)
                 }
               }
             } else {
-              logDebugging(`Modified USP stub is not handling a call to "${arg[0]}".`)
+              logDebugging(`Modified USP stub is not handling a call to "${cmd}".`)
             }
           } catch (e) {
             console.error('[tab-cmp]', e)
