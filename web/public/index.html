@@ -171,7 +171,9 @@
                 } else {
                   logDebugging(`No stored TCF data. Modified TCF stub is not handling a call to "${args[0]}"`)
                 }
-              } 
+              } else {
+                logDebugging(`Modified TCF stub is not handling a call to "${args[0]}".`)
+              }
             } catch (e) {
               console.error('[tab-cmp]', e)
             }
