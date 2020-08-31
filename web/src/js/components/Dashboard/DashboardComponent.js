@@ -12,7 +12,6 @@ import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageCont
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
@@ -64,7 +63,6 @@ import {
   showMockAds,
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
-import { isInEuropeanUnion } from 'js/utils/client-location'
 import logger from 'js/utils/logger'
 
 const NewUserTour = lazy(() =>
@@ -90,16 +88,22 @@ const loadAds = () => {
   }
   calledLoadAds = true
   try {
+    // Debugging can be enabled with URL param tabAdsDebug=true.
     fetchAds({
       adUnits: Object.values(getAdUnits()),
+      auctionTimeout: 1000,
       consent: {
-        isEU: isInEuropeanUnion,
+        // Time to wait for the consent management platform (CMP) to respond.
+        // If the CMP does not respond in this time, ad auctions may be cancelled.
+        // The tab-cmp package aims to make the CMP respond much more quickly
+        // than this after the user's first page load.
+        timeout: 500,
       },
       publisher: {
         domain: getHostname(),
         pageUrl: getCurrentURL(),
       },
-      logLevel: 'debug',
+      logLevel: 'error',
       onError: e => {
         logger.error(e)
       },
@@ -722,7 +726,6 @@ class Dashboard extends React.Component {
           ) : null}
         </div>
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
-        {user ? <LogConsentData user={user} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
         <ErrorMessage

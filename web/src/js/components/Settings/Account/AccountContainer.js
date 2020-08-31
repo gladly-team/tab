@@ -9,7 +9,6 @@ export default createFragmentContainer(Account, {
       id
       email
       username
-      ...LogConsentDataContainer_user
     }
   `,
 })

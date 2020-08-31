@@ -10,7 +10,6 @@ import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageCont
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
-import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
@@ -43,8 +42,6 @@ import {
   hasUserDismissedNotificationRecently,
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
-  hasUserClickedNewTabSearchIntroNotifV2,
-  setUserClickedNewTabSearchIntroNotifV2,
   removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -56,7 +53,6 @@ import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
-import { isInEuropeanUnion } from 'js/utils/client-location'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
 
@@ -74,7 +70,6 @@ jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
 jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
-jest.mock('js/utils/client-location')
 jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
 
@@ -192,13 +187,6 @@ describe('Dashboard component', () => {
     expect(wrapper.find(LogTab).length).toBe(1)
   })
 
-  it('renders LogConsentData component', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(LogConsentData).length).toBe(1)
-  })
-
   it('renders LogAccountCreation component', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -285,14 +273,6 @@ describe('Dashboard component', () => {
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
     expect(wrapper.find(LogTab).length).toBe(0)
-  })
-
-  it('does not render LogConsentData component until the "user" prop exists', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
-    const wrapper = shallow(<DashboardComponent {...mockPropsWithoutUser} />)
-    expect(wrapper.find(LogConsentData).length).toBe(0)
   })
 
   it('does not render LogAccountCreation component until the "user" prop exists', () => {
@@ -564,6 +544,10 @@ describe('Dashboard component: ads logic', () => {
       .default
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0]).toEqual({
+      auctionTimeout: expect.any(Number),
+      consent: {
+        timeout: expect.any(Number),
+      },
       adUnits: [
         {
           // The long leaderboard ad.
@@ -584,25 +568,15 @@ describe('Dashboard component: ads logic', () => {
           sizes: [[300, 250]],
         },
       ],
-      consent: {
-        isEU: expect.any(Function),
-      },
       publisher: {
         domain: 'example.com',
         pageUrl: 'https://example.com/my-new-tab/',
       },
-      logLevel: 'debug',
+      logLevel: expect.any(String),
       onError: expect.any(Function),
       disableAds: false,
       useMockAds: false,
     })
-  })
-
-  it('passes isInEuropeanUnion function to the tab-ads config property consent.isEU', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    shallow(<DashboardComponent {...mockProps} />)
-    expect(fetchAds.mock.calls[0][0].consent.isEU).toBe(isInEuropeanUnion)
   })
 
   it('passes the expected hostname and page URL to the tab-ads config', () => {

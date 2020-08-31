@@ -4,7 +4,12 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-jest.mock('js/utils/client-location')
+import Button from '@material-ui/core/Button'
+import { flushAllPromises } from 'js/utils/test-utils'
+import initializeCMP from 'js/utils/initializeCMP'
+
+jest.mock('tab-cmp')
+jest.mock('js/utils/initializeCMP')
 
 const getMockUserData = () => {
   return {
@@ -13,6 +18,10 @@ const getMockUserData = () => {
     username: 'somebody123',
   }
 }
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 describe('Account component', () => {
   it('renders without error', () => {
@@ -35,16 +44,29 @@ describe('Account component', () => {
     ).toEqual('Account')
   })
 
-  it('shows data privacy choices when the client is in the EU', async () => {
+  it('calls initializeCMP on mount', async () => {
+    expect.assertions(1)
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    expect(initializeCMP).toHaveBeenCalled()
+  })
+
+  it('shows the GDPR data privacy button when the client is in the EU', async () => {
+    expect.assertions(1)
+
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(true)
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
     // Find the data privacy choices setting
@@ -60,16 +82,49 @@ describe('Account component', () => {
     expect(containsDataPrivacyOption).toBe(true)
   })
 
-  it('does not show data privacy choices when the client is not in the EU', async () => {
-    // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(false)
+  it('opens the GDPR dialog when clicking the GDPR data privacy button', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const dataPrivacyAccountItem = wrapper
+      .find(AccountItem)
+      .last()
+      .dive()
+    const button = dataPrivacyAccountItem.find(Button).first()
+
+    expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
+    button.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openTCFConsentDialog).toHaveBeenCalled()
+  })
+
+  it('does not show the GDPR data privacy button when the client is not in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the EU or US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
     // Try to find the data privacy choices setting
@@ -85,37 +140,90 @@ describe('Account component', () => {
     expect(containsDataPrivacyOption).toBe(false)
   })
 
-  it('contains the LogConsentData component when the client is in the EU', async () => {
-    // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(true)
+  it('shows the CCPA data privacy button when the client is in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
-    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer')
-      .default
-    expect(wrapper.find(LogConsentData).length > 0).toBe(true)
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const accountItems = wrapper.find(AccountItem)
+    var containsDataPrivacyOption = false
+    accountItems.forEach(item => {
+      if (item.prop('name') === 'Ad personalization choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(true)
   })
 
-  it('does not contain the LogConsentData component when the client is not in the EU', async () => {
-    const isInEuropeanUnion = require('js/utils/client-location')
-      .isInEuropeanUnion
-    isInEuropeanUnion.mockResolvedValue(false)
+  it('opens the CCPA dialog when clicking the CCPA data privacy link', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
 
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
     await wrapper.instance().componentDidMount()
+    await flushAllPromises()
     wrapper.update()
 
-    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer')
+    // Find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const dataPrivacyAccountItem = wrapper
+      .find(AccountItem)
+      .last()
+      .dive()
+    const link = dataPrivacyAccountItem.find('a').first()
+
+    expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
+    link.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openCCPAConsentDialog).toHaveBeenCalled()
+  })
+
+  it('does not show the CCPA data privacy button when the client is not in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the US or EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
-    expect(wrapper.find(LogConsentData).length > 0).toBe(false)
+    const wrapper = shallow(<AccountComponent user={getMockUserData()} />)
+    await wrapper.instance().componentDidMount()
+    await flushAllPromises()
+    wrapper.update()
+
+    // Try to find the data privacy choices setting
+    const AccountItem = require('js/components/Settings/Account/AccountComponent')
+      .AccountItem
+    const accountItems = wrapper.find(AccountItem)
+    var containsDataPrivacyOption = false
+    accountItems.forEach(item => {
+      if (item.prop('name') === 'Ad personalization choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(false)
   })
 
   it('displays the username', () => {

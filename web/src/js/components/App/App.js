@@ -9,19 +9,26 @@ import defaultTheme from 'js/theme/defaultV1'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
-import { isInEuropeanUnion } from 'js/utils/client-location'
-import {
-  registerConsentCallback,
-  saveConsentUpdateEventToLocalStorage,
-  unregisterConsentCallback,
-} from 'js/ads/consentManagement'
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
-import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import tabFavicon from 'js/assets/logos/favicon.ico'
 import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
-import { requestEUAdPersonalization } from 'js/utils/feature-flags'
+import initializeCMP from 'js/utils/initializeCMP'
+
+// Delaying the CMP initialization avoids delaying any CMP
+// responses needed for our ad partner bid requests.
+// Our modified CMP API stubs are quick to respond, but the
+// core CMP JS, which replaces the stubs and is out of our
+// control, may be slower to respond.
+// Note that because we delay CMP initialization by default,
+// any pages that rely on other CMP methods, such as the
+// account page, should initialize the CMP before calling
+// those methods.
+const initCMP = () => {
+  initializeCMP()
+}
+setTimeout(initCMP, 2000)
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -38,44 +45,10 @@ const muiTheme = createMuiTheme(defaultTheme)
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.consentChangeCallback = null
-    this.state = {
-      requestEUAdPersonalization: requestEUAdPersonalization(),
-    }
-  }
-
-  async componentDidMount() {
-    var isEU
-    try {
-      isEU = await isInEuropeanUnion()
-    } catch (e) {
-      isEU = false
-    }
-    if (isEU) {
-      this.consentChangeCallback = this.handleDataConsentDecision.bind(this)
-      registerConsentCallback(this.consentChangeCallback)
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.consentChangeCallback) {
-      unregisterConsentCallback(this.consentChangeCallback)
-    }
-  }
-
-  async handleDataConsentDecision() {
-    // Store the consent data. We'll log it to the server with
-    // the user's ID after the user authenticates.
-    saveConsentUpdateEventToLocalStorage()
-  }
-
   render() {
     // Get the app for branding purposes (e.g. we use the auth flow for
     // multiple apps).
     const { location } = this.props
-    const { requestEUAdPersonalization } = this.state
     const urlParams = parseUrlSearchString(location.search)
     const app = validateAppName(urlParams.app)
 
@@ -131,11 +104,6 @@ class App extends React.Component {
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
-              {requestEUAdPersonalization ? (
-                <ErrorBoundary ignoreErrors brand={TAB_APP}>
-                  <QuantcastChoiceCMP />
-                </ErrorBoundary>
-              ) : null}
             </div>
           </ErrorBoundary>
         </V0MuiThemeProvider>

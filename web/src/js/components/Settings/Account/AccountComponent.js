@@ -5,11 +5,8 @@ import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { isInEuropeanUnion } from 'js/utils/client-location'
-import { displayConsentUI } from 'js/ads/consentManagement'
-import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
-import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
-import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import initializeCMP from 'js/utils/initializeCMP'
+import tabCMP from 'tab-cmp'
 
 export const AccountItem = props => (
   <div
@@ -43,27 +40,35 @@ class Account extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDataPrivacyOption: false,
+      doesGDPRApply: false,
+      doesCCPAApply: false,
     }
   }
 
   async componentDidMount() {
-    // See if we should show the data privacy choices option
-    var isInEU
-    try {
-      isInEU = await isInEuropeanUnion()
-    } catch (e) {
-      isInEU = false
-    }
-    if (isInEU) {
+    await initializeCMP()
+
+    // Determine if any data privacy frameworks apply.
+    const doesGDPRApply = await tabCMP.doesGDPRApply()
+    if (doesGDPRApply) {
       this.setState({
-        showDataPrivacyOption: true,
+        doesGDPRApply: true,
+      })
+    }
+    const doesCCPAApply = await tabCMP.doesCCPAApply()
+    if (doesCCPAApply) {
+      this.setState({
+        doesCCPAApply: true,
       })
     }
   }
 
-  reviewDataPrivacy() {
-    displayConsentUI()
+  async openTCFConsentDialog() {
+    await tabCMP.openTCFConsentDialog()
+  }
+
+  async openCCPAConsentDialog() {
+    await tabCMP.openCCPAConsentDialog()
   }
 
   render() {
@@ -86,27 +91,60 @@ class Account extends React.Component {
           name={'Email'}
           value={user.email ? user.email : 'Not signed in'}
         />
-        {this.state.showDataPrivacyOption ? (
+        {this.state.doesGDPRApply ? (
           <span>
             <Divider />
             <AccountItem
               name={'Data privacy choices'}
               actionButton={
                 <Button
-                  color={'primary'}
+                  color={'default'}
                   variant={'contained'}
-                  onClick={this.reviewDataPrivacy}
+                  onClick={this.openTCFConsentDialog}
                 >
                   Review choices
                 </Button>
               }
             />
-            {user ? <LogConsentData user={user} /> : null}
           </span>
         ) : null}
-        <ErrorBoundary ignoreErrors>
-          <QuantcastChoiceCMP />
-        </ErrorBoundary>
+        {this.state.doesCCPAApply ? (
+          <span>
+            <Divider />
+            <AccountItem
+              name={'Ad personalization choices'}
+              actionButton={
+                <div>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a onClick={this.openCCPAConsentDialog}>
+                    <Typography
+                      variant={'body2'}
+                      style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                      gutterBottom
+                    >
+                      Do Not Sell My Info
+                    </Typography>
+                  </a>
+                  <Typography
+                    variant={'caption'}
+                    style={{
+                      lineHeight: '1.16',
+                      color: 'rgba(0, 0, 0, 0.54)',
+                      maxWidth: '80%',
+                    }}
+                  >
+                    This preference sets whether advertisers can personalize ads
+                    to you. Personalized ads can be more interesting and often
+                    raise more money for charity. We{' '}
+                    <span style={{ fontWeight: 'bold' }}>never</span> sell
+                    personal information like email addresses, nor do we collect
+                    your browsing history on other sites.
+                  </Typography>
+                </div>
+              }
+            />
+          </span>
+        ) : null}
       </Paper>
     )
   }

@@ -69,7 +69,8 @@
     "react-transition-group": "^4.0.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.20.1",
-    "tab-ads": "^1.0.0-beta.3",
+    "tab-ads": "^1.0.0-beta.8",
+    "tab-cmp": "^0.11.0",
     "tti-polyfill": "^0.2.2",
     "uuid": "^3.3.2"
   },
@@ -104,7 +105,8 @@
     "format:check": "yarn run format --list-different",
     "sls:deploy": "serverless deploy -v",
     "dev:add-local-dep": "yalc add",
-    "dev:update-local-deps": "yalc update"
+    "dev:update-local-deps": "yalc update",
+    "dev:cp-server-cert": "cp ./ssl/server.pem ./node_modules/webpack-dev-server/ssl/server.pem"
   },
   "proxy": "http://localhost:8080",
   "jest": {

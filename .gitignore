@@ -13,3 +13,6 @@ graphql/data/schema.graphql
 
 # yarn
 yarn-error.log
+
+.yalc
+yalc.lock
