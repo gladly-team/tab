@@ -7,10 +7,6 @@ const initializeCMP = async () => {
   // acceptance tests.
   if (process.env.REACT_APP_CMP_ENABLED === 'true') {
     await tabCMP.initializeCMP({
-      consent: {
-        enabled: true,
-        timeout: 500,
-      },
       // Debugging can be enabled with URL param tabCMPDebug=true.
       debug: false,
       displayPersistentConsentLink: false,

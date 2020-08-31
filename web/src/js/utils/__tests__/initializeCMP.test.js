@@ -19,10 +19,6 @@ describe('initializeCMP', () => {
     const tabCMP = require('tab-cmp').default
     await initializeCMP()
     expect(tabCMP.initializeCMP).toHaveBeenCalledWith({
-      consent: {
-        enabled: expect.any(Boolean),
-        timeout: expect.any(Number),
-      },
       debug: expect.any(Boolean),
       displayPersistentConsentLink: false,
       onError: expect.any(Function),
