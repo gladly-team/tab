@@ -28,7 +28,7 @@ import initializeCMP from 'js/utils/initializeCMP'
 const initCMP = () => {
   initializeCMP()
 }
-setTimeout(initCMP, 2000)
+setTimeout(initCMP, 1500)
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
