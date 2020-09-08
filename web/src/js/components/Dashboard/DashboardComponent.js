@@ -93,7 +93,7 @@ const loadAds = () => {
       adUnits: Object.values(getAdUnits()),
       auctionTimeout: 1000,
       consent: {
-        enabled: false,
+        enabled: true,
         // Time to wait for the consent management platform (CMP) to respond.
         // If the CMP does not respond in this time, ad auctions may be cancelled.
         // The tab-cmp package aims to make the CMP respond much more quickly
