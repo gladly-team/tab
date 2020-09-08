@@ -17,7 +17,10 @@ try {
   // try filtering manually because Sentry's ignoreErrors might not
   // support Regex.
   // https://docs.sentry.io/platforms/javascript/#decluttering-sentry
-  const errorNamesToIgnore = [/^AbortError$/]
+  const errorNamesToIgnore = [
+    /^AbortError$/,
+    /^GVLError$/, // tab-cmp (unhandled Quantcast rejection)
+  ]
   const errorsMessagesToIgnore = [
     // FIXME: we should refactor to better handle network errors.
     /^Failed to fetch$/,
@@ -31,6 +34,8 @@ try {
     // Webpack chunk loading errors.
     /^Loading chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
     /^Loading CSS chunk/, // Webpack network error: "Loading CSS chunk [0] failed",
+    // tab-cmp (unhandled Quantcast rejection).
+    /^Failed to read the 'localStorage' property from 'Window': Access is denied for this document.$/,
   ]
 
   Sentry.init({
