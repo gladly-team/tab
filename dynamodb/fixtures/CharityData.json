@@ -335,5 +335,19 @@
     "updated": "2020-08-03T18:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "8cb56329-ea93-416b-b5ca-9e8d60554e5a",
+    "name": "DirectRelief",
+    "category": "Health",
+    "logo": "placeholder.png",
+    "image": "direct-relief.jpg",
+    "website": "https://www.directrelief.org/",
+    "impact": "Working towards our goal of 8M hearts, we can help DirectRelief provide masks, medicine and other important resources to healthcare agencies and first responders combating the West Coast fires. Thank you for your support!",
+    "description": "Equips doctors and nurses with life-saving medical resources to care for the world's most vulnerable people",
+    "created": "2020-09-17T18:00:00.000Z",
+    "updated": "2020-09-17T18:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
