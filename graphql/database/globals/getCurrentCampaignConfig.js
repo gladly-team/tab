@@ -1,37 +1,36 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## Support Racial Justice: Equal Justice Initiative'
+const campaignTitle = '## Western Wildfire Response: DirectRelief'
 const campaignDescription = `
-#### Now, as much as ever, we need to support people of color to seek justice and thrive.
-#### The [Equal Justice Initiative](https://eji.org/) is committed to ending mass incarceration and excessive punishment in the United States, to challenging racial and economic injustice, and to protecting basic human rights for the most vulnerable people in American society.
-#### Join us in supporting the Equal Justice Initiative's efforts to fight for criminal and economic justice.
+#### Historic fires across the entire West Coast are forcing families to evacuate, destroying ecosystems, and sending smoke across the globe. As a result, [DirectRelief](https://www.directrelief.org/) is providing Wildfire Health Kits, KN95 & N95 masks, and medical resources to first responders in the affected areas.
+#### Join us in supporting DirectRelief, and invite your friends to help us reach our goal of 8M hearts!
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thanks for supporting racial justice'
+const campaignEndTitle = '## Thank You for Supporting DirectRelief!'
 const campaignEndDescription = `
-#### With your help, we raised thousands of dollars for the Equal Justice Initiative's fight for racial justice. 
-#### There are many ways to continue your support with donations, time, and your voice. [Learn more here.](http://www.bit.ly/AllyGuideBLM)
+#### Thank you! Every time you tab, you are aiding charitable causes like [DirectRelief](https://www.directrelief.org/). The funds raised will help provide resources to first responders and healthcare agencies in the wildfire affected areas.
+#### If you have a charitable cause that is close to your heart and want it featured as a spotlight campaign, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
 `
 // const campaignEndDescriptionTwo =
 //   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'EJIAug2020',
-  charityId: '43872478-a195-415a-b4ba-fdc824db7ab4',
+  campaignId: 'DirectReliefSep2020',
+  charityId: '8cb56329-ea93-416b-b5ca-9e8d60554e5a',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
-  countMoneyRaised: true,
+  countMoneyRaised: false,
   countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
     whenGoalAchieved: true,
-    whenTimeEnds: false,
+    whenTimeEnds: true,
   },
   goal: {
     impactUnitSingular: 'heart',
@@ -42,9 +41,9 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10e6,
+    targetNumber: 8e6,
     // transformNumberSourceValue: num => {
-    //   return num
+    //   return 9e6
     // },
   },
   // Modifications to the campaign when the campaign has
@@ -60,6 +59,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       showProgressBarLabel: true,
       showProgressBarEndText: false,
     },
+    showCountdownTimer: false,
     showHeartsDonationButton: false,
     showSocialSharing: false,
     // socialSharing: {
@@ -85,20 +85,20 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     //   },
     // },
   },
-  showCountdownTimer: false,
+  showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
   showSocialSharing: false,
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#ea0029',
+      main: '#FE5000',
       light: '#94989e',
     },
   },
   time: {
-    start: '2020-08-03T10:00:00.000Z',
-    end: '2020-12-01T18:00:00.000Z',
+    start: '2020-09-17T18:00:00.000Z',
+    end: '2020-09-30T19:00:00.000Z',
   },
 })
 
