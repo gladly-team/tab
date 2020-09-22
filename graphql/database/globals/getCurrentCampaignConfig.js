@@ -4,6 +4,7 @@ const campaignTitle = '## Western Wildfire Response: DirectRelief'
 const campaignDescription = `
 #### Historic fires across the entire West Coast are forcing families to evacuate, destroying ecosystems, and sending smoke across the globe. As a result, [DirectRelief](https://www.directrelief.org/) is providing Wildfire Health Kits, KN95 & N95 masks, and medical resources to first responders in the affected areas.
 #### Join us in supporting DirectRelief, and invite your friends to help us reach our goal of 8M hearts!
+#### **Update:** Thanks to your support, we reached our heart goal in just a few days—so let's shoot for 10M hearts!
 `
 // const campaignDescriptionTwo = ``
 
@@ -41,7 +42,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 8e6,
+    targetNumber: 10e6,
     // transformNumberSourceValue: num => {
     //   return 9e6
     // },
