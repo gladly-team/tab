@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:20.04
 
 RUN mkdir /opt/dynamodb
 RUN mkdir /opt/dynamodb/db
@@ -14,8 +14,7 @@ RUN wget -O /tmp/dynamodb https://s3-us-west-2.amazonaws.com/dynamodb-local/dyna
 RUN tar xfz /tmp/dynamodb
 
 # Install Node.
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - \
-    && apt-get update \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get install -y nodejs
 
 ENTRYPOINT ["java", "-Djava.library.path=.", "-jar", "/opt/dynamodb/DynamoDBLocal.jar", "-dbPath", "/opt/dynamodb/db", "-sharedDb"]
