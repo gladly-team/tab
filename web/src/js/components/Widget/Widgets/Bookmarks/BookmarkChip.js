@@ -15,6 +15,8 @@ const EditBookmarkWidgetModal = lazy(() =>
   import('js/components/Widget/Widgets/Bookmarks/EditBookmarkWidgetModal')
 )
 
+const AUXILIARY_BUTTON = 1
+
 class BookmarkChip extends React.Component {
   constructor(props) {
     super(props)
@@ -23,6 +25,7 @@ class BookmarkChip extends React.Component {
       startingIndex: this.props.index,
       // Set while modifying the widget settings
       temporaryColor: this.props.bookmark.color,
+      auxiliaryButtonClickInProgress: false,
     }
   }
 
@@ -45,9 +48,9 @@ class BookmarkChip extends React.Component {
     return url
   }
 
-  openLink(link) {
+  openLink(link, name = '_top') {
     // The page might be iframed, so opening in _top is critical.
-    window.open(this.addProtocolToURLIfNeeded(link), '_top')
+    window.open(this.addProtocolToURLIfNeeded(link), name)
     this.setState({
       open: false,
     })
@@ -62,6 +65,29 @@ class BookmarkChip extends React.Component {
     } else {
       this.openLink(this.props.bookmark.link)
     }
+  }
+
+  onMouseDown(e) {
+    if (e.button === AUXILIARY_BUTTON) {
+      this.setState({
+        auxiliaryButtonClickInProgress: true,
+      })
+    }
+  }
+
+  onMouseUp(e) {
+    if (
+      e.button === AUXILIARY_BUTTON &&
+      this.state.auxiliaryButtonClickInProgress
+    ) {
+      this.openLink(this.props.bookmark.link, '_blank')
+    }
+  }
+
+  onMouseLeave(e) {
+    this.setState({
+      auxiliaryButtonClickInProgress: false,
+    })
   }
 
   onEditCancel() {
@@ -147,6 +173,9 @@ class BookmarkChip extends React.Component {
             userSelect: 'none',
           }}
           onClick={this.onClick.bind(this)}
+          onMouseDown={this.onMouseDown.bind(this)}
+          onMouseUp={this.onMouseUp.bind(this)}
+          onMouseLeave={this.onMouseLeave.bind(this)}
         >
           <EditIcon
             color={widgetEditButtonInactive}
