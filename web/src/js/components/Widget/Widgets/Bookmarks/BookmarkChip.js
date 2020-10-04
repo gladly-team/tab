@@ -10,6 +10,8 @@ import {
 } from 'js/theme/default'
 import hexToRgbA from 'hex-to-rgba'
 import logger from 'js/utils/logger'
+import ConditionalWrapper from 'js/components/General/ConditionalWrapper'
+import Link from 'js/components/General/Link'
 
 const EditBookmarkWidgetModal = lazy(() =>
   import('js/components/Widget/Widgets/Bookmarks/EditBookmarkWidgetModal')
@@ -45,22 +47,12 @@ class BookmarkChip extends React.Component {
     return url
   }
 
-  openLink(link) {
-    // The page might be iframed, so opening in _top is critical.
-    window.open(this.addProtocolToURLIfNeeded(link), '_top')
-    this.setState({
-      open: false,
-    })
-  }
-
   onClick(e) {
     if (this.props.editMode) {
       this.setState({
         isEditing: true,
         startingIndex: this.props.index,
       })
-    } else {
-      this.openLink(this.props.bookmark.link)
     }
   }
 
@@ -128,51 +120,60 @@ class BookmarkChip extends React.Component {
     }
     return (
       <span>
-        <Paper
-          zDepth={0}
-          style={{
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            alignItems: 'center',
-            margin: 5,
-            minWidth: 84,
-            maxWidth: 150,
-            height: 50,
-            fontSize: 14,
-            padding: 10,
-            backgroundColor: bookmarkColor,
-            color: '#FFF',
-            userSelect: 'none',
-          }}
-          onClick={this.onClick.bind(this)}
+        <ConditionalWrapper
+          condition={!this.props.editMode}
+          wrapper={children => (
+            <Link to={this.addProtocolToURLIfNeeded(this.props.bookmark.link)}>
+              {children}
+            </Link>
+          )}
         >
-          <EditIcon
-            color={widgetEditButtonInactive}
-            hoverColor={widgetEditButtonHover}
+          <Paper
+            zDepth={0}
             style={{
-              position: 'absolute',
-              zIndex: 5,
-              top: 2,
-              right: 2,
-              opacity: this.props.editMode ? 1 : 0,
-              transition: 'opacity 0.1s ease-in',
-              pointerEvents: this.props.editMode ? 'all' : 'none',
-            }}
-          />
-          <span
-            style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              alignItems: 'center',
+              margin: 5,
+              minWidth: 84,
+              maxWidth: 150,
+              height: 50,
+              fontSize: 14,
+              padding: 10,
+              backgroundColor: bookmarkColor,
               color: '#FFF',
-              pointerEvents: 'none',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              userSelect: 'none',
             }}
+            onClick={this.onClick.bind(this)}
           >
-            {bookmark.name}
-          </span>
-        </Paper>
+            <EditIcon
+              color={widgetEditButtonInactive}
+              hoverColor={widgetEditButtonHover}
+              style={{
+                position: 'absolute',
+                zIndex: 5,
+                top: 2,
+                right: 2,
+                opacity: this.props.editMode ? 1 : 0,
+                transition: 'opacity 0.1s ease-in',
+                pointerEvents: this.props.editMode ? 'all' : 'none',
+              }}
+            />
+            <span
+              style={{
+                color: '#FFF',
+                pointerEvents: 'none',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {bookmark.name}
+            </span>
+          </Paper>
+        </ConditionalWrapper>
         {this.state.isEditing ? (
           <Suspense fallback={null}>
             <EditBookmarkWidgetModal
