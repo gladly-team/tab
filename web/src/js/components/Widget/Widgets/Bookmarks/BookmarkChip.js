@@ -123,7 +123,10 @@ class BookmarkChip extends React.Component {
         <ConditionalWrapper
           condition={!this.props.editMode}
           wrapper={children => (
-            <Link to={this.addProtocolToURLIfNeeded(this.props.bookmark.link)}>
+            <Link
+              to={this.addProtocolToURLIfNeeded(this.props.bookmark.link)}
+              target="_top"
+            >
               {children}
             </Link>
           )}
