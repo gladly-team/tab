@@ -67,7 +67,8 @@
     "data": {},
     "widgetId": "8b5e572b-7f44-45ea-965b-55e6a22ca190",
     "config": {
-      "format24": false
+      "format24": false,
+      "showSeconds": false
     }
   }
 ]

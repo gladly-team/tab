@@ -34,6 +34,12 @@
         "type": "boolean",
         "display": "Use 24 hours format",
         "defaultValue": false
+      },
+      {
+        "field": "showSeconds",
+        "type": "boolean",
+        "display": "Show seconds",
+        "defaultValue": false
       }
     ]
   },
