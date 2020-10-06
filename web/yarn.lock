@@ -14766,10 +14766,10 @@ tab-ads@^1.0.0-beta.9:
   dependencies:
     lodash "^4.17.15"
 
-tab-cmp@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.11.1.tgz#1708e858edc6e0d004bde05125b9abed885e9c0f"
-  integrity sha512-mawMTIDVDpjEQRQ3/B0LI6GjkRMuK0NshL0mao5tRMyxnDGfxzPtiqCW1TYu5c/KSgUnD+PmnZ/BsF27SA52mQ==
+tab-cmp@0.12.0-beta.0:
+  version "0.12.0-beta.0"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.12.0-beta.0.tgz#eaa8b11c561b3933f1671e4a2f95d6c20b82a2c0"
+  integrity sha512-8mYklftVJ6als5u0GFFcIdPBB6LsH65eCYZHH+6G/0mhCsKab7EMxRW9ZY4dlVjwZv/LqkvILNaYBEezKdPHrg==
 
 table@^5.2.3:
   version "5.3.3"
