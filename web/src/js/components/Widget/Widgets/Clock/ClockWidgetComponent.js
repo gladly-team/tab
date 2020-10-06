@@ -41,17 +41,18 @@ class ClockWidget extends React.Component {
 
   setDateTime(config) {
     const format24 = config.format24
+    const secondsFormat = config.showSeconds ? ':ss' : ''
     var date = moment().format('dddd, MMMM D')
     var time
     if (format24) {
       // If it's midnight, show two leading zeros
       if (moment().get('hour') === 0) {
-        time = moment().format('HH:mm')
+        time = moment().format('HH:mm' + secondsFormat)
       } else {
-        time = moment().format('H:mm')
+        time = moment().format('H:mm' + secondsFormat)
       }
     } else {
-      time = moment().format('h:mm')
+      time = moment().format('h:mm' + secondsFormat)
     }
 
     this.setState({
