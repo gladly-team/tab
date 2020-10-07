@@ -14759,10 +14759,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^1.0.0-beta.9:
-  version "1.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.0-beta.9.tgz#130c6cf03b076f215d8284be9cf968650b5c8f20"
-  integrity sha512-fcgL/zBTjwnFZSQXb6jgG5o70sgRqmkpq2bGcjNQGaYnFzz7DaSDp33pEWEnjSWJVdQzJGEmQlbQEjggsbq1NQ==
+tab-ads@1.0.0-beta.10:
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.0-beta.10.tgz#88f6d25e64d2446bbf51aba53dd762ebbc24bfbc"
+  integrity sha512-wA0z8vEJIQSC0yALkrkGVmRPvdc4UGfug10laPd6oiRG/7QdKDpr6uLi7oGqQcYfgs1B8MfxvtRg07bnc29SoA==
   dependencies:
     lodash "^4.17.15"
 
