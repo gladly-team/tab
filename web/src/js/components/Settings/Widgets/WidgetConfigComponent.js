@@ -47,6 +47,7 @@ class BooleanWidgetConfig extends React.Component {
       width: '80%',
       marginLeft: '5%',
       marginRight: '5%',
+      marginBottom: 16,
     }
 
     return (
