@@ -69,7 +69,7 @@
     "react-transition-group": "^4.0.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.20.1",
-    "tab-ads": "1.0.0-beta.10",
+    "tab-ads": "1.0.0-beta.11",
     "tab-cmp": "0.12.0-beta.0",
     "tti-polyfill": "^0.2.2",
     "uuid": "^3.3.2"
