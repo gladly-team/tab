@@ -1,16 +1,16 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## Western Wildfire Response: DirectRelief'
+const campaignTitle = '## October Spotlight: Trees for the Future'
 const campaignDescription = `
-#### Historic fires across the entire West Coast are forcing families to evacuate, destroying ecosystems, and sending smoke across the globe. As a result, [DirectRelief](https://www.directrelief.org/) is providing Wildfire Health Kits, KN95 & N95 masks, and medical resources to first responders in the affected areas.
-#### Join us in supporting DirectRelief, and invite your friends to help us reach our goal of 8M hearts!
-#### **Update:** Thanks to your support, we reached our heart goal in just a few days—so let's shoot for 10M hearts!
+#### Climate change has had devastating effects on communities around the world, but there is opportunity to protect our planet and future!
+#### [Trees for the Future](https://trees.org/) is working to plant thousands of trees that provide crucial nutrients back to the soil. Beyond this, these trees provide farmers with food security and an opportunity to improve their income.
+#### Open some tabs, tell a friend to join, and donate those hearts to support sustainable farming through Trees for the Future!
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thank You for Supporting DirectRelief!'
+const campaignEndTitle = '## Thanks for Supporting Trees for the Future!'
 const campaignEndDescription = `
-#### Thank you! Every time you tab, you are aiding charitable causes like [DirectRelief](https://www.directrelief.org/). The funds raised will help provide resources to first responders and healthcare agencies in the wildfire affected areas.
+#### Every Heart donated towards charitable causes like [Trees for the Future](https://trees.org/) adds up, and the end result is something to be proud of. These funds raised will help plant trees providing financial security for farmers and a healthier planet. 
 #### If you have a charitable cause that is close to your heart and want it featured as a spotlight campaign, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
 `
 // const campaignEndDescriptionTwo =
@@ -18,8 +18,8 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'DirectReliefSep2020',
-  charityId: '8cb56329-ea93-416b-b5ca-9e8d60554e5a',
+  campaignId: 'TFTF2020',
+  charityId: '67d1d576-4ab1-43dd-970c-3537cd13d476',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -93,13 +93,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#FE5000',
+      main: '#53AF4A',
       light: '#94989e',
     },
   },
   time: {
-    start: '2020-09-17T18:00:00.000Z',
-    end: '2020-09-30T19:00:00.000Z',
+    start: '2020-10-19T17:00:00.000Z',
+    end: '2020-10-26T18:00:00.000Z',
   },
 })
 
