@@ -349,5 +349,19 @@
     "updated": "2020-09-17T18:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "67d1d576-4ab1-43dd-970c-3537cd13d476",
+    "name": "Trees for the Future",
+    "category": "The Environment",
+    "logo": "placeholder.png",
+    "image": "trees-for-the-future.jpg",
+    "website": "https://trees.org/",
+    "impact": "Every new tree planted makes a difference for our planet and farmers, every Heart donated makes a difference for Trees for the Future. Thank you for supporting this cause and promoting a sustainable future for us all!",
+    "description": "Aims to end hunger and poverty by training farmers to regenerate their land",
+    "created": "2020-10-19T08:00:00.000Z",
+    "updated": "2020-10-19T08:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
