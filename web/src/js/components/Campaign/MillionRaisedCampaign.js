@@ -57,6 +57,28 @@ const styles = theme => ({
   },
 })
 
+const DAY_2020_10_29 = '2020-10-29'
+const DAY_2020_10_30 = '2020-10-30'
+const DAY_2020_10_31 = '2020-10-31'
+const DAY_2020_11_01 = '2020-11-01'
+const DAY_2020_11_02 = '2020-11-02' // Monday
+const DAY_2020_11_03 = '2020-11-03'
+const DAY_2020_11_04 = '2020-11-04'
+const DAY_2020_11_05 = '2020-11-05'
+const DAY_2020_11_06 = '2020-11-06'
+const DAY_2020_11_07 = '2020-11-07'
+const DAY_2020_11_08 = '2020-11-08'
+const DAY_2020_11_09 = '2020-11-09' // Monday
+const DAY_2020_11_10 = '2020-11-10'
+const DAY_2020_11_11 = '2020-11-11'
+const DAY_2020_11_12 = '2020-11-12'
+const DAY_2020_11_13 = '2020-11-13'
+const DAY_2020_11_14 = '2020-11-14'
+const DAY_2020_11_15 = '2020-11-15'
+const DAY_2020_11_16 = '2020-11-16' // Monday
+const DAY_2020_11_17 = '2020-11-17'
+const DAY_2020_11_18 = '2020-11-18'
+
 const getCampaignContent = ({ app, currentDateString }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
@@ -66,12 +88,25 @@ const getCampaignContent = ({ app, currentDateString }) => {
       <MoneyRaisedGeneric app={app} />
     </Typography>
   )
+  const defaultMainContent = (
+    <div>
+      {moneyRaisedDisplay}
+      <Typography variant="body2">Some description here</Typography>
+    </div>
+  )
+  const defaultAddendumContent = (
+    <div>
+      <Typography variant="body2">
+        Check out what you've helped achieve
+      </Typography>
+    </div>
+  )
 
   let title = defaultTitle
-  let mainContent
-  let addendumContent
+  let mainContent = defaultMainContent
+  let addendumContent = defaultAddendumContent
   switch (currentDateString) {
-    case '2020-10-29': {
+    case DAY_2020_10_29: {
       mainContent = (
         <div>
           {moneyRaisedDisplay}
@@ -85,7 +120,7 @@ const getCampaignContent = ({ app, currentDateString }) => {
       )
       break
     }
-    case '2020-10-30': {
+    case DAY_2020_10_30: {
       mainContent = (
         <div>
           {moneyRaisedDisplay}
@@ -99,20 +134,70 @@ const getCampaignContent = ({ app, currentDateString }) => {
       )
       break
     }
+    case DAY_2020_10_31: {
+      break
+    }
+    case DAY_2020_11_01: {
+      break
+    }
+    case DAY_2020_11_02: {
+      break
+    }
+    case DAY_2020_11_03: {
+      break
+    }
+
+    case DAY_2020_11_04: {
+      break
+    }
+    case DAY_2020_11_05: {
+      break
+    }
+    case DAY_2020_11_06: {
+      break
+    }
+    case DAY_2020_11_07: {
+      break
+    }
+    case DAY_2020_11_08: {
+      break
+    }
+    case DAY_2020_11_09: {
+      break
+    }
+    case DAY_2020_11_10: {
+      break
+    }
+    case DAY_2020_11_11: {
+      break
+    }
+    case DAY_2020_11_12: {
+      break
+    }
+    case DAY_2020_11_13: {
+      break
+    }
+    case DAY_2020_11_14: {
+      break
+    }
+    case DAY_2020_11_15: {
+      break
+    }
+    case DAY_2020_11_16: {
+      break
+    }
+    case DAY_2020_11_17: {
+      break
+    }
+    case DAY_2020_11_18: {
+      break
+    }
+
+    // TODO: handle dates past 11/18/2020
     default: {
-      mainContent = (
-        <div>
-          {moneyRaisedDisplay}
-          <Typography variant="body2">
-            This is an entirely different day!
-          </Typography>
-        </div>
-      )
-      addendumContent = (
-        <div>
-          <Typography variant="body2">Some other things.</Typography>
-        </div>
-      )
+      title = defaultTitle
+      mainContent = defaultMainContent
+      addendumContent = defaultAddendumContent
     }
   }
 
