@@ -9,13 +9,9 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
-    zIndex: 2,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
     width: '100%',
     height: '100%',
     boxSizing: 'border-box',
@@ -25,6 +21,7 @@ const styles = theme => ({
     position: 'relative',
     pointerEvents: 'all',
     minWidth: 400,
+    width: '100%',
     margin: 0,
     padding: 0,
     background: '#FFF',
@@ -43,7 +40,6 @@ const styles = theme => ({
     right: 2,
   },
   campaignContent: {
-    width: 480,
     padding: 12,
   },
   campaignAddendum: {
@@ -61,18 +57,53 @@ const styles = theme => ({
 })
 
 const getCampaignContent = ({ currentDateString }) => {
-  // TODO: vary by day
-  let title = <Typography variant="h6">Some title here</Typography>
-  let mainContent = (
-    <div>
-      <Typography variant="body2">Some description here</Typography>
-    </div>
-  )
-  let addendumContent = (
-    <div>
-      <Typography variant="body2">Hi there!</Typography>
-    </div>
-  )
+  let title
+  let mainContent
+  let addendumContent
+
+  switch (currentDateString) {
+    case '2020-10-29': {
+      title = <Typography variant="h6">Some title here</Typography>
+      mainContent = (
+        <div>
+          <Typography variant="body2">Some description here</Typography>
+        </div>
+      )
+      addendumContent = (
+        <div>
+          <Typography variant="body2">Hi there!</Typography>
+        </div>
+      )
+      break
+    }
+    case '2020-10-30': {
+      title = <Typography variant="h6">Another title!</Typography>
+      mainContent = (
+        <div>
+          <Typography variant="body2">Another description here</Typography>
+        </div>
+      )
+      addendumContent = (
+        <div>
+          <Typography variant="body2">Hi there! :)</Typography>
+        </div>
+      )
+      break
+    }
+    default: {
+      title = <Typography variant="h6">Some title here</Typography>
+      mainContent = (
+        <div>
+          <Typography variant="body2">Some description here</Typography>
+        </div>
+      )
+      addendumContent = (
+        <div>
+          <Typography variant="body2">Hi there!</Typography>
+        </div>
+      )
+    }
+  }
 
   return {
     title,

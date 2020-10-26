@@ -1,6 +1,11 @@
 import React from 'react'
+import Typography from '@material-ui/core/Typography'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
+
+const CampaignContainer = ({ children }) => {
+  return <div style={{ width: 500, margin: 16 }}>{children}</div>
+}
 
 const DemosView = () => {
   // This is an internal page for our team only.
@@ -12,6 +17,8 @@ const DemosView = () => {
 
   const campaignOnDismiss = () => {}
 
+  const campaignDates = ['2020-10-29', '2020-10-30', '2020-10-31']
+
   return (
     <div
       style={{
@@ -19,10 +26,21 @@ const DemosView = () => {
         width: '100%',
       }}
     >
-      <MillionRaisedCampaign
-        currentDateString={'2020-10-29'}
-        onDismiss={campaignOnDismiss}
-      />
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {campaignDates.map(date => {
+          return (
+            <div style={{ margin: 16 }}>
+              <Typography variant="body2">{date}</Typography>
+              <CampaignContainer>
+                <MillionRaisedCampaign
+                  currentDateString={date}
+                  onDismiss={campaignOnDismiss}
+                />
+              </CampaignContainer>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
