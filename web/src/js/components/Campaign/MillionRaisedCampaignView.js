@@ -28,6 +28,9 @@ class MillionRaisedCampaignView extends React.Component {
             return null
           }
           const { app } = props
+          if (!app) {
+            return null
+          }
 
           return (
             <FadeInDashboardAnimation>

@@ -25,13 +25,13 @@ const MoneyRaisedGeneric = props => {
     setMoneyRaised(currentMoneyRaised + 0.01)
   }, msPerPenny)
 
-  return <span>{commaFormatted(currencyFormatted(currentMoneyRaised))}</span>
+  return <span>${commaFormatted(currencyFormatted(currentMoneyRaised))}</span>
 }
 
 MoneyRaisedGeneric.displayName = 'MoneyRaisedGeneric'
 MoneyRaisedGeneric.propTypes = {
   app: PropTypes.shape({
-    MoneyRaisedGeneric: PropTypes.number.isRequired,
+    moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired,
   }).isRequired,
 }

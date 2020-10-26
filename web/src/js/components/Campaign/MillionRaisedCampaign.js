@@ -59,10 +59,14 @@ const styles = theme => ({
 
 const getCampaignContent = ({ app, currentDateString }) => {
   const defaultTitle = (
-    <Typography variant="h6">
-      $1,000,000: A tab you’ll want to keep open
+    <Typography variant="h6">A tab you'll want to keep open:</Typography>
+  )
+  const moneyRaisedDisplay = (
+    <Typography variant="h2" align={'center'} gutterBottom>
+      <MoneyRaisedGeneric app={app} />
     </Typography>
   )
+
   let title = defaultTitle
   let mainContent
   let addendumContent
@@ -70,7 +74,7 @@ const getCampaignContent = ({ app, currentDateString }) => {
     case '2020-10-29': {
       mainContent = (
         <div>
-          <MoneyRaisedGeneric app={app} />
+          {moneyRaisedDisplay}
           <Typography variant="body2">Some description here</Typography>
         </div>
       )
@@ -84,6 +88,7 @@ const getCampaignContent = ({ app, currentDateString }) => {
     case '2020-10-30': {
       mainContent = (
         <div>
+          {moneyRaisedDisplay}
           <Typography variant="body2">Another description here</Typography>
         </div>
       )
@@ -97,12 +102,15 @@ const getCampaignContent = ({ app, currentDateString }) => {
     default: {
       mainContent = (
         <div>
-          <Typography variant="body2">Some description here</Typography>
+          {moneyRaisedDisplay}
+          <Typography variant="body2">
+            This is an entirely different day!
+          </Typography>
         </div>
       )
       addendumContent = (
         <div>
-          <Typography variant="body2">Hi there!</Typography>
+          <Typography variant="body2">Some other things.</Typography>
         </div>
       )
     }
@@ -153,10 +161,7 @@ const MillionRaisedCampaign = ({
 }
 
 MillionRaisedCampaign.propTypes = {
-  app: PropTypes.shape({
-    moneyRaised: PropTypes.number.isRequired,
-    dollarsPerDayRate: PropTypes.number.isRequired,
-  }).isRequired,
+  app: PropTypes.shape({}).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
