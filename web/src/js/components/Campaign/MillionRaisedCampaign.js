@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
@@ -60,6 +61,20 @@ const styles = theme => ({
   link: {
     color: theme.palette.primary.main,
   },
+  hashtag: {
+    background: theme.palette.secondary.main,
+    padding: '2px 14px',
+    borderRadius: 3,
+    display: 'inline-block',
+    marginBottom: 10,
+  },
+  hashtagText: {
+    color: 'white',
+  },
+  addendumButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 })
 
 const DAY_2020_10_29 = '2020-10-29'
@@ -101,7 +116,12 @@ const getCampaignContent = ({ app, classes, currentDateString }) => {
         <span style={{ fontWeight: 'bold' }}>a million dollars</span> raised!
         Never underestimate the power of a small group working together for
         positive change.{' '}
-        <Link to={millionRaisedURL} target="_top" className={classes.link}>
+        <Link
+          to={millionRaisedURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
           See what we've accomplished together
         </Link>
       </Typography>
@@ -109,9 +129,27 @@ const getCampaignContent = ({ app, classes, currentDateString }) => {
   )
   const defaultAddendumContent = (
     <div>
-      <Typography variant="body2">
-        Check out what you've helped achieve
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #TabForAMillion
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today:</span> check
+        out what real-world good your tabs have turned into!
       </Typography>
+      <div className={classes.addendumButtonContainer}>
+        <Link
+          to={millionRaisedURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          <Button size={'medium'} color={'primary'} variant={'contained'}>
+            See Your Impact
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 
