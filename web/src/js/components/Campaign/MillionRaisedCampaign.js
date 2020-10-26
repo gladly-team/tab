@@ -57,13 +57,16 @@ const styles = theme => ({
 })
 
 const getCampaignContent = ({ currentDateString }) => {
-  let title
+  const defaultTitle = (
+    <Typography variant="h6">
+      $1,000,000: A tab you’ll want to keep open
+    </Typography>
+  )
+  let title = defaultTitle
   let mainContent
   let addendumContent
-
   switch (currentDateString) {
     case '2020-10-29': {
-      title = <Typography variant="h6">Some title here</Typography>
       mainContent = (
         <div>
           <Typography variant="body2">Some description here</Typography>
@@ -77,7 +80,6 @@ const getCampaignContent = ({ currentDateString }) => {
       break
     }
     case '2020-10-30': {
-      title = <Typography variant="h6">Another title!</Typography>
       mainContent = (
         <div>
           <Typography variant="body2">Another description here</Typography>
@@ -91,7 +93,6 @@ const getCampaignContent = ({ currentDateString }) => {
       break
     }
     default: {
-      title = <Typography variant="h6">Some title here</Typography>
       mainContent = (
         <div>
           <Typography variant="body2">Some description here</Typography>
