@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
@@ -136,20 +135,17 @@ const getCampaignContent = ({ app, classes, currentDateString }) => {
       </div>
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today:</span> check
-        out what real-world good your tabs have turned into!
-      </Typography>
-      <div className={classes.addendumButtonContainer}>
+        out{' '}
         <Link
           to={millionRaisedURL}
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
         >
-          <Button size={'medium'} color={'primary'} variant={'contained'}>
-            See Your Impact
-          </Button>
+          the real-world good your tabs have turned into here
         </Link>
-      </div>
+        ! Share the achievement you're proudest of.
+      </Typography>
     </div>
   )
 
