@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
-import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
+import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignView'
 
 const CampaignContainer = ({ children }) => {
   return <div style={{ width: 500, margin: 16 }}>{children}</div>
@@ -29,7 +29,7 @@ const DemosView = () => {
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {campaignDates.map(date => {
           return (
-            <div style={{ margin: 16 }}>
+            <div style={{ margin: 16 }} key={date}>
               <Typography variant="body2">{date}</Typography>
               <CampaignContainer>
                 <MillionRaisedCampaign

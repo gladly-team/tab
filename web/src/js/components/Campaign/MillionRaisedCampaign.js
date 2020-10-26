@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
+import MoneyRaisedGeneric from 'js/components/MoneyRaised/MoneyRaisedGenericContainer'
 
 const styles = theme => ({
   root: {
@@ -56,7 +57,7 @@ const styles = theme => ({
   },
 })
 
-const getCampaignContent = ({ currentDateString }) => {
+const getCampaignContent = ({ app, currentDateString }) => {
   const defaultTitle = (
     <Typography variant="h6">
       $1,000,000: A tab you’ll want to keep open
@@ -69,6 +70,7 @@ const getCampaignContent = ({ currentDateString }) => {
     case '2020-10-29': {
       mainContent = (
         <div>
+          <MoneyRaisedGeneric app={app} />
           <Typography variant="body2">Some description here</Typography>
         </div>
       )
@@ -113,8 +115,14 @@ const getCampaignContent = ({ currentDateString }) => {
   }
 }
 
-const MillionRaisedCampaign = ({ classes, currentDateString, onDismiss }) => {
+const MillionRaisedCampaign = ({
+  app,
+  classes,
+  currentDateString,
+  onDismiss,
+}) => {
   const { title, mainContent, addendumContent } = getCampaignContent({
+    app,
     currentDateString,
   })
   return (
@@ -145,6 +153,10 @@ const MillionRaisedCampaign = ({ classes, currentDateString, onDismiss }) => {
 }
 
 MillionRaisedCampaign.propTypes = {
+  app: PropTypes.shape({
+    moneyRaised: PropTypes.number.isRequired,
+    dollarsPerDayRate: PropTypes.number.isRequired,
+  }).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
