@@ -1,5 +1,6 @@
 import React from 'react'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
+import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
 
 const DemosView = () => {
   // This is an internal page for our team only.
@@ -9,6 +10,8 @@ const DemosView = () => {
     return null
   }
 
+  const campaignOnDismiss = () => {}
+
   return (
     <div
       style={{
@@ -16,7 +19,7 @@ const DemosView = () => {
         width: '100%',
       }}
     >
-      TODO
+      <MillionRaisedCampaign onDismiss={campaignOnDismiss} />
     </div>
   )
 }
