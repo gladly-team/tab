@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -27,7 +26,6 @@ const styles = theme => ({
     pointerEvents: 'all',
     minWidth: 400,
     margin: 0,
-    marginBottom: 100,
     padding: 0,
     background: '#FFF',
     border: 'none',
@@ -48,6 +46,10 @@ const styles = theme => ({
     width: 480,
     padding: 12,
   },
+  campaignAddendum: {
+    background: '#f5f5f5', // darker: '#eeeeee'
+    padding: 12,
+  },
   mainTextContainer: {},
   title: {
     textAlign: 'center',
@@ -58,10 +60,34 @@ const styles = theme => ({
   },
 })
 
-const MillionRaisedCampaign = ({ classes, onDismiss }) => {
+const getCampaignContent = ({ currentDateString }) => {
+  // TODO: vary by day
+  let title = <Typography variant="h6">Some title here</Typography>
+  let mainContent = (
+    <div>
+      <Typography variant="body2">Some description here</Typography>
+    </div>
+  )
+  let addendumContent = (
+    <div>
+      <Typography variant="body2">Hi there!</Typography>
+    </div>
+  )
+
+  return {
+    title,
+    mainContent,
+    addendumContent,
+  }
+}
+
+const MillionRaisedCampaign = ({ classes, currentDateString, onDismiss }) => {
+  const { title, mainContent, addendumContent } = getCampaignContent({
+    currentDateString,
+  })
   return (
     <div className={classes.root}>
-      <FadeInDashboardAnimation>
+      <Paper elevation={1} className={classes.paper}>
         <Paper elevation={1} className={classes.paper}>
           <div className={classes.borderTop} />
           <IconButton
@@ -75,21 +101,19 @@ const MillionRaisedCampaign = ({ classes, onDismiss }) => {
           </IconButton>
           <div className={classes.campaignContent}>
             <div className={classes.mainTextContainer}>
-              <div className={classes.title}>
-                <Typography variant="h6">Some title here</Typography>
-              </div>
-              <div className={classes.description}>
-                <Typography variant="body2">Some description here</Typography>
-              </div>
+              <div className={classes.title}>{title}</div>
+              <div>{mainContent}</div>
             </div>
           </div>
         </Paper>
-      </FadeInDashboardAnimation>
+        <div className={classes.campaignAddendum}>{addendumContent}</div>
+      </Paper>
     </div>
   )
 }
 
 MillionRaisedCampaign.propTypes = {
+  currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
 MillionRaisedCampaign.defaultProps = {

@@ -19,7 +19,10 @@ const DemosView = () => {
         width: '100%',
       }}
     >
-      <MillionRaisedCampaign onDismiss={campaignOnDismiss} />
+      <MillionRaisedCampaign
+        currentDateString={'2020-10-29'}
+        onDismiss={campaignOnDismiss}
+      />
     </div>
   )
 }
