@@ -40,6 +40,7 @@ const FirstTabView = lazy(() => import('js/components/Dashboard/FirstTabView'))
 const PostUninstallView = lazy(() =>
   import('js/components/Dashboard/PostUninstallView')
 )
+const InternalDemosView = lazy(() => import('js/components/Demos/DemosPage'))
 
 const muiTheme = createMuiTheme(defaultTheme)
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
@@ -101,6 +102,11 @@ class App extends React.Component {
                     component={PostUninstallView}
                   />
                   <Route path="/newtab/auth/" component={AuthenticationView} />
+                  <Route
+                    exact
+                    path="/newtab/demos/"
+                    component={InternalDemosView}
+                  />
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
