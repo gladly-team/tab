@@ -7,6 +7,8 @@ import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import MoneyRaisedGeneric from 'js/components/MoneyRaised/MoneyRaisedGenericContainer'
+import Link from 'js/components/General/Link'
+import { millionRaisedURL } from 'js/navigation/navigation'
 
 const styles = theme => ({
   root: {
@@ -55,6 +57,9 @@ const styles = theme => ({
     margin: 14,
     textAlign: 'left',
   },
+  link: {
+    color: theme.palette.primary.main,
+  },
 })
 
 const DAY_2020_10_29 = '2020-10-29'
@@ -79,7 +84,7 @@ const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
 const DAY_2020_11_18 = '2020-11-18'
 
-const getCampaignContent = ({ app, currentDateString }) => {
+const getCampaignContent = ({ app, classes, currentDateString }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
   )
@@ -91,7 +96,15 @@ const getCampaignContent = ({ app, currentDateString }) => {
   const defaultMainContent = (
     <div>
       {moneyRaisedDisplay}
-      <Typography variant="body2">Some description here</Typography>
+      <Typography variant="body2">
+        We couldn't be more excited that we are about to hit{' '}
+        <span style={{ fontWeight: 'bold' }}>a million dollars</span> raised!
+        Never underestimate the power of a small group working together for
+        positive change.{' '}
+        <Link to={millionRaisedURL} target="_top" className={classes.link}>
+          See what we've accomplished together
+        </Link>
+      </Typography>
     </div>
   )
   const defaultAddendumContent = (
@@ -107,6 +120,9 @@ const getCampaignContent = ({ app, currentDateString }) => {
   let addendumContent = defaultAddendumContent
   switch (currentDateString) {
     case DAY_2020_10_29: {
+      break
+    }
+    case DAY_2020_10_30: {
       mainContent = (
         <div>
           {moneyRaisedDisplay}
@@ -120,11 +136,18 @@ const getCampaignContent = ({ app, currentDateString }) => {
       )
       break
     }
-    case DAY_2020_10_30: {
+    case DAY_2020_10_31: {
+      title = (
+        <Typography variant="h6">
+          We can modify the title if we want.
+        </Typography>
+      )
       mainContent = (
         <div>
-          {moneyRaisedDisplay}
-          <Typography variant="body2">Another description here</Typography>
+          <Typography variant="body2">
+            We can remove the money raised if we want.
+          </Typography>
+          <Typography variant="body2">Another description here.</Typography>
         </div>
       )
       addendumContent = (
@@ -132,9 +155,6 @@ const getCampaignContent = ({ app, currentDateString }) => {
           <Typography variant="body2">Hi there! :)</Typography>
         </div>
       )
-      break
-    }
-    case DAY_2020_10_31: {
       break
     }
     case DAY_2020_11_01: {
@@ -216,6 +236,7 @@ const MillionRaisedCampaign = ({
 }) => {
   const { title, mainContent, addendumContent } = getCampaignContent({
     app,
+    classes,
     currentDateString,
   })
   return (
