@@ -76,10 +76,10 @@ const MillionRaisedCampaign = ({ classes, onDismiss }) => {
           <div className={classes.campaignContent}>
             <div className={classes.mainTextContainer}>
               <div className={classes.title}>
-                <Typography>Some title here</Typography>
+                <Typography variant="h6">Some title here</Typography>
               </div>
               <div className={classes.description}>
-                <Typography>Some description here</Typography>
+                <Typography variant="body2">Some description here</Typography>
               </div>
             </div>
           </div>
