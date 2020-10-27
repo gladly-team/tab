@@ -8,7 +8,11 @@ import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import MoneyRaisedGeneric from 'js/components/MoneyRaised/MoneyRaisedGenericContainer'
 import Link from 'js/components/General/Link'
-import { millionRaisedURL } from 'js/navigation/navigation'
+import {
+  millionRaisedURL,
+  instagramPageURL,
+  twitterPageURL,
+} from 'js/navigation/navigation'
 
 const styles = theme => ({
   root: {
@@ -195,6 +199,56 @@ const getCampaignContent = ({ app, classes, currentDateString }) => {
       break
     }
     case DAY_2020_11_02: {
+      mainContent = (
+        <div>
+          {moneyRaisedDisplay}
+          <Typography variant="body2">
+            We're about to hit a million dollars raised! For us, it was as easy
+            as opening a new tab and donating hearts to a cause we care about.
+            For multi-millionaires, it's as easy as writing a check. Join us on{' '}
+            <Link
+              to={twitterPageURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+            >
+              Twitter
+            </Link>{' '}
+            and{' '}
+            <Link
+              to={instagramPageURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+            >
+              Instagram
+            </Link>{' '}
+            where we will be asking the uber-wealthy to match a $1M donation.
+            We’re looking at you, @google...
+          </Typography>
+        </div>
+      )
+      addendumContent = (
+        <div>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today:</span>{' '}
+            hit up some multi-millionaires on Twitter and Instagram to ask them
+            to match our $1M raised.
+          </Typography>
+          <div>
+            <div>
+              <Typography variant="body2" gutterBottom>
+                @Bill&MelindaGates -- TODO link to Twitter & Instagram
+              </Typography>
+            </div>
+          </div>
+        </div>
+      )
       break
     }
     case DAY_2020_11_03: {

@@ -181,6 +181,7 @@ export const externalContactUsURL =
 
 // Social
 export const facebookPageURL = 'https://www.facebook.com/TabForACause'
+export const instagramPageURL = 'https://www.instagram.com/tabforacause/'
 export const twitterPageURL = 'https://twitter.com/TabForACause'
 
 // Browser extension pages
