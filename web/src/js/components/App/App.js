@@ -53,6 +53,8 @@ class App extends React.Component {
     const urlParams = parseUrlSearchString(location.search)
     const app = validateAppName(urlParams.app)
 
+    const shouldShowDemosPage = process.env.REACT_APP_SHOW_DEMOS_PAGE === 'true'
+
     // @material-ui-1-todo: remove legacy theme provider
     return (
       <MuiThemeProvider theme={muiTheme}>
@@ -102,11 +104,13 @@ class App extends React.Component {
                     component={PostUninstallView}
                   />
                   <Route path="/newtab/auth/" component={AuthenticationView} />
-                  <Route
-                    exact
-                    path="/newtab/demos/"
-                    component={InternalDemosView}
-                  />
+                  {shouldShowDemosPage ? (
+                    <Route
+                      exact
+                      path="/newtab/demos/"
+                      component={InternalDemosView}
+                    />
+                  ) : null}
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
