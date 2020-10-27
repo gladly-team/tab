@@ -6,13 +6,13 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
-import MoneyRaisedGeneric from 'js/components/MoneyRaised/MoneyRaisedGenericContainer'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
   instagramPageURL,
   twitterPageURL,
 } from 'js/navigation/navigation'
+import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
 
 const styles = theme => ({
   root: {
@@ -56,6 +56,9 @@ const styles = theme => ({
   mainTextContainer: {},
   title: {
     textAlign: 'center',
+  },
+  moneyRaised: {
+    color: theme.palette.secondary.main,
   },
   description: {
     margin: 14,
@@ -102,13 +105,18 @@ const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
 const DAY_2020_11_18 = '2020-11-18'
 
-const getCampaignContent = ({ app, classes, currentDateString }) => {
+const getCampaignContent = ({
+  app,
+  classes,
+  currentDateString,
+  moneyRaisedUSDString,
+}) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
   )
   const moneyRaisedDisplay = (
     <Typography variant="h2" align={'center'} gutterBottom>
-      <MoneyRaisedGeneric app={app} />
+      <span className={classes.moneyRaised}>{moneyRaisedUSDString}</span>
     </Typography>
   )
   const defaultMainContent = (
@@ -322,10 +330,15 @@ const MillionRaisedCampaign = ({
   currentDateString,
   onDismiss,
 }) => {
+  const { moneyRaisedUSDString } = useMoneyRaised({
+    moneyRaised: app.moneyRaised,
+    dollarsPerDayRate: app.dollarsPerDayRate,
+  })
   const { title, mainContent, addendumContent } = getCampaignContent({
     app,
     classes,
     currentDateString,
+    moneyRaisedUSDString,
   })
   return (
     <div className={classes.root}>

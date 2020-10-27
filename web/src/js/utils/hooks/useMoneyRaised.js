@@ -1,13 +1,9 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
 import useInterval from 'js/utils/hooks/useInterval'
 import { currencyFormatted, commaFormatted } from 'js/utils/utils'
 
-const MoneyRaisedGeneric = props => {
-  const {
-    app: { dollarsPerDayRate, moneyRaised },
-  } = props
-
+// https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+function useMoneyRaised({ moneyRaised, dollarsPerDayRate }) {
   const [currentMoneyRaised, setMoneyRaised] = useState(moneyRaised)
 
   // If the moneyRaised prop changes, use the new value.
@@ -25,16 +21,12 @@ const MoneyRaisedGeneric = props => {
     setMoneyRaised(currentMoneyRaised + 0.01)
   }, msPerPenny)
 
-  return <span>${commaFormatted(currencyFormatted(currentMoneyRaised))}</span>
+  return {
+    moneyRaised: currentMoneyRaised,
+    moneyRaisedUSDString: `$${commaFormatted(
+      currencyFormatted(currentMoneyRaised)
+    )}`,
+  }
 }
 
-MoneyRaisedGeneric.displayName = 'MoneyRaisedGeneric'
-MoneyRaisedGeneric.propTypes = {
-  app: PropTypes.shape({
-    moneyRaised: PropTypes.number.isRequired,
-    dollarsPerDayRate: PropTypes.number.isRequired,
-  }).isRequired,
-}
-MoneyRaisedGeneric.defaultProps = {}
-
-export default MoneyRaisedGeneric
+export default useMoneyRaised

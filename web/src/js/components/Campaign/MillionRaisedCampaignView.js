@@ -16,7 +16,8 @@ class MillionRaisedCampaignView extends React.Component {
         query={graphql`
           query MillionRaisedCampaignViewQuery {
             app {
-              ...MoneyRaisedGenericContainer_app
+              moneyRaised
+              dollarsPerDayRate
             }
           }
         `}
