@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import grey from '@material-ui/core/colors/grey'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
@@ -50,7 +51,9 @@ const styles = theme => ({
     padding: 12,
   },
   campaignAddendum: {
-    background: '#f5f5f5', // darker: '#eeeeee'
+    display: 'flex',
+    flexDirection: 'column',
+    background: grey[100],
     padding: 12,
   },
   mainTextContainer: {},
@@ -58,7 +61,7 @@ const styles = theme => ({
     textAlign: 'center',
   },
   moneyRaised: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
   },
   description: {
     margin: 14,
@@ -68,11 +71,11 @@ const styles = theme => ({
     color: theme.palette.primary.main,
   },
   hashtag: {
-    background: theme.palette.secondary.main,
+    margin: '0px auto 10px auto',
+    background: grey[500],
     padding: '2px 14px',
     borderRadius: 3,
     display: 'inline-block',
-    marginBottom: 10,
   },
   hashtagText: {
     color: 'white',
@@ -139,7 +142,7 @@ const getCampaignContent = ({
     </div>
   )
   const defaultAddendumContent = (
-    <div>
+    <>
       <div className={classes.hashtag}>
         <Typography variant="subtitle2" className={classes.hashtagText}>
           #TabForAMillion
@@ -158,7 +161,7 @@ const getCampaignContent = ({
         </Link>
         ! Share the achievement you're proudest of.
       </Typography>
-    </div>
+    </>
   )
 
   let title = defaultTitle
@@ -176,9 +179,9 @@ const getCampaignContent = ({
         </div>
       )
       addendumContent = (
-        <div>
+        <>
           <Typography variant="body2">Hi there!</Typography>
-        </div>
+        </>
       )
       break
     }
@@ -197,9 +200,9 @@ const getCampaignContent = ({
         </div>
       )
       addendumContent = (
-        <div>
+        <>
           <Typography variant="body2">Hi there! :)</Typography>
-        </div>
+        </>
       )
       break
     }
@@ -237,7 +240,7 @@ const getCampaignContent = ({
         </div>
       )
       addendumContent = (
-        <div>
+        <>
           <div className={classes.hashtag}>
             <Typography variant="subtitle2" className={classes.hashtagText}>
               #MillionaireMonday
@@ -255,7 +258,7 @@ const getCampaignContent = ({
               </Typography>
             </div>
           </div>
-        </div>
+        </>
       )
       break
     }
