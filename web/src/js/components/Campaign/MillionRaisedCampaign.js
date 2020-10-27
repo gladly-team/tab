@@ -204,8 +204,8 @@ const getCampaignContent = ({ app, classes, currentDateString }) => {
           {moneyRaisedDisplay}
           <Typography variant="body2">
             We're about to hit a million dollars raised! For us, it was as easy
-            as opening a new tab and donating hearts to a cause we care about.
-            For multi-millionaires, it's as easy as writing a check. Join us on{' '}
+            as opening tabs. For multi-millionaires, it's as easy as writing a
+            check. Join us on{' '}
             <Link
               to={twitterPageURL}
               target="_blank"
