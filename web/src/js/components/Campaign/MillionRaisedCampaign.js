@@ -129,18 +129,20 @@ const getCampaignContent = ({
           {moneyRaisedUSDString}
         </span>
       </Typography>
-      <Typography variant="body2" gutterBottom>
-        We're about to reach $1M raised for charity! It's amazing what a
-        dedicated community and a few (million) browser tabs can do.{' '}
+      <Typography variant="body2" align="center">
+        We're about to reach $1M raised for charity!
+      </Typography>
+      <Typography variant="body2" align="center" gutterBottom>
+        Thank you – it's incredible{' '}
         <Link
           to={millionRaisedURL}
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
         >
-          See what we've accomplished together
-        </Link>{' '}
-        and join us as we celebrate this milestone!
+          what we've accomplished together
+        </Link>
+        .
       </Typography>
     </div>
   )
