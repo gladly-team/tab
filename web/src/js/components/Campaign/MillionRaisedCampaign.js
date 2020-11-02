@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
+  facebookPageURL,
   instagramPageURL,
   twitterPageURL,
 } from 'js/navigation/navigation'
@@ -86,22 +87,18 @@ const styles = theme => ({
   },
 })
 
-const DAY_2020_10_29 = '2020-10-29'
-const DAY_2020_10_30 = '2020-10-30'
-const DAY_2020_10_31 = '2020-10-31'
-const DAY_2020_11_01 = '2020-11-01'
 const DAY_2020_11_02 = '2020-11-02' // Monday
 const DAY_2020_11_03 = '2020-11-03'
-const DAY_2020_11_04 = '2020-11-04'
+const DAY_2020_11_04 = '2020-11-04' // Wednesday
 const DAY_2020_11_05 = '2020-11-05'
-const DAY_2020_11_06 = '2020-11-06'
+const DAY_2020_11_06 = '2020-11-06' // Friday
 const DAY_2020_11_07 = '2020-11-07'
 const DAY_2020_11_08 = '2020-11-08'
 const DAY_2020_11_09 = '2020-11-09' // Monday
 const DAY_2020_11_10 = '2020-11-10'
-const DAY_2020_11_11 = '2020-11-11'
+const DAY_2020_11_11 = '2020-11-11' // Wednesday
 const DAY_2020_11_12 = '2020-11-12'
-const DAY_2020_11_13 = '2020-11-13'
+const DAY_2020_11_13 = '2020-11-13' // Friday
 const DAY_2020_11_14 = '2020-11-14'
 const DAY_2020_11_15 = '2020-11-15'
 const DAY_2020_11_16 = '2020-11-16' // Monday
@@ -125,11 +122,9 @@ const getCampaignContent = ({
   const defaultMainContent = (
     <div>
       {moneyRaisedDisplay}
-      <Typography variant="body2">
-        We couldn't be more excited that we are about to hit{' '}
-        <span style={{ fontWeight: 'bold' }}>a million dollars</span> raised!
-        Never underestimate the power of a small group working together for
-        positive change.{' '}
+      <Typography variant="body2" gutterBottom>
+        We're about to reach $1M raised for charity! It's amazing what a
+        dedicated community and a few (million) browser tabs can do.{' '}
         <Link
           to={millionRaisedURL}
           target="_blank"
@@ -137,7 +132,8 @@ const getCampaignContent = ({
           className={classes.link}
         >
           See what we've accomplished together
-        </Link>
+        </Link>{' '}
+        and join us as we celebrate this milestone!
       </Typography>
     </div>
   )
@@ -164,154 +160,209 @@ const getCampaignContent = ({
     </>
   )
 
+  const addendumContentMonday = (
+    <>
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #MillionaireMonday
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>@ a
+        multi-millionaire to have them match our $1M! For us, it was as easy as
+        opening tabs. For them, it's as easy as writing a check.
+      </Typography>
+    </>
+  )
+  const addendumContentTuesday = (
+    <>
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #TabberTuesday
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+        Celebrating this milestone would not be possible without all of you. We
+        would love to hear from you on social media why you tab! DM us
+        @tabforacause or post to your feed with #TabForAMillion to be featured
+        on #TabberTuesday.
+      </Typography>
+    </>
+  )
+  const addendumContentWednesday = (
+    <>
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #WelcomeWednesday
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>text,
+        email, tiktok, carrier-pigeon, or talk to 2 friends or family members
+        about Tab for a Cause! If every person who sees this gets 2 friends to
+        turn their tabs into a force for good, we'll be celebrating $2M raised
+        in less than a year!
+      </Typography>
+    </>
+  )
+  const addendumContentThursday = (
+    <>
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #ThankfulThursday
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+        join us in letting the world know how impactful a tab can be by liking,
+        reposting, and/or sharing our #ThankfulThursday posts on{' '}
+        <Link
+          to={instagramPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Instagram
+        </Link>
+        ,{' '}
+        <Link
+          to={facebookPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Facebook
+        </Link>
+        , and{' '}
+        <Link
+          to={twitterPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Twitter
+        </Link>
+        .
+      </Typography>
+    </>
+  )
+  const addendumContentFriday = (
+    <>
+      <div className={classes.hashtag}>
+        <Typography variant="subtitle2" className={classes.hashtagText}>
+          #FriendFriday
+        </Typography>
+      </div>
+      <Typography variant="body2" gutterBottom>
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+        we are proud to support nine amazing nonprofit partners who turn our
+        tabs into concrete impact. Check out what these partners have to say
+        about Tab for a Cause on{' '}
+        <Link
+          to={instagramPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Instagram
+        </Link>
+        ,{' '}
+        <Link
+          to={facebookPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Facebook
+        </Link>
+        , and{' '}
+        <Link
+          to={twitterPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+        >
+          Twitter
+        </Link>
+        .
+      </Typography>
+    </>
+  )
+  const addendumContentWeekend = defaultAddendumContent
+
   let title = defaultTitle
   let mainContent = defaultMainContent
   let addendumContent = defaultAddendumContent
   switch (currentDateString) {
-    case DAY_2020_10_29: {
-      break
-    }
-    case DAY_2020_10_30: {
-      mainContent = (
-        <div>
-          {moneyRaisedDisplay}
-          <Typography variant="body2">Some description here</Typography>
-        </div>
-      )
-      addendumContent = (
-        <>
-          <Typography variant="body2">Hi there!</Typography>
-        </>
-      )
-      break
-    }
-    case DAY_2020_10_31: {
-      title = (
-        <Typography variant="h6">
-          We can modify the title if we want.
-        </Typography>
-      )
-      mainContent = (
-        <div>
-          <Typography variant="body2">
-            We can remove the money raised if we want.
-          </Typography>
-          <Typography variant="body2">Another description here.</Typography>
-        </div>
-      )
-      addendumContent = (
-        <>
-          <Typography variant="body2">Hi there! :)</Typography>
-        </>
-      )
-      break
-    }
-    case DAY_2020_11_01: {
-      break
-    }
     case DAY_2020_11_02: {
-      mainContent = (
-        <div>
-          {moneyRaisedDisplay}
-          <Typography variant="body2">
-            We're about to hit a million dollars raised! For us, it was as easy
-            as opening tabs. For multi-millionaires, it's as easy as writing a
-            check. Join us on{' '}
-            <Link
-              to={twitterPageURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.link}
-            >
-              Twitter
-            </Link>{' '}
-            and{' '}
-            <Link
-              to={instagramPageURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.link}
-            >
-              Instagram
-            </Link>{' '}
-            where we will be asking the uber-wealthy to match a $1M donation.
-            We’re looking at you, @google...
-          </Typography>
-        </div>
-      )
-      addendumContent = (
-        <>
-          <div className={classes.hashtag}>
-            <Typography variant="subtitle2" className={classes.hashtagText}>
-              #MillionaireMonday
-            </Typography>
-          </div>
-          <Typography variant="body2" gutterBottom>
-            <span style={{ fontWeight: 'bold' }}>What you can do today:</span>{' '}
-            hit up some multi-millionaires on Twitter and Instagram to ask them
-            to match our $1M raised.
-          </Typography>
-          <div>
-            <div>
-              <Typography variant="body2" gutterBottom>
-                @Bill&MelindaGates -- TODO link to Twitter & Instagram
-              </Typography>
-            </div>
-          </div>
-        </>
-      )
+      addendumContent = addendumContentMonday
       break
     }
     case DAY_2020_11_03: {
+      addendumContent = addendumContentTuesday
       break
     }
-
     case DAY_2020_11_04: {
+      addendumContent = addendumContentWednesday
       break
     }
     case DAY_2020_11_05: {
+      addendumContent = addendumContentThursday
       break
     }
     case DAY_2020_11_06: {
+      addendumContent = addendumContentFriday
       break
     }
     case DAY_2020_11_07: {
+      addendumContent = addendumContentWeekend
       break
     }
     case DAY_2020_11_08: {
+      addendumContent = addendumContentWeekend
       break
     }
     case DAY_2020_11_09: {
+      addendumContent = addendumContentMonday
       break
     }
     case DAY_2020_11_10: {
+      addendumContent = addendumContentTuesday
       break
     }
     case DAY_2020_11_11: {
+      addendumContent = addendumContentWednesday
       break
     }
     case DAY_2020_11_12: {
+      addendumContent = addendumContentThursday
       break
     }
     case DAY_2020_11_13: {
+      addendumContent = addendumContentFriday
       break
     }
     case DAY_2020_11_14: {
+      addendumContent = addendumContentWeekend
       break
     }
     case DAY_2020_11_15: {
+      addendumContent = addendumContentWeekend
       break
     }
     case DAY_2020_11_16: {
+      addendumContent = addendumContentMonday
       break
     }
     case DAY_2020_11_17: {
+      addendumContent = addendumContentTuesday
       break
     }
     case DAY_2020_11_18: {
+      addendumContent = addendumContentWednesday
       break
     }
-
     // TODO: handle dates past 11/18/2020
     default: {
       title = defaultTitle

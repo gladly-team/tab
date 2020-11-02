@@ -3,10 +3,6 @@ import Typography from '@material-ui/core/Typography'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignView'
 
-const DAY_2020_10_29 = '2020-10-29'
-const DAY_2020_10_30 = '2020-10-30'
-const DAY_2020_10_31 = '2020-10-31'
-const DAY_2020_11_01 = '2020-11-01'
 const DAY_2020_11_02 = '2020-11-02' // Monday
 const DAY_2020_11_03 = '2020-11-03'
 const DAY_2020_11_04 = '2020-11-04'
@@ -27,10 +23,6 @@ const DAY_2020_11_18 = '2020-11-18'
 
 const getCampaignDates = () => {
   return [
-    DAY_2020_10_29,
-    DAY_2020_10_30,
-    DAY_2020_10_31,
-    DAY_2020_11_01,
     DAY_2020_11_02,
     DAY_2020_11_03,
     DAY_2020_11_04,
