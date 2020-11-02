@@ -211,6 +211,7 @@ const getCampaignContent = ({
         style={{ margin: 16 }}
         label={'Share this link with a friend'}
         helperText={'and accelerate your impact!'}
+        InputProps={{ style: { fontSize: '0.875rem' } }}
       />
     </>
   )
