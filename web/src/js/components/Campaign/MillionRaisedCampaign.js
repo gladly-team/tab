@@ -13,12 +13,21 @@ import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
+  millionRaisedRainforestImpactURL,
+  // millionRaisedWaterImpactURL,
+  // millionRaisedHungerImpactURL,
+  // millionRaisedGiveImpactURL,
+  // millionRaisedReadImpactURL,
+  // millionRaisedChildrenImpactURL,
+  // millionRaisedEducateImpactURL,
   facebookPageURL,
   instagramPageURL,
   twitterPageURL,
 } from 'js/navigation/navigation'
 import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
+import TreeIcon from 'mdi-material-ui/PineTree'
+import SocialShare from 'js/components/General/SocialShareComponent'
 
 const primaryMainColor = '#9d4ba3'
 const secondaryMainColor = '#4a90e2'
@@ -91,6 +100,17 @@ const styles = theme => ({
   addendumButtonContainer: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  impactStatContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  impactStatIcon: {
+    flex: 1,
+  },
+  impactStatText: {
+    flex: 6,
   },
 })
 
@@ -321,9 +341,44 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
-  const addendumContentWeekend = getDefaultAddendumContent({
-    themeColor: primaryMainColor,
-  })
+  const addendumContentWeekend = (
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography variant="body2" className={classes.impactStatText}>
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            protect over 5,000 acres of rainforest!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        /* FIXME: actual copy needed */
+        url={millionRaisedRainforestImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={{
+          quote:
+            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
+        }}
+        RedditShareButtonProps={{
+          title:
+            'Tabs transformed into vital supplies for 100 families in rainforest communities',
+        }}
+        TumblrShareButtonProps={{
+          title:
+            'Tabs transformed into vital supplies for 100 families in rainforest communities',
+          caption:
+            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>
+  )
 
   let title = defaultTitle
   let themeColor = defaultThemeColor

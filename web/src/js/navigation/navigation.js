@@ -163,7 +163,18 @@ export const adblockerWhitelistingForSearchURL = absoluteUrl(
   '/adblockers/search/'
 )
 export const treePlantingCampaignHomepageURL = absoluteUrl('/plant-trees/')
+
+// Million raised
 export const millionRaisedURL = absoluteUrl('/million/')
+export const millionRaisedRainforestImpactURL = absoluteUrl(
+  '/million/rainforest/'
+)
+export const millionRaisedWaterImpactURL = absoluteUrl('/million/water/')
+export const millionRaisedHungerImpactURL = absoluteUrl('/million/hunger/')
+export const millionRaisedGiveImpactURL = absoluteUrl('/million/give/')
+export const millionRaisedReadImpactURL = absoluteUrl('/million/read/')
+export const millionRaisedChildrenImpactURL = absoluteUrl('/million/children/')
+export const millionRaisedEducateImpactURL = absoluteUrl('/million/educate/')
 
 // External links
 
