@@ -15,6 +15,7 @@ import {
   twitterPageURL,
 } from 'js/navigation/navigation'
 import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
+import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 
 const styles = theme => ({
   root: {
@@ -107,6 +108,7 @@ const DAY_2020_11_18 = '2020-11-18'
 
 const getCampaignContent = ({
   app,
+  user,
   classes,
   currentDateString,
   moneyRaisedUSDString,
@@ -199,11 +201,17 @@ const getCampaignContent = ({
       </div>
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>text,
-        email, tiktok, carrier-pigeon, or talk to 2 friends or family members
-        about Tab for a Cause! If every person who sees this gets 2 friends to
-        turn their tabs into a force for good, we'll be celebrating $2M raised
-        in less than a year!
+        email, tiktok, carrier-pigeon, or talk to 2 friends about Tab for a
+        Cause! If every person who sees this gets 2 friends to turn their tabs
+        into a force for good, we'll be celebrating $2M raised in less than a
+        year!
       </Typography>
+      <InviteFriend
+        user={user}
+        style={{ margin: 16 }}
+        label={'Share this link with a friend'}
+        helperText={'and accelerate your impact!'}
+      />
     </>
   )
   const addendumContentThursday = (
@@ -380,6 +388,7 @@ const getCampaignContent = ({
 
 const MillionRaisedCampaign = ({
   app,
+  user,
   classes,
   currentDateString,
   onDismiss,
@@ -390,6 +399,7 @@ const MillionRaisedCampaign = ({
   })
   const { title, mainContent, addendumContent } = getCampaignContent({
     app,
+    user,
     classes,
     currentDateString,
     moneyRaisedUSDString,
@@ -423,6 +433,7 @@ const MillionRaisedCampaign = ({
 
 MillionRaisedCampaign.propTypes = {
   app: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({}).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
