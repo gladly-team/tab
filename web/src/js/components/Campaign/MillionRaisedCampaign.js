@@ -5,6 +5,9 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import grey from '@material-ui/core/colors/grey'
+import amber from '@material-ui/core/colors/amber'
+import green from '@material-ui/core/colors/green'
+import orange from '@material-ui/core/colors/orange'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
@@ -16,6 +19,9 @@ import {
 } from 'js/navigation/navigation'
 import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
+
+const primaryMainColor = '#9d4ba3'
+const secondaryMainColor = '#4a90e2'
 
 const styles = theme => ({
   root: {
@@ -116,14 +122,13 @@ const getCampaignContent = ({
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
   )
-  const moneyRaisedDisplay = (
-    <Typography variant="h2" align={'center'} gutterBottom>
-      <span className={classes.moneyRaised}>{moneyRaisedUSDString}</span>
-    </Typography>
-  )
-  const defaultMainContent = (
+  const getDefaultMainContent = ({ themeColor }) => (
     <div>
-      {moneyRaisedDisplay}
+      <Typography variant="h2" align={'center'} gutterBottom>
+        <span className={classes.moneyRaised} style={{ color: themeColor }}>
+          {moneyRaisedUSDString}
+        </span>
+      </Typography>
       <Typography variant="body2" gutterBottom>
         We're about to reach $1M raised for charity! It's amazing what a
         dedicated community and a few (million) browser tabs can do.{' '}
@@ -161,6 +166,7 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
+  const defaultThemeColor = orange[600]
 
   const addendumContentMonday = (
     <>
@@ -300,82 +306,125 @@ const getCampaignContent = ({
   )
   const addendumContentWeekend = defaultAddendumContent
 
+  const themeColorMonday = amber[600]
+  const themeColorTuesday = primaryMainColor
+  const themeColorWednesday = orange[600]
+  const themeColorThursday = secondaryMainColor
+  const themeColorFriday = green[600]
+  const themeColorWeekend = primaryMainColor
+
   let title = defaultTitle
-  let mainContent = defaultMainContent
+  let themeColor = defaultThemeColor
+  let mainContent = getDefaultMainContent({ themeColor })
   let addendumContent = defaultAddendumContent
   switch (currentDateString) {
     case DAY_2020_11_02: {
       addendumContent = addendumContentMonday
+      themeColor = themeColorMonday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_03: {
       addendumContent = addendumContentTuesday
+      themeColor = themeColorTuesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_04: {
       addendumContent = addendumContentWednesday
+      themeColor = themeColorWednesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_05: {
       addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_06: {
       addendumContent = addendumContentFriday
+      themeColor = themeColorFriday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_07: {
       addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_08: {
       addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_09: {
       addendumContent = addendumContentMonday
+      themeColor = themeColorMonday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_10: {
       addendumContent = addendumContentTuesday
+      themeColor = themeColorTuesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_11: {
       addendumContent = addendumContentWednesday
+      themeColor = themeColorWednesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_12: {
       addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_13: {
       addendumContent = addendumContentFriday
+      themeColor = themeColorFriday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_14: {
       addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_15: {
       addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_16: {
       addendumContent = addendumContentMonday
+      themeColor = themeColorMonday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_17: {
       addendumContent = addendumContentTuesday
+      themeColor = themeColorTuesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     case DAY_2020_11_18: {
       addendumContent = addendumContentWednesday
+      themeColor = themeColorWednesday
+      mainContent = getDefaultMainContent({ themeColor })
       break
     }
     // TODO: handle dates past 11/18/2020
     default: {
       title = defaultTitle
-      mainContent = defaultMainContent
+      themeColor = defaultThemeColor
+      mainContent = getDefaultMainContent({ themeColor })
       addendumContent = defaultAddendumContent
     }
   }
@@ -384,6 +433,7 @@ const getCampaignContent = ({
     title,
     mainContent,
     addendumContent,
+    themeColor,
   }
 }
 
@@ -398,7 +448,12 @@ const MillionRaisedCampaign = ({
     moneyRaised: app.moneyRaised,
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
-  const { title, mainContent, addendumContent } = getCampaignContent({
+  const {
+    title,
+    mainContent,
+    addendumContent,
+    themeColor,
+  } = getCampaignContent({
     app,
     user,
     classes,
@@ -409,7 +464,10 @@ const MillionRaisedCampaign = ({
     <div className={classes.root}>
       <Paper elevation={1} className={classes.paper}>
         <Paper elevation={1} className={classes.paper}>
-          <div className={classes.borderTop} />
+          <div
+            className={classes.borderTop}
+            style={{ backgroundColor: themeColor }}
+          />
           <IconButton
             onClick={() => {
               setCampaignDismissTime()
