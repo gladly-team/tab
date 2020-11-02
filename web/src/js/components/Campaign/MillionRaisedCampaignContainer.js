@@ -11,8 +11,7 @@ export default createFragmentContainer(MillionRaisedCampaign, {
   `,
   user: graphql`
     fragment MillionRaisedCampaignContainer_user on User {
-      id
-      username
+      ...InviteFriendContainer_user
     }
   `,
 })
