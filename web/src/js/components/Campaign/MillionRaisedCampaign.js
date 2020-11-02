@@ -139,6 +139,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColor }}
         >
           what we've accomplished together
         </Link>
@@ -146,7 +147,7 @@ const getCampaignContent = ({
       </Typography>
     </div>
   )
-  const defaultAddendumContent = (
+  const getDefaultAddendumContent = ({ themeColor }) => (
     <>
       <div className={classes.hashtag}>
         <Typography variant="subtitle2" className={classes.hashtagText}>
@@ -161,6 +162,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColor }}
         >
           the real-world good your tabs have turned into here
         </Link>
@@ -168,7 +170,14 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
+
   const defaultThemeColor = orange[600]
+  const themeColorMonday = amber[700]
+  const themeColorTuesday = primaryMainColor
+  const themeColorWednesday = orange[700]
+  const themeColorThursday = secondaryMainColor
+  const themeColorFriday = green[600]
+  const themeColorWeekend = primaryMainColor
 
   const addendumContentMonday = (
     <>
@@ -239,6 +248,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorThursday }}
         >
           Instagram
         </Link>
@@ -248,6 +258,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorThursday }}
         >
           Facebook
         </Link>
@@ -257,6 +268,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorThursday }}
         >
           Twitter
         </Link>
@@ -281,6 +293,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorFriday }}
         >
           Instagram
         </Link>
@@ -290,6 +303,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorFriday }}
         >
           Facebook
         </Link>
@@ -299,6 +313,7 @@ const getCampaignContent = ({
           target="_blank"
           rel="noopener noreferrer"
           className={classes.link}
+          style={{ color: themeColorFriday }}
         >
           Twitter
         </Link>
@@ -306,19 +321,14 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
-  const addendumContentWeekend = defaultAddendumContent
-
-  const themeColorMonday = amber[600]
-  const themeColorTuesday = primaryMainColor
-  const themeColorWednesday = orange[600]
-  const themeColorThursday = secondaryMainColor
-  const themeColorFriday = green[600]
-  const themeColorWeekend = primaryMainColor
+  const addendumContentWeekend = getDefaultAddendumContent({
+    themeColor: primaryMainColor,
+  })
 
   let title = defaultTitle
   let themeColor = defaultThemeColor
   let mainContent = getDefaultMainContent({ themeColor })
-  let addendumContent = defaultAddendumContent
+  let addendumContent = getDefaultAddendumContent({ themeColor })
   switch (currentDateString) {
     case DAY_2020_11_02: {
       addendumContent = addendumContentMonday
@@ -427,7 +437,7 @@ const getCampaignContent = ({
       title = defaultTitle
       themeColor = defaultThemeColor
       mainContent = getDefaultMainContent({ themeColor })
-      addendumContent = defaultAddendumContent
+      addendumContent = getDefaultAddendumContent({ themeColor })
     }
   }
 
