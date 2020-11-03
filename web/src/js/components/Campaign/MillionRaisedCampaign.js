@@ -236,18 +236,18 @@ const getCampaignContent = ({
           #WelcomeWednesday
         </Typography>
       </div>
-      <Typography variant="body2" gutterBottom>
+      <Typography variant="body2">
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>text,
         email, tiktok, carrier-pigeon, or talk to 2 friends about Tab for a
-        Cause! If every person who sees this gets 2 friends to turn their tabs
-        into a force for good, we'll be celebrating $2M raised in less than a
-        year!
+        Cause!
       </Typography>
       <InviteFriend
         user={user}
         style={{ margin: 16 }}
-        label={'Share this link with a friend'}
-        helperText={'and accelerate your impact!'}
+        label={'Share this link with a few friends:'}
+        helperText={
+          "If everyone does, we'll be celebrating $2M raised within months!"
+        }
         InputProps={{ style: { fontSize: '0.875rem' } }}
       />
     </>
