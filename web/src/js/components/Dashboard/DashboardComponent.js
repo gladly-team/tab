@@ -64,13 +64,14 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
+import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
-const CampaignGeneric = lazy(() =>
-  import('js/components/Campaign/CampaignGenericView')
-)
+// const CampaignGeneric = lazy(() =>
+//   import('js/components/Campaign/CampaignGenericView')
+// )
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -587,18 +588,49 @@ class Dashboard extends React.Component {
         />
         {showCampaign ? (
           <FadeInDashboardAnimation>
-            <Suspense fallback={null}>
-              <CampaignGeneric
-                onDismiss={() => {
-                  this.setState({
-                    hasUserDismissedCampaignRecently: true,
-                  })
-                }}
-                showError={this.showError.bind(this)}
-              />
-            </Suspense>
+            <div
+              style={{
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                boxSizing: 'border-box',
+                pointerEvents: 'none',
+              }}
+            >
+              <div style={{ width: 500, marginBottom: 100 }}>
+                <MillionRaisedCampaign
+                  app={app}
+                  user={user}
+                  currentDateString={moment().format('YYYY-MM-DD')}
+                  onDismiss={() => {
+                    this.setState({
+                      hasUserDismissedCampaignRecently: true,
+                    })
+                  }}
+                  showError={this.showError.bind(this)}
+                />
+              </div>
+            </div>
           </FadeInDashboardAnimation>
-        ) : null}
+        ) : // <FadeInDashboardAnimation>
+        //   <Suspense fallback={null}>
+        //     <CampaignGeneric
+        //       onDismiss={() => {
+        //         this.setState({
+        //           hasUserDismissedCampaignRecently: true,
+        //         })
+        //       }}
+        //       showError={this.showError.bind(this)}
+        //     />
+        //       </Suspense>
+        // </FadeInDashboardAnimation>
+        null}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />
