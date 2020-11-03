@@ -289,38 +289,9 @@ const getCampaignContent = ({
       </div>
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
-        Let the world know how impactful a tab can be by liking or sharing our
-        #ThankfulThursday posts, showcasing our amazing charity partners, on{' '}
-        <Link
-          to={instagramPageURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColorThursday }}
-        >
-          Instagram
-        </Link>
-        ,{' '}
-        <Link
-          to={facebookPageURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColorThursday }}
-        >
-          Facebook
-        </Link>
-        , and{' '}
-        <Link
-          to={twitterPageURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColorThursday }}
-        >
-          Twitter
-        </Link>
-        .
+        On social media, share which Tab for a Cause nonprofit partner or
+        spotlight campaign you're most thankful for with #TabForAMillion
+        #ThankfulThursday
       </Typography>
     </>
   )
