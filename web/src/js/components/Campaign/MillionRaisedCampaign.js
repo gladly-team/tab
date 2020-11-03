@@ -222,10 +222,38 @@ const getCampaignContent = ({
       </div>
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
-        Celebrating this milestone would not be possible without all of you. We
-        would love to hear from you on social media why you tab! DM us
-        @tabforacause or post to your feed with #TabForAMillion to be featured
-        on #TabberTuesday.
+        Tell us why you tab! This milestone wouldn't have been possible without
+        all of you, and we'd love to feature you. DM us @tabforacause (
+        <Link
+          to={instagramPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+          style={{ color: themeColorTuesday }}
+        >
+          Instagram
+        </Link>
+        ,{' '}
+        <Link
+          to={facebookPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+          style={{ color: themeColorTuesday }}
+        >
+          Facebook
+        </Link>
+        ,{' '}
+        <Link
+          to={twitterPageURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
+          style={{ color: themeColorTuesday }}
+        >
+          Twitter
+        </Link>
+        ) or post using #TabForAMillion.
       </Typography>
     </>
   )
@@ -237,7 +265,7 @@ const getCampaignContent = ({
         </Typography>
       </div>
       <Typography variant="body2">
-        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>text,
+        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>Text,
         email, tiktok, carrier-pigeon, or talk to 2 friends about Tab for a
         Cause!
       </Typography>
@@ -261,8 +289,8 @@ const getCampaignContent = ({
       </div>
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
-        join us in letting the world know how impactful a tab can be by liking,
-        reposting, and/or sharing our #ThankfulThursday posts on{' '}
+        Let the world know how impactful a tab can be by liking or sharing our
+        #ThankfulThursday posts, showcasing our amazing charity partners, on{' '}
         <Link
           to={instagramPageURL}
           target="_blank"
@@ -304,10 +332,9 @@ const getCampaignContent = ({
         </Typography>
       </div>
       <Typography variant="body2" gutterBottom>
-        <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
-        we are proud to support nine amazing nonprofit partners who turn our
-        tabs into concrete impact. Check out what these partners have to say
-        about Tab for a Cause on{' '}
+        We are proud to support nine incredible nonprofit partners who turn our
+        tabs into concrete impact. Check out what they have to say about Tab for
+        a Cause on{' '}
         <Link
           to={instagramPageURL}
           target="_blank"
