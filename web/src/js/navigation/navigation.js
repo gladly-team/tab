@@ -164,6 +164,18 @@ export const adblockerWhitelistingForSearchURL = absoluteUrl(
 )
 export const treePlantingCampaignHomepageURL = absoluteUrl('/plant-trees/')
 
+// Million raised
+export const millionRaisedURL = absoluteUrl('/million/')
+export const millionRaisedRainforestImpactURL = absoluteUrl(
+  '/million/rainforest/'
+)
+export const millionRaisedWaterImpactURL = absoluteUrl('/million/water/')
+export const millionRaisedHungerImpactURL = absoluteUrl('/million/hunger/')
+export const millionRaisedGiveImpactURL = absoluteUrl('/million/give/')
+export const millionRaisedReadImpactURL = absoluteUrl('/million/read/')
+export const millionRaisedChildrenImpactURL = absoluteUrl('/million/children/')
+export const millionRaisedEducateImpactURL = absoluteUrl('/million/educate/')
+
 // External links
 
 // Surveys
@@ -180,6 +192,7 @@ export const externalContactUsURL =
 
 // Social
 export const facebookPageURL = 'https://www.facebook.com/TabForACause'
+export const instagramPageURL = 'https://www.instagram.com/tabforacause/'
 export const twitterPageURL = 'https://twitter.com/TabForACause'
 
 // Browser extension pages

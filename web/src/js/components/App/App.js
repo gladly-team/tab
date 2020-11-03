@@ -40,6 +40,7 @@ const FirstTabView = lazy(() => import('js/components/Dashboard/FirstTabView'))
 const PostUninstallView = lazy(() =>
   import('js/components/Dashboard/PostUninstallView')
 )
+const InternalDemosView = lazy(() => import('js/components/Demos/DemosPage'))
 
 const muiTheme = createMuiTheme(defaultTheme)
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
@@ -51,6 +52,8 @@ class App extends React.Component {
     const { location } = this.props
     const urlParams = parseUrlSearchString(location.search)
     const app = validateAppName(urlParams.app)
+
+    const shouldShowDemosPage = process.env.REACT_APP_SHOW_DEMOS_PAGE === 'true'
 
     // @material-ui-1-todo: remove legacy theme provider
     return (
@@ -101,6 +104,13 @@ class App extends React.Component {
                     component={PostUninstallView}
                   />
                   <Route path="/newtab/auth/" component={AuthenticationView} />
+                  {shouldShowDemosPage ? (
+                    <Route
+                      exact
+                      path="/newtab/demos/"
+                      component={InternalDemosView}
+                    />
+                  ) : null}
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>

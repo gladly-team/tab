@@ -34,9 +34,8 @@ const SocialShare = props => {
     TumblrShareButtonProps,
     TwitterShareButtonProps,
     url,
+    iconSize,
   } = props
-  const iconSize = 32
-
   // Note: hashtags for Facebook and Twitter are hardcoded.
   // We may want to move them server-side if we use them often.
   return (
@@ -114,8 +113,11 @@ SocialShare.propTypes = {
     related: PropTypes.arrayOf(PropTypes.string),
   }),
   url: PropTypes.string.isRequired,
+  iconSize: PropTypes.number.isRequired,
 }
 
-SocialShare.defaultProps = {}
+SocialShare.defaultProps = {
+  iconSize: 32,
+}
 
 export default withStyles(styles)(SocialShare)

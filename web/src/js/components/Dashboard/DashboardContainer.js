@@ -10,6 +10,7 @@ export default createFragmentContainer(Dashboard, {
         isLive
       }
       ...UserMenuContainer_app
+      ...MillionRaisedCampaignContainer_app
     }
   `,
   user: graphql`
@@ -29,6 +30,7 @@ export default createFragmentContainer(Dashboard, {
       ...LogAccountCreationContainer_user
       ...NewUserTourContainer_user
       ...AssignExperimentGroupsContainer_user
+      ...MillionRaisedCampaignContainer_user
     }
   `,
 })
