@@ -290,8 +290,8 @@ const getCampaignContent = ({
       <Typography variant="body2" gutterBottom>
         <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
         On social media, share which Tab for a Cause nonprofit partner or
-        spotlight campaign you're most thankful for with #TabForAMillion
-        #ThankfulThursday
+        spotlight campaign you're most thankful for with #TabForAMillion and
+        #ThankfulThursday.
       </Typography>
     </>
   )
