@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -201,6 +201,7 @@ const getCampaignContent = ({
   classes,
   currentDateString,
   moneyRaisedUSDString,
+  randomMillionaire,
 }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
@@ -489,7 +490,29 @@ const getCampaignContent = ({
       break
     }
     case DAY_2020_11_09: {
-      addendumContent = addendumContentMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a tech millionaire to have them match our $1M! We open tabs:
+            easy. They write a check: easy.
+          </Typography>
+          <Typography variant="body2" gutterBottom>
+            {randomMillionaire.name}:{' '}
+            {randomMillionaire.twitterHandles.map(handle => (
+              <>
+                <span key={handle}>@{handle}</span>{' '}
+              </>
+            ))}
+          </Typography>
+        </>
+      )
+
       themeColor = themeColorMonday
       mainContent = getDefaultMainContent({ themeColor })
       break
@@ -576,6 +599,11 @@ const MillionRaisedCampaign = ({
     moneyRaised: app.moneyRaised,
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
+
+  const [randomMillionaire] = useState(
+    millionairesTech[Math.floor(Math.random() * millionairesTech.length)]
+  )
+
   const {
     title,
     mainContent,
@@ -587,6 +615,7 @@ const MillionRaisedCampaign = ({
     classes,
     currentDateString,
     moneyRaisedUSDString,
+    randomMillionaire,
   })
   return (
     <div className={classes.root}>
