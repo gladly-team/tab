@@ -45,6 +45,7 @@ const SocialShare = props => {
           <FacebookShareButton
             {...FacebookShareButtonProps}
             url={url}
+            // TODO: remove
             hashtag={'tabsTransformed'}
           >
             <FacebookIcon size={iconSize} round />
@@ -56,6 +57,7 @@ const SocialShare = props => {
           <TwitterShareButton
             {...TwitterShareButtonProps}
             url={url}
+            // TODO: remove
             hashtags={['tabsTransformed']}
           >
             <TwitterIcon size={iconSize} round />
