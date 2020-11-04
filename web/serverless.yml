@@ -327,6 +327,8 @@ resources:
                 Cookies:
                   Forward: all
               ViewerProtocolPolicy: redirect-to-https
+            # FIXME: now that _next is hosted on the /newtab/ subpath,
+            # move this above /newtab/* and change it to /newtab/_next*
             # Next.js app static files
             - PathPattern: '_next*'
               MinTTL: 0
