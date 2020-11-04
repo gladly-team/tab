@@ -132,6 +132,69 @@ const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
 const DAY_2020_11_18 = '2020-11-18'
 
+const millionairesTech = [
+  {
+    name: 'Bill & Melinda Gates',
+    twitterHandles: ['BillGates', 'melindagates', 'gatesfoundation'],
+  },
+  {
+    name: 'Jeff Bezos',
+    twitterHandles: ['JeffBezos'],
+  },
+  {
+    name: 'Elon Musk',
+    twitterHandles: ['elonmusk'],
+  },
+  {
+    name: 'Sheryl Sandberg',
+    twitterHandles: ['sherylsandberg'],
+  },
+  {
+    name: 'Laurene Powell Jobs',
+    twitterHandles: ['laurenepowell'],
+  },
+  {
+    name: 'Michael Dell',
+    twitterHandles: ['MichaelDell'],
+  },
+  {
+    name: 'Larry Ellison',
+    twitterHandles: ['larryellison'],
+  },
+  {
+    name: 'Dustin Moskovitz',
+    twitterHandles: ['moskov'],
+  },
+  {
+    name: 'Eric Schmidt',
+    twitterHandles: ['ericschmidt'],
+  },
+  {
+    name: 'Evan Spiegel',
+    twitterHandles: ['evanspiegel'],
+  },
+  {
+    name: 'Pierre Omidyar',
+    twitterHandles: ['pierre'],
+  },
+  {
+    name: 'Nathan Blecharczyk',
+    twitterHandles: ['nathanblec'],
+  },
+  {
+    name: 'Brian Chesky',
+    twitterHandles: ['bchesky'],
+  },
+  {
+    name: 'Travis Kalanick',
+    twitterHandles: ['travisk'],
+  },
+  {
+    name: 'Alexis Ohanian Sr',
+    twitterHandles: ['alexisohanian'],
+  },
+]
+
 const getCampaignContent = ({
   app,
   user,
