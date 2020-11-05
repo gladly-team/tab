@@ -42,24 +42,14 @@ const SocialShare = props => {
     <div className={classes.root}>
       {FacebookShareButtonProps ? (
         <div className={classes.button}>
-          <FacebookShareButton
-            {...FacebookShareButtonProps}
-            url={url}
-            // TODO: remove
-            hashtag={'tabsTransformed'}
-          >
+          <FacebookShareButton {...FacebookShareButtonProps} url={url}>
             <FacebookIcon size={iconSize} round />
           </FacebookShareButton>
         </div>
       ) : null}
       {TwitterShareButtonProps ? (
         <div className={classes.button}>
-          <TwitterShareButton
-            {...TwitterShareButtonProps}
-            url={url}
-            // TODO: remove
-            hashtags={['tabsTransformed']}
-          >
+          <TwitterShareButton {...TwitterShareButtonProps} url={url}>
             <TwitterIcon size={iconSize} round />
           </TwitterShareButton>
         </div>

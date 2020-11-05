@@ -8,6 +8,7 @@ import grey from '@material-ui/core/colors/grey'
 import amber from '@material-ui/core/colors/amber'
 import green from '@material-ui/core/colors/green'
 import orange from '@material-ui/core/colors/orange'
+import { TwitterShareButton } from 'react-share'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
@@ -490,6 +491,7 @@ const getCampaignContent = ({
       break
     }
     case DAY_2020_11_09: {
+      themeColor = themeColorMonday
       addendumContent = (
         <>
           <div className={classes.hashtag}>
@@ -502,18 +504,43 @@ const getCampaignContent = ({
             Hit up a tech millionaire to have them match our $1M! We open tabs:
             easy. They write a check: easy.
           </Typography>
-          <Typography variant="body2" gutterBottom>
-            {randomMillionaire.name}:{' '}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 4,
+            }}
+          >
+            <Typography variant="body2">{randomMillionaire.name}: </Typography>
             {randomMillionaire.twitterHandles.map(handle => (
               <>
-                <span key={handle}>@{handle}</span>{' '}
+                <TwitterShareButton
+                  key={handle}
+                  // TODO: new URL
+                  url={millionRaisedURL}
+                  // TODO: correct tweet copy
+                  title={`.@${handle}, match our $1M raised for some incredible nonprofits! #TabForAMillion @TabForACause`}
+                >
+                  <div
+                    key={handle}
+                    style={{
+                      background: themeColor,
+                      padding: '1px 8px',
+                      borderRadius: 2,
+                      margin: '0px 8px',
+                    }}
+                  >
+                    <Typography variant="body2" style={{ color: 'white' }}>
+                      @{handle}
+                    </Typography>
+                  </div>
+                </TwitterShareButton>
               </>
             ))}
-          </Typography>
+          </div>
         </>
       )
-
-      themeColor = themeColorMonday
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
