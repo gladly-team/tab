@@ -509,35 +509,49 @@ const getCampaignContent = ({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              margin: 4,
+              margin: 2,
             }}
           >
-            <Typography variant="body2">{randomMillionaire.name}: </Typography>
-            {randomMillionaire.twitterHandles.map(handle => (
-              <>
-                <TwitterShareButton
-                  key={handle}
-                  // TODO: new URL
-                  url={millionRaisedURL}
-                  // TODO: correct tweet copy
-                  title={`.@${handle}, match our $1M raised for some incredible nonprofits! #TabForAMillion @TabForACause`}
-                >
-                  <div
+            <Typography
+              variant="body2"
+              align="right"
+              style={{ margin: 4, flexBasis: 160, flexShrink: 1 }}
+            >
+              {randomMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexBasis: 160,
+              }}
+            >
+              {randomMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
                     key={handle}
-                    style={{
-                      background: themeColor,
-                      padding: '1px 8px',
-                      borderRadius: 2,
-                      margin: '0px 8px',
-                    }}
+                    // TODO: new URL
+                    url={millionRaisedURL}
+                    // TODO: correct tweet copy
+                    title={`.@${handle}, match our $1M raised for some incredible nonprofits! #TabForAMillion @TabForACause`}
                   >
-                    <Typography variant="body2" style={{ color: 'white' }}>
-                      @{handle}
-                    </Typography>
-                  </div>
-                </TwitterShareButton>
-              </>
-            ))}
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
           </div>
         </>
       )
