@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
+  millionRaisedMatchURL,
   millionRaisedRainforestImpactURL,
   // millionRaisedWaterImpactURL,
   // millionRaisedHungerImpactURL,
@@ -133,6 +134,10 @@ const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
 const DAY_2020_11_18 = '2020-11-18'
 
+// TODO: more
+
+const DAY_2020_11_23 = '2020-11-23' // Monday
+
 const millionairesTech = [
   {
     name: 'Bill & Melinda Gates',
@@ -218,7 +223,7 @@ const millionairesPopCulture = [
   { name: 'Stephen Curry', twitterHandles: ['StephenCurry30'] },
   { name: 'Dr. Dre', twitterHandles: ['drdre'] },
   { name: 'Cristiano Ronaldo', twitterHandles: ['Cristiano'] },
-  { name: 'Rhianna', twitterHandles: ['rihanna'] },
+  { name: 'Rihanna', twitterHandles: ['rihanna'] },
   {
     name: 'Jonas Brothers',
     twitterHandles: ['kevinjonas', 'joejonas', 'nickjonas'],
@@ -277,6 +282,8 @@ const getCampaignContent = ({
   currentDateString,
   moneyRaisedUSDString,
   randomTechMillionaire,
+  randomPopMillionaire,
+  randomCompanyMillionaire,
 }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
@@ -599,10 +606,8 @@ const getCampaignContent = ({
                 <>
                   <TwitterShareButton
                     key={handle}
-                    // TODO: new URL
-                    url={millionRaisedURL}
-                    // TODO: correct tweet copy
-                    title={`.@${handle}, match our $1M raised for some incredible nonprofits! #TabForAMillion @TabForACause`}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
                   >
                     <div
                       key={handle}
@@ -664,8 +669,63 @@ const getCampaignContent = ({
       break
     }
     case DAY_2020_11_16: {
-      addendumContent = addendumContentMonday
       themeColor = themeColorMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a pop culture millionaire to have them match our $1M! We open
+            tabs: easy. They write a check: easy.
+          </Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 2,
+            }}
+          >
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomPopMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {randomPopMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
+                    key={handle}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
+                  >
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
+          </div>
+        </>
+      )
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
@@ -682,6 +742,67 @@ const getCampaignContent = ({
       break
     }
     // TODO: handle dates past 11/18/2020
+    case DAY_2020_11_23: {
+      themeColor = themeColorMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a multi-million-dollar company to have them match our $1M! We
+            open tabs: easy. They write a check: easy.
+          </Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 2,
+            }}
+          >
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomCompanyMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {randomCompanyMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
+                    key={handle}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
+                  >
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
+          </div>
+        </>
+      )
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
     default: {
       title = defaultTitle
       themeColor = defaultThemeColor
