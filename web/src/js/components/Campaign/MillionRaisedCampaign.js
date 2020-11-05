@@ -132,11 +132,17 @@ const DAY_2020_11_14 = '2020-11-14'
 const DAY_2020_11_15 = '2020-11-15'
 const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
-const DAY_2020_11_18 = '2020-11-18'
-
-// TODO: more
-
+const DAY_2020_11_18 = '2020-11-18' // Wednesday
+const DAY_2020_11_19 = '2020-11-19'
+const DAY_2020_11_20 = '2020-11-20' // Friday
+const DAY_2020_11_21 = '2020-11-21'
+const DAY_2020_11_22 = '2020-11-22'
 const DAY_2020_11_23 = '2020-11-23' // Monday
+const DAY_2020_11_24 = '2020-11-24'
+const DAY_2020_11_25 = '2020-11-25' // Wednesday
+const DAY_2020_11_26 = '2020-11-26'
+const DAY_2020_11_27 = '2020-11-27' // Friday
+const DAY_2020_11_28 = '2020-11-28'
 
 const millionairesTech = [
   {
@@ -741,7 +747,30 @@ const getCampaignContent = ({
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
-    // TODO: handle dates past 11/18/2020
+    case DAY_2020_11_19: {
+      addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_20: {
+      addendumContent = addendumContentFriday
+      themeColor = themeColorFriday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_21: {
+      addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_22: {
+      addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
     case DAY_2020_11_23: {
       themeColor = themeColorMonday
       addendumContent = (
@@ -800,6 +829,24 @@ const getCampaignContent = ({
           </div>
         </>
       )
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_24: {
+      addendumContent = addendumContentTuesday
+      themeColor = themeColorTuesday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_25: {
+      addendumContent = addendumContentWednesday
+      themeColor = themeColorWednesday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_26: {
+      addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
