@@ -196,13 +196,87 @@ const millionairesTech = [
   },
 ]
 
+const millionairesPopCulture = [
+  {
+    name: 'Kardashian/Jenner Family',
+    twitterHandles: [
+      'KrisJenner',
+      'KimKardashian',
+      'khloekardashian',
+      'kourtneykardash',
+      'KendallJenner',
+      'KylieJenner',
+    ],
+  },
+  { name: 'Beyonce & Jay Z', twitterHandles: ['Beyonce', 'S_C_'] },
+  { name: 'BTS', twitterHandles: ['bts_bighit'] },
+  { name: 'Oprah Winfrey', twitterHandles: ['Oprah'] },
+  { name: 'Ellen', twitterHandles: ['TheEllenShow'] },
+  { name: 'Madonna', twitterHandles: ['Madonna'] },
+  { name: 'Jerry Seinfeld', twitterHandles: ['JerrySeinfeld'] },
+  { name: 'Lebron James', twitterHandles: ['Kingjames'] },
+  { name: 'Stephen Curry', twitterHandles: ['StephenCurry30'] },
+  { name: 'Dr. Dre', twitterHandles: ['drdre'] },
+  { name: 'Cristiano Ronaldo', twitterHandles: ['Cristiano'] },
+  { name: 'Rhianna', twitterHandles: ['rihanna'] },
+  {
+    name: 'Jonas Brothers',
+    twitterHandles: ['kevinjonas', 'joejonas', 'nickjonas'],
+  },
+  { name: 'Justin Bieber', twitterHandles: ['JustinBieber'] },
+  { name: 'Taylor Swift', twitterHandles: ['taylorswift13'] },
+  { name: 'Kevin Durant', twitterHandles: ['KDTrey5'] },
+  { name: 'Ryan Seacrest', twitterHandles: ['RyanSeacrest'] },
+  { name: 'Ariana Grande', twitterHandles: ['ArianaGrande'] },
+  {
+    name: 'John Legend & Chrissy Tegen',
+    twitterHandles: ['johnlegend', 'chrissyteigan'],
+  },
+  { name: 'Nicki Minaj', twitterHandles: ['nickiminaj'] },
+]
+
+const millionairesCompanies = [
+  {
+    name: 'Twitter',
+    twitterHandles: ['Twitter'],
+  },
+  {
+    name: 'Airbnb',
+    twitterHandles: ['Airbnb'],
+  },
+  {
+    name: 'Snapchat',
+    twitterHandles: ['Snapchat'],
+  },
+  {
+    name: 'Instagram',
+    twitterHandles: ['Instagram'],
+  },
+  {
+    name: 'Uber & Lyft',
+    twitterHandles: ['Uber', 'Lyft'],
+  },
+  {
+    name: 'Google',
+    twitterHandles: ['Google'],
+  },
+  {
+    name: 'Microsoft',
+    twitterHandles: ['Microsoft'],
+  },
+  {
+    name: 'Facebook',
+    twitterHandles: ['Facebook'],
+  },
+]
+
 const getCampaignContent = ({
   app,
   user,
   classes,
   currentDateString,
   moneyRaisedUSDString,
-  randomMillionaire,
+  randomTechMillionaire,
 }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
@@ -512,21 +586,16 @@ const getCampaignContent = ({
               margin: 2,
             }}
           >
-            <Typography
-              variant="body2"
-              align="right"
-              style={{ margin: 4, flexBasis: 160, flexShrink: 1 }}
-            >
-              {randomMillionaire.name}:{' '}
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomTechMillionaire.name}:{' '}
             </Typography>
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                flexBasis: 160,
               }}
             >
-              {randomMillionaire.twitterHandles.map(handle => (
+              {randomTechMillionaire.twitterHandles.map(handle => (
                 <>
                   <TwitterShareButton
                     key={handle}
@@ -641,8 +710,18 @@ const MillionRaisedCampaign = ({
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
 
-  const [randomMillionaire] = useState(
+  const [randomTechMillionaire] = useState(
     millionairesTech[Math.floor(Math.random() * millionairesTech.length)]
+  )
+  const [randomPopMillionaire] = useState(
+    millionairesPopCulture[
+      Math.floor(Math.random() * millionairesPopCulture.length)
+    ]
+  )
+  const [randomCompanyMillionaire] = useState(
+    millionairesCompanies[
+      Math.floor(Math.random() * millionairesCompanies.length)
+    ]
   )
 
   const {
@@ -656,7 +735,9 @@ const MillionRaisedCampaign = ({
     classes,
     currentDateString,
     moneyRaisedUSDString,
-    randomMillionaire,
+    randomTechMillionaire,
+    randomPopMillionaire,
+    randomCompanyMillionaire,
   })
   return (
     <div className={classes.root}>
