@@ -141,8 +141,6 @@ const DAY_2020_11_23 = '2020-11-23' // Monday
 const DAY_2020_11_24 = '2020-11-24'
 const DAY_2020_11_25 = '2020-11-25' // Wednesday
 const DAY_2020_11_26 = '2020-11-26'
-const DAY_2020_11_27 = '2020-11-27' // Friday
-const DAY_2020_11_28 = '2020-11-28'
 
 const millionairesTech = [
   {
