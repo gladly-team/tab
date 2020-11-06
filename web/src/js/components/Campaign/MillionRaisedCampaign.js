@@ -29,6 +29,11 @@ import {
 import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import TreeIcon from 'mdi-material-ui/PineTree'
+import SchoolIcon from '@material-ui/icons/School'
+import BookIcon from '@material-ui/icons/LocalLibrary'
+import WaterIcon from '@material-ui/icons/LocalDrink'
+import HospitalIcon from '@material-ui/icons/LocalHospital'
+import ATMIcon from '@material-ui/icons/LocalAtm'
 import SocialShare from 'js/components/General/SocialShareComponent'
 
 const primaryMainColor = '#9d4ba3'
@@ -110,6 +115,9 @@ const styles = theme => ({
   },
   impactStatIcon: {
     flex: 1,
+    width: 30,
+    height: 30,
+    marginBottom: 5,
   },
   impactStatText: {
     flex: 6,
@@ -900,7 +908,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <WaterIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
@@ -943,7 +951,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <HospitalIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
@@ -985,7 +993,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <ATMIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
@@ -1028,7 +1036,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <SchoolIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
@@ -1070,7 +1078,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <HospitalIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
@@ -1113,7 +1121,7 @@ const MillionRaisedCampaign = ({
     </>,
     <>
       <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
+        <BookIcon className={classes.impactStatIcon} />
         <Typography
           variant="body2"
           className={classes.impactStatText}
