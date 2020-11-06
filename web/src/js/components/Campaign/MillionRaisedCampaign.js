@@ -303,37 +303,63 @@ const getCampaignContent = ({
   classes,
   currentDateString,
   moneyRaisedUSDString,
+  moneyRaised,
   randomTechMillionaire,
   randomPopMillionaire,
   randomCompanyMillionaire,
   randomImpactContent,
 }) => {
+  const isOver1M = moneyRaised > 1e6
   const defaultTitle = (
-    <Typography variant="h6">A tab you'll want to keep open:</Typography>
+    <Typography variant="h6">
+      {isOver1M
+        ? "Together, we've raised over"
+        : "A tab you'll want to keep open:"}
+    </Typography>
   )
   const getDefaultMainContent = ({ themeColor }) => (
     <div>
       <Typography variant="h2" align={'center'} gutterBottom>
         <span className={classes.moneyRaised} style={{ color: themeColor }}>
-          {moneyRaisedUSDString}
+          {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
         </span>
       </Typography>
-      <Typography variant="body2" align="center">
-        We're about to reach $1M raised for charity!
-      </Typography>
-      <Typography variant="body2" align="center" gutterBottom>
-        Thank you – it's incredible{' '}
-        <Link
-          to={millionRaisedURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColor }}
-        >
-          what we've accomplished together
-        </Link>
-        .
-      </Typography>
+      {isOver1M ? (
+        <>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="body2" align="center">
+            We're about to reach $1M raised for charity!
+          </Typography>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      )}
     </div>
   )
   const getDefaultAddendumContent = ({ themeColor }) => (
@@ -853,7 +879,7 @@ const MillionRaisedCampaign = ({
   currentDateString,
   onDismiss,
 }) => {
-  const { moneyRaisedUSDString } = useMoneyRaised({
+  const { moneyRaisedUSDString, moneyRaised } = useMoneyRaised({
     moneyRaised: app.moneyRaised,
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
@@ -1224,6 +1250,7 @@ const MillionRaisedCampaign = ({
     classes,
     currentDateString,
     moneyRaisedUSDString,
+    moneyRaised,
     randomTechMillionaire,
     randomPopMillionaire,
     randomCompanyMillionaire,
