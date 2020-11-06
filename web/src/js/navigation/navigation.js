@@ -175,6 +175,7 @@ export const millionRaisedGiveImpactURL = absoluteUrl('/million/give/')
 export const millionRaisedReadImpactURL = absoluteUrl('/million/read/')
 export const millionRaisedChildrenImpactURL = absoluteUrl('/million/children/')
 export const millionRaisedEducateImpactURL = absoluteUrl('/million/educate/')
+export const millionRaisedMatchURL = absoluteUrl('/million/match/')
 
 // External links
 

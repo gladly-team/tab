@@ -1,4 +1,6 @@
 import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Link from 'js/components/General/Link'
 import Typography from '@material-ui/core/Typography'
 import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
@@ -7,8 +9,6 @@ import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
 import withUser from 'js/components/General/withUser'
 
-const DAY_2020_11_02 = '2020-11-02' // Monday
-const DAY_2020_11_03 = '2020-11-03'
 const DAY_2020_11_04 = '2020-11-04'
 const DAY_2020_11_05 = '2020-11-05'
 const DAY_2020_11_06 = '2020-11-06'
@@ -24,11 +24,19 @@ const DAY_2020_11_15 = '2020-11-15'
 const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
 const DAY_2020_11_18 = '2020-11-18'
+const DAY_2020_11_19 = '2020-11-19'
+const DAY_2020_11_20 = '2020-11-20'
+const DAY_2020_11_21 = '2020-11-21'
+const DAY_2020_11_22 = '2020-11-22'
+const DAY_2020_11_23 = '2020-11-23'
+const DAY_2020_11_24 = '2020-11-24'
+const DAY_2020_11_25 = '2020-11-25'
+const DAY_2020_11_26 = '2020-11-26'
+const DAY_2020_11_27 = '2020-11-27'
+const DAY_2020_11_28 = '2020-11-28'
 
 const getCampaignDates = () => {
   return [
-    DAY_2020_11_02,
-    DAY_2020_11_03,
     DAY_2020_11_04,
     DAY_2020_11_05,
     DAY_2020_11_06,
@@ -44,6 +52,16 @@ const getCampaignDates = () => {
     DAY_2020_11_16,
     DAY_2020_11_17,
     DAY_2020_11_18,
+    DAY_2020_11_19,
+    DAY_2020_11_20,
+    DAY_2020_11_21,
+    DAY_2020_11_22,
+    DAY_2020_11_23,
+    DAY_2020_11_24,
+    DAY_2020_11_25,
+    DAY_2020_11_26,
+    DAY_2020_11_27,
+    DAY_2020_11_28,
   ]
 }
 
@@ -82,37 +100,44 @@ const DemosView = ({ authUser }) => {
         if (error) {
           logger.error(error)
         }
-        if (!props) {
-          return null
-        }
-        const { app, user } = props
-        if (!app || !user) {
-          return null
-        }
-
+        const { app, user } = props || {}
         return (
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-            }}
-          >
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ padding: 20 }}>
+              <Typography variant="h6">Million raised campaign</Typography>
               {campaignDates.map(date => {
                 return (
-                  <div style={{ margin: 16 }} key={date}>
-                    <Typography variant="body2">{date}</Typography>
-                    <CampaignContainer>
-                      <MillionRaisedCampaign
-                        app={app}
-                        user={user}
-                        currentDateString={date}
-                        onDismiss={campaignOnDismiss}
-                      />
-                    </CampaignContainer>
+                  <div key={date}>
+                    <Link to={`/newtab/demos/million/${date}/`}>{date}</Link>
                   </div>
                 )
               })}
+              <Switch>
+                {campaignDates.map(date => {
+                  return (
+                    <Route
+                      exact
+                      key={date}
+                      path={`/newtab/demos/million/${date}/`}
+                      render={() => {
+                        if (!app || !user) {
+                          return null
+                        }
+                        return (
+                          <CampaignContainer>
+                            <MillionRaisedCampaign
+                              app={app}
+                              user={user}
+                              currentDateString={date}
+                              onDismiss={campaignOnDismiss}
+                            />
+                          </CampaignContainer>
+                        )
+                      }}
+                    />
+                  )
+                })}
+              </Switch>
             </div>
           </div>
         )
