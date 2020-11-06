@@ -16,12 +16,12 @@ import {
   millionRaisedURL,
   millionRaisedMatchURL,
   millionRaisedRainforestImpactURL,
-  // millionRaisedWaterImpactURL,
-  // millionRaisedHungerImpactURL,
-  // millionRaisedGiveImpactURL,
-  // millionRaisedReadImpactURL,
-  // millionRaisedChildrenImpactURL,
-  // millionRaisedEducateImpactURL,
+  millionRaisedWaterImpactURL,
+  millionRaisedHungerImpactURL,
+  millionRaisedGiveImpactURL,
+  millionRaisedReadImpactURL,
+  millionRaisedChildrenImpactURL,
+  millionRaisedEducateImpactURL,
   facebookPageURL,
   instagramPageURL,
   twitterPageURL,
@@ -854,12 +854,15 @@ const MillionRaisedCampaign = ({
     ]
   )
 
-  // TODO: add more
   const impactContents = [
     <>
       <div className={classes.impactStatContainer}>
         <TreeIcon className={classes.impactStatIcon} />
-        <Typography variant="body2" className={classes.impactStatText}>
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
           Tabbers have raised enough to
           <span style={{ fontWeight: 'bold' }}>
             {' '}
@@ -869,6 +872,7 @@ const MillionRaisedCampaign = ({
       </div>
       <SocialShare
         url={millionRaisedRainforestImpactURL}
+        iconSize={24}
         FacebookShareButtonProps={
           {
             // Disabling the quote so Facebook shares the large version
@@ -890,6 +894,262 @@ const MillionRaisedCampaign = ({
         TwitterShareButtonProps={{
           title:
             'I helped protect over 5,000 acres of rainforest just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            provide access to clean water to over 12,000 people!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedWaterImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped provide access to clean water for over 12,000 people just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title:
+            'Access to clean water for over 12,000 people just by opening browser tabs',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped provide access to clean water for over 12,000 people just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped provide access to clean water for over 12,000 people just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            provide life-saving malnutrition treatment to over 1,500 children!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedHungerImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped provide food to over 1,500 children just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title: '1,500 children fed just by opening browser tabs',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped provide food to over 1,500 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped provide food to over 1,500 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            fund over $41,000 in direct cash transfers!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedGiveImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped transfer over $41,000 to those in need just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title:
+            '$41,000 in direct cash transfer to those in need just by opening browser tabs',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped transfer over $41,000 to those in need just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped transfer over $41,000 to those in need just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            keep over 200 girls in school!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedReadImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped keep over 200 girls in school just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title: 'Browser tabs transformed into education for over 200 girls',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped keep over 200 girls in school just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause.',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped keep over 200 girls in school just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            give over 6,000 children a month of emergency nutrition!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedChildrenImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped provide emergency nutrition to over 6,000 children just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title:
+            '6,000 children provided emergency nutrition just by opening browser tabs',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped  provide emergency nutrition to over 6,000 children just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped provide emergency nutrition to over 6,000 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            give learning materials to over 3,500 students!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedEducateImpactURL}
+        iconSize={24}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped provide learning materials to over 3,500 students just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title:
+            'Browser tabs transformed into learning materials for over 3,500 students',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped provide learning materials to over 3,500 students just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped provide learning materials to over 3,500 students just by opening tabs with @TabForACause. Join me! #TabForAMillion',
           related: ['@TabForACause'],
         }}
       />
