@@ -288,6 +288,7 @@ const getCampaignContent = ({
   randomTechMillionaire,
   randomPopMillionaire,
   randomCompanyMillionaire,
+  randomImpactContent,
 }) => {
   const defaultTitle = (
     <Typography variant="h6">A tab you'll want to keep open:</Typography>
@@ -489,44 +490,7 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
-  const addendumContentWeekend = (
-    <>
-      <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
-        <Typography variant="body2" className={classes.impactStatText}>
-          Tabbers have raised enough to
-          <span style={{ fontWeight: 'bold' }}>
-            {' '}
-            protect over 5,000 acres of rainforest!
-          </span>
-        </Typography>
-      </div>
-      <SocialShare
-        /* FIXME: actual copy needed */
-        url={millionRaisedRainforestImpactURL}
-        iconSize={24}
-        FacebookShareButtonProps={{
-          quote:
-            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-        }}
-        RedditShareButtonProps={{
-          title:
-            'Tabs transformed into vital supplies for 100 families in rainforest communities',
-        }}
-        TumblrShareButtonProps={{
-          title:
-            'Tabs transformed into vital supplies for 100 families in rainforest communities',
-          caption:
-            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-        }}
-        TwitterShareButtonProps={{
-          title:
-            'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
-          related: ['@TabForACause'],
-        }}
-      />
-    </>
-  )
+  const addendumContentWeekend = randomImpactContent
 
   let title = defaultTitle
   let themeColor = defaultThemeColor
@@ -890,6 +854,52 @@ const MillionRaisedCampaign = ({
     ]
   )
 
+  // TODO: add more
+  const impactContents = [
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography variant="body2" className={classes.impactStatText}>
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            protect over 5,000 acres of rainforest!
+          </span>
+        </Typography>
+      </div>
+      <SocialShare
+        url={millionRaisedRainforestImpactURL}
+        FacebookShareButtonProps={
+          {
+            // Disabling the quote so Facebook shares the large version
+            // of the image, but leaving this prop so that SocialShare
+            // will still show the Facebook button.
+            // quote:
+            //   'I helped protect over 5,000 acres of rainforest just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+          }
+        }
+        RedditShareButtonProps={{
+          title:
+            '5,000 acres of rainforest protected just by opening browser tabs',
+        }}
+        TumblrShareButtonProps={{
+          title: 'A simple and free way to make the world a better place',
+          caption:
+            'I helped protect 5,000 acres of rainforest just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+        }}
+        TwitterShareButtonProps={{
+          title:
+            'I helped protect over 5,000 acres of rainforest just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          related: ['@TabForACause'],
+        }}
+      />
+    </>,
+  ]
+
+  const [randomImpactContent] = useState(
+    impactContents[Math.floor(Math.random() * impactContents.length)]
+  )
+
   const {
     title,
     mainContent,
@@ -904,6 +914,7 @@ const MillionRaisedCampaign = ({
     randomTechMillionaire,
     randomPopMillionaire,
     randomCompanyMillionaire,
+    randomImpactContent,
   })
   return (
     <div className={classes.root}>
