@@ -102,13 +102,8 @@ const DemosView = ({ authUser }) => {
         }
         const { app, user } = props || {}
         return (
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-            }}
-          >
-            <div style={{ margin: 20 }}>
+          <div>
+            <div style={{ padding: 20 }}>
               <Typography variant="h6">Million raised campaign</Typography>
               {campaignDates.map(date => {
                 return (
