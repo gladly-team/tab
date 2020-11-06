@@ -8,6 +8,7 @@ import logger from 'js/utils/logger'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
 import withUser from 'js/components/General/withUser'
+import Fireworks from 'js/components/General/Fireworks'
 
 const DAY_2020_11_04 = '2020-11-04'
 const DAY_2020_11_05 = '2020-11-05'
@@ -115,6 +116,7 @@ const DemosView = ({ authUser }) => {
         }
         return (
           <div>
+            <Fireworks options={{ maxRockets: 5, explosionChance: 0.06 }} />
             <div style={{ padding: 20 }}>
               <Typography variant="h6">Million raised campaign</Typography>
               <div style={{ display: 'flex' }}>

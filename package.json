@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Tab for a Cause.",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "fireworks-canvas": "^2.5.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",

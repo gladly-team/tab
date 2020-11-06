@@ -2515,6 +2515,11 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
+fireworks-canvas@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/fireworks-canvas/-/fireworks-canvas-2.5.0.tgz#57b9efa4e05e3feb799b6ab14f9298ab77dec6d9"
+  integrity sha512-hOSpXLcdIJbEsGSo6m1lK6g6yjUdx/kDQWwuVsoR/XJ0mYwsBrsw7GYrWhu8U6D95vh/gwvJwIM1JuePmk8d6g==
+
 flat-cache@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-2.0.1.tgz#5d296d6f04bda44a4630a301413bdbc2ec085ec0"
