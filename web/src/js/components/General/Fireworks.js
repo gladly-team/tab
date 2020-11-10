@@ -1,13 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 import * as FireworksCanvas from 'fireworks-canvas'
 import { withStyles } from '@material-ui/core/styles'
-import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
 const styles = {
   container: {
-    position: 'absolute',
+    position: 'fixed',
     zIndex: 5000,
     top: 0,
     right: 0,
@@ -28,30 +28,39 @@ const styles = {
   },
 }
 
-const Fireworks = ({ classes, children, options }) => {
-  const [active, setActive] = useState(true)
+const Fireworks = ({ classes, children, onClose, options }) => {
   const containerEl = useRef(null)
-  if (containerEl.current) {
+  useEffect(() => {
     const fireworks = new FireworksCanvas(containerEl.current, options)
-    fireworks.start()
-  }
+    const stopFireworks = fireworks.start()
+    return stopFireworks
+  }, [containerEl, options])
   return (
-    <FadeInDashboardAnimation>
-      {active ? (
-        <div ref={containerEl} className={classes.container}>
-          <IconButton
-            className={classes.closeIconButton}
-            onClick={() => {
-              setActive(false)
-            }}
-          >
-            <CloseIcon className={classes.closeIcon} />
-          </IconButton>
-          {children}
-        </div>
-      ) : null}
-    </FadeInDashboardAnimation>
+    <div ref={containerEl} className={classes.container}>
+      <IconButton
+        className={classes.closeIconButton}
+        onClick={() => {
+          onClose()
+        }}
+      >
+        <CloseIcon className={classes.closeIcon} />
+      </IconButton>
+      {children}
+    </div>
   )
+}
+
+Fireworks.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  onClose: PropTypes.func.isRequired,
+  options: PropTypes.object,
+}
+
+Fireworks.defaultProps = {
+  onClose: () => {},
 }
 
 export default withStyles(styles)(Fireworks)

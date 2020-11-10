@@ -72,6 +72,7 @@ const CampaignContainer = ({ children }) => {
 
 const DemosView = ({ authUser }) => {
   const [mock1MReached, setMock1MReached] = useState(false)
+  const [fireworksShown, setFireworksShown] = useState(false)
 
   // This is an internal page for our team only.
   const shouldShowPage = process.env.REACT_APP_SHOW_DEMOS_PAGE === 'true'
@@ -116,7 +117,14 @@ const DemosView = ({ authUser }) => {
         }
         return (
           <div>
-            <Fireworks options={{ maxRockets: 5, explosionChance: 0.06 }} />
+            {fireworksShown ? (
+              <Fireworks
+                options={{ maxRockets: 5, explosionChance: 0.06 }}
+                onClose={() => {
+                  setFireworksShown(false)
+                }}
+              />
+            ) : null}
             <div style={{ padding: 20 }}>
               <Typography variant="h6">Million raised campaign</Typography>
               <div style={{ display: 'flex' }}>
@@ -160,6 +168,9 @@ const DemosView = ({ authUser }) => {
                               {...mockMillionRaisedProps}
                               currentDateString={date}
                               onDismiss={campaignOnDismiss}
+                              onShowFireworks={() => {
+                                setFireworksShown(true)
+                              }}
                             />
                           </CampaignContainer>
                         )
