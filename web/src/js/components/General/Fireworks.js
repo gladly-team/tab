@@ -31,14 +31,17 @@ const styles = {
   },
   messageContainer: {
     position: 'absolute',
-    top: 20,
+    top: '15%',
     left: 20,
     right: 20,
     bottom: 20,
-    maxWidth: 800,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   messageText: {
     color: 'white',
+    maxWidth: 840,
   },
   shareContainer: {
     display: 'flex',
@@ -57,7 +60,12 @@ const FireworksMessage1MComponent = ({ classes }) => {
       <Typography variant="h2" className={classes.messageText} gutterBottom>
         Congratulations!
       </Typography>
-      <Typography variant="h5" className={classes.messageText} gutterBottom>
+      <Typography
+        variant="h5"
+        className={classes.messageText}
+        align="center"
+        gutterBottom
+      >
         $1M raised is incredible milestone, and we couldn't be more proud of the
         Tabbing community. From the bottoms of our hearts, thank you, and
         congrats!
@@ -66,6 +74,7 @@ const FireworksMessage1MComponent = ({ classes }) => {
         <Typography
           variant="h5"
           className={classes.shareMessageText}
+          align="center"
           gutterBottom
         >
           Share this achievement:
