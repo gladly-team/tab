@@ -58,8 +58,9 @@ const FireworksMessage1MComponent = ({ classes }) => {
         Congratulations!
       </Typography>
       <Typography variant="h5" className={classes.messageText} gutterBottom>
-        This is an incredible milestone, and we couldn't be more proud of the
-        Tabbing community. From the bottoms of our hearts, thank you.
+        $1M raised is incredible milestone, and we couldn't be more proud of the
+        Tabbing community. From the bottoms of our hearts, thank you, and
+        congrats!
       </Typography>
       <div className={classes.shareContainer}>
         <Typography
