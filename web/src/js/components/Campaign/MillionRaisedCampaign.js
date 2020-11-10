@@ -321,7 +321,19 @@ const getCampaignContent = ({
   )
   const getDefaultMainContent = ({ themeColor }) => (
     <div>
-      <Typography variant="h2" align={'center'} gutterBottom>
+      <Typography
+        variant="h2"
+        align={'center'}
+        gutterBottom
+        {...isOver1M && {
+          onClick: () => {
+            onShowFireworks()
+          },
+          style: {
+            cursor: 'pointer',
+          },
+        }}
+      >
         <span className={classes.moneyRaised} style={{ color: themeColor }}>
           {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
         </span>
