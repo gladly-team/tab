@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import grey from '@material-ui/core/colors/grey'
@@ -340,16 +341,16 @@ const getCampaignContent = ({
             </Link>
             .
           </Typography>
-          <Typography
-            variant="body2"
-            align="center"
-            gutterBottom
-            onClick={() => {
-              onShowFireworks()
-            }}
-          >
-            CELEBRATE
-          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              style={{ backgroundColor: themeColor, color: 'white' }}
+              onClick={() => {
+                onShowFireworks()
+              }}
+            >
+              Celebrate
+            </Button>
+          </div>
         </>
       ) : (
         <>
