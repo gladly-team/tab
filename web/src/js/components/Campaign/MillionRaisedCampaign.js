@@ -372,16 +372,6 @@ const getCampaignContent = ({
             </Link>
             .
           </Typography>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              style={{ backgroundColor: themeColor, color: 'white' }}
-              onClick={() => {
-                onShowFireworks()
-              }}
-            >
-              Celebrate
-            </Button>
-          </div>
         </>
       ) : (
         <>
