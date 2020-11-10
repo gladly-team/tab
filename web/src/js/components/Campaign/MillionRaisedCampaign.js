@@ -12,6 +12,7 @@ import orange from '@material-ui/core/colors/orange'
 import { TwitterShareButton } from 'react-share'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
+import Sparkle from 'react-sparkle'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
@@ -321,23 +322,41 @@ const getCampaignContent = ({
   )
   const getDefaultMainContent = ({ themeColor }) => (
     <div>
-      <Typography
-        variant="h2"
-        align={'center'}
-        gutterBottom
-        {...isOver1M && {
-          onClick: () => {
-            onShowFireworks()
-          },
-          style: {
-            cursor: 'pointer',
-          },
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: 21,
         }}
       >
-        <span className={classes.moneyRaised} style={{ color: themeColor }}>
-          {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
+        <span style={{ display: 'inline-block', position: 'relative' }}>
+          {isOver1M ? (
+            <Sparkle
+              color={themeColor}
+              count={28}
+              fadeOutSpeed={42}
+              overflowPx={24}
+              flicker={false}
+            />
+          ) : null}
+          <Typography
+            variant="h2"
+            align={'center'}
+            {...isOver1M && {
+              onClick: () => {
+                onShowFireworks()
+              },
+              style: {
+                cursor: 'pointer',
+              },
+            }}
+          >
+            <span className={classes.moneyRaised} style={{ color: themeColor }}>
+              {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
+            </span>
+          </Typography>
         </span>
-      </Typography>
+      </div>
       {isOver1M ? (
         <>
           <Typography variant="body2" align="center" gutterBottom>
