@@ -65,6 +65,7 @@ import {
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
+import Fireworks, { FireworksMessage1M } from 'js/components/General/Fireworks'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -148,6 +149,7 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
+      fireworksShown: false,
     }
   }
 
@@ -190,6 +192,12 @@ class Dashboard extends React.Component {
   clearError() {
     this.setState({
       errorOpen: false,
+    })
+  }
+
+  setFireworksShown(show) {
+    this.setState({
+      fireworksShown: show,
     })
   }
 
@@ -388,6 +396,18 @@ class Dashboard extends React.Component {
         data-test-id={'app-dashboard'}
         key={'dashboard-key'}
       >
+        <FadeInDashboardAnimation>
+          {this.state.fireworksShown ? (
+            <Fireworks
+              options={{ maxRockets: 5, explosionChance: 0.06 }}
+              onClose={() => {
+                this.setFireworksShown(false)
+              }}
+            >
+              <FireworksMessage1M />
+            </Fireworks>
+          ) : null}
+        </FadeInDashboardAnimation>
         <UserBackgroundImage
           user={user}
           showError={this.showError.bind(this)}
@@ -614,6 +634,9 @@ class Dashboard extends React.Component {
                     })
                   }}
                   showError={this.showError.bind(this)}
+                  onShowFireworks={() => {
+                    this.setFireworksShown(true)
+                  }}
                 />
               </div>
             </div>
