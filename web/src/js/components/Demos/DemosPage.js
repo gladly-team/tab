@@ -8,7 +8,7 @@ import logger from 'js/utils/logger'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
 import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
 import withUser from 'js/components/General/withUser'
-import Fireworks from 'js/components/General/Fireworks'
+import Fireworks, { FireworksMessage1M } from 'js/components/General/Fireworks'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 
 const DAY_2020_11_04 = '2020-11-04'
@@ -125,7 +125,9 @@ const DemosView = ({ authUser }) => {
                   onClose={() => {
                     setFireworksShown(false)
                   }}
-                />
+                >
+                  <FireworksMessage1M />
+                </Fireworks>
               ) : null}
             </FadeInDashboardAnimation>
             <div style={{ padding: 20 }}>
