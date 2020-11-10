@@ -308,6 +308,7 @@ const getCampaignContent = ({
   randomPopMillionaire,
   randomCompanyMillionaire,
   randomImpactContent,
+  onShowFireworks,
 }) => {
   const isOver1M = moneyRaised > 1e6
   const defaultTitle = (
@@ -338,6 +339,16 @@ const getCampaignContent = ({
               what we've accomplished together
             </Link>
             .
+          </Typography>
+          <Typography
+            variant="body2"
+            align="center"
+            gutterBottom
+            onClick={() => {
+              onShowFireworks()
+            }}
+          >
+            CELEBRATE
           </Typography>
         </>
       ) : (
@@ -878,6 +889,7 @@ const MillionRaisedCampaign = ({
   classes,
   currentDateString,
   onDismiss,
+  onShowFireworks,
 }) => {
   const { moneyRaisedUSDString, moneyRaised } = useMoneyRaised({
     moneyRaised: app.moneyRaised,
@@ -1255,6 +1267,7 @@ const MillionRaisedCampaign = ({
     randomPopMillionaire,
     randomCompanyMillionaire,
     randomImpactContent,
+    onShowFireworks,
   })
   return (
     <div className={classes.root}>
@@ -1291,9 +1304,11 @@ MillionRaisedCampaign.propTypes = {
   user: PropTypes.shape({}).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  onShowFireworks: PropTypes.func.isRequired,
 }
 MillionRaisedCampaign.defaultProps = {
   onDismiss: () => {},
+  onShowFireworks: () => {},
 }
 
 export default withStyles(styles, { withTheme: true })(MillionRaisedCampaign)
