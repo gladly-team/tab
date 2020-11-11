@@ -11,6 +11,7 @@ import orange from '@material-ui/core/colors/orange'
 import { TwitterShareButton } from 'react-share'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
+import Sparkle from 'react-sparkle'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
@@ -303,37 +304,94 @@ const getCampaignContent = ({
   classes,
   currentDateString,
   moneyRaisedUSDString,
+  moneyRaised,
   randomTechMillionaire,
   randomPopMillionaire,
   randomCompanyMillionaire,
   randomImpactContent,
+  onShowFireworks,
 }) => {
+  const isOver1M = moneyRaised > 1e6
   const defaultTitle = (
-    <Typography variant="h6">A tab you'll want to keep open:</Typography>
+    <Typography variant="h6">
+      {isOver1M
+        ? "Together, we've raised over"
+        : "A tab you'll want to keep open:"}
+    </Typography>
   )
   const getDefaultMainContent = ({ themeColor }) => (
     <div>
-      <Typography variant="h2" align={'center'} gutterBottom>
-        <span className={classes.moneyRaised} style={{ color: themeColor }}>
-          {moneyRaisedUSDString}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: 21,
+        }}
+      >
+        <span style={{ display: 'inline-block', position: 'relative' }}>
+          {isOver1M ? (
+            <Sparkle
+              color={themeColor}
+              count={28}
+              fadeOutSpeed={42}
+              overflowPx={24}
+              flicker={false}
+            />
+          ) : null}
+          <Typography
+            variant="h2"
+            align={'center'}
+            {...isOver1M && {
+              onClick: () => {
+                onShowFireworks()
+              },
+              style: {
+                cursor: 'pointer',
+              },
+            }}
+          >
+            <span className={classes.moneyRaised} style={{ color: themeColor }}>
+              {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
+            </span>
+          </Typography>
         </span>
-      </Typography>
-      <Typography variant="body2" align="center">
-        We're about to reach $1M raised for charity!
-      </Typography>
-      <Typography variant="body2" align="center" gutterBottom>
-        Thank you – it's incredible{' '}
-        <Link
-          to={millionRaisedURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColor }}
-        >
-          what we've accomplished together
-        </Link>
-        .
-      </Typography>
+      </div>
+      {isOver1M ? (
+        <>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="body2" align="center">
+            We're about to reach $1M raised for charity!
+          </Typography>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      )}
     </div>
   )
   const getDefaultAddendumContent = ({ themeColor }) => (
@@ -852,8 +910,9 @@ const MillionRaisedCampaign = ({
   classes,
   currentDateString,
   onDismiss,
+  onShowFireworks,
 }) => {
-  const { moneyRaisedUSDString } = useMoneyRaised({
+  const { moneyRaisedUSDString, moneyRaised } = useMoneyRaised({
     moneyRaised: app.moneyRaised,
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
@@ -1224,10 +1283,12 @@ const MillionRaisedCampaign = ({
     classes,
     currentDateString,
     moneyRaisedUSDString,
+    moneyRaised,
     randomTechMillionaire,
     randomPopMillionaire,
     randomCompanyMillionaire,
     randomImpactContent,
+    onShowFireworks,
   })
   return (
     <div className={classes.root}>
@@ -1264,9 +1325,11 @@ MillionRaisedCampaign.propTypes = {
   user: PropTypes.shape({}).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  onShowFireworks: PropTypes.func.isRequired,
 }
 MillionRaisedCampaign.defaultProps = {
   onDismiss: () => {},
+  onShowFireworks: () => {},
 }
 
 export default withStyles(styles, { withTheme: true })(MillionRaisedCampaign)

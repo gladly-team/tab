@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Link from 'js/components/General/Link'
 import Typography from '@material-ui/core/Typography'
@@ -6,8 +6,10 @@ import QueryRendererWithUser from 'js/components/General/QueryRendererWithUser'
 import graphql from 'babel-plugin-relay/macro'
 import logger from 'js/utils/logger'
 import { replaceUrl, dashboardURL } from 'js/navigation/navigation'
-import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
+import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaign'
 import withUser from 'js/components/General/withUser'
+import Fireworks, { FireworksMessage1M } from 'js/components/General/Fireworks'
+import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 
 const DAY_2020_11_04 = '2020-11-04'
 const DAY_2020_11_05 = '2020-11-05'
@@ -70,6 +72,9 @@ const CampaignContainer = ({ children }) => {
 }
 
 const DemosView = ({ authUser }) => {
+  const [mock1MReached, setMock1MReached] = useState(false)
+  const [fireworksShown, setFireworksShown] = useState(false)
+
   // This is an internal page for our team only.
   const shouldShowPage = process.env.REACT_APP_SHOW_DEMOS_PAGE === 'true'
   if (!shouldShowPage) {
@@ -78,7 +83,6 @@ const DemosView = ({ authUser }) => {
   }
 
   const campaignOnDismiss = () => {}
-
   const campaignDates = getCampaignDates()
 
   return (
@@ -101,17 +105,57 @@ const DemosView = ({ authUser }) => {
           logger.error(error)
         }
         const { app, user } = props || {}
+
+        const mockMillionRaisedProps = {
+          app: {
+            dollarsPerDayRate: 1141,
+            moneyRaised: mock1MReached ? 1000119.12 : 986356.18,
+          },
+          user: {
+            id: 'abc',
+            username: 'bob',
+          },
+        }
         return (
           <div>
+            <FadeInDashboardAnimation>
+              {fireworksShown ? (
+                <Fireworks
+                  options={{ maxRockets: 5, explosionChance: 0.06 }}
+                  onClose={() => {
+                    setFireworksShown(false)
+                  }}
+                >
+                  <FireworksMessage1M />
+                </Fireworks>
+              ) : null}
+            </FadeInDashboardAnimation>
             <div style={{ padding: 20 }}>
               <Typography variant="h6">Million raised campaign</Typography>
-              {campaignDates.map(date => {
-                return (
-                  <div key={date}>
-                    <Link to={`/newtab/demos/million/${date}/`}>{date}</Link>
-                  </div>
-                )
-              })}
+              <div style={{ display: 'flex' }}>
+                <div>
+                  {campaignDates.map(date => {
+                    return (
+                      <div key={date}>
+                        <Link to={`/newtab/demos/million/${date}/`}>
+                          {date}
+                        </Link>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div
+                  style={{ margin: 20, cursor: 'pointer' }}
+                  onClick={() => {
+                    setMock1MReached(!mock1MReached)
+                  }}
+                >
+                  <Typography variant="body1">Set >$1M</Typography>
+                  <Typography variant="body1">
+                    {mock1MReached ? 'Enabled' : 'Disabled'}
+                  </Typography>
+                </div>
+              </div>
               <Switch>
                 {campaignDates.map(date => {
                   return (
@@ -126,10 +170,12 @@ const DemosView = ({ authUser }) => {
                         return (
                           <CampaignContainer>
                             <MillionRaisedCampaign
-                              app={app}
-                              user={user}
+                              {...mockMillionRaisedProps}
                               currentDateString={date}
                               onDismiss={campaignOnDismiss}
+                              onShowFireworks={() => {
+                                setFireworksShown(true)
+                              }}
                             />
                           </CampaignContainer>
                         )
