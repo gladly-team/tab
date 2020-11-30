@@ -125,7 +125,7 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
               </Typography>
             ) : (
               <Typography variant={'body2'}>
-                Now until January 10,{' '}
+                Now until January 5,{' '}
                 <Link
                   to={treePlantingCampaignHomepageURL}
                   target="_blank"
