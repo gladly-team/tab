@@ -36,6 +36,7 @@ export default createFragmentContainer(Dashboard, {
       ...NewUserTourContainer_user
       ...AssignExperimentGroupsContainer_user
       ...TreePlantingCampaignContainer_user
+        @arguments(startTime: $startTime, endTime: $endTime)
     }
   `,
 })
