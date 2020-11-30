@@ -26,7 +26,9 @@ afterEach(() => {
 const getMockProps = () => ({
   app: {
     campaign: {
-      numNewUsers: 192,
+      goal: {
+        currentNumber: 192,
+      },
     },
   },
   user: {
@@ -41,6 +43,7 @@ const getMockProps = () => ({
     },
     treesPlantedGoal: 20000,
   },
+  onDismiss: () => {},
 })
 
 describe('Tree planting campaign component', () => {
@@ -102,7 +105,7 @@ describe('Tree planting campaign component', () => {
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 1
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const treeIcons = wrapper.find(TreeIcon)
-    expect(treeIcons.at(0).prop('style').color).toEqual('#f50057') // green
+    expect(treeIcons.at(0).prop('style').color).toEqual('#028502') // green
     expect(treeIcons.at(1).prop('style').color).toEqual('#BBB')
     expect(treeIcons.at(2).prop('style').color).toEqual('#BBB')
   })
@@ -114,8 +117,8 @@ describe('Tree planting campaign component', () => {
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 2
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const treeIcons = wrapper.find(TreeIcon)
-    expect(treeIcons.at(0).prop('style').color).toEqual('#f50057') // green
-    expect(treeIcons.at(1).prop('style').color).toEqual('#f50057') // green
+    expect(treeIcons.at(0).prop('style').color).toEqual('#028502') // green
+    expect(treeIcons.at(1).prop('style').color).toEqual('#028502') // green
     expect(treeIcons.at(2).prop('style').color).toEqual('#BBB')
   })
 
@@ -127,7 +130,7 @@ describe('Tree planting campaign component', () => {
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const treeIcons = wrapper.find(TreeIcon)
     treeIcons.forEach(icon => {
-      expect(icon.prop('style').color).toEqual('#f50057') // green
+      expect(icon.prop('style').color).toEqual('#028502') // green
     })
   })
 
@@ -170,7 +173,7 @@ describe('Tree planting campaign component', () => {
         .render()
         .text()
     ).toEqual(
-      "Now until January 10, we're planting a tree for every person who joins Tab for a Cause!"
+      "Now until January 5, we're planting a tree for every person who joins Tab for a Cause! (Use TikTok/Insta? Join our challenge.)"
     )
   })
 
@@ -200,7 +203,7 @@ describe('Tree planting campaign component', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const link = wrapper.find(Link)
+    const link = wrapper.find(Link).first()
     expect(link.prop('to')).toEqual(treePlantingCampaignHomepageURL)
     expect(link.render().text()).toEqual("we're planting a tree")
   })
@@ -210,7 +213,7 @@ describe('Tree planting campaign component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.campaign.treesPlantedGoal = 30000
-    mockProps.app.campaign.numNewUsers = 6000
+    mockProps.app.campaign.goal.currentNumber = 6000
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const progressBar = wrapper.find(LinearProgress)
     expect(progressBar.prop('value')).toEqual(20)
@@ -220,7 +223,7 @@ describe('Tree planting campaign component', () => {
     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.numNewUsers = 0
+    mockProps.app.campaign.goal.currentNumber = 0
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
       '[data-test-id="trees-planted-progress-bar"]'
@@ -238,7 +241,7 @@ describe('Tree planting campaign component', () => {
     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.numNewUsers = 1
+    mockProps.app.campaign.goal.currentNumber = 1
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
       '[data-test-id="trees-planted-progress-bar"]'
@@ -256,7 +259,7 @@ describe('Tree planting campaign component', () => {
     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.numNewUsers = 2
+    mockProps.app.campaign.goal.currentNumber = 2
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
       '[data-test-id="trees-planted-progress-bar"]'
@@ -274,7 +277,7 @@ describe('Tree planting campaign component', () => {
     const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.numNewUsers = 38911
+    mockProps.app.campaign.goal.currentNumber = 38911
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
       '[data-test-id="trees-planted-progress-bar"]'
