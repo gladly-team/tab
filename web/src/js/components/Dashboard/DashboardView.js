@@ -25,6 +25,7 @@ class DashboardView extends React.Component {
           query={graphql`
             query DashboardViewQuery(
               $userId: String!
+              # @tree-planting-campaign
               $treeCampaignStartTime: String!
               $treeCampaignEndTime: String!
             ) {
@@ -33,6 +34,7 @@ class DashboardView extends React.Component {
               }
               user(userId: $userId) {
                 ...DashboardContainer_user
+                  # @tree-planting-campaign
                   @arguments(
                     startTime: $treeCampaignStartTime
                     endTime: $treeCampaignEndTime

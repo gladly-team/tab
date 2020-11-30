@@ -66,6 +66,7 @@ import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
 import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
 
+// @tree-planting-campaign
 const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
 const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
 const TREE_CAMPAIGN_START_MOMENT = moment(TREE_CAMPAIGN_START_TIME_ISO)

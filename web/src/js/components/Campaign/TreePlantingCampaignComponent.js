@@ -19,7 +19,8 @@ class TreePlantingCampaign extends React.Component {
     } = user
     const { time, treesPlantedGoal } = campaign
     const hasCampaignEnded = moment().isAfter(time.end)
-    const treesPlantedAbbreviated = abbreviateNumber(app.campaign.numNewUsers)
+    const { currentNumber: numNewUsers } = app.campaign.goal
+    const treesPlantedAbbreviated = abbreviateNumber(numNewUsers)
     const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
     const progress = (100 * app.campaign.numNewUsers) / treesPlantedGoal
     const treesWord = app.campaign.numNewUsers === 1 ? 'tree' : 'trees'
@@ -197,7 +198,9 @@ class TreePlantingCampaign extends React.Component {
 TreePlantingCampaign.propTypes = {
   app: PropTypes.shape({
     campaign: PropTypes.shape({
-      numNewUsers: PropTypes.number.isRequired,
+      goal: PropTypes.shape({
+        currentNumber: PropTypes.number.isRequired,
+      }),
     }).isRequired,
   }),
   campaign: PropTypes.shape({

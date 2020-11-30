@@ -1,24 +1,29 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## October Spotlight: Trees for the Future'
+// @tree-planting-campaign
+const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
+const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
+
+// @tree-planting-campaign
+// The tree planting campaign has hardcoded copy, so much of
+// this is currently unused.
+
+const campaignTitle = '## X'
 const campaignDescription = `
-#### Climate change has had devastating effects on communities around the world, but there is opportunity to protect our planet and future!
-#### [Trees for the Future](https://trees.org/) is working to plant thousands of trees that provide crucial nutrients back to the soil. Beyond this, these trees provide farmers with food security and an opportunity to improve their income.
-#### Open some tabs, tell a friend to join, and donate those hearts to support sustainable farming through Trees for the Future!
+#### X
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thanks for Supporting Trees for the Future!'
+const campaignEndTitle = '## X'
 const campaignEndDescription = `
-#### Every Heart donated towards charitable causes like [Trees for the Future](https://trees.org/) adds up, and the end result is something to be proud of. These funds raised will help plant trees providing financial security for farmers and a healthier planet. 
-#### If you have a charitable cause that is close to your heart and want it featured as a spotlight campaign, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
+#### X 
 `
 // const campaignEndDescriptionTwo =
 //   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'TFTF2020',
+  campaignId: 'TreePlantingDec2020',
   charityId: '67d1d576-4ab1-43dd-970c-3537cd13d476',
   content: {
     titleMarkdown: campaignTitle,
@@ -30,7 +35,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: true,
+    whenGoalAchieved: false,
     whenTimeEnds: true,
   },
   goal: {
@@ -39,7 +44,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
     limitProgressToTargetMax: true,
-    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'newUsers', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
     targetNumber: 10e6,
@@ -98,8 +103,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
   },
   time: {
-    start: '2020-10-19T17:00:00.000Z',
-    end: '2020-10-26T18:00:00.000Z',
+    start: TREE_CAMPAIGN_START_TIME_ISO,
+    end: TREE_CAMPAIGN_END_TIME_ISO,
   },
 })
 

@@ -15,6 +15,7 @@ export default createFragmentContainer(Dashboard, {
   `,
   user: graphql`
     fragment DashboardContainer_user on User
+      # @tree-planting-campaign
       @argumentDefinitions(
         startTime: { type: "String" }
         endTime: { type: "String" }

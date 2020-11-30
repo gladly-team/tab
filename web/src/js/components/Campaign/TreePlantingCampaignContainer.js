@@ -7,7 +7,9 @@ export default createFragmentContainer(TreePlantingCampaign, {
   app: graphql`
     fragment TreePlantingCampaignContainer_app on App {
       campaign {
-        numNewUsers
+        goal {
+          currentNumber
+        }
       }
     }
   `,
