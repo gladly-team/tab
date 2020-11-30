@@ -8,7 +8,10 @@ import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
-import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
+import {
+  treePlantingCampaignHomepageURL,
+  treePlantingCampaignCompetitionHomepageURL,
+} from 'js/navigation/navigation'
 import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
 
 const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
@@ -134,7 +137,16 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
                 >
                   we're planting a tree
                 </Link>{' '}
-                for every person who joins Tab for a Cause!
+                for every person who joins Tab for a Cause! (Use TikTok/Insta?{' '}
+                <Link
+                  to={treePlantingCampaignCompetitionHomepageURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: ACCENT_COLOR }}
+                >
+                  Join our challenge.
+                </Link>
+                )
               </Typography>
             )}
           </div>
