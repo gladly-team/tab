@@ -620,11 +620,11 @@ class Dashboard extends React.Component {
                     },
                     treesPlantedGoal: 25000,
                   }}
-                  // onDismiss={() => {
-                  //   this.setState({
-                  //     hasUserDismissedCampaignRecently: true,
-                  //   })
-                  // }}
+                  onDismiss={() => {
+                    this.setState({
+                      hasUserDismissedCampaignRecently: true,
+                    })
+                  }}
                 />
               </div>
             </div>

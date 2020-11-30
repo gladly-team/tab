@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-// import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import TreeIcon from 'mdi-material-ui/PineTree'
@@ -10,8 +9,9 @@ import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
 import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
+import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
 
-const TreePlantingCampaign = ({ app, user, campaign }) => {
+const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
   const {
     recruits: { recruitsWithAtLeastOneTab = {} },
   } = user
@@ -20,10 +20,10 @@ const TreePlantingCampaign = ({ app, user, campaign }) => {
   const { currentNumber: numNewUsers } = app.campaign.goal
   const treesPlantedAbbreviated = abbreviateNumber(numNewUsers)
   const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
-  const progress = (100 * app.campaign.numNewUsers) / treesPlantedGoal
-  const treesWord = app.campaign.numNewUsers === 1 ? 'tree' : 'trees'
+  const progress = (100 * numNewUsers) / treesPlantedGoal
+  const treesWord = numNewUsers === 1 ? 'tree' : 'trees'
 
-  const ACCENT_COLOR = 'green'
+  const ACCENT_COLOR = '#028502'
 
   // Tree icon style
   const treeStyle = {
@@ -38,16 +38,10 @@ const TreePlantingCampaign = ({ app, user, campaign }) => {
   })
 
   return (
-    <div
-      style={{
-        width: 480,
-        paddingTop: 8,
-        paddingBottom: 8,
-        paddingLeft: 12,
-        paddingRight: 12,
-      }}
+    <CampaignWrapper
+      onDismiss={onDismiss}
+      customTheme={{ mainColor: ACCENT_COLOR, lightColor: '#94989e' }}
     >
-      {' '}
       <Typography
         variant={'h6'}
         style={{
@@ -190,7 +184,7 @@ const TreePlantingCampaign = ({ app, user, campaign }) => {
           remaining
         </Typography>
       </div>
-    </div>
+    </CampaignWrapper>
   )
 }
 
@@ -214,6 +208,7 @@ TreePlantingCampaign.propTypes = {
       recruitsWithAtLeastOneTab: PropTypes.number.isRequired,
     }).isRequired,
   }).isRequired,
+  onDismiss: PropTypes.func.isRequired,
 }
 
 export default TreePlantingCampaign
