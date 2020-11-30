@@ -64,8 +64,12 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
-import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
-import Fireworks, { FireworksMessage1M } from 'js/components/General/Fireworks'
+import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
+
+const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
+const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
+const TREE_CAMPAIGN_START_MOMENT = moment(TREE_CAMPAIGN_START_TIME_ISO)
+const TREE_CAMPAIGN_END_MOMENT = moment(TREE_CAMPAIGN_END_TIME_ISO)
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -149,7 +153,6 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
-      fireworksShown: false,
     }
   }
 
@@ -192,12 +195,6 @@ class Dashboard extends React.Component {
   clearError() {
     this.setState({
       errorOpen: false,
-    })
-  }
-
-  setFireworksShown(show) {
-    this.setState({
-      fireworksShown: show,
     })
   }
 
@@ -396,18 +393,6 @@ class Dashboard extends React.Component {
         data-test-id={'app-dashboard'}
         key={'dashboard-key'}
       >
-        <FadeInDashboardAnimation>
-          {this.state.fireworksShown ? (
-            <Fireworks
-              options={{ maxRockets: 5, explosionChance: 0.06 }}
-              onClose={() => {
-                this.setFireworksShown(false)
-              }}
-            >
-              <FireworksMessage1M />
-            </Fireworks>
-          ) : null}
-        </FadeInDashboardAnimation>
         <UserBackgroundImage
           user={user}
           showError={this.showError.bind(this)}
@@ -606,7 +591,7 @@ class Dashboard extends React.Component {
           isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
         />
-        {showCampaign ? (
+        {showCampaign && app && user ? (
           <FadeInDashboardAnimation>
             <div
               style={{
@@ -624,19 +609,21 @@ class Dashboard extends React.Component {
               }}
             >
               <div style={{ width: 500, marginBottom: 100 }}>
-                <MillionRaisedCampaign
+                <TreePlantingCampaign
                   app={app}
                   user={user}
-                  currentDateString={moment().format('YYYY-MM-DD')}
-                  onDismiss={() => {
-                    this.setState({
-                      hasUserDismissedCampaignRecently: true,
-                    })
+                  campaign={{
+                    time: {
+                      start: TREE_CAMPAIGN_START_MOMENT,
+                      end: TREE_CAMPAIGN_END_MOMENT,
+                    },
+                    treesPlantedGoal: 25000,
                   }}
-                  showError={this.showError.bind(this)}
-                  onShowFireworks={() => {
-                    this.setFireworksShown(true)
-                  }}
+                  // onDismiss={() => {
+                  //   this.setState({
+                  //     hasUserDismissedCampaignRecently: true,
+                  //   })
+                  // }}
                 />
               </div>
             </div>
