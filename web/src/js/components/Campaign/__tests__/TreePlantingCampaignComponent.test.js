@@ -11,6 +11,7 @@ import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Link from 'js/components/General/Link'
 import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
 
+//
 jest.mock('js/components/General/Link')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
@@ -172,8 +173,8 @@ describe('Tree planting campaign component', () => {
         .last()
         .render()
         .text()
-    ).toEqual(
-      "Now until January 5, we're planting a tree for every person who joins Tab for a Cause! (Use TikTok/Insta? Join our challenge.)"
+    ).toMatch(
+      /Now until January 5, we're planting a tree for every person who joins Tab for a Cause!/
     )
   })
 
