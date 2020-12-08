@@ -127,27 +127,38 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
                 about Tab for a Cause!
               </Typography>
             ) : (
-              <Typography variant={'body2'}>
-                Now until January 5,{' '}
-                <Link
-                  to={treePlantingCampaignHomepageURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: ACCENT_COLOR }}
-                >
-                  we're planting a tree
-                </Link>{' '}
-                for every person who joins Tab for a Cause! (Use TikTok/Insta?{' '}
-                <Link
-                  to={treePlantingCampaignCompetitionHomepageURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: ACCENT_COLOR }}
-                >
-                  Join our challenge.
-                </Link>
-                )
-              </Typography>
+              <>
+                <Typography variant={'body2'} gutterBottom>
+                  Now until January 5,{' '}
+                  <Link
+                    to={treePlantingCampaignHomepageURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: ACCENT_COLOR }}
+                  >
+                    we're planting a tree
+                  </Link>{' '}
+                  for every person who joins Tab for a Cause! Use TikTok/Insta?{' '}
+                  <Link
+                    to={treePlantingCampaignCompetitionHomepageURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: ACCENT_COLOR }}
+                  >
+                    Join our challenge
+                  </Link>{' '}
+                  and win{' '}
+                  <Link
+                    to={'https://shop.spreadshirt.com/tab-for-a-cause/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: ACCENT_COLOR }}
+                  >
+                    merch
+                  </Link>{' '}
+                  + $500 for your favorite charity.
+                </Typography>
+              </>
             )}
           </div>
         </div>
