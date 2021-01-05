@@ -69,43 +69,45 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
             alignItems: 'center',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          {hasCampaignEnded ? null : (
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                margin: 8,
               }}
             >
-              <div>
-                {recruitsWithAtLeastOneTab > 0 ? (
-                  <TreeIcon style={plantedTreeStyle} />
-                ) : (
-                  <TreeIcon style={incompleteTreeStyle} />
-                )}
-                {recruitsWithAtLeastOneTab > 1 ? (
-                  <TreeIcon style={plantedTreeStyle} />
-                ) : (
-                  <TreeIcon style={incompleteTreeStyle} />
-                )}
-                {recruitsWithAtLeastOneTab > 2 ? (
-                  <TreeIcon style={plantedTreeStyle} />
-                ) : (
-                  <TreeIcon style={incompleteTreeStyle} />
-                )}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  margin: 8,
+                }}
+              >
+                <div>
+                  {recruitsWithAtLeastOneTab > 0 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                  {recruitsWithAtLeastOneTab > 1 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                  {recruitsWithAtLeastOneTab > 2 ? (
+                    <TreeIcon style={plantedTreeStyle} />
+                  ) : (
+                    <TreeIcon style={incompleteTreeStyle} />
+                  )}
+                </div>
+                <Typography variant={'body2'} gutterBottom>
+                  {recruitsWithAtLeastOneTab}/3 trees planted
+                </Typography>
               </div>
-              <Typography variant={'body2'} gutterBottom>
-                {recruitsWithAtLeastOneTab}/3 trees planted
-              </Typography>
             </div>
-          </div>
+          )}
           {hasCampaignEnded ? null : (
             <div style={{ margin: 16 }}>
               <InviteFriend
@@ -121,11 +123,39 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
           )}
           <div style={{ margin: 12 }}>
             {hasCampaignEnded ? (
-              <Typography variant={'body2'}>
-                Together, we planted {treesPlantedAbbreviated} trees this
-                holiday season! Great job, and thank you for spreading the word
-                about Tab for a Cause!
-              </Typography>
+              <>
+                <Typography variant={'body2'} paragraph>
+                  Thank you for joining us in planting trees with{' '}
+                  <Link
+                    to="https://edenprojects.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: ACCENT_COLOR }}
+                  >
+                    Eden Reforestation Projects
+                  </Link>
+                  ! Because of you,
+                  <b> more than 10,000 trees will be planted</b> to combat
+                  carbon sequestration, guard land erosion, provide habitat for
+                  countless organisms, and provide economic resources for
+                  surrounding communities!
+                </Typography>
+                <Typography variant={'body2'} gutterBottom={false} paragraph>
+                  We loved all the creative submissions to our Tik Tok/Instagram
+                  video challenge, and now it is time to decide a winner.{' '}
+                  <Link
+                    to="https://forms.gle/YimwK55ECcoNMYmu7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: ACCENT_COLOR }}
+                  >
+                    View our top 5 submissions
+                  </Link>{' '}
+                  and pick your favorite content creator to receive $500 to the
+                  charity of their choice! Thank you to everyone who submitted a
+                  video and helped spread the word about Tab for a Cause.
+                </Typography>
+              </>
             ) : (
               <>
                 <Typography variant={'body2'} gutterBottom>
@@ -163,50 +193,52 @@ const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
           </div>
         </div>
       </div>
-      <div
-        style={{
-          marginTop: 8,
-          marginBottom: 8,
-          textAlign: 'center',
-        }}
-      >
+      {hasCampaignEnded ? null : (
         <div
-          data-test-id={'trees-planted-progress-bar'}
           style={{
-            marginLeft: 10,
-            marginRight: 10,
+            marginTop: 8,
+            marginBottom: 8,
+            textAlign: 'center',
           }}
         >
-          {hasCampaignEnded ? null : (
-            <span
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography variant={'caption'}>
-                {treesPlantedAbbreviated} {treesWord} planted
-              </Typography>
-              <Typography variant={'caption'}>
-                Goal: {treesPlantedGoalAbbreviated}
-              </Typography>
-            </span>
-          )}
-          <LinearProgress
-            color={'primary'}
-            variant={'determinate'}
-            value={progress}
-          />
+          <div
+            data-test-id={'trees-planted-progress-bar'}
+            style={{
+              marginLeft: 10,
+              marginRight: 10,
+            }}
+          >
+            {hasCampaignEnded ? null : (
+              <span
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Typography variant={'caption'}>
+                  {treesPlantedAbbreviated} {treesWord} planted
+                </Typography>
+                <Typography variant={'caption'}>
+                  Goal: {treesPlantedGoalAbbreviated}
+                </Typography>
+              </span>
+            )}
+            <LinearProgress
+              color={'primary'}
+              variant={'determinate'}
+              value={progress}
+            />
+          </div>
+          <Typography variant={'caption'}>
+            <CountdownClock
+              campaignStartDatetime={time.start}
+              campaignEndDatetime={time.end}
+            />{' '}
+            remaining
+          </Typography>
         </div>
-        <Typography variant={'caption'}>
-          <CountdownClock
-            campaignStartDatetime={time.start}
-            campaignEndDatetime={time.end}
-          />{' '}
-          remaining
-        </Typography>
-      </div>
+      )}
     </CampaignWrapper>
   )
 }
