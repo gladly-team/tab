@@ -191,12 +191,10 @@ describe('Tree planting campaign component', () => {
       wrapper
         .find(Typography)
         .filterWhere(e => e.prop('variant') === 'body2')
-        .last()
+        .first()
         .render()
         .text()
-    ).toEqual(
-      'Together, we planted 192 trees this holiday season! Great job, and thank you for spreading the word about Tab for a Cause!'
-    )
+    ).toMatch(/Thank you for joining us in planting trees/)
   })
 
   it('links to the tree planting FAQ page', () => {
