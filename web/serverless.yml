@@ -147,7 +147,7 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
-            # Next.js app on ZEIT Now.
+            # Next.js app on Vercel.
             - DomainName: ${self:custom.tabV4Host}
               # An identifier for the origin. This must be unique within the distribution.
               Id: nextjs-tab-web.now.sh
@@ -189,6 +189,22 @@ resources:
           # We enforce a minimum, short CF cache for objects that aren't
           # browser-cached.
           CacheBehaviors:
+            # New tab app V4 (Next.js app on Vercel) static files. The
+            # app is hosted on the /newtab/ subpath.
+            - PathPattern: '/newtab/_next/*'
+              MinTTL: 0
+              DefaultTTL: 86400
+              MaxTTL: 63115200 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: nextjs-tab-web.now.sh
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              ViewerProtocolPolicy: redirect-to-https
             # New tab app
             - PathPattern: 'newtab*'
               MinTTL: 0
@@ -303,7 +319,7 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # Next.js app on ZEIT Now
+            # Next.js app on Vercel.
             - PathPattern: 'v4*'
               MinTTL: 0
               DefaultTTL: 0
@@ -326,23 +342,6 @@ resources:
                 QueryString: true
                 Cookies:
                   Forward: all
-              ViewerProtocolPolicy: redirect-to-https
-            # FIXME: now that _next is hosted on the /newtab/ subpath,
-            # move this above /newtab/* and change it to /newtab/_next*
-            # Next.js app static files
-            - PathPattern: '_next*'
-              MinTTL: 0
-              DefaultTTL: 86400
-              MaxTTL: 63115200 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: nextjs-tab-web.now.sh
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
               ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our homepage
             - PathPattern: '*'
