@@ -8,6 +8,9 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import withUser from 'js/components/General/withUser'
 
+const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
+const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
+
 class DashboardView extends React.Component {
   render() {
     const { authUser } = this.props
@@ -20,17 +23,29 @@ class DashboardView extends React.Component {
       >
         <QueryRendererWithUser
           query={graphql`
-            query DashboardViewQuery($userId: String!) {
+            query DashboardViewQuery(
+              $userId: String!
+              # @tree-planting-campaign
+              $treeCampaignStartTime: String!
+              $treeCampaignEndTime: String!
+            ) {
               app {
                 ...DashboardContainer_app
               }
               user(userId: $userId) {
                 ...DashboardContainer_user
+                  # @tree-planting-campaign
+                  @arguments(
+                    startTime: $treeCampaignStartTime
+                    endTime: $treeCampaignEndTime
+                  )
               }
             }
           `}
           variables={{
             userId: authUser.id,
+            treeCampaignStartTime: TREE_CAMPAIGN_START_TIME_ISO,
+            treeCampaignEndTime: TREE_CAMPAIGN_END_TIME_ISO,
           }}
           render={({ error, props, retry }) => {
             if (error && get(error, 'source.errors')) {

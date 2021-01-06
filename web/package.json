@@ -41,6 +41,7 @@
     "blockadblock": "^3.2.1",
     "browser-detect": "^0.2.28",
     "firebase": "^6.0.2",
+    "fireworks-canvas": "^2.5.0",
     "hex-to-rgba": "^1.0.2",
     "history": "^4.9.0",
     "jss": "^9",
@@ -69,8 +70,8 @@
     "react-transition-group": "^4.0.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.20.1",
-    "tab-ads": "1.0.0-beta.11",
-    "tab-cmp": "0.12.0-beta.0",
+    "tab-ads": "^1.0.2",
+    "tab-cmp": "^0.13.0",
     "tti-polyfill": "^0.2.2",
     "uuid": "^3.3.2"
   },

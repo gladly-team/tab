@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -8,18 +8,21 @@ import grey from '@material-ui/core/colors/grey'
 import amber from '@material-ui/core/colors/amber'
 import green from '@material-ui/core/colors/green'
 import orange from '@material-ui/core/colors/orange'
+import { TwitterShareButton } from 'react-share'
 import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 import Typography from '@material-ui/core/Typography'
+import Sparkle from 'react-sparkle'
 import Link from 'js/components/General/Link'
 import {
   millionRaisedURL,
+  millionRaisedMatchURL,
   millionRaisedRainforestImpactURL,
-  // millionRaisedWaterImpactURL,
-  // millionRaisedHungerImpactURL,
-  // millionRaisedGiveImpactURL,
-  // millionRaisedReadImpactURL,
-  // millionRaisedChildrenImpactURL,
-  // millionRaisedEducateImpactURL,
+  millionRaisedWaterImpactURL,
+  millionRaisedHungerImpactURL,
+  millionRaisedGiveImpactURL,
+  millionRaisedReadImpactURL,
+  millionRaisedChildrenImpactURL,
+  millionRaisedEducateImpactURL,
   facebookPageURL,
   instagramPageURL,
   twitterPageURL,
@@ -27,6 +30,11 @@ import {
 import useMoneyRaised from 'js/utils/hooks/useMoneyRaised'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import TreeIcon from 'mdi-material-ui/PineTree'
+import SchoolIcon from '@material-ui/icons/School'
+import BookIcon from '@material-ui/icons/LocalLibrary'
+import WaterIcon from '@material-ui/icons/LocalDrink'
+import HospitalIcon from '@material-ui/icons/LocalHospital'
+import ATMIcon from '@material-ui/icons/LocalAtm'
 import SocialShare from 'js/components/General/SocialShareComponent'
 
 const primaryMainColor = '#9d4ba3'
@@ -108,6 +116,19 @@ const styles = theme => ({
   },
   impactStatIcon: {
     flex: 1,
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+  },
+  impactStatShareContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  impactStatSharePrompt: {
+    marginLeft: 8,
+    marginRight: 8,
+    marginBottom: 3,
   },
   impactStatText: {
     flex: 6,
@@ -130,7 +151,152 @@ const DAY_2020_11_14 = '2020-11-14'
 const DAY_2020_11_15 = '2020-11-15'
 const DAY_2020_11_16 = '2020-11-16' // Monday
 const DAY_2020_11_17 = '2020-11-17'
-const DAY_2020_11_18 = '2020-11-18'
+const DAY_2020_11_18 = '2020-11-18' // Wednesday
+const DAY_2020_11_19 = '2020-11-19'
+const DAY_2020_11_20 = '2020-11-20' // Friday
+const DAY_2020_11_21 = '2020-11-21'
+const DAY_2020_11_22 = '2020-11-22'
+const DAY_2020_11_23 = '2020-11-23' // Monday
+const DAY_2020_11_24 = '2020-11-24'
+const DAY_2020_11_25 = '2020-11-25' // Wednesday
+const DAY_2020_11_26 = '2020-11-26'
+
+const millionairesTech = [
+  {
+    name: 'Bill & Melinda Gates',
+    twitterHandles: ['BillGates', 'melindagates', 'gatesfoundation'],
+  },
+  {
+    name: 'Jeff Bezos',
+    twitterHandles: ['JeffBezos'],
+  },
+  {
+    name: 'Elon Musk',
+    twitterHandles: ['elonmusk'],
+  },
+  {
+    name: 'Sheryl Sandberg',
+    twitterHandles: ['sherylsandberg'],
+  },
+  {
+    name: 'Laurene Powell Jobs',
+    twitterHandles: ['laurenepowell'],
+  },
+  {
+    name: 'Michael Dell',
+    twitterHandles: ['MichaelDell'],
+  },
+  {
+    name: 'Larry Ellison',
+    twitterHandles: ['larryellison'],
+  },
+  {
+    name: 'Dustin Moskovitz',
+    twitterHandles: ['moskov'],
+  },
+  {
+    name: 'Eric Schmidt',
+    twitterHandles: ['ericschmidt'],
+  },
+  {
+    name: 'Evan Spiegel',
+    twitterHandles: ['evanspiegel'],
+  },
+  {
+    name: 'Pierre Omidyar',
+    twitterHandles: ['pierre'],
+  },
+  {
+    name: 'Nathan Blecharczyk',
+    twitterHandles: ['nathanblec'],
+  },
+  {
+    name: 'Brian Chesky',
+    twitterHandles: ['bchesky'],
+  },
+  {
+    name: 'Travis Kalanick',
+    twitterHandles: ['travisk'],
+  },
+  {
+    name: 'Alexis Ohanian Sr',
+    twitterHandles: ['alexisohanian'],
+  },
+]
+
+const millionairesPopCulture = [
+  {
+    name: 'Kardashian/Jenner Family',
+    twitterHandles: [
+      'KrisJenner',
+      'KimKardashian',
+      'khloekardashian',
+      'kourtneykardash',
+      'KendallJenner',
+      'KylieJenner',
+    ],
+  },
+  { name: 'Beyonce & Jay Z', twitterHandles: ['Beyonce', 'S_C_'] },
+  { name: 'BTS', twitterHandles: ['bts_bighit'] },
+  { name: 'Oprah Winfrey', twitterHandles: ['Oprah'] },
+  { name: 'Ellen', twitterHandles: ['TheEllenShow'] },
+  { name: 'Madonna', twitterHandles: ['Madonna'] },
+  { name: 'Jerry Seinfeld', twitterHandles: ['JerrySeinfeld'] },
+  { name: 'Lebron James', twitterHandles: ['Kingjames'] },
+  { name: 'Stephen Curry', twitterHandles: ['StephenCurry30'] },
+  { name: 'Dr. Dre', twitterHandles: ['drdre'] },
+  { name: 'Cristiano Ronaldo', twitterHandles: ['Cristiano'] },
+  { name: 'Rihanna', twitterHandles: ['rihanna'] },
+  {
+    name: 'Jonas Brothers',
+    twitterHandles: ['kevinjonas', 'joejonas', 'nickjonas'],
+  },
+  { name: 'Justin Bieber', twitterHandles: ['JustinBieber'] },
+  { name: 'Taylor Swift', twitterHandles: ['taylorswift13'] },
+  { name: 'Kevin Durant', twitterHandles: ['KDTrey5'] },
+  { name: 'Ryan Seacrest', twitterHandles: ['RyanSeacrest'] },
+  { name: 'Ariana Grande', twitterHandles: ['ArianaGrande'] },
+  {
+    name: 'John Legend & Chrissy Tegen',
+    twitterHandles: ['johnlegend', 'chrissyteigan'],
+  },
+  { name: 'Nicki Minaj', twitterHandles: ['nickiminaj'] },
+]
+
+const millionairesCompanies = [
+  {
+    name: 'Twitter',
+    twitterHandles: ['Twitter'],
+  },
+  {
+    name: 'Airbnb',
+    twitterHandles: ['Airbnb'],
+  },
+  {
+    name: 'Snapchat',
+    twitterHandles: ['Snapchat'],
+  },
+  {
+    name: 'Instagram',
+    twitterHandles: ['Instagram'],
+  },
+  {
+    name: 'Uber & Lyft',
+    twitterHandles: ['Uber', 'Lyft'],
+  },
+  {
+    name: 'Google',
+    twitterHandles: ['Google'],
+  },
+  {
+    name: 'Microsoft',
+    twitterHandles: ['Microsoft'],
+  },
+  {
+    name: 'Facebook',
+    twitterHandles: ['Facebook'],
+  },
+]
 
 const getCampaignContent = ({
   app,
@@ -138,33 +304,94 @@ const getCampaignContent = ({
   classes,
   currentDateString,
   moneyRaisedUSDString,
+  moneyRaised,
+  randomTechMillionaire,
+  randomPopMillionaire,
+  randomCompanyMillionaire,
+  randomImpactContent,
+  onShowFireworks,
 }) => {
+  const isOver1M = moneyRaised > 1e6
   const defaultTitle = (
-    <Typography variant="h6">A tab you'll want to keep open:</Typography>
+    <Typography variant="h6">
+      {isOver1M
+        ? "Together, we've raised over"
+        : "A tab you'll want to keep open:"}
+    </Typography>
   )
   const getDefaultMainContent = ({ themeColor }) => (
     <div>
-      <Typography variant="h2" align={'center'} gutterBottom>
-        <span className={classes.moneyRaised} style={{ color: themeColor }}>
-          {moneyRaisedUSDString}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: 21,
+        }}
+      >
+        <span style={{ display: 'inline-block', position: 'relative' }}>
+          {isOver1M ? (
+            <Sparkle
+              color={themeColor}
+              count={28}
+              fadeOutSpeed={42}
+              overflowPx={24}
+              flicker={false}
+            />
+          ) : null}
+          <Typography
+            variant="h2"
+            align={'center'}
+            {...isOver1M && {
+              onClick: () => {
+                onShowFireworks()
+              },
+              style: {
+                cursor: 'pointer',
+              },
+            }}
+          >
+            <span className={classes.moneyRaised} style={{ color: themeColor }}>
+              {isOver1M ? '$1,000,000' : moneyRaisedUSDString}
+            </span>
+          </Typography>
         </span>
-      </Typography>
-      <Typography variant="body2" align="center">
-        We're about to reach $1M raised for charity!
-      </Typography>
-      <Typography variant="body2" align="center" gutterBottom>
-        Thank you – it's incredible{' '}
-        <Link
-          to={millionRaisedURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.link}
-          style={{ color: themeColor }}
-        >
-          what we've accomplished together
-        </Link>
-        .
-      </Typography>
+      </div>
+      {isOver1M ? (
+        <>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="body2" align="center">
+            We're about to reach $1M raised for charity!
+          </Typography>
+          <Typography variant="body2" align="center" gutterBottom>
+            Thank you – it's incredible{' '}
+            <Link
+              to={millionRaisedURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.link}
+              style={{ color: themeColor }}
+            >
+              what we've accomplished together
+            </Link>
+            .
+          </Typography>
+        </>
+      )}
     </div>
   )
   const getDefaultAddendumContent = ({ themeColor }) => (
@@ -339,44 +566,7 @@ const getCampaignContent = ({
       </Typography>
     </>
   )
-  const addendumContentWeekend = (
-    <>
-      <div className={classes.impactStatContainer}>
-        <TreeIcon className={classes.impactStatIcon} />
-        <Typography variant="body2" className={classes.impactStatText}>
-          Tabbers have raised enough to
-          <span style={{ fontWeight: 'bold' }}>
-            {' '}
-            protect over 5,000 acres of rainforest!
-          </span>
-        </Typography>
-      </div>
-      <SocialShare
-        /* FIXME: actual copy needed */
-        url={millionRaisedRainforestImpactURL}
-        iconSize={24}
-        FacebookShareButtonProps={{
-          quote:
-            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-        }}
-        RedditShareButtonProps={{
-          title:
-            'Tabs transformed into vital supplies for 100 families in rainforest communities',
-        }}
-        TumblrShareButtonProps={{
-          title:
-            'Tabs transformed into vital supplies for 100 families in rainforest communities',
-          caption:
-            'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-        }}
-        TwitterShareButtonProps={{
-          title:
-            'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
-          related: ['@TabForACause'],
-        }}
-      />
-    </>
-  )
+  const addendumContentWeekend = randomImpactContent
 
   let title = defaultTitle
   let themeColor = defaultThemeColor
@@ -426,8 +616,63 @@ const getCampaignContent = ({
       break
     }
     case DAY_2020_11_09: {
-      addendumContent = addendumContentMonday
       themeColor = themeColorMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a tech millionaire to have them match our $1M! We open tabs:
+            easy. They write a check: easy.
+          </Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 2,
+            }}
+          >
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomTechMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {randomTechMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
+                    key={handle}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
+                  >
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
+          </div>
+        </>
+      )
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
@@ -468,8 +713,63 @@ const getCampaignContent = ({
       break
     }
     case DAY_2020_11_16: {
-      addendumContent = addendumContentMonday
       themeColor = themeColorMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a pop culture millionaire to have them match our $1M! We open
+            tabs: easy. They write a check: easy.
+          </Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 2,
+            }}
+          >
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomPopMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {randomPopMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
+                    key={handle}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
+                  >
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
+          </div>
+        </>
+      )
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
@@ -485,7 +785,109 @@ const getCampaignContent = ({
       mainContent = getDefaultMainContent({ themeColor })
       break
     }
-    // TODO: handle dates past 11/18/2020
+    case DAY_2020_11_19: {
+      addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_20: {
+      addendumContent = addendumContentFriday
+      themeColor = themeColorFriday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_21: {
+      addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_22: {
+      addendumContent = addendumContentWeekend
+      themeColor = themeColorWeekend
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_23: {
+      themeColor = themeColorMonday
+      addendumContent = (
+        <>
+          <div className={classes.hashtag}>
+            <Typography variant="subtitle2" className={classes.hashtagText}>
+              #MillionaireMonday
+            </Typography>
+          </div>
+          <Typography variant="body2" gutterBottom>
+            <span style={{ fontWeight: 'bold' }}>What you can do today: </span>
+            Hit up a multi-million-dollar company to have them match our $1M! We
+            open tabs: easy. They write a check: easy.
+          </Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 2,
+            }}
+          >
+            <Typography variant="body2" align="right" style={{ margin: 8 }}>
+              {randomCompanyMillionaire.name}:{' '}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {randomCompanyMillionaire.twitterHandles.map(handle => (
+                <>
+                  <TwitterShareButton
+                    key={handle}
+                    url={millionRaisedMatchURL}
+                    title={`We raised $1M for charity by opening browser tabs. @${handle}, will you open your checkbook to match @Tabforacause? #TabForAMillion`}
+                  >
+                    <div
+                      key={handle}
+                      style={{
+                        background: themeColor,
+                        padding: '1px 8px',
+                        borderRadius: 2,
+                        margin: 3,
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: 'white' }}>
+                        @{handle}
+                      </Typography>
+                    </div>
+                  </TwitterShareButton>
+                </>
+              ))}
+            </div>
+          </div>
+        </>
+      )
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_24: {
+      addendumContent = addendumContentTuesday
+      themeColor = themeColorTuesday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_25: {
+      addendumContent = addendumContentWednesday
+      themeColor = themeColorWednesday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
+    case DAY_2020_11_26: {
+      addendumContent = addendumContentThursday
+      themeColor = themeColorThursday
+      mainContent = getDefaultMainContent({ themeColor })
+      break
+    }
     default: {
       title = defaultTitle
       themeColor = defaultThemeColor
@@ -508,11 +910,368 @@ const MillionRaisedCampaign = ({
   classes,
   currentDateString,
   onDismiss,
+  onShowFireworks,
 }) => {
-  const { moneyRaisedUSDString } = useMoneyRaised({
+  const { moneyRaisedUSDString, moneyRaised } = useMoneyRaised({
     moneyRaised: app.moneyRaised,
     dollarsPerDayRate: app.dollarsPerDayRate,
   })
+
+  const [randomTechMillionaire] = useState(
+    millionairesTech[Math.floor(Math.random() * millionairesTech.length)]
+  )
+  const [randomPopMillionaire] = useState(
+    millionairesPopCulture[
+      Math.floor(Math.random() * millionairesPopCulture.length)
+    ]
+  )
+  const [randomCompanyMillionaire] = useState(
+    millionairesCompanies[
+      Math.floor(Math.random() * millionairesCompanies.length)
+    ]
+  )
+
+  const impactContents = [
+    <>
+      <div className={classes.impactStatContainer}>
+        <TreeIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            protect over 5,000 acres of rainforest!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedRainforestImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped protect over 5,000 acres of rainforest just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title:
+              '5,000 acres of rainforest protected just by opening browser tabs',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped protect 5,000 acres of rainforest just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped protect over 5,000 acres of rainforest just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <WaterIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            provide access to clean water to over 12,000 people!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedWaterImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped provide access to clean water for over 12,000 people just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title:
+              'Access to clean water for over 12,000 people just by opening browser tabs',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped provide access to clean water for over 12,000 people just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped provide access to clean water for over 12,000 people just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <HospitalIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            provide life-saving malnutrition treatment to over 1,500 children!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedHungerImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped provide food to over 1,500 children just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title: '1,500 children fed just by opening browser tabs',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped provide food to over 1,500 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped provide food to over 1,500 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <ATMIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            fund over $41,000 in direct cash transfers!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedGiveImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped transfer over $41,000 to those in need just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title:
+              '$41,000 in direct cash transfer to those in need just by opening browser tabs',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped transfer over $41,000 to those in need just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped transfer over $41,000 to those in need just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <SchoolIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            keep over 200 girls in school!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedReadImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped keep over 200 girls in school just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title: 'Browser tabs transformed into education for over 200 girls',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped keep over 200 girls in school just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause.',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped keep over 200 girls in school just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <HospitalIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            give over 6,000 children a month of emergency nutrition!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedChildrenImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped provide emergency nutrition to over 6,000 children just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title:
+              '6,000 children provided emergency nutrition just by opening browser tabs',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped  provide emergency nutrition to over 6,000 children just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped provide emergency nutrition to over 6,000 children just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+    <>
+      <div className={classes.impactStatContainer}>
+        <BookIcon className={classes.impactStatIcon} />
+        <Typography
+          variant="body2"
+          className={classes.impactStatText}
+          gutterBottom
+        >
+          Tabbers have raised enough to
+          <span style={{ fontWeight: 'bold' }}>
+            {' '}
+            give learning materials to over 3,500 students!
+          </span>
+        </Typography>
+      </div>
+      <div className={classes.impactStatShareContainer}>
+        <Typography variant="body2" className={classes.impactStatSharePrompt}>
+          Share this:
+        </Typography>
+        <SocialShare
+          url={millionRaisedEducateImpactURL}
+          iconSize={24}
+          FacebookShareButtonProps={
+            {
+              // Disabling the quote so Facebook shares the large version
+              // of the image, but leaving this prop so that SocialShare
+              // will still show the Facebook button.
+              // quote:
+              //   'I helped provide learning materials to over 3,500 students just by opening tabs! Join me in turning your internet browsing into a force for good with @TabForACause',
+            }
+          }
+          RedditShareButtonProps={{
+            title:
+              'Browser tabs transformed into learning materials for over 3,500 students',
+          }}
+          TumblrShareButtonProps={{
+            title: 'A simple and free way to make the world a better place',
+            caption:
+              'I helped provide learning materials to over 3,500 students just by opening tabs! Join me in turning your internet browsing into a force for good with Tab for a Cause',
+          }}
+          TwitterShareButtonProps={{
+            title:
+              'I helped provide learning materials to over 3,500 students just by opening tabs with @TabForACause. Join me! #TabForAMillion',
+            related: ['@TabForACause'],
+          }}
+        />
+      </div>
+    </>,
+  ]
+
+  const [randomImpactContent] = useState(
+    impactContents[Math.floor(Math.random() * impactContents.length)]
+  )
+
   const {
     title,
     mainContent,
@@ -524,6 +1283,12 @@ const MillionRaisedCampaign = ({
     classes,
     currentDateString,
     moneyRaisedUSDString,
+    moneyRaised,
+    randomTechMillionaire,
+    randomPopMillionaire,
+    randomCompanyMillionaire,
+    randomImpactContent,
+    onShowFireworks,
   })
   return (
     <div className={classes.root}>
@@ -560,9 +1325,11 @@ MillionRaisedCampaign.propTypes = {
   user: PropTypes.shape({}).isRequired,
   currentDateString: PropTypes.string.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  onShowFireworks: PropTypes.func.isRequired,
 }
 MillionRaisedCampaign.defaultProps = {
   onDismiss: () => {},
+  onShowFireworks: () => {},
 }
 
 export default withStyles(styles, { withTheme: true })(MillionRaisedCampaign)

@@ -107,7 +107,7 @@ class App extends React.Component {
                   {shouldShowDemosPage ? (
                     <Route
                       exact
-                      path="/newtab/demos/"
+                      path="/newtab/demos/*"
                       component={InternalDemosView}
                     />
                   ) : null}

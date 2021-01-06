@@ -64,7 +64,13 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
-import MillionRaisedCampaign from 'js/components/Campaign/MillionRaisedCampaignContainer'
+import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
+
+// @tree-planting-campaign
+const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
+const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
+const TREE_CAMPAIGN_START_MOMENT = moment(TREE_CAMPAIGN_START_TIME_ISO)
+const TREE_CAMPAIGN_END_MOMENT = moment(TREE_CAMPAIGN_END_TIME_ISO)
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -586,7 +592,7 @@ class Dashboard extends React.Component {
           isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
         />
-        {showCampaign ? (
+        {showCampaign && app && user ? (
           <FadeInDashboardAnimation>
             <div
               style={{
@@ -604,16 +610,21 @@ class Dashboard extends React.Component {
               }}
             >
               <div style={{ width: 500, marginBottom: 100 }}>
-                <MillionRaisedCampaign
+                <TreePlantingCampaign
                   app={app}
                   user={user}
-                  currentDateString={moment().format('YYYY-MM-DD')}
+                  campaign={{
+                    time: {
+                      start: TREE_CAMPAIGN_START_MOMENT,
+                      end: TREE_CAMPAIGN_END_MOMENT,
+                    },
+                    treesPlantedGoal: 25000,
+                  }}
                   onDismiss={() => {
                     this.setState({
                       hasUserDismissedCampaignRecently: true,
                     })
                   }}
-                  showError={this.showError.bind(this)}
                 />
               </div>
             </div>

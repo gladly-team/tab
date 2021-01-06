@@ -6950,6 +6950,11 @@ firebaseui@^3.2.0:
   dependencies:
     dialog-polyfill "^0.4.7"
 
+fireworks-canvas@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/fireworks-canvas/-/fireworks-canvas-2.5.0.tgz#57b9efa4e05e3feb799b6ab14f9298ab77dec6d9"
+  integrity sha512-hOSpXLcdIJbEsGSo6m1lK6g6yjUdx/kDQWwuVsoR/XJ0mYwsBrsw7GYrWhu8U6D95vh/gwvJwIM1JuePmk8d6g==
+
 flat-cache@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-2.0.1.tgz#5d296d6f04bda44a4630a301413bdbc2ec085ec0"
@@ -14759,17 +14764,17 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@1.0.0-beta.11:
-  version "1.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.0-beta.11.tgz#866cb48c9b1059c74c25e39a89725044aeef02a2"
-  integrity sha512-zgUoP88NM2y2TcnPp1zJGiZwRCtazC2H0tpwGmft0Ur8h4L/aBeSiD+4TOuA/FcDnrjcgXTL62XRQfSdi6BBUA==
+tab-ads@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.2.tgz#d9cd8dedf74958eb8e9c7f2ce7dad61fcb6e5c4c"
+  integrity sha512-geCWa8iTFurrMGRJJiX46U7I6IwSRaBOuRQij6hrnk3O+s2knt4YOGBQrIB3BYM3vuhif9d7hCtQNYsO3B2enw==
   dependencies:
     lodash "^4.17.15"
 
-tab-cmp@0.12.0-beta.0:
-  version "0.12.0-beta.0"
-  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.12.0-beta.0.tgz#eaa8b11c561b3933f1671e4a2f95d6c20b82a2c0"
-  integrity sha512-8mYklftVJ6als5u0GFFcIdPBB6LsH65eCYZHH+6G/0mhCsKab7EMxRW9ZY4dlVjwZv/LqkvILNaYBEezKdPHrg==
+tab-cmp@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.13.0.tgz#76aa959c91b5b1763b5646537138438eaa0b9021"
+  integrity sha512-+U8Z1XAOmWwZ0aymjvHj0tKp+k0ojoqnRjD+v7d1l7NvHSVGlT6GByQQnMTrhLHdugb9HpVVvpGb9MmddbC1tg==
 
 table@^5.2.3:
   version "5.3.3"
