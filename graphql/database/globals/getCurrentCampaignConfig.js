@@ -4,7 +4,7 @@ const campaignTitle = '## Help select a new charity partner'
 const campaignDescription = `
 #### Over the past 6 months, one of the consistent pieces of your feedback has been about filling a gap in the issues addressed by our partner charities: racial justice in the United States. As such, **we are adding a new nonprofit partner that will focus on supporting the Black community**, and we’d love your help in selecting it.
 #### We recognize that financial support of one organization will not fix all of the problems at hand or the pain that has been inflicted on the Black community and other communities of color, but we hope to utilize our platform to make even a small impact.
-#### Read about [how we selected](#) these 7 amazing organizations and [vote for the ones you would most like to see as our next charity partner](#).
+#### Read about [how we selected](https://medium.com/for-a-cause/adding-a-new-charity-partner-509671872127) these 7 amazing organizations and [vote for the ones you would most like to see as our next charity partner](https://forms.gle/qAxTzBvrLyxfMTzE6).
 `
 // const campaignDescriptionTwo = ``
 
