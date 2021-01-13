@@ -1,13 +1,5 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-// @tree-planting-campaign
-const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
-const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
-
-// @tree-planting-campaign
-// The tree planting campaign has hardcoded copy, so much of
-// this is currently unused.
-
 const campaignTitle = '## X'
 const campaignDescription = `
 #### X
@@ -31,11 +23,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
   countMoneyRaised: false,
-  countNewUsers: true,
+  countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: false,
+    whenGoalAchieved: true,
     whenTimeEnds: true,
   },
   goal: {
@@ -44,7 +36,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
     limitProgressToTargetMax: true,
-    numberSource: 'newUsers', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
     targetNumber: 10e6,
@@ -103,8 +95,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
   },
   time: {
-    start: TREE_CAMPAIGN_START_TIME_ISO,
-    end: TREE_CAMPAIGN_END_TIME_ISO,
+    start: '2020-11-30T17:00:00.000Z',
+    end: '2021-01-05T20:00:00.000Z',
   },
 })
 
