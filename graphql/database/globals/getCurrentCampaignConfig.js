@@ -1,16 +1,10 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-// @tree-planting-campaign
-const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
-const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
-
-// @tree-planting-campaign
-// The tree planting campaign has hardcoded copy, so much of
-// this is currently unused.
-
-const campaignTitle = '## X'
+const campaignTitle = '## Help select a new charity partner'
 const campaignDescription = `
-#### X
+#### Over the past 6 months, one of the consistent pieces of your feedback has been about filling a gap in the issues addressed by our partner charities: racial justice in the United States. As such, **we are adding a new nonprofit partner that will focus on supporting the Black community**, and we’d love your help in selecting it.
+#### We recognize that financial support of one organization will not fix all of the problems at hand or the pain that has been inflicted on the Black community and other communities of color, but we hope to utilize our platform to make even a small impact.
+#### Read about [how we selected](https://medium.com/for-a-cause/adding-a-new-charity-partner-509671872127) these 7 amazing organizations and [vote for the ones you would most like to see as our next charity partner](https://forms.gle/qAxTzBvrLyxfMTzE6).
 `
 // const campaignDescriptionTwo = ``
 
@@ -31,12 +25,12 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
   countMoneyRaised: false,
-  countNewUsers: true,
+  countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
     whenGoalAchieved: false,
-    whenTimeEnds: true,
+    whenTimeEnds: false,
   },
   goal: {
     impactUnitSingular: 'heart',
@@ -44,7 +38,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
     limitProgressToTargetMax: true,
-    numberSource: 'newUsers', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
     targetNumber: 10e6,
@@ -91,20 +85,20 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     //   },
     // },
   },
-  showCountdownTimer: true,
-  showHeartsDonationButton: true,
-  showProgressBar: true,
+  showCountdownTimer: false,
+  showHeartsDonationButton: false,
+  showProgressBar: false,
   showSocialSharing: false,
   // socialSharing: undefined,
-  theme: {
-    color: {
-      main: '#53AF4A',
-      light: '#94989e',
-    },
-  },
+  // theme: {
+  //   color: {
+  //     main: '#53AF4A',
+  //     light: '#94989e',
+  //   },
+  // },
   time: {
-    start: TREE_CAMPAIGN_START_TIME_ISO,
-    end: TREE_CAMPAIGN_END_TIME_ISO,
+    start: '2021-01-13T16:00:00.000Z',
+    end: '2021-04-10T16:00:00.000Z',
   },
 })
 

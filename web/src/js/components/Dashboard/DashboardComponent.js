@@ -64,20 +64,13 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
-import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignContainer'
-
-// @tree-planting-campaign
-const TREE_CAMPAIGN_START_TIME_ISO = '2020-11-30T17:00:00.000Z'
-const TREE_CAMPAIGN_END_TIME_ISO = '2021-01-05T20:00:00.000Z'
-const TREE_CAMPAIGN_START_MOMENT = moment(TREE_CAMPAIGN_START_TIME_ISO)
-const TREE_CAMPAIGN_END_MOMENT = moment(TREE_CAMPAIGN_END_TIME_ISO)
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
-// const CampaignGeneric = lazy(() =>
-//   import('js/components/Campaign/CampaignGenericView')
-// )
+const CampaignGeneric = lazy(() =>
+  import('js/components/Campaign/CampaignGenericView')
+)
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -594,54 +587,18 @@ class Dashboard extends React.Component {
         />
         {showCampaign && app && user ? (
           <FadeInDashboardAnimation>
-            <div
-              style={{
-                zIndex: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                boxSizing: 'border-box',
-                pointerEvents: 'none',
-              }}
-            >
-              <div style={{ width: 500, marginBottom: 100 }}>
-                <TreePlantingCampaign
-                  app={app}
-                  user={user}
-                  campaign={{
-                    time: {
-                      start: TREE_CAMPAIGN_START_MOMENT,
-                      end: TREE_CAMPAIGN_END_MOMENT,
-                    },
-                    treesPlantedGoal: 25000,
-                  }}
-                  onDismiss={() => {
-                    this.setState({
-                      hasUserDismissedCampaignRecently: true,
-                    })
-                  }}
-                />
-              </div>
-            </div>
+            <Suspense fallback={null}>
+              <CampaignGeneric
+                onDismiss={() => {
+                  this.setState({
+                    hasUserDismissedCampaignRecently: true,
+                  })
+                }}
+                showError={this.showError.bind(this)}
+              />
+            </Suspense>
           </FadeInDashboardAnimation>
-        ) : // <FadeInDashboardAnimation>
-        //   <Suspense fallback={null}>
-        //     <CampaignGeneric
-        //       onDismiss={() => {
-        //         this.setState({
-        //           hasUserDismissedCampaignRecently: true,
-        //         })
-        //       }}
-        //       showError={this.showError.bind(this)}
-        //     />
-        //       </Suspense>
-        // </FadeInDashboardAnimation>
-        null}
+        ) : null}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />

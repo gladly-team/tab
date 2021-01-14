@@ -10,16 +10,10 @@ export default createFragmentContainer(Dashboard, {
         isLive
       }
       ...UserMenuContainer_app
-      ...TreePlantingCampaignContainer_app
     }
   `,
   user: graphql`
-    fragment DashboardContainer_user on User
-      # @tree-planting-campaign
-      @argumentDefinitions(
-        startTime: { type: "String" }
-        endTime: { type: "String" }
-      ) {
+    fragment DashboardContainer_user on User {
       id
       experimentActions {
         referralNotification
@@ -35,8 +29,6 @@ export default createFragmentContainer(Dashboard, {
       ...LogAccountCreationContainer_user
       ...NewUserTourContainer_user
       ...AssignExperimentGroupsContainer_user
-      ...TreePlantingCampaignContainer_user
-        @arguments(startTime: $startTime, endTime: $endTime)
     }
   `,
 })
