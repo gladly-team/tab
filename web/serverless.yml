@@ -228,8 +228,10 @@ resources:
                   # beta Next.js app.
                   Forward: whitelist
                   WhitelistedNames:
-                    - tabWebSession
-                    - tabWebSession.sig
+                    - TabAuth.AuthUser
+                    - TabAuth.AuthUser.sig
+                    - TabAuth.AuthUserTokens
+                    - TabAuth.AuthUserTokens.sig
                     - tabV4OptIn
                     - tabV4OptIn.sig
               Compress: true
