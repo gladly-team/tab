@@ -7,7 +7,10 @@ import { BACKGROUND_IMAGE_LEGACY_CATEGORY } from '../constants'
  * into a BackgroundImage instance.
  */
 
-export default async (userContext, category) => {
+export default async (
+  userContext,
+  category = BACKGROUND_IMAGE_LEGACY_CATEGORY
+) => {
   let images
   if (category === BACKGROUND_IMAGE_LEGACY_CATEGORY) {
     images = await BackgroundImageModel.getAll(userContext)
