@@ -46,7 +46,6 @@ class BackgroundImage extends BaseModel {
       imageURL: types.string().forbidden(),
       // category of the image
       category: types.string().valid(...self.allowedValues.category),
-      // .default(self.fieldDefaults.category),
       // Filename.
       thumbnail: types.string(),
       // Absolute URL. Only returned during deserialization.
@@ -59,7 +58,6 @@ class BackgroundImage extends BaseModel {
       get: () => true,
       getAll: () => true,
       indexPermissions: {
-        // I believe any user should be able to get images by category
         ImagesByCategory: {
           get: () => true,
           getAll: () => true,

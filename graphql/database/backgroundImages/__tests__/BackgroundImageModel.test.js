@@ -19,6 +19,7 @@ describe('BackgroundImageModel', () => {
   it('implements the tableName property', () => {
     expect(BackgroundImageModel.tableName).toBe(tableNames.backgroundImages)
   })
+
   it('implements a global secondary index on category', () => {
     expect(BackgroundImageModel.indexes).toContainEqual({
       hashKey: 'category',
@@ -26,6 +27,7 @@ describe('BackgroundImageModel', () => {
       type: 'global',
     })
   })
+
   it('has the correct get permission', () => {
     expect(BackgroundImageModel.permissions.get()).toBe(true)
   })
@@ -41,6 +43,7 @@ describe('BackgroundImageModel', () => {
   it('has the correct create permission', () => {
     expect(BackgroundImageModel.permissions.create).toBeUndefined()
   })
+
   it('has the correct imagesByCategory index permission', () => {
     expect(
       BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.get()
@@ -55,6 +58,7 @@ describe('BackgroundImageModel', () => {
       BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.create
     ).toBeUndefined()
   })
+
   it('returns a list of allowed categories', () => {
     expect(BackgroundImageModel.allowedValues.category).toEqual([
       'legacy',
@@ -82,6 +86,7 @@ describe('BackgroundImageModel', () => {
       thumbnailURL: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`,
     })
   })
+
   it('adds a default value of legacy to category', () => {
     const item = Object.assign(
       {},

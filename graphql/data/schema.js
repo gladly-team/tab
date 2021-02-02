@@ -172,7 +172,7 @@ const backgroundImageType = new GraphQLObjectType({
     },
     category: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'the image file URL',
+      description: 'the category that the image falls into',
     },
     thumbnail: {
       type: GraphQLString,

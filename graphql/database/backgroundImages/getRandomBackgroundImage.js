@@ -13,6 +13,7 @@ export default async (
 ) => {
   let images
   if (category === BACKGROUND_IMAGE_LEGACY_CATEGORY) {
+    // We're assuming legacy photo items in the DB don't have a category. Can remove this if we migrate that field to all items.
     images = await BackgroundImageModel.getAll(userContext)
     images = images.filter(
       image => image.category === BACKGROUND_IMAGE_LEGACY_CATEGORY

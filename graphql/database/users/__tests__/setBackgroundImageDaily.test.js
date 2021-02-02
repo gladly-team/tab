@@ -64,4 +64,10 @@ describe('setBackgroundImageDaily', () => {
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)
   })
+
+  it('passes along category to get random background image', async () => {
+    const userId = userContext.id
+    await setBackgroundImageDaily(userContext, 'cats', userId)
+    expect(getRandomBackgroundImage).toHaveBeenCalledWith(userContext, 'cats')
+  })
 })

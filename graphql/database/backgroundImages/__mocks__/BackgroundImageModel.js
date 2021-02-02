@@ -47,7 +47,7 @@ export const mockCatImages = [
 ]
 export default {
   get: jest.fn(() => mockImages[1]),
-  getAll: jest.fn(() => mockImages.filter(img => img.category === 'legacy')),
+  getAll: jest.fn(() => mockImages),
   query: jest.fn(() => ({
     usingIndex: () => ({
       execute: () => mockCatImages,

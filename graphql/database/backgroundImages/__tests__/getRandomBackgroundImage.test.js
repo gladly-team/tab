@@ -23,12 +23,14 @@ describe('getRandomBackgroundImage', () => {
     )
     expect(mockImages).toContainEqual(returnedImgTwo)
   })
+
   it('returns a legacy photo if a category is somehow ommitted', async () => {
     const returnedImg = await getRandomBackgroundImage(userContext)
     expect(mockImages).toContainEqual(returnedImg)
     const returnedImgTwo = await getRandomBackgroundImage(userContext)
     expect(mockImages).toContainEqual(returnedImgTwo)
   })
+
   it('returns a cat image when the category is cats ', async () => {
     const returnedImg = await getRandomBackgroundImage(userContext, 'cats')
     expect(mockCatImages).toContainEqual(returnedImg)
