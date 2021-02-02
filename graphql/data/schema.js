@@ -170,6 +170,7 @@ const backgroundImageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The image file URL',
     },
+    category: { type: GraphQLString, description: 'the image file URL' },
     thumbnail: {
       type: GraphQLString,
       description: 'The image thumbnail filename',
@@ -1350,6 +1351,7 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgDailyImage',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
+    category: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
@@ -1357,9 +1359,10 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
+  mutateAndGetPayload: ({ userId, category }, context) => {
+    console.log(userId, category, context)
     const userGlobalObj = fromGlobalId(userId)
-    return setBackgroundImageDaily(context.user, userGlobalObj.id)
+    return setBackgroundImageDaily(context.user, category, userGlobalObj.id)
   },
 })
 

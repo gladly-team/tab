@@ -314,6 +314,7 @@ class BaseModel {
     if (has(queryObj, 'request.IndexName')) {
       indexName = queryObj.request.IndexName
     }
+    console.log(indexName, hashKey, userContext, 'what i got')
     if (
       !this.isQueryAuthorized(
         userContext,

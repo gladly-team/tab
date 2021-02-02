@@ -7,11 +7,18 @@ import BackgroundImageModel from './BackgroundImageModel'
  * into a BackgroundImage instance.
  */
 
-export default async userContext => {
+export default async (userContext, category) => {
   try {
-    const images = await BackgroundImageModel.getAll(userContext)
+    console.log(category, userContext, 'inside get random')
+    const images = await BackgroundImageModel.query(userContext, 'id')
+      .usingIndex('ImagesByCategory')
+      .where('category')
+      .equals(category)
+      .execute()
+    console.log(images, 'images')
     return sample(images)
   } catch (e) {
-    throw e
+    console.log(e, 'error')
+    // throw e
   }
 }
