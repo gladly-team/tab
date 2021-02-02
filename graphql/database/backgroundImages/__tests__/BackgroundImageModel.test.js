@@ -51,6 +51,7 @@ describe('BackgroundImageModel', () => {
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Cool Photo',
       image: 'cool.png',
+      category: 'legacy',
       thumbnail: 'cool-thumb.png',
       imageURL: `${mediaRoot}/img/backgrounds/cool.png`,
       thumbnailURL: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`,

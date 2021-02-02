@@ -68,7 +68,23 @@ class BackgroundImage extends BaseModel {
     }
   }
 
-  // originally i was going to have the default value be all but now i'm thinking it should just be undefined
+  static get fieldDeserializers() {
+    return {
+      imageURL: (imageURL, obj) => {
+        const finalURL = obj.image
+          ? `${mediaRoot}/img/backgrounds/${obj.image}`
+          : null
+        return finalURL
+      },
+      thumbnailURL: (thumbnailURL, obj) => {
+        const finalURL = obj.thumbnail
+          ? `${mediaRoot}/img/background-thumbnails/${obj.thumbnail}`
+          : null
+        return finalURL
+      },
+    }
+  }
+
   static get fieldDefaults() {
     return {
       category: BACKGROUND_IMAGE_LEGACY_CATEGORY,
