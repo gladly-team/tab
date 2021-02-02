@@ -119,7 +119,28 @@
   {
     "TableName": "BackgroundImages",
     "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
-    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+    "AttributeDefinitions": [
+      { "AttributeName": "id", "AttributeType": "S" },
+      { "AttributeName": "category", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "ImagesByCategory",
+        "KeySchema": [
+          {
+            "AttributeName": "category",
+            "KeyType": "S"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ],
     "ProvisionedThroughput": {
       "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1

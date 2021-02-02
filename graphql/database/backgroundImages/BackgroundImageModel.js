@@ -18,11 +18,22 @@ class BackgroundImage extends BaseModel {
     return 'id'
   }
 
+  static get indexes() {
+    return [
+      {
+        hashKey: 'category',
+        name: 'ImagesByCategory',
+        type: 'global',
+      },
+    ]
+  }
+
   static get tableName() {
     return tableNames.backgroundImages
   }
 
   static get schema() {
+    const self = this
     return {
       id: types.uuid(),
       name: types.string(),
@@ -30,6 +41,9 @@ class BackgroundImage extends BaseModel {
       image: types.string(),
       // Absolute URL. Only returned during deserialization.
       imageURL: types.string().forbidden(),
+      // category of the image
+      category: types.string().allow(...self.allowedValues.category),
+      // .default(self.fieldDefaults.category),
       // Filename.
       thumbnail: types.string(),
       // Absolute URL. Only returned during deserialization.
@@ -58,6 +72,19 @@ class BackgroundImage extends BaseModel {
           : null
         return finalURL
       },
+    }
+  }
+
+  // originally i was going to have the default value be all but now i'm thinking it should just be undefined
+  static get fieldDefaults() {
+    return {
+      category: undefined,
+    }
+  }
+
+  static get allowedValues() {
+    return {
+      category: ['all', 'cats'],
     }
   }
 }

@@ -361,6 +361,8 @@ custom:
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.usage}
     - table: backgroundImagesTable
+      index:
+          - ImagesByCategory
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.maximum}
@@ -593,6 +595,16 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+          - IndexName: ImagesByCategory
+            KeySchema:
+              - AttributeName: category
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
 
     userWidgetsTable:  
       Type: AWS::DynamoDB::Table
