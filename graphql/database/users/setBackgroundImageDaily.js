@@ -1,7 +1,10 @@
 import moment from 'moment'
 import UserModel from './UserModel'
 import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
-import { USER_BACKGROUND_OPTION_DAILY } from '../constants'
+import {
+  USER_BACKGROUND_OPTION_DAILY,
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+} from '../constants'
 
 /**
  * Set user's background image to change daily.
@@ -9,9 +12,12 @@ import { USER_BACKGROUND_OPTION_DAILY } from '../constants'
  * @param {string} userId - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const setBackgroundImageDaily = async (userContext, category, userId) => {
+const setBackgroundImageDaily = async (
+  userContext,
+  category = BACKGROUND_IMAGE_LEGACY_CATEGORY,
+  userId
+) => {
   try {
-    console.log(category, 'category inside setBackground daily image')
     const image = await getRandomBackgroundImage(userContext, category)
     const userInstance = await UserModel.update(userContext, {
       id: userId,

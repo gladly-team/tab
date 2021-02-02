@@ -314,7 +314,6 @@ class BaseModel {
     if (has(queryObj, 'request.IndexName')) {
       indexName = queryObj.request.IndexName
     }
-    console.log(indexName, hashKey, userContext, 'what i got')
     if (
       !this.isQueryAuthorized(
         userContext,
@@ -516,24 +515,20 @@ class BaseModel {
     if (isValidPermissionsOverride(userContext)) {
       return true
     }
-
     // If the userContext is null or not an object, reject.
     if (!userContext || typeof userContext !== 'object') {
       return false
     }
-
     const validOperations = ['get', 'getAll', 'update', 'create']
     if (validOperations.indexOf(operation) === -1) {
       return false
     }
-
     // Get the permissions from the model class. If no permissions are
     // defined, do not allow any access.
     const { permissions } = this
     if (!permissions) {
       return false
     }
-
     // Get the authorizer function from the model class for this operation.
     // If the function does not exist, do not allow any access.
     // If this operation is happening on a secondary index, get the authorizer
@@ -551,7 +546,6 @@ class BaseModel {
     if (!authorizerFunction || !(typeof authorizerFunction === 'function')) {
       return false
     }
-
     // If the authorizer function returns `true`, the query is authorized.
     let isAuthorized = false
     try {

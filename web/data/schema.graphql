@@ -37,7 +37,7 @@ type BackgroundImage implements Node {
   imageURL: String
 
   """the image file URL"""
-  category: String
+  category: String!
 
   """The image thumbnail filename"""
   thumbnail: String
@@ -703,7 +703,7 @@ type SetUserBkgCustomImagePayload {
 
 input SetUserBkgDailyImageInput {
   userId: String!
-  category: String!
+  category: String
   clientMutationId: String
 }
 

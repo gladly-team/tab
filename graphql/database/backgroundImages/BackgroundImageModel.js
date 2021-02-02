@@ -1,7 +1,10 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { BACKGROUND_IMAGE } from '../constants'
+import {
+  BACKGROUND_IMAGE,
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+} from '../constants'
 import config from '../../config'
 
 const mediaRoot = config.MEDIA_ENDPOINT
@@ -42,7 +45,7 @@ class BackgroundImage extends BaseModel {
       // Absolute URL. Only returned during deserialization.
       imageURL: types.string().forbidden(),
       // category of the image
-      category: types.string().allow(...self.allowedValues.category),
+      category: types.string().valid(...self.allowedValues.category),
       // .default(self.fieldDefaults.category),
       // Filename.
       thumbnail: types.string(),
@@ -55,22 +58,12 @@ class BackgroundImage extends BaseModel {
     return {
       get: () => true,
       getAll: () => true,
-    }
-  }
-
-  static get fieldDeserializers() {
-    return {
-      imageURL: (imageURL, obj) => {
-        const finalURL = obj.image
-          ? `${mediaRoot}/img/backgrounds/${obj.image}`
-          : null
-        return finalURL
-      },
-      thumbnailURL: (thumbnailURL, obj) => {
-        const finalURL = obj.thumbnail
-          ? `${mediaRoot}/img/background-thumbnails/${obj.thumbnail}`
-          : null
-        return finalURL
+      indexPermissions: {
+        // I believe any user should be able to get images by category
+        ImagesByCategory: {
+          get: () => true,
+          getAll: () => true,
+        },
       },
     }
   }
@@ -78,13 +71,13 @@ class BackgroundImage extends BaseModel {
   // originally i was going to have the default value be all but now i'm thinking it should just be undefined
   static get fieldDefaults() {
     return {
-      category: undefined,
+      category: BACKGROUND_IMAGE_LEGACY_CATEGORY,
     }
   }
 
   static get allowedValues() {
     return {
-      category: ['all', 'cats'],
+      category: [BACKGROUND_IMAGE_LEGACY_CATEGORY, 'cats'],
     }
   }
 }

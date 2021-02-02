@@ -129,7 +129,7 @@
         "KeySchema": [
           {
             "AttributeName": "category",
-            "KeyType": "S"
+            "KeyType": "HASH"
           }
         ],
         "Projection": {

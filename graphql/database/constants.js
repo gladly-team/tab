@@ -21,6 +21,7 @@ export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
 export const USER_BACKGROUND_OPTION_COLOR = 'color'
 export const USER_BACKGROUND_OPTION_PHOTO = 'photo'
+export const BACKGROUND_IMAGE_LEGACY_CATEGORY = 'legacy'
 
 // Fixed values
 export const USER_REFERRAL_VC_REWARD = 350
