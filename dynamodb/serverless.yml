@@ -595,7 +595,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-      GlobalSecondaryIndexes:
+        GlobalSecondaryIndexes:
           - IndexName: ImagesByCategory
             KeySchema:
               - AttributeName: category
