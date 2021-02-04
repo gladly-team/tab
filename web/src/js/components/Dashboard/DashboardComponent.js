@@ -429,9 +429,10 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`We want your feedback`}
+                  title={`We want to hear from you!`}
                   message={`
-                        As we look forward to the future, we'd love to hear about your Tab for a Cause experience and how we can make it better.`}
+                        We'd love to hear how we can make your Tab for a Cause experience better.
+                        (Bonus: one participant will pick any charity we'll give $500 to!)`}
                   buttonText={'Take the Survey'}
                   buttonURL={'https://forms.gle/kkQ92wNdqSpGnvxJ7'}
                   onDismiss={() => {
