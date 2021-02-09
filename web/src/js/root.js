@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
+import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { filter } from 'lodash/collection'
 import { get } from 'lodash/object'
 import { Helmet } from 'react-helmet'
@@ -124,6 +124,7 @@ class Root extends React.Component {
           />
           <Router history={browserHistory}>
             <Switch>
+              <Redirect exact from="/" to={appPath} />
               <Route path={appPath} component={TheApp} />
             </Switch>
           </Router>
