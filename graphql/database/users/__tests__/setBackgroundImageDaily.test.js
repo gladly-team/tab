@@ -4,7 +4,10 @@ import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImageDaily from '../setBackgroundImageDaily'
 import getRandomBackgroundImage from '../../backgroundImages/getRandomBackgroundImage'
-import { USER_BACKGROUND_OPTION_DAILY } from '../../constants'
+import {
+  USER_BACKGROUND_OPTION_DAILY,
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+} from '../../constants'
 import {
   DatabaseOperation,
   getMockUserContext,
@@ -29,7 +32,11 @@ describe('setBackgroundImageDaily', () => {
   it('works as expected', async () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
     const userId = userContext.id
-    await setBackgroundImageDaily(userContext, userId)
+    await setBackgroundImageDaily(
+      userContext,
+      BACKGROUND_IMAGE_LEGACY_CATEGORY,
+      userId
+    )
     const mockImage = await getRandomBackgroundImage(userContext)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
@@ -49,8 +56,18 @@ describe('setBackgroundImageDaily', () => {
     const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: expectedReturnedUser,
     })
-    const returnedUser = await setBackgroundImageDaily(userContext, userId)
+    const returnedUser = await setBackgroundImageDaily(
+      userContext,
+      BACKGROUND_IMAGE_LEGACY_CATEGORY,
+      userId
+    )
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)
+  })
+
+  it('passes along category to get random background image', async () => {
+    const userId = userContext.id
+    await setBackgroundImageDaily(userContext, 'cats', userId)
+    expect(getRandomBackgroundImage).toHaveBeenCalledWith(userContext, 'cats')
   })
 })
