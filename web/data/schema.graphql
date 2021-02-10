@@ -36,7 +36,7 @@ type BackgroundImage implements Node {
   """The image file URL"""
   imageURL: String
 
-  """the image file URL"""
+  """the category that the image falls into"""
   category: String!
 
   """The image thumbnail filename"""

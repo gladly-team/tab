@@ -363,5 +363,19 @@
     "updated": "2020-10-19T08:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "6ce5ad8e-7dd4-4de5-ba4f-13868e7d830a",
+    "name": "The Bail Project",
+    "category": "Human Rights",
+    "logo": "the-bail-project.jpg",
+    "image": "the-bail-project.jpg",
+    "website": "https://bailproject.org",
+    "impact": "On behalf of the thousands of people whose lives have been restored through the presumption of innocence, thank you for donating to <a href='https://bailproject.org/' target='_blank' rel='noopener noreferrer'>The Bail Project</a>. Your gift will help The Bail Project to extend an immediate lifeline to low-income people who are legally presumed innocent, help them make their court dates and, through these efforts, demonstrate that the model of <a href='https://bailproject.org/our-work/' target='_blank' rel='noopener noreferrer'>Community Release with Support</a> is a more effective, humane, and equitable alternative to cash bail. In addition, because bail is returned at the end of a case, donations to The Bail Project’s National Revolving Bail Fund can be reused to pay bail two to three times per year, maximizing the impact of every dollar.",
+    "description": "Combatting mass incarceration by disrupting the money bail system—one person at a time",
+    "created": "2021-02-10T10:00:00.000Z",
+    "updated": "2021-02-10T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": true
   }
 ]
