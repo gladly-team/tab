@@ -11,7 +11,7 @@ const campaignDescription = `
 
 const campaignEndTitle = '## Thank You for Supporting The Bail Project!'
 const campaignEndDescription = `
-#### Thank you! Every time you tab, you are aiding charitable causes like The Bail Project. These funds will help The Bail Project reform a broken pretrial system. In addition, because bail is returned at the end of a case, donations to The Bail Project National Revolving Bail Fund can be reused to pay bail two to three times per year, maximizing the impact of every dollar.
+#### Every time you tab, you are aiding charitable causes like [The Bail Project](https://bailproject.org/). These funds will help The Bail Project reform a broken pretrial system. In addition, because bail is returned at the end of a case, donations to The Bail Project National Revolving Bail Fund can be reused to pay bail two to three times per year, maximizing the impact of every dollar.
 #### Excited about our newest addition to the Tabber family? Share the good news with your friends and invite them to start Tabbing!
 `
 // const campaignEndDescriptionTwo =
