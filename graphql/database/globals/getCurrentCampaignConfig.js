@@ -31,8 +31,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: false,
-    whenTimeEnds: false,
+    whenGoalAchieved: true,
+    whenTimeEnds: true,
   },
   goal: {
     impactUnitSingular: 'heart',
