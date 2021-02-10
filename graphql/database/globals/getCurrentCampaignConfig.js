@@ -99,6 +99,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
   },
   time: {
+    // TODO: make charity item active before campaign launch
+    // TODO: update start time before campaign launch
     start: '2021-02-10T10:00:00.000Z',
     end: '2021-03-03T16:00:00.000Z',
   },
