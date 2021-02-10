@@ -63,29 +63,28 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
     showCountdownTimer: false,
     showHeartsDonationButton: false,
-    showSocialSharing: false,
-    // socialSharing: {
-    //   url: 'https://tab.gladly.io/covid-19/',
-    //   FacebookShareButtonProps: {
-    //     quote:
-    //       'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-    //   },
-    //   RedditShareButtonProps: {
-    //     title:
-    //       'Tabs transformed into vital supplies for 100 families in rainforest communities',
-    //   },
-    //   TumblrShareButtonProps: {
-    //     title:
-    //       'Tabs transformed into vital supplies for 100 families in rainforest communities',
-    //     caption:
-    //       'We just helped protect 100 families in rainforest communities via Cool Earth. And all we did was open browser tabs.',
-    //   },
-    //   TwitterShareButtonProps: {
-    //     title:
-    //       'On @TabForACause, we just supplied 100 rainforest families via @coolearth just by opening tabs. #COVID19',
-    //     related: ['@TabForACause'],
-    //   },
-    // },
+    showSocialSharing: true,
+    socialSharing: {
+      url: 'https://tab.gladly.io',
+      FacebookShareButtonProps: {
+        quote:
+          'We are helping extend an immediate lifeline to people who are legally presumed innocent but cannot afford bail! And you can too, by supporting The Bail Project on Tab for a Cause.',
+      },
+      RedditShareButtonProps: {
+        title:
+          'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
+      },
+      TumblrShareButtonProps: {
+        title: 'Browser tabs transformed into bailouts for low-income people',
+        caption:
+          'We are helping extend an immediate lifeline to people who are legally presumed innocent but cannot afford bail! And you can too, by supporting The Bail Project on Tab for a Cause.',
+      },
+      TwitterShareButtonProps: {
+        title:
+          'On @TabForACause, we’re supporting people who are legally presumed innocent but cannot afford bail via @TheBailProject.  All we had to do? Open browser tabs!',
+        related: ['@TabForACause'],
+      },
+    },
   },
   showCountdownTimer: true,
   showHeartsDonationButton: true,
