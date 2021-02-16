@@ -150,7 +150,9 @@ provider:
         - "dynamodb:GetItem"
         - "dynamodb:Query"
         - "dynamodb:Scan"
-      Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
+      Resource:
+        - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}/index/*"
     # UserWidgets table
     - Effect: "Allow"
       Action:
