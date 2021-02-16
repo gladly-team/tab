@@ -1,7 +1,10 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { BACKGROUND_IMAGE } from '../constants'
+import {
+  BACKGROUND_IMAGE,
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+} from '../constants'
 import config from '../../config'
 
 const mediaRoot = config.MEDIA_ENDPOINT
@@ -18,11 +21,22 @@ class BackgroundImage extends BaseModel {
     return 'id'
   }
 
+  static get indexes() {
+    return [
+      {
+        hashKey: 'category',
+        name: 'ImagesByCategory',
+        type: 'global',
+      },
+    ]
+  }
+
   static get tableName() {
     return tableNames.backgroundImages
   }
 
   static get schema() {
+    const self = this
     return {
       id: types.uuid(),
       name: types.string(),
@@ -30,6 +44,8 @@ class BackgroundImage extends BaseModel {
       image: types.string(),
       // Absolute URL. Only returned during deserialization.
       imageURL: types.string().forbidden(),
+      // category of the image
+      category: types.string().valid(...self.allowedValues.category),
       // Filename.
       thumbnail: types.string(),
       // Absolute URL. Only returned during deserialization.
@@ -41,6 +57,12 @@ class BackgroundImage extends BaseModel {
     return {
       get: () => true,
       getAll: () => true,
+      indexPermissions: {
+        ImagesByCategory: {
+          get: () => true,
+          getAll: () => true,
+        },
+      },
     }
   }
 
@@ -58,6 +80,18 @@ class BackgroundImage extends BaseModel {
           : null
         return finalURL
       },
+    }
+  }
+
+  static get fieldDefaults() {
+    return {
+      category: BACKGROUND_IMAGE_LEGACY_CATEGORY,
+    }
+  }
+
+  static get allowedValues() {
+    return {
+      category: [BACKGROUND_IMAGE_LEGACY_CATEGORY, 'cats'],
     }
   }
 }

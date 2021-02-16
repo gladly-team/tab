@@ -78,7 +78,7 @@
   "scripts": {
     "start": "echo \"Run either start:newtab or start:search\"",
     "start:newtab": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:newtab:react-scripts & yarn run relay:watch",
-    "start:newtab:react-scripts": "REACT_APP_WHICH_APP=newtab react-scripts start",
+    "start:newtab:react-scripts": "BROWSER=none REACT_APP_WHICH_APP=newtab react-scripts start",
     "start:search": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:search:react-scripts & yarn run relay:watch",
     "start:search:react-scripts": "REACT_APP_WHICH_APP=search react-scripts start",
     "build": "echo \"Run either build:newtab or build:search\"",

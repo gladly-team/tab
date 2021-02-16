@@ -5,7 +5,6 @@ import BackgroundImageModel from '../BackgroundImageModel'
 import config from '../../../config'
 
 const mediaRoot = config.MEDIA_ENDPOINT
-
 jest.mock('../../databaseClient')
 
 describe('BackgroundImageModel', () => {
@@ -19,6 +18,14 @@ describe('BackgroundImageModel', () => {
 
   it('implements the tableName property', () => {
     expect(BackgroundImageModel.tableName).toBe(tableNames.backgroundImages)
+  })
+
+  it('implements a global secondary index on category', () => {
+    expect(BackgroundImageModel.indexes).toContainEqual({
+      hashKey: 'category',
+      name: 'ImagesByCategory',
+      type: 'global',
+    })
   })
 
   it('has the correct get permission', () => {
@@ -37,6 +44,28 @@ describe('BackgroundImageModel', () => {
     expect(BackgroundImageModel.permissions.create).toBeUndefined()
   })
 
+  it('has the correct imagesByCategory index permission', () => {
+    expect(
+      BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.get()
+    ).toBe(true)
+    expect(
+      BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.getAll()
+    ).toBe(true)
+    expect(
+      BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.update
+    ).toBeUndefined()
+    expect(
+      BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.create
+    ).toBeUndefined()
+  })
+
+  it('returns a list of allowed categories', () => {
+    expect(BackgroundImageModel.allowedValues.category).toEqual([
+      'legacy',
+      'cats',
+    ])
+  })
+
   it('constructs as expected', () => {
     const item = Object.assign(
       {},
@@ -51,6 +80,28 @@ describe('BackgroundImageModel', () => {
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Cool Photo',
       image: 'cool.png',
+      category: 'legacy',
+      thumbnail: 'cool-thumb.png',
+      imageURL: `${mediaRoot}/img/backgrounds/cool.png`,
+      thumbnailURL: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`,
+    })
+  })
+
+  it('adds a default value of legacy to category', () => {
+    const item = Object.assign(
+      {},
+      new BackgroundImageModel({
+        id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+        name: 'Cool Photo',
+        image: 'cool.png',
+        thumbnail: 'cool-thumb.png',
+      })
+    )
+    expect(item).toEqual({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      name: 'Cool Photo',
+      image: 'cool.png',
+      category: 'legacy',
       thumbnail: 'cool-thumb.png',
       imageURL: `${mediaRoot}/img/backgrounds/cool.png`,
       thumbnailURL: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`,
