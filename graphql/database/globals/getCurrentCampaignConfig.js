@@ -81,7 +81,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
       },
       TwitterShareButtonProps: {
         title:
-          'On @TabForACause, we’re supporting people who are legally presumed innocent but cannot afford bail via @TheBailProject.  All we had to do? Open browser tabs!',
+          'On @TabForACause, we’re supporting people who are legally presumed innocent but cannot afford bail via @BailProject.  All we had to do? Open browser tabs!',
         related: ['@TabForACause'],
       },
     },
