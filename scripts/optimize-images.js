@@ -1,5 +1,5 @@
 // A "this works for now" way to process/format new background
-// images.
+// images. The category is hardcoded.
 // To use: node optimize-images.js ~/folder-with-photos/
 
 /* eslint import/no-extraneous-dependencies: 0 */
@@ -47,6 +47,7 @@ const processImage = async fileName => {
   return {
     id,
     image: newFileName,
+    category: 'cats', // change or add input var as needed
     created: processTime,
     updated: processTime,
   }
