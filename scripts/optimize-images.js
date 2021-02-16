@@ -12,6 +12,7 @@ console.log(`Starting image optimization for images in directory: ${dir}`)
 const outDir = path.join(dir, '../', `${path.basename(dir)}-edited`)
 console.log(`Will save to: ${outDir}`)
 
+// https://github.com/lovell/sharp
 const formatImg = async imgFilePath => {
   console.log(`Formatting image: ${imgFilePath}`)
 
