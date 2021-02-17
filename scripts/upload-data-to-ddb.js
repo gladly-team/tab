@@ -19,8 +19,8 @@ const TABLE_NAME = process.env.TABLE_NAME
 AWS.config.update({
   region: process.env.AWS_REGION,
   endpoint: process.env.DYNAMODB_ENDPOINT,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  // accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 })
 
 const docClient = new AWS.DynamoDB.DocumentClient()
