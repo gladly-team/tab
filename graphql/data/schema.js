@@ -70,6 +70,7 @@ import donateVc from '../database/donations/donateVc'
 import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
+import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -1017,13 +1018,10 @@ const appType = new GraphQLObjectType({
     },
     backgroundImages: {
       type: backgroundImageConnection,
-      description: 'All the background Images',
+      description: 'Get all the "legacy" (uncategorized) background Images',
       args: connectionArgs,
       resolve: (_, args, context) =>
-        connectionFromPromisedArray(
-          BackgroundImageModel.getAll(context.user),
-          args
-        ),
+        connectionFromPromisedArray(getBackgroundImages(context.user), args),
     },
     campaign: {
       type: campaignType,

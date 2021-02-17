@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getRandomBackgroundImage from '../getRandomBackgroundImage'
+import getBackgroundImages from '../getBackgroundImages'
 import {
   mockLegacyImages,
   mockCatImages,
@@ -13,22 +13,25 @@ jest.mock('../BackgroundImageModel')
 
 const userContext = getMockUserContext()
 
-describe('getRandomBackgroundImage', () => {
+describe('getBackgroundImages', () => {
   it('works as expected with legacy category', async () => {
-    const returnedImg = await getRandomBackgroundImage(
+    expect.assertions(1)
+    const images = await getBackgroundImages(
       userContext,
       BACKGROUND_IMAGE_LEGACY_CATEGORY
     )
-    expect(mockLegacyImages).toContainEqual(returnedImg)
+    expect(images).toEqual(mockLegacyImages)
   })
 
-  it('returns a legacy photo if a category is somehow ommitted', async () => {
-    const returnedImg = await getRandomBackgroundImage(userContext)
-    expect(mockLegacyImages).toContainEqual(returnedImg)
+  it('returns legacy images if a category is somehow omitted', async () => {
+    expect.assertions(1)
+    const images = await getBackgroundImages(userContext)
+    expect(images).toEqual(mockLegacyImages)
   })
 
   it('returns a cat image when the category is cats ', async () => {
-    const returnedImg = await getRandomBackgroundImage(userContext, 'cats')
-    expect(mockCatImages).toContainEqual(returnedImg)
+    expect.assertions(1)
+    const images = await getBackgroundImages(userContext, 'cats')
+    expect(images).toEqual(mockCatImages)
   })
 })
