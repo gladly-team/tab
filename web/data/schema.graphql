@@ -15,7 +15,7 @@ type App implements Node {
   """All the charities"""
   charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
 
-  """All the background Images"""
+  """Get all the "legacy" (uncategorized) background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
 
   """Campaigns (or "charity spotlights") shown to users."""
