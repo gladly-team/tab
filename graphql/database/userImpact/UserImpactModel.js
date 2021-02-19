@@ -25,7 +25,7 @@ class UserImpact extends BaseModel {
   }
 
   static get tableName() {
-    return tableNames.users
+    return tableNames.userImpact
   }
 
   static get schema() {
