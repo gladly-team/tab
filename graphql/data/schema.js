@@ -26,6 +26,7 @@ import {
   CHARITY,
   USER,
   BACKGROUND_IMAGE,
+  USER_IMPACT,
   USER_RECRUITS,
 } from '../database/constants'
 
@@ -66,6 +67,7 @@ import setV4Enabled from '../database/users/setV4Enabled'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
+import UserImpactModel from '../database/userImpact/UserImpactModel'
 import donateVc from '../database/donations/donateVc'
 import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
@@ -120,6 +122,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === CHARITY) {
       return CharityModel.get(context.user, id)
     }
+    if (type === USER_IMPACT) {
+      return UserImpactModel.get(context.user, id)
+    }
     if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
@@ -141,6 +146,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof CharityModel) {
       // eslint-disable-next-line no-use-before-define
       return charityType
+    }
+    if (obj instanceof UserImpactModel) {
+      return userImpactType
     }
     if (obj instanceof BackgroundImageModel) {
       // eslint-disable-next-line no-use-before-define
@@ -682,7 +690,31 @@ const charityType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface],
 })
-
+const userImpactType = new GraphQLObjectType({
+  name: USER_IMPACT,
+  description: `a user's charity specific impact`,
+  fields: () => ({
+    userId: globalIdField(USER),
+    charityId: globalIdField(CHARITY),
+    userImpactMetric: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'a users impact for a specific charity',
+    },
+    pendingUserReferralImpact: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'a users pending impact based on referrals',
+    },
+    visitsUntilNextImpact: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'visits remaining until next recorded impact',
+    },
+    confirmedImpact: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'enables a user to start accruing impact',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const campaignContentType = new GraphQLObjectType({
   name: 'CampaignContent',
   description: 'Text content for campaigns',
