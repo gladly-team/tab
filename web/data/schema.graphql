@@ -589,6 +589,7 @@ type MergeIntoExistingUserPayload {
 
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
+  updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -641,6 +642,7 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+  userImpact(userId: String!, charityId: String!): UserImpact
 }
 
 input ReferralData {
@@ -743,6 +745,20 @@ input SetV4BetaInput {
 
 type SetV4BetaPayload {
   user: User
+  clientMutationId: String
+}
+
+input UpdateImpactInput {
+  userId: String!
+  charityId: String!
+  logImpact: Boolean
+  claimPendingUserReferralImpact: Boolean
+  confirmImpact: Boolean
+  clientMutationId: String
+}
+
+type UpdateImpactPayload {
+  userImpact: UserImpact
   clientMutationId: String
 }
 
@@ -893,6 +909,24 @@ type User implements Node {
 
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
+}
+
+"""a user's charity specific impact"""
+type UserImpact {
+  userId: String!
+  charityId: String!
+
+  """a users impact for a specific charity"""
+  userImpactMetric: Float!
+
+  """a users pending impact based on referrals"""
+  pendingUserReferralImpact: Float!
+
+  """visits remaining until next recorded impact"""
+  visitsUntilNextImpact: Float!
+
+  """enables a user to start accruing impact"""
+  confirmedImpact: Boolean!
 }
 
 """Info about a user recruited by a referring user"""

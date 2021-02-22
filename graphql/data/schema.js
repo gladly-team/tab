@@ -48,6 +48,7 @@ import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
+import updateImpact from '../database/userImpact/updateImpact'
 import logSearch from '../database/users/logSearch'
 import checkSearchRateLimit from '../database/users/checkSearchRateLimit'
 import logRevenue from '../database/userRevenue/logRevenue'
@@ -694,8 +695,8 @@ const userImpactType = new GraphQLObjectType({
   name: USER_IMPACT,
   description: `a user's charity specific impact`,
   fields: () => ({
-    userId: globalIdField(USER),
-    charityId: globalIdField(CHARITY),
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
     userImpactMetric: {
       type: new GraphQLNonNull(GraphQLFloat),
       description: 'a users impact for a specific charity',
@@ -713,7 +714,7 @@ const userImpactType = new GraphQLObjectType({
       description: 'enables a user to start accruing impact',
     },
   }),
-  interfaces: [nodeInterface],
+  // interfaces: [nodeInterface],
 })
 const campaignContentType = new GraphQLObjectType({
   name: 'CampaignContent',
@@ -1147,6 +1148,35 @@ const logTabMutation = mutationWithClientMutationId({
   },
 })
 
+/**
+ * Log user impact, optionally update referral impact and confirmed state
+ */
+const updateImpactMutation = mutationWithClientMutationId({
+  name: 'UpdateImpact',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    logImpact: { type: GraphQLBoolean },
+    claimPendingUserReferralImpact: { type: GraphQLBoolean },
+    confirmImpact: { type: GraphQLBoolean },
+  },
+  outputFields: {
+    userImpact: {
+      type: userImpactType,
+      resolve: userImpact => userImpact,
+    },
+  },
+  mutateAndGetPayload: (input, context) => {
+    const userGlobalId = fromGlobalId(input.userId)
+    const userImpact = updateImpact(
+      context.user,
+      userGlobalId.id,
+      input.charityId,
+      input
+    )
+    return userImpact
+  },
+})
 /**
  * Log a search, update VC, and change related stats.
  */
@@ -1758,6 +1788,15 @@ const queryType = new GraphQLObjectType({
       },
       resolve: (_, args, context) => UserModel.get(context.user, args.userId),
     },
+    userImpact: {
+      type: userImpactType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        charityId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, args, context) =>
+        UserImpactModel.get(context.user, args.userId, args.charityId),
+    },
   }),
 })
 
@@ -1769,6 +1808,7 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     logTab: logTabMutation,
+    updateImpact: updateImpactMutation,
     logSearch: logSearchMutation,
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,

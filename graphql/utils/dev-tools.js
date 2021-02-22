@@ -15,8 +15,8 @@ import {
  */
 function mockAuthorizer(authorizationToken) {
   if (!authorizationToken) {
-    const defaultUserId = 'abcdefghijklmno'
-    const defaultEmail = 'kevin@example.com'
+    const defaultUserId = 'cL5KcFKHd9fEU5C9Vstj3g4JAc73'
+    const defaultEmail = 'alec+01@tabforacause.org'
     console.warn('Warning: dev user is missing an Authorization token.')
     console.warn(
       `Using default user with id "${defaultUserId}"" and email "${defaultEmail}".`

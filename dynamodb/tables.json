@@ -41,11 +41,11 @@
   {
     "TableName": "UserImpact",
     "KeySchema": [
-      { "AttributeName": "id", "KeyType": "HASH" },
+      { "AttributeName": "userId", "KeyType": "HASH" },
       { "AttributeName": "charityId", "KeyType": "RANGE" }
     ],
     "AttributeDefinitions": [
-      { "AttributeName": "id", "AttributeType": "S" },
+      { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "charityId", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {
