@@ -714,7 +714,6 @@ const userImpactType = new GraphQLObjectType({
       description: 'enables a user to start accruing impact',
     },
   }),
-  // interfaces: [nodeInterface],
 })
 const campaignContentType = new GraphQLObjectType({
   name: 'CampaignContent',
