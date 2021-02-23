@@ -1,7 +1,7 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER_IMPACT } from '../constants'
+import { USER_IMPACT, USER_VISIT_IMPACT_VALUE } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import {
   DatabaseItemDoesNotExistException,
@@ -70,7 +70,8 @@ class UserImpact extends BaseModel {
     return {
       userImpactMetric: 0,
       pendingUserReferralImpact: 0,
-      visitsUntilNextImpact: 5,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      confirmedImpact: false,
     }
   }
 

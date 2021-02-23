@@ -1,5 +1,5 @@
 import UserImpactModel from './UserImpactModel'
-import USER_VISIT_IMPACT_VALUE from '../constants'
+import { USER_VISIT_IMPACT_VALUE } from '../constants'
 /**
  * Change the user's tab and VC stats accordingly when the
  * user opens a tab.
