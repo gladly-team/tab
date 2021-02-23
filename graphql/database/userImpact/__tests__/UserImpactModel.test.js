@@ -10,10 +10,7 @@ import {
   getMockUserContext,
   setMockDBResponse,
 } from '../../test-utils'
-import {
-  UnauthorizedQueryException,
-  UserDoesNotExistException,
-} from '../../../utils/exceptions'
+import { UnauthorizedQueryException } from '../../../utils/exceptions'
 
 jest.mock('../../databaseClient')
 
@@ -76,19 +73,6 @@ describe('UserImpactModel', () => {
     const item = null
     expect(UserImpact.permissions.create(userContext, null, null, item)).toBe(
       false
-    )
-  })
-
-  it('throws an UserDoesNotExistException error when a `get` returns no item', () => {
-    const userContext = getMockUserContext()
-    const mockItemId = userContext.id
-
-    // Set mock response from DB client.
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: null,
-    })
-    return expect(UserImpact.get(userContext, mockItemId)).rejects.toEqual(
-      new UserDoesNotExistException()
     )
   })
 

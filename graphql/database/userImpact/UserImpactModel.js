@@ -3,10 +3,6 @@ import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_IMPACT, USER_VISIT_IMPACT_VALUE } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
-import {
-  DatabaseItemDoesNotExistException,
-  UserDoesNotExistException,
-} from '../../utils/exceptions'
 
 /*
  * @extends BaseModel
@@ -72,21 +68,6 @@ class UserImpact extends BaseModel {
       pendingUserReferralImpact: 0,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: false,
-    }
-  }
-
-  // Extend the `get` method to throw a unique error when
-  // an item does not exist.
-  static async get(...args) {
-    try {
-      const response = await super.get(...args)
-      return response
-    } catch (e) {
-      if (e.code === DatabaseItemDoesNotExistException.code) {
-        throw new UserDoesNotExistException()
-      } else {
-        throw e
-      }
     }
   }
 
