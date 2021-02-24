@@ -713,6 +713,10 @@ const userImpactType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'enables a user to start accruing impact',
     },
+    hasClaimedLatestReward: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'flag that indicates if user has celebrated latest impact',
+    },
   }),
 })
 const campaignContentType = new GraphQLObjectType({
@@ -1158,6 +1162,7 @@ const updateImpactMutation = mutationWithClientMutationId({
     logImpact: { type: GraphQLBoolean },
     claimPendingUserReferralImpact: { type: GraphQLBoolean },
     confirmImpact: { type: GraphQLBoolean },
+    claimLatestReward: { type: GraphQLBoolean },
   },
   outputFields: {
     userImpact: {

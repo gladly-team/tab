@@ -27,3 +27,4 @@ export const BACKGROUND_IMAGE_LEGACY_CATEGORY = 'legacy'
 // Fixed values
 export const USER_REFERRAL_VC_REWARD = 350
 export const USER_VISIT_IMPACT_VALUE = 14
+export const USER_IMPACT_REWARD_LIMIT = 7

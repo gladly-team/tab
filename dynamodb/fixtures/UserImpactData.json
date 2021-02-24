@@ -5,7 +5,8 @@
     "userImpactMetric": 3,
     "pendingUserReferralImpact": 10,
     "visitsUntilNextImpact": 3,
-    "confirmedImpact": true
+    "confirmedImpact": true,
+    "hasClaimedLatestReward": false
   },
   {
     "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
@@ -13,6 +14,7 @@
     "userImpactMetric": 3,
     "pendingUserReferralImpact": 10,
     "visitsUntilNextImpact": 3,
-    "confirmedImpact": true
+    "confirmedImpact": true,
+    "hasClaimedLatestReward": false
   }
 ]

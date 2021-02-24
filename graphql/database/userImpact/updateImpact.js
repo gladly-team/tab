@@ -1,5 +1,5 @@
 import UserImpactModel from './UserImpactModel'
-import { USER_VISIT_IMPACT_VALUE } from '../constants'
+import { USER_VISIT_IMPACT_VALUE, USER_IMPACT_REWARD_LIMIT } from '../constants'
 /**
  * updates a user impact record
  * @param {object} userContext - The user authorizer object.
@@ -11,13 +11,20 @@ import { USER_VISIT_IMPACT_VALUE } from '../constants'
 
 const updateImpact = async (userContext, userId, charityId, updates) => {
   let userImpact = await UserImpactModel.get(userContext, userId, charityId)
-  const { logImpact, claimPendingReferralImpact, confirmImpact } = updates
+  const {
+    logImpact,
+    claimPendingReferralImpact,
+    confirmImpact,
+    claimLatestReward,
+  } = updates
   let {
     userImpactMetric,
     pendingUserReferralImpact,
     visitsUntilNextImpact,
     confirmedImpact,
+    hasClaimedLatestReward,
   } = userImpact
+
   // when user opens a new tab decrement visits counter and reset when
   // remaining visits hits 0
   if (logImpact && confirmedImpact) {
@@ -26,6 +33,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
     } else {
       visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
       userImpactMetric += 1
+      hasClaimedLatestReward = !(userImpactMetric < USER_IMPACT_REWARD_LIMIT)
     }
   }
   // if a user claims a referral reward give them all impact bonuses
@@ -39,12 +47,18 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
     confirmedImpact = confirmImpact
     visitsUntilNextImpact -= 1
   }
+  // if a user celebrates the latest reward on the front end
+  if (claimLatestReward) {
+    hasClaimedLatestReward = claimLatestReward
+  }
+
   userImpact = await UserImpactModel.update(userContext, {
     ...userImpact,
     userImpactMetric,
     pendingUserReferralImpact,
     visitsUntilNextImpact,
     confirmedImpact,
+    hasClaimedLatestReward,
   })
   return userImpact
 }

@@ -49,6 +49,12 @@ class UserImpact extends BaseModel {
         .default(self.fieldDefaults.pendingUserReferralImpact)
         .description(`The impact a user has gained from referrals that has not yet 
         been claimed in the UI by the user`),
+      hasClaimedLatestReward: types
+        .boolean()
+        .default(self.fieldDefaults.hasClaimedLatestReward)
+        .description(
+          `A flag that indicates if user has celebrated latest impact milestone`
+        ),
       visitsUntilNextImpact: types
         .number()
         .default(self.fieldDefaults.visitsUntilNextImpact) // only set in app code
@@ -68,6 +74,7 @@ class UserImpact extends BaseModel {
       pendingUserReferralImpact: 0,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: false,
+      hasClaimedLatestReward: false,
     }
   }
 

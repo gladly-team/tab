@@ -754,6 +754,7 @@ input UpdateImpactInput {
   logImpact: Boolean
   claimPendingUserReferralImpact: Boolean
   confirmImpact: Boolean
+  claimLatestReward: Boolean
   clientMutationId: String
 }
 
@@ -927,6 +928,9 @@ type UserImpact {
 
   """enables a user to start accruing impact"""
   confirmedImpact: Boolean!
+
+  """flag that indicates if user has celebrated latest impact"""
+  hasClaimedLatestReward: Boolean!
 }
 
 """Info about a user recruited by a referring user"""
