@@ -49,6 +49,12 @@ class UserImpact extends BaseModel {
         .default(self.fieldDefaults.pendingUserReferralImpact)
         .description(`The impact a user has gained from referrals that has not yet 
         been claimed in the UI by the user`),
+      pendingUserReferralCount: types
+        .number()
+        .default(self.fieldDefaults.pendingUserReferralCount)
+        .description(
+          `The number of friends a user has referred and hasn't claimed`
+        ),
       hasClaimedLatestReward: types
         .boolean()
         .default(self.fieldDefaults.hasClaimedLatestReward)
@@ -72,9 +78,10 @@ class UserImpact extends BaseModel {
     return {
       userImpactMetric: 0,
       pendingUserReferralImpact: 0,
+      pendingUserReferralCount: 0,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: false,
-      hasClaimedLatestReward: false,
+      hasClaimedLatestReward: true,
     }
   }
 
@@ -83,8 +90,6 @@ class UserImpact extends BaseModel {
       get: permissionAuthorizers.userIdMatchesHashKey,
       getAll: () => false,
       update: permissionAuthorizers.userIdMatchesHashKey,
-      // To create a new user, the created item must have the same
-      // email and user ID as the authorized user.
       create: permissionAuthorizers.userIdMatchesHashKey,
     }
   }

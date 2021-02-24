@@ -116,8 +116,10 @@ describe('UserImpactModel', () => {
       charityId: 'some-charity',
       userImpactMetric: 0,
       pendingUserReferralImpact: 0,
+      pendingUserReferralCount: 0,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: false,
+      hasClaimedLatestReward: true,
     })
   })
 })

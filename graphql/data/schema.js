@@ -705,6 +705,10 @@ const userImpactType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLFloat),
       description: 'a users pending impact based on referrals',
     },
+    pendingUserReferralCount: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'pending user referral count',
+    },
     visitsUntilNextImpact: {
       type: new GraphQLNonNull(GraphQLFloat),
       description: 'visits remaining until next recorded impact',

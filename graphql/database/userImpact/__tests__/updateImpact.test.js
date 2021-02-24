@@ -9,8 +9,6 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-// We use an export from the mock file.
-// eslint-disable-next-line import/named
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
@@ -32,12 +30,33 @@ const defaultResponse = {
   updated: '2017-06-22T01:13:28.000Z',
   visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
   pendingUserReferralImpact: 0,
+  pendingUserReferralCount: 0,
+  hasClaimedLatestReward: true,
   userImpactMetric: 0,
   confirmedImpact: true,
 }
 
 describe('updateImpact', () => {
   it('when a user has confirmed and logs impact, it decrements the visitsUntilNextImpact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      confirmedImpact: true,
+      userImpactMetric: 1,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      userImpactMetric: 1,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE - 1,
+    })
+  })
+
+  it('when a user logs their first visit after confirming, they should get a full impact metric and hasClaimedLatestReward should be set to false', async () => {
     const mockUserImpact = new UserImpactModel({
       userId,
       charityId: 'mock-charity',
@@ -50,7 +69,8 @@ describe('updateImpact', () => {
     await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       ...defaultResponse,
-      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE - 1,
+      userImpactMetric: 1,
+      hasClaimedLatestReward: false,
     })
   })
 
@@ -72,7 +92,7 @@ describe('updateImpact', () => {
     })
   })
 
-  it('if the visitsUntilNextImpact hits 0, it should increment userImpactMetric and reset visitsUntilNextImpact', async () => {
+  it('if the visitsUntilNextImpact hits 0, it should increment userImpactMetric and reset visitsUntilNextImpact and set hasClaimedLatestReward to false', async () => {
     const mockUserImpact = new UserImpactModel({
       userId,
       charityId: 'mock-charity',
@@ -88,14 +108,16 @@ describe('updateImpact', () => {
       ...defaultResponse,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       userImpactMetric: 1,
+      hasClaimedLatestReward: false,
     })
   })
 
-  it('if the user claims pending referral it should increase userImpact and reset pending referral', async () => {
+  it('if the user claims pending referral it should increase userImpact and reset pending referral and count', async () => {
     const mockUserImpact = new UserImpactModel({
       userId,
       charityId: 'mock-charity',
       pendingUserReferralImpact: 10,
+      pendingUserReferralCount: 1,
       confirmedImpact: true,
     })
     setMockDBResponse(DatabaseOperation.GET, {
@@ -109,10 +131,11 @@ describe('updateImpact', () => {
       ...defaultResponse,
       userImpactMetric: 10,
       pendingUserReferralImpact: 0,
+      pendingUserReferralCount: 0,
     })
   })
 
-  it('if the user confirms, it should set confirmedImpact to true and log a visit', async () => {
+  it('if the user confirms, it should set confirmedImpact to true', async () => {
     const mockUserImpact = new UserImpactModel({
       userId,
       charityId: 'mock-charity',
@@ -127,7 +150,7 @@ describe('updateImpact', () => {
     })
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       ...defaultResponse,
-      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE - 1,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: true,
     })
   })

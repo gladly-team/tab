@@ -4,7 +4,7 @@ import { USER_VISIT_IMPACT_VALUE, USER_IMPACT_REWARD_LIMIT } from '../constants'
  * updates a user impact record
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
- * @param {string} tabId - A UUID for this opened tab
+ * @param {string} charityId - A UUID for the charity
  * @param {object} updates - options to update impact record, include logImpact, claimPendingReferralImpact, confirmImpact
  * @return {Promise<User>}  A promise that resolves into a UserImpact instance.
  */
@@ -20,6 +20,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   let {
     userImpactMetric,
     pendingUserReferralImpact,
+    pendingUserReferralCount,
     visitsUntilNextImpact,
     confirmedImpact,
     hasClaimedLatestReward,
@@ -28,7 +29,15 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   // when user opens a new tab decrement visits counter and reset when
   // remaining visits hits 0
   if (logImpact && confirmedImpact) {
-    if (visitsUntilNextImpact > 1) {
+    // first visit after confirming they get a full impact
+    if (
+      userImpactMetric === 0 &&
+      visitsUntilNextImpact === USER_VISIT_IMPACT_VALUE
+    ) {
+      userImpactMetric += 1
+      hasClaimedLatestReward = false
+      // standard log
+    } else if (visitsUntilNextImpact > 1) {
       visitsUntilNextImpact -= 1
     } else {
       visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
@@ -41,11 +50,11 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   if (claimPendingReferralImpact) {
     userImpactMetric += pendingUserReferralImpact
     pendingUserReferralImpact = 0
+    pendingUserReferralCount = 0
   }
   // if a user confirms enable impact and give them first visit.
   if (confirmImpact) {
     confirmedImpact = confirmImpact
-    visitsUntilNextImpact -= 1
   }
   // if a user celebrates the latest reward on the front end
   if (claimLatestReward) {
@@ -55,6 +64,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   userImpact = await UserImpactModel.update(userContext, {
     ...userImpact,
     userImpactMetric,
+    pendingUserReferralCount,
     pendingUserReferralImpact,
     visitsUntilNextImpact,
     confirmedImpact,
