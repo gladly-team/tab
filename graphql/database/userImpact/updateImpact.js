@@ -5,7 +5,7 @@ import { USER_VISIT_IMPACT_VALUE, USER_IMPACT_REWARD_LIMIT } from '../constants'
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} charityId - A UUID for the charity
- * @param {object} updates - options to update impact record, include logImpact, claimPendingReferralImpact, confirmImpact
+ * @param {object} updates - options to update impact record, include logImpact, claimPendingUserReferralImpact, confirmImpact
  * @return {Promise<User>}  A promise that resolves into a UserImpact instance.
  */
 
@@ -13,7 +13,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   let userImpact = await UserImpactModel.get(userContext, userId, charityId)
   const {
     logImpact,
-    claimPendingReferralImpact,
+    claimPendingUserReferralImpact,
     confirmImpact,
     claimLatestReward,
   } = updates
@@ -47,7 +47,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   }
   // if a user claims a referral reward give them all impact bonuses
   // currently pending and reset the counter.
-  if (claimPendingReferralImpact) {
+  if (claimPendingUserReferralImpact) {
     userImpactMetric += pendingUserReferralImpact
     pendingUserReferralImpact = 0
     pendingUserReferralCount = 0

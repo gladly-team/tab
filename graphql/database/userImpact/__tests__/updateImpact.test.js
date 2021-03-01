@@ -6,6 +6,7 @@ import { USER_VISIT_IMPACT_VALUE } from '../../constants'
 import {
   DatabaseOperation,
   getMockUserContext,
+  getMockUserImpact,
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
@@ -24,17 +25,7 @@ beforeAll(() => {
 })
 
 const userId = userContext.id
-const defaultResponse = {
-  userId,
-  charityId: 'mock-charity',
-  updated: '2017-06-22T01:13:28.000Z',
-  visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
-  pendingUserReferralImpact: 0,
-  pendingUserReferralCount: 0,
-  hasClaimedLatestReward: true,
-  userImpactMetric: 0,
-  confirmedImpact: true,
-}
+const defaultResponse = getMockUserImpact()
 
 describe('updateImpact', () => {
   it('when a user has confirmed and logs impact, it decrements the visitsUntilNextImpact', async () => {
@@ -125,7 +116,7 @@ describe('updateImpact', () => {
     })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(userContext, userId, 'mock-charity', {
-      claimPendingReferralImpact: true,
+      claimPendingUserReferralImpact: true,
     })
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       ...defaultResponse,

@@ -923,6 +923,9 @@ type UserImpact {
   """a users pending impact based on referrals"""
   pendingUserReferralImpact: Float!
 
+  """pending user referral count"""
+  pendingUserReferralCount: Float!
+
   """visits remaining until next recorded impact"""
   visitsUntilNextImpact: Float!
 
