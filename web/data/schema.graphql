@@ -914,6 +914,8 @@ type User implements Node {
 
 """a user's charity specific impact"""
 type UserImpact {
+  """The ID of an object"""
+  id: ID!
   userId: String!
   charityId: String!
 

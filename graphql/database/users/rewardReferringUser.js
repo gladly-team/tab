@@ -84,8 +84,8 @@ const rewardReferringUser = async (userContext, userId) => {
   // if user is on v4, reward the referring user in UserImpact
   try {
     const userImpactRecord = await UserImpactModel.get(
-      userContext,
-      userId,
+      override,
+      referringUserId,
       CATS_CHARITY_ID
     )
     const {

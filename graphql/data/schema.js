@@ -695,6 +695,10 @@ const userImpactType = new GraphQLObjectType({
   name: USER_IMPACT,
   description: `a user's charity specific impact`,
   fields: () => ({
+    id: globalIdField(
+      USER_IMPACT,
+      userImpact => `${userImpact.userId}::${userImpact.charityId}`
+    ),
     userId: { type: new GraphQLNonNull(GraphQLString) },
     charityId: { type: new GraphQLNonNull(GraphQLString) },
     userImpactMetric: {
@@ -1802,8 +1806,13 @@ const queryType = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLString) },
         charityId: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: (_, args, context) =>
-        UserImpactModel.get(context.user, args.userId, args.charityId),
+      resolve: async (_, args, context) => {
+        const { userId, charityId } = args
+        return (await UserImpactModel.getOrCreate(context.user, {
+          userId,
+          charityId,
+        })).item
+      },
     },
   }),
 })
