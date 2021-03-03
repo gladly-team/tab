@@ -1,7 +1,7 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER_IMPACT, USER_VISIT_IMPACT_VALUE } from '../constants'
+import { USER_IMPACT } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
@@ -79,7 +79,7 @@ class UserImpact extends BaseModel {
       userImpactMetric: 0,
       pendingUserReferralImpact: 0,
       pendingUserReferralCount: 0,
-      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      visitsUntilNextImpact: 1,
       confirmedImpact: false,
       hasClaimedLatestReward: true,
     }

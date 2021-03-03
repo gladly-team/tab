@@ -29,15 +29,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
   // when user opens a new tab decrement visits counter and reset when
   // remaining visits hits 0
   if (logImpact && confirmedImpact) {
-    // first visit after confirming they get a full impact
-    if (
-      userImpactMetric === 0 &&
-      visitsUntilNextImpact === USER_VISIT_IMPACT_VALUE
-    ) {
-      userImpactMetric += 1
-      hasClaimedLatestReward = false
-      // standard log
-    } else if (visitsUntilNextImpact > 1) {
+    if (visitsUntilNextImpact > 1) {
       visitsUntilNextImpact -= 1
     } else {
       visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
