@@ -3,7 +3,6 @@
 import tableNames from '../../tables'
 import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 import UserImpact from '../UserImpactModel'
-import { USER_VISIT_IMPACT_VALUE } from '../../constants'
 import {
   DatabaseOperation,
   mockDate,
@@ -117,7 +116,7 @@ describe('UserImpactModel', () => {
       userImpactMetric: 0,
       pendingUserReferralImpact: 0,
       pendingUserReferralCount: 0,
-      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      visitsUntilNextImpact: 1,
       confirmedImpact: false,
       hasClaimedLatestReward: true,
     })

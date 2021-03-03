@@ -34,6 +34,7 @@ describe('updateImpact', () => {
       charityId: 'mock-charity',
       confirmedImpact: true,
       userImpactMetric: 1,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUserImpact,
@@ -70,6 +71,7 @@ describe('updateImpact', () => {
       userId,
       charityId: 'mock-charity',
       confirmedImpact: false,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUserImpact,
@@ -110,6 +112,7 @@ describe('updateImpact', () => {
       pendingUserReferralImpact: 10,
       pendingUserReferralCount: 1,
       confirmedImpact: true,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUserImpact,
@@ -131,6 +134,7 @@ describe('updateImpact', () => {
       userId,
       charityId: 'mock-charity',
       confirmedImpact: true,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUserImpact,
@@ -141,7 +145,6 @@ describe('updateImpact', () => {
     })
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       ...defaultResponse,
-      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
       confirmedImpact: true,
     })
   })
