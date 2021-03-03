@@ -3,6 +3,7 @@
 import moment from 'moment'
 import databaseClient from './databaseClient'
 import UserModel from './users/UserModel'
+import { USER_VISIT_IMPACT_VALUE } from './constants'
 
 export const DatabaseOperation = {
   BATCH_GET: 'batchGet',
@@ -112,6 +113,21 @@ export const getMockUserInfo = () => ({
   email: 'foo@bar.com',
 })
 
+/**
+ * Get a mock user impact
+ * @return {Object} The mock user impact object
+ */
+export const getMockUserImpact = () => ({
+  userId: 'abcdefghijklmno',
+  charityId: 'mock-charity',
+  updated: '2017-06-22T01:13:28.000Z',
+  visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+  pendingUserReferralImpact: 0,
+  pendingUserReferralCount: 0,
+  hasClaimedLatestReward: true,
+  userImpactMetric: 0,
+  confirmedImpact: true,
+})
 /**
  * Set the global `Date` to always return the same date.
  */

@@ -39,6 +39,21 @@
     }
   },
   {
+    "TableName": "UserImpact",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "charityId", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "charityId", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
     "TableName": "Widgets",
     "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
     "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],

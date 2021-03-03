@@ -1,6 +1,7 @@
 // Model names
 export const CHARITY = 'Charity'
 export const USER = 'User'
+export const USER_IMPACT = 'UserImpact'
 export const WIDGET = 'Widget'
 export const BASE_WIDGET = 'BaseWidget'
 export const USER_WIDGET = 'UserWidget'
@@ -25,3 +26,7 @@ export const BACKGROUND_IMAGE_LEGACY_CATEGORY = 'legacy'
 
 // Fixed values
 export const USER_REFERRAL_VC_REWARD = 350
+export const USER_VISIT_IMPACT_VALUE = 14
+export const USER_IMPACT_REWARD_LIMIT = 7
+export const USER_IMPACT_REFERRAL_BONUS = 10
+export const CATS_CHARITY_ID = '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z'

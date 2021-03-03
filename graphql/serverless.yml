@@ -153,6 +153,17 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}/index/*"
+    # UserImpact table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}/index/*"
     # UserWidgets table
     - Effect: "Allow"
       Action:

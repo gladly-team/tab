@@ -398,7 +398,11 @@ class BaseModel {
       // Get the item and return it.
       if (e.code === DatabaseConditionalCheckFailedException.code) {
         const hashKey = item[this.hashKey]
-        const fetchedItem = await this.get(userContext, hashKey)
+        let rangeKey
+        if (this.rangeKey) {
+          rangeKey = item[this.rangeKey]
+        }
+        const fetchedItem = await this.get(userContext, hashKey, rangeKey)
         return {
           created: false,
           item: fetchedItem,

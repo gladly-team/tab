@@ -51,6 +51,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
+      userImpactTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60
       widgetsTable:
         read:
           minimum: 1
@@ -178,6 +187,15 @@ custom:
         write:
           minimum: 1
           maximum: 9001
+          usage: 0.60
+      userImpactTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
           usage: 0.60
       widgetsTable:
         read:
@@ -311,6 +329,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.usage}
+    - table: userImpactTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.usage}
     - table: widgetsTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
@@ -468,6 +495,26 @@ resources:
             KeyType: HASH
         AttributeDefinitions:
           - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    userImpactTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: UserImpact-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: charityId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: charityId
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
