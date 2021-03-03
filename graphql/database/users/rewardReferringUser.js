@@ -1,7 +1,12 @@
 import moment from 'moment'
 import ReferralDataModel from '../referrals/ReferralDataModel'
 import UserModel from './UserModel'
-import { USER_REFERRAL_VC_REWARD } from '../constants'
+import UserImpactModel from '../userImpact/UserImpactModel'
+import {
+  USER_REFERRAL_VC_REWARD,
+  CATS_CHARITY_ID,
+  USER_IMPACT_REFERRAL_BONUS,
+} from '../constants'
 import {
   getPermissionsOverride,
   REWARD_REFERRER_OVERRIDE,
@@ -76,7 +81,28 @@ const rewardReferringUser = async (userContext, userId) => {
   } catch (e) {
     throw e
   }
-
+  // if user is on v4, reward the referring user in UserImpact
+  try {
+    const userImpactRecord = await UserImpactModel.get(
+      override,
+      referringUserId,
+      CATS_CHARITY_ID
+    )
+    const {
+      pendingUserReferralImpact,
+      pendingUserReferralCount,
+    } = userImpactRecord
+    await UserImpactModel.update(userContext, {
+      ...userImpactRecord,
+      pendingUserReferralImpact:
+        pendingUserReferralImpact + USER_IMPACT_REFERRAL_BONUS,
+      pendingUserReferralCount: pendingUserReferralCount + 1,
+    })
+  } catch (e) {
+    if (!(e instanceof DatabaseItemDoesNotExistException)) {
+      throw e
+    }
+  }
   // Reward the referring user.
   try {
     await addVc(override, referringUserId, USER_REFERRAL_VC_REWARD)

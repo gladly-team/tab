@@ -8,10 +8,13 @@ import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
+  getMockUserImpact,
   getMockUserInstance,
   setMockDBResponse,
   clearAllMockDBResponses,
 } from '../../test-utils'
+import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
+import UserImpactModel from '../../userImpact/UserImpactModel'
 
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
@@ -59,7 +62,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     await rewardReferringUser(userContext, userId)
     const addVcCallParams = addVc.mock.calls[0]
     expect(addVcCallParams[0]).toMatch(
@@ -102,7 +110,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     await rewardReferringUser(userContext, userId)
     expect(addUsersRecruited).toHaveBeenCalledWith(referringUserId, 1)
     expect(addUsersRecruited).toHaveBeenCalledTimes(1)
@@ -141,7 +154,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(true)
   })
@@ -171,7 +189,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
     expect(addVc).not.toHaveBeenCalled()
@@ -210,7 +233,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
     expect(addVc).not.toHaveBeenCalled()
@@ -251,7 +279,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
     expect(addVc).not.toHaveBeenCalled()
@@ -291,7 +324,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
   })
@@ -329,7 +367,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
   })
@@ -361,7 +404,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
@@ -397,7 +445,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
@@ -436,7 +489,12 @@ describe('rewardReferringUser', () => {
       null,
       new Error({ code: 'SomeFakeError' }) // simple mock error
     )
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     // FIXME
     await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
@@ -475,7 +533,12 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     // Mock an error when adding VC.
     addVc.mockImplementationOnce(() => Promise.reject(new Error('Darn.')))
 
@@ -517,12 +580,115 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new DatabaseItemDoesNotExistException() // simple mock error
+    )
     // Mock an error when adding VC.
     addUsersRecruited.mockImplementationOnce(() =>
       Promise.reject(new Error('Whoops.'))
     )
 
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow(
+      'Whoops.'
+    )
+  })
+
+  it('gives the referring user User Impact as expected', async () => {
+    const userContext = getMockUserContext()
+    const userInfo = getMockUserInfo()
+    const userId = userInfo.id
+    const mockUser = getMockUserInstance(Object.assign({}, userInfo))
+    const referringUserId = 'referring-user-id-123'
+
+    // Mock getting the ReferralData.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
+          referringUser: referringUserId,
+          referringChannel: null,
+        })
+      ),
+    })
+
+    // Mock getting the user to check if its referral has been rewarded.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
+
+    // Mock updating the user to mark the user as referred.
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
+    // Mock returning a record for user Impact
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: {
+        ...getMockUserImpact(),
+        pendingUserReferralImpact: 10,
+        pendingUserReferralCount: 1,
+      },
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Item: {
+        ...getMockUserImpact(),
+      },
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await rewardReferringUser(userContext, userId)
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...getMockUserImpact(),
+      pendingUserReferralCount: 2,
+      pendingUserReferralImpact: 20,
+    })
+  })
+
+  it('throws if there is an error when increasing user impact', async () => {
+    expect.assertions(1)
+
+    const userContext = getMockUserContext()
+    const userInfo = getMockUserInfo()
+    const userId = userInfo.id
+    const mockUser = getMockUserInstance(Object.assign({}, userInfo))
+    const referringUserId = 'referring-user-id-123'
+
+    // Mock getting the ReferralData.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
+          referringUser: referringUserId,
+          referringChannel: null,
+        })
+      ),
+    })
+
+    // Mock getting the user to check if its referral has been rewarded.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
+
+    // Mock updating the user to mark the user as referred.
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
+    // Mock returning no record for user Impact
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      null,
+      new Error('Whoops.') // simple mock error
+    )
+    // Mock an error when adding VC.
     await expect(rewardReferringUser(userContext, userId)).rejects.toThrow(
       'Whoops.'
     )

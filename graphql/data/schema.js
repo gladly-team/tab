@@ -26,6 +26,7 @@ import {
   CHARITY,
   USER,
   BACKGROUND_IMAGE,
+  USER_IMPACT,
   USER_RECRUITS,
 } from '../database/constants'
 
@@ -47,6 +48,7 @@ import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
+import updateImpact from '../database/userImpact/updateImpact'
 import logSearch from '../database/users/logSearch'
 import checkSearchRateLimit from '../database/users/checkSearchRateLimit'
 import logRevenue from '../database/userRevenue/logRevenue'
@@ -66,6 +68,7 @@ import setV4Enabled from '../database/users/setV4Enabled'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
+import UserImpactModel from '../database/userImpact/UserImpactModel'
 import donateVc from '../database/donations/donateVc'
 import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
@@ -120,6 +123,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === CHARITY) {
       return CharityModel.get(context.user, id)
     }
+    if (type === USER_IMPACT) {
+      return UserImpactModel.get(context.user, id)
+    }
     if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
@@ -141,6 +147,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof CharityModel) {
       // eslint-disable-next-line no-use-before-define
       return charityType
+    }
+    if (obj instanceof UserImpactModel) {
+      return userImpactType
     }
     if (obj instanceof BackgroundImageModel) {
       // eslint-disable-next-line no-use-before-define
@@ -682,7 +691,42 @@ const charityType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface],
 })
-
+const userImpactType = new GraphQLObjectType({
+  name: USER_IMPACT,
+  description: `a user's charity specific impact`,
+  fields: () => ({
+    id: globalIdField(
+      USER_IMPACT,
+      userImpact => `${userImpact.userId}::${userImpact.charityId}`
+    ),
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    userImpactMetric: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'a users impact for a specific charity',
+    },
+    pendingUserReferralImpact: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'a users pending impact based on referrals',
+    },
+    pendingUserReferralCount: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'pending user referral count',
+    },
+    visitsUntilNextImpact: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'visits remaining until next recorded impact',
+    },
+    confirmedImpact: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'enables a user to start accruing impact',
+    },
+    hasClaimedLatestReward: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'flag that indicates if user has celebrated latest impact',
+    },
+  }),
+})
 const campaignContentType = new GraphQLObjectType({
   name: 'CampaignContent',
   description: 'Text content for campaigns',
@@ -1115,6 +1159,36 @@ const logTabMutation = mutationWithClientMutationId({
   },
 })
 
+/**
+ * Log user impact, optionally update referral impact and confirmed state
+ */
+const updateImpactMutation = mutationWithClientMutationId({
+  name: 'UpdateImpact',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    logImpact: { type: GraphQLBoolean },
+    claimPendingUserReferralImpact: { type: GraphQLBoolean },
+    confirmImpact: { type: GraphQLBoolean },
+    claimLatestReward: { type: GraphQLBoolean },
+  },
+  outputFields: {
+    userImpact: {
+      type: userImpactType,
+      resolve: userImpact => userImpact,
+    },
+  },
+  mutateAndGetPayload: (input, context) => {
+    const userGlobalId = fromGlobalId(input.userId)
+    const userImpact = updateImpact(
+      context.user,
+      userGlobalId.id,
+      input.charityId,
+      input
+    )
+    return userImpact
+  },
+})
 /**
  * Log a search, update VC, and change related stats.
  */
@@ -1726,6 +1800,20 @@ const queryType = new GraphQLObjectType({
       },
       resolve: (_, args, context) => UserModel.get(context.user, args.userId),
     },
+    userImpact: {
+      type: userImpactType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        charityId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (_, args, context) => {
+        const { userId, charityId } = args
+        return (await UserImpactModel.getOrCreate(context.user, {
+          userId,
+          charityId,
+        })).item
+      },
+    },
   }),
 })
 
@@ -1737,6 +1825,7 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     logTab: logTabMutation,
+    updateImpact: updateImpactMutation,
     logSearch: logSearchMutation,
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,
