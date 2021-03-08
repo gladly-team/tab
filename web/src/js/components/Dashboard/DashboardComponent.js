@@ -22,6 +22,7 @@ import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import Link from 'js/components/General/Link'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
@@ -43,6 +44,9 @@ import {
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
+  facebookPageURL,
+  instagramPageURL,
+  twitterPageURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
@@ -429,12 +433,46 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`We want to hear from you!`}
-                  message={`
-                        We'd love to hear how we can make your Tab for a Cause experience better.
-                        (Bonus: one participant will pick any charity we'll give $500 to!)`}
-                  buttonText={'Take the Survey'}
-                  buttonURL={'https://forms.gle/kkQ92wNdqSpGnvxJ7'}
+                  title={`Vote for the March Charity Spotlight`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        It’s a new month, and that means it’s time for a new
+                        Charity Spotlight!
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        Have a suggestion for an organization you would like to
+                        see in the future? DM us or reply to one of our posts on{' '}
+                        <Link
+                          to={instagramPageURL}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Instagram
+                        </Link>
+                        ,{' '}
+                        <Link
+                          to={twitterPageURL}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Twitter
+                        </Link>
+                        , or{' '}
+                        <Link
+                          to={facebookPageURL}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Facebook
+                        </Link>{' '}
+                        @tabforacause to let us know!
+                      </Typography>
+                    </>
+                  }
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/MCCbaZByLqLhWbwq5'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
