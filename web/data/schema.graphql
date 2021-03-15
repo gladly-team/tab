@@ -877,7 +877,7 @@ type User implements Node {
   v4BetaEnabled: Boolean
 
   """if true, user has viewed intro flow in v4"""
-  hasViewedIntroFlow: Boolean
+  hasViewedIntroFlow: Boolean!
 
   """Remaing hearts until next level."""
   heartsUntilNextLevel: Int

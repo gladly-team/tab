@@ -482,7 +482,7 @@ const userType = new GraphQLObjectType({
       description: 'If true, serve the new Tab V4 app.',
     },
     hasViewedIntroFlow: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       description: 'if true, user has viewed intro flow in v4',
     },
     // TODO: change to heartsForNextLevel to be able to get progress
