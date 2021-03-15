@@ -391,5 +391,19 @@
     "updated": "2021-02-10T10:00:00.000Z",
     "inactive": true,
     "isPermanentPartner": false
+  },
+  {
+    "id": "6aec7956-7637-4547-80db-575db8beb277",
+    "name": "Black Women’s Health Imperative",
+    "category": "Health",
+    "logo": "placeholder.png",
+    "image": "bwhi.jpg",
+    "website": "https://bwhi.org/",
+    "impact": "Every Heart donated makes a difference for the programs supported through Black Women's Health Imperative! Thank you for supporting this cause and promoting a healthier future!",
+    "description": "",
+    "created": "2021-03-15T08:00:00.000Z",
+    "updated": "2021-03-15T08:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
