@@ -78,12 +78,15 @@ plugins:
 custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  # Don't automatically delete old function versions. We rely on specific
-  # function versions for our Lambda@Edge association in Cloudfront.
+  # Important: create an alias for any version we will rely on in
+  # other stacks, such as the one used for a Lambda@Edge association
+  # in Cloudfront. That way, this plugin will not prune it, because
+  # it will not delete any aliased functions.
+  # Alternatively, disable automatic pruning and handle it manually.
   # https://github.com/claygregory/serverless-prune-plugin
   prune:
-    automatic: false
-
+    automatic: true
+    number: 5
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
