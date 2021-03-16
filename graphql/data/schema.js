@@ -1777,6 +1777,7 @@ const setV4BetaMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
+      resolve: user => user,
     },
   },
   mutateAndGetPayload: ({ userId, enabled }, context) => {
@@ -1794,6 +1795,7 @@ const setHasViewedIntroFlowMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
+      resolve: user => user,
     },
   },
   mutateAndGetPayload: ({ userId, enabled }, context) => {
