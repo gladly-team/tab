@@ -105,6 +105,12 @@ class User extends BaseModel {
         .boolean()
         .default(self.fieldDefaults.v4BetaEnabled)
         .description(`If true, serve the new Tab V4 app.`),
+      hasViewedIntroFlow: types
+        .boolean()
+        .default(self.fieldDefaults.hasViewedIntroFlow)
+        .description(
+          `A flag indicating whether a user has viewed the intro in tab v4`
+        ),
       validTabs: types
         .number()
         .integer()
@@ -370,6 +376,7 @@ class User extends BaseModel {
         },
       }),
       v4BetaEnabled: false,
+      hasViewedIntroFlow: false,
     }
   }
 

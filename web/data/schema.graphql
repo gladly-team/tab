@@ -611,6 +611,7 @@ type Mutation {
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
+  setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
 }
 
 """An object with an ID"""
@@ -668,6 +669,17 @@ enum SearchRateLimitReason {
   ONE_MINUTE_MAX
   FIVE_MINUTE_MAX
   DAILY_MAX
+}
+
+input SetHasViewedIntroFlowInput {
+  userId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type SetHasViewedIntroFlowPayload {
+  user: User
+  clientMutationId: String
 }
 
 input SetUserActiveWidgetInput {
@@ -863,6 +875,9 @@ type User implements Node {
 
   """If true, serve the new Tab V4 app."""
   v4BetaEnabled: Boolean
+
+  """if true, user has viewed intro flow in v4"""
+  hasViewedIntroFlow: Boolean!
 
   """Remaing hearts until next level."""
   heartsUntilNextLevel: Int
