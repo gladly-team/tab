@@ -7,7 +7,7 @@
 
 ## Developing
 
-### Prerequesites
+### Prerequisites
 * [Docker Engine](https://docs.docker.com/engine/installation/)
 * [Yarn](https://yarnpkg.com/en/)
 
