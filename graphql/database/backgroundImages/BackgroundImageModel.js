@@ -4,6 +4,7 @@ import tableNames from '../tables'
 import {
   BACKGROUND_IMAGE,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
+  BACKGROUND_IMAGE_CAT_CATEGORY,
 } from '../constants'
 import config from '../../config'
 
@@ -91,7 +92,10 @@ class BackgroundImage extends BaseModel {
 
   static get allowedValues() {
     return {
-      category: [BACKGROUND_IMAGE_LEGACY_CATEGORY, 'cats'],
+      category: [
+        BACKGROUND_IMAGE_LEGACY_CATEGORY,
+        BACKGROUND_IMAGE_CAT_CATEGORY,
+      ],
     }
   }
 }

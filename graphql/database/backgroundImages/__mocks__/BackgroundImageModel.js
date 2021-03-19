@@ -36,6 +36,7 @@ export const mockImages = [
   {
     id: '7bd681cf-850d-42eb-9a1f-7b9620bfb82a',
     image: '7bd681cf-850d-42eb-9a1f-7b9620bfb82a.jpg',
+    thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
     category: 'cats',
     created: '2021-02-16T23:17:05.806Z',
     updated: '2021-02-16T23:17:05.806Z',
@@ -43,6 +44,7 @@ export const mockImages = [
   {
     id: '7c33e7df-fdc6-4f57-bb13-646de15e58bb',
     image: '7c33e7df-fdc6-4f57-bb13-646de15e58bb.jpg',
+    thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
     category: 'cats',
     created: '2021-02-16T23:17:05.806Z',
     updated: '2021-02-16T23:17:05.806Z',
@@ -50,6 +52,7 @@ export const mockImages = [
   {
     id: '8a5ca2a1-fa90-42c1-820a-9029303c9ccd',
     image: '8a5ca2a1-fa90-42c1-820a-9029303c9ccd.jpg',
+    thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
     category: 'cats',
     created: '2021-02-16T23:17:05.806Z',
     updated: '2021-02-16T23:17:05.806Z',
@@ -57,6 +60,7 @@ export const mockImages = [
   {
     id: '8f54a3b0-9788-4a19-a818-efc40950e97d',
     image: '8f54a3b0-9788-4a19-a818-efc40950e97d.jpg',
+    thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
     category: 'cats',
     created: '2021-02-16T23:17:05.806Z',
     updated: '2021-02-16T23:17:05.806Z',

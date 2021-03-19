@@ -8,6 +8,8 @@ import logUserExperimentGroups from './logUserExperimentGroups'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
+import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
+import { BACKGROUND_IMAGE_CAT_CATEGORY } from '../constants'
 
 /**
  * Create a new user and performs other setup actions.
@@ -20,6 +22,7 @@ import logger from '../../utils/logger'
  * @param {object|null} referralData - Referral data.
  * @param {object|null} experimentGroups - Any experimental test groups to
  *   which the user has been assigned.
+ * @param {bool} v4BetaEnabled - Whether or not the new user is enabled for v4 Beta
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (
@@ -29,10 +32,11 @@ const createUser = async (
   referralData = null,
   experimentGroups = {},
   extensionInstallId = null,
-  extensionInstallTimeApprox = null
+  extensionInstallTimeApprox = null,
+  v4BetaEnabled = false
 ) => {
   // Get or create the user.
-  const userInfo = Object.assign(
+  let userInfo = Object.assign(
     {
       id: userId,
       // This email address is from the user claims so will be
@@ -53,6 +57,23 @@ const createUser = async (
         }
       : null
   )
+
+  // Set default background image to a cat image if user is enabled for v4 beta
+  if (v4BetaEnabled) {
+    const backgroundCatImage = await getRandomBackgroundImage(
+      userContext,
+      BACKGROUND_IMAGE_CAT_CATEGORY
+    )
+    userInfo = {
+      ...userInfo,
+      backgroundImage: {
+        id: backgroundCatImage.id,
+        image: backgroundCatImage.image,
+        timestamp: moment.utc().toISOString(),
+      },
+    }
+  }
+
   let response
   try {
     response = await UserModel.getOrCreate(userContext, userInfo)

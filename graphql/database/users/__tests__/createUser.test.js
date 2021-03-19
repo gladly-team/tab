@@ -9,6 +9,7 @@ import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
 import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import logUserExperimentGroups from '../logUserExperimentGroups'
+import getRandomBackgroundImage from '../../backgroundImages/getRandomBackgroundImage'
 import {
   addTimestampFieldsToItem,
   MockAWSConditionalCheckFailedError,
@@ -28,6 +29,7 @@ jest.mock('../logEmailVerified')
 jest.mock('../getUserByUsername')
 jest.mock('../../widgets/setUpWidgetsForNewUser')
 jest.mock('../logUserExperimentGroups')
+jest.mock('../../backgroundImages/getRandomBackgroundImage')
 
 const defaultUserContext = getMockUserContext()
 
@@ -795,5 +797,87 @@ describe('createUser when user already exists (should be idempotent)', () => {
     await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
     expect(logEmailVerified).not.toHaveBeenCalledWith(userContext, userInfo.id)
+  })
+
+  it('does not set background image if not a v4 user', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const referralData = null
+    const userContext = cloneDeep(defaultUserContext)
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      {},
+      null,
+      null,
+      false
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+  })
+
+  it('sets background image to a random background image if a v4 user', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const referralData = null
+    const userContext = cloneDeep(defaultUserContext)
+    const backgroundImage = {
+      id: 'random-cat-image',
+      image: 'ramdom-cat-image.jpg',
+      timestamp: moment.utc().toISOString(),
+    }
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expectedCreateItem = {
+      ...expectedCreateItem,
+      backgroundImage,
+    }
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      {},
+      null,
+      null,
+      true
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
   })
 })
