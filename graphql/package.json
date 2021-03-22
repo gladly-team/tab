@@ -9,6 +9,7 @@
     "@sentry/node": "^5.14.2",
     "aws-sdk": "^2.632.0",
     "aws4": "^1.8.0",
+    "babel-watch": "^7.4.1",
     "bluebird": "^3.5.4",
     "consent-string": "^1.4.2",
     "cors": "^2.8.5",
@@ -62,7 +63,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "babel-node ./server.js",
+    "start": "babel-watch ./server.js",
     "build": "rm -rf ./build && yarn run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,integration-tests,node_modules,server.js' ./ && cp ./database/userRevenue/amazon-cpm-codes.json ./build/database/userRevenue/amazon-cpm-codes.json && yarn run build:config",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
