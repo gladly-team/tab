@@ -92,7 +92,7 @@ const rewardReferringUser = async (userContext, userId) => {
       pendingUserReferralImpact,
       pendingUserReferralCount,
     } = userImpactRecord
-    await UserImpactModel.update(userContext, {
+    await UserImpactModel.update(override, {
       ...userImpactRecord,
       pendingUserReferralImpact:
         pendingUserReferralImpact + USER_IMPACT_REFERRAL_BONUS,
