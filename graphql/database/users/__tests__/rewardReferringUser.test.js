@@ -15,7 +15,12 @@ import {
 } from '../../test-utils'
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
 import UserImpactModel from '../../userImpact/UserImpactModel'
+import {
+  getPermissionsOverride,
+  REWARD_REFERRER_OVERRIDE,
+} from '../../../utils/permissions-overrides'
 
+const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../addUsersRecruited')
@@ -642,7 +647,7 @@ describe('rewardReferringUser', () => {
     })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await rewardReferringUser(userContext, userId)
-    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+    expect(updateMethod).toHaveBeenLastCalledWith(override, {
       ...getMockUserImpact(),
       pendingUserReferralCount: 2,
       pendingUserReferralImpact: 20,
