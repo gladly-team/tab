@@ -56,7 +56,7 @@ env:
   - TEST_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
-  - TEST_LAMBDA_TAB_V4_HOST=tab-web-git-dev.gladly-team.vercel.app
+  - TEST_LAMBDA_TAB_V4_HOST=tab-web-git-dev-gladly-team.vercel.app
   # Endpoints
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
@@ -128,7 +128,7 @@ env:
   # version associated with the /newtab* cache behavior, because
   # Lambda@Edge does not support environment variables and thus the
   # host is hardcoded in deploys.
-  - DEV_LAMBDA_TAB_V4_HOST=tab-web-git-dev.gladly-team.vercel.app
+  - DEV_LAMBDA_TAB_V4_HOST=tab-web-git-dev-gladly-team.vercel.app
   # Endpoints
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
