@@ -1,10 +1,13 @@
 dist: trusty
 sudo: false
 language: node_js
-# Node 6 has a bug that affects some of our unit tests:
-# https://github.com/facebook/jest/issues/3152#issuecomment-287496730
 node_js:
 - '14'
+addons:
+  apt:
+    packages:
+      - "python3"
+      - "python3-pip"
 env:
   global:
   - CI=true
