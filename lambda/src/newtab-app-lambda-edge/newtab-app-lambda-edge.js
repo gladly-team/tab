@@ -1,5 +1,6 @@
 /* eslint prefer-destructuring: 0 */
 
+const url = require('url')
 const path = require('path')
 
 // This function rewrites all CloudFront HTML requests
@@ -32,7 +33,13 @@ exports.handler = (event, context, callback) => {
   const authPagePrefix = '/newtab/auth'
   const referrers = headers.referer || []
   const isAuthPageReferrer = referrers
-    .map(({ value }) => value.startsWith(authPagePrefix))
+    .map(({ value: referrerURI }) => {
+      if (!referrerURI) {
+        return false
+      }
+      const referrerPath = url.parse(referrerURI).pathname
+      return referrerPath.startsWith(authPagePrefix)
+    })
     .some(elem => !!elem)
   const isAuthPage = request.uri.startsWith(authPagePrefix)
   const showLegacyAuthPage = isAuthPage || isAuthPageReferrer

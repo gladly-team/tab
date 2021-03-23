@@ -16,6 +16,7 @@ afterEach(() => {
   jest.resetModules()
 })
 
+// The `referer` should be an absolute URL.
 const addRefererHeaderToEvent = (event, referer) => {
   const { headers } = event.Records[0].cf.request
   headers.referer = [
@@ -273,7 +274,7 @@ describe('newtab app Lambda@Edge function: auth page routing', () => {
     const { handler } = require('../newtab-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.uri = '/newtab/static/some-file.js'
-    addRefererHeaderToEvent(event, '/newtab/auth/')
+    addRefererHeaderToEvent(event, 'https://example.com/newtab/auth/')
     event.Records[0].cf.request.headers.cookie = [
       { key: 'Cookie', value: 'tabV4OptIn=enabled' },
     ]
@@ -289,7 +290,10 @@ describe('newtab app Lambda@Edge function: auth page routing', () => {
     const { handler } = require('../newtab-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.uri = '/newtab/static/img/my-thing.png'
-    addRefererHeaderToEvent(event, '/newtab/auth/something/here/')
+    addRefererHeaderToEvent(
+      event,
+      'https://example.com/newtab/auth/something/here/'
+    )
     event.Records[0].cf.request.headers.cookie = [
       { key: 'Cookie', value: 'tabV4OptIn=enabled' },
     ]
@@ -305,7 +309,7 @@ describe('newtab app Lambda@Edge function: auth page routing', () => {
     const { handler } = require('../newtab-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.uri = '/newtab/static/img/my-thing.png'
-    addRefererHeaderToEvent(event, '/newtab/another-page/')
+    addRefererHeaderToEvent(event, 'https://example.com/newtab/another-page/')
     event.Records[0].cf.request.headers.cookie = [
       { key: 'Cookie', value: 'tabV4OptIn=enabled' },
     ]
