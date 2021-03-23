@@ -241,7 +241,7 @@ before_install:
   # Gulp (used in Prebid.js build)
   - yarn global add gulp
   # AWS CLI
-  - pip install --user awscli
+  - pip3 install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
 # We want to fail fast if any script step fails, but TravisCI does not
