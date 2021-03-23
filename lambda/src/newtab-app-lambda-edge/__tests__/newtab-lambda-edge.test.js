@@ -16,6 +16,16 @@ afterEach(() => {
   jest.resetModules()
 })
 
+const addRefererHeaderToEvent = (event, referer) => {
+  const { headers } = event.Records[0].cf.request
+  headers.referer = [
+    {
+      key: 'Referer',
+      value: referer,
+    },
+  ]
+}
+
 describe('newtab app Lambda@Edge function on origin-request', () => {
   it('modifies the path for the /newtab/ URI', () => {
     const { handler } = require('../newtab-app-lambda-edge')
@@ -195,7 +205,9 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     const request = callback.mock.calls[0][1]
     expect(request.uri).toEqual('/newtab/')
   })
+})
 
+describe('newtab app Lambda@Edge function: auth page routing', () => {
   it('uses the legacy origin when calling /newtab/auth, even when the v4 beta cookie is set', () => {
     process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
     const { handler } = require('../newtab-app-lambda-edge')
@@ -254,5 +266,54 @@ describe('newtab app Lambda@Edge function on origin-request', () => {
     handler(event, context, callback)
     const request = callback.mock.calls[0][1]
     expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('uses the legacy origin when calling a static file with a referrer of /newtab/auth/, even when the v4 beta cookie is set', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.uri = '/newtab/static/some-file.js'
+    addRefererHeaderToEvent(event, '/newtab/auth/')
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    const originalOrigin = event.Records[0].cf.request.origin
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('uses the legacy origin when calling a static file with a referrer of /newtab/auth/something/here/, even when the v4 beta cookie is set', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.uri = '/newtab/static/img/my-thing.png'
+    addRefererHeaderToEvent(event, '/newtab/auth/something/here/')
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    const originalOrigin = event.Records[0].cf.request.origin
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('uses the Tab v4 origin when referrer is a non-auth page and the v4 beta cookie is set', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.uri = '/newtab/static/img/my-thing.png'
+    addRefererHeaderToEvent(event, '/newtab/another-page/')
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.headers.host).toEqual([
+      { key: 'host', value: 'foo.example.com' },
+    ])
   })
 })

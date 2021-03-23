@@ -27,11 +27,17 @@ exports.handler = (event, context, callback) => {
     }
   }
 
-  // If visiting an auth page, always use the legacy Tab app
+  // If this is an auth page resource, always use the legacy Tab app
   // until the auth functionality is complete.
-  const isAuthPage = request.uri.startsWith('/newtab/auth')
+  const authPagePrefix = '/newtab/auth'
+  const referrers = headers.referer || []
+  const isAuthPageReferrer = referrers
+    .map(({ value }) => value.startsWith(authPagePrefix))
+    .some(elem => !!elem)
+  const isAuthPage = request.uri.startsWith(authPagePrefix)
+  const showLegacyAuthPage = isAuthPage || isAuthPageReferrer
 
-  if (isTabV4OptIn && !isAuthPage) {
+  if (isTabV4OptIn && !showLegacyAuthPage) {
     const tabV4Host = process.env.LAMBDA_TAB_V4_HOST
     if (!tabV4Host) {
       throw new Error('The LAMBDA_TAB_V4_HOST env variable must be set.')
