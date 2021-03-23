@@ -205,7 +205,26 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # New tab app
+            # New tab app (Tab Legacy)
+            # Until Tab v4 has a complete auth flow, we want to *always* show
+            # the Tab Legacy app for auth.
+            - PathPattern: 'newtab/auth*'
+              MinTTL: 0
+              DefaultTTL: 86400
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: 63115200 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: true
+              ViewerProtocolPolicy: redirect-to-https
+            # New tab app 
             - PathPattern: 'newtab*'
               MinTTL: 0
               DefaultTTL: 86400
