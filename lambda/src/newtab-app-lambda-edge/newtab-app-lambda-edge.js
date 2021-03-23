@@ -44,6 +44,17 @@ exports.handler = (event, context, callback) => {
   const isAuthPage = request.uri.startsWith(authPagePrefix)
   const showLegacyAuthPage = isAuthPage || isAuthPageReferrer
 
+  // TODO: remove after debugging.
+  // eslint-disable-next-line no-console
+  console.log(
+    'URI:',
+    request.uri,
+    'Referer:',
+    headers.referer,
+    'showLegacyAuthPage?',
+    showLegacyAuthPage
+  )
+
   if (isTabV4OptIn && !showLegacyAuthPage) {
     const tabV4Host = process.env.LAMBDA_TAB_V4_HOST
     if (!tabV4Host) {
