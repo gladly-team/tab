@@ -28,32 +28,33 @@ exports.handler = (event, context, callback) => {
     }
   }
 
-  // If this is an auth page resource, always use the legacy Tab app
-  // until the auth functionality is complete.
-  const authPagePrefix = '/newtab/auth'
-  const referrers = headers.referer || []
-  const isAuthPageReferrer = referrers
-    .map(({ value: referrerURI }) => {
-      if (!referrerURI) {
-        return false
-      }
-      const referrerPath = url.parse(referrerURI).pathname
-      return referrerPath.startsWith(authPagePrefix)
-    })
-    .some(elem => !!elem)
-  const isAuthPage = request.uri.startsWith(authPagePrefix)
-  const showLegacyAuthPage = isAuthPage || isAuthPageReferrer
+  // If this is an auth page, or an auth page resource with a referrer
+  // from an auth page, always use the legacy Tab app until the auth
+  // functionality in Tab v4 is complete.
+  const USE_LEGACY_APP_FOR_AUTH = true
 
-  // TODO: remove after debugging.
-  // eslint-disable-next-line no-console
-  console.log(
-    'URI:',
-    request.uri,
-    'Referer:',
-    headers.referer,
-    'showLegacyAuthPage?',
-    showLegacyAuthPage
-  )
+  let showLegacyAuthPage = false
+  if (USE_LEGACY_APP_FOR_AUTH) {
+    const authPagePrefix = '/newtab/auth'
+    const referrers = headers.referer || []
+    const hasAuthPageReferrer = referrers
+      .map(({ value: referrerURI }) => {
+        if (!referrerURI) {
+          return false
+        }
+        const referrerPath = url.parse(referrerURI).pathname
+        return referrerPath.startsWith(authPagePrefix)
+      })
+      .some(elem => !!elem)
+
+    // Only consider referrers for non-page resources. E.g.: we don't
+    // want to consider the referrer of the newtab page after a redirect
+    // from the auth page.
+    const isNonPageResource = !!path.extname(request.uri)
+    const isAuthPage = request.uri.startsWith(authPagePrefix)
+    showLegacyAuthPage =
+      isAuthPage || (isNonPageResource && hasAuthPageReferrer)
+  }
 
   if (isTabV4OptIn && !showLegacyAuthPage) {
     const tabV4Host = process.env.LAMBDA_TAB_V4_HOST
