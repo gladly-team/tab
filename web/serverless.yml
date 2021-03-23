@@ -234,10 +234,10 @@ resources:
                     - TabAuth.AuthUserTokens.sig
                     - tabV4OptIn
                     - tabV4OptIn.sig
-                  Headers:
-                    # The referer header is necessary for conditional auth page
-                    # routing (via Lambda@Edge) between Tab v4 and Tab legacy.
-                    - Referer
+                Headers:
+                  # The referer header is necessary for conditional auth page
+                  # routing (via Lambda@Edge) between Tab v4 and Tab legacy.
+                  - Referer
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               # When CloudFront calls our origin, this function rewrites all
