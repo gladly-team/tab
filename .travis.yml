@@ -217,7 +217,7 @@ env:
   # react-snap does not yet support absolute URLs:
   # https://github.com/stereobooster/react-snap/issues/157
   - PROD_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=256 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=342 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - PROD_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=38 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
   - PROD_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
