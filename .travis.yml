@@ -1,10 +1,13 @@
 dist: trusty
 sudo: false
 language: node_js
-# Node 6 has a bug that affects some of our unit tests:
-# https://github.com/facebook/jest/issues/3152#issuecomment-287496730
 node_js:
 - '10'
+addons:
+  apt:
+    packages:
+      - "python3"
+      - "python3-pip"
 env:
   global:
   - CI=true
@@ -73,7 +76,7 @@ env:
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=test-search.gladly.io
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1104 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1118 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=139 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
@@ -145,7 +148,7 @@ env:
   - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=dev-search.gladly.io
   - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=977 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=985 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=133 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
@@ -241,7 +244,7 @@ before_install:
   # Gulp (used in Prebid.js build)
   - yarn global add gulp
   # AWS CLI
-  - pip install --user awscli
+  - pip3 install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
 # We want to fail fast if any script step fails, but TravisCI does not
