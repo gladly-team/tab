@@ -16,7 +16,6 @@ afterEach(() => {
   jest.resetModules()
 })
 
-// The `referer` should be an absolute URL.
 const addRefererHeaderToEvent = (event, referer) => {
   const { headers } = event.Records[0].cf.request
   headers.referer = [
@@ -275,6 +274,22 @@ describe('newtab app Lambda@Edge function: auth page routing', () => {
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.uri = '/newtab/static/some-file.js'
     addRefererHeaderToEvent(event, 'https://example.com/newtab/auth/')
+    event.Records[0].cf.request.headers.cookie = [
+      { key: 'Cookie', value: 'tabV4OptIn=enabled' },
+    ]
+    const originalOrigin = event.Records[0].cf.request.origin
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const request = callback.mock.calls[0][1]
+    expect(request.origin).toMatchObject(originalOrigin)
+  })
+
+  it('uses the legacy origin when calling a static file with a relative referrer URI of /newtab/auth/, even when the v4 beta cookie is set', () => {
+    process.env.LAMBDA_TAB_V4_HOST = 'foo.example.com'
+    const { handler } = require('../newtab-app-lambda-edge')
+    const event = getMockCloudFrontEventObject()
+    event.Records[0].cf.request.uri = '/newtab/static/some-file.js'
+    addRefererHeaderToEvent(event, '/newtab/auth/')
     event.Records[0].cf.request.headers.cookie = [
       { key: 'Cookie', value: 'tabV4OptIn=enabled' },
     ]
