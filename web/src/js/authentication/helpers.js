@@ -23,6 +23,7 @@ import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime,
+  isTabV4BetaUser,
 } from 'js/utils/local-user-data-mgr'
 import logger from 'js/utils/logger'
 
@@ -253,6 +254,7 @@ export const createNewUser = () => {
               experimentGroups,
               installId,
               installTime,
+              isTabV4BetaUser(),
               response => {
                 resolve(response.createNewUser)
               },

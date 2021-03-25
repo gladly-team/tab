@@ -21,6 +21,7 @@ function commit(
   experimentGroups,
   extensionInstallId,
   extensionInstallTimeApprox,
+  v4BetaEnabled,
   onCompleted,
   onError
 ) {
@@ -34,6 +35,7 @@ function commit(
         experimentGroups,
         extensionInstallId,
         extensionInstallTimeApprox,
+        v4BetaEnabled,
       },
     },
     onCompleted: response => {

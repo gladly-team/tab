@@ -27,6 +27,7 @@ import { getUserTestGroupsForMutation } from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime,
+  isTabV4BetaUser,
 } from 'js/utils/local-user-data-mgr'
 import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
 import environment from 'js/relay-env'
@@ -609,6 +610,7 @@ describe('createNewUser tests', () => {
     getBrowserExtensionInstallId.mockReturnValueOnce(mockUUID)
     const mockExtensionInstallTime = '2018-08-18T01:12:59.187Z'
     getBrowserExtensionInstallTime.mockReturnValueOnce(mockExtensionInstallTime)
+    isTabV4BetaUser.mockReturnValueOnce(true)
     getUserTestGroupsForMutation.mockReturnValueOnce({
       anonSignIn: 'ANONYMOUS_ALLOWED',
     })
@@ -632,6 +634,7 @@ describe('createNewUser tests', () => {
         experimentGroups,
         installId,
         installTime,
+        v4Enabled,
         onCompleted,
         onError
       ) => {
@@ -657,6 +660,7 @@ describe('createNewUser tests', () => {
       { anonSignIn: 'ANONYMOUS_ALLOWED' },
       mockUUID,
       mockExtensionInstallTime,
+      true,
       expect.any(Function),
       expect.any(Function)
     )
@@ -687,6 +691,7 @@ describe('createNewUser tests', () => {
         experimentGroups,
         installId,
         installTime,
+        v4BetaEnabled,
         onCompleted,
         onError
       ) => {
@@ -738,6 +743,7 @@ describe('createNewUser tests', () => {
         experimentGroups,
         installId,
         installTime,
+        v4BetaEnabled,
         onCompleted,
         onError
       ) => {
@@ -789,6 +795,7 @@ describe('createNewUser tests', () => {
         experimentGroups,
         installId,
         installTime,
+        v4BetaEnabled,
         onCompleted,
         onError
       ) => {
@@ -836,6 +843,7 @@ describe('createNewUser tests', () => {
         experimentGroups,
         installId,
         installTime,
+        v4BetaEnabled,
         onCompleted,
         onError
       ) => {

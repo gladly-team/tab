@@ -165,7 +165,7 @@ class User extends BaseModel {
         .object({
           id: types.string().required(),
           image: types.string().required(),
-          thumbnail: types.string().required(),
+          thumbnail: types.string(),
           imageURL: types.string().forbidden(), // only set in deserializer
           thumbnailURL: types.string().forbidden(), // only set in deserializer
           timestamp: types

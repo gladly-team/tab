@@ -6,7 +6,10 @@ import {
   mockCatImages,
 } from '../__mocks__/BackgroundImageModel'
 import { getMockUserContext } from '../../test-utils'
-import { BACKGROUND_IMAGE_LEGACY_CATEGORY } from '../../constants'
+import {
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+  BACKGROUND_IMAGE_CAT_CATEGORY,
+} from '../../constants'
 
 jest.mock('../../databaseClient')
 jest.mock('../BackgroundImageModel')
@@ -28,7 +31,10 @@ describe('getRandomBackgroundImage', () => {
   })
 
   it('returns a cat image when the category is cats ', async () => {
-    const returnedImg = await getRandomBackgroundImage(userContext, 'cats')
+    const returnedImg = await getRandomBackgroundImage(
+      userContext,
+      BACKGROUND_IMAGE_CAT_CATEGORY
+    )
     expect(mockCatImages).toContainEqual(returnedImg)
   })
 })
