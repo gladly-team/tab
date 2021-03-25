@@ -332,6 +332,7 @@ input CreateNewUserInput {
   experimentGroups: ExperimentGroups
   extensionInstallId: String
   extensionInstallTimeApprox: String
+  v4BetaEnabled: Boolean
   clientMutationId: String
 }
 
