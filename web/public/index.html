@@ -381,6 +381,7 @@
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
     />
     <% } %>
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
       <!-- Global site tag (gtag.js) - Google Analytics 4-->
         <script
         async
@@ -397,7 +398,7 @@
         gtag('config', 'G-LDFLQCKVHG',{'debug_mode':true});
         gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'legacy'});
       </script>
-
+    <% } %>
     <!--
       @gladly-customization:
       Facebook Pixel Code
