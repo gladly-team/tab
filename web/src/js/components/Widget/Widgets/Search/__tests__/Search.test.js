@@ -5,10 +5,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { mount, shallow } from 'enzyme'
 import TextField from 'material-ui/TextField'
 import { flushAllPromises } from 'js/utils/test-utils'
-import { searchExecuted } from 'js/analytics/logEvent'
 
 jest.mock('js/analytics/logEvent')
-jest.mock('js/analytics/google-analytics')
 jest.mock('js/analytics/facebook-analytics')
 
 function getMockProps() {
@@ -158,27 +156,5 @@ describe('Search widget  component', () => {
       'https://www.ecosia.org/search?q=carrot',
       '_top'
     )
-  })
-
-  it('logs a search event', async () => {
-    expect.assertions(2)
-
-    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
-      .default
-    const mockProps = getMockProps()
-
-    // @material-ui-1-todo: remove MuiThemeProvider wrapper
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <SearchWidget {...mockProps} />
-      </MuiThemeProvider>
-    )
-    const searchInput = wrapper.find(TextField).find('input')
-    searchInput.simulate('click')
-    searchInput.instance().value = 'taco'
-    searchInput.simulate('keypress', { key: 'Enter' })
-    await flushAllPromises()
-    expect(searchExecuted).toHaveBeenCalledWith()
-    expect(searchExecuted).toHaveBeenCalledTimes(1)
   })
 })
