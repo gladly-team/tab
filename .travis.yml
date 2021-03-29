@@ -5,9 +5,12 @@ node_js:
 - '10'
 addons:
   apt:
+    # Add Python 3 for installing aws-cli.
+    # https://stackoverflow.com/a/37660551
+    sources:
+      - deadsnakes
     packages:
-      - "python3"
-      - "python3-pip"
+      - "python3.7"
 env:
   global:
   - CI=true
@@ -244,7 +247,6 @@ before_install:
   # Gulp (used in Prebid.js build)
   - yarn global add gulp
   # AWS CLI
-  - pip3 install --upgrade pip
   - pip3 install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
