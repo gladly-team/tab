@@ -7,56 +7,28 @@ import logger from 'js/utils/logger'
 // See ./withPageviewTracking higher-order component.
 export const pageview = () => {
   fbq('track', 'PageView')
-  GA.pageview()
 }
 
 export const homepageView = () => {
   fbq('track', 'ViewContent', { content_name: 'Homepage' })
   fbq('track', 'PageView')
-
-  // GA pageview
-  GA.pageview()
 }
 
 export const signupPageButtonClick = () => {
   fbq('track', 'Lead', { content_name: 'SignupButtonClick' })
-
-  GA.event({
-    category: 'ButtonClick',
-    action: 'SignupButtonClick',
-  })
 }
 
 export const signupPageSocialButtonClick = () => {
   fbq('track', 'Lead', { content_name: 'SocialSignupButtonClick' })
-
-  GA.event({
-    category: 'ButtonClick',
-    action: 'SocialSignupButtonClick',
-  })
 }
 
 export const signupPageEmailButtonClick = () => {
   fbq('track', 'Lead', { content_name: 'EmailSignupButtonClick' })
-
-  GA.event({
-    category: 'ButtonClick',
-    action: 'EmailSignupButtonClick',
-  })
 }
 
 export const accountCreated = () => {
   fbq('track', 'CompleteRegistration', { content_name: 'AccountCreated' })
-  GA.event({
-    category: 'ButtonClick',
-    action: 'AccountCreation',
-  })
   rdt('track', 'SignUp')
-
-  // Google Ads conversion tracking.
-  window.gtag('event', 'conversion', {
-    send_to: 'AW-1013744060/v2M_COqV6owBELyDsuMD',
-  })
 }
 
 export const searchExecuted = () => {
@@ -101,10 +73,6 @@ export const searchForACauseAccountCreated = () => {
   try {
     fbq('track', 'CompleteRegistration', {
       content_name: 'SearchAccountCreated',
-    })
-    GA.event({
-      category: 'ButtonClick',
-      action: 'SearchAccountCreation',
     })
     rdt('track', 'Search')
 
