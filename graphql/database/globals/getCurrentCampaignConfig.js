@@ -1,26 +1,25 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = `## Spotlight: Black Women's Health Imperative`
+const campaignTitle = `## Spotlight: Asian Mental Health Collective`
 const campaignDescription = `
-#### This past year we have seen the incredible need to prioritize our health and wellness!
-#### [Black Women's Health Imperative](https://bwhi.org/) is taking action through signature programs that focus on diabetes preemptive care, intimate partner violence, leadership in the community, HIV care, and the de-stigmatization of periods.
-#### Join us this month in supporting Black women's health and invite your friends to do the same!
+#### This past year, we have seen a rise in violence and discrimination toward Asian and Pacific Islander communities. In response, we invite you to join us in supporting the [Asian Mental Health Collective](https://www.asianmhc.org/)!
+#### AMHC is committed to normalizing/de-stigmatizing mental health and making mental health support easily available, approachable, and accessible to Asian communities worldwide.
 
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thank You for Supporting BWHI!'
+const campaignEndTitle = '## Thank you for supporting the AMHC!'
 const campaignEndDescription = `
-#### Every Heart donated towards charitable causes like [Black Women's Health Imperative](https://bwhi.org/) adds up, and the result is something to be proud of. These funds raised will help support amazing programs working to promote leadership, prevent HIV, and much more!
-#### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our [Instagram](https://www.instagram.com/tabforacause/) @tabforacause to tell us about it!
+#### With your help, thousands of dollars were raised in support of the amazing programs run by the Asian Mental Health Collective.
+#### Want to continue to donate to organizations supporting Asian communities? [Check out some suggested nonprofits and emergency funds here](https://nymag.com/strategist/article/where-to-donate-to-help-asian-communities-2021.html).
 `
 // const campaignEndDescriptionTwo =
 //   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'BWHIMar2021',
-  charityId: '6aec7956-7637-4547-80db-575db8beb277',
+  campaignId: 'AMHCMar2021',
+  charityId: '82027e98-ba56-4307-a3cb-a22f30114ca5',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -31,7 +30,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: true,
+    whenGoalAchieved: false, // run the full time
     whenTimeEnds: true,
   },
   goal: {
@@ -43,7 +42,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 10e6,
+    targetNumber: 8e6,
     // transformNumberSourceValue: num => {
     //   return 9e6
     // },
@@ -93,13 +92,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#e63730',
+      main: '#116f62',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-03-15T10:00:00.000Z',
-    end: '2021-03-22T18:00:00.000Z',
+    start: '2021-03-30T08:00:00.000Z',
+    end: '2021-04-07T10:00:00.000Z',
   },
 })
 
