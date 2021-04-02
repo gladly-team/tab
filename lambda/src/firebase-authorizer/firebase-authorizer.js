@@ -45,6 +45,7 @@ const generatePolicy = (user, allow, resource) => {
           id: user.uid,
           email: user.email,
           email_verified: user.email_verified,
+          auth_time: user.auth_time,
         }
       : {},
   }
@@ -68,6 +69,7 @@ function checkUserAuthorization(event, context, callback) {
       uid: null,
       email: null,
       email_verified: false,
+      auth_time: 0,
     }
 
     // Generate AWS authorization policy
@@ -98,6 +100,7 @@ function checkUserAuthorization(event, context, callback) {
             uid: decodedToken.uid,
             email: decodedToken.email || null,
             email_verified: decodedToken.email_verified || false,
+            auth_time: decodedToken.auth_time || 0,
           }
 
           // Conditions for authorization. We do not check for a valid
