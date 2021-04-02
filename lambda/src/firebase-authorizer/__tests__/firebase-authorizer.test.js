@@ -96,6 +96,7 @@ test('authorization allows access when a good token is provided (for an authenti
         id: decodedToken.uid,
         email: decodedToken.email,
         email_verified: decodedToken.email_verified,
+        auth_time: decodedToken.auth_time,
       },
     })
     done()
@@ -133,6 +134,7 @@ test("authorization still allows access when the user's email is not verified (f
         id: decodedToken.uid,
         email: decodedToken.email,
         email_verified: decodedToken.email_verified,
+        auth_time: decodedToken.auth_time,
       },
     })
     done()
@@ -210,6 +212,7 @@ test('authorization allows access when the user is anonymous (token does not hav
         id: decodedToken.uid,
         email: null,
         email_verified: false,
+        auth_time: decodedToken.auth_time,
       },
     })
     done()
@@ -244,6 +247,7 @@ test('authorization allows access with no claims when the user has a placeholder
         id: null,
         email: null,
         email_verified: false,
+        auth_time: 0,
       },
     })
     done()
