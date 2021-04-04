@@ -32,7 +32,7 @@ import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import searchFavicon from 'js/assets/logos/search-favicon.png'
 import tabFavicon from 'js/assets/logos/favicon.ico'
-import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
+import { getUrlParameters, parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
@@ -114,7 +114,7 @@ class Authentication extends React.Component {
   }
 
   // What we should do after the auth process is finished,
-  // after account creation, email verifcatiion, and username
+  // after account creation, email verifcation, and username
   // creation.
   async onAuthProcessCompleted() {
     const { user } = this.props
@@ -164,7 +164,7 @@ class Authentication extends React.Component {
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
-    const stayOnAuthPage = urlParams.noredirect === 'true'
+    const stayOnAuthPage = urlParams.noredirect === 'true' || urlParams.reauth === 'true'
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
@@ -228,6 +228,11 @@ class Authentication extends React.Component {
           // authentication.
           // https://github.com/gladly-team/tab/issues/589
           this.props.fetchUser()
+
+          const urlParams = getUrlParameters()
+          if (urlParams.reauth === 'true') {
+            await this.onAuthProcessCompleted()
+          }
         }
       })
       .catch(err => {
