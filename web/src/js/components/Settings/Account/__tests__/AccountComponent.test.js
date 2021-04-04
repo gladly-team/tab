@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
 import { flushAllPromises } from 'js/utils/test-utils'
 import initializeCMP from 'js/utils/initializeCMP'
 
@@ -266,5 +267,22 @@ describe('Account component', () => {
     const typographies = wrapper.find(Typography)
     expect(typographies.at(3).text()).toBe('Email')
     expect(typographies.at(4).text()).toBe('Not signed in')
+  })
+
+  it('displays enter username form upon clicking action button', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    delete userData.email
+    const wrapper = mount(<AccountComponent user={userData} />)
+    const dialog = wrapper.find(Dialog)
+    const buttons = wrapper.find(Button)
+
+    const changeButton = buttons.at(0)
+    let state = wrapper.state()
+    expect(state.usernameOpen).toEqual(false)
+    changeButton.simulate('click')
+    state = wrapper.state()
+    expect(state.usernameOpen).toEqual(true)
   })
 })
