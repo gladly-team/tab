@@ -8,9 +8,18 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import { flushAllPromises } from 'js/utils/test-utils'
 import initializeCMP from 'js/utils/initializeCMP'
+import {
+  accountURL,
+  constructUrl,
+  loginURL,
+  replaceUrl,
+} from 'js/navigation/navigation'
+import { getUrlParameters } from 'js/utils/utils'
 
 jest.mock('tab-cmp')
 jest.mock('js/utils/initializeCMP')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/utils')
 
 const getMockUserData = () => {
   return {
@@ -275,7 +284,6 @@ describe('Account component', () => {
     const userData = getMockUserData()
     delete userData.email
     const wrapper = mount(<AccountComponent user={userData} />)
-    const dialog = wrapper.find(Dialog)
     const buttons = wrapper.find(Button)
 
     const changeButton = buttons.at(0)
@@ -284,5 +292,67 @@ describe('Account component', () => {
     changeButton.simulate('click')
     state = wrapper.state()
     expect(state.usernameOpen).toEqual(true)
+  })
+
+  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    delete userData.email
+    const wrapper = mount(<AccountComponent user={userData} />)
+    const buttons = wrapper.find(Button)
+
+    const emailButton = buttons.at(1)
+    emailButton.simulate('click')
+
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
+      next: constructUrl(accountURL, { reauthed: true }),
+      reauth: 'true',
+    })
+  })
+
+  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    delete userData.email
+    const wrapper = mount(<AccountComponent user={userData} />)
+    const buttons = wrapper.find(Button)
+
+    getUrlParameters.mockReturnValue({ reauthed: true })
+
+    let state = wrapper.state()
+    expect(state.emailOpen).toEqual(false)
+
+    const emailButton = buttons.at(1)
+    emailButton.simulate('click')
+
+    state = wrapper.state()
+    expect(state.emailOpen).toEqual(true)
+
+    expect(replaceUrl).not.toHaveBeenCalled()
+  })
+
+  it('displays email verified popup if the verified url param is provided', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    delete userData.email
+
+    getUrlParameters.mockReturnValue({ verified: true })
+
+    const wrapper = mount(<AccountComponent user={userData} />)
+
+    let state = wrapper.state()
+    expect(state.emailOpen).toEqual(true)
+    expect(state.emailVerified).toEqual(true)
+
+    const dialog = wrapper
+      .find(Dialog)
+      .last()
+      .find(Typography)
+      .first()
+
+    expect(dialog.text()).toEqual('Your email has been updated.')
   })
 })

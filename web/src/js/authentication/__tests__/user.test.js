@@ -1,7 +1,12 @@
 /* eslint-env jest */
 
 import { STORAGE_KEY_USERNAME } from 'js/constants'
-import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
+import {
+  absoluteUrl,
+  accountURL,
+  constructUrl,
+  enterUsernameURL,
+} from 'js/navigation/navigation'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('jsonwebtoken', () => ({
@@ -527,5 +532,51 @@ describe('reloadUser tests', () => {
     const reloadUser = require('js/authentication/user').reloadUser
     await reloadUser()
     expect(mockReload).not.toHaveBeenCalled()
+  })
+})
+
+describe('updateUserEmail tests', () => {
+  it('works as expected', async () => {
+    expect.assertions(2)
+    const mockVerifyBeforeUpdateEmail = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      verifyBeforeUpdateEmail: mockVerifyBeforeUpdateEmail,
+    })
+
+    const updateUserEmail = require('js/authentication/user').updateUserEmail
+    const response = await updateUserEmail('test@gmail.com')
+    expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledTimes(1)
+    expect(response).toBe(undefined)
+  })
+
+  it('uses the "accountURL" for Tab for a Cause as the default "continueURL"', async () => {
+    const mockVerifyBeforeUpdateEmail = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      verifyBeforeUpdateEmail: mockVerifyBeforeUpdateEmail,
+    })
+
+    const email = 'test@gmail.com'
+    const updateUserEmail = require('js/authentication/user').updateUserEmail
+    await updateUserEmail(email)
+
+    expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledWith(email, {
+      url: constructUrl(accountURL, { verified: true }, { absolute: true }),
+    })
   })
 })
