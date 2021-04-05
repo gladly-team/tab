@@ -4,6 +4,7 @@ import tabLogoDefault from 'js/assets/logos/logo.svg'
 import tabLogoWhite from 'js/assets/logos/logo-white.svg'
 import tabLogoGrey from 'js/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'js/assets/logos/logo-with-text.svg'
+import tabLogoWithTextWhite from 'js/assets/logos/logo-with-text-white.svg'
 import searchLogoDefault from 'js/assets/logos/search-logo.svg'
 import searchLogoWithText from 'js/assets/logos/search-logo-with-text.svg'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
@@ -22,28 +23,37 @@ class Logo extends React.Component {
     switch (brand) {
       case TAB_APP: {
         if (includeText) {
-          logo = tabLogoWithText
-          break
-        }
-        switch (color) {
-          case 'default': {
-            logo = tabLogoDefault
-            break
+          switch (color) {
+            case 'white': {
+              logo = tabLogoWithTextWhite
+              break
+            }
+            default: {
+              logo = tabLogoWithText
+              break
+            }
           }
-          case 'purple': {
-            logo = tabLogoDefault
-            break
-          }
-          case 'white': {
-            logo = tabLogoWhite
-            break
-          }
-          case 'grey': {
-            logo = tabLogoGrey
-            break
-          }
-          default: {
-            throw new Error(`No "tab" logo exists with color "${color}".`)
+        } else {
+          switch (color) {
+            case 'default': {
+              logo = tabLogoDefault
+              break
+            }
+            case 'purple': {
+              logo = tabLogoDefault
+              break
+            }
+            case 'white': {
+              logo = tabLogoWhite
+              break
+            }
+            case 'grey': {
+              logo = tabLogoGrey
+              break
+            }
+            default: {
+              throw new Error(`No "tab" logo exists with color "${color}".`)
+            }
           }
         }
         break
