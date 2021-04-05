@@ -17,6 +17,7 @@ import {
 } from 'js/authentication/user'
 import environment from 'js/relay-env'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
+import SetEmailMutation from 'js/mutations/SetEmailMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import { getUserTestGroupsForMutation } from 'js/utils/experiments'
 import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
@@ -301,6 +302,16 @@ export const checkIfEmailVerified = () => {
             // correct latest value for email verification.
             getUserToken(true)
               .then(() => {
+                SetEmailMutation(
+                  environment,
+                  user.id,
+                  user.email,
+                  () => {},
+                  response => {
+                    console.error('Error saving email:')
+                    logger.error(response)
+                  }
+                )
                 LogEmailVerifiedMutation(
                   environment,
                   user.id,

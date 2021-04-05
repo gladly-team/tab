@@ -9,6 +9,11 @@ import initializeCMP from 'js/utils/initializeCMP'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import tabCMP from 'tab-cmp'
 import Dialog from '@material-ui/core/Dialog'
+import EnterEmailForm from 'js/components/Authentication/EnterEmailForm'
+import { TAB_APP } from 'js/constants'
+import { checkIfEmailVerified } from 'js/authentication/helpers'
+import { getUrlParameters } from 'js/utils/utils'
+import { getCurrentURL } from 'js/navigation/utils'
 
 export const AccountItem = props => (
   <div
@@ -41,11 +46,15 @@ AccountItem.propTypes = {
 class Account extends React.Component {
   constructor(props) {
     super(props)
+    const { verified } = getUrlParameters(getCurrentURL())
     this.state = {
       doesGDPRApply: false,
       doesCCPAApply: false,
       usernameOpen: false,
       usernameUpdated: false,
+      emailOpen: verified ? verified : false,
+      emailUpdated: false,
+      emailVerified: verified ? verified : false,
     }
   }
 
@@ -64,6 +73,10 @@ class Account extends React.Component {
       this.setState({
         doesCCPAApply: true,
       })
+    }
+
+    if(this.state.emailVerified) {
+      checkIfEmailVerified()
     }
   }
 
@@ -85,6 +98,21 @@ class Account extends React.Component {
 
   usernameUpdated() {
     this.setState({ usernameUpdated: true })
+  }
+
+  openEmailDialog() {
+    this.setState({ emailOpen: true, emailUpdated: false })
+  }
+
+  closeEmailDialog() {
+    this.setState({ 
+      emailOpen: false,
+      emailVerified: false
+    })
+  }
+
+  emailUpdated() {
+    this.setState({ emailUpdated: true })
   }
 
   render() {
@@ -114,6 +142,11 @@ class Account extends React.Component {
         <AccountItem
           name={'Email'}
           value={user.email ? user.email : 'Not signed in'}
+          actionButton={
+            <Button onClick={this.openEmailDialog.bind(this)} variant={'text'}>
+              Change
+            </Button>
+          }
         />
         {this.state.doesGDPRApply ? (
           <span>
@@ -222,6 +255,54 @@ class Account extends React.Component {
               app="tab"
             />
           )}
+        </Dialog>
+        <Dialog
+          open={this.state.emailOpen}
+          onClose={this.closeEmailDialog.bind(this)}
+          aria-labelledby="form-dialog-title"
+        >
+          { this.state.emailVerified ? 
+            <Paper
+            elevation={1}
+            style={{
+              padding: 24,
+              backgroundColor: '#FFF',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 20,
+                fontWeight: 500,
+              }}
+            >
+              Email Updated
+            </span>
+            <Typography
+              variant={'body2'}
+              style={{ paddingTop: 24, paddingBottom: 24 }}
+            >
+              Your email has been updated.
+            </Typography>
+            <span
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: 4,
+              }}
+            >
+              <Button
+                data-test-id={'enter-username-form-button'}
+                color={'primary'}
+                variant={'contained'}
+                style={{ minWidth: 96 }}
+                onClick={this.closeEmailDialog.bind(this)}
+              >
+                Done
+              </Button>
+            </span>
+          </Paper> :
+            <EnterEmailForm onCompleted={() => {}} app={TAB_APP} />
+          }
         </Dialog>
       </Paper>
     )
