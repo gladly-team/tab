@@ -65,10 +65,6 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { background: '' }
-  }
   async componentDidMount() {
     await this.navigateToAuthStep()
   }
@@ -274,16 +270,6 @@ class Authentication extends React.Component {
       <MuiThemeProvider theme={defaultTheme}>
         {isV4Enabled ? (
           <>
-            {/* <img
-              src={backgroundImage}
-              alt="text"
-              style={{
-                zIndex: '-2',
-                position: 'absolute',
-                height: '100%',
-                width: '100%',
-              }}
-            /> */}
             <span
               data-test-id={'cats-background'}
               style={{
