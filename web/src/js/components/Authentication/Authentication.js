@@ -37,15 +37,12 @@ import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGrou
 import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
-import {
-  SEARCH_APP,
-  TAB_APP,
-  STORAGE_NEW_USER_IS_TAB_V4_BETA,
-} from 'js/constants'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
-
+import backgroundImage from 'js/assets/defaultBackground.jpg'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
 //     to the app if they are; otherwise: ->
@@ -68,6 +65,10 @@ import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { background: '' }
+  }
   async componentDidMount() {
     await this.navigateToAuthStep()
   }
@@ -241,6 +242,7 @@ class Authentication extends React.Component {
   }
 
   render() {
+    localStorageMgr.setItem('tab.newUser.isTabV4Enabled', 'true')
     const { user, location } = this.props
     // Show a different logo depending on the app for which the user is
     // signing in.
@@ -272,23 +274,28 @@ class Authentication extends React.Component {
       <MuiThemeProvider theme={defaultTheme}>
         {isV4Enabled ? (
           <>
-            <span
+            {/* <img
+              src={backgroundImage}
+              alt="text"
               style={{
                 zIndex: '-2',
-                display: 'flex',
-                flexDirection: 'column',
                 position: 'absolute',
-                alignItems: 'center',
                 height: '100%',
                 width: '100%',
-                backgroundColor: '#FAFAFA',
+              }}
+            /> */}
+            <span
+              data-test-id={'cats-background'}
+              style={{
+                zIndex: '-2',
+                position: 'absolute',
+                height: '100%',
+                width: '100%',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 backgroundAttachment: 'fixed',
-                backgroundImage: isV4Enabled
-                  ? 'url("https://prod-tab2017-media.gladly.io/img/backgrounds/c1f07b9d-535a-451f-b80b-cdd27ef4e302.jpg")'
-                  : undefined,
+                backgroundImage: `url("${backgroundImage}")`,
               }}
             />
             <span
