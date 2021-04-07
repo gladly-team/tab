@@ -975,6 +975,53 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
+  it('it shows a cat background during email verification when v4 is enabled in user', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const defaultMockProps = MockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      user: {
+        ...defaultMockProps,
+        v4BetaEnabled: true, // not enabled on user profile
+      },
+    }
+    mockProps.location.search = ''
+
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(1)
+  })
+
+  it('it does not show a cat background during email verification when v4 is not enabled in user', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(0)
+  })
+
+  it('it shows a cat background during email verification when v4 is enabled in local storage', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    isTabV4BetaUser.mockReturnValue(true)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(1)
+  })
+
+  it('it does not show a cat background during email verification when v4 is not enabled in local storage', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    isTabV4BetaUser.mockReturnValue(false)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(0)
+  })
+
   it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default

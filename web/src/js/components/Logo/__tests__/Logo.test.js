@@ -109,11 +109,20 @@ describe('Logo component: "tab" brand', () => {
     expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
   })
 
-  it('uses the same file for includeText=true even when another (unsupported) color is provided', () => {
+  it('uses the correct file for includeText=true and color is white', () => {
     const Logo = require('js/components/Logo/Logo').default
     const mockProps = getMockProps()
     mockProps.includeText = true
     mockProps.color = 'white'
+    const wrapper = shallow(<Logo {...mockProps} />)
+    expect(wrapper.find('img').prop('src')).toEqual('logo-with-text-white.svg')
+  })
+
+  it('uses the same file for includeText=true even when another (unsupported) color is provided', () => {
+    const Logo = require('js/components/Logo/Logo').default
+    const mockProps = getMockProps()
+    mockProps.includeText = true
+    mockProps.color = 'pink'
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
   })

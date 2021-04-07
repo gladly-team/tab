@@ -41,7 +41,7 @@ import { SEARCH_APP, TAB_APP } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
-
+import backgroundImage from 'js/assets/defaultBackground.jpg'
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
 //     to the app if they are; otherwise: ->
@@ -238,11 +238,9 @@ class Authentication extends React.Component {
 
   render() {
     const { user, location } = this.props
-
     // Show a different logo depending on the app for which the user is
     // signing in.
     const app = this.getApp()
-
     // Set a different theme depending on the app.
     let theme = tabTheme
     switch (app) {
@@ -256,7 +254,7 @@ class Authentication extends React.Component {
         theme = tabTheme
     }
     const defaultTheme = createMuiTheme(theme)
-
+    const isV4Enabled = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
     // Whether we are requiring the anonymous user to sign in.
     const urlParams = parseUrlSearchString(location.search)
     const isMandatoryAnonymousSignIn = urlParams.mandatory === 'true'
@@ -268,6 +266,35 @@ class Authentication extends React.Component {
 
     return (
       <MuiThemeProvider theme={defaultTheme}>
+        {isV4Enabled ? (
+          <>
+            <span
+              data-test-id={'cats-background'}
+              style={{
+                zIndex: '-2',
+                position: 'absolute',
+                height: '100%',
+                width: '100%',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                backgroundImage: `url("${backgroundImage}")`,
+              }}
+            />
+            <span
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                zIndex: '-1',
+                backgroundColor: `rgba(0, 0, 0, 0.15)`,
+              }}
+            />
+          </>
+        ) : null}
         <span
           data-test-id={'authentication-page'}
           style={{
@@ -276,7 +303,7 @@ class Authentication extends React.Component {
             alignItems: 'center',
             height: '100%',
             width: '100%',
-            backgroundColor: '#FAFAFA',
+            backgroundColor: isV4Enabled ? undefined : '#FAFAFA',
           }}
         >
           {app === TAB_APP ? (
@@ -299,7 +326,12 @@ class Authentication extends React.Component {
               left: 0,
             }}
           >
-            <Logo brand={app} includeText style={{ height: 40 }} />
+            <Logo
+              brand={app}
+              color={isV4Enabled ? 'white' : undefined}
+              includeText
+              style={{ height: 40 }}
+            />
           </div>
           <span
             style={{
@@ -364,7 +396,7 @@ class Authentication extends React.Component {
                 />
               </Switch>
             </span>
-            {!showRequiredSignInExplanation ? (
+            {!showRequiredSignInExplanation && !isV4Enabled ? (
               // Using same style as homepage
               <span
                 data-test-id={'endorsement-quote'}
