@@ -42,7 +42,6 @@ import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import backgroundImage from 'js/assets/defaultBackground.jpg'
-import localStorageMgr from 'js/utils/localstorage-mgr'
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
 //     to the app if they are; otherwise: ->
@@ -238,7 +237,6 @@ class Authentication extends React.Component {
   }
 
   render() {
-    localStorageMgr.setItem('tab.newUser.isTabV4Enabled', 'true')
     const { user, location } = this.props
     // Show a different logo depending on the app for which the user is
     // signing in.
