@@ -7,7 +7,6 @@ import appTheme, {
   dashboardIconActiveColor,
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
-import { searchExecuted } from 'js/analytics/logEvent'
 
 class Search extends React.Component {
   constructor(props) {
@@ -39,8 +38,6 @@ class Search extends React.Component {
   }
 
   async executeSearch() {
-    await searchExecuted()
-
     const engine = this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
