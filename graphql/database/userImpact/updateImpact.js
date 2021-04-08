@@ -1,5 +1,5 @@
 import UserImpactModel from './UserImpactModel'
-import { USER_VISIT_IMPACT_VALUE, USER_IMPACT_REWARD_LIMIT } from '../constants'
+import { USER_VISIT_IMPACT_VALUE } from '../constants'
 /**
  * updates a user impact record
  * @param {object} userContext - The user authorizer object.
@@ -8,7 +8,13 @@ import { USER_VISIT_IMPACT_VALUE, USER_IMPACT_REWARD_LIMIT } from '../constants'
  * @param {object} updates - options to update impact record, include logImpact, claimPendingUserReferralImpact, confirmImpact
  * @return {Promise<User>}  A promise that resolves into a UserImpact instance.
  */
-
+const shouldShowImpactNotification = userImpactMetric => {
+  const impactCountsToShow = [1, 3, 5, 7, 10, 15]
+  return !(
+    impactCountsToShow.includes(userImpactMetric) ||
+    (userImpactMetric >= 20 && userImpactMetric % 10 === 0)
+  )
+}
 const updateImpact = async (userContext, userId, charityId, updates) => {
   let userImpact = await UserImpactModel.get(userContext, userId, charityId)
   const {
@@ -34,7 +40,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
     } else {
       visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
       userImpactMetric += 1
-      hasClaimedLatestReward = !(userImpactMetric < USER_IMPACT_REWARD_LIMIT)
+      hasClaimedLatestReward = shouldShowImpactNotification(userImpactMetric)
     }
   }
   // if a user claims a referral reward give them all impact bonuses
