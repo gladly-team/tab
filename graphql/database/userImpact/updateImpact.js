@@ -40,7 +40,9 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
     } else {
       visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
       userImpactMetric += 1
-      hasClaimedLatestReward = shouldShowImpactNotification(userImpactMetric)
+      hasClaimedLatestReward = !hasClaimedLatestReward
+        ? false
+        : shouldShowImpactNotification(userImpactMetric)
     }
   }
   // if a user claims a referral reward give them all impact bonuses
