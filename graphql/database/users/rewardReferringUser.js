@@ -81,23 +81,45 @@ const rewardReferringUser = async (userContext, userId) => {
   } catch (e) {
     throw e
   }
-  // if user is on v4, reward the referring user in UserImpact
+  // if user is on v4, altruistically reward both the referring user and referred user in UserImpact
   try {
-    const userImpactRecord = await UserImpactModel.get(
+    // get Referring User Impact
+    const userImpactRecordReferringUser = await UserImpactModel.get(
       override,
       referringUserId,
       CATS_CHARITY_ID
     )
     const {
-      pendingUserReferralImpact,
-      pendingUserReferralCount,
-    } = userImpactRecord
-    await UserImpactModel.update(override, {
-      ...userImpactRecord,
-      pendingUserReferralImpact:
-        pendingUserReferralImpact + USER_IMPACT_REFERRAL_BONUS,
-      pendingUserReferralCount: pendingUserReferralCount + 1,
-    })
+      pendingUserReferralImpact: pendingUserReferralImpactReferringUser,
+      pendingUserReferralCount: pendingUserReferralCountReferringUser,
+    } = userImpactRecordReferringUser
+
+    // get Referred User Impact
+    const userImpactRecordReferredUser = (await UserImpactModel.getOrCreate(
+      override,
+      {
+        userId,
+        charityId: CATS_CHARITY_ID,
+      }
+    )).item
+    const {
+      pendingUserReferralImpact: pendingUserReferralImpactReferredUser,
+    } = userImpactRecordReferredUser
+
+    // reward both Reffering and Referred users
+    await Promise.all([
+      UserImpactModel.update(override, {
+        ...userImpactRecordReferringUser,
+        pendingUserReferralImpact:
+          pendingUserReferralImpactReferringUser + USER_IMPACT_REFERRAL_BONUS,
+        pendingUserReferralCount: pendingUserReferralCountReferringUser + 1,
+      }),
+      UserImpactModel.update(override, {
+        ...userImpactRecordReferredUser,
+        pendingUserReferralImpact:
+          pendingUserReferralImpactReferredUser + USER_IMPACT_REFERRAL_BONUS,
+      }),
+    ])
   } catch (e) {
     if (!(e instanceof DatabaseItemDoesNotExistException)) {
       throw e

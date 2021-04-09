@@ -4,6 +4,7 @@ import moment from 'moment'
 import databaseClient from './databaseClient'
 import UserModel from './users/UserModel'
 import { USER_VISIT_IMPACT_VALUE } from './constants'
+import UserImpactModel from './userImpact/UserImpactModel'
 
 export const DatabaseOperation = {
   BATCH_GET: 'batchGet',
@@ -143,6 +144,23 @@ export const getMockUserInstance = attributes => {
   const defaultUserInfo = getMockUserInfo()
   const now = mockDate.defaultDateISO
   return new UserModel(
+    Object.assign({}, defaultUserInfo, attributes, {
+      created: now,
+      updated: now,
+      joined: now,
+    })
+  )
+}
+
+/**
+ * Get a mock User Impact instance.
+ * @param {Object} attributes - Attributes to override when getting the mock user.
+ * @return {Object} The mock user.
+ */
+export const getMockUserImpactInstance = attributes => {
+  const defaultUserInfo = getMockUserImpact()
+  const now = mockDate.defaultDateISO
+  return new UserImpactModel(
     Object.assign({}, defaultUserInfo, attributes, {
       created: now,
       updated: now,
