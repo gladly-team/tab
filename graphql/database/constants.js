@@ -28,6 +28,5 @@ export const BACKGROUND_IMAGE_CAT_CATEGORY = 'cats'
 // Fixed values
 export const USER_REFERRAL_VC_REWARD = 350
 export const USER_VISIT_IMPACT_VALUE = 14
-export const USER_IMPACT_REWARD_LIMIT = 7
 export const USER_IMPACT_REFERRAL_BONUS = 5
 export const CATS_CHARITY_ID = '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z'

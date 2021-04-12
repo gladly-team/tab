@@ -105,6 +105,110 @@ describe('updateImpact', () => {
     })
   })
 
+  it('it should show claim reward at 1 impact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      visitsUntilNextImpact: 1,
+      confirmedImpact: true,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      userImpactMetric: 1,
+      hasClaimedLatestReward: false,
+    })
+  })
+
+  it('it should not show claim reward at 2 impact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      visitsUntilNextImpact: 1,
+      confirmedImpact: true,
+      userImpactMetric: 1,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      userImpactMetric: 2,
+      hasClaimedLatestReward: true,
+    })
+  })
+
+  it('it should show claim reward at 3 impact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      visitsUntilNextImpact: 1,
+      confirmedImpact: true,
+      userImpactMetric: 2,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      userImpactMetric: 3,
+      hasClaimedLatestReward: false,
+    })
+  })
+
+  it('it should not show claim reward at 4 impact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      visitsUntilNextImpact: 1,
+      confirmedImpact: true,
+      userImpactMetric: 3,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      userImpactMetric: 4,
+      hasClaimedLatestReward: true,
+    })
+  })
+
+  it('it should show claim reward at 20 impact', async () => {
+    const mockUserImpact = new UserImpactModel({
+      userId,
+      charityId: 'mock-charity',
+      visitsUntilNextImpact: 1,
+      confirmedImpact: true,
+      userImpactMetric: 19,
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUserImpact,
+    })
+    const updateMethod = jest.spyOn(UserImpactModel, 'update')
+    await updateImpact(userContext, userId, 'mock-charity', { logImpact: true })
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      ...defaultResponse,
+      visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
+      userImpactMetric: 20,
+      hasClaimedLatestReward: false,
+    })
+  })
+
   it('if the user claims pending referral it should increase userImpact and reset pending referral and count', async () => {
     const mockUserImpact = new UserImpactModel({
       userId,
