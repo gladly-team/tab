@@ -344,7 +344,6 @@ class BaseModel {
    * @return {Object} item - The created item
    */
   static async create(userContext, item, overwrite = false) {
-    console.log(item, 'item coming in')
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const hashKey = item[this.hashKey]
 
@@ -367,7 +366,6 @@ class BaseModel {
       const createdItem = await this.dynogelsModel.createAsync(item, {
         overwrite,
       })
-      console.log(createdItem, 'my created item')
       return this.deserialize(createdItem)
     } catch (e) {
       if (e.code === AWSConditionalCheckFailedErrorCode) {
@@ -391,7 +389,6 @@ class BaseModel {
   static async getOrCreate(userContext, item) {
     try {
       const createdItem = await this.create(userContext, item, false)
-      console.log('item created', createdItem, item)
       return {
         created: true,
         item: createdItem,
