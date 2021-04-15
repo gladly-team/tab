@@ -10,6 +10,7 @@ jest.mock('relay-commit-mutation-promise')
 const getMockInput = () => ({
   userId: 'abc-123',
   tabId: 'some-tab-id',
+  isV4: false,
 })
 
 const getMockAdditionalVars = () => ({})

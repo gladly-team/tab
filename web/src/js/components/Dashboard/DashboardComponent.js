@@ -258,6 +258,7 @@ class Dashboard extends React.Component {
           !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
         tabId: context.tabId,
         adUnitCode: GAMAdUnitId,
+        isV4: false,
       })
     }
 

@@ -15,6 +15,7 @@ const getMockInput = () => ({
   aggregationOperation: 'MAX',
   tabId: 'fc63cb6a-c8c7-42a3-98e7-1cb20c79db7f',
   adUnitCode: null,
+  isV4: false,
 })
 
 afterEach(() => {
