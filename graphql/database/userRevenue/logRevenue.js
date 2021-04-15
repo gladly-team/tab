@@ -125,7 +125,9 @@ const logRevenue = async (
   aggregationOperation = null,
   tabId = null,
   adSize = null,
-  adUnitCode = null
+  adUnitCode = null,
+  // eslint-disable-next-line no-unused-vars
+  isV4 = true
 ) => {
   const revenueObj = AdRevenue(revenue, adSize)
 

@@ -506,6 +506,7 @@ type LogSearchPayload {
 input LogTabInput {
   userId: String!
   tabId: String
+  isV4: Boolean
   clientMutationId: String
 }
 
@@ -552,6 +553,7 @@ input LogUserRevenueInput {
   adUnitCode: String
   tabId: String
   adSize: String
+  isV4: Boolean
   clientMutationId: String
 }
 
