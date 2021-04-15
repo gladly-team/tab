@@ -9,7 +9,7 @@ import { USER_VISIT_IMPACT_VALUE } from '../constants'
  * @return {Promise<User>}  A promise that resolves into a UserImpact instance.
  */
 const shouldShowImpactNotification = userImpactMetric => {
-  const impactCountsToShow = [1, 3, 5, 7, 10, 15]
+  const impactCountsToShow = [1, 3, 6, 10, 15]
   return !(
     impactCountsToShow.includes(userImpactMetric) ||
     (userImpactMetric >= 20 && userImpactMetric % 10 === 0)
