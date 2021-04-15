@@ -24,10 +24,12 @@ const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../addUsersRecruited')
+jest.mock('../../userImpact/UserImpactModel')
 
 afterEach(() => {
   jest.clearAllMocks()
   clearAllMockDBResponses()
+  UserImpactModel.clearAllMockItems()
 })
 
 const timeBeforeEmailVerifyFeatureChange = '2018-09-14T02:10:13.000Z'
@@ -601,7 +603,7 @@ describe('rewardReferringUser', () => {
     )
   })
 
-  it('gives the referring user User Impact as expected', async () => {
+  it('gives both the referring user and referred user User Impact as expected', async () => {
     const userContext = getMockUserContext()
     const userInfo = getMockUserInfo()
     const userId = userInfo.id
@@ -632,25 +634,44 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-    // Mock returning a record for user Impact
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: {
-        ...getMockUserImpact(),
-        pendingUserReferralImpact: 10,
-        pendingUserReferralCount: 1,
-      },
+    // Mock returning a record for referring user Impact
+    UserImpactModel.mockGetOrCreate({
+      ...getMockUserImpact(),
+      pendingUserReferralImpact: 5,
+      pendingUserReferralCount: 1,
     })
+    // Mock returning a record for referred user Impact
+    const userImpact = {
+      ...getMockUserImpact(),
+      userId,
+      pendingUserReferralImpact: 0,
+      pendingUserReferralCount: 0,
+    }
+    UserImpactModel.mockGetOrCreate(userImpact)
+    // Mock updating referring user impact
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Item: {
         ...getMockUserImpact(),
       },
     })
+    // Mock updating referred user impact
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Item: {
+        ...getMockUserImpact(),
+        userId,
+      },
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await rewardReferringUser(userContext, userId)
-    expect(updateMethod).toHaveBeenLastCalledWith(override, {
+    expect(updateMethod).toHaveBeenNthCalledWith(1, override, {
       ...getMockUserImpact(),
       pendingUserReferralCount: 2,
-      pendingUserReferralImpact: 20,
+      pendingUserReferralImpact: 10,
+    })
+    expect(updateMethod).toHaveBeenNthCalledWith(2, override, {
+      ...getMockUserImpact(),
+      pendingUserReferralCount: 0,
+      pendingUserReferralImpact: 5,
     })
   })
 
@@ -687,13 +708,9 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
-    // Mock returning no record for user Impact
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      null,
-      new Error('Whoops.') // simple mock error
-    )
-    // Mock an error when adding VC.
+    // Mock throwing a unique error in user Impact
+
+    UserImpactModel.mockError(new Error('Whoops.'))
     await expect(rewardReferringUser(userContext, userId)).rejects.toThrow(
       'Whoops.'
     )
