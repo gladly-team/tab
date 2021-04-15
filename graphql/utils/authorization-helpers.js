@@ -26,6 +26,7 @@ export const createGraphQLContext = userClaims => ({
     emailVerified: userClaims.email_verified
       ? userClaims.email_verified === 'true'
       : false,
+    authTime: userClaims.auth_time || null,
   },
 })
 

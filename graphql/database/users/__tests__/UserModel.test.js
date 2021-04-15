@@ -265,6 +265,7 @@ describe('UserModel', () => {
       searchesToday: 0,
       v4BetaEnabled: false,
       hasViewedIntroFlow: false,
+      deleted: false,
     })
   })
 

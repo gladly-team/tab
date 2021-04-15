@@ -102,6 +102,7 @@ export const getMockUserContext = () => ({
   id: 'abcdefghijklmno',
   email: 'foo@bar.com',
   emailVerified: true,
+  authTime: 1533144713,
 })
 
 /**
@@ -147,6 +148,7 @@ export const getMockUserInstance = attributes => {
       created: now,
       updated: now,
       joined: now,
+      deleted: false,
     })
   )
 }
