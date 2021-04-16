@@ -696,6 +696,7 @@ describe('Dashboard component: ads logic', () => {
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
       adUnitCode: '/12345/SomeAdUnit',
+      isV4: false,
     })
     expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
       userId: 'abc-123',
@@ -709,6 +710,7 @@ describe('Dashboard component: ads logic', () => {
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
       adUnitCode: '/12345/SecondAdThing',
+      isV4: false,
     })
     expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
       userId: 'abc-123',
@@ -722,6 +724,7 @@ describe('Dashboard component: ads logic', () => {
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
       adUnitCode: '/12345/ThirdAdHere',
+      isV4: false,
     })
   })
 
@@ -758,6 +761,7 @@ describe('Dashboard component: ads logic', () => {
       aggregationOperation: 'MAX',
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
       adUnitCode: '/12345/SomeAdUnit',
+      isV4: false,
     })
   })
 
@@ -774,6 +778,7 @@ describe('Dashboard component: ads logic', () => {
       GAMAdvertiserId: 1111,
       GAMAdUnitId: '/12345/SomeAdUnit',
       adSize: '728x90',
+      isV4: false,
     }
 
     // Call each Ad's onAdDisplayed with a mock ad info.
@@ -789,6 +794,7 @@ describe('Dashboard component: ads logic', () => {
       aggregationOperation: null,
       tabId: '101b73c7-468c-4d29-b224-0c07f621bc52',
       adUnitCode: '/12345/SomeAdUnit',
+      isV4: false,
     })
   })
 

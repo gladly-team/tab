@@ -51,6 +51,7 @@ describe('LogTabComponent', function() {
     expect(LogTabMutation).toHaveBeenCalledWith({
       userId: mockUserData.id,
       tabId,
+      isV4: false,
     })
   })
 

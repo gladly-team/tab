@@ -19,6 +19,7 @@ class LogTabComponent extends React.Component {
       LogTabMutation({
         userId: this.props.user.id,
         tabId: this.props.tabId,
+        isV4: false,
       }).catch(e => {
         logger.error(e)
       })
