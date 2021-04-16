@@ -1151,6 +1151,7 @@ const logTabMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     tabId: { type: GraphQLString },
+    isV4: { type: GraphQLBoolean },
   },
   outputFields: {
     user: {
@@ -1291,6 +1292,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
     adUnitCode: { type: GraphQLString },
     tabId: { type: GraphQLString },
     adSize: { type: GraphQLString },
+    isV4: { type: GraphQLBoolean },
   },
   outputFields: {
     success: {
@@ -1306,6 +1308,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       aggregationOperation,
       tabId,
       adSize,
+      isV4,
       adUnitCode,
     },
     context
@@ -1320,7 +1323,8 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       aggregationOperation,
       tabId,
       adSize,
-      adUnitCode
+      adUnitCode,
+      isV4
     )
   },
 })

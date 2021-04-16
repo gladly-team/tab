@@ -64,7 +64,8 @@ const addMillisecondsToISODatetime = ISODatetime => {
  * @param {string} tabId - A UUID for this opened tab
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const logTab = async (userContext, userId, tabId = null) => {
+// eslint-disable-next-line no-unused-vars
+const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   // Check if it's a valid tab before incrementing user VC or
   // the user's valid tab count.
   let user
