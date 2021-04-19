@@ -434,12 +434,12 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Vote for the March Charity Spotlight`}
+                  title={`Vote for the April Charity Spotlight`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        It’s a new month, and that means it’s time for a new
-                        Charity Spotlight!
+                        Let us know what nonprofit we should spotlight this
+                        month!
                       </Typography>
 
                       <Typography variant={'body2'}>
@@ -473,7 +473,7 @@ class Dashboard extends React.Component {
                     </>
                   }
                   buttonText={'Vote'}
-                  buttonURL={'https://forms.gle/MCCbaZByLqLhWbwq5'}
+                  buttonURL={'https://forms.gle/nDDAPwLjzNxZRg8N6'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
