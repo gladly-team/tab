@@ -114,6 +114,7 @@ const addMillisecondsToISODatetime = ISODatetime => {
  * @param {string} tabId - A UUID for the tab on which revenue is created
  * @param {string} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
  * @param {string|null} adUnitCode - The DFP ID for the ad slot.
+ * @param {boolean} isV4 - whether user is on v4 or legacy.
  * @return {Object} If successful, a single key ("success") with value `true`
  */
 const logRevenue = async (
@@ -170,6 +171,7 @@ const logRevenue = async (
       ...(tabId && { tabId }),
       ...(revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }),
       ...(adUnitCode && { adUnitCode }),
+      isV4,
     })
   }
 

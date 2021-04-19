@@ -32,6 +32,7 @@ class userTabsLog extends BaseModel {
         .isoDate()
         .required(),
       tabId: types.string().uuid(),
+      isV4: types.boolean(),
     }
   }
 

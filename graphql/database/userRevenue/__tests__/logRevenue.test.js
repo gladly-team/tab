@@ -60,6 +60,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
+        isV4: true,
       })
     )
   })
@@ -77,6 +78,7 @@ describe('logRevenue', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
+        isV4: true,
       })
     )
   })
@@ -97,6 +99,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         tabId: someTabId,
+        isV4: true,
       })
     )
   })
@@ -127,6 +130,7 @@ describe('logRevenue', () => {
         dfpAdvertiserId: '2468',
         tabId: someTabId,
         adSize: '728x90',
+        isV4: true,
       })
     )
   })
@@ -160,6 +164,42 @@ describe('logRevenue', () => {
         tabId: someTabId,
         adSize: '728x90',
         adUnitCode: someAdUnitCode,
+        isV4: true,
+      })
+    )
+  })
+
+  test('includes isV4 when provided', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const someAdUnitCode = '/24681357/blah-blah/'
+    await logRevenue(
+      userContext,
+      userId,
+      0.0172,
+      '2468',
+      null,
+      null,
+      someTabId,
+      '728x90',
+      someAdUnitCode,
+      false
+    )
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468',
+        tabId: someTabId,
+        adSize: '728x90',
+        adUnitCode: someAdUnitCode,
+        isV4: false,
       })
     )
   })
@@ -213,6 +253,7 @@ describe('logRevenue', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
+        isV4: true,
       })
     )
   })
@@ -240,6 +281,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         adSize: '300x250',
+        isV4: true,
       })
     )
   })
@@ -299,6 +341,7 @@ describe('logRevenue', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
+        isV4: true,
       })
     )
 
@@ -313,6 +356,7 @@ describe('logRevenue', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068,
+        isV4: true,
       })
     )
   })
@@ -351,6 +395,7 @@ describe('logRevenue', () => {
         revenue: 0.0085,
         tabId: someTabId,
         adSize: '300x600', // The encoded revenue value was higher
+        isV4: true,
       })
     )
 
@@ -376,6 +421,7 @@ describe('logRevenue', () => {
         revenue: 0.0068,
         tabId: someTabId,
         adSize: '728x90', // The non-encoded revenue value was higher
+        isV4: true,
       })
     )
   })
@@ -440,6 +486,7 @@ describe('logRevenue', () => {
         timestamp: '2017-06-22T01:13:28.012Z',
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
+        isV4: true,
       })
     )
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
@@ -449,6 +496,7 @@ describe('logRevenue', () => {
         timestamp: '2017-06-22T01:13:28.018Z', // Different time
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
+        isV4: true,
       })
     )
   })
@@ -497,6 +545,7 @@ describe('logRevenue', () => {
         timestamp: '2017-06-22T01:13:28.003Z', // Different time
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
+        isV4: true,
       })
     )
   })
