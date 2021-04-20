@@ -545,6 +545,9 @@ describe('Dashboard component: ads logic', () => {
     shallow(<DashboardComponent {...mockProps} />)
     expect(fetchAds.mock.calls[0][0]).toEqual({
       auctionTimeout: expect.any(Number),
+      pageLevelKeyValues: {
+        v4: 'false',
+      },
       consent: {
         enabled: expect.any(Boolean),
         timeout: expect.any(Number),
