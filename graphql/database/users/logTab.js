@@ -62,6 +62,7 @@ const addMillisecondsToISODatetime = ISODatetime => {
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} tabId - A UUID for this opened tab
+ * @param {boolean} isV4 - whether the user opened a tab in v4 or legacy
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 // eslint-disable-next-line no-unused-vars
@@ -127,6 +128,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
         userId,
         timestamp: addMillisecondsToISODatetime(logTabTimestamp),
         ...(tabId && { tabId }),
+        isV4,
       })
       break // successfully logged
     } catch (e) {

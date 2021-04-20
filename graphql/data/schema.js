@@ -1159,9 +1159,9 @@ const logTabMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId, tabId }, context) => {
+  mutateAndGetPayload: ({ userId, tabId, isV4 }, context) => {
     const { id } = fromGlobalId(userId)
-    return logTab(context.user, id, tabId)
+    return logTab(context.user, id, tabId, isV4)
   },
 })
 

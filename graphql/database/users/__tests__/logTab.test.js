@@ -114,6 +114,7 @@ describe('logTab', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        isV4: true,
       })
     )
   })
@@ -138,6 +139,7 @@ describe('logTab', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        isV4: true,
       })
     )
   })
@@ -170,6 +172,7 @@ describe('logTab', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        isV4: true,
       })
     )
   })
@@ -207,6 +210,7 @@ describe('logTab', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        isV4: true,
       })
     )
   })
@@ -266,6 +270,35 @@ describe('logTab', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         tabId,
+        isV4: true,
+      })
+    )
+  })
+
+  test('it logs the isV4 when given', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    const tabId = uuid()
+    const isV4 = false
+    await logTab(userContext, userId, tabId, isV4)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        tabId,
+        isV4: false,
       })
     )
   })
