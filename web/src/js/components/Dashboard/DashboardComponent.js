@@ -95,6 +95,7 @@ const loadAds = () => {
     // Debugging can be enabled with URL param tabAdsDebug=true.
     fetchAds({
       adUnits: Object.values(getAdUnits()),
+      pageLevelKeyValues: { v4: 'false' },
       auctionTimeout: 1000,
       consent: {
         enabled: true,
