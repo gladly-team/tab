@@ -6,7 +6,9 @@ import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import initializeCMP from 'js/utils/initializeCMP'
+import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import tabCMP from 'tab-cmp'
+import Dialog from '@material-ui/core/Dialog'
 
 export const AccountItem = props => (
   <div
@@ -16,7 +18,7 @@ export const AccountItem = props => (
       padding: 20,
     }}
   >
-    <Typography variant={'body2'} style={{ flex: 1, fontWeight: 'bold' }}>
+    <Typography variant={'body2'} style={{ fontWeight: 'bold', width: 260 }}>
       {props.name}
     </Typography>
     {props.value ? (
@@ -25,7 +27,7 @@ export const AccountItem = props => (
       </Typography>
     ) : null}
     {props.actionButton ? (
-      <div style={{ flex: 2 }}>{props.actionButton}</div>
+      <div style={{ flex: 1 }}>{props.actionButton}</div>
     ) : null}
   </div>
 )
@@ -42,6 +44,8 @@ class Account extends React.Component {
     this.state = {
       doesGDPRApply: false,
       doesCCPAApply: false,
+      usernameOpen: false,
+      usernameUpdated: false,
     }
   }
 
@@ -71,6 +75,18 @@ class Account extends React.Component {
     await tabCMP.openCCPAConsentDialog()
   }
 
+  openUsernameDialog() {
+    this.setState({ usernameOpen: true, usernameUpdated: false })
+  }
+
+  closeUsernameDialog() {
+    this.setState({ usernameOpen: false })
+  }
+
+  usernameUpdated() {
+    this.setState({ usernameUpdated: true })
+  }
+
   render() {
     const { user } = this.props
     return (
@@ -85,6 +101,14 @@ class Account extends React.Component {
         <AccountItem
           name={'Username'}
           value={user.username ? user.username : 'Not signed in'}
+          actionButton={
+            <Button
+              onClick={this.openUsernameDialog.bind(this)}
+              variant={'text'}
+            >
+              Change
+            </Button>
+          }
         />
         <Divider />
         <AccountItem
@@ -145,6 +169,60 @@ class Account extends React.Component {
             />
           </span>
         ) : null}
+        <Dialog
+          open={this.state.usernameOpen}
+          onClose={this.closeUsernameDialog.bind(this)}
+          aria-labelledby="form-dialog-title"
+        >
+          {this.state.usernameUpdated ? (
+            <Paper
+              elevation={1}
+              style={{
+                padding: 24,
+                backgroundColor: '#FFF',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 500,
+                }}
+              >
+                Username Updated
+              </span>
+              <Typography
+                variant={'body2'}
+                style={{ paddingTop: 24, paddingBottom: 24 }}
+              >
+                Your username has been updated.
+              </Typography>
+              <span
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginTop: 4,
+                }}
+              >
+                <Button
+                  data-test-id={'enter-username-form-button'}
+                  color={'primary'}
+                  variant={'contained'}
+                  disabled={this.state.savingUsernameInProgress}
+                  onClick={this.closeUsernameDialog.bind(this)}
+                  style={{ minWidth: 96 }}
+                >
+                  Done
+                </Button>
+              </span>
+            </Paper>
+          ) : (
+            <EnterUsernameForm
+              onCompleted={this.usernameUpdated.bind(this)}
+              user={user}
+              app="tab"
+            />
+          )}
+        </Dialog>
       </Paper>
     )
   }
