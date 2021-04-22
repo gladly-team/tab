@@ -495,7 +495,6 @@ describe('Dashboard component', () => {
     shallow(<DashboardComponent {...modifiedProps} />)
     expect(optIntoV4Beta).toHaveBeenCalled()
     await flushAllPromises
-    expect(window.location.reload).toHaveBeenCalled()
   })
 })
 
