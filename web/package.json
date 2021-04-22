@@ -17,6 +17,7 @@
     "graphql": "^14.3.0",
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
+    "mailosaur": "^7.2.1",
     "minimist": "^1.2.0",
     "mockdate": "^2.0.2",
     "nodemon": "^1.19.0",
