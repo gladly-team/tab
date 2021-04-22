@@ -55,6 +55,8 @@ import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
+import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('uuid/v4', () =>
   jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
@@ -72,7 +74,7 @@ jest.mock('js/mutations/LogUserExperimentActionsMutation')
 jest.mock('js/mutations/LogUserRevenueMutation')
 jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
-
+jest.mock('js/utils/v4-beta-opt-in')
 const mockNow = '2018-05-15T10:30:00.000'
 
 // Enzyme does not yet support React.lazy and React.Suspense,
@@ -448,6 +450,52 @@ describe('Dashboard component', () => {
     expect(
       wrapper.find('[data-test-id="ad-explanation"]').find(Button).length
     ).toBe(0)
+  })
+
+  it('does not update cookie and redirect to v4 if v4BetaEnabled is undefined', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    shallow(<DashboardComponent {...mockProps} />)
+    expect(optIntoV4Beta).not.toHaveBeenCalled()
+  })
+
+  it('does not update cookie and redirect to v4 if v4BetaEnabled is false', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = {
+      ...mockProps,
+      user: {
+        id: 'abc-123',
+        joined: '2017-04-10T14:00:00.000',
+        searches: 0,
+        tabs: 12,
+        experimentActions: {},
+        v4BetaEnabled: false,
+      },
+    }
+    shallow(<DashboardComponent {...modifiedProps} />)
+    expect(optIntoV4Beta).not.toHaveBeenCalled()
+  })
+
+  it('updates cookie and redirect to v4 if v4BetaEnabled is true', async () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = {
+      ...mockProps,
+      user: {
+        id: 'abc-123',
+        joined: '2017-04-10T14:00:00.000',
+        searches: 0,
+        tabs: 12,
+        experimentActions: {},
+        v4BetaEnabled: true,
+      },
+    }
+    window.location.reload = jest.fn()
+    shallow(<DashboardComponent {...modifiedProps} />)
+    expect(optIntoV4Beta).toHaveBeenCalled()
+    await flushAllPromises
+    expect(window.location.reload).toHaveBeenCalled()
   })
 })
 

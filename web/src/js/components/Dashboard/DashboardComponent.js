@@ -219,7 +219,6 @@ class Dashboard extends React.Component {
       userClickedSearchIntroV1,
       // userClickedSearchIntroV2,
     } = this.state
-    console.log(user, 'usuer')
     // if user is supposed to be on v4, set cookie and redirect
     if (user && user.v4BetaEnabled) {
       this.updateV4Cookie()
@@ -794,7 +793,7 @@ Dashboard.propTypes = {
       referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
-    v4BetaEnabled: PropTypes.string,
+    v4BetaEnabled: PropTypes.bool,
     joined: PropTypes.string.isRequired,
     searches: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,
