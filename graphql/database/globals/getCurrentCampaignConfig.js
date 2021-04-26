@@ -1,25 +1,26 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = `## Spotlight: Asian Mental Health Collective`
+const campaignTitle = '## Spotlight: The Uyghur Human Rights Project'
 const campaignDescription = `
-#### This past year, we have seen a rise in violence and discrimination toward Asian and Pacific Islander communities. In response, we invite you to join us in supporting the [Asian Mental Health Collective](https://www.asianmhc.org/)!
-#### AMHC is committed to normalizing/de-stigmatizing mental health and making mental health support easily available, approachable, and accessible to Asian communities worldwide.
+#### With another month comes another amazing organization to support!
+#### [The Uyghur Human Rights Project](https://uhrp.org/) advocates for and works to protect the Uyghurs, ethnically and culturally Turkic people living in the areas of Central Asia, commonly known as East Turkistan.
+#### Reports from East Turkistan document a pattern of abuse, including political imprisonment, torture, and disappearances. We ask you to join us in supporting an organization amplifying the voices affected by these conditions and advocating for positive change!
 
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thank you for supporting the AMHC!'
+const campaignEndTitle = '## Thanks for supporting the UHRP!'
 const campaignEndDescription = `
-#### With your help, thousands of dollars were raised in support of the amazing programs run by the Asian Mental Health Collective.
-#### Want to continue to donate to organizations supporting Asian communities? [Check out some suggested nonprofits and emergency funds here](https://nymag.com/strategist/article/where-to-donate-to-help-asian-communities-2021.html).
+#### Thank you! Every Heart donated towards charitable causes like [The Uyghur Human Rights Project](https://uhrp.org/) adds up, and the result is something to be proud of. These funds raised will aid in advocacy against the abuse of the Uyghur people in East Turkistan. 
+#### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
 `
 // const campaignEndDescriptionTwo =
 //   '#### This is only part of [our relief efforts](https://tab.gladly.io/covid-19/) for this global health crisis—more to come soon.'
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'AMHCMar2021',
-  charityId: '82027e98-ba56-4307-a3cb-a22f30114ca5',
+  campaignId: 'UHRPApr2021',
+  charityId: '839030b5-b0e2-43f7-8ce4-c2a50645cd54',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -30,7 +31,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: false, // run the full time
+    whenGoalAchieved: true,
     whenTimeEnds: true,
   },
   goal: {
@@ -42,7 +43,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 8e6,
+    targetNumber: 7e6,
     // transformNumberSourceValue: num => {
     //   return 9e6
     // },
@@ -92,13 +93,13 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // socialSharing: undefined,
   theme: {
     color: {
-      main: '#116f62',
+      main: '#0d4c6b',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-03-30T08:00:00.000Z',
-    end: '2021-04-07T10:00:00.000Z',
+    start: '2021-04-26T08:00:00.000Z',
+    end: '2021-05-03T16:00:00.000Z',
   },
 })
 

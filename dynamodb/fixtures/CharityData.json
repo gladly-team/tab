@@ -419,5 +419,19 @@
     "updated": "2021-03-30T08:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "839030b5-b0e2-43f7-8ce4-c2a50645cd54",
+    "name": "The Uyghur Human Rights Project",
+    "category": "Human Rights",
+    "logo": "placeholder.png",
+    "image": "uhrp.jpg",
+    "website": "https://uhrp.org/",
+    "impact": "Every Heart donated makes a difference for <a href='https://uhrp.org/' target='_blank' rel='noopener noreferrer'>The Uyghur Human Rights Project</a> and the people they advocate for! Thank you so much for making an impact.",
+    "description": "--",
+    "created": "2021-04-26T08:00:00.000Z",
+    "updated": "2021-04-26T08:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
