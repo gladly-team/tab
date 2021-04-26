@@ -22,6 +22,7 @@ export default createFragmentContainer(Dashboard, {
       joined
       searches
       tabs
+      v4BetaEnabled
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
