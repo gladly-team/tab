@@ -21,6 +21,7 @@ describe('Tab: acceptance tests', () => {
       driver = getDriver('Tab: acceptance tests: should load auth page')
       await driver.navigateTo('/newtab/')
       await driver.waitForElementExistsByTestId('authentication-page')
+      expect(true).toEqual(false)
     },
     testTimeout
   )
