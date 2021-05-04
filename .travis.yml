@@ -249,7 +249,7 @@ install: yarn run all:install
 # to handle TravisCI PR restrictions. See:
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
 script:
-  - yarn run ci:test
+  - 'yarn run ci:test'
   - 'if [ ${TRAVIS_BRANCH} = "dev" ]; then
       yarn run ci:deploy test || travis_terminate 1;
       yarn run ci:test:integration || travis_terminate 1;
