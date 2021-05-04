@@ -249,11 +249,11 @@ install: yarn run all:install
 # to handle TravisCI PR restrictions. See:
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
 before_deploy:
-  yarn run ci:test &&
-  if [[ $TRAVIS_BRANCH = "dev" ]]; then
-    yarn run ci:deploy test &&
-    yarn run ci:test:integration
-  fi
+  - yarn run ci:test
+  - if [[ $TRAVIS_BRANCH = "dev" ]]; then
+      yarn run ci:deploy test &&
+      yarn run ci:test:integration
+    fi
 # TODO: master branch deploy to prod; other logic for test/dev
 # Note: travis_wait doesn't work well in deploy:
 #   https://github.com/travis-ci/travis-ci/issues/7961
