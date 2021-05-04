@@ -248,9 +248,9 @@ install: yarn run all:install
 # Only deploy and run integration tests when not a PR
 # to handle TravisCI PR restrictions. See:
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
-script: >
+before_deploy:
   yarn run ci:test &&
-  if [ "$TRAVIS_BRANCH" = "dev" ]; then
+  if [[ $TRAVIS_BRANCH = "dev" ]]; then
     yarn run ci:deploy test &&
     yarn run ci:test:integration
   fi
