@@ -250,7 +250,7 @@ install: yarn run all:install
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
 script: >
   yarn run ci:test &&
-  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+  if [ "$TRAVIS_PULL_REQUEST" = "false" AND "$TRAVIS_BRANCH" = "master" ]; then
     yarn run ci:deploy test &&
     yarn run ci:test:integration
   fi
