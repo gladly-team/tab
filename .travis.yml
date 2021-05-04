@@ -250,10 +250,10 @@ install: yarn run all:install
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
 script:
   - yarn run ci:test
-  - if [[ $TRAVIS_BRANCH = "dev" ]]; then
+  - 'if [ ${TRAVIS_BRANCH} = "dev" ]; then
       yarn run ci:deploy test || travis_terminate 1;
       yarn run ci:test:integration || travis_terminate 1;
-    fi
+    fi'
 # TODO: master branch deploy to prod; other logic for test/dev
 # Note: travis_wait doesn't work well in deploy:
 #   https://github.com/travis-ci/travis-ci/issues/7961
