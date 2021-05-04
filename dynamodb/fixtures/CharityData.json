@@ -433,5 +433,19 @@
     "updated": "2021-04-26T08:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "b95be5b4-2812-4529-bb13-9c9d981bfe2c",
+    "name": "CARE India",
+    "category": "Health",
+    "logo": "placeholder.png",
+    "image": "care-india.jpg",
+    "website": "https://www.careindia.org/",
+    "impact": "Thanks for supporting CARE India! These funds raised will help provide medical equipment and access to temporary COVID-19 hospitals to those affected throughout India.",
+    "description": "--",
+    "created": "2021-05-04T08:00:00.000Z",
+    "updated": "2021-05-04T08:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
