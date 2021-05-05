@@ -6,7 +6,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 
+import { jobsURL } from 'js/navigation/navigation'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import Link from 'js/components/General/Link'
 import Logo from 'js/components/Logo/Logo'
 
 const sidebarWidth = 240
@@ -30,7 +35,28 @@ const styles = theme => ({
     marginLeft: sidebarWidth,
     boxSizing: 'border-box',
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
+  },
+  messageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '14px 18px',
+    margin: 20,
+    marginBottom: 0,
+  },
+  messageText: {
+    color: theme.palette.action.active,
+  },
+  infoIcon: {
+    marginRight: 8,
+    color: theme.palette.action.active,
+    minHeight: 24,
+    minWidth: 24,
+  },
+  link: {
+    color: theme.palette.primary.main,
   },
 })
 
@@ -48,10 +74,10 @@ const SettingsPage = props => {
 
   return (
     <div className={classes.container}>
-      <AppBar color={'primary'} position={'sticky'}>
+      <AppBar color="primary" position="sticky">
         <Toolbar>
           <div style={{ flex: 1 }}>
-            <Logo color={'white'} />
+            <Logo color="white" />
           </div>
           <IconButton onClick={onClose}>
             <CloseIcon className={classes.closeIcon} />
@@ -62,6 +88,19 @@ const SettingsPage = props => {
         {sidebarContent({ showError })}
       </div>
       <div className={classes.mainContentContainer}>
+        <Paper elevation={1} className={classes.messageContainer}>
+          <Typography variant="body2" className={classes.messageText}>
+            We're hiring for a paid social media internship position!{' '}
+            <Link
+              to={jobsURL}
+              className={classes.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              More info here.
+            </Link>
+          </Typography>
+        </Paper>
         {mainContent({ showError })}
       </div>
       <ErrorMessage
