@@ -143,7 +143,7 @@ class EnterEmailForm extends React.Component {
   }
 
   render() {
-    const { app, emailVerified } = this.props
+    const { app } = this.props
     return this.state.verifyEmailSent ? (
       <PaperItem
         title="Verify Your New Email Address"

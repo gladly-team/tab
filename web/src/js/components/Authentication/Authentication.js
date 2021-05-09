@@ -163,7 +163,11 @@ class Authentication extends React.Component {
     const redirected = redirectToAuthIfNeeded({
       authUser,
       user,
-      urlParams: { app: urlParams.app, next: urlParams.next },
+      urlParams: {
+        app: urlParams.app,
+        next: urlParams.next,
+        reauth: urlParams.reauth,
+      },
     })
 
     // When anonymous users choose to sign in, do not go back to the
@@ -358,10 +362,15 @@ class Authentication extends React.Component {
               style={{
                 flex: 1,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 padding: 20,
               }}
             >
+              {urlParams.reauth ? (
+                <span>Please re-login to perform this operation.</span>
+              ) : null}
               <Switch>
                 <Route
                   exact

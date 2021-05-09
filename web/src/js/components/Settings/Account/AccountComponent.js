@@ -75,7 +75,7 @@ class Account extends React.Component {
       })
     }
 
-    if(this.state.emailVerified) {
+    if (this.state.emailVerified) {
       checkIfEmailVerified()
     }
   }
@@ -105,9 +105,9 @@ class Account extends React.Component {
   }
 
   closeEmailDialog() {
-    this.setState({ 
+    this.setState({
       emailOpen: false,
-      emailVerified: false
+      emailVerified: false,
     })
   }
 
@@ -261,48 +261,49 @@ class Account extends React.Component {
           onClose={this.closeEmailDialog.bind(this)}
           aria-labelledby="form-dialog-title"
         >
-          { this.state.emailVerified ? (
+          {this.state.emailVerified ? (
             <Paper
-            elevation={1}
-            style={{
-              padding: 24,
-              backgroundColor: '#FFF',
-            }}
-          >
-            <span
+              elevation={1}
               style={{
-                fontSize: 20,
-                fontWeight: 500,
+                padding: 24,
+                backgroundColor: '#FFF',
               }}
             >
-              Email Updated
-            </span>
-            <Typography
-              variant={'body2'}
-              style={{ paddingTop: 24, paddingBottom: 24 }}
-            >
-              Your email has been updated.
-            </Typography>
-            <span
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                marginTop: 4,
-              }}
-            >
-              <Button
-                data-test-id={'enter-username-form-button'}
-                color={'primary'}
-                variant={'contained'}
-                style={{ minWidth: 96 }}
-                onClick={this.closeEmailDialog.bind(this)}
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 500,
+                }}
               >
-                Done
-              </Button>
-            </span>
-          </Paper> ) :
-            (<EnterEmailForm onCompleted={() => {}} app={TAB_APP} />)
-          }
+                Email Updated
+              </span>
+              <Typography
+                variant={'body2'}
+                style={{ paddingTop: 24, paddingBottom: 24 }}
+              >
+                Your email has been updated.
+              </Typography>
+              <span
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginTop: 4,
+                }}
+              >
+                <Button
+                  data-test-id={'enter-username-form-button'}
+                  color={'primary'}
+                  variant={'contained'}
+                  style={{ minWidth: 96 }}
+                  onClick={this.closeEmailDialog.bind(this)}
+                >
+                  Done
+                </Button>
+              </span>
+            </Paper>
+          ) : (
+            <EnterEmailForm onCompleted={() => {}} app={TAB_APP} />
+          )}
         </Dialog>
       </Paper>
     )
