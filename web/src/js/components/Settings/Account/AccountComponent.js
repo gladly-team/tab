@@ -52,9 +52,9 @@ class Account extends React.Component {
       doesCCPAApply: false,
       usernameOpen: false,
       usernameUpdated: false,
-      emailOpen: verified ? verified : false,
+      emailOpen: verified ? true : false,
       emailUpdated: false,
-      emailVerified: verified ? verified : false,
+      emailVerified: verified ? true : false,
     }
   }
 
@@ -261,7 +261,7 @@ class Account extends React.Component {
           onClose={this.closeEmailDialog.bind(this)}
           aria-labelledby="form-dialog-title"
         >
-          { this.state.emailVerified ? 
+          { this.state.emailVerified ? (
             <Paper
             elevation={1}
             style={{
@@ -300,8 +300,8 @@ class Account extends React.Component {
                 Done
               </Button>
             </span>
-          </Paper> :
-            <EnterEmailForm onCompleted={() => {}} app={TAB_APP} />
+          </Paper> ) :
+            (<EnterEmailForm onCompleted={() => {}} app={TAB_APP} />)
           }
         </Dialog>
       </Paper>
