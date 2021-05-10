@@ -58,7 +58,7 @@ env:
   # version associated with the CloudFront /newtab* cache behavior, because
   # Lambda@Edge does not support environment variables and thus the
   # host is hardcoded in deploys.
-  - TEST_LAMBDA_TAB_V4_HOST=tab-web-git-dev-gladly-team.vercel.app
+  - TEST_LAMBDA_TAB_V4_HOST=tab-web-qa-gladly-team.vercel.app
   # Endpoints
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
