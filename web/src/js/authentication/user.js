@@ -17,7 +17,12 @@ import {
   STORAGE_EXPERIMENT_ANON_USER,
   STORAGE_NEW_USER_IS_TAB_V4_BETA,
 } from 'js/constants'
-import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
+import {
+  absoluteUrl,
+  accountURL,
+  enterUsernameURL,
+  constructUrl,
+} from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
 // Only for development.
@@ -329,4 +334,26 @@ export const reloadUser = async () => {
     return
   }
   await user.reload()
+}
+
+export const updateUserEmail = async newEmail => {
+  const continueUrl = constructUrl(
+    accountURL,
+    { verified: true },
+    { absolute: true }
+  )
+  console.log('continueUrl is ' + continueUrl)
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser
+    user
+      .verifyBeforeUpdateEmail(newEmail, {
+        url: continueUrl,
+      })
+      .then(function() {
+        resolve()
+      })
+      .catch(function(error) {
+        reject(error)
+      })
+  })
 }

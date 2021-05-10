@@ -234,7 +234,9 @@ class BaseModel {
     if (rangeKey) {
       keys.push(rangeKey)
     }
-    // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
+    logger.debug(
+      `Getting obj with hashKey ${hashKey} from table ${this.tableName}.`
+    )
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       throw new UnauthorizedQueryException()
     }
@@ -424,7 +426,7 @@ class BaseModel {
    * @return {Object} item - The updated item
    */
   static async update(userContext, item, params = {}) {
-    // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
+    // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const hashKeyValue = item[this.hashKey]
     const rangeKeyValue = item[this.rangeKey]
 
