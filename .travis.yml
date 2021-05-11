@@ -71,7 +71,7 @@ env:
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=test-search.gladly.io
   - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1118 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1224 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=139 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
