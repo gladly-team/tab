@@ -46,6 +46,7 @@ import {
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
+import setEmail from '../database/users/setEmail'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import updateImpact from '../database/userImpact/updateImpact'
@@ -1712,6 +1713,26 @@ const setUsernameMutation = mutationWithClientMutationId({
   },
 })
 
+const setEmailMutation = mutationWithClientMutationId({
+  name: 'SetEmail',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: data => data.user,
+    },
+    errors: {
+      type: new GraphQLList(customErrorType),
+      resolve: data => data.errors,
+    },
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    return setEmail(context.user, userId)
+  },
+})
+
 /**
  * Handle when a user is a duplicate account for an existing user.
  */
@@ -1882,6 +1903,7 @@ const mutationType = new GraphQLObjectType({
 
     createNewUser: createNewUserMutation,
     setUsername: setUsernameMutation,
+    setEmail: setEmailMutation,
     updateUserExperimentGroups: updateUserExperimentGroupsMutation,
     logUserExperimentActions: logUserExperimentActionsMutation,
     setV4Beta: setV4BetaMutation,
