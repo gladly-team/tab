@@ -611,6 +611,7 @@ type Mutation {
   setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
+  setEmail(input: SetEmailInput!): SetEmailPayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
@@ -672,6 +673,17 @@ enum SearchRateLimitReason {
   ONE_MINUTE_MAX
   FIVE_MINUTE_MAX
   DAILY_MAX
+}
+
+input SetEmailInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetEmailPayload {
+  user: User
+  errors: [CustomError]
+  clientMutationId: String
 }
 
 input SetHasViewedIntroFlowInput {
