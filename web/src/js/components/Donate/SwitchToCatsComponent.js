@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
-// import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
+import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { goToDashboard } from 'js/navigation/navigation'
 import catImage from 'js/assets/catCharity.png'
 import Button from '@material-ui/core/Button'
@@ -11,6 +11,7 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
 class SwitchToCatCharity extends React.Component {
   async switchToV4() {
+    await optIntoV4Beta()
     await localStorageMgr.setItem(STORAGE_NEW_USER_IS_TAB_V4_BETA, 'true')
     await SetV4BetaMutation({
       userId: this.props.user.id,
