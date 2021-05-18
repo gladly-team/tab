@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import { goToDashboard } from 'js/navigation/navigation'
 import catImage from 'js/assets/catCharity.png'
 import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -17,7 +16,7 @@ class SwitchToCatCharity extends React.Component {
       userId: this.props.user.id,
       enabled: true,
     })
-    goToDashboard()
+    window.location.reload()
   }
   render() {
     return (
