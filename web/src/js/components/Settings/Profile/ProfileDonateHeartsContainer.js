@@ -19,6 +19,7 @@ export default createFragmentContainer(ProfileDonateHearts, {
   user: graphql`
     fragment ProfileDonateHeartsContainer_user on User {
       ...CharityContainer_user
+      ...SwitchToCatsContainer_user
     }
   `,
 })
