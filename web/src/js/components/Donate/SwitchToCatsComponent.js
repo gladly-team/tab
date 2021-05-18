@@ -8,7 +8,7 @@ import catImage from 'js/assets/catCharity.png'
 import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
-import { reload } from 'js/navigation/navigation'
+import { reloadDashboard } from 'js/navigation/navigation'
 class SwitchToCatCharity extends React.Component {
   async switchToV4() {
     await optIntoV4Beta()
@@ -17,7 +17,7 @@ class SwitchToCatCharity extends React.Component {
       userId: this.props.user.id,
       enabled: true,
     })
-    reload()
+    reloadDashboard()
   }
   render() {
     return (

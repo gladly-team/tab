@@ -239,4 +239,4 @@ export const goToInviteFriends = () => {
   goTo(inviteFriendsURL)
 }
 
-export const reload = () => window.location.reload()
+export const reloadDashboard = () => externalRedirect(absoluteUrl(dashboardURL))
