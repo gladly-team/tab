@@ -8,6 +8,7 @@ import catImage from 'js/assets/catCharity.png'
 import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
+import { reload } from 'js/navigation/navigation'
 class SwitchToCatCharity extends React.Component {
   async switchToV4() {
     await optIntoV4Beta()
@@ -16,7 +17,7 @@ class SwitchToCatCharity extends React.Component {
       userId: this.props.user.id,
       enabled: true,
     })
-    window.location.reload()
+    reload()
   }
   render() {
     return (
@@ -107,7 +108,11 @@ class SwitchToCatCharity extends React.Component {
   }
 }
 
-SwitchToCatCharity.propTypes = { userId: PropTypes.string }
+SwitchToCatCharity.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }),
+}
 
 SwitchToCatCharity.defaultProps = {}
 
