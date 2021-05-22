@@ -12,6 +12,7 @@ describe('authorization-helpers', () => {
       id: 'abc123',
       email: 'foo@bar.com',
       email_verified: 'true',
+      auth_time: 1,
     }
     const minimalLambdaEventObj = {
       requestContext: {
@@ -27,12 +28,14 @@ describe('authorization-helpers', () => {
       id: 'abc123',
       email: 'foo@bar.com',
       email_verified: 'true',
+      auth_time: 1,
     }
     const expectedContext = {
       user: {
         id: 'abc123',
         email: 'foo@bar.com',
         emailVerified: true,
+        authTime: 1,
       },
     }
     const context = createGraphQLContext(userClaims)
@@ -45,6 +48,7 @@ describe('permission authorizer functions', () => {
     id: 'abcdefghijklmno',
     email: 'abc@example.com',
     emailVerified: true,
+    authTime: 1,
   }
 
   test('userIdMatchesHashKey works if user ID matches hash key', () => {

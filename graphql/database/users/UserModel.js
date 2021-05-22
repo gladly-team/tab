@@ -111,6 +111,12 @@ class User extends BaseModel {
         .description(
           `A flag indicating whether a user has viewed the intro in tab v4`
         ),
+      deleted: types
+        .boolean()
+        .default(self.fieldDefaults.deleted)
+        .description(
+          `A flag indicating whether or not this User has been deleted.`
+        ),
       validTabs: types
         .number()
         .integer()
@@ -377,6 +383,7 @@ class User extends BaseModel {
       }),
       v4BetaEnabled: false,
       hasViewedIntroFlow: false,
+      deleted: false,
     }
   }
 

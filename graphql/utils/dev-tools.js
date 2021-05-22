@@ -1,5 +1,6 @@
 /* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
 import jwtDecode from 'jwt-decode'
+import moment from 'moment'
 import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
@@ -19,7 +20,7 @@ function mockAuthorizer(authorizationToken) {
     const defaultEmail = 'kevin@example.com'
     console.warn('Warning: dev user is missing an Authorization token.')
     console.warn(
-      `Using default user with id "${defaultUserId}"" and email "${defaultEmail}".`
+      `Using default user with id "${defaultUserId}" and email "${defaultEmail}".`
     )
     // Default user. Helpful for GraphiQL until we support it with
     // an Authorization header.
@@ -28,6 +29,7 @@ function mockAuthorizer(authorizationToken) {
       id: defaultUserId,
       email: defaultEmail,
       email_verified: 'true',
+      auth_time: moment().unix(),
     }
 
     // If the request is unauthenticated, allow access but do not
@@ -46,6 +48,7 @@ function mockAuthorizer(authorizationToken) {
       id: null,
       email: null,
       email_verified: 'false',
+      auth_time: null,
     }
   }
   const parsedJwt = jwtDecode(authorizationToken)
@@ -58,6 +61,7 @@ function mockAuthorizer(authorizationToken) {
     email_verified: parsedJwt.email_verified
       ? parsedJwt.email_verified.toString()
       : 'false',
+    auth_time: parsedJwt.auth_time || null,
   }
 }
 

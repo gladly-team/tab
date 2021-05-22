@@ -1,7 +1,9 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import jwtDecode from 'jwt-decode'
 import { cloneDeep } from 'lodash/lang'
+import { mockDate } from '../../database/test-utils'
 
 jest.mock('jwt-decode')
 
@@ -18,6 +20,10 @@ const mockDecodedToken = {
   email_verified: true,
   firebase: { identities: { email: [] }, sign_in_provider: 'password' },
 }
+
+beforeAll(() => {
+  mockDate.on()
+})
 
 describe('dev-tools', () => {
   it('correctly forms GraphQL context from a request object when the user has a verified email', () => {
@@ -37,6 +43,7 @@ describe('dev-tools', () => {
         id: 'abc123xyz987',
         email: 'somebody@example.com',
         emailVerified: true,
+        authTime: mockDecodedToken.auth_time,
       },
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)
@@ -63,6 +70,7 @@ describe('dev-tools', () => {
         id: 'abc123xyz987',
         email: null,
         emailVerified: false,
+        authTime: mockDecodedToken.auth_time,
       },
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)
@@ -82,6 +90,7 @@ describe('dev-tools', () => {
         id: 'abcdefghijklmno',
         email: 'kevin@example.com',
         emailVerified: true,
+        authTime: moment().unix(),
       },
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)
@@ -103,6 +112,7 @@ describe('dev-tools', () => {
         id: null,
         email: null,
         emailVerified: false,
+        authTime: null,
       },
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)

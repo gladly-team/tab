@@ -24,6 +24,7 @@ describe('test-utils', () => {
       id: 'abcdefghijklmno',
       email: 'foo@bar.com',
       emailVerified: true,
+      authTime: 1533144713,
     })
   })
 

@@ -66,6 +66,7 @@ import constructExperimentActionsType from '../database/users/constructExperimen
 import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
 import setV4Enabled from '../database/users/setV4Enabled'
 import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
+import deleteUser from '../database/users/deleteUser'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -1835,6 +1836,21 @@ const setHasViewedIntroFlowMutation = mutationWithClientMutationId({
   },
 })
 
+const deleteUserMutation = mutationWithClientMutationId({
+  name: 'DeleteUser',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    return deleteUser(context.user, userId)
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -1908,6 +1924,8 @@ const mutationType = new GraphQLObjectType({
     logUserExperimentActions: logUserExperimentActionsMutation,
     setV4Beta: setV4BetaMutation,
     setHasViewedIntroFlow: setHasViewedIntroFlowMutation,
+
+    deleteUser: deleteUserMutation,
   }),
 })
 

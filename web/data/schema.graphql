@@ -350,6 +350,16 @@ type CustomError {
   message: String
 }
 
+input DeleteUserInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type DeleteUserPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 input DonateVcInput {
   userId: String!
   charityId: String!
@@ -616,6 +626,7 @@ type Mutation {
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
   setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
 }
 
 """An object with an ID"""
