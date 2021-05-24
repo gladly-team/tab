@@ -20,12 +20,13 @@ function commit(
   environment,
   userId,
   onCompleted = () => {},
-  onError = () => {}
+  onError = () => {},
+  category
 ) {
   return commitMutation(environment, {
     mutation,
     variables: {
-      input: { userId },
+      input: { userId, category },
     },
     onCompleted,
     onError,

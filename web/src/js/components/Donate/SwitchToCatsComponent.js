@@ -9,10 +9,19 @@ import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
 import { reloadDashboard } from 'js/navigation/navigation'
+import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
+
 class SwitchToCatCharity extends React.Component {
   async switchToV4() {
     await optIntoV4Beta()
     await localStorageMgr.setItem(STORAGE_NEW_USER_IS_TAB_V4_BETA, 'true')
+    await SetBackgroundDailyImageMutation(
+      this.props.relay.environment,
+      this.props.user.id,
+      () => {},
+      () => {},
+      'cats'
+    )
     await SetV4BetaMutation({
       userId: this.props.user.id,
       enabled: true,

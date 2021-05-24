@@ -8,18 +8,19 @@ import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import Button from '@material-ui/core/Button'
 import { flushAllPromises } from 'js/utils/test-utils'
 import { reloadDashboard } from 'js/navigation/navigation'
-
+import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 jest.mock('js/utils/v4-beta-opt-in')
 jest.mock('js/mutations/SetV4BetaMutation')
 jest.mock('js/navigation/navigation', () => ({ reloadDashboard: jest.fn() }))
+jest.mock('js/mutations/SetBackgroundDailyImageMutation')
 const getMockProps = () => ({
   user: {
     id: 'abc123',
-    vcCurrent: 23,
   },
+  relay: { environment: {} },
 })
 
-describe('Charity (donate Hearts) component', () => {
+describe('Switch to Cats component', () => {
   it('renders without error', () => {
     const Charity = require('js/components/Donate/SwitchToCatsComponent')
       .default
@@ -27,7 +28,7 @@ describe('Charity (donate Hearts) component', () => {
     shallow(<Charity {...mockProps} />)
   })
 
-  it('contains the charity image', () => {
+  it('contains the cat image', () => {
     const Charity = require('js/components/Donate/SwitchToCatsComponent')
       .default
     const mockProps = getMockProps()
@@ -51,5 +52,12 @@ describe('Charity (donate Hearts) component', () => {
     expect(SetV4BetaMutation).toHaveBeenCalled()
     expect(optIntoV4Beta).toHaveBeenCalled()
     expect(reloadDashboard).toHaveBeenCalled()
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledWith(
+      expect.any(Object),
+      'abc123',
+      expect.any(Function),
+      expect.any(Function),
+      'cats'
+    )
   })
 })
