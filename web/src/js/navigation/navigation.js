@@ -238,3 +238,5 @@ export const goToStats = () => {
 export const goToInviteFriends = () => {
   goTo(inviteFriendsURL)
 }
+
+export const reloadDashboard = () => externalRedirect(absoluteUrl(dashboardURL))

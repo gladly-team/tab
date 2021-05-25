@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Charity from 'js/components/Donate/CharityContainer'
+import CatCharity from 'js/components/Donate/SwitchToCatsContainer'
 import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
@@ -69,6 +70,7 @@ class ProfileDonateHearts extends React.Component {
               />
             )
           })}
+          <CatCharity user={user} />
         </span>
       </div>
     )
