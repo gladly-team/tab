@@ -594,6 +594,7 @@ describe('Dashboard component: ads logic', () => {
       auctionTimeout: expect.any(Number),
       pageLevelKeyValues: {
         v4: 'false',
+        dev: 'true', // TODO: remove
       },
       consent: {
         enabled: expect.any(Boolean),
