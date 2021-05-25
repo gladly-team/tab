@@ -16,6 +16,10 @@ const allFixtures = [
     jsonFile: 'UserImpactData.json',
   },
   {
+    tableName: 'InvitedUsers',
+    jsonFile: 'InvitedUsers.json',
+  },
+  {
     tableName: 'UserLevels',
     jsonFile: 'UserLevels.json',
   },

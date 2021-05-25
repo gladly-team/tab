@@ -54,6 +54,21 @@
     }
   },
   {
+    "TableName": "InvitedUsers",
+    "KeySchema": [
+      { "AttributeName": "inviterId", "KeyType": "HASH" },
+      { "AttributeName": "invitedEmail", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "inviterId", "AttributeType": "S" },
+      { "AttributeName": "invitedEmail", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
     "TableName": "Widgets",
     "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
     "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],

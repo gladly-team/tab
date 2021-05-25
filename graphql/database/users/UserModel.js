@@ -62,6 +62,11 @@ class User extends BaseModel {
         .description(
           `Username provided by the user. Will be unique (caps-sensitive).`
         ),
+      name: types
+        .string()
+        .description(
+          `an optional field currently added when a user invites someone new via email invite`
+        ),
       joined: types
         .string()
         .isoDate()

@@ -11,6 +11,7 @@ const tables = {
   userLevels: 'UserLevels',
   charities: 'Charities',
   userImpact: 'UserImpact',
+  invitedUsers: 'InvitedUsers',
   vcDonationLog: 'VcDonationLog',
   vcDonationByCharity: 'VcDonationByCharity',
   userRevenueLog: 'UserRevenueLog',

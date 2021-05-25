@@ -60,6 +60,15 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
+      invitedUsersTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60
       widgetsTable:
         read:
           minimum: 1
@@ -197,6 +206,15 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
+      invitedUsersTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60          
       widgetsTable:
         read:
           minimum: 10
@@ -338,6 +356,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.usage}
+    - table: invitedUsersTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.usage}
     - table: widgetsTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
@@ -515,6 +542,26 @@ resources:
           - AttributeName: userId
             AttributeType: S
           - AttributeName: charityId
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    invitedUsersTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: InvitedUsers-${self:provider.stage}
+        KeySchema:
+          - AttributeName: inviterId
+            KeyType: HASH
+          - AttributeName: invitedEmail
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: inviterId
+            AttributeType: S
+          - AttributeName: invitedEmail
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
