@@ -6,12 +6,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 
-import { jobsURL } from 'js/navigation/navigation'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
+// import { jobsURL } from 'js/navigation/navigation'
+// import Paper from '@material-ui/core/Paper'
+// import Typography from '@material-ui/core/Typography'
+// import Link from 'js/components/General/Link'
 
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import Link from 'js/components/General/Link'
 import Logo from 'js/components/Logo/Logo'
 
 const sidebarWidth = 240
@@ -88,19 +88,21 @@ const SettingsPage = props => {
         {sidebarContent({ showError })}
       </div>
       <div className={classes.mainContentContainer}>
-        <Paper elevation={1} className={classes.messageContainer}>
-          <Typography variant="body2" className={classes.messageText}>
-            We're hiring for a paid social media internship position!{' '}
-            <Link
-              to={jobsURL}
-              className={classes.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              More info here.
-            </Link>
-          </Typography>
-        </Paper>
+        {/* Optional message for users, such as job postings. */}
+
+        {/* <Paper elevation={1} className={classes.messageContainer}> */}
+        {/*   <Typography variant="body2" className={classes.messageText}> */}
+        {/*     We're hiring for a paid social media internship position!{' '} */}
+        {/*     <Link */}
+        {/*       to={jobsURL} */}
+        {/*       className={classes.link} */}
+        {/*       target="_blank" */}
+        {/*       rel="noopener noreferrer" */}
+        {/*     > */}
+        {/*       More info here. */}
+        {/*     </Link> */}
+        {/*   </Typography> */}
+        {/* </Paper> */}
         {mainContent({ showError })}
       </div>
       <ErrorMessage
