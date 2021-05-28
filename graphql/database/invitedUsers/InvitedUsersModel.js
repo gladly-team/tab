@@ -20,12 +20,26 @@ class InvitedUsers extends BaseModel {
     return 'invitedEmail'
   }
 
+  static get indexes() {
+    return [
+      {
+        hashKey: 'inviterId',
+        name: 'InvitesByInviter',
+        type: 'global',
+      },
+      {
+        hashKey: 'invitedEmail',
+        name: 'InvitesByInvitedEmail',
+        type: 'global',
+      },
+    ]
+  }
+
   static get tableName() {
     return tableNames.invitedUsers
   }
 
   static get schema() {
-    const self = this
     return {
       inviterId: types
         .string()
@@ -37,35 +51,28 @@ class InvitedUsers extends BaseModel {
         .string()
         .required()
         .description(`the email address of a newly invited user`),
-      isSquadInvite: types
-        .boolean()
-        .default(self.fieldDefaults.isSquadInvite)
-        .description(
-          `whether the user is invited to a v4 squad or is a normal referral`
-        ),
-      status: types
+      invitedId: types
         .string()
-        .allow('pending', 'accepted')
-        .default(self.fieldDefaults.status) // only set in app code
         .description(
-          `the status of the invite. A user is pending and then can accept`
+          `the invited user's' user id once they have successfully signed up`
         ),
     }
   }
 
   static get fieldDefaults() {
-    return {
-      isSquadInvite: false,
-      status: 'pending',
-    }
+    return {}
   }
 
   static get permissions() {
     return {
       get: permissionAuthorizers.userIdMatchesHashKey,
+      query: () => true,
       getAll: () => false,
       update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
+      indexPermissions: {
+        InvitesByInviter: { get: permissionAuthorizers.userIdMatchesHashKey },
+      },
     }
   }
 }

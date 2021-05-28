@@ -113,8 +113,6 @@ describe('InvitedUsersModel', () => {
     expect(item).toEqual({
       inviterId: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       invitedEmail: 'test@gmail.com',
-      status: 'pending',
-      isSquadInvite: false,
     })
   })
 })

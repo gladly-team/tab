@@ -33,6 +33,11 @@ class User extends BaseModel {
         name: 'UsersByUsername',
         type: 'global',
       },
+      {
+        hashKey: 'email',
+        name: 'UsersByEmail',
+        type: 'global',
+      },
     ]
   }
 
