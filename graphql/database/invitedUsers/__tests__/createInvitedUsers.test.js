@@ -14,7 +14,6 @@ jest.mock('../utils', () => ({
 }))
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
-// jest.mock('../../users/UserModel')
 const userContext = getMockUserContext()
 
 afterEach(() => {
@@ -56,6 +55,7 @@ describe('createInvitedUsers', () => {
     expect(results.successfulEmailAddresses.length).toEqual(1)
     expect(results.failedEmailAddresses.length).toEqual(1)
   })
+
   it('it throws an error if user tries to create more than 50 invites in 24 hours', async () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: getMockUserInstance(),

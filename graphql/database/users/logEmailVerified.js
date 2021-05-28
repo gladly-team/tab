@@ -1,6 +1,11 @@
 import UserModel from './UserModel'
 import rewardReferringUser from './rewardReferringUser'
 import logger from '../../utils/logger'
+import InvitedUsersModel from '../invitedUsers/InvitedUsersModel'
+import {
+  ADMIN_MANAGEMENT,
+  getPermissionsOverride,
+} from '../../utils/permissions-overrides'
 
 /**
  * Log that a user's email is verified, using the trustworthy
@@ -29,6 +34,21 @@ const logEmailVerified = async (userContext, userId) => {
   if (userContext.emailVerified) {
     try {
       await rewardReferringUser(userContext, userId)
+      const override = getPermissionsOverride(ADMIN_MANAGEMENT)
+      const originalInvitedUsers = await InvitedUsersModel.query(
+        override,
+        userContext.email
+      )
+        .usingIndex('InvitesByInvitedEmail')
+        .execute()
+      await Promise.all(
+        originalInvitedUsers.map(invitedUserEntry =>
+          InvitedUsersModel.update(override, {
+            ...invitedUserEntry,
+            invitedId: userId,
+          })
+        )
+      )
     } catch (e) {
       logger.error(
         new Error(`Could not reward referring user for user ID ${userId}.`)

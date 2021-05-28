@@ -1251,7 +1251,6 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
         })
       ),
     },
-    // resolve: invitedUsers => invitedUsers,
   },
   mutateAndGetPayload: (input, context) => {
     const invitedUser = createInvitedUsers(

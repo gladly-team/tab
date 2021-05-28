@@ -91,7 +91,6 @@ describe('InvitedUsersModel', () => {
     // Set mock response from DB client.
     setMockDBResponse(DatabaseOperation.GET, {
       Item: {
-        // Actual item would have more properties
         inviterId: mockItemId,
         invitedEmail: mockInvitedEmail,
       },
