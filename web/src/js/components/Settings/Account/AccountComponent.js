@@ -18,6 +18,12 @@ import {
   loginURL,
   replaceUrl,
 } from 'js/navigation/navigation'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import PaperItem from 'js/components/General/PaperItem'
+import { deleteUser } from 'js/authentication/user'
 
 export const AccountItem = props => (
   <div
@@ -59,6 +65,7 @@ class Account extends React.Component {
       emailOpen: verified ? true : false,
       emailUpdated: false,
       emailVerified: verified ? true : false,
+      deleteAccountOpen: false,
     }
   }
 
@@ -104,7 +111,7 @@ class Account extends React.Component {
     this.setState({ usernameUpdated: true })
   }
 
-  openEmailDialog() {
+  reauthIfNecessary() {
     const { reauthed } = getUrlParameters()
     if (!reauthed) {
       replaceUrl(loginURL, {
@@ -112,6 +119,10 @@ class Account extends React.Component {
         reauth: 'true',
       })
     }
+  }
+
+  openEmailDialog() {
+    this.reauthIfNecessary()
     this.setState({ emailOpen: true, emailUpdated: false })
   }
 
@@ -120,6 +131,29 @@ class Account extends React.Component {
       emailOpen: false,
       emailVerified: false,
     })
+  }
+
+  openDeleteAccountDialog() {
+    this.reauthIfNecessary()
+    this.setState({
+      deleteAccountOpen: true,
+    })
+  }
+
+  closeDeleteAccountDialog() {
+    this.setState({
+      deleteAccountOpen: false,
+    })
+  }
+
+  deleteUserHandler() {
+    deleteUser()
+      .then(() =>
+        replaceUrl(loginURL, {
+          accountDeleted: true,
+        })
+      )
+      .catch(error => console.error(error))
   }
 
   render() {
@@ -209,6 +243,30 @@ class Account extends React.Component {
             />
           </span>
         ) : null}
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography> Advanced </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails
+            style={{
+              padding: 0,
+              display: 'flex',
+            }}
+          >
+            <AccountItem
+              name={'Delete Account'}
+              actionButton={
+                <Button
+                  color={'default'}
+                  variant={'contained'}
+                  onClick={this.openDeleteAccountDialog.bind(this)}
+                >
+                  Delete Account
+                </Button>
+              }
+            />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         <Dialog
           open={this.state.usernameOpen}
           onClose={this.closeUsernameDialog.bind(this)}
@@ -311,6 +369,20 @@ class Account extends React.Component {
           ) : (
             <EnterEmailForm />
           )}
+        </Dialog>
+        <Dialog
+          open={this.state.deleteAccountOpen}
+          aria-labelledby="form-dialog-title"
+        >
+          <PaperItem
+            title="Are you sure you want to delete your account?"
+            text="This cannot be undone. Any money you’ve raised will still go 
+              to our partner nonprofits, but your account, stats, and other info will be permanently lost."
+            buttonText="Cancel"
+            buttonHandler={this.closeDeleteAccountDialog.bind(this)}
+            secondaryButtonText="Confirm"
+            secondaryButtonHandler={this.deleteUserHandler.bind(this)}
+          />
         </Dialog>
       </Paper>
     )

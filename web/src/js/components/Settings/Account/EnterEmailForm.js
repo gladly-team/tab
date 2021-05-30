@@ -9,49 +9,7 @@ import {
   replaceUrl,
 } from 'js/navigation/navigation'
 import EmailField from 'js/components/General/EmailField'
-import Typography from '@material-ui/core/Typography'
-
-export const PaperItem = props => (
-  <Paper
-    elevation={1}
-    style={{
-      padding: 24,
-      backgroundColor: '#FFF',
-    }}
-  >
-    <span
-      style={{
-        fontSize: 20,
-        fontWeight: 500,
-      }}
-    >
-      {props.title}
-    </span>
-    <Typography variant={'body2'} style={{ paddingTop: 24, paddingBottom: 24 }}>
-      {props.text}
-    </Typography>
-    <span
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        marginTop: 4,
-      }}
-    >
-      {' '}
-      {props.buttonText ? (
-        <Button
-          data-test-id={'enter-email-form-button'}
-          color={'primary'}
-          variant={'contained'}
-          onClick={props.buttonHandler}
-          style={{ minWidth: 96 }}
-        >
-          {props.buttonText}
-        </Button>
-      ) : null}
-    </span>
-  </Paper>
-)
+import PaperItem from 'js/components/General/PaperItem'
 
 class EnterEmailForm extends React.Component {
   constructor(props) {
