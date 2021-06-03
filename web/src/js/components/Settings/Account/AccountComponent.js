@@ -9,6 +9,15 @@ import initializeCMP from 'js/utils/initializeCMP'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import tabCMP from 'tab-cmp'
 import Dialog from '@material-ui/core/Dialog'
+import EnterEmailForm from 'js/components/Settings/Account/EnterEmailForm'
+import { checkIfEmailVerified } from 'js/authentication/helpers'
+import { getUrlParameters } from 'js/utils/utils'
+import {
+  accountURL,
+  constructUrl,
+  loginURL,
+  replaceUrl,
+} from 'js/navigation/navigation'
 
 export const AccountItem = props => (
   <div
@@ -41,11 +50,15 @@ AccountItem.propTypes = {
 class Account extends React.Component {
   constructor(props) {
     super(props)
+    const { verified } = getUrlParameters()
     this.state = {
       doesGDPRApply: false,
       doesCCPAApply: false,
       usernameOpen: false,
       usernameUpdated: false,
+      emailOpen: verified ? true : false,
+      emailUpdated: false,
+      emailVerified: verified ? true : false,
     }
   }
 
@@ -64,6 +77,10 @@ class Account extends React.Component {
       this.setState({
         doesCCPAApply: true,
       })
+    }
+
+    if (this.state.emailVerified) {
+      checkIfEmailVerified()
     }
   }
 
@@ -85,6 +102,24 @@ class Account extends React.Component {
 
   usernameUpdated() {
     this.setState({ usernameUpdated: true })
+  }
+
+  openEmailDialog() {
+    const { reauthed } = getUrlParameters()
+    if (!reauthed) {
+      replaceUrl(loginURL, {
+        next: constructUrl(accountURL, { reauthed: true }),
+        reauth: 'true',
+      })
+    }
+    this.setState({ emailOpen: true, emailUpdated: false })
+  }
+
+  closeEmailDialog() {
+    this.setState({
+      emailOpen: false,
+      emailVerified: false,
+    })
   }
 
   render() {
@@ -114,6 +149,11 @@ class Account extends React.Component {
         <AccountItem
           name={'Email'}
           value={user.email ? user.email : 'Not signed in'}
+          actionButton={
+            <Button onClick={this.openEmailDialog.bind(this)} variant={'text'}>
+              Change
+            </Button>
+          }
         />
         {this.state.doesGDPRApply ? (
           <span>
@@ -221,6 +261,55 @@ class Account extends React.Component {
               user={user}
               app="tab"
             />
+          )}
+        </Dialog>
+        <Dialog
+          open={this.state.emailOpen}
+          onClose={this.closeEmailDialog.bind(this)}
+          aria-labelledby="form-dialog-title"
+        >
+          {this.state.emailVerified ? (
+            <Paper
+              elevation={1}
+              style={{
+                padding: 24,
+                backgroundColor: '#FFF',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 500,
+                }}
+              >
+                Email Updated
+              </span>
+              <Typography
+                variant={'body2'}
+                style={{ paddingTop: 24, paddingBottom: 24 }}
+              >
+                Your email has been updated.
+              </Typography>
+              <span
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginTop: 4,
+                }}
+              >
+                <Button
+                  data-test-id={'enter-username-form-button'}
+                  color={'primary'}
+                  variant={'contained'}
+                  style={{ minWidth: 96 }}
+                  onClick={this.closeEmailDialog.bind(this)}
+                >
+                  Done
+                </Button>
+              </span>
+            </Paper>
+          ) : (
+            <EnterEmailForm />
           )}
         </Dialog>
       </Paper>

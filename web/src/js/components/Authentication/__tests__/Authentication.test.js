@@ -273,7 +273,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = ''
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
   })
 
   it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', () => {
@@ -287,7 +287,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = '?app=search'
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL)
+    expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL, {})
   })
 
   it('opts in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
@@ -437,7 +437,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = '?app=foobar'
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
   })
 
   it('redirects to the "next" URL if it is set and the user is fully authenticated', () => {
@@ -453,7 +453,8 @@ describe('Authentication.js tests', function() {
       '?app=search&next=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fprofile%2Finvite%2F'
     shallow(<Authentication {...mockProps} />)
     expect(replaceUrl).toHaveBeenCalledWith(
-      'https://tab.gladly.io/newtab/profile/invite/'
+      'https://tab.gladly.io/newtab/profile/invite/',
+      {}
     )
   })
 
@@ -484,7 +485,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.search = '?noredirect=something'
     shallow(<Authentication {...mockProps} />)
 
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
   })
 
   it('does not redirect to the app if the user is not fully authenticated', () => {
@@ -1108,7 +1109,7 @@ describe('Authentication.js tests', function() {
       'onCompleted'
     )
     onCompletedCallback()
-    expect(replaceUrl).toHaveBeenCalledWith('/newtab/')
+    expect(replaceUrl).toHaveBeenCalledWith('/newtab/', {})
   })
 
   it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it calls to enable Tab v4 when invoked and the user has v4BetaEnabled === true', () => {

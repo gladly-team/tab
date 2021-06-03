@@ -105,16 +105,29 @@ class Authentication extends React.Component {
     return validateAppName(urlParams.app || firebaseContinueURLAppVal)
   }
 
-  getNextURLAfterSignIn() {
+  getNextURLAfterSignIn(asUrl = true) {
     const { location } = this.props
     const urlParams = parseUrlSearchString(location.search)
-    const app = this.getApp()
+    const mainAppDestination =
+      this.getApp() === SEARCH_APP ? searchBaseURL : dashboardURL
 
+    let nextURL = urlParams.next ? decodeURIComponent(urlParams.next) : null
+    if (asUrl) {
+      return nextURL ? nextURL : mainAppDestination
+    }
     // If the "next" URL param specifies a destination URL for after
     // sign-in, use it. Otherwise, go to the main app page.
-    const nextURL = urlParams.next ? decodeURIComponent(urlParams.next) : null
-    const mainAppDestination = app === SEARCH_APP ? searchBaseURL : dashboardURL
-    return nextURL ? nextURL : mainAppDestination
+
+    let destinationURLParams = {}
+    if (nextURL && nextURL.indexOf('?') >= 0) {
+      const queryPosition = nextURL.indexOf('?')
+      const queryString = nextURL.substring(queryPosition + 1)
+      destinationURLParams = parseUrlSearchString(queryString)
+      nextURL = nextURL.substring(0, queryPosition)
+    }
+    return nextURL
+      ? { destinationURL: nextURL, destinationURLParams }
+      : { destinationURL: mainAppDestination, destinationURLParams: {} }
   }
 
   // What we should do after the auth process is finished,
@@ -127,7 +140,10 @@ class Authentication extends React.Component {
     // do this *after* all of the auth logic on this app
     // because v4 does not yet have a complete auth flow.
     const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
-    const destinationURL = this.getNextURLAfterSignIn()
+    const { destinationURL, destinationURLParams } = this.getNextURLAfterSignIn(
+      false
+    )
+
     if (enableTabV4) {
       try {
         await optIntoV4Beta()
@@ -145,9 +161,9 @@ class Authentication extends React.Component {
         })
       }
 
-      externalRedirect(destinationURL)
+      externalRedirect(destinationURL, destinationURLParams)
     } else {
-      replaceUrl(destinationURL)
+      replaceUrl(destinationURL, destinationURLParams)
     }
   }
 
@@ -163,7 +179,11 @@ class Authentication extends React.Component {
     const redirected = redirectToAuthIfNeeded({
       authUser,
       user,
-      urlParams: { app: urlParams.app, next: urlParams.next },
+      urlParams: {
+        app: urlParams.app,
+        next: urlParams.next,
+        reauth: urlParams.reauth,
+      },
     })
 
     // When anonymous users choose to sign in, do not go back to the
@@ -358,10 +378,22 @@ class Authentication extends React.Component {
               style={{
                 flex: 1,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 padding: 20,
               }}
             >
+              {urlParams.reauth ? (
+                <Typography
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                  variant="h6"
+                >
+                  <span>First, please login again.</span>
+                </Typography>
+              ) : null}
               <Switch>
                 <Route
                   exact
