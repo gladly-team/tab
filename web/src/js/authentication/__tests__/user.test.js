@@ -7,7 +7,6 @@ import {
   constructUrl,
   enterUsernameURL,
 } from 'js/navigation/navigation'
-import DeleteUserMutation from 'js/mutations/DeleteUserMutation'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('jsonwebtoken', () => ({
