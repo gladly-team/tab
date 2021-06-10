@@ -183,6 +183,7 @@ class Authentication extends React.Component {
         app: urlParams.app,
         next: urlParams.next,
         reauth: urlParams.reauth,
+        accountDeleted: urlParams.accountDeleted,
       },
     })
 
@@ -392,6 +393,16 @@ class Authentication extends React.Component {
                   variant="h6"
                 >
                   <span>First, please login again.</span>
+                </Typography>
+              ) : null}
+              {urlParams.accountDeleted ? (
+                <Typography
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                  variant="h6"
+                >
+                  <span>Your account has been deleted.</span>
                 </Typography>
               ) : null}
               <Switch>

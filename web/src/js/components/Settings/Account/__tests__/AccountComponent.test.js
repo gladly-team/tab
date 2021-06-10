@@ -15,11 +15,14 @@ import {
   replaceUrl,
 } from 'js/navigation/navigation'
 import { getUrlParameters } from 'js/utils/utils'
+import { AccountItem } from 'js/components/Settings/Account/AccountComponent'
+import { deleteUser, reloadUser } from 'js/authentication/user'
 
 jest.mock('tab-cmp')
 jest.mock('js/utils/initializeCMP')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
+jest.mock('js/authentication/user')
 
 const getMockUserData = () => {
   return {
@@ -31,6 +34,7 @@ const getMockUserData = () => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  reloadUser.mockResolvedValue(true)
 })
 
 describe('Account component', () => {
@@ -112,7 +116,7 @@ describe('Account component', () => {
       .AccountItem
     const dataPrivacyAccountItem = wrapper
       .find(AccountItem)
-      .last()
+      .at(2)
       .dive()
     const button = dataPrivacyAccountItem.find(Button).first()
 
@@ -198,7 +202,7 @@ describe('Account component', () => {
       .AccountItem
     const dataPrivacyAccountItem = wrapper
       .find(AccountItem)
-      .last()
+      .at(2)
       .dive()
     const link = dataPrivacyAccountItem.find('a').first()
 
@@ -298,7 +302,6 @@ describe('Account component', () => {
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const userData = getMockUserData()
-    delete userData.email
     const wrapper = mount(<AccountComponent user={userData} />)
     const buttons = wrapper.find(Button)
 
@@ -311,11 +314,10 @@ describe('Account component', () => {
     })
   })
 
-  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
+  it('does not redirect on clicking the check email form if there is reauthed parameter', () => {
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const userData = getMockUserData()
-    delete userData.email
     const wrapper = mount(<AccountComponent user={userData} />)
     const buttons = wrapper.find(Button)
 
@@ -337,7 +339,6 @@ describe('Account component', () => {
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
     const userData = getMockUserData()
-    delete userData.email
 
     getUrlParameters.mockReturnValue({ verified: true })
 
@@ -349,10 +350,99 @@ describe('Account component', () => {
 
     const dialog = wrapper
       .find(Dialog)
-      .last()
+      .at(1)
       .find(Typography)
       .first()
 
     expect(dialog.text()).toEqual('Your email has been updated.')
+  })
+
+  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    const wrapper = mount(<AccountComponent user={userData} />)
+
+    const accountItems = wrapper.find(AccountItem)
+    const deleteUserButton = accountItems.last().find(Button)
+
+    deleteUserButton.simulate('click')
+
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
+      next: constructUrl(accountURL, { reauthed: true }),
+      reauth: 'true',
+    })
+  })
+
+  it('does not redirect on clicking the delete user form if there is reauthed parameter', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    const wrapper = mount(<AccountComponent user={userData} />)
+    const accountItems = wrapper.find(AccountItem)
+    const deleteUserButton = accountItems.last().find(Button)
+
+    getUrlParameters.mockReturnValue({ reauthed: true })
+
+    deleteUserButton.simulate('click')
+    expect(replaceUrl).not.toHaveBeenCalled()
+  })
+
+  it('displays delete user popup if the reauthed url param is provided', () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    const wrapper = mount(<AccountComponent user={userData} />)
+
+    getUrlParameters.mockReturnValue({ reauthed: true })
+
+    const accountItems = wrapper.find(AccountItem)
+    const deleteUserButton = accountItems.last().find(Button)
+
+    let deleteUserDialog = wrapper.find(Dialog).last()
+    expect(deleteUserDialog.prop('open')).toEqual(false)
+
+    deleteUserButton.simulate('click')
+    wrapper.update()
+
+    deleteUserDialog = wrapper.find(Dialog).last()
+
+    expect(deleteUserDialog.prop('open')).toEqual(true)
+  })
+
+  it('delete user popup should call deleteUser and redirect to login if clicked', async () => {
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const userData = getMockUserData()
+    const wrapper = mount(<AccountComponent user={userData} />)
+
+    getUrlParameters.mockReturnValue({ reauthed: true })
+
+    const accountItems = wrapper.find(AccountItem)
+    const deleteUserButton = accountItems.last().find(Button)
+
+    let deleteUserDialog = wrapper.find(Dialog).last()
+    expect(deleteUserDialog.prop('open')).toEqual(false)
+
+    deleteUserButton.simulate('click')
+    wrapper.update()
+
+    deleteUserDialog = wrapper.find(Dialog).last()
+
+    expect(deleteUserDialog.prop('open')).toEqual(true)
+
+    deleteUser.mockResolvedValue(true)
+
+    deleteUserDialog
+      .find(Button)
+      .last()
+      .simulate('click')
+
+    await flushAllPromises()
+
+    expect(deleteUser).toHaveBeenCalled()
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
+      accountDeleted: true,
+    })
   })
 })

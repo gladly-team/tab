@@ -12,6 +12,7 @@ jest.mock('js/utils/localstorage-mgr')
 jest.mock('jsonwebtoken', () => ({
   sign: () => 'fake-signed-token',
 }))
+jest.mock('js/mutations/DeleteUserMutation')
 
 const storedMockDevAuthenticationEnvVar =
   process.env.REACT_APP_MOCK_DEV_AUTHENTICATION
@@ -578,5 +579,37 @@ describe('updateUserEmail tests', () => {
     expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledWith(email, {
       url: constructUrl(accountURL, { verified: true }, { absolute: true }),
     })
+  })
+})
+
+describe('deleteUser tests', () => {
+  it('works as expected', async () => {
+    expect.assertions(3)
+
+    const mockDeleteUser = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      delete: mockDeleteUser,
+    })
+
+    const DeleteUserMutation = require('js/mutations/DeleteUserMutation')
+      .default
+    DeleteUserMutation.mockImplementationOnce((env, userid, callback) =>
+      callback()
+    )
+
+    const deleteUser = require('js/authentication/user').deleteUser
+    const response = await deleteUser()
+
+    expect(DeleteUserMutation).toHaveBeenCalled()
+    expect(mockDeleteUser).toHaveBeenCalled()
+    expect(response).toBe(true)
   })
 })

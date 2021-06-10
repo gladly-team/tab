@@ -24,6 +24,8 @@ import {
   constructUrl,
 } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
+import DeleteUserMutation from 'js/mutations/DeleteUserMutation'
+import environment from 'js/relay-env'
 
 // Only for development.
 const shouldMockAuthentication =
@@ -344,4 +346,36 @@ export const updateUserEmail = async newEmail => {
   )
   const user = firebase.auth().currentUser
   return user.verifyBeforeUpdateEmail(newEmail, { url: continueUrl })
+}
+
+export const deleteUser = async () => {
+  return new Promise((resolve, reject) => {
+    getCurrentUser()
+      .then(user => {
+        DeleteUserMutation(
+          environment,
+          user.id,
+          () => {
+            firebase
+              .auth()
+              .currentUser.delete()
+              .then(() => {
+                clearAuthLocalStorageItems()
+                resolve(true)
+              })
+              .catch(error => {
+                reject(error)
+              })
+          },
+          response => {
+            console.error('Error deleting user:')
+            logger.error(response)
+          }
+        )
+      })
+      .catch(e => {
+        logger.error(e)
+        reject(e)
+      })
+  })
 }
