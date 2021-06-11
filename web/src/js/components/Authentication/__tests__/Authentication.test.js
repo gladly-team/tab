@@ -12,12 +12,12 @@ import {
 } from 'js/authentication/helpers'
 import {
   goTo,
-  replaceUrl,
   dashboardURL,
   missingEmailMessageURL,
   searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import { sendVerificationEmail } from 'js/authentication/user'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -33,6 +33,7 @@ jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
+jest.mock('js/navigation/utils')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
@@ -217,8 +218,7 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    mockProps.location.search =
-      '?app=tab&next=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fprofile%2Fdonate%2F'
+    mockProps.location.search = '?app=tab&next=1'
     mockProps.authUser = {
       id: 'qwertyqwerty',
       email: 'charles@example.com',
@@ -236,7 +236,7 @@ describe('Authentication.js tests', function() {
       user: mockProps.user,
       urlParams: {
         app: 'tab',
-        next: 'https://tab.gladly.io/newtab/profile/donate/',
+        next: '1',
       },
     })
   })
@@ -273,7 +273,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = ''
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
+    expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', () => {
@@ -287,7 +287,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = '?app=search'
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL, {})
+    expect(externalRedirect).toHaveBeenCalledWith(searchBaseURL)
   })
 
   it('opts in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
@@ -437,7 +437,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     mockProps.location.search = '?app=foobar'
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
+    expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('redirects to the "next" URL if it is set and the user is fully authenticated', () => {
@@ -449,12 +449,10 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    mockProps.location.search =
-      '?app=search&next=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fprofile%2Finvite%2F'
+    mockProps.location.search = '?app=search&next=2'
     shallow(<Authentication {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith(
-      'https://tab.gladly.io/newtab/profile/invite/',
-      {}
+    expect(externalRedirect).toHaveBeenCalledWith(
+      'https://tab-test-env.gladly.io/newtab/account/?reauthed=true'
     )
   })
 
@@ -470,7 +468,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.search = '?noredirect=true'
     shallow(<Authentication {...mockProps} />)
 
-    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(externalRedirect).not.toHaveBeenCalled()
   })
 
   it('redirects to the app if the user is fully authenticated but the URL has an invalid noredirect param', async () => {
@@ -485,7 +483,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.search = '?noredirect=something'
     shallow(<Authentication {...mockProps} />)
 
-    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL, {})
+    expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('does not redirect to the app if the user is not fully authenticated', () => {
@@ -499,7 +497,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
 
-    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(externalRedirect).not.toHaveBeenCalled()
   })
 
   it('does not redirect at all if the URL is /auth/action/*', () => {
@@ -514,8 +512,8 @@ describe('Authentication.js tests', function() {
 
     shallow(<Authentication {...mockProps} />)
     expect(goTo).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(externalRedirect).not.toHaveBeenCalled()
+    expect(externalRedirect).not.toHaveBeenCalled()
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
@@ -602,7 +600,7 @@ describe('Authentication.js tests', function() {
     })
   })
 
-  it('sets the "continueURL" in the email verification with URL param "app" === "tab" and "next" === "/newtab/" if the "app" URL param is not specified', async () => {
+  it('sets the "continueURL" in the email verification with URL param "app" === "tab" and "next" === "0" if the "app" URL param is not specified', async () => {
     expect.assertions(1)
 
     // Args for onSignInSuccess
@@ -647,7 +645,7 @@ describe('Authentication.js tests', function() {
 
     expect(sendVerificationEmail).toHaveBeenCalledWith({
       continueURL:
-        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab&next=%2Fnewtab%2F',
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab&next=0',
     })
   })
 
@@ -696,11 +694,11 @@ describe('Authentication.js tests', function() {
 
     expect(sendVerificationEmail).toHaveBeenCalledWith({
       continueURL:
-        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab&next=%2Fnewtab%2F',
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab&next=0',
     })
   })
 
-  it('sets the "continueURL" in the email verification with URL params "app" === "search" and "next" === "/search" if the "app" URL param === "search"', async () => {
+  it('sets the "continueURL" in the email verification with URL params "app" === "search" if the "app" URL param === "search"', async () => {
     expect.assertions(1)
 
     // Args for onSignInSuccess
@@ -745,7 +743,7 @@ describe('Authentication.js tests', function() {
 
     expect(sendVerificationEmail).toHaveBeenCalledWith({
       continueURL:
-        'https://tab-test-env.gladly.io/newtab/auth/username/?app=search&next=%2Fsearch',
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=search&next=0',
     })
   })
 
@@ -1109,7 +1107,7 @@ describe('Authentication.js tests', function() {
       'onCompleted'
     )
     onCompletedCallback()
-    expect(replaceUrl).toHaveBeenCalledWith('/newtab/', {})
+    expect(externalRedirect).toHaveBeenCalledWith('/newtab/')
   })
 
   it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it calls to enable Tab v4 when invoked and the user has v4BetaEnabled === true', () => {

@@ -5,13 +5,7 @@ import { mount, shallow } from 'enzyme'
 import { updateUserEmail } from 'js/authentication/user'
 import TextField from '@material-ui/core/TextField'
 import { flushAllPromises } from 'js/utils/test-utils'
-import {
-  loginURL,
-  replaceUrl,
-  constructUrl,
-  accountURL,
-} from 'js/navigation/navigation'
-import { PaperItem } from 'js/components/Settings/Account/EnterEmailForm'
+import { loginURL, replaceUrl } from 'js/navigation/navigation'
 
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
@@ -159,7 +153,7 @@ describe('EnterEmailForm tests', () => {
     wrapper.update()
 
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
-      next: constructUrl(accountURL, { reauthed: true }),
+      next: 2,
       reauth: 'true',
     })
   })

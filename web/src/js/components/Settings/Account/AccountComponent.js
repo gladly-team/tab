@@ -12,12 +12,7 @@ import Dialog from '@material-ui/core/Dialog'
 import EnterEmailForm from 'js/components/Settings/Account/EnterEmailForm'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 import { getUrlParameters } from 'js/utils/utils'
-import {
-  accountURL,
-  constructUrl,
-  loginURL,
-  replaceUrl,
-} from 'js/navigation/navigation'
+import { loginURL, replaceUrl } from 'js/navigation/navigation'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
@@ -115,7 +110,7 @@ class Account extends React.Component {
     const { reauthed } = getUrlParameters()
     if (!reauthed) {
       replaceUrl(loginURL, {
-        next: constructUrl(accountURL, { reauthed: true }),
+        next: 2,
         reauth: 'true',
       })
     }

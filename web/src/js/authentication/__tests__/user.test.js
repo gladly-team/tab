@@ -577,7 +577,7 @@ describe('updateUserEmail tests', () => {
     await updateUserEmail(email)
 
     expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledWith(email, {
-      url: constructUrl(accountURL, { verified: true }, { absolute: true }),
+      url: constructUrl('/newtab/auth/', { next: 3 }, { absolute: true }),
     })
   })
 })

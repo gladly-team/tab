@@ -143,13 +143,10 @@ const withUser = (options = {}) => WrappedComponent => {
         }
       }
 
-      // If the user must complete the authentication process, optionally
-      // redirect to the appropriate auth page.
-      const currentURL = window.location.href
       let redirected = false
       if (redirectToAuthIfIncomplete) {
         try {
-          const urlParams = { app: app, next: currentURL }
+          const urlParams = { app: app }
           redirected = redirectToAuthIfNeeded({ authUser, urlParams })
         } catch (e) {
           logger.error(e)

@@ -19,7 +19,7 @@ import {
 } from 'js/constants'
 import {
   absoluteUrl,
-  accountURL,
+  loginURL,
   enterUsernameURL,
   constructUrl,
 } from 'js/navigation/navigation'
@@ -339,11 +339,9 @@ export const reloadUser = async () => {
 }
 
 export const updateUserEmail = async newEmail => {
-  const continueUrl = constructUrl(
-    accountURL,
-    { verified: true },
-    { absolute: true }
-  )
+  // After verifying a new email, go to the login page with a
+  // subsequent redirect to the account page + email change confirmation.
+  const continueUrl = constructUrl(loginURL, { next: 3 }, { absolute: true })
   const user = firebase.auth().currentUser
   return user.verifyBeforeUpdateEmail(newEmail, { url: continueUrl })
 }
