@@ -240,3 +240,18 @@ export const goToInviteFriends = () => {
 }
 
 export const reloadDashboard = () => externalRedirect(absoluteUrl(dashboardURL))
+
+// Whitelist of post-authentication redirect destinations.
+export const postAuthURLs = {
+  1: dashboardURL,
+  // Account page after reauthentication.
+  2: constructUrl(accountURL, { reauthed: true }, { absolute: true }),
+  // Account page with email change confirmation.
+  3: constructUrl(accountURL, { verified: true }, { absolute: true }),
+}
+
+export const getPostAuthURL = (index, { isSearchApp = false }) => {
+  const nextURLVal = postAuthURLs[index]
+  const fallbackURL = isSearchApp ? searchBaseURL : dashboardURL
+  return nextURLVal || fallbackURL
+}

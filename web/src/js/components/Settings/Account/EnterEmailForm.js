@@ -2,12 +2,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import { updateUserEmail } from 'js/authentication/user'
-import {
-  accountURL,
-  constructUrl,
-  loginURL,
-  replaceUrl,
-} from 'js/navigation/navigation'
+import { loginURL, replaceUrl } from 'js/navigation/navigation'
 import EmailField from 'js/components/General/EmailField'
 import PaperItem from 'js/components/General/PaperItem'
 
@@ -32,7 +27,7 @@ class EnterEmailForm extends React.Component {
   updateUserFailure(error) {
     if (error.code === 'auth/requires-recent-login') {
       replaceUrl(loginURL, {
-        next: constructUrl(accountURL, { reauthed: true }),
+        next: 2,
         reauth: 'true',
       })
     } else if (error.code === 'auth/email-already-in-use') {

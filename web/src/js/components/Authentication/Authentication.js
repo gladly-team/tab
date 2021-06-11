@@ -20,13 +20,11 @@ import {
 import {
   constructUrl,
   goTo,
-  replaceUrl,
   authMessageURL,
-  dashboardURL,
   enterUsernameURL,
   missingEmailMessageURL,
-  searchBaseURL,
   verifyEmailURL,
+  getPostAuthURL,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -105,29 +103,11 @@ class Authentication extends React.Component {
     return validateAppName(urlParams.app || firebaseContinueURLAppVal)
   }
 
-  getNextURLAfterSignIn(asUrl = true) {
+  getNextURLIndex() {
     const { location } = this.props
     const urlParams = parseUrlSearchString(location.search)
-    const mainAppDestination =
-      this.getApp() === SEARCH_APP ? searchBaseURL : dashboardURL
-
-    let nextURL = urlParams.next ? decodeURIComponent(urlParams.next) : null
-    if (asUrl) {
-      return nextURL ? nextURL : mainAppDestination
-    }
-    // If the "next" URL param specifies a destination URL for after
-    // sign-in, use it. Otherwise, go to the main app page.
-
-    let destinationURLParams = {}
-    if (nextURL && nextURL.indexOf('?') >= 0) {
-      const queryPosition = nextURL.indexOf('?')
-      const queryString = nextURL.substring(queryPosition + 1)
-      destinationURLParams = parseUrlSearchString(queryString)
-      nextURL = nextURL.substring(0, queryPosition)
-    }
-    return nextURL
-      ? { destinationURL: nextURL, destinationURLParams }
-      : { destinationURL: mainAppDestination, destinationURLParams: {} }
+    let nextURLIndex = urlParams.next ? decodeURIComponent(urlParams.next) : 0
+    return nextURLIndex
   }
 
   // What we should do after the auth process is finished,
@@ -140,9 +120,9 @@ class Authentication extends React.Component {
     // do this *after* all of the auth logic on this app
     // because v4 does not yet have a complete auth flow.
     const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
-    const { destinationURL, destinationURLParams } = this.getNextURLAfterSignIn(
-      false
-    )
+    const nextURLIndex = this.getNextURLIndex()
+    const isSearchApp = this.getApp() === SEARCH_APP
+    const destinationURL = getPostAuthURL(nextURLIndex, { isSearchApp })
 
     if (enableTabV4) {
       try {
@@ -160,11 +140,9 @@ class Authentication extends React.Component {
           enabled: true,
         })
       }
-
-      externalRedirect(destinationURL, destinationURLParams)
-    } else {
-      replaceUrl(destinationURL, destinationURLParams)
     }
+
+    externalRedirect(destinationURL)
   }
 
   async navigateToAuthStep() {
@@ -237,7 +215,7 @@ class Authentication extends React.Component {
             // "continue URL" after email verification.
             continueURL: constructUrl(
               enterUsernameURL,
-              { app: app, next: this.getNextURLAfterSignIn() },
+              { app: app, next: this.getNextURLIndex() },
               { absolute: true }
             ),
           })

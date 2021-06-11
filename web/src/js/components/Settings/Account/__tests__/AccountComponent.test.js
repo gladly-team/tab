@@ -8,12 +8,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import { flushAllPromises } from 'js/utils/test-utils'
 import initializeCMP from 'js/utils/initializeCMP'
-import {
-  accountURL,
-  constructUrl,
-  loginURL,
-  replaceUrl,
-} from 'js/navigation/navigation'
+import { loginURL, replaceUrl } from 'js/navigation/navigation'
 import { getUrlParameters } from 'js/utils/utils'
 import { AccountItem } from 'js/components/Settings/Account/AccountComponent'
 import { deleteUser, reloadUser } from 'js/authentication/user'
@@ -309,7 +304,7 @@ describe('Account component', () => {
     emailButton.simulate('click')
 
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
-      next: constructUrl(accountURL, { reauthed: true }),
+      next: 2,
       reauth: 'true',
     })
   })
@@ -369,7 +364,7 @@ describe('Account component', () => {
     deleteUserButton.simulate('click')
 
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
-      next: constructUrl(accountURL, { reauthed: true }),
+      next: 2,
       reauth: 'true',
     })
   })
