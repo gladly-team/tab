@@ -329,6 +329,7 @@ input CreateInvitedUsersInput {
   inviterId: String!
   invitedEmails: [String]!
   inviterName: String
+  inviterMessage: String
   clientMutationId: String
 }
 

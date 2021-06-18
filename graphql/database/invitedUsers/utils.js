@@ -14,7 +14,8 @@ export const verifyAndSendInvite = async (
   inviterId,
   inviteEmail,
   invitingUser,
-  inviterName
+  inviterName,
+  inviterMessage
 ) => {
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -45,6 +46,7 @@ export const verifyAndSendInvite = async (
     dynamicTemplateData: {
       name: inviterName,
       username: invitingUser.username,
+      personalMessage: inviterMessage,
     },
   }
   try {

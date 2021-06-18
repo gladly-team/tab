@@ -17,54 +17,62 @@ const createInvitedUsers = async (
   userContext,
   inviterId,
   invitedEmails,
-  inviterName
+  inviterName,
+  inviterMessage
 ) => {
-  const endTimeRoundedISO = moment()
-    .startOf('hour')
-    .toISOString()
-  const startTimeRoundedISO = moment(endTimeRoundedISO)
-    .subtract(30, 'days')
-    .endOf('hour')
-    .toISOString()
-  const sanitizedEmails = uniq(
-    invitedEmails.map(email => xssFilters.inHTMLData(email))
-  )
-  const [invitingUser, userInvites] = await Promise.all([
-    UserModel.get(userContext, inviterId),
-    InvitedUsersModel.query(userContext, inviterId)
-      .usingIndex('InvitesByInviter')
-      .where('created')
-      .between(startTimeRoundedISO, endTimeRoundedISO)
-      .execute(),
-  ])
-  if (userInvites.length + sanitizedEmails.length > 50) {
-    throw new Error('user is trying to invite too many people in 24 hours')
-  }
-
-  const verifiedAndSentEmails = await Promise.all(
-    sanitizedEmails.map(inviteEmail =>
-      verifyAndSendInvite(
-        userContext,
-        inviterId,
-        inviteEmail,
-        invitingUser,
-        inviterName
+  try {
+    console.log(inviterId)
+    const endTimeRoundedISO = moment()
+      .startOf('hour')
+      .toISOString()
+    const startTimeRoundedISO = moment(endTimeRoundedISO)
+      .subtract(30, 'days')
+      .endOf('hour')
+      .toISOString()
+    const sanitizedEmails = uniq(
+      invitedEmails.map(email => xssFilters.inHTMLData(email))
+    )
+    const [invitingUser, userInvites] = await Promise.all([
+      UserModel.get(userContext, inviterId),
+      InvitedUsersModel.query(userContext, inviterId)
+        .usingIndex('InvitesByInviter')
+        .where('created')
+        .between(startTimeRoundedISO, endTimeRoundedISO)
+        .execute(),
+    ])
+    if (userInvites.length + sanitizedEmails.length > 50) {
+      throw new Error('user is trying to invite too many people in 24 hours')
+    }
+    const sanitizedMessage = xssFilters.inHTMLData(inviterMessage)
+    const verifiedAndSentEmails = await Promise.all(
+      sanitizedEmails.map(inviteEmail =>
+        verifyAndSendInvite(
+          userContext,
+          inviterId,
+          inviteEmail,
+          invitingUser,
+          inviterName,
+          sanitizedMessage
+        )
       )
     )
-  )
-  const sortedResults = verifiedAndSentEmails.reduce(
-    (acum, item) => {
-      acum[
-        item.error ? 'failedEmailAddresses' : 'successfulEmailAddresses'
-      ].push(item)
-      return acum
-    },
-    {
-      successfulEmailAddresses: [],
-      failedEmailAddresses: [],
-    }
-  )
-  return sortedResults
+    const sortedResults = verifiedAndSentEmails.reduce(
+      (acum, item) => {
+        acum[
+          item.error ? 'failedEmailAddresses' : 'successfulEmailAddresses'
+        ].push(item)
+        return acum
+      },
+      {
+        successfulEmailAddresses: [],
+        failedEmailAddresses: [],
+      }
+    )
+    return sortedResults
+  } catch (e) {
+    console.log(e, 'whats my error')
+    throw e
+  }
 }
 
 export default createInvitedUsers

@@ -1230,6 +1230,7 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
     invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
     inviterName: { type: GraphQLString },
+    inviterMessage: { type: GraphQLString },
   },
   outputFields: {
     successfulEmailAddresses: {
@@ -1253,9 +1254,10 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: (input, context) => {
+    const { id } = fromGlobalId(input.inviterId)
     const invitedUser = createInvitedUsers(
       context.user,
-      input.inviterId,
+      id,
       input.invitedEmails,
       input.inviterName
     )
