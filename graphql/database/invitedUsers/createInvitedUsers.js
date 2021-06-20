@@ -9,8 +9,9 @@ import { verifyAndSendInvite } from './utils'
  * been invited OR if inviting user has exceeded the max amount of invites in 24 hours
  * @param {object} userContext - The user authorizer object.
  * @param {string} inviterId - The user id.
- * @param {any} invitedEmails - A UUID for the charity
- * @param {object} inviterName - options to update impact record, include logImpact, claimPendingUserReferralImpact, confirmImpact
+ * @param {array} invitedEmails - email addresses to send
+ * @param {string} inviterName - name to include in ivite email
+ * @param {string} inviterMessage - optional personal message to include in email
  * @return {Promise<User>}  A promise that resolves into a invitedUser instance or an error.
  */
 const createInvitedUsers = async (
@@ -21,7 +22,6 @@ const createInvitedUsers = async (
   inviterMessage
 ) => {
   try {
-    console.log(inviterId)
     const endTimeRoundedISO = moment()
       .startOf('hour')
       .toISOString()
@@ -44,6 +44,7 @@ const createInvitedUsers = async (
       throw new Error('user is trying to invite too many people in 24 hours')
     }
     const sanitizedMessage = xssFilters.inHTMLData(inviterMessage)
+    const santiziedInviterName = xssFilters.inHTMLData(inviterName)
     const verifiedAndSentEmails = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite(
@@ -51,7 +52,7 @@ const createInvitedUsers = async (
           inviterId,
           inviteEmail,
           invitingUser,
-          inviterName,
+          santiziedInviterName,
           sanitizedMessage
         )
       )
@@ -70,7 +71,6 @@ const createInvitedUsers = async (
     )
     return sortedResults
   } catch (e) {
-    console.log(e, 'whats my error')
     throw e
   }
 }

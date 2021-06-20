@@ -73,7 +73,7 @@ describe('verifyAndSendInvite', () => {
       ],
     })
     setMockDBResponse(DatabaseOperation.QUERY, {
-      Item: [{ email: 'test123' }],
+      Items: [{ email: 'test123' }],
     })
     await verifyAndSendInvite(...mockParams)
     expect(sgMail.send).not.toHaveBeenCalled()
