@@ -61,7 +61,7 @@ describe('verifyAndSendInvite', () => {
     expect(sgMail.send).toHaveBeenCalledWith({
       dynamicTemplateData: { name: 'alec', username: 'test1' },
       from: 'foo@bar.com',
-      templateId: 'd-e974f14ae104424cb8237b234d485804',
+      templateId: 'd-69707bd6c49a444fa68a99505930f801',
       to: 'test123',
     })
   })
