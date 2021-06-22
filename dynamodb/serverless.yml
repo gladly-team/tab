@@ -358,10 +358,10 @@ custom:
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.usage}
     - table: invitedUsersTable
-      read:
       index:
-        - InvitesByInviter
-        - InvitesByInvitedEmail
+          - InvitesByInviter
+          - InvitesByInvitedEmail
+      read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.usage}
