@@ -42,7 +42,7 @@ export const verifyAndSendInvite = async (
   const msg = {
     to: inviteEmail,
     from: invitingUser.email,
-    templateId: 'd-e974f14ae104424cb8237b234d485804',
+    templateId: 'd-69707bd6c49a444fa68a99505930f801',
     dynamicTemplateData: {
       name: inviterName,
       username: invitingUser.username,
