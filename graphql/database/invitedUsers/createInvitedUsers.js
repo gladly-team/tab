@@ -4,6 +4,12 @@ import xssFilters from 'xss-filters'
 import InvitedUsersModel from './InvitedUsersModel'
 import UserModel from '../users/UserModel'
 import { verifyAndSendInvite } from './utils'
+import {
+  ADMIN_MANAGEMENT,
+  getPermissionsOverride,
+} from '../../utils/permissions-overrides'
+
+const override = getPermissionsOverride(ADMIN_MANAGEMENT)
 /**
  * conditionally creates a new invited user and sends a sendgrid email if user has not already
  * been invited OR if inviting user has exceeded the max amount of invites in 24 hours
@@ -34,7 +40,7 @@ const createInvitedUsers = async (
     )
     const [invitingUser, userInvites] = await Promise.all([
       UserModel.get(userContext, inviterId),
-      InvitedUsersModel.query(userContext, inviterId)
+      InvitedUsersModel.query(override, inviterId)
         .usingIndex('InvitesByInviter')
         .where('created')
         .between(startTimeRoundedISO, endTimeRoundedISO)
