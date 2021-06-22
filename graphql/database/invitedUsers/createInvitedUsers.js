@@ -9,7 +9,6 @@ import {
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
 
-const override = getPermissionsOverride(ADMIN_MANAGEMENT)
 /**
  * conditionally creates a new invited user and sends a sendgrid email if user has not already
  * been invited OR if inviting user has exceeded the max amount of invites in 24 hours
@@ -28,6 +27,7 @@ const createInvitedUsers = async (
   inviterMessage
 ) => {
   try {
+    const override = getPermissionsOverride(ADMIN_MANAGEMENT)
     const endTimeRoundedISO = moment()
       .startOf('hour')
       .toISOString()

@@ -330,6 +330,7 @@ custom:
     - table: usersTable
       index:
         - UsersByUsername
+        - UsersByEmail
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.maximum}
@@ -358,6 +359,9 @@ custom:
         usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.usage}
     - table: invitedUsersTable
       read:
+      index:
+        - InvitesByInviter
+        - InvitesByInvitedEmail
         minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.usage}
@@ -507,6 +511,15 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+          - IndexName: UsersByEmail
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
@@ -563,6 +576,31 @@ resources:
             AttributeType: S
           - AttributeName: invitedEmail
             AttributeType: S
+          - AttributeName: created
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: InvitesByInviter
+            KeySchema:
+              - AttributeName: inviterId
+                KeyType: HASH
+              - AttributeName: created
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: InvitesByInvitedEmail
+            KeySchema:
+              - AttributeName: invitedEmail
+                KeyType: HASH
+              - AttributeName: created
+                KeyType: RANGE
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
