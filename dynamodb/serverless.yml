@@ -501,6 +501,8 @@ resources:
             AttributeType: S
           - AttributeName: username
             AttributeType: S
+          - AttributeName: email
+            AttributeType: S
         GlobalSecondaryIndexes:
           - IndexName: UsersByUsername
             KeySchema:
