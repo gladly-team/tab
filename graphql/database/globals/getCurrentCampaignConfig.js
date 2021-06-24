@@ -2,7 +2,7 @@ import createCampaignConfiguration from './createCampaignConfiguration'
 
 const campaignTitle = '## Charity Spotlight: Trans Lifeline'
 const campaignDescription = `
-#### Happy Pride! Join us in celebrating LGBTQIA+ Pride Month by supporting Trans Lifeline, an organization committed to "offering direct emotional and financial support to trans people in crisis."
+#### Happy Pride! Join us in celebrating LGBTQIA+ Pride Month by supporting [Trans Lifeline](https://translifeline.org/), an organization committed to "offering direct emotional and financial support to trans people in crisis."
 #### So far they have answered over 100,000 calls and dispersed over $1,000,000 to help create a future where trans people have the care everyone needs and deserves.
 #### Already donated all your hearts? Invite your friends to make an impact by supporting this campaign!
 `
