@@ -8,7 +8,7 @@ import {
   ADMIN_MANAGEMENT,
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
-
+import { SENDGRID_API_KEY } from '../../config'
 export const verifyAndSendInvite = async (
   userContext,
   inviterId,
@@ -18,7 +18,7 @@ export const verifyAndSendInvite = async (
   inviterMessage
 ) => {
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+  sgMail.setApiKey(SENDGRID_API_KEY)
   const [doesUserAlreadyExist, hasUserBeenInvitedRecently] = await Promise.all([
     UserModel.query(override, inviteEmail)
       .usingIndex('UsersByEmail')
