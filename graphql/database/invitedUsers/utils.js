@@ -9,6 +9,7 @@ import {
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
 import { SENDGRID_API_KEY } from '../../config'
+
 export const verifyAndSendInvite = async (
   userContext,
   inviterId,
