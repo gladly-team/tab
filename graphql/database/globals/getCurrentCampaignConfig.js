@@ -90,28 +90,28 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showCountdownTimer: true,
   showHeartsDonationButton: true,
   showProgressBar: true,
-  showSocialSharing: false,
-  // socialSharing: {
-  //   url: 'https://tab.gladly.io',
-  //   FacebookShareButtonProps: {
-  //     quote:
-  //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
-  //   },
-  //   // RedditShareButtonProps: {
-  //   //   title:
-  //   //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
-  //   // },
-  //   TumblrShareButtonProps: {
-  //     title: 'Browser tabs transformed into PPE & temporary hospitals in India',
-  //     caption:
-  //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
-  //   },
-  //   TwitterShareButtonProps: {
-  //     title:
-  //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. Tthese resources are needed more than ever, & I was able to make a difference by just opening browser tabs! @TabForACause',
-  //     related: ['@TabForACause'],
-  //   },
-  // },
+  showSocialSharing: true,
+  socialSharing: {
+    url: 'https://tab.gladly.io',
+    FacebookShareButtonProps: {
+      quote:
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+    },
+    // RedditShareButtonProps: {
+    //   title:
+    //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
+    // },
+    TumblrShareButtonProps: {
+      title: 'Support Trans Lifeline by opening browser tabs',
+      caption:
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+    },
+    TwitterShareButtonProps: {
+      title:
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+      related: ['@TabForACause'],
+    },
+  },
   theme: {
     color: {
       main: '#887fff',
