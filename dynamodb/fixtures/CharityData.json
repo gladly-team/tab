@@ -447,5 +447,19 @@
     "updated": "2021-05-04T08:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "fe395423-6ceb-493c-a1df-c88f98a53894",
+    "name": "Trans Lifeline",
+    "category": "Human Rights",
+    "logo": "placeholder.png",
+    "image": "trans-lifeline.jpg",
+    "website": "https://translifeline.org/",
+    "impact": "<p>Thanks for supporting Trans Lifeline! These funds raised will help connect trans people to the community support and resources they need to survive and thrive!</p><p>If you or someone you know could use support, please don’t hesitate to call:</p><p>US: (877)-565-8860</p><p>CANADA: (877)-330-6366</p>",
+    "description": "--",
+    "created": "2021-06-24T16:00:00.000Z",
+    "updated": "2021-06-24T16:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
