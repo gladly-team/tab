@@ -49,7 +49,9 @@ const createInvitedUsers = async (
     if (userInvites.length + sanitizedEmails.length > 50) {
       throw new Error('user is trying to invite too many people in 24 hours')
     }
-    const sanitizedMessage = xssFilters.inHTMLData(inviterMessage)
+    const sanitizedMessage = inviterMessage
+      ? xssFilters.inHTMLData(inviterMessage)
+      : undefined
     const santiziedInviterName = xssFilters.inHTMLData(inviterName)
     const verifiedAndSentEmails = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
