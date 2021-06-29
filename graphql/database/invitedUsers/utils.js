@@ -49,6 +49,10 @@ export const verifyAndSendInvite = async (
       username: encodeURIComponent(invitingUser.username),
       personalMessage: inviterMessage,
     },
+    asm: {
+      group_id: 3861,
+      groups_to_display: [3861],
+    },
   }
   try {
     await sgMail.send(msg)
