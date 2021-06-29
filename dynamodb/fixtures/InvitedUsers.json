@@ -1,0 +1,18 @@
+[
+  {
+    "inviterId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+    "invitedEmail": "alec+07@tabforacause.org",
+    "invitedId": "12341234",
+    "created": "2020-07-19T03:05:12Z"
+  },
+  {
+    "inviterId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+    "invitedEmail": "alec+09@tabforacause.org",
+    "created": "2020-07-19T03:05:12Z"
+  },
+  {
+    "inviterId": "shouldNotBeQueried",
+    "invitedEmail": "alec+09@tabforacause.org",
+    "created": "2020-07-19T03:05:12Z"
+  }
+]

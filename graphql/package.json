@@ -6,6 +6,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.4",
     "@hapi/joi": "^17.1.1",
+    "@sendgrid/mail": "^7.4.4",
     "@sentry/node": "^5.14.2",
     "aws-sdk": "^2.632.0",
     "aws4": "^1.8.0",
@@ -21,7 +22,8 @@
     "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.1",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "xss-filters": "^1.2.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

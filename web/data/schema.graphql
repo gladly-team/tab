@@ -325,6 +325,20 @@ type CharityEdge {
   cursor: String!
 }
 
+input CreateInvitedUsersInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type CreateInvitedUsersPayload {
+  successfulEmailAddresses: [successfulEmailAddresses]
+  failedEmailAddresses: [failedEmailAddresses]
+  clientMutationId: String
+}
+
 input CreateNewUserInput {
   userId: String!
   email: String
@@ -482,6 +496,11 @@ enum ExperimentGroupVariousAdSizes {
   VARIOUS
 }
 
+type failedEmailAddresses {
+  email: String
+  error: String
+}
+
 input LogEmailVerifiedMutationInput {
   userId: String!
   clientMutationId: String
@@ -603,6 +622,7 @@ type MergeIntoExistingUserPayload {
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
+  createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -784,6 +804,10 @@ input SetV4BetaInput {
 type SetV4BetaPayload {
   user: User
   clientMutationId: String
+}
+
+type successfulEmailAddresses {
+  email: String
 }
 
 input UpdateImpactInput {
