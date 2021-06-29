@@ -46,7 +46,7 @@ export const verifyAndSendInvite = async (
     templateId: 'd-69707bd6c49a444fa68a99505930f801',
     dynamicTemplateData: {
       name: inviterName,
-      username: invitingUser.username,
+      username: encodeURIComponent(invitingUser.username),
       personalMessage: inviterMessage,
     },
   }
