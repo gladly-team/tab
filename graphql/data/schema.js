@@ -1259,7 +1259,8 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
       context.user,
       id,
       input.invitedEmails,
-      input.inviterName
+      input.inviterName,
+      input.inviterMessage
     )
     return invitedUser
   },
