@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import TextField from 'material-ui/TextField'
+import Popover from 'material-ui/Popover'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor,
@@ -110,35 +112,48 @@ class Search extends React.Component {
     }
 
     return (
-      <span
-        style={searchContainerStyle}
-        onClick={this.onSearchClick.bind(this)}
-        onMouseEnter={this.onSearchHover.bind(this, true)}
-        onMouseLeave={this.onSearchHover.bind(this, false)}
-      >
-        <SearchIcon
-          color={
-            this.state.hover || this.state.focused
-              ? dashboardIconActiveColor
-              : dashboardIconInactiveColor
-          }
-          hoverColor={dashboardIconActiveColor}
-          style={iconStyle}
-        />
-        <TextField
-          id={'tab-search-id'}
-          onFocus={this.onInputFocusChanged.bind(this, true)}
-          onBlur={this.onInputFocusChanged.bind(this, false)}
-          ref={input => {
-            this.searchInput = input
-          }}
-          onKeyPress={this.handleKeyPress.bind(this)}
-          style={inputContainerStyle}
-          inputStyle={inputStyle}
-          underlineStyle={underlineStyle}
-          underlineFocusStyle={underlineFocusStyle}
-        />
-      </span>
+      <>
+        <span
+          style={searchContainerStyle}
+          onClick={this.onSearchClick.bind(this)}
+          onMouseEnter={this.onSearchHover.bind(this, true)}
+          onMouseLeave={this.onSearchHover.bind(this, false)}
+        >
+          <SearchIcon
+            color={
+              this.state.hover || this.state.focused
+                ? dashboardIconActiveColor
+                : dashboardIconInactiveColor
+            }
+            hoverColor={dashboardIconActiveColor}
+            style={iconStyle}
+          />
+          <TextField
+            id={'tab-search-id'}
+            onFocus={this.onInputFocusChanged.bind(this, true)}
+            onBlur={this.onInputFocusChanged.bind(this, false)}
+            ref={input => {
+              this.searchInput = input
+            }}
+            onKeyPress={this.handleKeyPress.bind(this)}
+            style={inputContainerStyle}
+            inputStyle={inputStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle}
+          />
+        </span>
+      </>
+      //   <Popover
+      //   open={open}
+      //   anchorEl={anchorEl}
+      //   onClose={onClose}
+      //   anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+      //   transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+      //   className={clsx(classes.root, className)}
+      // >
+      //   <div className={classes.popoverStyle} />
+      //   {children}
+      // </Popover>
     )
   }
 }
