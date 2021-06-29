@@ -28,12 +28,9 @@ const createInvitedUsers = async (
 ) => {
   try {
     const override = getPermissionsOverride(ADMIN_MANAGEMENT)
-    const endTimeRoundedISO = moment()
-      .startOf('hour')
-      .toISOString()
+    const endTimeRoundedISO = moment().toISOString()
     const startTimeRoundedISO = moment(endTimeRoundedISO)
-      .subtract(30, 'days')
-      .endOf('hour')
+      .subtract(1, 'days')
       .toISOString()
     const sanitizedEmails = uniq(
       invitedEmails.map(email => xssFilters.inHTMLData(email))
