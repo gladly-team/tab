@@ -300,9 +300,7 @@ resources:
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               LambdaFunctionAssociations:
-                # TODO: change to viewer-request after updating version
-                # - EventType: viewer-request
-                - EventType: origin-request
+                - EventType: viewer-request
                   LambdaFunctionARN: ${self:custom.searchAppLambdaEdgeFunctionARN}
             # GraphQL
             - PathPattern: 'graphql*'
