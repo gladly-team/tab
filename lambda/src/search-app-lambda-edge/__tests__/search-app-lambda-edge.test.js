@@ -11,86 +11,85 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('newtab app Lambda@Edge function on origin-request', () => {
-  it('modifies the path for the /search/ URI', () => {
+describe('search app Lambda@Edge function on viewer-request', () => {
+  it('redirects with a 307 redirect', () => {
+    expect.assertions(2)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
     event.Records[0].cf.request.uri = '/search/'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/index.html')
+    const response = callback.mock.calls[0][1]
+    expect(response.status).toEqual('307')
+    expect(response.statusDescription).toEqual('Found')
   })
 
-  it('modifies the path for the /search/ URI with a query string', () => {
+  it('redirects an empty search to Google without a query string', () => {
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/?q=foobar&src=chrome'
+    event.Records[0].cf.request.uri = '/search/'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/index.html')
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search'
+    )
   })
 
-  // In the future, we may want to change this to pre-render
-  // additional pages.
-  it('sends a non-search-page path, /search/foo/?q=blah, to 200.html', () => {
+  it('sets the query string value if the "q" value is defined', () => {
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/foo/?q=blah'
+    event.Records[0].cf.request.uri = '/search/'
+    event.Records[0].cf.request.querystring = 'q=pizza'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/200.html')
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza'
+    )
   })
 
-  it('sends a non-search-page path, /search/profile/stats/, to 200.html', () => {
+  it('sets the query string value if the "q" value is defined with a space character', () => {
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/profile/stats/'
+    event.Records[0].cf.request.uri = '/search/'
+    event.Records[0].cf.request.querystring = 'q=pizza+palace'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/200.html')
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza%20palace'
+    )
   })
 
-  it('sends a non-search-page path, /search/profile/stats-thing, to 200.html', () => {
+  it('sets the query string value if the "q" value is defined with a special character', () => {
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/profile/stats-thing'
+    event.Records[0].cf.request.uri = '/search/'
+    event.Records[0].cf.request.querystring = 'q=pizza🍕'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/200.html')
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza%F0%9F%8D%95'
+    )
   })
 
-  it('does not modify the path for the /search/manifest.json URI', () => {
+  it('only sets the "q" query string value, ignoring other URL params', () => {
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/manifest.json'
+    event.Records[0].cf.request.uri = '/search/'
+    event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=foo'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/manifest.json')
-  })
-
-  it('does not modify the path for the /search/static/my-img.png URI', () => {
-    const { handler } = require('../search-app-lambda-edge')
-    const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/static/my-img.png'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/static/my-img.png')
-  })
-
-  it('does not modify the path for the /search/profile/stats/something.txt URI', () => {
-    const { handler } = require('../search-app-lambda-edge')
-    const event = getMockCloudFrontEventObject()
-    event.Records[0].cf.request.uri = '/search/profile/stats/something.txt'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const request = callback.mock.calls[0][1]
-    expect(request.uri).toEqual('/search/profile/stats/something.txt')
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza'
+    )
   })
 })
