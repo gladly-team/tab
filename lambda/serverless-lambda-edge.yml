@@ -88,6 +88,13 @@ custom:
     automatic: true
     number: 5
 
+# Don't include any dependencies by default. CloudFront-triggered Lambdas
+# have stricter package size limitations.
+# https://www.serverless.com/framework/docs/providers/aws/guide/packaging/
+package:
+  exclude:
+    - node_modules/**
+
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
 # Custom IAM roles:
