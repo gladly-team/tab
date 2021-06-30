@@ -12,26 +12,26 @@ exports.handler = (event, context, callback) => {
 
   // Map our search URL onto another search provider's URL.
   const SFAC_QUERY_QS_KEY = 'q'
-  const SEARCH_PROVIDER_DOMAIN = 'google.com'
+  const SEARCH_PROVIDER_URL = 'https://www.google.com/search'
   const SEARCH_PROVIDER_QS_KEY = 'q'
   const params = querystring.parse(request.querystring.toLowerCase())
-  const newQuerystringVals = {
-    ...(params[SFAC_QUERY_QS_KEY] && {
-      [SEARCH_PROVIDER_QS_KEY]: params[SFAC_QUERY_QS_KEY],
-    }),
-  }
-  request.origin = {
-    custom: {
-      domainName: SEARCH_PROVIDER_DOMAIN,
-      port: 443,
-      protocol: 'https',
-      path: '',
-      sslProtocols: ['TLSv1', 'TLSv1.1'],
-      readTimeout: 10,
-      keepaliveTimeout: 10,
-      customHeaders: {},
+  const searchQueryVal = params[SFAC_QUERY_QS_KEY]
+  const redirectURL = searchQueryVal
+    ? `${SEARCH_PROVIDER_URL}?${querystring.stringify({
+        [SEARCH_PROVIDER_QS_KEY]: searchQueryVal,
+      })}`
+    : SEARCH_PROVIDER_URL
+  const response = {
+    status: '307',
+    statusDescription: 'Found',
+    headers: {
+      location: [
+        {
+          key: 'Location',
+          value: redirectURL,
+        },
+      ],
     },
   }
-  request.querystring = querystring.stringify(newQuerystringVals)
-  callback(null, request)
+  callback(null, response)
 }
