@@ -169,5 +169,5 @@ functions:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
   searchAppLambdaEdge:
     handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
-    memorySize: 128 # Max allowed for CloudFront-triggered Lambda
-    
+    memorySize: 128 # 128 is max allowed for CloudFront-triggered Lambda
+    timeout: 3 # 5s is max allowed for CloudFront-triggered Lambda
