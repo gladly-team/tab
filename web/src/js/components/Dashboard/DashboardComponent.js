@@ -631,6 +631,7 @@ class Dashboard extends React.Component {
           user={user}
           isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
+          tabId={tabId}
         />
         {showCampaign && app && user ? (
           <FadeInDashboardAnimation>

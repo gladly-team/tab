@@ -17,7 +17,7 @@ import TodosWidget from 'js/components/Widget/Widgets/Todos/TodosWidgetContainer
 
 class Widget extends React.Component {
   render() {
-    const { widget, user } = this.props
+    const { widget, user, tabId } = this.props
 
     switch (widget.type) {
       case WIDGET_TYPE_BOOKMARKS:
@@ -30,7 +30,7 @@ class Widget extends React.Component {
         )
 
       case WIDGET_TYPE_SEARCH:
-        return <SearchWidget widget={widget} user={user} />
+        return <SearchWidget widget={widget} user={user} tabId={tabId} />
 
       case WIDGET_TYPE_CLOCK:
         return <ClockWidget widget={widget} user={user} />

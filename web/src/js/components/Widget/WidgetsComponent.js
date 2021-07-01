@@ -42,7 +42,6 @@ class Widgets extends React.Component {
     const separator = {
       width: 5,
     }
-
     return (
       <FadeInDashboardAnimation>
         <span>
@@ -56,6 +55,7 @@ class Widgets extends React.Component {
                     user={user}
                     widget={edge.node}
                     showError={this.props.showError}
+                    tabId={this.props.tabId}
                   />
                 )
               } else {

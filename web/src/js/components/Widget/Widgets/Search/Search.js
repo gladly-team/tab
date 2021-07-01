@@ -2,7 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import TextField from 'material-ui/TextField'
-import Popover from 'material-ui/Popover'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import logger from 'js/utils/logger'
+import { STORAGE_YAHOO_SEARCH_DEMO, YAHOO_USER_ID } from 'js/constants'
+import LogTabMutation from 'js/mutations/LogTabMutation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import appTheme, {
   dashboardIconInactiveColor,
@@ -10,6 +15,8 @@ import appTheme, {
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
 
+// I've temporarily added some hacky code for a yahoo demo and there is
+// user specific code in this file
 class Search extends React.Component {
   constructor(props) {
     super(props)
@@ -17,11 +24,29 @@ class Search extends React.Component {
     this.state = {
       hover: false,
       focused: false,
+      hasSeenYahooDemo: true,
+      isYahooUser: false,
+      showYahooDemoPopover: false,
       config: {},
     }
+    this.anchorElement = React.createRef()
   }
-
   componentDidMount() {
+    if (this.props.user.id === YAHOO_USER_ID) {
+      this.setState({ isYahooUser: true })
+      const yahooHasAcknowledged = localStorageMgr.getItem(
+        STORAGE_YAHOO_SEARCH_DEMO
+      )
+      console.log(
+        yahooHasAcknowledged,
+        this.props.user.id,
+        YAHOO_USER_ID,
+        'what'
+      )
+      if (yahooHasAcknowledged === null) {
+        this.setState({ hasSeenYahooDemo: false })
+      }
+    }
     const { widget } = this.props
 
     // TODO: have server send these as objects
@@ -43,7 +68,19 @@ class Search extends React.Component {
     const engine = this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
-
+    //refetch latest local storage
+    const yahooHasAcknowledged = localStorageMgr.getItem(
+      STORAGE_YAHOO_SEARCH_DEMO
+    )
+    if (yahooHasAcknowledged === 'true') {
+      LogTabMutation({
+        userId: this.props.user.id,
+        tabId: this.props.tabId,
+        isV4: false,
+      }).catch(e => {
+        logger.error(e)
+      })
+    }
     // The page might be iframed, so opening in _top is critical.
     window.open(searchApi + searchTerm, '_top')
   }
@@ -55,7 +92,19 @@ class Search extends React.Component {
   }
 
   onSearchClick() {
+    const { isYahooUser, hasSeenYahooDemo } = this.state
+    if (isYahooUser && !hasSeenYahooDemo) {
+      this.setState({ showYahooDemoPopover: true })
+    }
     this.searchInput.focus()
+  }
+  onClickYahooYes() {
+    localStorageMgr.setItem(STORAGE_YAHOO_SEARCH_DEMO, 'true')
+    this.setState({ showYahooDemoPopover: false, hasSeenYahooDemo: true })
+  }
+  onClickYahooNo() {
+    localStorageMgr.setItem(STORAGE_YAHOO_SEARCH_DEMO, 'false')
+    this.setState({ showYahooDemoPopover: false, hasSeenYahooDemo: true })
   }
 
   onInputFocusChanged(focused) {
@@ -74,11 +123,15 @@ class Search extends React.Component {
         return 'https://duckduckgo.com/?q='
       case 'Ecosia':
         return 'https://www.ecosia.org/search?q='
+      case 'Yahoo':
+        return 'https://search.yahoo.com/search;?q='
       default:
         return 'https://www.google.com/search?q='
     }
   }
-
+  onClose() {
+    this.setState({ showYahooDemoPopover: false })
+  }
   render() {
     const searchContainerStyle = {
       display: 'flex',
@@ -110,7 +163,8 @@ class Search extends React.Component {
       fontWeight: 'normal',
       fontFamily: appTheme.fontFamily,
     }
-
+    const { showYahooDemoPopover } = this.state
+    const anchorElement = this.anchorElement
     return (
       <>
         <span
@@ -118,6 +172,7 @@ class Search extends React.Component {
           onClick={this.onSearchClick.bind(this)}
           onMouseEnter={this.onSearchHover.bind(this, true)}
           onMouseLeave={this.onSearchHover.bind(this, false)}
+          ref={this.anchorElement}
         >
           <SearchIcon
             color={
@@ -142,18 +197,40 @@ class Search extends React.Component {
             underlineFocusStyle={underlineFocusStyle}
           />
         </span>
+        <DashboardPopover
+          open={showYahooDemoPopover}
+          anchorEl={anchorElement.current}
+          onClose={this.onClose.bind(this)}
+        >
+          <div style={{ maxWidth: '444px', padding: '12px' }}>
+            <Typography variant={'body1'}>
+              Would you like to earn a Heart for each search, so your searches
+              count toward your money raised for charity?
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '8px',
+              }}
+            >
+              <Button
+                color={'primary'}
+                onClick={this.onClickYahooNo.bind(this)}
+              >
+                No
+              </Button>
+              <Button
+                color={'primary'}
+                variant={'contained'}
+                onClick={this.onClickYahooYes.bind(this)}
+              >
+                Yes
+              </Button>
+            </div>
+          </div>
+        </DashboardPopover>
       </>
-      //   <Popover
-      //   open={open}
-      //   anchorEl={anchorEl}
-      //   onClose={onClose}
-      //   anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-      //   transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-      //   className={clsx(classes.root, className)}
-      // >
-      //   <div className={classes.popoverStyle} />
-      //   {children}
-      // </Popover>
     )
   }
 }
@@ -171,6 +248,7 @@ Search.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
+  tabId: PropTypes.string,
 }
 
 export default Search
