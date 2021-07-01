@@ -5,6 +5,7 @@ import WidgetConfig from 'js/components/Settings/Widgets/WidgetConfigComponent'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import { cardHeaderTitleStyle } from 'js/theme/default'
 import { getWidgetIconFromWidgetType } from 'js/components/Widget/widget-utils'
+
 import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'
 import UpdateWidgetConfigMutation from 'js/mutations/UpdateWidgetConfigMutation'
 
@@ -19,12 +20,14 @@ class WidgetSettings extends React.Component {
 
   componentDidMount() {
     const { appWidget, widget } = this.props
+
     var config
     if (widget && widget.config) {
       config = JSON.parse(widget.config)
     }
 
-    let settings = this.getConfig(JSON.parse(appWidget.settings), config)
+    const settings = this.getConfig(JSON.parse(appWidget.settings), config)
+
     this.setState({
       settings: settings,
     })

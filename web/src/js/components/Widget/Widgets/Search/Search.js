@@ -244,7 +244,6 @@ Search.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
-  tabId: PropTypes.string,
 }
 
 export default Search
