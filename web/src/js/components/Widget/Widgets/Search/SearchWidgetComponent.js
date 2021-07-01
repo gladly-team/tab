@@ -3,13 +3,7 @@ import PropTypes from 'prop-types'
 import Search from 'js/components/Widget/Widgets/Search/Search'
 class SearchWidget extends React.Component {
   render() {
-    return (
-      <Search
-        widget={this.props.widget}
-        user={this.props.user}
-        tabId={this.props.tabId}
-      />
-    )
+    return <Search widget={this.props.widget} user={this.props.user} />
   }
 }
 

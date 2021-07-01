@@ -55,7 +55,6 @@ class Widgets extends React.Component {
                     user={user}
                     widget={edge.node}
                     showError={this.props.showError}
-                    tabId={this.props.tabId}
                   />
                 )
               } else {

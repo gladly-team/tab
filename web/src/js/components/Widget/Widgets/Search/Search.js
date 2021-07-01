@@ -5,9 +5,8 @@ import TextField from 'material-ui/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import logger from 'js/utils/logger'
 import { STORAGE_YAHOO_SEARCH_DEMO, YAHOO_USER_ID } from 'js/constants'
-import LogTabMutation from 'js/mutations/LogTabMutation'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import appTheme, {
   dashboardIconInactiveColor,
@@ -59,7 +58,9 @@ class Search extends React.Component {
   }
 
   async executeSearch() {
-    const engine = this.state.config.engine || 'Google'
+    const engine = this.state.isYahooUser
+      ? 'Yahoo'
+      : this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
     //refetch latest local storage
@@ -67,16 +68,17 @@ class Search extends React.Component {
       STORAGE_YAHOO_SEARCH_DEMO
     )
     if (yahooHasAcknowledged === 'true') {
-      LogTabMutation({
+      LogSearchMutation({
         userId: this.props.user.id,
-        tabId: this.props.tabId,
-        isV4: false,
-      }).catch(e => {
-        logger.error(e)
+        source: 'tab',
       })
     }
-    // The page might be iframed, so opening in _top is critical.
-    window.open(searchApi + searchTerm, '_top')
+    if (this.state.isYahooUser && yahooHasAcknowledged === null) {
+      this.setState({ showYahooDemoPopover: true })
+    } else {
+      // The page might be iframed, so opening in _top is critical.
+      window.open(searchApi + searchTerm, '_top')
+    }
   }
 
   onSearchHover(hover) {

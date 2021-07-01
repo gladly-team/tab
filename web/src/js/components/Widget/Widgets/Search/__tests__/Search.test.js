@@ -9,9 +9,9 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { YAHOO_USER_ID } from 'js/constants'
 import Button from '@material-ui/core/Button'
-import LogTabMutation from 'js/mutations/LogTabMutation'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
 
-jest.mock('js/mutations/LogTabMutation')
+jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/utils/localstorage-mgr', () => ({
@@ -316,6 +316,6 @@ describe('Yahoo Search Demo', () => {
       'https://search.yahoo.com/search;?q=taco',
       '_top'
     )
-    expect(LogTabMutation).toHaveBeenCalled()
+    expect(LogSearchMutation).toHaveBeenCalled()
   })
 })

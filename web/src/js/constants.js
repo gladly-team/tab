@@ -129,6 +129,6 @@ export const SEARCH_INTRO_QUERY_ENGLISH =
 
 export const STORAGE_YAHOO_SEARCH_DEMO = 'tab.yahoo.searchdemo'
 // local testing
-export const YAHOO_USER_ID = 'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz'
+// export const YAHOO_USER_ID = 'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz'
 // prod
-// export const YAHOO_USER_ID='Eh1S0gtEvYSWZjZ8B0kk4jk6zBm2'
+export const YAHOO_USER_ID = 'VXNlcjpFaDFTMGd0RXZZU1daalo4QjBrazRqazZ6Qm0y'
