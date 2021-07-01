@@ -37,12 +37,6 @@ class Search extends React.Component {
       const yahooHasAcknowledged = localStorageMgr.getItem(
         STORAGE_YAHOO_SEARCH_DEMO
       )
-      console.log(
-        yahooHasAcknowledged,
-        this.props.user.id,
-        YAHOO_USER_ID,
-        'what'
-      )
       if (yahooHasAcknowledged === null) {
         this.setState({ hasSeenYahooDemo: false })
       }
