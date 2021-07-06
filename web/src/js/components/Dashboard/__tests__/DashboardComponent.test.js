@@ -47,6 +47,7 @@ import {
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
+  isGAMDevEnvironment,
 } from 'js/utils/feature-flags'
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
@@ -120,6 +121,9 @@ beforeEach(() => {
   // Default to enabled ads.
   areAdsEnabled.mockReturnValue(true)
   showMockAds.mockReturnValue(false)
+
+  // Default to non-dev GAM key-value.
+  isGAMDevEnvironment.mockReturnValue(false)
 
   // Provide mock hostname and URL.
   getHostname.mockReturnValue('example.com')

@@ -52,6 +52,7 @@ import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
+  isGAMDevEnvironment,
 } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_REFERRAL_NOTIFICATION,
@@ -92,11 +93,12 @@ const loadAds = () => {
     return
   }
   calledLoadAds = true
+  const setGAMDevKey = isGAMDevEnvironment()
   try {
     // Debugging can be enabled with URL param tabAdsDebug=true.
     fetchAds({
       adUnits: Object.values(getAdUnits()),
-      pageLevelKeyValues: { v4: 'false' },
+      pageLevelKeyValues: { v4: 'false', ...(setGAMDevKey && { dev: 'true' }) },
       auctionTimeout: 1000,
       consent: {
         enabled: true,

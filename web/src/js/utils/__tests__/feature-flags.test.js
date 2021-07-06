@@ -67,4 +67,18 @@ describe('feature flags', () => {
     process.env.REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE = 'true'
     expect(isBingJSAdsProductionMode()).toBe(true)
   })
+
+  test('isGAMDevEnvironment is false if the env var is "false"', () => {
+    const isGAMDevEnvironment = require('js/utils/feature-flags')
+      .isGAMDevEnvironment
+    process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'false'
+    expect(isGAMDevEnvironment()).toBe(false)
+  })
+
+  test('isGAMDevEnvironment is true if the env var is "true"', () => {
+    const isGAMDevEnvironment = require('js/utils/feature-flags')
+      .isGAMDevEnvironment
+    process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'true'
+    expect(isGAMDevEnvironment()).toBe(true)
+  })
 })
