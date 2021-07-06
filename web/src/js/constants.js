@@ -126,3 +126,9 @@ export const SEARCH_SRC_OWN_PAGE = 'self'
 
 export const SEARCH_INTRO_QUERY_ENGLISH =
   'How many searches do people make every day?'
+
+export const STORAGE_YAHOO_SEARCH_DEMO = 'tab.yahoo.searchdemo'
+// local testing
+// export const YAHOO_USER_ID = 'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz'
+// prod
+export const YAHOO_USER_ID = 'VXNlcjpFaDFTMGd0RXZZU1daalo4QjBrazRqazZ6Qm0y'

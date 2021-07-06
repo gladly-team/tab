@@ -42,7 +42,6 @@ class Widgets extends React.Component {
     const separator = {
       width: 5,
     }
-
     return (
       <FadeInDashboardAnimation>
         <span>

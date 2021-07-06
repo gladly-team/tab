@@ -2,12 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import TextField from 'material-ui/TextField'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import { STORAGE_YAHOO_SEARCH_DEMO, YAHOO_USER_ID } from 'js/constants'
+import { getCurrentUser } from 'js/authentication/user'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor,
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
 
+// I've temporarily added some hacky code for a yahoo demo and there is
+// user specific code in this file
 class Search extends React.Component {
   constructor(props) {
     super(props)
@@ -15,11 +24,23 @@ class Search extends React.Component {
     this.state = {
       hover: false,
       focused: false,
+      hasSeenYahooDemo: true,
+      isYahooUser: false,
+      showYahooDemoPopover: false,
       config: {},
     }
+    this.anchorElement = React.createRef()
   }
-
   componentDidMount() {
+    if (this.props.user.id === YAHOO_USER_ID) {
+      this.setState({ isYahooUser: true })
+      const yahooHasAcknowledged = localStorageMgr.getItem(
+        STORAGE_YAHOO_SEARCH_DEMO
+      )
+      if (yahooHasAcknowledged === null) {
+        this.setState({ hasSeenYahooDemo: false })
+      }
+    }
     const { widget } = this.props
 
     // TODO: have server send these as objects
@@ -38,12 +59,28 @@ class Search extends React.Component {
   }
 
   async executeSearch() {
-    const engine = this.state.config.engine || 'Google'
+    const engine = this.state.isYahooUser
+      ? 'Yahoo'
+      : this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
-
-    // The page might be iframed, so opening in _top is critical.
-    window.open(searchApi + searchTerm, '_top')
+    //refetch latest local storage
+    const yahooHasAcknowledged = localStorageMgr.getItem(
+      STORAGE_YAHOO_SEARCH_DEMO
+    )
+    if (yahooHasAcknowledged === 'true') {
+      const user = await getCurrentUser()
+      LogSearchMutation({
+        userId: user.id,
+        source: 'tab',
+      })
+    }
+    if (this.state.isYahooUser && yahooHasAcknowledged === null) {
+      this.setState({ showYahooDemoPopover: true })
+    } else {
+      // The page might be iframed, so opening in _top is critical.
+      window.open(searchApi + searchTerm, '_top')
+    }
   }
 
   onSearchHover(hover) {
@@ -53,7 +90,19 @@ class Search extends React.Component {
   }
 
   onSearchClick() {
+    const { isYahooUser, hasSeenYahooDemo } = this.state
+    if (isYahooUser && !hasSeenYahooDemo) {
+      this.setState({ showYahooDemoPopover: true })
+    }
     this.searchInput.focus()
+  }
+  onClickYahooYes() {
+    localStorageMgr.setItem(STORAGE_YAHOO_SEARCH_DEMO, 'true')
+    this.setState({ showYahooDemoPopover: false, hasSeenYahooDemo: true })
+  }
+  onClickYahooNo() {
+    localStorageMgr.setItem(STORAGE_YAHOO_SEARCH_DEMO, 'false')
+    this.setState({ showYahooDemoPopover: false, hasSeenYahooDemo: true })
   }
 
   onInputFocusChanged(focused) {
@@ -72,11 +121,15 @@ class Search extends React.Component {
         return 'https://duckduckgo.com/?q='
       case 'Ecosia':
         return 'https://www.ecosia.org/search?q='
+      case 'Yahoo':
+        return 'https://search.yahoo.com/search;?q='
       default:
         return 'https://www.google.com/search?q='
     }
   }
-
+  onClose() {
+    this.setState({ showYahooDemoPopover: false })
+  }
   render() {
     const searchContainerStyle = {
       display: 'flex',
@@ -108,37 +161,74 @@ class Search extends React.Component {
       fontWeight: 'normal',
       fontFamily: appTheme.fontFamily,
     }
-
+    const { showYahooDemoPopover } = this.state
+    const anchorElement = this.anchorElement
     return (
-      <span
-        style={searchContainerStyle}
-        onClick={this.onSearchClick.bind(this)}
-        onMouseEnter={this.onSearchHover.bind(this, true)}
-        onMouseLeave={this.onSearchHover.bind(this, false)}
-      >
-        <SearchIcon
-          color={
-            this.state.hover || this.state.focused
-              ? dashboardIconActiveColor
-              : dashboardIconInactiveColor
-          }
-          hoverColor={dashboardIconActiveColor}
-          style={iconStyle}
-        />
-        <TextField
-          id={'tab-search-id'}
-          onFocus={this.onInputFocusChanged.bind(this, true)}
-          onBlur={this.onInputFocusChanged.bind(this, false)}
-          ref={input => {
-            this.searchInput = input
-          }}
-          onKeyPress={this.handleKeyPress.bind(this)}
-          style={inputContainerStyle}
-          inputStyle={inputStyle}
-          underlineStyle={underlineStyle}
-          underlineFocusStyle={underlineFocusStyle}
-        />
-      </span>
+      <>
+        <span
+          style={searchContainerStyle}
+          onClick={this.onSearchClick.bind(this)}
+          onMouseEnter={this.onSearchHover.bind(this, true)}
+          onMouseLeave={this.onSearchHover.bind(this, false)}
+          ref={this.anchorElement}
+        >
+          <SearchIcon
+            color={
+              this.state.hover || this.state.focused
+                ? dashboardIconActiveColor
+                : dashboardIconInactiveColor
+            }
+            hoverColor={dashboardIconActiveColor}
+            style={iconStyle}
+          />
+          <TextField
+            id={'tab-search-id'}
+            onFocus={this.onInputFocusChanged.bind(this, true)}
+            onBlur={this.onInputFocusChanged.bind(this, false)}
+            ref={input => {
+              this.searchInput = input
+            }}
+            onKeyPress={this.handleKeyPress.bind(this)}
+            style={inputContainerStyle}
+            inputStyle={inputStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle}
+          />
+        </span>
+        <DashboardPopover
+          open={showYahooDemoPopover}
+          anchorEl={anchorElement.current}
+          onClose={this.onClose.bind(this)}
+        >
+          <div style={{ maxWidth: '444px', padding: '12px' }}>
+            <Typography variant={'body1'}>
+              Would you like to earn a Heart for each search, so your searches
+              count toward your money raised for charity?
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '8px',
+              }}
+            >
+              <Button
+                color={'primary'}
+                onClick={this.onClickYahooNo.bind(this)}
+              >
+                No
+              </Button>
+              <Button
+                color={'primary'}
+                variant={'contained'}
+                onClick={this.onClickYahooYes.bind(this)}
+              >
+                Yes
+              </Button>
+            </div>
+          </div>
+        </DashboardPopover>
+      </>
     )
   }
 }

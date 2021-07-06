@@ -5,14 +5,25 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { mount, shallow } from 'enzyme'
 import TextField from 'material-ui/TextField'
 import { flushAllPromises } from 'js/utils/test-utils'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import { YAHOO_USER_ID } from 'js/constants'
+import Button from '@material-ui/core/Button'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import { getCurrentUser } from 'js/authentication/user'
 
+jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/analytics/facebook-analytics')
-
+jest.mock('js/utils/localstorage-mgr', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+}))
+jest.mock('js/authentication/user', () => ({ getCurrentUser: jest.fn() }))
 function getMockProps() {
   return {
     user: {
-      id: 'abc123',
+      id: 'abc_123',
     },
     widget: {
       id: 'widget-xyz',
@@ -35,7 +46,32 @@ function getMockProps() {
     },
   }
 }
-
+function getMockYahooProps() {
+  return {
+    user: {
+      id: YAHOO_USER_ID,
+    },
+    widget: {
+      id: 'widget-xyz',
+      name: 'Search',
+      enabled: true,
+      config: JSON.stringify({
+        engine: 'Yahoo',
+      }),
+      data: JSON.stringify({}),
+      settings: JSON.stringify([
+        {
+          choices: ['Yahoo', 'Bing', 'DuckDuckGo', 'Ecosia'],
+          defaultValue: 'Yahoo',
+          display: 'Search engine',
+          field: 'engine',
+          type: 'choices',
+        },
+      ]),
+      type: 'search',
+    },
+  }
+}
 const windowOpenMock = jest.spyOn(window, 'open').mockImplementation(() => {})
 
 afterEach(() => {
@@ -156,5 +192,133 @@ describe('Search widget  component', () => {
       'https://www.ecosia.org/search?q=carrot',
       '_top'
     )
+  })
+})
+describe('Yahoo Search Demo', () => {
+  it('If Yahoo user, shows user opt in popover on first visit', async () => {
+    expect.assertions(2)
+
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockYahooProps()
+    localStorageMgr.getItem.mockReturnValueOnce(null)
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    searchInput.simulate('click')
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+  })
+
+  it('If Yahoo user, does not show opt in popover after acknowledged', async () => {
+    expect.assertions(2)
+
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockYahooProps()
+    localStorageMgr.getItem.mockReturnValueOnce('true')
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    searchInput.simulate('click')
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+  })
+
+  it('If Yahoo user, clicking yes dismisses dropdown and updates local storage', async () => {
+    expect.assertions(4)
+
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockYahooProps()
+    localStorageMgr.getItem.mockReturnValueOnce(null)
+    getCurrentUser.mockReturnValueOnce({ id: YAHOO_USER_ID })
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    searchInput.simulate('click')
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+    wrapper
+      .find(Button)
+      .at(1)
+      .simulate('click')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.yahoo.searchdemo',
+      'true'
+    )
+  })
+
+  it('If Yahoo user, clicking no dismisses dropdown and udpates local storage', async () => {
+    expect.assertions(4)
+
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockYahooProps()
+    localStorageMgr.getItem.mockReturnValueOnce(null)
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    searchInput.simulate('click')
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+    wrapper
+      .find(Button)
+      .at(0)
+      .simulate('click')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.yahoo.searchdemo',
+      'false'
+    )
+  })
+
+  it('If Yahoo user, clicking yes logs a tab on successful search', async () => {
+    expect.assertions(2)
+    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
+      .default
+    const mockProps = getMockYahooProps()
+    localStorageMgr.getItem
+      .mockReturnValueOnce(null)
+      .mockReturnValueOnce('true')
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <SearchWidget {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const searchInput = wrapper.find(TextField).find('input')
+    searchInput.simulate('click')
+    wrapper.update()
+    wrapper
+      .find(Button)
+      .at(1)
+      .simulate('click')
+    wrapper.update()
+    searchInput.simulate('click')
+    searchInput.instance().value = 'taco'
+    searchInput.simulate('keypress', { key: 'Enter' })
+    await flushAllPromises()
+    expect(windowOpenMock).toHaveBeenCalledWith(
+      'https://search.yahoo.com/search;?q=taco',
+      '_top'
+    )
+    expect(LogSearchMutation).toHaveBeenCalled()
   })
 })
