@@ -598,7 +598,6 @@ describe('Dashboard component: ads logic', () => {
       auctionTimeout: expect.any(Number),
       pageLevelKeyValues: {
         v4: 'false',
-        dev: expect.any(String),
       },
       consent: {
         enabled: expect.any(Boolean),
@@ -633,24 +632,6 @@ describe('Dashboard component: ads logic', () => {
       disableAds: false,
       useMockAds: false,
     })
-  })
-
-  it('does not set a "dev" GAM key during fetchAds (on prod)', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    setGAMDevKeyValue.mockReturnValue(false)
-    shallow(<DashboardComponent {...mockProps} />)
-    const config = fetchAds.mock.calls[0][0]
-    expect(config.pageLevelKeyValues.dev).toBeUndefined()
-  })
-
-  it('sets the "dev=true" GAM key during fetchAds (on dev)', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    setGAMDevKeyValue.mockReturnValue(false)
-    shallow(<DashboardComponent {...mockProps} />)
-    const config = fetchAds.mock.calls[0][0]
-    expect(config.pageLevelKeyValues.dev).toEqual('true') // should be a string
   })
 
   it('passes the expected hostname and page URL to the tab-ads config', () => {
