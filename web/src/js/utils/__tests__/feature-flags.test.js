@@ -68,17 +68,17 @@ describe('feature flags', () => {
     expect(isBingJSAdsProductionMode()).toBe(true)
   })
 
-  test('setGAMDevKeyValue is false if the env var is "false"', () => {
-    const setGAMDevKeyValue = require('js/utils/feature-flags')
-      .setGAMDevKeyValue
+  test('isGAMDevEnvironment is false if the env var is "false"', () => {
+    const isGAMDevEnvironment = require('js/utils/feature-flags')
+      .isGAMDevEnvironment
     process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'false'
-    expect(setGAMDevKeyValue()).toBe(false)
+    expect(isGAMDevEnvironment()).toBe(false)
   })
 
-  test('setGAMDevKeyValue is true if the env var is "true"', () => {
-    const setGAMDevKeyValue = require('js/utils/feature-flags')
-      .setGAMDevKeyValue
+  test('isGAMDevEnvironment is true if the env var is "true"', () => {
+    const isGAMDevEnvironment = require('js/utils/feature-flags')
+      .isGAMDevEnvironment
     process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'true'
-    expect(setGAMDevKeyValue()).toBe(true)
+    expect(isGAMDevEnvironment()).toBe(true)
   })
 })

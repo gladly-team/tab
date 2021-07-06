@@ -20,5 +20,5 @@ export const isBingJSAdsProductionMode = () =>
 
 export const showSearchIntroductionMessage = () => false
 
-export const setGAMDevKeyValue = () =>
+export const isGAMDevEnvironment = () =>
   process.env.REACT_APP_GAM_DEV_ENVIRONMENT === 'true'

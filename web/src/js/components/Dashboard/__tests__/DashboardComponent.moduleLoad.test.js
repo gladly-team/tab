@@ -45,8 +45,8 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  const { setGAMDevKeyValue } = require('js/utils/feature-flags')
-  setGAMDevKeyValue.mockReturnValue(false)
+  const { isGAMDevEnvironment } = require('js/utils/feature-flags')
+  isGAMDevEnvironment.mockReturnValue(false)
 })
 
 afterEach(() => {
@@ -56,8 +56,8 @@ afterEach(() => {
 describe('Dashboard component: fetchAds', () => {
   it('does not set a "dev" GAM key during fetchAds (on prod)', () => {
     const { fetchAds } = require('tab-ads')
-    const { setGAMDevKeyValue } = require('js/utils/feature-flags')
-    setGAMDevKeyValue.mockReturnValue(false)
+    const { isGAMDevEnvironment } = require('js/utils/feature-flags')
+    isGAMDevEnvironment.mockReturnValue(false)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     shallow(<DashboardComponent {...getMockProps()} />)
@@ -67,8 +67,8 @@ describe('Dashboard component: fetchAds', () => {
 
   it('sets the "dev=true" GAM key during fetchAds (on dev)', () => {
     const { fetchAds } = require('tab-ads')
-    const { setGAMDevKeyValue } = require('js/utils/feature-flags')
-    setGAMDevKeyValue.mockReturnValue(true)
+    const { isGAMDevEnvironment } = require('js/utils/feature-flags')
+    isGAMDevEnvironment.mockReturnValue(true)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     shallow(<DashboardComponent {...getMockProps()} />)
