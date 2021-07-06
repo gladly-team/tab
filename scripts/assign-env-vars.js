@@ -40,6 +40,7 @@ export const envVars = [
   { name: 'REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE' },
   { name: 'REACT_APP_MEASURE_TIME_TO_INTERACTIVE', optional: true },
   { name: 'REACT_APP_SHOW_DEMOS_PAGE', optional: true },
+  { name: 'REACT_APP_GAM_DEV_ENVIRONMENT', optional: true },
   // GraphQL / Lambda
   { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
