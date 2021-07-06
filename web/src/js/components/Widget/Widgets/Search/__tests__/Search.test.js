@@ -10,6 +10,7 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { YAHOO_USER_ID } from 'js/constants'
 import Button from '@material-ui/core/Button'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import { getCurrentUser } from 'js/authentication/user'
 
 jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/analytics/logEvent')
@@ -18,6 +19,7 @@ jest.mock('js/utils/localstorage-mgr', () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
 }))
+jest.mock('js/authentication/user', () => ({ getCurrentUser: jest.fn() }))
 function getMockProps() {
   return {
     user: {
@@ -238,6 +240,7 @@ describe('Yahoo Search Demo', () => {
       .default
     const mockProps = getMockYahooProps()
     localStorageMgr.getItem.mockReturnValueOnce(null)
+    getCurrentUser.mockReturnValueOnce({ id: YAHOO_USER_ID })
     const wrapper = mount(
       <MuiThemeProvider>
         <SearchWidget {...mockProps} />
