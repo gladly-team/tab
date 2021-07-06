@@ -10,6 +10,7 @@ import {
   setMockDBResponse,
 } from '../../test-utils'
 import rewardReferringUser from '../rewardReferringUser'
+import InvitedUsersModel from '../../invitedUsers/InvitedUsersModel'
 
 jest.mock('../../databaseClient')
 jest.mock('../rewardReferringUser')
@@ -97,27 +98,37 @@ describe('logEmailVerified', () => {
   })
 
   it('calls to reward the referring user when the email is verified', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = true
-
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
+    })
+    const updateSpy = jest.spyOn(InvitedUsersModel, 'update')
     const logEmailVerified = require('../logEmailVerified').default
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
     expect(rewardReferringUser).toHaveBeenCalledWith(
       modifiedUserContext,
       modifiedUserContext.id
     )
+    expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
+      invitedEmail: 'foo@bar.com',
+      invitedId: 'abcdefghijklmno',
+      inviterId: 'someInviterId',
+      updated: '2017-05-19T13:59:46.000Z',
+    })
   })
 
   it('does not call to reward the referring user when the email is not verified', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = false
-
+    const updateSpy = jest.spyOn(InvitedUsersModel, 'update')
     const logEmailVerified = require('../logEmailVerified').default
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
     expect(rewardReferringUser).not.toHaveBeenCalled()
+    expect(updateSpy).not.toHaveBeenCalled()
   })
 })

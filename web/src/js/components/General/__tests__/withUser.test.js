@@ -629,7 +629,7 @@ describe('withUser', () => {
     await flushAllPromises()
     expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
       urlParams: {
-        next: 'https://example.gladly.io/newtab/profile/donate/',
+        app: 'tab',
       },
     })
   })

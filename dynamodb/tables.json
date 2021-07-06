@@ -4,7 +4,8 @@
     "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
     "AttributeDefinitions": [
       { "AttributeName": "id", "AttributeType": "S" },
-      { "AttributeName": "username", "AttributeType": "S" }
+      { "AttributeName": "username", "AttributeType": "S" },
+      { "AttributeName": "email", "AttributeType": "S" }
     ],
     "GlobalSecondaryIndexes": [
       {
@@ -17,6 +18,22 @@
         ],
         "Projection": {
           "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "UsersByEmail",
+        "KeySchema": [
+          {
+            "AttributeName": "email",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "KEYS_ONLY"
         },
         "ProvisionedThroughput": {
           "ReadCapacityUnits": 1,
@@ -47,6 +64,64 @@
     "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "charityId", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
+    "TableName": "InvitedUsers",
+    "KeySchema": [
+      { "AttributeName": "inviterId", "KeyType": "HASH" },
+      { "AttributeName": "invitedEmail", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "inviterId", "AttributeType": "S" },
+      { "AttributeName": "invitedEmail", "AttributeType": "S" },
+      { "AttributeName": "created", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "InvitesByInviter",
+        "KeySchema": [
+          {
+            "AttributeName": "inviterId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "created",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "InvitesByInvitedEmail",
+        "KeySchema": [
+          {
+            "AttributeName": "invitedEmail",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "created",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "KEYS_ONLY"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
     ],
     "ProvisionedThroughput": {
       "ReadCapacityUnits": 1,

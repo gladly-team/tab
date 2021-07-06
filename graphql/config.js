@@ -21,4 +21,5 @@ module.exports = {
   SENTRY_PRIVATE_KEY: process.env.SENTRY_PRIVATE_KEY,
   SENTRY_PROJECT_ID: process.env.GQL_SENTRY_PROJECT_ID,
   SENTRY_STAGE: process.env.GQL_SENTRY_STAGE,
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
 }

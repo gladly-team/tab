@@ -20,13 +20,11 @@ import {
 import {
   constructUrl,
   goTo,
-  replaceUrl,
   authMessageURL,
-  dashboardURL,
   enterUsernameURL,
   missingEmailMessageURL,
-  searchBaseURL,
   verifyEmailURL,
+  getPostAuthURL,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -105,16 +103,11 @@ class Authentication extends React.Component {
     return validateAppName(urlParams.app || firebaseContinueURLAppVal)
   }
 
-  getNextURLAfterSignIn() {
+  getNextURLIndex() {
     const { location } = this.props
     const urlParams = parseUrlSearchString(location.search)
-    const app = this.getApp()
-
-    // If the "next" URL param specifies a destination URL for after
-    // sign-in, use it. Otherwise, go to the main app page.
-    const nextURL = urlParams.next ? decodeURIComponent(urlParams.next) : null
-    const mainAppDestination = app === SEARCH_APP ? searchBaseURL : dashboardURL
-    return nextURL ? nextURL : mainAppDestination
+    let nextURLIndex = urlParams.next ? decodeURIComponent(urlParams.next) : 0
+    return nextURLIndex
   }
 
   // What we should do after the auth process is finished,
@@ -127,7 +120,10 @@ class Authentication extends React.Component {
     // do this *after* all of the auth logic on this app
     // because v4 does not yet have a complete auth flow.
     const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
-    const destinationURL = this.getNextURLAfterSignIn()
+    const nextURLIndex = this.getNextURLIndex()
+    const isSearchApp = this.getApp() === SEARCH_APP
+    const destinationURL = getPostAuthURL(nextURLIndex, { isSearchApp })
+
     if (enableTabV4) {
       try {
         await optIntoV4Beta()
@@ -144,11 +140,9 @@ class Authentication extends React.Component {
           enabled: true,
         })
       }
-
-      externalRedirect(destinationURL)
-    } else {
-      replaceUrl(destinationURL)
     }
+
+    externalRedirect(destinationURL)
   }
 
   async navigateToAuthStep() {
@@ -163,7 +157,12 @@ class Authentication extends React.Component {
     const redirected = redirectToAuthIfNeeded({
       authUser,
       user,
-      urlParams: { app: urlParams.app, next: urlParams.next },
+      urlParams: {
+        app: urlParams.app,
+        next: urlParams.next,
+        reauth: urlParams.reauth,
+        accountDeleted: urlParams.accountDeleted,
+      },
     })
 
     // When anonymous users choose to sign in, do not go back to the
@@ -216,7 +215,7 @@ class Authentication extends React.Component {
             // "continue URL" after email verification.
             continueURL: constructUrl(
               enterUsernameURL,
-              { app: app, next: this.getNextURLAfterSignIn() },
+              { app: app, next: this.getNextURLIndex() },
               { absolute: true }
             ),
           })
@@ -358,10 +357,32 @@ class Authentication extends React.Component {
               style={{
                 flex: 1,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 padding: 20,
               }}
             >
+              {urlParams.reauth ? (
+                <Typography
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                  variant="h6"
+                >
+                  <span>First, please login again.</span>
+                </Typography>
+              ) : null}
+              {urlParams.accountDeleted ? (
+                <Typography
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                  variant="h6"
+                >
+                  <span>Your account has been deleted.</span>
+                </Typography>
+              ) : null}
               <Switch>
                 <Route
                   exact

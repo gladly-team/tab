@@ -60,6 +60,15 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
+      invitedUsersTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60
       widgetsTable:
         read:
           minimum: 1
@@ -197,6 +206,15 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
+      invitedUsersTable:
+        read:
+          minimum: 1
+          maximum: 100
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60          
       widgetsTable:
         read:
           minimum: 10
@@ -312,6 +330,7 @@ custom:
     - table: usersTable
       index:
         - UsersByUsername
+        - UsersByEmail
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.maximum}
@@ -338,6 +357,18 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userImpactTable.write.usage}
+    - table: invitedUsersTable
+      index:
+          - InvitesByInviter
+          - InvitesByInvitedEmail
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.invitedUsersTable.write.usage}
     - table: widgetsTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
@@ -470,6 +501,8 @@ resources:
             AttributeType: S
           - AttributeName: username
             AttributeType: S
+          - AttributeName: email
+            AttributeType: S
         GlobalSecondaryIndexes:
           - IndexName: UsersByUsername
             KeySchema:
@@ -477,6 +510,15 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: UsersByEmail
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
@@ -516,6 +558,51 @@ resources:
             AttributeType: S
           - AttributeName: charityId
             AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    invitedUsersTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: InvitedUsers-${self:provider.stage}
+        KeySchema:
+          - AttributeName: inviterId
+            KeyType: HASH
+          - AttributeName: invitedEmail
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: inviterId
+            AttributeType: S
+          - AttributeName: invitedEmail
+            AttributeType: S
+          - AttributeName: created
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: InvitesByInviter
+            KeySchema:
+              - AttributeName: inviterId
+                KeyType: HASH
+              - AttributeName: created
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: InvitesByInvitedEmail
+            KeySchema:
+              - AttributeName: invitedEmail
+                KeyType: HASH
+              - AttributeName: created
+                KeyType: RANGE
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

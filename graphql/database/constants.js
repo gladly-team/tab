@@ -2,6 +2,7 @@
 export const CHARITY = 'Charity'
 export const USER = 'User'
 export const USER_IMPACT = 'UserImpact'
+export const INVITED_USERS = 'InvitedUsers'
 export const WIDGET = 'Widget'
 export const BASE_WIDGET = 'BaseWidget'
 export const USER_WIDGET = 'UserWidget'

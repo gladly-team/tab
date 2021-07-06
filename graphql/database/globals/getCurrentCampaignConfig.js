@@ -1,16 +1,16 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## COVID-19 Relief: CARE India'
+const campaignTitle = '## Charity Spotlight: Trans Lifeline'
 const campaignDescription = `
-#### As COVID-19 continues to spread throughout India, communities are desperate for frontline workers and PPE. Please join us in supporting [CARE India](https://www.careindia.org/) to help this community during an incredibly difficult time.
-#### CARE India has supplied frontline workers with more than 39,000 PPE kits, along with masks and other supplies so far. They will continue to supply these necessary materials as well as set up temporary COVID-19 hospitals and Care Centres.
-#### Already donated all your hearts? Invite your friends to make an impact as well:
+#### Happy Pride! Join us in celebrating LGBTQIA+ Pride Month by supporting [Trans Lifeline](https://translifeline.org/), an organization committed to "offering direct emotional and financial support to trans people in crisis."
+#### So far they have answered over 100,000 calls and dispersed over $1,000,000 to help create a future where trans people have the care everyone needs and deserves.
+#### Already donated all your hearts? Invite your friends to make an impact by supporting this campaign!
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## COVID-19 Relief: CARE India'
+const campaignEndTitle = '## Thank you for your support!'
 const campaignEndDescription = `
-#### With your help, we raised thousands of dollars to provide PPE and access to frontline workers to those affected by COVID-19 in India. We thank you for helping support [CARE India](https://www.careindia.org/) and for continuing to make a positive impact.
+#### Thank you for supporting [Trans Lifeline](https://translifeline.org/), an incredible trans-led organization! The funds raised not only will impact their peer led hotline but also help with the distribution of microgrants.
 `
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
 
@@ -19,8 +19,8 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'CAREIndiaMay2021',
-  charityId: 'b95be5b4-2812-4529-bb13-9c9d981bfe2c',
+  campaignId: 'TransLifelineJune2021',
+  charityId: 'fe395423-6ceb-493c-a1df-c88f98a53894',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -43,7 +43,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 8e6,
+    targetNumber: 5e6,
     // transformNumberSourceValue: num => {
     //   return 9e6
     // },
@@ -95,32 +95,32 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     url: 'https://tab.gladly.io',
     FacebookShareButtonProps: {
       quote:
-        'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
     },
     // RedditShareButtonProps: {
     //   title:
     //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
     // },
     TumblrShareButtonProps: {
-      title: 'Browser tabs transformed into PPE & temporary hospitals in India',
+      title: 'Support Trans Lifeline by opening browser tabs',
       caption:
-        'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
     },
     TwitterShareButtonProps: {
       title:
-        'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. Tthese resources are needed more than ever, & I was able to make a difference by just opening browser tabs! @TabForACause',
+        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
       related: ['@TabForACause'],
     },
   },
   theme: {
     color: {
-      main: '#0d4c6b',
+      main: '#887fff',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-05-04T08:00:00.000Z',
-    end: '2021-05-11T16:00:00.000Z',
+    start: '2021-06-24T16:00:00.000Z',
+    end: '2021-06-30T20:00:00.000Z',
   },
 })
 

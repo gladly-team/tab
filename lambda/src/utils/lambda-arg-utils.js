@@ -50,6 +50,7 @@ export const getMockCloudFrontEventObject = () => ({
               sslProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2'],
             },
           },
+          querystring: '',
         },
       },
     },

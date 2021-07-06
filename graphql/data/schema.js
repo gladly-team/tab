@@ -28,6 +28,7 @@ import {
   BACKGROUND_IMAGE,
   USER_IMPACT,
   USER_RECRUITS,
+  INVITED_USERS,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -50,6 +51,7 @@ import setEmail from '../database/users/setEmail'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import updateImpact from '../database/userImpact/updateImpact'
+import createInvitedUsers from '../database/invitedUsers/createInvitedUsers'
 import logSearch from '../database/users/logSearch'
 import checkSearchRateLimit from '../database/users/checkSearchRateLimit'
 import logRevenue from '../database/userRevenue/logRevenue'
@@ -74,7 +76,7 @@ import getCharities from '../database/charities/getCharities'
 import UserImpactModel from '../database/userImpact/UserImpactModel'
 import donateVc from '../database/donations/donateVc'
 import getCharityVcReceived from '../database/donations/getCharityVcReceived'
-
+import InvitedUsersModel from '../database/invitedUsers/InvitedUsersModel'
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 
@@ -129,6 +131,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === USER_IMPACT) {
       return UserImpactModel.get(context.user, id)
     }
+    if (type === INVITED_USERS) {
+      return InvitedUsersModel.get(context.user, id)
+    }
     if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
@@ -153,6 +158,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (obj instanceof UserImpactModel) {
       return userImpactType
+    }
+    if (obj instanceof InvitedUsersModel) {
+      return invitedUsersType
     }
     if (obj instanceof BackgroundImageModel) {
       // eslint-disable-next-line no-use-before-define
@@ -734,6 +742,22 @@ const userImpactType = new GraphQLObjectType({
     },
   }),
 })
+const invitedUsersType = new GraphQLObjectType({
+  name: INVITED_USERS,
+  description: `a record of a user email inviting someone`,
+  fields: () => ({
+    id: globalIdField(
+      INVITED_USERS,
+      invitedUsers => `${invitedUsers.inviterId}::${invitedUsers.invitedEmail}`
+    ),
+    inviterId: { type: new GraphQLNonNull(GraphQLString) },
+    invitedEmail: { type: new GraphQLNonNull(GraphQLString) },
+    invitedId: {
+      type: GraphQLString,
+      description: 'invited users id once user has successfully signed up',
+    },
+  }),
+})
 const campaignContentType = new GraphQLObjectType({
   name: 'CampaignContent',
   description: 'Text content for campaigns',
@@ -1195,6 +1219,50 @@ const updateImpactMutation = mutationWithClientMutationId({
       input
     )
     return userImpact
+  },
+})
+/**
+ * conditionally create invited user, send automated email
+ */
+const createInvitedUsersMutation = mutationWithClientMutationId({
+  name: 'CreateInvitedUsers',
+  inputFields: {
+    inviterId: { type: new GraphQLNonNull(GraphQLString) },
+    invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    inviterName: { type: GraphQLString },
+    inviterMessage: { type: GraphQLString },
+  },
+  outputFields: {
+    successfulEmailAddresses: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'successfulEmailAddresses',
+          fields: () => ({ email: { type: GraphQLString } }),
+        })
+      ),
+    },
+    failedEmailAddresses: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'failedEmailAddresses',
+          fields: () => ({
+            email: { type: GraphQLString },
+            error: { type: GraphQLString },
+          }),
+        })
+      ),
+    },
+  },
+  mutateAndGetPayload: (input, context) => {
+    const { id } = fromGlobalId(input.inviterId)
+    const invitedUser = createInvitedUsers(
+      context.user,
+      id,
+      input.invitedEmails,
+      input.inviterName,
+      input.inviterMessage
+    )
+    return invitedUser
   },
 })
 /**
@@ -1897,6 +1965,7 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     logTab: logTabMutation,
     updateImpact: updateImpactMutation,
+    createInvitedUsers: createInvitedUsersMutation,
     logSearch: logSearchMutation,
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,

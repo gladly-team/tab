@@ -17,8 +17,15 @@ import {
   STORAGE_EXPERIMENT_ANON_USER,
   STORAGE_NEW_USER_IS_TAB_V4_BETA,
 } from 'js/constants'
-import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
+import {
+  absoluteUrl,
+  loginURL,
+  enterUsernameURL,
+  constructUrl,
+} from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
+import DeleteUserMutation from 'js/mutations/DeleteUserMutation'
+import environment from 'js/relay-env'
 
 // Only for development.
 const shouldMockAuthentication =
@@ -329,4 +336,44 @@ export const reloadUser = async () => {
     return
   }
   await user.reload()
+}
+
+export const updateUserEmail = async newEmail => {
+  // After verifying a new email, go to the login page with a
+  // subsequent redirect to the account page + email change confirmation.
+  const continueUrl = constructUrl(loginURL, { next: 3 }, { absolute: true })
+  const user = firebase.auth().currentUser
+  return user.verifyBeforeUpdateEmail(newEmail, { url: continueUrl })
+}
+
+export const deleteUser = async () => {
+  return new Promise((resolve, reject) => {
+    getCurrentUser()
+      .then(user => {
+        DeleteUserMutation(
+          environment,
+          user.id,
+          () => {
+            firebase
+              .auth()
+              .currentUser.delete()
+              .then(() => {
+                clearAuthLocalStorageItems()
+                resolve(true)
+              })
+              .catch(error => {
+                reject(error)
+              })
+          },
+          response => {
+            console.error('Error deleting user:')
+            logger.error(response)
+          }
+        )
+      })
+      .catch(e => {
+        logger.error(e)
+        reject(e)
+      })
+  })
 }
