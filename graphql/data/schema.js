@@ -1107,6 +1107,157 @@ const appType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+//corresponds to UserMission table
+const UserMissionStats = new GraphQLObjectType({
+  name: 'UserMissionStats',
+  description: "an individual's stats for a mission",
+  fields: () => ({
+    missionId: {
+      type: GraphQLString,
+      description: 'Mission ID',
+    },
+    userId: {
+      type: GraphQLString,
+      description: "Users's userId",
+    },
+    username: {
+      type: GraphQLString,
+      description: "Users's username",
+    },
+    longestTabStreak: {
+      type: GraphQLInt,
+      description: 'the longest tab streak in days so far',
+    },
+    currentTabStreak: {
+      type: GraphQLInt,
+      description: 'the current tab streak in days so far',
+    },
+    tabCount: {
+      type: GraphQLInt,
+      description: "the user's' number of tabs towards mission",
+    },
+    missionMaxTabsDay: {
+      type: GraphQLInt,
+      description: 'the most tabs in a single day',
+    },
+    created: {
+      type: GraphQLString,
+      description: 'the timestamp from createSquadMutation',
+    },
+    acknowledgedMissionComplete: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission complete',
+    },
+    acknowledgedMissionStarted: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission started',
+    },
+  }),
+})
+
+const EndOfMissionAwards = new GraphQLObjectType({
+  name: 'EndOfMissionAwards',
+  description: 'persistant awards calculated at end of mission',
+  fields: () => ({
+    missionId: {
+      type: GraphQLString,
+      description: 'Mission ID',
+    },
+    mostConsistent: {
+      type: GraphQLString,
+      description: "Users's username who had the longest tab streak in days",
+    },
+    mostTabsInDay: {
+      type: GraphQLString,
+      description: "Users's username who had the most tabs in a day",
+    },
+    largestContributor: {
+      type: GraphQLInt,
+      description: "Users's username who had the most tabs overall",
+    },
+  }),
+})
+const getSquadMissionStats = () => {}
+const getCurrentUserMission = () => {}
+const getPastMissions = () => {}
+//mostly corresponds to Mission table, rolls up stats
+const MissionType = new GraphQLObjectType({
+  name: 'Mission',
+  description: 'the shape of a single mission',
+  fields: () => ({
+    missionId: {
+      type: GraphQLString,
+      description: 'Mission ID',
+    },
+    squadName: {
+      type: GraphQLString,
+      description: 'the name of the squad',
+    },
+    created: {
+      type: GraphQLString,
+      description: 'the timestamp from createSquadMutation',
+    },
+    started: {
+      type: GraphQLString,
+      description: 'the timestamp from first user accepting squad invite',
+    },
+    completed: {
+      type: GraphQLString,
+      description: 'the timestamp from when the mission completes',
+    },
+    tabGoal: {
+      type: GraphQLInt,
+      description: 'the number of tabs to complete mission',
+    },
+    missionType: {
+      type: GraphQLString,
+      description: 'the type of mission',
+    },
+    acceptedSquadMembers: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      description: 'user ids of accepted squad members',
+    },
+    pendingSquadMembersExisting: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      description: 'user ids of pending existing users',
+    },
+    pendingSquadMembersEmailInvite: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      description: 'email addresses of pending invited users',
+    },
+    SquadMemberMissionStats: {
+      type: new GraphQLList(UserMissionStats),
+      description: "each user's current stats",
+      resolve: (user, args) => getSquadMissionStats(user, args),
+    },
+    endOfMissionAwards: {
+      type: EndOfMissionAwards,
+      description:
+        'the end of mission awards calculated when mission completes',
+    },
+  }),
+})
+const MissionsType = new GraphQLObjectType({
+  name: 'Missions',
+  description: 'current and previous missions',
+  fields: () => ({
+    userId: {
+      type: GraphQLString,
+      description: "Users's userId",
+    },
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+      resolve: user => getCurrentUserMission(user),
+    },
+    pastMissions: {
+      type: MissionType,
+      description: 'gets all the past missions for a user',
+      resolve: user => getPastMissions(user),
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const customErrorType = new GraphQLObjectType({
   name: 'CustomError',
   description: 'For expected errors, such as during form validation',
@@ -1951,6 +2102,13 @@ const queryType = new GraphQLObjectType({
           userId,
           charityId,
         })).item
+      },
+    },
+    missions: {
+      type: MissionsType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        includePastMissions: { type: GraphQLBoolean },
       },
     },
   }),
