@@ -1225,10 +1225,15 @@ const MissionType = new GraphQLObjectType({
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: 'email addresses of pending invited users',
     },
+    tabCount: {
+      type: new GraphQLList(UserMissionStats),
+      description: 'the current percentage of goal',
+      resolve: (mission, args) => getCurrentPercentComplete(user, args),
+    },
     SquadMemberMissionStats: {
       type: new GraphQLList(UserMissionStats),
       description: "each user's current stats",
-      resolve: (user, args) => getSquadMissionStats(user, args),
+      resolve: (mission, args) => getSquadMissionStats(user, args),
     },
     endOfMissionAwards: {
       type: EndOfMissionAwards,
