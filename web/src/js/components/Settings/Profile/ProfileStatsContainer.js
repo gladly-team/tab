@@ -16,6 +16,7 @@ export default createFragmentContainer(ProfileStats, {
         numTabs
       }
       numUsersRecruited
+      searches
       tabs
       vcDonatedAllTime
     }

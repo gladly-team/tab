@@ -8,9 +8,12 @@ import MockDate from 'mockdate'
 import Stat from 'js/components/Settings/Profile/StatComponent'
 import Typography from '@material-ui/core/Typography'
 import { goTo, donateURL, inviteFriendsURL } from 'js/navigation/navigation'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import { YAHOO_USER_ID } from 'js/constants'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[HEART-ICON] ')
 jest.mock('js/navigation/navigation')
+jest.mock('js/utils/localstorage-mgr')
 
 const mockNow = '2019-05-19T13:59:58.000Z'
 
@@ -169,6 +172,83 @@ describe('Profile stats component', () => {
         .render()
         .text()
     ).toEqual('23[HEART-ICON] until next level')
+  })
+
+  it('shows "Hearts from searches" if the user is the Yahoo demo user', () => {
+    expect.assertions(1)
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.id = YAHOO_USER_ID
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper
+      .find(Stat)
+      .findWhere(elem => elem.prop('statText') === 'Hearts from searches')
+    expect(statElem.exists()).toBe(true)
+  })
+
+  it('does not show "Hearts from searches" if the user is not the Yahoo demo user', () => {
+    expect.assertions(1)
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.id = 'some-id'
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper
+      .find(Stat)
+      .findWhere(elem => elem.prop('statText') === 'Hearts from searches')
+    expect(statElem.exists()).toBe(false)
+  })
+
+  it('shows zero "Hearts from searches" if the Yahoo demo user did not opt in to earning hearts', () => {
+    expect.assertions(1)
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.id = YAHOO_USER_ID
+    mockProps.user.searches = 17
+    localStorageMgr.getItem.mockReturnValue('false')
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper
+      .find(Stat)
+      .findWhere(elem => elem.prop('statText') === 'Hearts from searches')
+    expect(statElem.prop('stat')).toEqual(0)
+  })
+
+  it('shows nonzero "Hearts from searches" if the Yahoo demo user did not opt in to earning hearts', () => {
+    expect.assertions(1)
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.id = YAHOO_USER_ID
+    mockProps.user.searches = 17
+    localStorageMgr.getItem.mockReturnValue('true')
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper
+      .find(Stat)
+      .findWhere(elem => elem.prop('statText') === 'Hearts from searches')
+    expect(statElem.prop('stat')).toEqual(17)
+  })
+
+  it('un-pluralizes "Hearts from searches" if the Yahoo demo user has exactly one search', () => {
+    expect.assertions(2)
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.id = YAHOO_USER_ID
+    mockProps.user.searches = 1
+    localStorageMgr.getItem.mockReturnValue('true')
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper
+      .find(Stat)
+      .findWhere(elem => elem.prop('statText') === 'Heart from searches')
+    expect(statElem.exists()).toBe(true)
+    expect(
+      wrapper
+        .find(Stat)
+        .findWhere(elem => elem.prop('statText') === 'Hearts from searches')
+        .exists()
+    ).toBe(false)
   })
 
   it('shows the correct "friends recruited" stat', () => {
