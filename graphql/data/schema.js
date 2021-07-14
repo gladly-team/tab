@@ -1139,7 +1139,7 @@ const SquadMemberInfo = new GraphQLObjectType({
     },
     status: {
       type: new GraphQLNonNull(
-        GraphQLEnumType({
+        new GraphQLEnumType({
           name: 'squadAcceptedStatus',
           description:
             'whether a usuer has accepted rejected or is pending invitation',
