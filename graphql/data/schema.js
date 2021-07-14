@@ -113,6 +113,7 @@ class App {
 // https://stackoverflow.com/a/33411416
 // Note that it's NOT required for a type to use the Node interface:
 // https://github.com/facebook/relay/issues/1061#issuecomment-227857031
+const getMission = () => {}
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId, context) => {
     const { type, id } = fromGlobalId(globalId)
@@ -124,6 +125,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (type === WIDGET) {
       return getWidget(context.user, id)
+    }
+    if (type === MISSION) {
+      return getMission(context.user, id)
     }
     if (type === CHARITY) {
       return CharityModel.get(context.user, id)
@@ -1103,6 +1107,16 @@ const appType = new GraphQLObjectType({
       description: 'Campaigns (or "charity spotlights") shown to users.',
       resolve: (_, args, context) => getCampaign(context.user),
     },
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+      resolve: user => getCurrentUserMission(user),
+    },
+    pastMissions: {
+      type: MissionType,
+      description: 'gets all the past missions for a user',
+      resolve: user => getPastMissions(user),
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1112,14 +1126,6 @@ const UserMissionStats = new GraphQLObjectType({
   name: 'UserMissionStats',
   description: "an individual's stats for a mission",
   fields: () => ({
-    missionId: {
-      type: GraphQLString,
-      description: 'Mission ID',
-    },
-    userId: {
-      type: GraphQLString,
-      description: "Users's userId",
-    },
     username: {
       type: GraphQLString,
       description: "Users's username",
@@ -1132,25 +1138,15 @@ const UserMissionStats = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'the current tab streak in days so far',
     },
-    tabCount: {
-      type: GraphQLInt,
-      description: "the user's' number of tabs towards mission",
-    },
+
     missionMaxTabsDay: {
       type: GraphQLInt,
       description: 'the most tabs in a single day',
     },
-    created: {
-      type: GraphQLString,
-      description: 'the timestamp from createSquadMutation',
-    },
-    acknowledgedMissionComplete: {
-      type: GraphQLBoolean,
-      description: 'if a user has acknowledged mission complete',
-    },
-    acknowledgedMissionStarted: {
-      type: GraphQLBoolean,
-      description: 'if a user has acknowledged mission started',
+
+    tabs: {
+      type: GraphQLInt,
+      description: 'users tab contribution',
     },
   }),
 })
@@ -1189,46 +1185,42 @@ const MissionType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Mission ID',
     },
+    status: {
+      type: GraphQLString,
+      description:
+        'the current status of the current mission - pending, started, completed',
+      resolve: () => {}, //marking to calculate
+    },
     squadName: {
       type: GraphQLString,
       description: 'the name of the squad',
     },
-    created: {
-      type: GraphQLString,
-      description: 'the timestamp from createSquadMutation',
-    },
-    started: {
-      type: GraphQLString,
-      description: 'the timestamp from first user accepting squad invite',
-    },
-    completed: {
-      type: GraphQLString,
-      description: 'the timestamp from when the mission completes',
-    },
+    //sending these both down and calculating on the front end so we can see percent move
     tabGoal: {
       type: GraphQLInt,
       description: 'the number of tabs to complete mission',
     },
-    missionType: {
-      type: GraphQLString,
-      description: 'the type of mission',
+    tabCount: {
+      type: GraphQLInt,
+      description: "the user's' number of tabs towards mission",
+    },
+    acknowledgedMissionComplete: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission complete',
+    },
+    acknowledgedMissionStarted: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission started',
     },
     acceptedSquadMembers: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: 'user ids of accepted squad members',
+      description: 'the usernames of squad members who accepted',
+      resolve: () => {},
     },
-    pendingSquadMembersExisting: {
+    pendingSquadMembers: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: 'user ids of pending existing users',
-    },
-    pendingSquadMembersEmailInvite: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: 'email addresses of pending invited users',
-    },
-    tabCount: {
-      type: new GraphQLList(UserMissionStats),
-      description: 'the current percentage of goal',
-      resolve: (mission, args) => getCurrentPercentComplete(user, args),
+      description: 'usernames and emails of pending existing users',
+      resolve: () => {},
     },
     SquadMemberMissionStats: {
       type: new GraphQLList(UserMissionStats),
@@ -1241,27 +1233,6 @@ const MissionType = new GraphQLObjectType({
         'the end of mission awards calculated when mission completes',
     },
   }),
-})
-const MissionsType = new GraphQLObjectType({
-  name: 'Missions',
-  description: 'current and previous missions',
-  fields: () => ({
-    userId: {
-      type: GraphQLString,
-      description: "Users's userId",
-    },
-    currentMission: {
-      type: MissionType,
-      description: 'the current active mission for a user',
-      resolve: user => getCurrentUserMission(user),
-    },
-    pastMissions: {
-      type: MissionType,
-      description: 'gets all the past missions for a user',
-      resolve: user => getPastMissions(user),
-    },
-  }),
-  interfaces: [nodeInterface],
 })
 const customErrorType = new GraphQLObjectType({
   name: 'CustomError',
