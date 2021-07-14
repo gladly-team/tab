@@ -29,6 +29,7 @@ import {
   USER_IMPACT,
   USER_RECRUITS,
   INVITED_USERS,
+  MISSION,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -113,6 +114,7 @@ class App {
 // https://stackoverflow.com/a/33411416
 // Note that it's NOT required for a type to use the Node interface:
 // https://github.com/facebook/relay/issues/1061#issuecomment-227857031
+const getMission = () => {}
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId, context) => {
     const { type, id } = fromGlobalId(globalId)
@@ -124,6 +126,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (type === WIDGET) {
       return getWidget(context.user, id)
+    }
+    if (type === MISSION) {
+      return getMission(context.user, id)
     }
     if (type === CHARITY) {
       return CharityModel.get(context.user, id)
@@ -1103,10 +1108,136 @@ const appType = new GraphQLObjectType({
       description: 'Campaigns (or "charity spotlights") shown to users.',
       resolve: (_, args, context) => getCampaign(context.user),
     },
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+      resolve: user => getCurrentUserMission(user),
+    },
+    pastMissions: {
+      type: MissionsConnection,
+      description: 'gets all the past missions for a user',
+      args: connectionArgs,
+      resolve: (_, args, context) =>
+        connectionFromPromisedArray(getPastMissions(context.user), args),
+    },
   }),
   interfaces: [nodeInterface],
 })
 
+// corresponds to UserMission table
+const SquadMemberInfo = new GraphQLObjectType({
+  name: 'SquadMemberInfo',
+  description: "an individual's stats for a mission",
+  fields: () => ({
+    username: {
+      type: GraphQLString,
+      description: "Users's username if they have joined TFAC",
+    },
+    invitedEmail: {
+      type: GraphQLString,
+      description: "Users's invited email if they have not joined TFAC",
+    },
+    status: {
+      type: new GraphQLNonNull(
+        GraphQLEnumType({
+          name: 'squadAcceptedStatus',
+          description:
+            'whether a usuer has accepted rejected or is pending invitation',
+          values: {
+            pending: { value: 'pending' },
+            accepted: { value: 'accepted' },
+            rejected: { value: 'rejected' },
+          },
+        })
+      ),
+    },
+    longestTabStreak: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'the longest tab streak in days so far',
+    },
+    currentTabStreak: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'the current tab streak in days so far',
+    },
+
+    missionMaxTabsDay: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'the most tabs in a single day',
+    },
+
+    tabs: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'users tab contribution',
+    },
+  }),
+})
+
+const EndOfMissionAward = new GraphQLObjectType({
+  name: 'EndOfMissionAward',
+  description: 'persistant awards calculated at end of mission',
+  fields: () => ({
+    user: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'users ID',
+    },
+    awardType: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the string name of the particular award',
+    },
+    unit: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'the unit for the award IE tab count',
+    },
+  }),
+})
+const getCurrentUserMission = () => {}
+const getPastMissions = () => {}
+// mostly corresponds to Mission table, rolls up stats
+const MissionType = new GraphQLObjectType({
+  name: 'Mission',
+  description: 'the shape of a single mission',
+  fields: () => ({
+    missionId: {
+      type: GraphQLString,
+      description: 'Mission ID',
+    },
+    status: {
+      type: GraphQLString,
+      description:
+        'the current status of the current mission - pending, started, completed',
+    },
+    squadName: {
+      type: GraphQLString,
+      description: 'the name of the squad',
+    },
+    // sending these both down and calculating on the front end so we can see percent move
+    tabGoal: {
+      type: GraphQLInt,
+      description: 'the number of tabs to complete mission',
+    },
+    tabCount: {
+      type: GraphQLInt,
+      description: "the sum of users' number of tabs towards mission",
+    },
+    acknowledgedMissionComplete: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission complete',
+    },
+    acknowledgedMissionStarted: {
+      type: GraphQLBoolean,
+      description: 'if a user has acknowledged mission started',
+    },
+    squadMembers: {
+      description: 'stats and state of each squad member',
+      type: new GraphQLList(SquadMemberInfo),
+    },
+    endOfMissionAwards: {
+      type: new GraphQLList(EndOfMissionAward),
+      description:
+        'the end of mission awards calculated when mission completes',
+    },
+  }),
+})
 const customErrorType = new GraphQLObjectType({
   name: 'CustomError',
   description: 'For expected errors, such as during form validation',
@@ -1139,6 +1270,10 @@ const { connectionType: charityConnection } = connectionDefinitions({
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
   nodeType: backgroundImageType,
+})
+const { connectionType: MissionsConnection } = connectionDefinitions({
+  name: MISSION,
+  nodeType: MissionType,
 })
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,

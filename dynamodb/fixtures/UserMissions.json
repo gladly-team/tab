@@ -1,0 +1,24 @@
+[
+  {
+    "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+    "missionId": "123456789",
+    "squadName": "TestSquad",
+    "tabs": 234,
+    "longestTabStreak": 4,
+    "currentTabStreak": 2,
+    "missionMaxTabsDay": 10,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": false
+  },
+  {
+    "userId": "abcdefghijklmno",
+    "missionId": "123456789",
+    "squadName": "TestSquad",
+    "tabs": 24,
+    "longestTabStreak": 4,
+    "currentTabStreak": 2,
+    "missionMaxTabsDay": 10,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": false
+  }
+]
