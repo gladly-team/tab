@@ -29,6 +29,7 @@ import {
   USER_IMPACT,
   USER_RECRUITS,
   INVITED_USERS,
+  MISSION,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -1121,7 +1122,7 @@ const appType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
-//corresponds to UserMission table
+// corresponds to UserMission table
 const UserMissionStats = new GraphQLObjectType({
   name: 'UserMissionStats',
   description: "an individual's stats for a mission",
@@ -1151,32 +1152,28 @@ const UserMissionStats = new GraphQLObjectType({
   }),
 })
 
-const EndOfMissionAwards = new GraphQLObjectType({
-  name: 'EndOfMissionAwards',
+const EndOfMissionAward = new GraphQLObjectType({
+  name: 'EndOfMissionAward',
   description: 'persistant awards calculated at end of mission',
   fields: () => ({
-    missionId: {
+    user: {
       type: GraphQLString,
-      description: 'Mission ID',
+      description: 'users ID',
     },
-    mostConsistent: {
+    awardType: {
       type: GraphQLString,
-      description: "Users's username who had the longest tab streak in days",
+      description: 'the string name of the particular award',
     },
-    mostTabsInDay: {
-      type: GraphQLString,
-      description: "Users's username who had the most tabs in a day",
-    },
-    largestContributor: {
+    unit: {
       type: GraphQLInt,
-      description: "Users's username who had the most tabs overall",
+      description: 'the unit for the award IE tab count',
     },
   }),
 })
 const getSquadMissionStats = () => {}
 const getCurrentUserMission = () => {}
 const getPastMissions = () => {}
-//mostly corresponds to Mission table, rolls up stats
+// mostly corresponds to Mission table, rolls up stats
 const MissionType = new GraphQLObjectType({
   name: 'Mission',
   description: 'the shape of a single mission',
@@ -1189,13 +1186,13 @@ const MissionType = new GraphQLObjectType({
       type: GraphQLString,
       description:
         'the current status of the current mission - pending, started, completed',
-      resolve: () => {}, //marking to calculate
+      resolve: () => {}, // marking to calculate
     },
     squadName: {
       type: GraphQLString,
       description: 'the name of the squad',
     },
-    //sending these both down and calculating on the front end so we can see percent move
+    // sending these both down and calculating on the front end so we can see percent move
     tabGoal: {
       type: GraphQLInt,
       description: 'the number of tabs to complete mission',
@@ -1225,10 +1222,10 @@ const MissionType = new GraphQLObjectType({
     SquadMemberMissionStats: {
       type: new GraphQLList(UserMissionStats),
       description: "each user's current stats",
-      resolve: (mission, args) => getSquadMissionStats(user, args),
+      resolve: (user, args) => getSquadMissionStats(user, args),
     },
     endOfMissionAwards: {
-      type: EndOfMissionAwards,
+      type: new GraphQLList(EndOfMissionAward),
       description:
         'the end of mission awards calculated when mission completes',
     },
@@ -2078,13 +2075,6 @@ const queryType = new GraphQLObjectType({
           userId,
           charityId,
         })).item
-      },
-    },
-    missions: {
-      type: MissionsType,
-      args: {
-        userId: { type: new GraphQLNonNull(GraphQLString) },
-        includePastMissions: { type: GraphQLBoolean },
       },
     },
   }),
