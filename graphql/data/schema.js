@@ -1114,39 +1114,59 @@ const appType = new GraphQLObjectType({
       resolve: user => getCurrentUserMission(user),
     },
     pastMissions: {
-      type: MissionType,
+      type: MissionsConnection,
       description: 'gets all the past missions for a user',
-      resolve: user => getPastMissions(user),
+      args: connectionArgs,
+      resolve: (_, args, context) =>
+        connectionFromPromisedArray(getPastMissions(context.user), args),
     },
   }),
   interfaces: [nodeInterface],
 })
 
 // corresponds to UserMission table
-const UserMissionStats = new GraphQLObjectType({
-  name: 'UserMissionStats',
+const SquadMemberInfo = new GraphQLObjectType({
+  name: 'SquadMemberInfo',
   description: "an individual's stats for a mission",
   fields: () => ({
     username: {
       type: GraphQLString,
-      description: "Users's username",
+      description: "Users's username if they have joined TFAC",
+    },
+    invitedEmail: {
+      type: GraphQLString,
+      description: "Users's invited email if they have not joined TFAC",
+    },
+    status: {
+      type: new GraphQLNonNull(
+        GraphQLEnumType({
+          name: 'squadAcceptedStatus',
+          description:
+            'whether a usuer has accepted rejected or is pending invitation',
+          values: {
+            pending: { value: 'pending' },
+            accepted: { value: 'accepted' },
+            rejected: { value: 'rejected' },
+          },
+        })
+      ),
     },
     longestTabStreak: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the longest tab streak in days so far',
     },
     currentTabStreak: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tab streak in days so far',
     },
 
     missionMaxTabsDay: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the most tabs in a single day',
     },
 
     tabs: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'users tab contribution',
     },
   }),
@@ -1157,20 +1177,19 @@ const EndOfMissionAward = new GraphQLObjectType({
   description: 'persistant awards calculated at end of mission',
   fields: () => ({
     user: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'users ID',
     },
     awardType: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'the string name of the particular award',
     },
     unit: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the unit for the award IE tab count',
     },
   }),
 })
-const getSquadMissionStats = () => {}
 const getCurrentUserMission = () => {}
 const getPastMissions = () => {}
 // mostly corresponds to Mission table, rolls up stats
@@ -1186,7 +1205,6 @@ const MissionType = new GraphQLObjectType({
       type: GraphQLString,
       description:
         'the current status of the current mission - pending, started, completed',
-      resolve: () => {}, // marking to calculate
     },
     squadName: {
       type: GraphQLString,
@@ -1199,7 +1217,7 @@ const MissionType = new GraphQLObjectType({
     },
     tabCount: {
       type: GraphQLInt,
-      description: "the user's' number of tabs towards mission",
+      description: "the sum of users' number of tabs towards mission",
     },
     acknowledgedMissionComplete: {
       type: GraphQLBoolean,
@@ -1209,20 +1227,9 @@ const MissionType = new GraphQLObjectType({
       type: GraphQLBoolean,
       description: 'if a user has acknowledged mission started',
     },
-    acceptedSquadMembers: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: 'the usernames of squad members who accepted',
-      resolve: () => {},
-    },
-    pendingSquadMembers: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: 'usernames and emails of pending existing users',
-      resolve: () => {},
-    },
-    SquadMemberMissionStats: {
-      type: new GraphQLList(UserMissionStats),
-      description: "each user's current stats",
-      resolve: (user, args) => getSquadMissionStats(user, args),
+    squadMembers: {
+      description: 'stats and state of each squad member',
+      type: new GraphQLList(SquadMemberInfo),
     },
     endOfMissionAwards: {
       type: new GraphQLList(EndOfMissionAward),
@@ -1263,6 +1270,10 @@ const { connectionType: charityConnection } = connectionDefinitions({
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
   nodeType: backgroundImageType,
+})
+const { connectionType: MissionsConnection } = connectionDefinitions({
+  name: MISSION,
+  nodeType: MissionType,
 })
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,

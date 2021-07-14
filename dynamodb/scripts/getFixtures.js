@@ -20,6 +20,14 @@ const allFixtures = [
     jsonFile: 'InvitedUsers.json',
   },
   {
+    tableName: 'Missions',
+    jsonFile: 'Missions.json',
+  },
+  {
+    tableName: 'UserMissions',
+    jsonFile: 'UserMissions.json',
+  },
+  {
     tableName: 'UserLevels',
     jsonFile: 'UserLevels.json',
   },

@@ -129,6 +129,53 @@
     }
   },
   {
+    "TableName": "Missions",
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
+    "TableName": "UserMissions",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "missionId", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "missionId", "AttributeType": "S" },
+      { "AttributeName": "created", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "userMissionsByDate",
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "created",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
     "TableName": "Widgets",
     "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
     "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],

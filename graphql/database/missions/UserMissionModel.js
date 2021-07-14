@@ -7,7 +7,7 @@ import { permissionAuthorizers } from '../../utils/authorization-helpers'
 /*
  * @extends BaseModel
  */
-class UserMissions extends BaseModel {
+class UserMission extends BaseModel {
   static get name() {
     return USER_MISSION
   }
@@ -17,7 +17,7 @@ class UserMissions extends BaseModel {
   }
 
   static get rangeKey() {
-    return 'MissionId'
+    return 'missionId'
   }
 
   static get indexes() {
@@ -25,7 +25,7 @@ class UserMissions extends BaseModel {
       {
         hashKey: 'userId',
         rangeKey: 'created',
-        name: 'MissionsByUser',
+        name: 'userMissionsByDate',
         type: 'global',
       },
     ]
@@ -36,6 +36,7 @@ class UserMissions extends BaseModel {
   }
 
   static get schema() {
+    const self = this
     return {
       userId: types
         .string()
@@ -47,29 +48,46 @@ class UserMissions extends BaseModel {
         .string()
         .required()
         .description(`the mission id for specific mission`),
+      tabs: types
+        .number()
+        .integer()
+        .default(self.fieldDefaults.tabs)
+        .description(`the number of tabs the user has contributed`),
       longestTabStreak: types
         .number()
         .integer()
+        .default(self.fieldDefaults.longestTabStreak)
         .description(`count of longest tab streak in current mission`),
       currentTabStreak: types
         .number()
         .integer()
+        .default(self.fieldDefaults.currentTabStreak)
         .description(`count of the current tab streak in current mission`),
       missionMaxTabsDay: types
         .number()
         .integer()
+        .default(self.fieldDefaults.missionMaxTabsDay)
         .description(`most tabs in a single day during mission`),
       acknowledgedMissionComplete: types
         .boolean()
+        .default(self.fieldDefaults.acknowledgedMissionComplete)
         .description('user has aknowledged that the mission has completed'),
       acknowledgedMissionStarted: types
         .boolean()
+        .default(self.fieldDefaults.acknowledgedMissionStarted)
         .description('user has aknowledged that the mission has started'),
     }
   }
 
   static get fieldDefaults() {
-    return {}
+    return {
+      tabs: 0,
+      longestTabStreak: 0,
+      currentTabStreak: 0,
+      missionMaxTabsDay: 0,
+      acknowledgedMissionStarted: false,
+      acknowledgedMissionComplete: false,
+    }
   }
 
   static get permissions() {
@@ -77,15 +95,16 @@ class UserMissions extends BaseModel {
       get: permissionAuthorizers.userIdMatchesHashKey,
       query: () => true,
       getAll: () => false,
-      update: permissionAuthorizers.userIdMatchesHashKey,
-      create: permissionAuthorizers.userIdMatchesHashKey,
       indexPermissions: {
-        InvitesByInviter: { get: permissionAuthorizers.userIdMatchesHashKey },
+        userMissionsByDate: {
+          get: permissionAuthorizers.userIdMatchesHashKey,
+          getAll: permissionAuthorizers.userIdMatchesHashKey,
+        },
       },
     }
   }
 }
 
-UserMissions.register()
+UserMission.register()
 
-export default UserMissions
+export default UserMission
