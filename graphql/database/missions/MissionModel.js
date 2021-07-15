@@ -52,29 +52,35 @@ class Mission extends BaseModel {
         .default(self.fieldDefaults.missionType)
         .description('the kind of mission ie cats mission'),
       acceptedSquadMembers: types
-        .array(types.string())
+        .array()
+        .items(types.string())
         .default(self.fieldDefaults.acceptedSquadMembers)
         .description('users ids who have accepted and signed up for cats'),
       pendingSquadMembersExisting: types
-        .array(types.string())
+        .array()
+        .items(types.string())
         .default(self.fieldDefaults.pendingSquadMembersExisting)
         .description('users ids who have pending invites'),
       pendingSquadMembersEmailInvite: types
-        .array(types.string())
+        .array()
+        .items(types.string())
         .default(self.fieldDefaults.pendingSquadMembersEmailInvite)
         .description('users who have been invited via email'),
       rejectedSquadMembers: types
-        .array(types.string())
+        .array()
+        .items(types.string())
         .default(self.fieldDefaults.rejectedSquadMembers)
         .description('users who declined to join the squad'),
       endOfMissionAwards: types
-        .array(
+        .array()
+        .items(
           types.object({
             user: types.string().description('the user id'),
             awardType: types
               .string()
               .description('the string name of the particular award'),
             unit: types
+              .number()
               .integer()
               .description('the unit for the award IE tab count'),
           })
