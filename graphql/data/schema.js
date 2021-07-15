@@ -555,7 +555,6 @@ const userType = new GraphQLObjectType({
       description: 'gets all the past missions for a user',
       args: connectionArgs,
       resolve: (user, args) => {
-        console.log(args, 'what my args')
         return connectionFromPromisedArray(getPastUserMissions(user), args)
       },
     },
