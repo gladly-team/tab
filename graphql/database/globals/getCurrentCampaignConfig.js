@@ -1,17 +1,20 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## Charity Spotlight: Trans Lifeline'
+const campaignTitle = '## July Spotlight: RAINN'
 const campaignDescription = `
-#### Happy Pride! Join us in celebrating LGBTQIA+ Pride Month by supporting [Trans Lifeline](https://translifeline.org/), an organization committed to "offering direct emotional and financial support to trans people in crisis."
-#### So far they have answered over 100,000 calls and dispersed over $1,000,000 to help create a future where trans people have the care everyone needs and deserves.
-#### Already donated all your hearts? Invite your friends to make an impact by supporting this campaign!
+#### *Content Warning: Sexual Violence*
+#### Join us in supporting [RAINN](https://www.rainn.org/) (Rape, Abuse & Incest National Network), an organization committed to helping “improve the lives of hundreds of thousands of people affected by sexual violence annually”.
+#### On average, RAINN supports 844 survivors each day through their victim services programs and “educates more than 130 million people per year on prevention and recovery.”
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thank you for your support!'
+const campaignEndTitle =
+  '## Thank you for supporting [RAINN](https://www.rainn.org/)!'
 const campaignEndDescription = `
-#### Thank you for supporting [Trans Lifeline](https://translifeline.org/), an incredible trans-led organization! The funds raised not only will impact their peer led hotline but also help with the distribution of microgrants.
+#### *Content Warning: Sexual Violence*
+#### With your help, we were able to support an incredible organization, supporting survivors of sexual assault. The funds raised not only will benefit their 24/7 national hotline but also help with local programming and lead to changes in legislation.
 `
+
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
 
 // const campaignEndDescriptionTwo =
@@ -19,8 +22,8 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'TransLifelineJune2021',
-  charityId: 'fe395423-6ceb-493c-a1df-c88f98a53894',
+  campaignId: 'RAINNJuly2021',
+  charityId: '0550618f-9ed6-477e-a1a4-21f607c7536f',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
@@ -31,7 +34,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: true,
+    whenGoalAchieved: false,
     whenTimeEnds: true,
   },
   goal: {
@@ -39,11 +42,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitPlural: 'hearts',
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
-    limitProgressToTargetMax: true,
+    limitProgressToTargetMax: false,
     numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 5e6,
+    targetNumber: 6e6,
     // transformNumberSourceValue: num => {
     //   return 9e6
     // },
@@ -95,7 +98,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     url: 'https://tab.gladly.io',
     FacebookShareButtonProps: {
       quote:
-        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
     },
     // RedditShareButtonProps: {
     //   title:
@@ -104,23 +107,23 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     TumblrShareButtonProps: {
       title: 'Support Trans Lifeline by opening browser tabs',
       caption:
-        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
     },
     TwitterShareButtonProps: {
       title:
-        'This #PrideMonth, support Trans Lifeline on @TabForACause! It\'s an amazing organization committed to "offering direct emotional and financial support to trans people in crisis."',
+        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
       related: ['@TabForACause'],
     },
   },
   theme: {
     color: {
-      main: '#887fff',
+      main: '#11497c',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-06-24T16:00:00.000Z',
-    end: '2021-06-30T20:00:00.000Z',
+    start: '2021-07-15T16:00:00.000Z',
+    end: '2021-07-20T20:00:00.000Z',
   },
 })
 
