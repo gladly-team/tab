@@ -20,12 +20,6 @@ type App implements Node {
 
   """Campaigns (or "charity spotlights") shown to users."""
   campaign: Campaign
-
-  """the current active mission for a user"""
-  currentMission: Mission
-
-  """gets all the past missions for a user"""
-  pastMissions(after: String, first: Int, before: String, last: Int): MissionConnection
 }
 
 """A background image"""
@@ -645,7 +639,7 @@ type Mission {
   """
   the current status of the current mission - pending, started, completed
   """
-  status: String
+  status: missionStatus!
 
   """the name of the squad"""
   squadName: String
@@ -685,6 +679,13 @@ type MissionEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""whether a usuer has accepted rejected or is pending invitation"""
+enum missionStatus {
+  pending
+  started
+  completed
 }
 
 type Mutation {
@@ -1043,6 +1044,12 @@ type User implements Node {
 
   """User's active widget id"""
   activeWidget: String
+
+  """the current active mission for a user"""
+  currentMission: Mission
+
+  """gets all the past missions for a user"""
+  pastMissions(after: String, first: Int, before: String, last: Int): MissionConnection
 
   """User's background option"""
   backgroundOption: String

@@ -80,7 +80,8 @@ import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 import InvitedUsersModel from '../database/invitedUsers/InvitedUsersModel'
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
-
+import getCurrentUserMission from '../database/missions/getCurrentUserMission'
+import getPastUserMissions from '../database/missions/getPastUserMissions'
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
   getTotalRecruitsCount,
@@ -543,6 +544,20 @@ const userType = new GraphQLObjectType({
     activeWidget: {
       type: GraphQLString,
       description: "User's active widget id",
+    },
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+      resolve: user => getCurrentUserMission(user),
+    },
+    pastMissions: {
+      type: MissionsConnection,
+      description: 'gets all the past missions for a user',
+      args: connectionArgs,
+      resolve: (user, args) => {
+        console.log(args, 'what my args')
+        return connectionFromPromisedArray(getPastUserMissions(user), args)
+      },
     },
     backgroundOption: {
       type: GraphQLString,
@@ -1108,18 +1123,6 @@ const appType = new GraphQLObjectType({
       description: 'Campaigns (or "charity spotlights") shown to users.',
       resolve: (_, args, context) => getCampaign(context.user),
     },
-    currentMission: {
-      type: MissionType,
-      description: 'the current active mission for a user',
-      resolve: user => getCurrentUserMission(user),
-    },
-    pastMissions: {
-      type: MissionsConnection,
-      description: 'gets all the past missions for a user',
-      args: connectionArgs,
-      resolve: (_, args, context) =>
-        connectionFromPromisedArray(getPastMissions(context.user), args),
-    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1190,8 +1193,7 @@ const EndOfMissionAward = new GraphQLObjectType({
     },
   }),
 })
-const getCurrentUserMission = () => {}
-const getPastMissions = () => {}
+
 // mostly corresponds to Mission table, rolls up stats
 const MissionType = new GraphQLObjectType({
   name: 'Mission',
@@ -1202,7 +1204,18 @@ const MissionType = new GraphQLObjectType({
       description: 'Mission ID',
     },
     status: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'missionStatus',
+          description:
+            'whether a usuer has accepted rejected or is pending invitation',
+          values: {
+            pending: { value: 'pending' },
+            started: { value: 'started' },
+            completed: { value: 'completed' },
+          },
+        })
+      ),
       description:
         'the current status of the current mission - pending, started, completed',
     },

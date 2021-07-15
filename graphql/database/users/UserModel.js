@@ -349,6 +349,24 @@ class User extends BaseModel {
       testReferralNotificationActionTime: types.string().isoDate()
         .description(`The time the user took an action for the "referral notification"
           split-test.`),
+      currentMissionId: types
+        .string()
+        .length(9)
+        .description('the current mission id'),
+      pendingMissionInvites: types
+        .array()
+        .items(
+          types.object({
+            missionId: types
+              .string()
+              .description('the mission id of squad invite'),
+            invitingUser: types.object({
+              userId: types.string().description('inviting user user id'),
+              name: types.string().description('the name entered in invite'),
+            }),
+          })
+        )
+        .default(self.fieldDefaults.pendingMissionInvites),
     }
   }
 
@@ -394,6 +412,7 @@ class User extends BaseModel {
       v4BetaEnabled: false,
       hasViewedIntroFlow: false,
       deleted: false,
+      pendingMissionInvites: [],
     }
   }
 

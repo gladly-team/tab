@@ -13,11 +13,11 @@ class UserMission extends BaseModel {
   }
 
   static get hashKey() {
-    return 'userId'
+    return 'missionId'
   }
 
   static get rangeKey() {
-    return 'missionId'
+    return 'userId'
   }
 
   static get indexes() {

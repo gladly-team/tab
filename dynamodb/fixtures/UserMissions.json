@@ -3,6 +3,7 @@
     "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
     "missionId": "123456789",
     "squadName": "TestSquad",
+    "created": "2017-07-19T03:05:12Z",
     "tabs": 234,
     "longestTabStreak": 4,
     "currentTabStreak": 2,
@@ -14,11 +15,36 @@
     "userId": "abcdefghijklmno",
     "missionId": "123456789",
     "squadName": "TestSquad",
+    "created": "2017-07-19T03:05:12Z",
     "tabs": 24,
     "longestTabStreak": 4,
     "currentTabStreak": 2,
     "missionMaxTabsDay": 10,
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": false
+  },
+  {
+    "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+    "missionId": "113456789",
+    "squadName": "TestSquad",
+    "created": "2017-07-19T03:05:12Z",
+    "tabs": 234,
+    "longestTabStreak": 4,
+    "currentTabStreak": 2,
+    "missionMaxTabsDay": 10,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true
+  },
+  {
+    "userId": "abcdefghijklmno",
+    "missionId": "113456789",
+    "squadName": "TestSquad",
+    "created": "2017-07-19T03:05:12Z",
+    "tabs": 24,
+    "longestTabStreak": 4,
+    "currentTabStreak": 2,
+    "missionMaxTabsDay": 10,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true
   }
 ]
