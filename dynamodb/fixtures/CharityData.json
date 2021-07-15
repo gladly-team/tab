@@ -461,5 +461,19 @@
     "updated": "2021-06-24T16:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "0550618f-9ed6-477e-a1a4-21f607c7536f",
+    "name": "RAINN",
+    "category": "Human Rights",
+    "logo": "placeholder.png",
+    "image": "rainn.jpg",
+    "website": "https://www.rainn.org/",
+    "impact": "<p>Thanks for supporting RAINN! These funds raised will help ensure survivors of sexual assault are supported through local programs, a national hotline, and changes in legislation. </p><p>If you or someone you know need someone to talk to, call <b>800.656.HOPE</b> (4673) to be connected with a trained staff member from your area.</p>",
+    "description": "--",
+    "created": "2021-07-15T16:00:00.000Z",
+    "updated": "2021-07-15T16:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
