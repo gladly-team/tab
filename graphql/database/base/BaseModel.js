@@ -251,7 +251,7 @@ class BaseModel {
 
   // `keys` can be an array of hashKey strings or an array of objects
   // containing hashKeys and rangeKeys
-  static async getBatch(userContext, keys) {
+  static async getBatch(userContext, keys, options) {
     const self = this
     // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
     let authorizationError = false
@@ -272,7 +272,7 @@ class BaseModel {
       throw new UnauthorizedQueryException()
     }
     try {
-      const data = await this.dynogelsModel.getItemsAsync(keys)
+      const data = await this.dynogelsModel.getItemsAsync(keys, options)
       return this.deserialize(data)
     } catch (e) {
       throw e

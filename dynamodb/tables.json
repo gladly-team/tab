@@ -140,8 +140,8 @@
   {
     "TableName": "UserMissions",
     "KeySchema": [
-      { "AttributeName": "userId", "KeyType": "HASH" },
-      { "AttributeName": "missionId", "KeyType": "RANGE" }
+      { "AttributeName": "missionId", "KeyType": "HASH" },
+      { "AttributeName": "userId", "KeyType": "RANGE" }
     ],
     "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },

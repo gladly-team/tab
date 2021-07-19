@@ -682,14 +682,14 @@ resources:
       Properties:  
         TableName: UserMissions-${self:provider.stage}
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: missionId
             KeyType: HASH
-          - AttributeName: MissionId
+          - AttributeName: userId
             KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: MissionId
+          - AttributeName: missionId
             AttributeType: S
           - AttributeName: created
             AttributeType: S

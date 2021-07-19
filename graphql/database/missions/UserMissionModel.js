@@ -13,11 +13,11 @@ class UserMission extends BaseModel {
   }
 
   static get hashKey() {
-    return 'userId'
+    return 'missionId'
   }
 
   static get rangeKey() {
-    return 'missionId'
+    return 'userId'
   }
 
   static get indexes() {
@@ -95,8 +95,6 @@ class UserMission extends BaseModel {
       get: permissionAuthorizers.userIdMatchesHashKey,
       update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
-      query: () => true,
-      getAll: () => false,
       indexPermissions: {
         userMissionsByDate: {
           get: permissionAuthorizers.userIdMatchesHashKey,
