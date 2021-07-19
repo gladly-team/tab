@@ -78,15 +78,15 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
-      userMissions:
-        read:
-          minimum: 1
-          maximum: 100
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 100
-          usage: 0.60
+      # userMissions:
+      #   read:
+      #     minimum: 1
+      #     maximum: 100
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 100
+      #     usage: 0.60
       widgetsTable:
         read:
           minimum: 1
@@ -242,11 +242,11 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
-      userMissions:
-        read:
-          minimum: 1
-          maximum: 100
-          usage: 0.75          
+      # userMissions:
+      #   read:
+      #     minimum: 1
+      #     maximum: 100
+      #     usage: 0.75          
       widgetsTable:
         read:
           minimum: 10
@@ -410,17 +410,17 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.missionsTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.missionsTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.missionsTable.write.usage}
-    - table: userMissionsTable
-      index:
-        - userMissionsByDate
-      read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.usage}
-      write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.usage}
+    # - table: userMissionsTable
+    #   index:
+    #     - userMissionsByDate
+    #   read:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.usage}
+    #   write:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.usage}
     - table: widgetsTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
@@ -675,39 +675,39 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userMissionsTable:  
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      UpdateReplacePolicy: Retain
-      Properties:  
-        TableName: UserMissions-${self:provider.stage}
-        KeySchema:
-          - AttributeName: missionId
-            KeyType: HASH
-          - AttributeName: userId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: missionId
-            AttributeType: S
-          - AttributeName: created
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: userMissionsByDate
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: created
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+    # userMissionsTable:  
+    #   Type: AWS::DynamoDB::Table
+    #   DeletionPolicy: Retain
+    #   UpdateReplacePolicy: Retain
+    #   Properties:  
+    #     TableName: UserMissions-${self:provider.stage}
+    #     KeySchema:
+    #       - AttributeName: missionId
+    #         KeyType: HASH
+    #       - AttributeName: userId
+    #         KeyType: RANGE
+    #     AttributeDefinitions:
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: missionId
+    #         AttributeType: S
+    #       - AttributeName: created
+    #         AttributeType: S
+    #     GlobalSecondaryIndexes:
+    #       - IndexName: userMissionsByDate
+    #         KeySchema:
+    #           - AttributeName: userId
+    #             KeyType: HASH
+    #           - AttributeName: created
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #         ProvisionedThroughput:
+    #           ReadCapacityUnits: 1
+    #           WriteCapacityUnits: 1
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
 
     widgetsTable:  
       Type: AWS::DynamoDB::Table
