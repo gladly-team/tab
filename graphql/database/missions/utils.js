@@ -7,7 +7,7 @@ import {
 } from '../../utils/permissions-overrides'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
-export const buildSquadMemberDataFromMissionDoc = missionDoc => {
+const buildSquadMemberDataFromMissionDoc = missionDoc => {
   const {
     acceptedSquadMembers,
     pendingSquadMembersExisting,
@@ -35,16 +35,14 @@ export const buildSquadMemberDataFromMissionDoc = missionDoc => {
   })
   pendingSquadMembersEmailInvite.forEach(email => {
     squadMemberDataFromMissionDocAsDictionary[email] = {
-      status: 'rejected',
+      status: 'pending',
       invitedEmail: email,
     }
   })
+  console.log(squadMemberDataFromMissionDocAsDictionary)
   return squadMemberDataFromMissionDocAsDictionary
 }
-export const buildTopLevelFieldsFromUserMissionDocs = (
-  userMissionDocuments,
-  userId
-) =>
+const buildTopLevelFieldsFromUserMissionDocs = (userMissionDocuments, userId) =>
   userMissionDocuments.reduce(
     (acum, item) => {
       if (item.userId === userId) {
@@ -59,7 +57,7 @@ export const buildTopLevelFieldsFromUserMissionDocs = (
     }
   )
 
-export const buildTopLevelFieldsFromMissionDocument = missionDocument => {
+const buildTopLevelFieldsFromMissionDocument = missionDocument => {
   const {
     id,
     squadName,
@@ -79,7 +77,7 @@ export const buildTopLevelFieldsFromMissionDocument = missionDocument => {
   }
 }
 
-export const buildSquadMembersDetailedStats = async (
+const buildSquadMembersDetailedStats = async (
   squadMemberDataFromMissionDocAsMap,
   userMissionDocuments
 ) => {
@@ -91,7 +89,7 @@ export const buildSquadMembersDetailedStats = async (
     acum[item.id] = item.username
     return acum
   }, {})
-
+  console.log(userIdUsernameMap, 'did i get anything')
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
     const {
       userId,
@@ -124,10 +122,28 @@ export const buildSquadMembersDetailedStats = async (
       missionMaxTabsDay: 0,
       tabs: 0,
     }))
-  return [...squadMembersExisting, ...emailInviteSquadMembers]
+  const nonAcceptedExistingUsers = Object.values(
+    squadMemberDataFromMissionDocAsMap
+  )
+    .filter(
+      user => user.invitedEmail === undefined && user.status !== 'accepted'
+    )
+    .map(existingUser => ({
+      username: userIdUsernameMap[existingUser.userId],
+      status: existingUser.status,
+      longestTabStreak: 0,
+      currentTabStreak: 0,
+      missionMaxTabsDay: 0,
+      tabs: 0,
+    }))
+  return [
+    ...squadMembersExisting,
+    ...emailInviteSquadMembers,
+    ...nonAcceptedExistingUsers,
+  ]
 }
 
-export const buildMissionReturnType = async (
+const buildMissionReturnType = async (
   missionDocument,
   userMissionDocuments,
   userId
@@ -152,3 +168,4 @@ export const buildMissionReturnType = async (
     squadMembers,
   }
 }
+export default buildMissionReturnType

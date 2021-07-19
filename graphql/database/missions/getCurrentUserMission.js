@@ -4,7 +4,7 @@ import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
-import { buildMissionReturnType } from './utils'
+import buildMissionReturnType from './utils'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
