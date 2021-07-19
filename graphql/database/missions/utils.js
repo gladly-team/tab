@@ -1,11 +1,12 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
 import UserModel from '../users/UserModel'
 import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
 
+const PENDING = 'pending'
+const ACCEPTED = 'accepted'
+const REJECTED = 'rejected'
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 const buildSquadMemberDataFromMissionDoc = missionDoc => {
   const {
@@ -18,37 +19,39 @@ const buildSquadMemberDataFromMissionDoc = missionDoc => {
   acceptedSquadMembers.forEach(acceptedUserId => {
     squadMemberDataFromMissionDocAsDictionary[acceptedUserId] = {
       userId: acceptedUserId,
-      status: 'accepted',
+      status: ACCEPTED,
     }
   })
   pendingSquadMembersExisting.forEach(pendingUserId => {
     squadMemberDataFromMissionDocAsDictionary[pendingUserId] = {
-      status: 'pending',
+      status: PENDING,
       userId: pendingUserId,
     }
   })
   rejectedSquadMembers.forEach(rejectedUserId => {
     squadMemberDataFromMissionDocAsDictionary[rejectedUserId] = {
-      status: 'rejected',
+      status: REJECTED,
       userId: rejectedUserId,
     }
   })
   pendingSquadMembersEmailInvite.forEach(email => {
     squadMemberDataFromMissionDocAsDictionary[email] = {
-      status: 'pending',
+      status: PENDING,
       invitedEmail: email,
     }
   })
-  console.log(squadMemberDataFromMissionDocAsDictionary)
   return squadMemberDataFromMissionDocAsDictionary
 }
 const buildTopLevelFieldsFromUserMissionDocs = (userMissionDocuments, userId) =>
   userMissionDocuments.reduce(
     (acum, item) => {
       if (item.userId === userId) {
+        // eslint-disable-next-line no-param-reassign
         acum.acknowledgedMissionComplete = item.acknowledgedMissionComplete
+        // eslint-disable-next-line no-param-reassign
         acum.acknowledgedMissionStarted = item.acknowledgedMissionStarted
       }
+      // eslint-disable-next-line no-param-reassign
       acum.tabCount += item.tabs
       return acum
     },
@@ -67,9 +70,17 @@ const buildTopLevelFieldsFromMissionDocument = missionDocument => {
     tabGoal,
     endOfMissionAwards,
   } = missionDocument
+  let status
+  if (completed) {
+    status = 'completed'
+  } else if (started) {
+    status = 'started'
+  } else {
+    status = 'pending'
+  }
   return {
     missionId: id,
-    status: completed ? 'completed' : started ? 'started' : 'pending',
+    status,
     squadName,
     tabGoal,
     endOfMissionAwards,
@@ -86,10 +97,10 @@ const buildSquadMembersDetailedStats = async (
     userMissionDocuments.map(user => user.userId),
     { ProjectionExpression: 'id, username' }
   )).reduce((acum, item) => {
+    // eslint-disable-next-line no-param-reassign
     acum[item.id] = item.username
     return acum
   }, {})
-  console.log(userIdUsernameMap, 'did i get anything')
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
     const {
       userId,

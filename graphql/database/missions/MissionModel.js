@@ -26,7 +26,7 @@ class Mission extends BaseModel {
         .string()
         .length(9)
         .required()
-        .description(`The unique mission id`), // not sure how to nanoid this value
+        .description(`The unique mission id`),
       squadName: types
         .string()
         .required()
@@ -55,7 +55,7 @@ class Mission extends BaseModel {
         .array()
         .items(types.string())
         .default(self.fieldDefaults.acceptedSquadMembers)
-        .description('users ids who have accepted and signed up for cats'),
+        .description('user IDs of people who have joined the mission'),
       pendingSquadMembersExisting: types
         .array()
         .items(types.string())
@@ -70,7 +70,7 @@ class Mission extends BaseModel {
         .array()
         .items(types.string())
         .default(self.fieldDefaults.rejectedSquadMembers)
-        .description('users who declined to join the squad'),
+        .description('User IDs of users who declined to join the squad'),
       endOfMissionAwards: types
         .array()
         .items(

@@ -1144,7 +1144,7 @@ const SquadMemberInfo = new GraphQLObjectType({
         new GraphQLEnumType({
           name: 'squadAcceptedStatus',
           description:
-            'whether a usuer has accepted rejected or is pending invitation',
+            'whether a user has accepted rejected or is pending invitation',
           values: {
             pending: { value: 'pending' },
             accepted: { value: 'accepted' },
@@ -1188,7 +1188,7 @@ const EndOfMissionAward = new GraphQLObjectType({
     },
     unit: {
       type: new GraphQLNonNull(GraphQLInt),
-      description: 'the unit for the award IE tab count',
+      description: 'the numerical stat for the award, such as number of tabs',
     },
   }),
 })
@@ -1196,10 +1196,10 @@ const EndOfMissionAward = new GraphQLObjectType({
 // mostly corresponds to Mission table, rolls up stats
 const MissionType = new GraphQLObjectType({
   name: 'Mission',
-  description: 'the shape of a single mission',
+  description: 'A goal that Tabbers complete with a group of friends',
   fields: () => ({
     missionId: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Mission ID',
     },
     status: {
@@ -1219,32 +1219,32 @@ const MissionType = new GraphQLObjectType({
         'the current status of the current mission - pending, started, completed',
     },
     squadName: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'the name of the squad',
     },
     // sending these both down and calculating on the front end so we can see percent move
     tabGoal: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the number of tabs to complete mission',
     },
     tabCount: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: "the sum of users' number of tabs towards mission",
     },
     acknowledgedMissionComplete: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       description: 'if a user has acknowledged mission complete',
     },
     acknowledgedMissionStarted: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       description: 'if a user has acknowledged mission started',
     },
     squadMembers: {
       description: 'stats and state of each squad member',
-      type: new GraphQLList(SquadMemberInfo),
+      type: new GraphQLNonNull(new GraphQLList(SquadMemberInfo)),
     },
     endOfMissionAwards: {
-      type: new GraphQLList(EndOfMissionAward),
+      type: new GraphQLNonNull(new GraphQLList(EndOfMissionAward)),
       description:
         'the end of mission awards calculated when mission completes',
     },

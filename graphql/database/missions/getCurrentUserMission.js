@@ -13,9 +13,9 @@ const override = getPermissionsOverride(MISSIONS_OVERRIDE)
  * into a mission.
  */
 
-// eslint-disable-next-line consistent-return
 export default async ({ currentMissionId, id: userId }) => {
   // if no mission return
+  console.log(userId, currentMissionId)
   if (currentMissionId !== undefined) {
     const [userMissionDocuments, missionDocument] = await Promise.all([
       UserMissionModel.query(override, currentMissionId).execute(),
@@ -23,4 +23,5 @@ export default async ({ currentMissionId, id: userId }) => {
     ])
     return buildMissionReturnType(missionDocument, userMissionDocuments, userId)
   }
+  return null
 }

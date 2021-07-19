@@ -1,18 +1,14 @@
 /* eslint-env jest */
 import buildMissionReturnType from '../utils'
-import getCurrentUserMission from '../getCurrentUserMission'
 import UserModel from '../../users/UserModel'
 import {
   DatabaseOperation,
-  getMockUserContext,
   setMockDBResponse,
-  getMockUserInstance,
   clearAllMockDBResponses,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
-const userContext = getMockUserContext()
 
 afterEach(() => {
   jest.clearAllMocks()

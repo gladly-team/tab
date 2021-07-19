@@ -95,8 +95,6 @@ class UserMission extends BaseModel {
       get: permissionAuthorizers.userIdMatchesHashKey,
       update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
-      query: () => true,
-      getAll: () => false,
       indexPermissions: {
         userMissionsByDate: {
           get: permissionAuthorizers.userIdMatchesHashKey,

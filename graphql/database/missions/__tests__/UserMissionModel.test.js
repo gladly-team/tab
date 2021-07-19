@@ -50,10 +50,6 @@ describe('UserMissionModel', () => {
     )
   })
 
-  it('has the correct getAll permission', () => {
-    expect(UserMission.permissions.getAll()).toBe(false)
-  })
-
   it('allows create when the user context matches the item to create', () => {
     const userContext = {
       id: 'abc',

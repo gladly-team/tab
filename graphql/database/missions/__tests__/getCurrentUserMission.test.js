@@ -3,16 +3,13 @@ import buildMissionReturnType from '../utils'
 import getCurrentUserMission from '../getCurrentUserMission'
 import {
   DatabaseOperation,
-  getMockUserContext,
   setMockDBResponse,
-  getMockUserInstance,
   clearAllMockDBResponses,
 } from '../../test-utils'
 
 jest.mock('../utils')
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
-const userContext = getMockUserContext()
 
 afterEach(() => {
   jest.clearAllMocks()

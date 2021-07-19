@@ -413,7 +413,7 @@ type EndOfMissionAward {
   """the string name of the particular award"""
   awardType: String!
 
-  """the unit for the award IE tab count"""
+  """the numerical stat for the award, such as number of tabs"""
   unit: Int!
 }
 
@@ -631,10 +631,10 @@ type MergeIntoExistingUserPayload {
   clientMutationId: String
 }
 
-"""the shape of a single mission"""
+"""A goal that Tabbers complete with a group of friends"""
 type Mission {
   """Mission ID"""
-  missionId: String
+  missionId: String!
 
   """
   the current status of the current mission - pending, started, completed
@@ -642,25 +642,25 @@ type Mission {
   status: missionStatus!
 
   """the name of the squad"""
-  squadName: String
+  squadName: String!
 
   """the number of tabs to complete mission"""
-  tabGoal: Int
+  tabGoal: Int!
 
   """the sum of users' number of tabs towards mission"""
-  tabCount: Int
+  tabCount: Int!
 
   """if a user has acknowledged mission complete"""
-  acknowledgedMissionComplete: Boolean
+  acknowledgedMissionComplete: Boolean!
 
   """if a user has acknowledged mission started"""
-  acknowledgedMissionStarted: Boolean
+  acknowledgedMissionStarted: Boolean!
 
   """stats and state of each squad member"""
-  squadMembers: [SquadMemberInfo]
+  squadMembers: [SquadMemberInfo]!
 
   """the end of mission awards calculated when mission completes"""
-  endOfMissionAwards: [EndOfMissionAward]
+  endOfMissionAwards: [EndOfMissionAward]!
 }
 
 """A connection to a list of items."""
@@ -875,7 +875,7 @@ type SetV4BetaPayload {
   clientMutationId: String
 }
 
-"""whether a usuer has accepted rejected or is pending invitation"""
+"""whether a user has accepted rejected or is pending invitation"""
 enum squadAcceptedStatus {
   pending
   accepted

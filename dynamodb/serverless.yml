@@ -689,7 +689,7 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: MissionId
+          - AttributeName: missionId
             AttributeType: S
           - AttributeName: created
             AttributeType: S
