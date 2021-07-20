@@ -339,6 +339,17 @@ type CreateInvitedUsersPayload {
   clientMutationId: String
 }
 
+input CreateNewMissionInput {
+  userId: String!
+  squadName: String!
+  clientMutationId: String
+}
+
+type CreateNewMissionPayload {
+  squadId: String
+  clientMutationId: String
+}
+
 input CreateNewUserInput {
   userId: String!
   email: String
@@ -709,6 +720,7 @@ type Mutation {
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
   setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
+  createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   setEmail(input: SetEmailInput!): SetEmailPayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
