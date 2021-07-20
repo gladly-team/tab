@@ -40,6 +40,7 @@ const styles = theme => ({
   mainContentContainer: {
     marginLeft: sidebarWidth,
     boxSizing: 'border-box',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
