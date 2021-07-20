@@ -164,7 +164,7 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}/index/*"
-    # Mission table
+    # Missions table
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"
