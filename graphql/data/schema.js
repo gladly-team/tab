@@ -82,6 +82,7 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 import getCurrentUserMission from '../database/missions/getCurrentUserMission'
 import getPastUserMissions from '../database/missions/getPastUserMissions'
+import createMission from '../database/missions/createMission'
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
   getTotalRecruitsCount,
@@ -1413,6 +1414,25 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
   },
 })
 /**
+ * conditionally create mission
+ */
+const createNewMissionMutation = mutationWithClientMutationId({
+  name: 'CreateNewMission',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    squadName: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    squadId: {
+      type: GraphQLString,
+    },
+  },
+  mutateAndGetPayload: (input, context) => {
+    const { id } = fromGlobalId(input.userId)
+    return createMission(context.user, id, input.squadName)
+  },
+})
+/**
  * Log a search, update VC, and change related stats.
  */
 const logSearchMutation = mutationWithClientMutationId({
@@ -2134,6 +2154,7 @@ const mutationType = new GraphQLObjectType({
     setUserActiveWidget: setUserActiveWidgetMutation,
 
     createNewUser: createNewUserMutation,
+    createNewMission: createNewMissionMutation,
     setUsername: setUsernameMutation,
     setEmail: setEmailMutation,
     updateUserExperimentGroups: updateUserExperimentGroupsMutation,
