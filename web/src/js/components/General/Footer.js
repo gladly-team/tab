@@ -37,7 +37,7 @@ const footerLinkStyles = theme => ({
 const FooterLinkComponent = props => {
   const { children, classes, ...otherProps } = props
   return (
-    <Link {...otherProps} className={classes.footerLink}>
+    <Link target="_top" {...otherProps} className={classes.footerLink}>
       {children}
     </Link>
   )

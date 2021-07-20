@@ -5,10 +5,12 @@ import { shallow } from 'enzyme'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import Footer from 'js/components/General/Footer'
 
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/components/Logo/Logo')
 jest.mock('js/navigation/navigation')
+jest.mock('js/components/General/Footer')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -74,5 +76,14 @@ describe('SettingsPage', () => {
     expect(mockProps.onClose).not.toHaveBeenCalled()
     wrapper.find(IconButton).simulate('click')
     expect(mockProps.onClose).toHaveBeenCalled()
+  })
+
+  it('contains the Footer component', () => {
+    const mockProps = getMockProps()
+    mockProps.mainContent = ({ showError }) => (
+      <div id="main-content-error-test" showError={showError} />
+    )
+    const wrapper = shallow(<SettingsPage {...mockProps} />).dive()
+    expect(wrapper.find(Footer).exists()).toBe(true)
   })
 })
