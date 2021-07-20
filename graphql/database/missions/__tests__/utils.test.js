@@ -163,6 +163,7 @@ const mockDefaultMissionReturn = {
 
 describe('buildMissionReturnType tests', () => {
   it('it successfully returns the mission type', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
       Responses: {
         [UserModel.tableName]: mockUsers,
@@ -177,6 +178,7 @@ describe('buildMissionReturnType tests', () => {
   })
 
   it('it successfully generates user details with default values for pending email invite users ', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
       Responses: {
         [UserModel.tableName]: mockUsers,
@@ -214,6 +216,7 @@ describe('buildMissionReturnType tests', () => {
   })
 
   it('it successfully generates user details with default values for pending existing invite users ', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
       Responses: {
         [UserModel.tableName]: mockUsers,
@@ -245,6 +248,7 @@ describe('buildMissionReturnType tests', () => {
   })
 
   it('it successfully generates user details with default values for rejected existing invite users ', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
       Responses: {
         [UserModel.tableName]: mockUsers,
@@ -276,6 +280,7 @@ describe('buildMissionReturnType tests', () => {
   })
 
   it('it correctly accumulates top level tab count based on userMission docs', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.GET_BATCH, {
       Responses: {
         [UserModel.tableName]: mockUsers,

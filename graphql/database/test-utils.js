@@ -149,7 +149,6 @@ export const getMockUserInstance = attributes => {
       updated: now,
       joined: now,
       deleted: false,
-      pendingMissionInvites: [],
     })
   )
 }
