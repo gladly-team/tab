@@ -42,6 +42,13 @@ describe('FooterLink', () => {
     const wrapper = shallow(<FooterLink {...mockProps} foo={'bar'} />).dive()
     expect(wrapper.find(Link).prop('foo')).toEqual('bar')
   })
+
+  it('uses target="_top"', () => {
+    const { FooterLink } = require('../Footer')
+    const mockProps = getMockPropsFooterLink()
+    const wrapper = shallow(<FooterLink {...mockProps} />).dive()
+    expect(wrapper.find(Link).prop('target')).toEqual('_top')
+  })
 })
 
 const getMockProps = () => ({})

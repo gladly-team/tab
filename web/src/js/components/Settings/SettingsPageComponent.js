@@ -13,6 +13,7 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Logo from 'js/components/Logo/Logo'
+import Footer from 'js/components/General/Footer'
 
 const sidebarWidth = 240
 const styles = theme => ({
@@ -21,11 +22,16 @@ const styles = theme => ({
     backgroundColor: '#F2F2F2',
     minWidth: '100vw',
     minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
   closeIcon: {
     color: '#fff',
     width: 28,
     height: 28,
+  },
+  pageContentContainer: {
+    display: 'flex',
   },
   sidebarContentContainer: {
     width: sidebarWidth,
@@ -34,6 +40,7 @@ const styles = theme => ({
   mainContentContainer: {
     marginLeft: sidebarWidth,
     boxSizing: 'border-box',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -84,32 +91,35 @@ const SettingsPage = props => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <div className={classes.sidebarContentContainer}>
-        {sidebarContent({ showError })}
-      </div>
-      <div className={classes.mainContentContainer}>
-        {/* Optional message for users, such as job postings. */}
+      <div className={classes.pageContentContainer}>
+        <div className={classes.sidebarContentContainer}>
+          {sidebarContent({ showError })}
+        </div>
+        <div className={classes.mainContentContainer}>
+          {/* Optional message for users, such as job postings. */}
 
-        {/* <Paper elevation={1} className={classes.messageContainer}> */}
-        {/*   <Typography variant="body2" className={classes.messageText}> */}
-        {/*     We're hiring for a paid social media internship position!{' '} */}
-        {/*     <Link */}
-        {/*       to={jobsURL} */}
-        {/*       className={classes.link} */}
-        {/*       target="_blank" */}
-        {/*       rel="noopener noreferrer" */}
-        {/*     > */}
-        {/*       More info here. */}
-        {/*     </Link> */}
-        {/*   </Typography> */}
-        {/* </Paper> */}
-        {mainContent({ showError })}
+          {/* <Paper elevation={1} className={classes.messageContainer}> */}
+          {/*   <Typography variant="body2" className={classes.messageText}> */}
+          {/*     We're hiring for a paid social media internship position!{' '} */}
+          {/*     <Link */}
+          {/*       to={jobsURL} */}
+          {/*       className={classes.link} */}
+          {/*       target="_blank" */}
+          {/*       rel="noopener noreferrer" */}
+          {/*     > */}
+          {/*       More info here. */}
+          {/*     </Link> */}
+          {/*   </Typography> */}
+          {/* </Paper> */}
+          {mainContent({ showError })}
+        </div>
       </div>
       <ErrorMessage
         message={errorMessage}
         onClose={clearError}
         open={isErrorOpen}
       />
+      <Footer style={{ marginTop: 'auto' }} />
     </div>
   )
 }
