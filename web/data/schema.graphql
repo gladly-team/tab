@@ -655,6 +655,12 @@ interface Node {
   id: ID!
 }
 
+"""user notifications to show on v4"""
+type notifications {
+  """the kind of notification it is"""
+  code: String
+}
+
 """Information about pagination in a connection."""
 type PageInfo {
   """When paginating forwards, are there more items?"""
@@ -963,6 +969,9 @@ type User implements Node {
 
   """User's all time search count"""
   searches: Int
+
+  """notifications for the v4 user to see"""
+  notifications: [notifications]!
 
   """User's search count for today"""
   searchesToday: Int
