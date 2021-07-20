@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button'
 import ChartIcon from '@material-ui/icons/InsertChart'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import Typography from '@material-ui/core/Typography'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import { STORAGE_YAHOO_SEARCH_DEMO, YAHOO_USER_ID } from 'js/constants'
 
 import Stat from 'js/components/Settings/Profile/StatComponent'
 import { goTo, donateURL, inviteFriendsURL } from 'js/navigation/navigation'
@@ -68,6 +70,9 @@ const ProfileStats = props => {
     margin: spacingPx,
   }
   const greeting = user.username ? `Hi, ${user.username}!` : 'Hi!'
+  const showYahooDemo = user.id === YAHOO_USER_ID
+  const isYahooHeartsOptIn =
+    localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO) === 'true'
   return (
     <div>
       <Helmet>
@@ -119,6 +124,15 @@ const ProfileStats = props => {
           }
           style={statStyle}
         />
+        {showYahooDemo ? (
+          <Stat
+            stat={isYahooHeartsOptIn ? user.searches : 0}
+            statText={`${
+              user.searches === 1 ? 'Heart' : 'Hearts'
+            } from searches`}
+            style={statStyle}
+          />
+        ) : null}
         <Stat
           stat={commaFormatted(user.numUsersRecruited)}
           statText={`${tabberWord} recruited`}
@@ -171,6 +185,7 @@ ProfileStats.propTypes = {
       numTabs: PropTypes.number.isRequired,
     }),
     numUsersRecruited: PropTypes.number.isRequired,
+    searches: PropTypes.number,
     tabs: PropTypes.number.isRequired,
     vcDonatedAllTime: PropTypes.number.isRequired,
   }).isRequired,
