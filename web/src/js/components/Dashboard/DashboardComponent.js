@@ -69,7 +69,6 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
-import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -199,10 +198,7 @@ class Dashboard extends React.Component {
       errorOpen: false,
     })
   }
-  async updateV4Cookie() {
-    await optIntoV4Beta()
-    window.location.reload()
-  }
+
   render() {
     // Props will be null on first render.
     const { user, app } = this.props
@@ -221,10 +217,7 @@ class Dashboard extends React.Component {
       userClickedSearchIntroV1,
       // userClickedSearchIntroV2,
     } = this.state
-    // if user is supposed to be on v4, set cookie and redirect
-    if (user && user.v4BetaEnabled) {
-      this.updateV4Cookie()
-    }
+
     /*
      * A handler for AdComponents' onAdDisplayed callbacks, which receives
      * info about the displayed ad.
@@ -795,7 +788,6 @@ Dashboard.propTypes = {
       referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
-    v4BetaEnabled: PropTypes.bool,
     joined: PropTypes.string.isRequired,
     searches: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,
