@@ -9,8 +9,10 @@ import {
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
-
- * into a mission id.
+ * @param {Object} userContext - The user context.
+ * @param {string} userId - The user's Id
+ * @param {string} squadName - the name of the squad being created
+ * @return {Promise<Object>}  A promise that resolves into an object containing a squad id
  */
 
 export default async (userContext, userId, squadName) => {
