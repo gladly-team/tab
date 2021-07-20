@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import buildMissionReturnType from '../utils'
-import getCurrentUserMission from '../getCurrentUserMission'
+import getPastUserMissions from '../getPastUserMissions'
 import {
   DatabaseOperation,
   setMockDBResponse,
@@ -25,7 +25,7 @@ const mockUserMissions = [
     currentTabStreak: 2,
     missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
-    acknowledgedMissionComplete: false,
+    acknowledgedMissionComplete: true,
   },
   {
     userId: 'abcdefghijklmno',
@@ -36,7 +36,7 @@ const mockUserMissions = [
     currentTabStreak: 2,
     missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
-    acknowledgedMissionComplete: false,
+    acknowledgedMissionComplete: true,
   },
 ]
 const mockMissionDocument = {
@@ -44,6 +44,7 @@ const mockMissionDocument = {
   squadName: 'TestSquad',
   created: '2017-07-19T03:05:12Z',
   started: '2017-07-19T03:05:12Z',
+  completed: '2017-07-19T03:05:12Z',
   tabGoal: 1000,
   acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
   pendingSquadMembersExisting: ['efghijklmnopqrs'],
@@ -52,46 +53,20 @@ const mockMissionDocument = {
   endOfMissionAwards: [],
   missionType: 'cats',
 }
-const mockDefaultMissionReturn = {
-  missionId: '123456789',
-  status: 'started',
-  squadName: 'TestSquad',
-  tabGoal: 1000,
-  endOfMissionAwards: [],
-  created: '2017-07-19T03:05:12Z',
-  tabCount: 258,
-  squadMembers: [
-    {
-      username: 'alec',
-      status: 'accepted',
-      longestTabStreak: 4,
-      currentTabStreak: 2,
-      missionMaxTabsDay: 10,
-      tabs: 234,
-    },
-    {
-      username: 'kevin',
-      status: 'accepted',
-      longestTabStreak: 4,
-      currentTabStreak: 2,
-      missionMaxTabsDay: 10,
-      tabs: 24,
-    },
-  ],
-}
 // const mockParams = [userContext, userId, ['test123', 'test124'], 'alec']
-describe('getCurrentUserMission tests', () => {
+describe('getPastUserMissions tests', () => {
   it('it successfully gets current mission for users with a mission', async () => {
-    expect.assertions(3)
-    buildMissionReturnType.mockReturnValue(mockDefaultMissionReturn)
+    expect.assertions(2)
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [mockUserMissions[0]],
+    })
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: mockUserMissions,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockMissionDocument,
     })
-
-    const currentMission = await getCurrentUserMission({
+    await getPastUserMissions({
       currentMissionId: '123456789',
       id: '123',
     })
@@ -101,21 +76,24 @@ describe('getCurrentUserMission tests', () => {
       mockUserMissions,
       '123'
     )
-    expect(currentMission).toEqual(mockDefaultMissionReturn)
   })
 
-  it('it returns null if user is not in a current mission', async () => {
-    expect.assertions(1)
+  it('it successfully returns an empty array if user has no past missions', async () => {
+    expect.assertions(2)
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: mockUserMissions,
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockMissionDocument,
     })
-    buildMissionReturnType.mockReturnValue(mockDefaultMissionReturn)
-    const currentMission = await getCurrentUserMission({
+    const results = await getPastUserMissions({
+      currentMissionId: '123456789',
       id: '123',
     })
-    expect(currentMission).toEqual(null)
+    expect(buildMissionReturnType).not.toHaveBeenCalled()
+    expect(results).toEqual([])
   })
 })

@@ -15,7 +15,6 @@ const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 export default async ({ currentMissionId, id: userId }) => {
   // if no mission return
-  console.log(userId, currentMissionId)
   if (currentMissionId !== undefined) {
     const [userMissionDocuments, missionDocument] = await Promise.all([
       UserMissionModel.query(override, currentMissionId).execute(),

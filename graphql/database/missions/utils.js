@@ -7,6 +7,8 @@ import {
 const PENDING = 'pending'
 const ACCEPTED = 'accepted'
 const REJECTED = 'rejected'
+const COMPLETED = 'completed'
+const STARTED = 'started'
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 const buildSquadMemberDataFromMissionDoc = missionDoc => {
   const {
@@ -72,11 +74,11 @@ const buildTopLevelFieldsFromMissionDocument = missionDocument => {
   } = missionDocument
   let status
   if (completed) {
-    status = 'completed'
+    status = COMPLETED
   } else if (started) {
-    status = 'started'
+    status = STARTED
   } else {
-    status = 'pending'
+    status = PENDING
   }
   return {
     missionId: id,

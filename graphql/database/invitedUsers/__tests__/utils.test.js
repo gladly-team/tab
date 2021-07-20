@@ -34,6 +34,7 @@ const mockParams = [
 ]
 describe('verifyAndSendInvite', () => {
   it('it successfully creates a new invite user document', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
@@ -51,6 +52,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('sends an email if a user doesnt already exist and hasnt been invited in the last 30 days', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Item: [],
     })
@@ -69,6 +71,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('does not send an email if invited user already exists', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [
         { ...getMockUserInstance({ username: 'test1' }), email: 'test123' },
@@ -82,6 +85,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('if user already exists it gives the appropriate error reason', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [
         { ...getMockUserInstance({ username: 'test1' }), email: 'test123' },
@@ -95,6 +99,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('does not send an email if user has been invited in the last 30 days', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
@@ -106,6 +111,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('if user has already been invite, it gives the appropriate error reason', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
@@ -117,6 +123,7 @@ describe('verifyAndSendInvite', () => {
   })
 
   it('if the email fails to send, it gives the appropriate error reason', async () => {
+    expect.assertions(1)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
