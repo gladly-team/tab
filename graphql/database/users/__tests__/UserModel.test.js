@@ -223,6 +223,7 @@ describe('UserModel', () => {
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       email: 'foo@bar.com',
       username: 'Foo Bar',
+      pendingMissionInvites: [],
       vcCurrent: 0,
       vcAllTime: 0,
       level: 0,

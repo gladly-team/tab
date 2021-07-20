@@ -40,6 +40,7 @@
     "email": "alec+01@tabforacause.org",
     "username": "alec",
     "v4BetaEnabled": true,
+    "currentMissionId": "123456789",
     "joined": "2017-07-19T03:05:12Z",
     "vcCurrent": 50,
     "vcAllTime": 100,

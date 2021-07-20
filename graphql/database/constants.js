@@ -17,6 +17,8 @@ export const REFERRAL_DATA = 'ReferralData'
 export const REFERRAL_LINK_CLICK_LOG = 'ReferralLinkClickLog'
 export const USER_REVENUE = 'UserRevenue'
 export const USER_DATA_CONSENT = 'UserDataConsent'
+export const MISSION = 'Mission'
+export const USER_MISSION = 'UserMission'
 
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
