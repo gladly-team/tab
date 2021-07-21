@@ -53,6 +53,7 @@ import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import updateImpact from '../database/userImpact/updateImpact'
 import createInvitedUsers from '../database/invitedUsers/createInvitedUsers'
+import createSquadInvite from '../database/missions/inviteUserToMission'
 import logSearch from '../database/users/logSearch'
 import checkSearchRateLimit from '../database/users/checkSearchRateLimit'
 import logRevenue from '../database/userRevenue/logRevenue'
@@ -1414,6 +1415,66 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
   },
 })
 /**
+ * conditionally create squad invite, send automated email
+ */
+const createSquadInvitesMutation = mutationWithClientMutationId({
+  name: 'CreateSquadInvite',
+  inputFields: {
+    inviterId: { type: new GraphQLNonNull(GraphQLString) },
+    invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    inviterName: { type: GraphQLString },
+    inviterMessage: { type: GraphQLString },
+  },
+  outputFields: {
+    successfulEmailAddresses: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'successfulSquadEmailAddresses',
+          fields: () => ({ email: { type: GraphQLString } }),
+        })
+      ),
+    },
+    existingUserInvited: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'successfulExistingUsers',
+          fields: () => ({ username: { type: GraphQLString } }),
+        })
+      ),
+    },
+    failedEmailAddresses: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'failedSquadEmailAddresses',
+          fields: () => ({
+            email: { type: GraphQLString },
+            error: { type: GraphQLString },
+          }),
+        })
+      ),
+    },
+    existingUserRejected: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'rejectedExistingUsers',
+          fields: () => ({ username: { type: GraphQLString } }),
+        })
+      ),
+    },
+  },
+  mutateAndGetPayload: (input, context) => {
+    const { id } = fromGlobalId(input.inviterId)
+    return createSquadInvite(
+      context.user,
+      id,
+      input.invitedEmails,
+      input.inviterName,
+      input.inviterMessage
+    )
+  },
+})
+
+/**
  * conditionally create mission
  */
 const createNewMissionMutation = mutationWithClientMutationId({
@@ -2133,6 +2194,7 @@ const mutationType = new GraphQLObjectType({
     logTab: logTabMutation,
     updateImpact: updateImpactMutation,
     createInvitedUsers: createInvitedUsersMutation,
+    createSquadInvites: createSquadInvitesMutation,
     logSearch: logSearchMutation,
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,

@@ -366,6 +366,22 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
+input CreateSquadInviteInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type CreateSquadInvitePayload {
+  successfulEmailAddresses: [successfulSquadEmailAddresses]
+  existingUserInvited: [successfulExistingUsers]
+  failedEmailAddresses: [failedSquadEmailAddresses]
+  existingUserRejected: [rejectedExistingUsers]
+  clientMutationId: String
+}
+
 """For expected errors, such as during form validation"""
 type CustomError {
   """The error code"""
@@ -520,6 +536,11 @@ enum ExperimentGroupVariousAdSizes {
 }
 
 type failedEmailAddresses {
+  email: String
+  error: String
+}
+
+type failedSquadEmailAddresses {
   email: String
   error: String
 }
@@ -703,6 +724,7 @@ type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
+  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -765,6 +787,10 @@ type Query {
 input ReferralData {
   referringUser: String
   referringChannel: String
+}
+
+type rejectedExistingUsers {
+  username: String
 }
 
 """Info about any rate-limiting for VC earned from search queries"""
@@ -917,6 +943,14 @@ type SquadMemberInfo {
 }
 
 type successfulEmailAddresses {
+  email: String
+}
+
+type successfulExistingUsers {
+  username: String
+}
+
+type successfulSquadEmailAddresses {
   email: String
 }
 
