@@ -716,6 +716,8 @@ type Mutation {
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
   setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
+  updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
 }
 
 """An object with an ID"""
@@ -882,6 +884,18 @@ enum squadAcceptedStatus {
   rejected
 }
 
+input SquadInviteResponseInput {
+  userId: String!
+  missionId: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type SquadInviteResponsePayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 """an individual's stats for a mission"""
 type SquadMemberInfo {
   """Users's username if they have joined TFAC"""
@@ -920,6 +934,17 @@ input UpdateImpactInput {
 
 type UpdateImpactPayload {
   userImpact: UserImpact
+  clientMutationId: String
+}
+
+input UpdateMissionNotificationInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type UpdateMissionNotificationPayload {
+  success: Boolean!
   clientMutationId: String
 }
 

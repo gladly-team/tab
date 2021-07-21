@@ -70,6 +70,8 @@ import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
 import setV4Enabled from '../database/users/setV4Enabled'
 import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
 import deleteUser from '../database/users/deleteUser'
+import squadInviteResponse from '../database/missions/squadInviteResponse'
+import updateMissionNotification from '../database/missions/updateMissionNotification'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -2066,6 +2068,39 @@ const deleteUserMutation = mutationWithClientMutationId({
   },
 })
 
+const squadInviteResponseMutation = mutationWithClientMutationId({
+  name: 'SquadInviteResponse',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+    accepted: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId, accepted }, context) => {
+    return squadInviteResponse(context.user, userId, missionId, accepted)
+  },
+})
+
+const updateMissionNotificationMutation = mutationWithClientMutationId({
+  name: 'UpdateMissionNotification',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId, accepted }, context) => {
+    return updateMissionNotification(context.user, userId, missionId, accepted)
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2142,6 +2177,9 @@ const mutationType = new GraphQLObjectType({
     setHasViewedIntroFlow: setHasViewedIntroFlowMutation,
 
     deleteUser: deleteUserMutation,
+
+    squadInviteResponse: squadInviteResponseMutation,
+    updateMissionNotification: updateMissionNotificationMutation,
   }),
 })
 

@@ -13,17 +13,17 @@ class UserMission extends BaseModel {
   }
 
   static get hashKey() {
-    return 'missionId'
+    return 'userId'
   }
 
   static get rangeKey() {
-    return 'userId'
+    return 'missionId'
   }
 
   static get indexes() {
     return [
       {
-        hashKey: 'userId',
+        hashKey: 'missionId',
         rangeKey: 'created',
         name: 'userMissionsByDate',
         type: 'global',
