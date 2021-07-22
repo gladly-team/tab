@@ -2,7 +2,6 @@ import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { MISSION } from '../constants'
-import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * @extends BaseModel
@@ -98,16 +97,6 @@ class Mission extends BaseModel {
       pendingSquadMembersEmailInvite: [],
       rejectedSquadMembers: [],
       endOfMissionAwards: [],
-    }
-  }
-
-  static get permissions() {
-    return {
-      get: permissionAuthorizers.allowAll,
-      update: permissionAuthorizers.allowAll,
-      create: permissionAuthorizers.allowAll,
-      query: permissionAuthorizers.allowAll,
-      getAll: permissionAuthorizers.allowAll,
     }
   }
 }
