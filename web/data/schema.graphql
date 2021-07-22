@@ -716,6 +716,7 @@ type Mutation {
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
   setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
 }
 
 """An object with an ID"""
@@ -920,6 +921,17 @@ input UpdateImpactInput {
 
 type UpdateImpactPayload {
   userImpact: UserImpact
+  clientMutationId: String
+}
+
+input UpdateMissionNotificationInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type UpdateMissionNotificationPayload {
+  success: Boolean!
   clientMutationId: String
 }
 
