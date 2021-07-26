@@ -4,7 +4,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import MockDate from 'mockdate'
 import localStorageMgr, { __mockClear } from 'js/utils/localstorage-mgr'
-
+import { STORAGE_REFERRAL_DATA_MISSION_ID } from 'js/constants'
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('uuid/v4')
 
@@ -504,5 +504,14 @@ describe('local user data manager', () => {
     expect(isTabV4BetaUser()).toBe(false)
     localStorageMgr.removeItem('tab.newUser.clickedNewTabSearchIntroV2')
     expect(isTabV4BetaUser()).toBe(false)
+  })
+  // isTabV4BetaUser
+  it('returns the currentMissionId from  localStorage', () => {
+    localStorageMgr.setItem(STORAGE_REFERRAL_DATA_MISSION_ID, '123456789')
+    const { getMissionId } = require('js/utils/local-user-data-mgr')
+    localStorageMgr.setItem('tab.newUser.isTabV4Enabled', 'true')
+    expect(getMissionId()).toBe('123456789')
+    localStorageMgr.removeItem(STORAGE_REFERRAL_DATA_MISSION_ID)
+    expect(getMissionId()).toBe(undefined)
   })
 })

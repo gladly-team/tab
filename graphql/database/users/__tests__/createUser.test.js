@@ -881,4 +881,53 @@ describe('createUser when user already exists (should be idempotent)', () => {
       expectedCreateItem
     )
   })
+
+  it('sets the mission ID for a v4 user is a squad invite', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const referralData = null
+    const userContext = cloneDeep(defaultUserContext)
+    const backgroundImage = {
+      id: 'random-cat-image',
+      image: 'ramdom-cat-image.jpg',
+      timestamp: moment.utc().toISOString(),
+    }
+    const missionId = '123456789'
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expectedCreateItem = {
+      ...expectedCreateItem,
+      backgroundImage,
+      currentMissionId: missionId,
+    }
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      {},
+      null,
+      null,
+      true,
+      missionId
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+  })
 })

@@ -6,7 +6,8 @@ import {
   ADMIN_MANAGEMENT,
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
-
+import UserMissionModel from '../missions/UserMissionModel'
+import MissionModel from '../missions/MissionModel'
 /**
  * Log that a user's email is verified, using the trustworthy
  * user context to know that the email is truly verified. Then,
@@ -18,15 +19,10 @@ import {
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const logEmailVerified = async (userContext, userId) => {
-  let returnedUser
-  try {
-    returnedUser = await UserModel.update(userContext, {
-      id: userId,
-      emailVerified: userContext.emailVerified,
-    })
-  } catch (e) {
-    throw e
-  }
+  const returnedUser = await UserModel.update(userContext, {
+    id: userId,
+    emailVerified: userContext.emailVerified,
+  })
 
   // If the user's email is verified, reward their
   // referring user. `rewardReferringUser` is idempotent
@@ -49,6 +45,38 @@ const logEmailVerified = async (userContext, userId) => {
           })
         )
       )
+      // if missionId, update Mission
+      const { currentMissionId } = returnedUser
+      if (currentMissionId) {
+        // Move the user to acceptedSquadMembers
+        try {
+          const missionModel = await MissionModel.get(
+            override,
+            currentMissionId
+          )
+          const { acceptedSquadMembers } = missionModel
+          if (!acceptedSquadMembers.includes(userId)) {
+            acceptedSquadMembers.push(userId)
+          }
+          const { pendingSquadMembersEmailInvite } = missionModel
+          const newPendingSquadMembersEmailInvite = pendingSquadMembersEmailInvite.filter(
+            pendingUser => pendingUser !== userContext.email
+          )
+          await Promise.all([
+            MissionModel.update(override, {
+              id: currentMissionId,
+              acceptedSquadMembers,
+              pendingSquadMembersExisting: newPendingSquadMembersEmailInvite,
+            }),
+            UserMissionModel.getOrCreate(override, {
+              userId,
+              missionId: currentMissionId,
+            }),
+          ])
+        } catch (e) {
+          logger.error(`could not add user ${userId} to mission`)
+        }
+      }
     } catch (e) {
       logger.error(
         new Error(`Could not reward referring user for user ID ${userId}.`)
