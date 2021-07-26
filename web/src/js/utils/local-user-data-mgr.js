@@ -14,6 +14,7 @@ import {
   STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO,
   STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO_V2,
   STORAGE_NEW_USER_IS_TAB_V4_BETA,
+  STORAGE_REFERRAL_DATA_MISSION_ID,
 } from 'js/constants'
 
 /**
@@ -340,4 +341,8 @@ export const getBingClientID = () =>
  */
 export const isTabV4BetaUser = () => {
   return localStorageMgr.getItem(STORAGE_NEW_USER_IS_TAB_V4_BETA) === 'true'
+}
+
+export const getMissionId = () => {
+  return localStorageMgr.getItem(STORAGE_REFERRAL_DATA_MISSION_ID)
 }

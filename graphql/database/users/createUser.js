@@ -33,7 +33,8 @@ const createUser = async (
   experimentGroups = {},
   extensionInstallId = null,
   extensionInstallTimeApprox = null,
-  v4BetaEnabled = false
+  v4BetaEnabled = false,
+  missionId = false
 ) => {
   // Get or create the user.
   let userInfo = Object.assign(
@@ -45,6 +46,7 @@ const createUser = async (
       // to the user).
       email: userContext.email || null,
       joined: moment.utc().toISOString(),
+      currentMissionId: missionId || undefined,
     },
     !isNil(extensionInstallId)
       ? {

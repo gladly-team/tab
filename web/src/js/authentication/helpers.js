@@ -25,6 +25,7 @@ import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime,
   isTabV4BetaUser,
+  getMissionId,
 } from 'js/utils/local-user-data-mgr'
 import logger from 'js/utils/logger'
 
@@ -262,7 +263,8 @@ export const createNewUser = () => {
               err => {
                 console.error('Could not create new user:')
                 reject(err)
-              }
+              },
+              getMissionId()
             )
           })
         })

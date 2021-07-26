@@ -11,6 +11,8 @@ import {
 } from '../../test-utils'
 import rewardReferringUser from '../rewardReferringUser'
 import InvitedUsersModel from '../../invitedUsers/InvitedUsersModel'
+import MissionModel from '../../missions/MissionModel'
+import UserMissionModel from '../../missions/UserMissionModel'
 
 jest.mock('../../databaseClient')
 jest.mock('../rewardReferringUser')
@@ -130,5 +132,64 @@ describe('logEmailVerified', () => {
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
     expect(rewardReferringUser).not.toHaveBeenCalled()
     expect(updateSpy).not.toHaveBeenCalled()
+  })
+
+  it('updates the mission and creates a new UserMission if the new user was invited to a squad', async () => {
+    expect.assertions(2)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = true
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: { currentMissionId: '123456789' },
+    })
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: {
+        id: '123456789',
+        squadName: 'TestSquad',
+        created: '2017-07-19T03:05:12Z',
+        started: '2017-07-19T03:05:12Z',
+        tabGoal: 1000,
+        acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73'],
+        pendingSquadMembersExisting: ['efghijklmnopqrs'],
+        pendingSquadMembersEmailInvite: ['foo@bar.com'],
+        rejectedSquadMembers: [],
+      },
+    })
+    const updateSpy = jest.spyOn(MissionModel, 'update')
+    const createSpy = jest.spyOn(UserMissionModel, 'create')
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
+      acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
+      id: '123456789',
+      pendingSquadMembersExisting: [],
+      updated: '2017-05-19T13:59:46.000Z',
+    })
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        created: '2017-05-19T13:59:46.000Z',
+        missionId: '123456789',
+        updated: '2017-05-19T13:59:46.000Z',
+        userId: 'abcdefghijklmno',
+      },
+      expect.anything()
+    )
+  })
+
+  it('does not call update the mission or create a userMission if user was not invited to a squad', async () => {
+    expect.assertions(2)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = false
+    const updateSpy = jest.spyOn(MissionModel, 'update')
+    const createSpy = jest.spyOn(UserMissionModel, 'create')
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(updateSpy).not.toHaveBeenCalled()
+    expect(createSpy).not.toHaveBeenCalled()
   })
 })

@@ -740,11 +740,12 @@ class SearchPage extends React.Component {
             </ErrorBoundary>
           </div>
         </div>
-        <Footer
-          style={{
-            marginTop: 'auto',
-          }}
-        />
+        {/* Update footer before using here. */}
+        {/* <Footer */}
+        {/*   style={{ */}
+        {/*     marginTop: 'auto', */}
+        {/*   }} */}
+        {/* /> */}
       </div>
     )
   }
