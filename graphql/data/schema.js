@@ -1420,7 +1420,7 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
  * conditionally create squad invite, send automated email
  */
 const createSquadInvitesMutation = mutationWithClientMutationId({
-  name: 'CreateSquadInvite',
+  name: 'CreateSquadInvites',
   inputFields: {
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
     invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },

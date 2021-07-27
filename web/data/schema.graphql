@@ -366,15 +366,15 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
-input CreateSquadInviteInput {
+input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
-  inviterName: String
+  inviterName: String!
   inviterMessage: String
   clientMutationId: String
 }
 
-type CreateSquadInvitePayload {
+type CreateSquadInvitesPayload {
   successfulEmailAddresses: [successfulSquadEmailAddresses]
   existingUserInvited: [successfulExistingUsers]
   failedEmailAddresses: [failedSquadEmailAddresses]
@@ -724,7 +724,7 @@ type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
-  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
+  createSquadInvites(input: CreateSquadInvitesInput!): CreateSquadInvitesPayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
