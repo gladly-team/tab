@@ -164,6 +164,28 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}UserImpact-${self:provider.stage}/index/*"
+    # Missions table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "${self:custom.dbTableArnBase}Missions-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}Missions-${self:provider.stage}/index/*"
+    # UserMissions table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "${self:custom.dbTableArnBase}UserMissions-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}UserMissions-${self:provider.stage}/index/*"
     # InvitedUsers table
     - Effect: 'Allow'
       Action:

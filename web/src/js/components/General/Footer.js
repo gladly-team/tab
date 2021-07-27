@@ -5,18 +5,18 @@ import Divider from '@material-ui/core/Divider'
 
 import Logo from 'js/components/Logo/Logo'
 import {
-  adblockerWhitelistingForSearchURL,
+  adblockerWhitelistingURL,
   externalContactUsURL,
   financialsURL,
   jobsURL,
   privacyPolicyURL,
-  searchHomeURL,
-  searchExternalHelpURL,
+  homeURL,
+  externalHelpURL,
   teamURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
-import { SEARCH_APP } from 'js/constants'
+import { TAB_APP } from 'js/constants'
 
 // Styles match tab-homepage style.
 
@@ -37,7 +37,7 @@ const footerLinkStyles = theme => ({
 const FooterLinkComponent = props => {
   const { children, classes, ...otherProps } = props
   return (
-    <Link {...otherProps} className={classes.footerLink}>
+    <Link target="_top" {...otherProps} className={classes.footerLink}>
       {children}
     </Link>
   )
@@ -82,15 +82,15 @@ class Footer extends React.Component {
   render() {
     const { classes, style } = this.props
 
-    // Currently only for Search for a Cause. Customize if used
+    // Currently only for Tab for a Cause. Customize if used
     // for other apps.
     return (
       <div style={style} className={classes.container}>
         <Divider className={classes.divider} />
         <div className={classes.contentContainer}>
-          <Link to={searchHomeURL}>
+          <Link to={homeURL}>
             <Logo
-              brand={SEARCH_APP}
+              brand={TAB_APP}
               color={'grey'}
               style={{
                 width: 43,
@@ -99,10 +99,8 @@ class Footer extends React.Component {
             />
           </Link>
           <div className={classes.textLinkContainer}>
-            <FooterLink to={searchExternalHelpURL}>Help</FooterLink>
-            <FooterLink to={adblockerWhitelistingForSearchURL}>
-              Adblockers
-            </FooterLink>
+            <FooterLink to={externalHelpURL}>Help</FooterLink>
+            <FooterLink to={adblockerWhitelistingURL}>Adblockers</FooterLink>
             <FooterLink to={financialsURL}>Financials</FooterLink>
             <FooterLink to={termsOfServiceURL}>Terms</FooterLink>
             <FooterLink to={privacyPolicyURL}>Privacy</FooterLink>

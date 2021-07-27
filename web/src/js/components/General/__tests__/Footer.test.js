@@ -5,13 +5,13 @@ import { shallow } from 'enzyme'
 import Link from 'js/components/General/Link'
 import Logo from 'js/components/Logo/Logo'
 import {
-  adblockerWhitelistingForSearchURL,
+  adblockerWhitelistingURL,
   externalContactUsURL,
   financialsURL,
   jobsURL,
   privacyPolicyURL,
-  searchHomeURL,
-  searchExternalHelpURL,
+  homeURL,
+  externalHelpURL,
   teamURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
@@ -42,6 +42,13 @@ describe('FooterLink', () => {
     const wrapper = shallow(<FooterLink {...mockProps} foo={'bar'} />).dive()
     expect(wrapper.find(Link).prop('foo')).toEqual('bar')
   })
+
+  it('uses target="_top"', () => {
+    const { FooterLink } = require('../Footer')
+    const mockProps = getMockPropsFooterLink()
+    const wrapper = shallow(<FooterLink {...mockProps} />).dive()
+    expect(wrapper.find(Link).prop('target')).toEqual('_top')
+  })
 })
 
 const getMockProps = () => ({})
@@ -53,12 +60,12 @@ describe('Footer', () => {
     shallow(<Footer {...mockProps} />).dive()
   })
 
-  it('contains the grey search logo without text', () => {
+  it('contains the grey tab logo without text', () => {
     const Footer = require('../Footer').default
     const mockProps = getMockProps()
     const wrapper = shallow(<Footer {...mockProps} />).dive()
     expect(wrapper.find(Logo).props()).toMatchObject({
-      brand: 'search',
+      brand: 'tab',
       color: 'grey',
       includeText: false,
       style: {
@@ -68,13 +75,13 @@ describe('Footer', () => {
     })
   })
 
-  it('links to the search homepage from the logo', () => {
+  it('links to the tab homepage from the logo', () => {
     const Footer = require('../Footer').default
     const mockProps = getMockProps()
     const wrapper = shallow(<Footer {...mockProps} />).dive()
     const logoParent = wrapper.find(Logo).parent()
     expect(logoParent.type()).toEqual(Link)
-    expect(logoParent.prop('to')).toEqual(searchHomeURL)
+    expect(logoParent.prop('to')).toEqual(homeURL)
   })
 
   it('contains a link to our help center', () => {
@@ -86,7 +93,7 @@ describe('Footer', () => {
       .find(FooterLink)
       .filterWhere(e => e.prop('children') === 'Help')
     expect(linkElem.exists()).toBe(true)
-    expect(linkElem.prop('to')).toEqual(searchExternalHelpURL)
+    expect(linkElem.prop('to')).toEqual(externalHelpURL)
   })
 
   it('contains a link to the search adblocker whitelisting page', () => {
@@ -98,7 +105,7 @@ describe('Footer', () => {
       .find(FooterLink)
       .filterWhere(e => e.prop('children') === 'Adblockers')
     expect(linkElem.exists()).toBe(true)
-    expect(linkElem.prop('to')).toEqual(adblockerWhitelistingForSearchURL)
+    expect(linkElem.prop('to')).toEqual(adblockerWhitelistingURL)
   })
 
   it('contains a link to the financials page', () => {

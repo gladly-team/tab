@@ -246,7 +246,11 @@ custom:
         read:
           minimum: 1
           maximum: 100
-          usage: 0.75          
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 100
+          usage: 0.60          
       widgetsTable:
         read:
           minimum: 10
