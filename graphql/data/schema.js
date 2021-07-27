@@ -1424,7 +1424,7 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
   inputFields: {
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
     invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
-    inviterName: { type: GraphQLString },
+    inviterName: { type: new GraphQLNonNull(GraphQLString) },
     inviterMessage: { type: GraphQLString },
   },
   outputFields: {
