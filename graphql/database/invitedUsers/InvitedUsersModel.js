@@ -56,6 +56,11 @@ class InvitedUsers extends BaseModel {
         .description(
           `the invited user's' user id once they have successfully signed up`
         ),
+      missionId: types
+        .string()
+        .description(
+          `if a user is invited to a mission, then include the mission id`
+        ),
     }
   }
 
