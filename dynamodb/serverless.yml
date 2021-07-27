@@ -78,7 +78,7 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
-      userMissions:
+      userMissionsTable:
         read:
           minimum: 1
           maximum: 100
@@ -242,7 +242,7 @@ custom:
           minimum: 1
           maximum: 100
           usage: 0.60
-      userMissions:
+      userMissionsTable:
         read:
           minimum: 1
           maximum: 100
@@ -418,13 +418,13 @@ custom:
       index:
         - userMissionsByDate
       read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.read.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.read.usage}
       write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissions.write.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userMissionsTable.write.usage}
     - table: widgetsTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
@@ -668,7 +668,7 @@ resources:
       DeletionPolicy: Retain
       UpdateReplacePolicy: Retain
       Properties:  
-        TableName: MissionsTable-${self:provider.stage}
+        TableName: Missions-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
