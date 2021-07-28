@@ -72,7 +72,7 @@ const createInvitedUsers = async (
             item.status === INVITED
               ? 'existingUserInvited'
               : 'existingUserRejected'
-          ].push(item.existingUserId)
+          ].push(item.existingUserEmail)
         } else {
           acum[
             item.error ? 'failedEmailAddresses' : 'successfulEmailAddresses'

@@ -50,6 +50,7 @@ export const verifyAndSendInvite = async ({
     if (currentMissionId) {
       if (existingUser.currentMissionId) {
         return {
+          existingUserEmail: inviteEmail,
           existingUserId: existingUser.id,
           existingUserName: existingUser.username,
           status: REJECTED,
@@ -74,6 +75,7 @@ export const verifyAndSendInvite = async ({
         }),
       ])
       return {
+        existingUserEmail: inviteEmail,
         existingUserId: existingUser.id,
         existingUserName: existingUser.username,
         status: INVITED,

@@ -1437,12 +1437,8 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
       ),
     },
     existingUserInvited: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'successfulExistingUsers',
-          fields: () => ({ username: { type: GraphQLString } }),
-        })
-      ),
+      type: new GraphQLList(GraphQLString),
+      description: 'a list of invited emails for existing users',
     },
     failedEmailAddresses: {
       type: new GraphQLList(
@@ -1456,12 +1452,9 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
       ),
     },
     existingUserRejected: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'rejectedExistingUsers',
-          fields: () => ({ username: { type: GraphQLString } }),
-        })
-      ),
+      type: new GraphQLList(GraphQLString),
+      description:
+        'a list of invited emails for existing users rejected bc they are already in a mission',
     },
   },
   mutateAndGetPayload: (input, context) => {
