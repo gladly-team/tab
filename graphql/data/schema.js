@@ -32,7 +32,6 @@ import {
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
-import { SHOW_NOTIF_INTL_CAT_DAY_2021 } from '../config'
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
@@ -577,7 +576,7 @@ const userType = new GraphQLObjectType({
       ),
       description: 'notifications for the v4 user to see',
       resolve: () => {
-        if (SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
+        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
           return [{ code: 'intlCatDay2021' }]
         }
         return []
