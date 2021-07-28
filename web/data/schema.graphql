@@ -347,6 +347,7 @@ input CreateNewUserInput {
   extensionInstallId: String
   extensionInstallTimeApprox: String
   v4BetaEnabled: Boolean
+  missionId: String
   clientMutationId: String
 }
 

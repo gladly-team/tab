@@ -23,7 +23,8 @@ function commit(
   extensionInstallTimeApprox,
   v4BetaEnabled,
   onCompleted,
-  onError
+  onError,
+  missionId
 ) {
   return commitMutation(environment, {
     mutation,
@@ -36,6 +37,7 @@ function commit(
         extensionInstallId,
         extensionInstallTimeApprox,
         v4BetaEnabled,
+        missionId,
       },
     },
     onCompleted: response => {
