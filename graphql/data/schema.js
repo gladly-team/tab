@@ -33,7 +33,6 @@ import {
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
-
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
@@ -580,6 +579,29 @@ const userType = new GraphQLObjectType({
     searches: {
       type: GraphQLInt,
       description: "User's all time search count",
+    },
+    notifications: {
+      type: new GraphQLNonNull(
+        GraphQLList(
+          new GraphQLObjectType({
+            name: 'notifications',
+            description: 'user notifications to show on v4',
+            fields: () => ({
+              code: {
+                type: GraphQLString,
+                description: 'the kind of notification it is',
+              },
+            }),
+          })
+        )
+      ),
+      description: 'notifications for the v4 user to see',
+      resolve: () => {
+        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
+          return [{ code: 'intlCatDay2021' }]
+        }
+        return []
+      },
     },
     searchesToday: {
       type: GraphQLInt,
