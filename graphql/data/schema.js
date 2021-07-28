@@ -2090,14 +2090,15 @@ const updateMissionNotificationMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     missionId: { type: new GraphQLNonNull(GraphQLString) },
+    action: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     success: {
       type: new GraphQLNonNull(GraphQLBoolean),
     },
   },
-  mutateAndGetPayload: ({ userId, missionId, accepted }) => {
-    return updateMissionNotification(userId, missionId, accepted)
+  mutateAndGetPayload: ({ userId, missionId, action }) => {
+    return updateMissionNotification(userId, missionId, action)
   },
 })
 

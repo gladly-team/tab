@@ -93,7 +93,6 @@ describe('squadInviteResponse', () => {
     expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
       userId: userInfo.id,
       missionId: mockMission.id,
-      acknowledgedMissionStarted: false,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
     })
@@ -155,7 +154,6 @@ describe('squadInviteResponse', () => {
     expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
       userId: defaultUserContext.id,
       missionId: mockMission.id,
-      acknowledgedMissionStarted: true,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
     })

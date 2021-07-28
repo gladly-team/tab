@@ -940,6 +940,7 @@ type UpdateImpactPayload {
 input UpdateMissionNotificationInput {
   userId: String!
   missionId: String!
+  action: String!
   clientMutationId: String
 }
 
