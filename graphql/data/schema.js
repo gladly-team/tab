@@ -33,7 +33,6 @@ import {
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
-
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
@@ -582,6 +581,29 @@ const userType = new GraphQLObjectType({
     searches: {
       type: GraphQLInt,
       description: "User's all time search count",
+    },
+    notifications: {
+      type: new GraphQLNonNull(
+        GraphQLList(
+          new GraphQLObjectType({
+            name: 'notifications',
+            description: 'user notifications to show on v4',
+            fields: () => ({
+              code: {
+                type: GraphQLString,
+                description: 'the kind of notification it is',
+              },
+            }),
+          })
+        )
+      ),
+      description: 'notifications for the v4 user to see',
+      resolve: () => {
+        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
+          return [{ code: 'intlCatDay2021' }]
+        }
+        return []
+      },
     },
     searchesToday: {
       type: GraphQLInt,
@@ -1420,11 +1442,11 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
  * conditionally create squad invite, send automated email
  */
 const createSquadInvitesMutation = mutationWithClientMutationId({
-  name: 'CreateSquadInvite',
+  name: 'CreateSquadInvites',
   inputFields: {
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
     invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
-    inviterName: { type: GraphQLString },
+    inviterName: { type: new GraphQLNonNull(GraphQLString) },
     inviterMessage: { type: GraphQLString },
   },
   outputFields: {
@@ -1437,12 +1459,8 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
       ),
     },
     existingUserInvited: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'successfulExistingUsers',
-          fields: () => ({ username: { type: GraphQLString } }),
-        })
-      ),
+      type: new GraphQLList(GraphQLString),
+      description: 'a list of invited emails for existing users',
     },
     failedEmailAddresses: {
       type: new GraphQLList(
@@ -1456,12 +1474,9 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
       ),
     },
     existingUserRejected: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'rejectedExistingUsers',
-          fields: () => ({ username: { type: GraphQLString } }),
-        })
-      ),
+      type: new GraphQLList(GraphQLString),
+      description:
+        'a list of invited emails for existing users rejected bc they are already in a mission',
     },
   },
   mutateAndGetPayload: (input, context) => {

@@ -367,15 +367,15 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
-input CreateSquadInviteInput {
+input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
-  inviterName: String
+  inviterName: String!
   inviterMessage: String
   clientMutationId: String
 }
 
-type CreateSquadInvitePayload {
+type CreateSquadInvitesPayload {
   successfulEmailAddresses: [successfulSquadEmailAddresses]
   existingUserInvited: [successfulExistingUsers]
   failedEmailAddresses: [failedSquadEmailAddresses]
@@ -725,7 +725,7 @@ type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
-  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
+  createSquadInvites(input: CreateSquadInvitesInput!): CreateSquadInvitesPayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -759,6 +759,12 @@ type Mutation {
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+"""user notifications to show on v4"""
+type notifications {
+  """the kind of notification it is"""
+  code: String
 }
 
 """Information about pagination in a connection."""
@@ -1139,6 +1145,9 @@ type User implements Node {
 
   """User's all time search count"""
   searches: Int
+
+  """notifications for the v4 user to see"""
+  notifications: [notifications]!
 
   """User's search count for today"""
   searchesToday: Int

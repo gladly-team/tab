@@ -118,6 +118,7 @@ describe('verifyAndSendInvite general email', () => {
       existingUserId: 'abcdefghijklmno',
       status: 'invited',
       existingUserName: 'test1',
+      existingUserEmail: 'test123',
     })
   })
 
@@ -147,6 +148,7 @@ describe('verifyAndSendInvite general email', () => {
       existingUserId: 'abcdefghijklmno',
       status: 'rejected',
       existingUserName: 'test1',
+      existingUserEmail: 'test123',
     })
   })
 

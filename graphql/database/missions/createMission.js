@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid'
+import xssFilters from 'xss-filters'
 import UserMissionModel from './UserMissionModel'
 import MissionModel from './MissionModel'
 import UserModel from '../users/UserModel'
@@ -26,7 +27,7 @@ export default async (userContext, userId, squadName) => {
   const missionId = nanoid(9)
   const newMission = {
     id: missionId,
-    squadName,
+    squadName: xssFilters.inHTMLData(squadName.slice(0, 30)),
     acceptedSquadMembers: [userId],
   }
   const userMission = {
