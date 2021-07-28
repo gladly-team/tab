@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
@@ -53,21 +55,33 @@ class UserMission extends BaseModel {
         .integer()
         .default(self.fieldDefaults.tabs)
         .description(`the number of tabs the user has contributed`),
-      longestTabStreak: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.longestTabStreak)
-        .description(`count of longest tab streak in current mission`),
-      currentTabStreak: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.currentTabStreak)
-        .description(`count of the current tab streak in current mission`),
+      tabStreak: types
+        .object({
+          longestTabStreak: types.number().integer(),
+          currentTabStreak: types.number().integer(),
+        })
+        .default(self.fieldDefaults.tabStreak, `Default is zero tab streaks.`)
+        .description(`tab streak information for the current UserMission`),
       missionMaxTabsDay: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.missionMaxTabsDay)
-        .description(`most tabs in a single day during mission`),
+        .object({
+          // The count of tabs for the day on which the user opened
+          // the most tabs.
+          maxDay: types.object({
+            date: types.string().isoDate(),
+            numTabs: types.number().integer(),
+          }),
+          // The count of tabs for the current (or most recent) day
+          // the user has opened a tab.
+          recentDay: types.object({
+            date: types.string().isoDate(),
+            numTabs: types.number().integer(),
+          }),
+        })
+        .default(
+          self.fieldDefaults.missionMaxTabsDay,
+          `Default is zero tabs for today.`
+        )
+        .description(`Most tabs in a single day during the mission.`),
       acknowledgedMissionComplete: types
         .boolean()
         .default(self.fieldDefaults.acknowledgedMissionComplete)
@@ -82,9 +96,20 @@ class UserMission extends BaseModel {
   static get fieldDefaults() {
     return {
       tabs: 0,
-      longestTabStreak: 0,
-      currentTabStreak: 0,
-      missionMaxTabsDay: 0,
+      tabStreak: () => ({
+        longestTabStreak: 0,
+        currentTabStreak: 0,
+      }),
+      missionMaxTabsDay: () => ({
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+      }),
       acknowledgedMissionStarted: false,
       acknowledgedMissionComplete: false,
     }

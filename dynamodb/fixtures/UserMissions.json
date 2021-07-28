@@ -4,8 +4,10 @@
     "missionId": "123456789",
     "created": "2017-07-19T03:05:12Z",
     "tabs": 234,
-    "longestTabStreak": 4,
-    "currentTabStreak": 2,
+    "tabStreak": {
+      "longestTabStreak": 4,
+      "currentTabStreak": 2
+    },
     "missionMaxTabsDay": 10,
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": false
@@ -15,8 +17,10 @@
     "missionId": "123456789",
     "created": "2017-07-19T03:05:12Z",
     "tabs": 24,
-    "longestTabStreak": 4,
-    "currentTabStreak": 2,
+    "tabStreak": {
+      "longestTabStreak": 4,
+      "currentTabStreak": 2
+    },
     "missionMaxTabsDay": 10,
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": false
@@ -26,8 +30,10 @@
     "missionId": "113456789",
     "created": "2017-07-19T03:05:12Z",
     "tabs": 234,
-    "longestTabStreak": 4,
-    "currentTabStreak": 2,
+    "tabStreak": {
+      "longestTabStreak": 4,
+      "currentTabStreak": 2
+    },
     "missionMaxTabsDay": 10,
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": true
@@ -37,8 +43,10 @@
     "missionId": "113456789",
     "created": "2017-07-19T03:05:12Z",
     "tabs": 24,
-    "longestTabStreak": 4,
-    "currentTabStreak": 2,
+    "tabStreak": {
+      "longestTabStreak": 4,
+      "currentTabStreak": 2
+    },
     "missionMaxTabsDay": 10,
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": true
