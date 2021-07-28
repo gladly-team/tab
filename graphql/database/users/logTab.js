@@ -75,8 +75,19 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   } catch (e) {
     throw e
   }
+
   const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
+
+  if (user.has('currentMissionId')) {
+    mission = await MissionModel.get(userContext, currentMissionId)
+    if (!mission.has('completed')) {
+      userMission = await UserMissionModel.query(userContext, currentMissionId, userId)
+      userMissionTabs = userMission.tabs + 1
+      
+
+    }
+  }
 
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter

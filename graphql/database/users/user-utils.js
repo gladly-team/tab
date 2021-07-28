@@ -33,3 +33,7 @@ export const getTodaySearchCount = user => {
       .format('LL')
   return isFirstSearchToday ? 0 : user.maxSearchesDay.recentDay.numSearches
 }
+
+export const calculateMaxTabs = a => {
+  
+}
