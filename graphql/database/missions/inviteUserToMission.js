@@ -1,6 +1,17 @@
 import uniq from 'lodash/uniq'
-import { verifyAndSendInvite, sanitize, getUserInvites } from './utils'
+import MissionModel from './MissionModel'
+// import { verifyAndSendInvite } from '../invitedUsers/utils'
+import {
+  MISSIONS_OVERRIDE,
+  getPermissionsOverride,
+} from '../../utils/permissions-overrides'
+import {
+  verifyAndSendInvite,
+  sanitize,
+  getUserInvites,
+} from '../invitedUsers/utils'
 
+const INVITED = 'invited'
 /**
  * conditionally creates a new invited user and sends a sendgrid email if user has not already
  * been invited OR if inviting user has exceeded the max amount of invites in 24 hours
@@ -19,6 +30,8 @@ const createInvitedUsers = async (
   inviterMessage
 ) => {
   try {
+    // get users current mission
+    const override = getPermissionsOverride(MISSIONS_OVERRIDE)
     // sanitize strings
     const sanitizedEmails = uniq(invitedEmails.map(email => sanitize(email)))
     const sanitizedMessage = inviterMessage
@@ -34,7 +47,12 @@ const createInvitedUsers = async (
     if (userInvites.length + sanitizedEmails.length > 50) {
       throw new Error('user is trying to invite too many people in 24 hours')
     }
-    const verifiedAndSentEmails = await Promise.all(
+
+    const currentMission = await MissionModel.get(
+      override,
+      invitingUser.currentMissionId
+    )
+    const verifiedAndSentInvites = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite({
           userContext,
@@ -43,21 +61,47 @@ const createInvitedUsers = async (
           invitingUser,
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
+          currentMissionId: currentMission.id,
         })
       )
     )
-    const sortedResults = verifiedAndSentEmails.reduce(
+    const sortedResults = verifiedAndSentInvites.reduce(
       (acum, item) => {
-        acum[
-          item.error ? 'failedEmailAddresses' : 'successfulEmailAddresses'
-        ].push(item)
+        if (item.existingUserId) {
+          acum[
+            item.status === INVITED
+              ? 'existingUserInvited'
+              : 'existingUserRejected'
+          ].push(item.existingUserEmail)
+        } else {
+          acum[
+            item.error ? 'failedEmailAddresses' : 'successfulEmailAddresses'
+          ].push(item)
+        }
         return acum
       },
       {
         successfulEmailAddresses: [],
         failedEmailAddresses: [],
+        existingUserInvited: [],
+        existingUserRejected: [],
       }
     )
+    await MissionModel.update(override, {
+      id: currentMission.id,
+      pendingSquadMembersExisting: [
+        ...currentMission.pendingSquadMembersExisting,
+        ...sortedResults.existingUserInvited,
+      ],
+      pendingSquadMembersEmailInvite: [
+        ...currentMission.pendingSquadMembersEmailInvite,
+        ...sortedResults.successfulEmailAddresses.map(item => item.email),
+      ],
+      rejectedSquadMembers: [
+        ...currentMission.rejectedSquadMembers,
+        ...sortedResults.existingUserRejected,
+      ],
+    })
     return sortedResults
   } catch (e) {
     throw e
