@@ -7,6 +7,7 @@ import addVc from './addVc'
 import { getTodayTabCount } from './user-utils'
 import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import { isValidLiteralValue } from 'graphql'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -79,13 +80,15 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
 
-  if (user.has('currentMissionId')) {
+  if (user.has('currentMissionId') && isValid) {
     mission = await MissionModel.get(userContext, currentMissionId)
     if (!mission.has('completed')) {
       userMission = await UserMissionModel.query(userContext, currentMissionId, userId)
-      userMissionTabs = userMission.tabs + 1
       
-
+      await UserModel.update(userContext, {
+        id: userId,
+        tabs: { $add: 1 },
+      })
     }
   }
 
