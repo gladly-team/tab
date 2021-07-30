@@ -82,9 +82,7 @@ class UserMission extends BaseModel {
           self.fieldDefaults.missionMaxTabsDay,
           `Default is zero tabs for today.`
         )
-        .description(
-          `Most tabs in a single day during the mission.`
-        ),
+        .description(`Most tabs in a single day during the mission.`),
       acknowledgedMissionComplete: types
         .boolean()
         .default(self.fieldDefaults.acknowledgedMissionComplete)

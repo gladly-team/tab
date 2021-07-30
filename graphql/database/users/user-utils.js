@@ -34,7 +34,7 @@ export const getTodaySearchCount = user => {
   return isFirstSearchToday ? 0 : user.maxSearchesDay.recentDay.numSearches
 }
 
-export const calculateMaxTabs = (maxDayObject) => {
+export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
   // for the user's "current day" tab count.
@@ -43,9 +43,7 @@ export const calculateMaxTabs = (maxDayObject) => {
   const isTodayMax = todayTabCount >= maxDayObject.maxDay.numTabs
   return {
     maxDay: {
-      date: isTodayMax
-        ? moment.utc().toISOString()
-        : maxDayObject.maxDay.date,
+      date: isTodayMax ? moment.utc().toISOString() : maxDayObject.maxDay.date,
       numTabs: isTodayMax ? todayTabCount : maxDayObject.maxDay.numTabs,
     },
     recentDay: {
@@ -55,21 +53,34 @@ export const calculateMaxTabs = (maxDayObject) => {
   }
 }
 
-export const calculateTabStreak = (maxDayObject, currentTabStreak, longestTabStreak) => {
-  const isYesterday
-  const isPreviousDay
+export const calculateTabStreak = (
+  maxDayObject,
+  currentTabStreak,
+  longestTabStreak
+) => {
+  const recentDay = moment(maxDayObject.recentDay.date)
+  const isYesterday = moment()
+    .subtract(1, 'days')
+    .isSame(recentDay, 'd')
+  const isPreviousDay = recentDay.isBefore(
+    moment()
+      .subtract(2, 'days')
+      .startOf('day')
+  )
+  let newCurrentTabStreak = currentTabStreak
+  let newLongestTabStreak = longestTabStreak
 
   if (isYesterday) {
-    currentTabStreak += 1
+    newCurrentTabStreak += 1
     if (currentTabStreak > longestTabStreak) {
-      longestTabStreak = currentTabStreak
+      newLongestTabStreak = currentTabStreak
     }
   } else if (isPreviousDay) {
-    currentTabStreak = 0
+    newCurrentTabStreak = 0
   }
 
   return {
-    currentTabStreak,
-    longestTabStreak
+    currentTabStreak: newCurrentTabStreak,
+    longestTabStreak: newLongestTabStreak,
   }
 }

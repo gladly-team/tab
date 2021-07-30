@@ -2,9 +2,15 @@ import moment from 'moment'
 import { random } from 'lodash/number'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
+import MissionModel from '../missions/MissionModel'
+import UserMissionModel from '../missions/UserMissionModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
-import { calculateMaxTabs, calculateTabStreak, getTodayTabCount } from './user-utils'
+import {
+  calculateMaxTabs,
+  calculateTabStreak,
+  getTodayTabCount,
+} from './user-utils'
 import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 
@@ -79,12 +85,17 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
 
-  if (user.has('currentMissionId') && isValid) {
-    mission = await MissionModel.get(userContext, currentMissionId)
-    if (!mission.has('completed')) {
-      userMission = await UserMissionModel.query(userContext, currentMissionId, userId)
+  if ('currentMissionId' in user && isValid) {
+    const mission = await MissionModel.get(userContext, user.currentMissionId)
+    if ('completed' in mission) {
+      const userMission = await UserMissionModel.query(userContext, {
+        missionId: user.currentMissionId,
+        userId,
+      })
       const missionMaxTabsDay = calculateMaxTabs(userMission.missionMaxTabsDay)
-      const {currentTabStreak, longestTabStreak} = calculateTabStreak(userMission.missionMaxTabsDay)
+      const { currentTabStreak, longestTabStreak } = calculateTabStreak(
+        userMission.missionMaxTabsDay
+      )
       await UserModel.update(userContext, {
         id: userId,
         tabs: { $add: 1 },
@@ -95,7 +106,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     }
   }
 
-  const maxTabsDayVal = calculateMaxTabs(user.maxTabsDay)
+  const maxTabsDayVal = calculateMaxTabs(todayTabCount, user.maxTabsDay)
 
   try {
     // TODO: parallelize the multiple awaits
