@@ -64,10 +64,27 @@ class UserMission extends BaseModel {
         .default(self.fieldDefaults.currentTabStreak)
         .description(`count of the current tab streak in current mission`),
       missionMaxTabsDay: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.missionMaxTabsDay)
-        .description(`most tabs in a single day during mission`),
+        .object({
+          // The count of tabs for the day on which the user opened
+          // the most tabs.
+          maxDay: types.object({
+            date: types.string().isoDate(),
+            numTabs: types.number().integer(),
+          }),
+          // The count of tabs for the current (or most recent) day
+          // the user has opened a tab.
+          recentDay: types.object({
+            date: types.string().isoDate(),
+            numTabs: types.number().integer(),
+          }),
+        })
+        .default(
+          self.fieldDefaults.missionMaxTabsDay,
+          `Default is zero tabs for today.`
+        )
+        .description(
+          `Most tabs in a single day during the mission.`
+        ),
       acknowledgedMissionComplete: types
         .boolean()
         .default(self.fieldDefaults.acknowledgedMissionComplete)
