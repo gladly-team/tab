@@ -4,10 +4,9 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
-import { getTodayTabCount } from './user-utils'
+import { calculateMaxTabs, calculateTabStreak, getTodayTabCount } from './user-utils'
 import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
-import { isValidLiteralValue } from 'graphql'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -84,32 +83,19 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     mission = await MissionModel.get(userContext, currentMissionId)
     if (!mission.has('completed')) {
       userMission = await UserMissionModel.query(userContext, currentMissionId, userId)
-      
+      const missionMaxTabsDay = calculateMaxTabs(userMission.missionMaxTabsDay)
+      const {currentTabStreak, longestTabStreak} = calculateTabStreak(userMission.missionMaxTabsDay)
       await UserModel.update(userContext, {
         id: userId,
         tabs: { $add: 1 },
+        missionMaxTabsDay,
+        currentTabStreak,
+        longestTabStreak,
       })
     }
   }
 
-  // Update the user's counter for max tabs in a day.
-  // If this is the user's first tab today, reset the counter
-  // for the user's "current day" tab count.
-  // If today is also the day of all time max tabs,
-  // update the max tabs day value.
-  const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
-  const maxTabsDayVal = {
-    maxDay: {
-      date: isTodayMax
-        ? moment.utc().toISOString()
-        : user.maxTabsDay.maxDay.date,
-      numTabs: isTodayMax ? todayTabCount : user.maxTabsDay.maxDay.numTabs,
-    },
-    recentDay: {
-      date: moment.utc().toISOString(),
-      numTabs: todayTabCount,
-    },
-  }
+  const maxTabsDayVal = calculateMaxTabs(user.maxTabsDay)
 
   try {
     // TODO: parallelize the multiple awaits
