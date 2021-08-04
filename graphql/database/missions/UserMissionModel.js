@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
@@ -99,7 +101,16 @@ class UserMission extends BaseModel {
       tabs: 0,
       longestTabStreak: 0,
       currentTabStreak: 0,
-      missionMaxTabsDay: 0,
+      missionMaxTabsDay: () => ({
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+      }),
       acknowledgedMissionStarted: false,
       acknowledgedMissionComplete: false,
     }

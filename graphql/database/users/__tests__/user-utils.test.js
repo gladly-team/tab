@@ -83,4 +83,154 @@ describe('user utils', () => {
     const { getTodaySearchCount } = require('../user-utils')
     expect(getTodaySearchCount(mockUser)).toBe(0)
   })
+
+  test('calculateMaxTabs correctly updates both maxDay and recentDay keys', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(1, 'days')
+          .toISOString(),
+        numTabs: 14,
+      },
+      recentDay: {
+        date: '2017-06-18T01:13:28.000Z', // not today
+        numTabs: 10,
+      },
+    }
+    const { calculateMaxTabs } = require('../user-utils')
+    expect(calculateMaxTabs(15, mockMaxDay)).toEqual({
+      maxDay: {
+        date: moment.utc().toISOString(),
+        numTabs: 15,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // today
+        numTabs: 15,
+      },
+    })
+  })
+
+  test('calculateMaxTabs correctly updates only recentDay keys', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 200,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // not today
+        numTabs: 10,
+      },
+    }
+    const { calculateMaxTabs } = require('../user-utils')
+    expect(calculateMaxTabs(15, mockMaxDay)).toEqual({
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 200,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // today
+        numTabs: 15,
+      },
+    })
+  })
+
+  test('calculateTabStreak correctly updates current tab streak and longest tab streak', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 10,
+      },
+      recentDay: {
+        date: moment
+          .utc()
+          .subtract(1, 'days')
+          .toISOString(), // not today
+        numTabs: 10,
+      },
+    }
+    const { calculateTabStreak } = require('../user-utils')
+    expect(calculateTabStreak(mockMaxDay, 2, 2)).toEqual({
+      currentTabStreak: 3,
+      longestTabStreak: 3,
+    })
+  })
+
+  test('calculateTabStreak correctly updates only current tab streak', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 10,
+      },
+      recentDay: {
+        date: moment
+          .utc()
+          .subtract(1, 'days')
+          .toISOString(), // yesterday
+        numTabs: 10,
+      },
+    }
+    const { calculateTabStreak } = require('../user-utils')
+    expect(calculateTabStreak(mockMaxDay, 2, 4)).toEqual({
+      currentTabStreak: 3,
+      longestTabStreak: 4,
+    })
+  })
+
+  test('calculateTabStreak correctly resets current tab streak', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 10,
+      },
+      recentDay: {
+        date: moment
+          .utc()
+          .subtract(2, 'days')
+          .toISOString(), // yesterday
+        numTabs: 10,
+      },
+    }
+    const { calculateTabStreak } = require('../user-utils')
+    expect(calculateTabStreak(mockMaxDay, 2, 4)).toEqual({
+      currentTabStreak: 0,
+      longestTabStreak: 4,
+    })
+  })
+
+  test('calculateTabStreak correctly doesnt change if same day', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 10,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // yesterday
+        numTabs: 10,
+      },
+    }
+    const { calculateTabStreak } = require('../user-utils')
+    expect(calculateTabStreak(mockMaxDay, 2, 4)).toEqual({
+      currentTabStreak: 2,
+      longestTabStreak: 4,
+    })
+  })
 })

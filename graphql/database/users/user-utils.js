@@ -34,6 +34,12 @@ export const getTodaySearchCount = user => {
   return isFirstSearchToday ? 0 : user.maxSearchesDay.recentDay.numSearches
 }
 
+/**
+ * Updates the max day object as appropriate given todays tab count.
+ * @param {object} maxDayObject
+ * @param {int} todayTabCount number of tabs logged today
+ * @return {object} The updated max day object
+ */
 export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
@@ -53,6 +59,13 @@ export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
   }
 }
 
+/**
+ * Calculates tab streak for the current user.
+ * @param {object} maxDayObject
+ * @param {int} currentTabStreak consecutive days with a logged tab
+ * @param {int} longestTabStreak longest streak of consecutive days with a logged tab
+ * @return {object} The current and longest tab streaks
+ */
 export const calculateTabStreak = (
   maxDayObject,
   currentTabStreak,
@@ -64,7 +77,7 @@ export const calculateTabStreak = (
     .isSame(recentDay, 'd')
   const isPreviousDay = recentDay.isBefore(
     moment()
-      .subtract(2, 'days')
+      .subtract(1, 'days')
       .startOf('day')
   )
   let newCurrentTabStreak = currentTabStreak
@@ -72,8 +85,8 @@ export const calculateTabStreak = (
 
   if (isYesterday) {
     newCurrentTabStreak += 1
-    if (currentTabStreak > longestTabStreak) {
-      newLongestTabStreak = currentTabStreak
+    if (newCurrentTabStreak > longestTabStreak) {
+      newLongestTabStreak = newCurrentTabStreak
     }
   } else if (isPreviousDay) {
     newCurrentTabStreak = 0
