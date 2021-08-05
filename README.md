@@ -3,7 +3,7 @@
 <a href="https://www.browserstack.com/automate/public-build/ZDB3cGJEVUxPcTc2Y0g4L1BPU3UyRWpmL3NlVEM1N0p3M3cvQ1Bxb0lEQT0tLXA1aEcvM21iZng4eG5NOTVIZUVHMnc9PQ==--b8f278737dc1219bf657bc70fd9f0c5f4652199a"><img src='https://www.browserstack.com/automate/badge.svg?badge_key=ZDB3cGJEVUxPcTc2Y0g4L1BPU3UyRWpmL3NlVEM1N0p3M3cvQ1Bxb0lEQT0tLXA1aEcvM21iZng4eG5NOTVIZUVHMnc9PQ==--b8f278737dc1219bf657bc70fd9f0c5f4652199a'/></a>
 
 # Tab for a Cause
-*The easiest way to do good every day*
+The easiest way to do good every day! Join in: [tab.gladly.io](https://tab.gladly.io/)
 
 ## Developing
 
