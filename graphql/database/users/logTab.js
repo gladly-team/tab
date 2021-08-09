@@ -4,7 +4,7 @@ import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
-import { getTodayTabCount } from './user-utils'
+import { calculateMaxTabs, getTodayTabCount } from './user-utils'
 import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 
@@ -77,25 +77,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   }
   const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
-
-  // Update the user's counter for max tabs in a day.
-  // If this is the user's first tab today, reset the counter
-  // for the user's "current day" tab count.
-  // If today is also the day of all time max tabs,
-  // update the max tabs day value.
-  const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
-  const maxTabsDayVal = {
-    maxDay: {
-      date: isTodayMax
-        ? moment.utc().toISOString()
-        : user.maxTabsDay.maxDay.date,
-      numTabs: isTodayMax ? todayTabCount : user.maxTabsDay.maxDay.numTabs,
-    },
-    recentDay: {
-      date: moment.utc().toISOString(),
-      numTabs: todayTabCount,
-    },
-  }
+  const maxTabsDay = calculateMaxTabs(todayTabCount, user.maxTabsDay)
 
   try {
     // TODO: parallelize the multiple awaits
@@ -110,7 +92,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
       tabs: { $add: 1 },
       ...(isValid && { validTabs: { $add: 1 } }),
       lastTabTimestamp: moment.utc().toISOString(),
-      maxTabsDay: maxTabsDayVal,
+      maxTabsDay,
     })
   } catch (e) {
     throw e
