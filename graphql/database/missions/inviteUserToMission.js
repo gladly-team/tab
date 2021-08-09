@@ -10,6 +10,7 @@ import {
   sanitize,
   getUserInvites,
 } from '../invitedUsers/utils'
+import getCurrentUserMission from './getCurrentUserMission'
 
 const INVITED = 'invited'
 /**
@@ -102,7 +103,11 @@ const createInvitedUsers = async (
         ...sortedResults.existingUserRejected,
       ],
     })
-    return sortedResults
+    const newlyCreatedMission = await getCurrentUserMission({
+      id: inviterId,
+      currentMissionId: currentMission.id,
+    })
+    return { currentMission: newlyCreatedMission }
   } catch (e) {
     throw e
   }

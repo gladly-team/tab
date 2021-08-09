@@ -599,7 +599,9 @@ const userType = new GraphQLObjectType({
       ),
       description: 'notifications for the v4 user to see',
       resolve: () => {
+        console.log(process.env.SHOW_NOTIF_INTL_CAT_DAY_2021, 'should be true')
         if (process.env.SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
+          console.log('fired')
           return [{ code: 'intlCatDay2021' }]
         }
         return []
@@ -1450,33 +1452,9 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
     inviterMessage: { type: GraphQLString },
   },
   outputFields: {
-    successfulEmailAddresses: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'successfulSquadEmailAddresses',
-          fields: () => ({ email: { type: GraphQLString } }),
-        })
-      ),
-    },
-    existingUserInvited: {
-      type: new GraphQLList(GraphQLString),
-      description: 'a list of invited emails for existing users',
-    },
-    failedEmailAddresses: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'failedSquadEmailAddresses',
-          fields: () => ({
-            email: { type: GraphQLString },
-            error: { type: GraphQLString },
-          }),
-        })
-      ),
-    },
-    existingUserRejected: {
-      type: new GraphQLList(GraphQLString),
-      description:
-        'a list of invited emails for existing users rejected bc they are already in a mission',
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
     },
   },
   mutateAndGetPayload: (input, context) => {
@@ -1501,8 +1479,9 @@ const createNewMissionMutation = mutationWithClientMutationId({
     squadName: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    squadId: {
-      type: GraphQLString,
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
     },
   },
   mutateAndGetPayload: (input, context) => {
