@@ -377,9 +377,15 @@ input CreateSquadInvitesInput {
 
 type CreateSquadInvitesPayload {
   successfulEmailAddresses: [successfulSquadEmailAddresses]
-  existingUserInvited: [successfulExistingUsers]
+
+  """a list of invited emails for existing users"""
+  existingUserInvited: [String]
   failedEmailAddresses: [failedSquadEmailAddresses]
-  existingUserRejected: [rejectedExistingUsers]
+
+  """
+  a list of invited emails for existing users rejected bc they are already in a mission
+  """
+  existingUserRejected: [String]
   clientMutationId: String
 }
 
@@ -798,10 +804,6 @@ input ReferralData {
   referringChannel: String
 }
 
-type rejectedExistingUsers {
-  username: String
-}
-
 """Info about any rate-limiting for VC earned from search queries"""
 type SearchRateLimit {
   """
@@ -965,10 +967,6 @@ type SquadMemberInfo {
 
 type successfulEmailAddresses {
   email: String
-}
-
-type successfulExistingUsers {
-  username: String
 }
 
 type successfulSquadEmailAddresses {
