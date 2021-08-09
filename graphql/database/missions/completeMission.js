@@ -3,10 +3,18 @@ import getCurrentUserMission from './getCurrentUserMission'
 import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
+  USERS_OVERRIDE,
 } from '../../utils/permissions-overrides'
 import MissionModel from './MissionModel'
+import {
+  LONGEST_TAB_STREAK_AWARD_NAME,
+  MOST_TABS_IN_DAY_AWARD_NAME,
+  MOST_TOTAL_TABS_AWARD_NAME,
+} from './constants'
+import UserModel from '../users/UserModel'
 
-const override = getPermissionsOverride(MISSIONS_OVERRIDE)
+const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
+const usersOverride = getPermissionsOverride(USERS_OVERRIDE)
 
 /**
  * @param {string} missionId
@@ -37,23 +45,32 @@ export default async (missionId, userId) => {
 
   const endOfMissionAwards = [
     {
-      awardType: 'Consistent Kitty',
-      user: longestTabMember.username,
+      awardType: LONGEST_TAB_STREAK_AWARD_NAME,
+      user: longestTabMember.userId,
       unit: longestTabMember.longestTabStreak,
     },
     {
-      awardType: 'Hot Paws',
-      user: mostDayTabsMember.username,
+      awardType: MOST_TABS_IN_DAY_AWARD_NAME,
+      user: mostDayTabsMember.userId,
       unit: mostDayTabsMember.missionMaxTabsDay,
     },
     {
-      awardType: 'All-Star Fur Ball',
-      user: mostTotalTabsMember.username,
+      awardType: MOST_TOTAL_TABS_AWARD_NAME,
+      user: mostTotalTabsMember.userId,
       unit: mostTotalTabsMember.tabs,
     },
   ]
 
-  await MissionModel.update(override, {
+  await Promise.all(
+    mission.squadMembers.map(async member => {
+      UserModel.update(usersOverride, {
+        userId: member.userId,
+        currentMissionId: null,
+      })
+    })
+  )
+
+  await MissionModel.update(missionsOverride, {
     id: missionId,
     completed: moment.utc().toISOString(),
     endOfMissionAwards,

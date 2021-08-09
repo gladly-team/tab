@@ -143,6 +143,7 @@ const mockDefaultMissionReturn = {
   tabCount: 258,
   squadMembers: [
     {
+      userId: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
       username: 'alec',
       status: 'accepted',
       longestTabStreak: 4,
@@ -151,6 +152,7 @@ const mockDefaultMissionReturn = {
       tabs: 234,
     },
     {
+      userId: 'abcdefghijklmno',
       username: 'kevin',
       status: 'accepted',
       longestTabStreak: 4,

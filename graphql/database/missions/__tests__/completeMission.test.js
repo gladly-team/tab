@@ -5,9 +5,11 @@ import completeMission from '../completeMission'
 import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
+  USERS_OVERRIDE,
 } from '../../../utils/permissions-overrides'
 import { mockDate } from '../../test-utils'
 import MissionModel from '../MissionModel'
+import UserModel from '../../users/UserModel'
 
 jest.mock('../utils')
 jest.mock('../../databaseClient')
@@ -26,7 +28,8 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-const override = getPermissionsOverride(MISSIONS_OVERRIDE)
+const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
+const usersOverride = getPermissionsOverride(USERS_OVERRIDE)
 
 const mockDefaultMissionReturnIncomplete = {
   missionId: '123456789',
@@ -38,6 +41,7 @@ const mockDefaultMissionReturnIncomplete = {
   tabCount: 258,
   squadMembers: [
     {
+      userId: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
       username: 'alec',
       status: 'accepted',
       longestTabStreak: 4,
@@ -58,6 +62,7 @@ const mockDefaultMissionReturnComplete = {
   tabCount: 354,
   squadMembers: [
     {
+      userId: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
       username: 'alec',
       status: 'accepted',
       longestTabStreak: 4,
@@ -66,6 +71,7 @@ const mockDefaultMissionReturnComplete = {
       tabs: 258,
     },
     {
+      userId: 'abcdefghijklmno',
       username: 'kevin',
       status: 'accepted',
       longestTabStreak: 6,
@@ -74,6 +80,7 @@ const mockDefaultMissionReturnComplete = {
       tabs: 34,
     },
     {
+      userId: 'omnlkjihgfedcba',
       username: 'jed',
       status: 'accepted',
       longestTabStreak: 4,
@@ -102,29 +109,38 @@ describe('completeMissions', () => {
   })
 
   it('calculates end of mission awards correctly and complete time', async () => {
-    expect.assertions(2)
+    expect.assertions(5)
     getCurrentUserMission.mockReturnValue(mockDefaultMissionReturnComplete)
 
-    const updateMethod = jest.spyOn(MissionModel, 'update')
+    const updateMissionMethod = jest.spyOn(MissionModel, 'update')
+    const updateUserMethod = jest.spyOn(UserModel, 'update')
 
     const completeMissionResult = await completeMission('123456789', '123')
 
-    expect(updateMethod).toHaveBeenCalledWith(override, {
+    mockDefaultMissionReturnComplete.squadMembers.forEach(member => {
+      expect(updateUserMethod).toHaveBeenCalledWith(usersOverride, {
+        userId: member.userId,
+        currentMissionId: null,
+        updated: moment.utc().toISOString(),
+      })
+    })
+
+    expect(updateMissionMethod).toHaveBeenCalledWith(missionsOverride, {
       id: mockDefaultMissionReturnComplete.missionId,
       completed: moment.utc().toISOString(),
       endOfMissionAwards: [
         {
-          user: 'kevin',
+          user: 'abcdefghijklmno',
           awardType: 'Consistent Kitty',
           unit: 6,
         },
         {
-          user: 'jed',
+          user: 'omnlkjihgfedcba',
           awardType: 'Hot Paws',
           unit: 20,
         },
         {
-          user: 'alec',
+          user: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
           awardType: 'All-Star Fur Ball',
           unit: 258,
         },
