@@ -9,7 +9,7 @@ env:
   - CXX=g++-5
   - SLS_DEBUG=true
   - LOG_TEST_COVERAGE=true
-  - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/8a660efb-4edc-45ca-b82b-bae1987156fc
+  - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/5e058db8-5c79-4bae-9209-cde666eda29e
   ########## Test stage ##########
   # Note: Material UI creates different DOM between development
   # and production Node environments, which breaks Jest snapshot tests.
