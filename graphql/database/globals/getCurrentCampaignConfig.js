@@ -34,10 +34,10 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: true,
   },
   goal: {
-    impactUnitSingular: 'year of reading support to a child',
-    impactUnitPlural: 'yearss of reading support to a child',
-    impactVerbPastParticiple: 'given',
-    impactVerbPastTense: 'gave',
+    impactUnitSingular: 'child',
+    impactUnitPlural: 'children',
+    impactVerbPastParticiple: 'provided with a year of reading instruction',
+    impactVerbPastTense: 'provided with a year of reading instruction',
     limitProgressToTargetMax: true,
     numberSource: 'moneyRaised', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
