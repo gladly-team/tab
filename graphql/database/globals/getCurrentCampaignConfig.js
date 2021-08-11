@@ -1,18 +1,14 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## July Spotlight: RAINN'
+const campaignTitle = '## Back to School: Placeholder'
 const campaignDescription = `
-#### *Content Warning: Sexual Violence*
-#### Join us in supporting [RAINN](https://www.rainn.org/) (Rape, Abuse & Incest National Network), an organization committed to helping “improve the lives of hundreds of thousands of people affected by sexual violence annually”.
-#### On average, RAINN supports 844 survivors each day through their victim services programs and “educates more than 130 million people per year on prevention and recovery.”
+#### Cupcake ipsum dolor sit amet. Sesame snaps cake tiramisu candy lollipop tart donut macaroon. Pastry ice cream caramels apple pie biscuit jelly-o bonbon cheesecake. Ice cream jujubes macaroon jelly chocolate topping brownie toffee apple pie.
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle =
-  '## Thank you for supporting [RAINN](https://www.rainn.org/)!'
+const campaignEndTitle = '## Thank you for supporting Room to Read!'
 const campaignEndDescription = `
-#### *Content Warning: Sexual Violence*
-#### With your help, we were able to support an incredible organization, supporting survivors of sexual assault. The funds raised not only will benefit their 24/7 national hotline but also help with local programming and lead to changes in legislation.
+#### Cupcake ipsum dolor sit amet. Sesame snaps cake tiramisu candy lollipop tart donut macaroon. Pastry ice cream caramels apple pie biscuit jelly-o bonbon cheesecake. Ice cream jujubes macaroon jelly chocolate topping brownie toffee apple pie.
 `
 
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
@@ -22,34 +18,35 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'RAINNJuly2021',
-  charityId: '0550618f-9ed6-477e-a1a4-21f607c7536f',
+  campaignId: 'RoomToReadAug2021',
+  charityId: '3caf69b6-9803-4495-9a5c-5ae0316bf367',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
-  countMoneyRaised: false,
+  countMoneyRaised: true,
   countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: false,
+    whenGoalAchieved: true,
     whenTimeEnds: true,
   },
   goal: {
-    impactUnitSingular: 'heart',
-    impactUnitPlural: 'hearts',
-    impactVerbPastParticiple: 'donated',
-    impactVerbPastTense: 'donated',
-    limitProgressToTargetMax: false,
-    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    impactUnitSingular: 'year of reading support to a child',
+    impactUnitPlural: 'yearss of reading support to a child',
+    impactVerbPastParticiple: 'given',
+    impactVerbPastTense: 'gave',
+    limitProgressToTargetMax: true,
+    numberSource: 'moneyRaised', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 6e6,
-    // transformNumberSourceValue: num => {
-    //   return 9e6
-    // },
+    targetNumber: 100,
+    transformNumberSourceValue: num => {
+      // return 9e6
+      return Math.floor(num / 50)
+    },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -91,39 +88,39 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     // },
   },
   showCountdownTimer: true,
-  showHeartsDonationButton: true,
+  showHeartsDonationButton: false,
   showProgressBar: true,
-  showSocialSharing: true,
-  socialSharing: {
-    url: 'https://tab.gladly.io',
-    FacebookShareButtonProps: {
-      quote:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-    },
-    // RedditShareButtonProps: {
-    //   title:
-    //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
-    // },
-    TumblrShareButtonProps: {
-      title: 'Support Trans Lifeline by opening browser tabs',
-      caption:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-    },
-    TwitterShareButtonProps: {
-      title:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-      related: ['@TabForACause'],
-    },
-  },
+  showSocialSharing: false,
+  // socialSharing: {
+  //   url: 'https://tab.gladly.io',
+  //   FacebookShareButtonProps: {
+  //     quote:
+  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+  //   },
+  //   // RedditShareButtonProps: {
+  //   //   title:
+  //   //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
+  //   // },
+  //   TumblrShareButtonProps: {
+  //     title: 'Support Trans Lifeline by opening browser tabs',
+  //     caption:
+  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+  //   },
+  //   TwitterShareButtonProps: {
+  //     title:
+  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+  //     related: ['@TabForACause'],
+  //   },
+  // },
   theme: {
     color: {
-      main: '#11497c',
+      main: '#49b6cf',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-07-15T16:00:00.000Z',
-    end: '2021-07-20T20:00:00.000Z',
+    start: '2021-08-25T16:00:00.000Z',
+    end: '2021-09-01T20:00:00.000Z',
   },
 })
 
