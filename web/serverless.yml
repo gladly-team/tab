@@ -33,7 +33,6 @@ custom:
   webAppName: Tab2017
   searchAppName: SearchForACause
   graphQLAppName: TabGraphQL
-  # We assume the domain is *not* prefixed by "www".
   cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
@@ -169,7 +168,6 @@ resources:
           # DefaultRootObject: index.html
           Aliases:
             - ${self:custom.cloudfrontDomainAlias}
-            - www.${self:custom.cloudfrontDomainAlias} # for a www redirect
           # Show the homepage's 404 page if any origin returns 404.
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html#HTTPStatusCodes-custom-error-pages
           CustomErrorResponses:
