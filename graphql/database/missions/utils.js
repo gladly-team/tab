@@ -112,6 +112,7 @@ const buildSquadMembersDetailedStats = async (
       tabs,
     } = item
     const squadMember = {
+      userId,
       username: userIdUsernameMap[userId],
       status: squadMemberDataFromMissionDocAsMap[userId].status,
       longestTabStreak,
