@@ -34,6 +34,7 @@ import {
 } from 'js/constants'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import StarIcon from '@material-ui/icons/Star'
+import VideoEngagement from 'js/components/Dashboard/VideoEngagementComponent'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -282,6 +283,15 @@ class UserMenu extends React.Component {
               </DashboardPopover>
             )}
           />
+          <CircleIcon
+            style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+            }}
+            classes={{
+              root: classes.circleIcon,
+            }}
+          />
+          <VideoEngagement />
           <CircleIcon
             style={{
               color: 'rgba(255, 255, 255, 0.8)',
