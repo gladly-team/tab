@@ -370,6 +370,14 @@
     <!-- End Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <!-- End tab-cmp -->
 
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
+    <!--
+      @gladly-customization:
+      true[X] video ads.
+    -->
+    <script src="//static.truex.com/js/client.js"></script>
+    <% } %>
+
     <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
     <!--
       @gladly-customization:
