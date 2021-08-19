@@ -540,6 +540,15 @@ type failedEmailAddresses {
   error: String
 }
 
+"""inviting user"""
+type InvitingUser {
+  """inviting user user id"""
+  userId: String!
+
+  """the name entered in invite"""
+  name: String!
+}
+
 input LogEmailVerifiedMutationInput {
   userId: String!
   clientMutationId: String
