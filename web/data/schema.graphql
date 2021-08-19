@@ -688,6 +688,12 @@ type Mission {
 
   """the end of mission awards calculated when mission completes"""
   endOfMissionAwards: [EndOfMissionAward]!
+
+  """ISO datetime string of when the mission started"""
+  started: String
+
+  """ISO datetime string of when the mission completed"""
+  completed: String
 }
 
 """A connection to a list of items."""

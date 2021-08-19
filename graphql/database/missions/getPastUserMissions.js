@@ -20,6 +20,7 @@ export default async ({ id: userId }) => {
     .filter('acknowledgedMissionComplete')
     .eq(true)
     .execute()
+  console.log(pastUserMissions, 'what')
   const missionDatabaseDocumentsByMission = await Promise.all(
     pastUserMissions.map(pastMission => {
       return Promise.all([
@@ -28,6 +29,7 @@ export default async ({ id: userId }) => {
       ])
     })
   )
+  console.log(missionDatabaseDocumentsByMission, 'am i returning')
   return missionDatabaseDocumentsByMission.map(
     ([userMissionDocuments, missionDocument]) =>
       buildMissionReturnType(missionDocument, userMissionDocuments, userId)

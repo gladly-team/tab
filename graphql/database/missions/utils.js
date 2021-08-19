@@ -87,6 +87,8 @@ const buildTopLevelFieldsFromMissionDocument = missionDocument => {
     tabGoal,
     endOfMissionAwards,
     created,
+    started,
+    completed,
   }
 }
 

@@ -1276,6 +1276,14 @@ const MissionType = new GraphQLObjectType({
       description:
         'the end of mission awards calculated when mission completes',
     },
+    started: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the mission started',
+    },
+    completed: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the mission completed',
+    },
   }),
 })
 const customErrorType = new GraphQLObjectType({
