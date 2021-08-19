@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import moment from 'moment'
 
 import tableNames from '../../tables'
 import { permissionAuthorizers } from '../../../utils/authorization-helpers'
@@ -91,9 +92,20 @@ describe('UserMissionModel', () => {
         missionId: '123456789',
         squadName: 'TestSquad',
         tabs: 234,
-        longestTabStreak: 4,
-        currentTabStreak: 2,
-        missionMaxTabsDay: 10,
+        tabStreak: () => ({
+          longestTabStreak: 4,
+          currentTabStreak: 2,
+        }),
+        missionMaxTabsDay: () => ({
+          maxDay: {
+            date: moment.utc().toISOString(),
+            numTabs: 10,
+          },
+          recentDay: {
+            date: moment.utc().toISOString(),
+            numTabs: 0,
+          },
+        }),
         acknowledgedMissionStarted: true,
         acknowledgedMissionComplete: false,
       },
@@ -116,9 +128,20 @@ describe('UserMissionModel', () => {
       userId: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       missionId: '123456789',
       tabs: 0,
-      longestTabStreak: 0,
-      currentTabStreak: 0,
-      missionMaxTabsDay: 0,
+      tabStreak: {
+        longestTabStreak: 0,
+        currentTabStreak: 0,
+      },
+      missionMaxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0,
+        },
+      },
       acknowledgedMissionComplete: false,
       acknowledgedMissionStarted: false,
     })

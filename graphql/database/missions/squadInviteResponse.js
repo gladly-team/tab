@@ -59,7 +59,6 @@ const squadInviteResponse = async (
   await UserMissionModel.getOrCreate(override, {
     userId,
     missionId,
-    acknowledgedMissionStarted: accepted,
   })
 
   return {

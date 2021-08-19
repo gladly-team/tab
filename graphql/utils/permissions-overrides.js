@@ -12,6 +12,7 @@ export const GET_RECRUITS_LAST_ACTIVE_OVERRIDE =
 export const ADD_VC_DONATED_BY_CHARITY = 'ADD_VC_DONATED_BY_CHARITY'
 export const ADMIN_MANAGEMENT = 'ADMIN_MANAGEMENT'
 export const MISSIONS_OVERRIDE = 'MISSIONS_OVERRIDE'
+export const USERS_OVERRIDE = 'USERS_OVERRIDE'
 // TODO: remove after migration
 export const MIGRATION_OVERRIDE = 'MIGRATION_OVERRIDE'
 
@@ -28,6 +29,7 @@ const validOverrides = {
   [ADD_VC_DONATED_BY_CHARITY]: `${ADD_VC_DONATED_BY_CHARITY}${validOverridesAppendix}`,
   [ADMIN_MANAGEMENT]: `${ADMIN_MANAGEMENT}${validOverridesAppendix}`,
   [MISSIONS_OVERRIDE]: `${MISSIONS_OVERRIDE}${validOverridesAppendix}`,
+  [USERS_OVERRIDE]: `${USERS_OVERRIDE}${validOverridesAppendix}`,
   // TODO: remove after migration
   [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`,
 }

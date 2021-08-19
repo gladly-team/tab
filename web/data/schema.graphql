@@ -714,7 +714,7 @@ type MissionEdge {
   cursor: String!
 }
 
-"""whether a usuer has accepted rejected or is pending invitation"""
+"""whether a user has accepted rejected or is pending invitation"""
 enum missionStatus {
   pending
   started
@@ -780,6 +780,13 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+"""pending mission invites for user"""
+type PendingMissionInvite {
+  """the mission id of the squad invite"""
+  missionId: String!
+  invitingUser: InvitingUser
 }
 
 type Query {
@@ -981,6 +988,7 @@ type UpdateImpactPayload {
 input UpdateMissionNotificationInput {
   userId: String!
   missionId: String!
+  action: String!
   clientMutationId: String
 }
 
@@ -1148,6 +1156,7 @@ type User implements Node {
 
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
+  pendingMissionInvites: [PendingMissionInvite]!
 }
 
 """a user's charity specific impact"""
