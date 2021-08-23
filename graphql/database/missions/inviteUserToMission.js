@@ -101,6 +101,7 @@ const createInvitedUsers = async (
       rejectedSquadMembers: [
         ...currentMission.rejectedSquadMembers,
         ...sortedResults.existingUserRejected,
+        ...sortedResults.failedEmailAddresses.map(item => item.email),
       ],
     })
     const newlyCreatedMission = await getCurrentUserMission({

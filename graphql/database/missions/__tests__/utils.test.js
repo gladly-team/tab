@@ -136,6 +136,8 @@ const mockUsers = [
 const mockDefaultMissionReturn = {
   missionId: '123456789',
   status: 'started',
+  completed: undefined,
+  started: '2017-07-19T03:05:12Z',
   squadName: 'TestSquad',
   tabGoal: 1000,
   endOfMissionAwards: [],
