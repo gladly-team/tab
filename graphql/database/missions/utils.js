@@ -1,9 +1,9 @@
+import get from 'lodash/get'
 import UserModel from '../users/UserModel'
 import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
-import get from 'lodash/get'
 
 const PENDING = 'pending'
 const ACCEPTED = 'accepted'
