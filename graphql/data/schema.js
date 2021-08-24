@@ -1223,6 +1223,10 @@ const SquadMemberInfo = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the most tabs in a single day',
     },
+    missionCurrentTabsDay: {
+      type: GraphQLInt,
+      description: 'the current tabs today',
+    },
     tabs: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'users tab contribution',

@@ -3,6 +3,7 @@ import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
+import get from 'lodash/get'
 
 const PENDING = 'pending'
 const ACCEPTED = 'accepted'
@@ -119,13 +120,21 @@ const buildSquadMembersDetailedStats = async (
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
     const { userId, tabStreak, missionMaxTabsDay, tabs } = item
     const { longestTabStreak, currentTabStreak } = tabStreak
+    console.log(
+      longestTabStreak,
+      currentTabStreak,
+      missionMaxTabsDay,
+      'should have value',
+      userId
+    )
     const squadMember = {
       userId,
       username: userIdUsernameMap[userId],
       status: squadMemberDataFromMissionDocAsMap[userId].status,
       longestTabStreak,
       currentTabStreak,
-      missionMaxTabsDay: missionMaxTabsDay.maxDay.numTabs,
+      missionMaxTabsDay: get(missionMaxTabsDay, 'maxDay.numTabs', 0),
+      missionCurrentTabsDay: get(missionMaxTabsDay, 'recentDay.numTabs', 0),
       tabs,
     }
     acum.push(squadMember)

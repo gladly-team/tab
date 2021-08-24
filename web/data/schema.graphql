@@ -971,6 +971,9 @@ type SquadMemberInfo {
   """the most tabs in a single day"""
   missionMaxTabsDay: Int!
 
+  """the current tabs today"""
+  missionCurrentTabsDay: Int
+
   """users tab contribution"""
   tabs: Int!
 }
