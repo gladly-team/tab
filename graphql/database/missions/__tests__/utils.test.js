@@ -20,9 +20,20 @@ const mockUserMissions = [
     missionId: '123456789',
     created: '2017-07-19T03:05:12Z',
     tabs: 234,
-    longestTabStreak: 4,
-    currentTabStreak: 2,
-    missionMaxTabsDay: 10,
+    tabStreak: {
+      longestTabStreak: 4,
+      currentTabStreak: 2,
+    },
+    missionMaxTabsDay: {
+      maxDay: {
+        date: '2017-07-19T03:05:12Z',
+        numTabs: 4,
+      },
+      recentDay: {
+        date: '2017-07-19T03:05:12Z',
+        numTabs: 4,
+      },
+    },
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -31,9 +42,20 @@ const mockUserMissions = [
     missionId: '123456789',
     created: '2017-07-19T03:05:12Z',
     tabs: 24,
-    longestTabStreak: 4,
-    currentTabStreak: 2,
-    missionMaxTabsDay: 10,
+    tabStreak: {
+      longestTabStreak: 4,
+      currentTabStreak: 2,
+    },
+    missionMaxTabsDay: {
+      maxDay: {
+        date: '2017-07-19T03:05:12Z',
+        numTabs: 4,
+      },
+      recentDay: {
+        date: '2017-07-19T03:05:12Z',
+        numTabs: 4,
+      },
+    },
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -150,7 +172,7 @@ const mockDefaultMissionReturn = {
       status: 'accepted',
       longestTabStreak: 4,
       currentTabStreak: 2,
-      missionMaxTabsDay: 10,
+      missionMaxTabsDay: 4,
       tabs: 234,
     },
     {
@@ -159,7 +181,7 @@ const mockDefaultMissionReturn = {
       status: 'accepted',
       longestTabStreak: 4,
       currentTabStreak: 2,
-      missionMaxTabsDay: 10,
+      missionMaxTabsDay: 4,
       tabs: 24,
     },
   ],
@@ -304,9 +326,20 @@ describe('buildMissionReturnType tests', () => {
         missionId: '123456789',
         created: '2017-07-19T03:05:12Z',
         tabs: 523,
-        longestTabStreak: 4,
-        currentTabStreak: 2,
-        missionMaxTabsDay: 10,
+        tabStreak: {
+          longestTabStreak: 4,
+          currentTabStreak: 2,
+        },
+        missionMaxTabsDay: {
+          maxDay: {
+            date: '2017-07-19T03:05:12Z',
+            numTabs: 10,
+          },
+          recentDay: {
+            date: '2017-07-19T03:05:12Z',
+            numTabs: 10,
+          },
+        },
         acknowledgedMissionStarted: true,
         acknowledgedMissionComplete: false,
       },
