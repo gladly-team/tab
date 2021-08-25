@@ -38,6 +38,14 @@ describe('logEmailVerified', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = true
 
@@ -56,6 +64,14 @@ describe('logEmailVerified', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: false,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = false
 
@@ -73,6 +89,14 @@ describe('logEmailVerified', () => {
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
 
     const logEmailVerified = require('../logEmailVerified').default
     await logEmailVerified(userContext, userContext.id)
@@ -104,6 +128,15 @@ describe('logEmailVerified', () => {
 
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = true
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
     })

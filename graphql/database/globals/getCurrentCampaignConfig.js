@@ -1,18 +1,16 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## July Spotlight: RAINN'
+const campaignTitle = '## Back to School: Lift Up 100 Students'
 const campaignDescription = `
-#### *Content Warning: Sexual Violence*
-#### Join us in supporting [RAINN](https://www.rainn.org/) (Rape, Abuse & Incest National Network), an organization committed to helping “improve the lives of hundreds of thousands of people affected by sexual violence annually”.
-#### On average, RAINN supports 844 survivors each day through their victim services programs and “educates more than 130 million people per year on prevention and recovery.”
+#### While many of you may be preparing for school by picking out a new backpack or color-coordinating your notebooks for each class, many kids around the world will not be returning to school. This year, we ask you to join us in supporting 100 students learning to read through an amazing organization, Room to Read.
+
+#### This week, all tabs will go toward this goal, and you can help us reach it even faster by inviting your friends to join Tab for a Cause! 
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle =
-  '## Thank you for supporting [RAINN](https://www.rainn.org/)!'
+const campaignEndTitle = '## Thanks supporting Room to Read!'
 const campaignEndDescription = `
-#### *Content Warning: Sexual Violence*
-#### With your help, we were able to support an incredible organization, supporting survivors of sexual assault. The funds raised not only will benefit their 24/7 national hotline but also help with local programming and lead to changes in legislation.
+#### Wow! Thank you, Tabbers, for helping us reach our goal of supporting 100 kids learning to read. You can continue to make a difference for children with limited access to education by [donating hearts](https://tab.gladly.io/newtab/profile/donate/) to Room to Read.
 `
 
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
@@ -22,14 +20,14 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'RAINNJuly2021',
-  charityId: '0550618f-9ed6-477e-a1a4-21f607c7536f',
+  campaignId: 'RoomToReadAug2021',
+  charityId: '3caf69b6-9803-4495-9a5c-5ae0316bf367',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
-  countMoneyRaised: false,
+  countMoneyRaised: true,
   countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
@@ -38,18 +36,19 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     whenTimeEnds: true,
   },
   goal: {
-    impactUnitSingular: 'heart',
-    impactUnitPlural: 'hearts',
-    impactVerbPastParticiple: 'donated',
-    impactVerbPastTense: 'donated',
+    impactUnitSingular: 'child',
+    impactUnitPlural: 'children',
+    impactVerbPastParticiple: 'provided with a year of reading instruction',
+    impactVerbPastTense: 'provided with a year of reading instruction',
     limitProgressToTargetMax: false,
-    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'moneyRaised', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 6e6,
-    // transformNumberSourceValue: num => {
-    //   return 9e6
-    // },
+    targetNumber: 100,
+    transformNumberSourceValue: num => {
+      // return 9e6
+      return Math.floor(num / 50)
+    },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -91,14 +90,14 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     // },
   },
   showCountdownTimer: true,
-  showHeartsDonationButton: true,
+  showHeartsDonationButton: false,
   showProgressBar: true,
   showSocialSharing: true,
   socialSharing: {
     url: 'https://tab.gladly.io',
     FacebookShareButtonProps: {
       quote:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
     },
     // RedditShareButtonProps: {
     //   title:
@@ -107,23 +106,23 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     TumblrShareButtonProps: {
       title: 'Support Trans Lifeline by opening browser tabs',
       caption:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
     },
     TwitterShareButtonProps: {
       title:
-        'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
       related: ['@TabForACause'],
     },
   },
   theme: {
     color: {
-      main: '#11497c',
+      main: '#4f6571',
       light: '#94989e',
     },
   },
   time: {
-    start: '2021-07-15T16:00:00.000Z',
-    end: '2021-07-20T20:00:00.000Z',
+    start: '2021-08-25T14:00:00.000Z',
+    end: '2021-09-01T18:00:00.000Z',
   },
 })
 
