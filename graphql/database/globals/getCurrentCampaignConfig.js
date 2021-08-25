@@ -32,7 +32,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
-    whenGoalAchieved: true,
+    whenGoalAchieved: false,
     whenTimeEnds: true,
   },
   goal: {
@@ -40,7 +40,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactUnitPlural: 'children',
     impactVerbPastParticiple: 'provided with a year of reading instruction',
     impactVerbPastTense: 'provided with a year of reading instruction',
-    limitProgressToTargetMax: true,
+    limitProgressToTargetMax: false,
     numberSource: 'moneyRaised', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
