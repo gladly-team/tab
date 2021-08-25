@@ -599,8 +599,8 @@ const userType = new GraphQLObjectType({
       ),
       description: 'notifications for the v4 user to see',
       resolve: () => {
-        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_2021 === 'true') {
-          return [{ code: 'intlCatDay2021' }]
+        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_END_2021 === 'true') {
+          return [{ code: 'intlCatDayEnd2021' }]
         }
         return []
       },
@@ -624,6 +624,38 @@ const userType = new GraphQLObjectType({
       type: ExperimentActionsOutputType,
       description: 'Actions the user has taken during experiments',
       resolve: user => constructExperimentActionsType(user),
+    },
+    pendingMissionInvites: {
+      type: new GraphQLNonNull(
+        GraphQLList(
+          new GraphQLObjectType({
+            name: 'PendingMissionInvite',
+            description: 'pending mission invites for user',
+            fields: () => ({
+              missionId: {
+                type: new GraphQLNonNull(GraphQLString),
+                description: 'the mission id of the squad invite',
+              },
+              invitingUser: {
+                type: new GraphQLObjectType({
+                  name: 'InvitingUser',
+                  description: 'inviting user',
+                  fields: () => ({
+                    userId: {
+                      type: new GraphQLNonNull(GraphQLString),
+                      description: 'inviting user user id',
+                    },
+                    name: {
+                      type: new GraphQLNonNull(GraphQLString),
+                      description: 'the name entered in invite',
+                    },
+                  }),
+                }),
+              },
+            }),
+          })
+        )
+      ),
     },
   }),
   interfaces: [nodeInterface],
@@ -1233,7 +1265,7 @@ const MissionType = new GraphQLObjectType({
         new GraphQLEnumType({
           name: 'missionStatus',
           description:
-            'whether a usuer has accepted rejected or is pending invitation',
+            'whether a user has accepted rejected or is pending invitation',
           values: {
             pending: { value: 'pending' },
             started: { value: 'started' },
