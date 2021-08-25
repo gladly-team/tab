@@ -1,14 +1,16 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-const campaignTitle = '## Back to School: Placeholder'
+const campaignTitle = '## Back to School: Lift Up 100 Students'
 const campaignDescription = `
-#### Cupcake ipsum dolor sit amet. Sesame snaps cake tiramisu candy lollipop tart donut macaroon. Pastry ice cream caramels apple pie biscuit jelly-o bonbon cheesecake. Ice cream jujubes macaroon jelly chocolate topping brownie toffee apple pie.
+#### While many of you may be preparing for school by picking out a new backpack or color-coordinating your notebooks for each class, many kids around the world will not be returning to school. This year, we ask you to join us in supporting 100 students learning to read through an amazing organization, Room to Read.
+
+#### This week, all tabs will go toward this goal, and you can help us reach it even faster by inviting your friends to join Tab for a Cause! 
 `
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## Thank you for supporting Room to Read!'
+const campaignEndTitle = '## Thanks supporting Room to Read!'
 const campaignEndDescription = `
-#### Cupcake ipsum dolor sit amet. Sesame snaps cake tiramisu candy lollipop tart donut macaroon. Pastry ice cream caramels apple pie biscuit jelly-o bonbon cheesecake. Ice cream jujubes macaroon jelly chocolate topping brownie toffee apple pie.
+#### Wow! Thank you, Tabbers, for helping us reach our goal of supporting 100 kids learning to read. You can continue to make a difference for children with limited access to education by [donating hearts](https://tab.gladly.io/newtab/profile/donate/) to Room to Read.
 `
 
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
@@ -90,31 +92,31 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   showCountdownTimer: true,
   showHeartsDonationButton: false,
   showProgressBar: true,
-  showSocialSharing: false,
-  // socialSharing: {
-  //   url: 'https://tab.gladly.io',
-  //   FacebookShareButtonProps: {
-  //     quote:
-  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-  //   },
-  //   // RedditShareButtonProps: {
-  //   //   title:
-  //   //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
-  //   // },
-  //   TumblrShareButtonProps: {
-  //     title: 'Support Trans Lifeline by opening browser tabs',
-  //     caption:
-  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-  //   },
-  //   TwitterShareButtonProps: {
-  //     title:
-  //       'This month, support RAINN on @TabForACause! It’s an amazing organization committed to offering support to survivors of sexual assault through its national hotline and local programs.',
-  //     related: ['@TabForACause'],
-  //   },
-  // },
+  showSocialSharing: true,
+  socialSharing: {
+    url: 'https://tab.gladly.io',
+    FacebookShareButtonProps: {
+      quote:
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
+    },
+    // RedditShareButtonProps: {
+    //   title:
+    //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
+    // },
+    TumblrShareButtonProps: {
+      title: 'Support Trans Lifeline by opening browser tabs',
+      caption:
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
+    },
+    TwitterShareButtonProps: {
+      title:
+        'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
+      related: ['@TabForACause'],
+    },
+  },
   theme: {
     color: {
-      main: '#49b6cf',
+      main: '#4f6571',
       light: '#94989e',
     },
   },
