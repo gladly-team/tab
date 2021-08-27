@@ -132,8 +132,8 @@ export const STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF = 'tab.yahoo.searchdemoInfo'
 
 // local testing -- default user
 
-export const YAHOO_USER_ID = 'VXNlcjphYmNkZWZnaGlqa2xtbm8='
+// export const YAHOO_USER_ID = 'VXNlcjphYmNkZWZnaGlqa2xtbm8='
 
 // prod
 
-// export const YAHOO_USER_ID = 'VXNlcjpFaDFTMGd0RXZZU1daalo4QjBrazRqazZ6Qm0y'
+export const YAHOO_USER_ID = 'VXNlcjpFaDFTMGd0RXZZU1daalo4QjBrazRqazZ6Qm0y'
