@@ -56,6 +56,10 @@ import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import { AdComponent, fetchAds } from 'tab-ads'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
+import {
+  STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+  YAHOO_USER_ID,
+} from 'js/constants'
 
 jest.mock('uuid/v4', () =>
   jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
@@ -1847,5 +1851,88 @@ describe('Dashboard component: campaign reopen click', () => {
     const callback = wrapper.find(UserMenu).prop('onClickCampaignReopen')
     callback()
     expect(removeCampaignDismissTime).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('Yahoo search demo info notification', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+    localStorageMgr.getItem.mockReturnValue(null)
+  })
+
+  it('shows an info notification to the Yahoo demo user', () => {
+    expect.assertions(1)
+    const newMockProps = {
+      ...mockProps,
+      user: {
+        ...mockProps.user,
+        id: YAHOO_USER_ID,
+      },
+    }
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...newMockProps} />)
+    expect(wrapper.find('[data-test-id="yahoo-demo-info"]').exists()).toBe(true)
+  })
+
+  it('does not show an info notification to a non-Yahoo-demo user', () => {
+    expect.assertions(1)
+    const newMockProps = {
+      ...mockProps,
+      user: {
+        ...mockProps.user,
+        id: 'some-other-id',
+      },
+    }
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...newMockProps} />)
+    expect(wrapper.find('[data-test-id="yahoo-demo-info"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not show an info notification if the Yahoo demo user has already dismissed it', () => {
+    expect.assertions(1)
+    const newMockProps = {
+      ...mockProps,
+      user: {
+        ...mockProps.user,
+        id: YAHOO_USER_ID,
+      },
+    }
+    localStorageMgr.getItem.mockReturnValue('true') // mock dismissal
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...newMockProps} />)
+    expect(wrapper.find('[data-test-id="yahoo-demo-info"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('hides the info notification after dismissing it and persists to local storage', () => {
+    expect.assertions(3)
+    const newMockProps = {
+      ...mockProps,
+      user: {
+        ...mockProps.user,
+        id: YAHOO_USER_ID,
+      },
+    }
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...newMockProps} />)
+    expect(wrapper.find('[data-test-id="yahoo-demo-info"]').exists()).toBe(true)
+    const notifButton = wrapper
+      .find('[data-test-id="yahoo-demo-info"]')
+      .find(Button)
+    notifButton.simulate('click')
+    expect(wrapper.find('[data-test-id="yahoo-demo-info"]').exists()).toBe(
+      false
+    )
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+      'true'
+    )
   })
 })

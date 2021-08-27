@@ -69,6 +69,10 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
+import {
+  STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+  YAHOO_USER_ID,
+} from 'js/constants'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -154,6 +158,9 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
+      hasDismissedYahooDemoInfo:
+        localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
+        'true',
     }
   }
 
@@ -379,6 +386,8 @@ class Dashboard extends React.Component {
     }
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
 
+    const isYahooUser = user && user.id === YAHOO_USER_ID
+
     return (
       <div
         style={{
@@ -433,6 +442,37 @@ class Dashboard extends React.Component {
                   removeCampaignDismissTime()
                 }}
               />
+              {isYahooUser && !this.state.hasDismissedYahooDemoInfo ? (
+                <Paper>
+                  <div
+                    data-test-id="yahoo-demo-info"
+                    style={{
+                      maxWidth: 300,
+                      padding: '12px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Typography variant={'body1'}>
+                      You can view your stats, our terms, and our privacy policy
+                      here.
+                    </Typography>
+                    <Button
+                      color={'primary'}
+                      onClick={() => {
+                        localStorageMgr.setItem(
+                          STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+                          'true'
+                        )
+                        this.setState({ hasDismissedYahooDemoInfo: true })
+                      }}
+                      style={{ marginLeft: 'auto' }}
+                    >
+                      Got it
+                    </Button>
+                  </div>
+                </Paper>
+              ) : null}
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
