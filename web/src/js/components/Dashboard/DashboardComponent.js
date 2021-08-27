@@ -5,6 +5,7 @@ import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -69,6 +70,10 @@ import {
 } from 'js/ads/adHelpers'
 import { AdComponent, fetchAds } from 'tab-ads'
 import logger from 'js/utils/logger'
+import {
+  STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+  YAHOO_USER_ID,
+} from 'js/constants'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -124,6 +129,26 @@ const loadAds = () => {
 }
 loadAds()
 
+const styles = theme => ({
+  paperArrow: {
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      marginRight: 10,
+      top: -8,
+      right: 0,
+      width: 10,
+      height: 10,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[1],
+      transform: 'translate(-50%, 50%) rotate(-45deg)',
+      clipPath:
+        'polygon(-5px -5px, calc(100% + 5px) -5px, calc(100% + 5px) calc(100% + 5px))',
+    },
+  },
+})
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -154,6 +179,9 @@ class Dashboard extends React.Component {
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
+      hasDismissedYahooDemoInfo:
+        localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
+        'true',
     }
   }
 
@@ -201,7 +229,7 @@ class Dashboard extends React.Component {
 
   render() {
     // Props will be null on first render.
-    const { user, app } = this.props
+    const { user, app, classes } = this.props
     const {
       adUnitsToShow,
       browser,
@@ -379,6 +407,8 @@ class Dashboard extends React.Component {
     }
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
 
+    const isYahooUser = user && user.id === YAHOO_USER_ID
+
     return (
       <div
         style={{
@@ -433,6 +463,37 @@ class Dashboard extends React.Component {
                   removeCampaignDismissTime()
                 }}
               />
+              {isYahooUser && !this.state.hasDismissedYahooDemoInfo ? (
+                <Paper className={classes.paperArrow}>
+                  <div
+                    data-test-id="yahoo-demo-info"
+                    style={{
+                      maxWidth: 300,
+                      padding: '12px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Typography variant={'body1'}>
+                      You can view your stats, our terms, and our privacy policy
+                      here.
+                    </Typography>
+                    <Button
+                      color={'primary'}
+                      onClick={() => {
+                        localStorageMgr.setItem(
+                          STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
+                          'true'
+                        )
+                        this.setState({ hasDismissedYahooDemoInfo: true })
+                      }}
+                      style={{ marginLeft: 'auto' }}
+                    >
+                      Got it
+                    </Button>
+                  </div>
+                </Paper>
+              ) : null}
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
@@ -801,4 +862,4 @@ Dashboard.propTypes = {
 
 Dashboard.defaultProps = {}
 
-export default Dashboard
+export default withStyles(styles, { withTheme: true })(Dashboard)
