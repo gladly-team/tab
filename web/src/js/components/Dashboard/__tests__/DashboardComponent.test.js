@@ -78,6 +78,15 @@ jest.mock('js/mutations/LogUserRevenueMutation')
 jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
 
+// Workaround to not have to .dive() on all shallow renders.
+jest.mock('@material-ui/core/styles', () => {
+  const muiStyles = require.requireActual('@material-ui/core/styles')
+  return {
+    ...muiStyles,
+    withStyles: () => comp => comp,
+  }
+})
+
 const mockNow = '2018-05-15T10:30:00.000'
 
 // Enzyme does not yet support React.lazy and React.Suspense,
@@ -158,6 +167,7 @@ const mockProps = {
       isLive: false,
     },
   },
+  classes: {},
 }
 
 describe('Dashboard component', () => {

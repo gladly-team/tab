@@ -5,6 +5,7 @@ import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -128,6 +129,26 @@ const loadAds = () => {
 }
 loadAds()
 
+const styles = theme => ({
+  paperArrow: {
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      marginRight: 10,
+      top: -8,
+      right: 0,
+      width: 10,
+      height: 10,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[1],
+      transform: 'translate(-50%, 50%) rotate(-45deg)',
+      clipPath:
+        'polygon(-5px -5px, calc(100% + 5px) -5px, calc(100% + 5px) calc(100% + 5px))',
+    },
+  },
+})
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -208,7 +229,7 @@ class Dashboard extends React.Component {
 
   render() {
     // Props will be null on first render.
-    const { user, app } = this.props
+    const { user, app, classes } = this.props
     const {
       adUnitsToShow,
       browser,
@@ -443,7 +464,7 @@ class Dashboard extends React.Component {
                 }}
               />
               {isYahooUser && !this.state.hasDismissedYahooDemoInfo ? (
-                <Paper>
+                <Paper className={classes.paperArrow}>
                   <div
                     data-test-id="yahoo-demo-info"
                     style={{
@@ -841,4 +862,4 @@ Dashboard.propTypes = {
 
 Dashboard.defaultProps = {}
 
-export default Dashboard
+export default withStyles(styles, { withTheme: true })(Dashboard)
