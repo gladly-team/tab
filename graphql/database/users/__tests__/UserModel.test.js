@@ -267,6 +267,7 @@ describe('UserModel', () => {
       v4BetaEnabled: false,
       hasViewedIntroFlow: false,
       deleted: false,
+      hasSeenSquads: false,
     })
   })
 

@@ -768,6 +768,7 @@ type Mutation {
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
 }
 
 """An object with an ID"""
@@ -848,6 +849,16 @@ input SetEmailInput {
 type SetEmailPayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetHasSeenSquadsInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenSquadsPayload {
+  user: User
   clientMutationId: String
 }
 
@@ -1176,6 +1187,9 @@ type User implements Node {
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
   pendingMissionInvites: [PendingMissionInvite]!
+
+  """Whether this user has seen any notification of the squads feature"""
+  hasSeenSquads: Boolean
 }
 
 """a user's charity specific impact"""
