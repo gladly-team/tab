@@ -20,20 +20,9 @@ const mockUserMissions = [
     missionId: '123456789',
     created: '2017-07-19T03:05:12Z',
     tabs: 234,
-    tabStreak: {
-      longestTabStreak: 4,
-      currentTabStreak: 2,
-    },
-    missionMaxTabsDay: {
-      maxDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-      recentDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-    },
+    longestTabStreak: 4,
+    currentTabStreak: 2,
+    missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -42,20 +31,9 @@ const mockUserMissions = [
     missionId: '123456789',
     created: '2017-07-19T03:05:12Z',
     tabs: 24,
-    tabStreak: {
-      longestTabStreak: 4,
-      currentTabStreak: 2,
-    },
-    missionMaxTabsDay: {
-      maxDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-      recentDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-    },
+    longestTabStreak: 4,
+    currentTabStreak: 2,
+    missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -170,7 +148,7 @@ const mockDefaultMissionReturn = {
       status: 'accepted',
       longestTabStreak: 4,
       currentTabStreak: 2,
-      missionMaxTabsDay: 4,
+      missionMaxTabsDay: 10,
       tabs: 234,
     },
     {
@@ -179,7 +157,7 @@ const mockDefaultMissionReturn = {
       status: 'accepted',
       longestTabStreak: 4,
       currentTabStreak: 2,
-      missionMaxTabsDay: 4,
+      missionMaxTabsDay: 10,
       tabs: 24,
     },
   ],
@@ -324,20 +302,9 @@ describe('buildMissionReturnType tests', () => {
         missionId: '123456789',
         created: '2017-07-19T03:05:12Z',
         tabs: 523,
-        tabStreak: {
-          longestTabStreak: 4,
-          currentTabStreak: 2,
-        },
-        missionMaxTabsDay: {
-          maxDay: {
-            date: '2017-07-19T03:05:12Z',
-            numTabs: 10,
-          },
-          recentDay: {
-            date: '2017-07-19T03:05:12Z',
-            numTabs: 10,
-          },
-        },
+        longestTabStreak: 4,
+        currentTabStreak: 2,
+        missionMaxTabsDay: 10,
         acknowledgedMissionStarted: true,
         acknowledgedMissionComplete: false,
       },

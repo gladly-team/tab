@@ -104,15 +104,20 @@ const buildSquadMembersDetailedStats = async (
     return acum
   }, {})
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
-    const { userId, tabStreak, missionMaxTabsDay, tabs } = item
-    const { longestTabStreak, currentTabStreak } = tabStreak
+    const {
+      userId,
+      longestTabStreak,
+      currentTabStreak,
+      missionMaxTabsDay,
+      tabs,
+    } = item
     const squadMember = {
       userId,
       username: userIdUsernameMap[userId],
       status: squadMemberDataFromMissionDocAsMap[userId].status,
       longestTabStreak,
       currentTabStreak,
-      missionMaxTabsDay: missionMaxTabsDay.maxDay.numTabs,
+      missionMaxTabsDay,
       tabs,
     }
     acum.push(squadMember)
