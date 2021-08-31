@@ -14,6 +14,7 @@ import appTheme, {
   dashboardIconActiveColor,
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
+import { externalHelpURL } from 'js/navigation/navigation'
 
 // I've temporarily added some hacky code for a yahoo demo and there is
 // user specific code in this file
@@ -212,15 +213,34 @@ class Search extends React.Component {
                 marginTop: '8px',
               }}
             >
+              <a
+                href={externalHelpURL}
+                target="_top"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  marginRight: 'auto',
+                  alignSelf: 'flex-start',
+                }}
+              >
+                <Button
+                  color={'primary'}
+                  style={{ marginLeft: 4, marginRight: 4 }}
+                >
+                  Learn more
+                </Button>
+              </a>
               <Button
                 color={'primary'}
                 onClick={this.onClickYahooNo.bind(this)}
+                style={{ marginLeft: 4, marginRight: 4 }}
               >
                 No
               </Button>
               <Button
                 color={'primary'}
                 variant={'contained'}
+                style={{ marginLeft: 4, marginRight: 4 }}
                 onClick={this.onClickYahooYes.bind(this)}
               >
                 Yes
