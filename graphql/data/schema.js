@@ -1238,7 +1238,7 @@ const SquadMemberInfo = new GraphQLObjectType({
       resolve: squadMember => getMaxTabsDay(squadMember),
     },
     missionCurrentTabsDay: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tabs today',
       resolve: squadMember => getMissionCurrentTabsDay(squadMember),
     },
