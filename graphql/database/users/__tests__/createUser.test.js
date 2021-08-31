@@ -864,6 +864,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
     expectedCreateItem = {
       ...expectedCreateItem,
       backgroundImage,
+      currentMissionId: undefined,
+      hasSeenSquads: false,
     }
 
     await createUser(
@@ -912,6 +914,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
       ...expectedCreateItem,
       backgroundImage,
       currentMissionId: missionId,
+      hasSeenSquads: true,
     }
 
     await createUser(

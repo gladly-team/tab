@@ -101,10 +101,10 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     }
 
     if (isValid && 'currentMissionId' in user) {
-      const userMission = await getCurrentUserMission(
-        user.currentMissionId,
-        userId
-      )
+      const userMission = await getCurrentUserMission({
+        currentMissionId: user.currentMissionId,
+        id: userId,
+      })
       const memberInfo = userMission.squadMembers.find(member => {
         return member.userId === user.id
       })
@@ -118,6 +118,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
           memberInfo.tabStreak
         )
         await UserMissionModel.update(missionsOverride, {
+          missionId: user.currentMissionId,
           userId,
           tabs: { $add: 1 },
           missionMaxTabsDay,
