@@ -620,6 +620,7 @@ describe('logTab', () => {
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: undefined,
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import get from 'lodash/get'
 import { random } from 'lodash/number'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
@@ -18,6 +19,7 @@ import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
 
 const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
 
@@ -100,7 +102,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
       user = await addVc(userContext, userId, 1)
     }
 
-    if (isValid && 'currentMissionId' in user) {
+    if (isValid && !!get(user, 'currentMissionId', undefined)) {
       const userMission = await getCurrentUserMission({
         currentMissionId: user.currentMissionId,
         id: userId,
@@ -117,15 +119,19 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
           memberInfo.missionMaxTabsDay,
           memberInfo.tabStreak
         )
-        await UserMissionModel.update(missionsOverride, {
-          missionId: user.currentMissionId,
-          userId,
-          tabs: { $add: 1 },
-          missionMaxTabsDay,
-          tabStreak,
-        })
-        if (userMission.tabCount + 1 >= userMission.tabGoal) {
-          completeMission(userId, user.currentMissionId)
+        try {
+          await UserMissionModel.update(missionsOverride, {
+            missionId: user.currentMissionId,
+            userId,
+            tabs: { $add: 1 },
+            missionMaxTabsDay,
+            tabStreak,
+          })
+          if (userMission.tabCount + 1 >= userMission.tabGoal) {
+            completeMission(userId, user.currentMissionId)
+          }
+        } catch (e) {
+          logger.error(e)
         }
       }
     }
