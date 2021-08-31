@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import UserModel from '../users/UserModel'
 import {
   getPermissionsOverride,
@@ -11,18 +10,6 @@ const REJECTED = 'rejected'
 const COMPLETED = 'completed'
 const STARTED = 'started'
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
-
-const buildUserIdUsernameMap = async userMissionDocuments =>
-  (await UserModel.getBatch(
-    override,
-    userMissionDocuments.map(user => user.userId),
-    { ProjectionExpression: 'id, username' }
-  )).reduce((acum, item) => {
-    // eslint-disable-next-line no-param-reassign
-    acum[item.id] = item.username
-    return acum
-  }, {})
-
 const buildSquadMemberDataFromMissionDoc = missionDoc => {
   const {
     acceptedSquadMembers,
@@ -75,10 +62,7 @@ const buildTopLevelFieldsFromUserMissionDocs = (userMissionDocuments, userId) =>
     }
   )
 
-const buildTopLevelFieldsFromMissionDocument = (
-  missionDocument,
-  userIdUsernameMap
-) => {
+const buildTopLevelFieldsFromMissionDocument = missionDocument => {
   const {
     id,
     squadName,
@@ -96,34 +80,43 @@ const buildTopLevelFieldsFromMissionDocument = (
   } else {
     status = PENDING
   }
-  const pivotedEndOfMissionAwards = endOfMissionAwards.map(award => ({
-    ...award,
-    user: userIdUsernameMap[award.user],
-  }))
   return {
     missionId: id,
     status,
     squadName,
     tabGoal,
-    endOfMissionAwards: pivotedEndOfMissionAwards,
+    endOfMissionAwards,
     created,
-    started,
-    completed,
   }
 }
 
 const buildSquadMembersDetailedStats = async (
   squadMemberDataFromMissionDocAsMap,
-  userMissionDocuments,
-  userIdUsernameMap
+  userMissionDocuments
 ) => {
+  const userIdUsernameMap = (await UserModel.getBatch(
+    override,
+    userMissionDocuments.map(user => user.userId),
+    { ProjectionExpression: 'id, username' }
+  )).reduce((acum, item) => {
+    // eslint-disable-next-line no-param-reassign
+    acum[item.id] = item.username
+    return acum
+  }, {})
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
-    const { userId, tabStreak, missionMaxTabsDay, tabs } = item
+    const {
+      userId,
+      longestTabStreak,
+      currentTabStreak,
+      missionMaxTabsDay,
+      tabs,
+    } = item
     const squadMember = {
       userId,
       username: userIdUsernameMap[userId],
       status: squadMemberDataFromMissionDocAsMap[userId].status,
-      tabStreak,
+      longestTabStreak,
+      currentTabStreak,
       missionMaxTabsDay,
       tabs,
     }
@@ -169,13 +162,8 @@ const buildMissionReturnType = async (
   userMissionDocuments,
   userId
 ) => {
-  const userIdUsernameMap = await buildUserIdUsernameMap([
-    ...userMissionDocuments,
-    ...missionDocument.pendingSquadMembersExisting.map(id => ({ userId: id })),
-  ])
   const topLevelFieldsFromMissionDocument = buildTopLevelFieldsFromMissionDocument(
-    missionDocument,
-    userIdUsernameMap
+    missionDocument
   )
   const topLevelFieldsFromUserMissionDocuments = buildTopLevelFieldsFromUserMissionDocs(
     userMissionDocuments,
@@ -186,8 +174,7 @@ const buildMissionReturnType = async (
   )
   const squadMembers = await buildSquadMembersDetailedStats(
     squadMemberDataFromMissionDocAsDictionary,
-    userMissionDocuments,
-    userIdUsernameMap
+    userMissionDocuments
   )
   return {
     ...topLevelFieldsFromMissionDocument,
@@ -196,12 +183,3 @@ const buildMissionReturnType = async (
   }
 }
 export default buildMissionReturnType
-
-export const getLongestTabStreak = squadMember =>
-  get(squadMember, 'tabStreak.longestTabStreak', 0)
-export const getCurrentTabStreak = squadMember =>
-  get(squadMember, 'tabStreak.currentTabStreak', 0)
-export const getMaxTabsDay = squadMember =>
-  get(squadMember, 'missionMaxTabsDay.maxDay.numTabs', 0)
-export const getMissionCurrentTabsDay = squadMember =>
-  get(squadMember, 'missionMaxTabsDay.recentDay.numTabs', 0)

@@ -7,7 +7,6 @@ import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
-import getCurrentUserMission from './getCurrentUserMission'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
@@ -43,9 +42,5 @@ export default async (userContext, userId, squadName) => {
     id: userId,
     currentMissionId: missionId,
   })
-  const newlyCreatedMission = await getCurrentUserMission({
-    currentMissionId: missionId,
-    id: userId,
-  })
-  return { currentMission: newlyCreatedMission }
+  return { squadId: missionId }
 }

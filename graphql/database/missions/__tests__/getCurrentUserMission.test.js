@@ -25,16 +25,7 @@ const mockUserMissions = [
       longestTabStreak: 4,
       currentTabStreak: 2,
     },
-    missionMaxTabsDay: {
-      maxDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-      recentDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-    },
+    missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -47,16 +38,7 @@ const mockUserMissions = [
       longestTabStreak: 4,
       currentTabStreak: 2,
     },
-    missionMaxTabsDay: {
-      maxDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-      recentDay: {
-        date: '2017-07-19T03:05:12Z',
-        numTabs: 4,
-      },
-    },
+    missionMaxTabsDay: 10,
     acknowledgedMissionStarted: true,
     acknowledgedMissionComplete: false,
   },
@@ -101,6 +83,7 @@ const mockDefaultMissionReturn = {
     },
   ],
 }
+// const mockParams = [userContext, userId, ['test123', 'test124'], 'alec']
 describe('getCurrentUserMission tests', () => {
   it('it successfully gets current mission for users with a mission', async () => {
     expect.assertions(3)

@@ -72,7 +72,6 @@ describe('MissionModel', () => {
       id: '123456789',
       squadName: 'TestSquad',
       missionType: 'cats',
-      tabGoal: 1000,
       acceptedSquadMembers: [],
       pendingSquadMembersExisting: [],
       pendingSquadMembersEmailInvite: [],
