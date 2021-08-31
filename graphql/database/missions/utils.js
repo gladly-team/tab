@@ -119,15 +119,12 @@ const buildSquadMembersDetailedStats = async (
 ) => {
   const squadMembersExisting = userMissionDocuments.reduce((acum, item) => {
     const { userId, tabStreak, missionMaxTabsDay, tabs } = item
-    const { longestTabStreak, currentTabStreak } = tabStreak
     const squadMember = {
       userId,
       username: userIdUsernameMap[userId],
       status: squadMemberDataFromMissionDocAsMap[userId].status,
-      longestTabStreak,
-      currentTabStreak,
-      missionMaxTabsDay: get(missionMaxTabsDay, 'maxDay.numTabs', 0),
-      missionCurrentTabsDay: get(missionMaxTabsDay, 'recentDay.numTabs', 0),
+      tabStreak,
+      missionMaxTabsDay,
       tabs,
     }
     acum.push(squadMember)
@@ -172,7 +169,10 @@ const buildMissionReturnType = async (
   userMissionDocuments,
   userId
 ) => {
-  const userIdUsernameMap = await buildUserIdUsernameMap(userMissionDocuments)
+  const userIdUsernameMap = await buildUserIdUsernameMap([
+    ...userMissionDocuments,
+    ...missionDocument.pendingSquadMembersExisting.map(id => ({ userId: id })),
+  ])
   const topLevelFieldsFromMissionDocument = buildTopLevelFieldsFromMissionDocument(
     missionDocument,
     userIdUsernameMap
@@ -196,3 +196,12 @@ const buildMissionReturnType = async (
   }
 }
 export default buildMissionReturnType
+
+export const getLongestTabStreak = squadMember =>
+  get(squadMember, 'tabStreak.longestTabStreak', 0)
+export const getCurrentTabStreak = squadMember =>
+  get(squadMember, 'tabStreak.currentTabStreak', 0)
+export const getMaxTabsDay = squadMember =>
+  get(squadMember, 'missionMaxTabsDay.maxDay.numTabs', 0)
+export const getMissionCurrentTabsDay = squadMember =>
+  get(squadMember, 'missionMaxTabsDay.recentDay.numTabs', 0)

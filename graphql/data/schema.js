@@ -84,6 +84,12 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 import getCurrentUserMission from '../database/missions/getCurrentUserMission'
 import getPastUserMissions from '../database/missions/getPastUserMissions'
+import {
+  getLongestTabStreak,
+  getCurrentTabStreak,
+  getMaxTabsDay,
+  getMissionCurrentTabsDay,
+} from '../database/missions/utils'
 import createMission from '../database/missions/createMission'
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -1218,19 +1224,23 @@ const SquadMemberInfo = new GraphQLObjectType({
     longestTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the longest tab streak in days so far',
+      resolve: squadMember => getLongestTabStreak(squadMember),
     },
     currentTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tab streak in days so far',
+      resolve: squadMember => getCurrentTabStreak(squadMember),
     },
 
     missionMaxTabsDay: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the most tabs in a single day',
+      resolve: squadMember => getMaxTabsDay(squadMember),
     },
     missionCurrentTabsDay: {
       type: GraphQLInt,
       description: 'the current tabs today',
+      resolve: squadMember => getMissionCurrentTabsDay(squadMember),
     },
     tabs: {
       type: new GraphQLNonNull(GraphQLInt),
