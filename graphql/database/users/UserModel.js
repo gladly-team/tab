@@ -367,6 +367,10 @@ class User extends BaseModel {
           })
         )
         .default(self.fieldDefaults.pendingMissionInvites),
+      hasSeenSquads: types
+        .boolean()
+        .description('if a user has been introduced to squads')
+        .default(self.fieldDefaults.hasSeenSquads),
     }
   }
 
@@ -413,6 +417,7 @@ class User extends BaseModel {
       hasViewedIntroFlow: false,
       deleted: false,
       pendingMissionInvites: [],
+      hasSeenSquads: false,
     }
   }
 
