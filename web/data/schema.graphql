@@ -1169,6 +1169,9 @@ type User implements Node {
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
   pendingMissionInvites: [PendingMissionInvite]!
+
+  """whether a v4 user has been introduced to squads in the ui"""
+  hasSeenSquads: Boolean!
 }
 
 """a user's charity specific impact"""

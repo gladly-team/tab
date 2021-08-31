@@ -657,6 +657,10 @@ const userType = new GraphQLObjectType({
         )
       ),
     },
+    hasSeenSquads: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether a v4 user has been introduced to squads in the ui',
+    },
   }),
   interfaces: [nodeInterface],
 })
