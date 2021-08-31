@@ -59,7 +59,7 @@ const mockMissionDocument = {
 }
 // const mockParams = [userContext, userId, ['test123', 'test124'], 'alec']
 describe('getPastUserMissions tests', () => {
-  it('it successfully gets past missions for users with a mission', async () => {
+  it('it successfully gets current mission for users with a mission', async () => {
     expect.assertions(2)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [mockUserMissions[0]],

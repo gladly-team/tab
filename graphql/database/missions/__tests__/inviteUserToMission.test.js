@@ -15,26 +15,8 @@ jest.mock('../MissionModel', () => ({
   get: jest.fn(),
   update: jest.fn(),
 }))
-jest.mock('../UserMissionModel', () => ({
-  get: jest.fn(),
-  update: jest.fn(),
-  getBatch: jest.fn(),
-  query: () => ({ execute: jest.fn().mockReturnValue([]) }),
-}))
 const userContext = getMockUserContext()
-const mockMissionDocument = {
-  id: '123456789',
-  squadName: 'TestSquad',
-  created: '2017-07-19T03:05:12Z',
-  started: '2017-07-19T03:05:12Z',
-  tabGoal: 1000,
-  acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
-  pendingSquadMembersExisting: ['efghijklmnopqrs'],
-  pendingSquadMembersEmailInvite: ['alec+897234@tabforacause.org'],
-  rejectedSquadMembers: [],
-  endOfMissionAwards: [],
-  missionType: 'cats',
-}
+
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -42,16 +24,28 @@ const userId = userContext.id
 const mockParams = [userContext, userId, ['test123', 'test124'], 'alec']
 describe('invite users to mission', () => {
   it('it successfully emails and invites new users', async () => {
-    expect.assertions(2)
+    expect.assertions(4)
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),
       [{ user: 'test' }],
     ])
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test123' })
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
-    MissionModel.get.mockReturnValue(mockMissionDocument)
-    await inviteUserToMission(...mockParams)
+    MissionModel.get.mockReturnValueOnce({
+      id: '123456789',
+      squadName: 'TestSquad',
+      created: '2017-07-19T03:05:12Z',
+      started: '2017-07-19T03:05:12Z',
+      tabGoal: 1000,
+      acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
+      pendingSquadMembersExisting: ['efghijklmnopqrs'],
+      pendingSquadMembersEmailInvite: ['alec+897234@tabforacause.org'],
+      rejectedSquadMembers: [],
+    })
+    const results = await inviteUserToMission(...mockParams)
     expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
+    expect(results.successfulEmailAddresses.length).toEqual(2)
+    expect(results.failedEmailAddresses.length).toEqual(0)
     expect(MissionModel.update).toHaveBeenCalledWith(expect.anything(), {
       id: '123456789',
       pendingSquadMembersEmailInvite: [
@@ -65,7 +59,7 @@ describe('invite users to mission', () => {
   })
 
   it('it seperates failed email creations from succesful email creations', async () => {
-    expect.assertions(2)
+    expect.assertions(4)
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),
       [{ user: 'test' }],
@@ -75,9 +69,21 @@ describe('invite users to mission', () => {
       email: 'test124',
       error: 'user already exists',
     })
-    MissionModel.get.mockReturnValue(mockMissionDocument)
-    await inviteUserToMission(...mockParams)
+    MissionModel.get.mockReturnValueOnce({
+      id: '123456789',
+      squadName: 'TestSquad',
+      created: '2017-07-19T03:05:12Z',
+      started: '2017-07-19T03:05:12Z',
+      tabGoal: 1000,
+      acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
+      pendingSquadMembersExisting: ['efghijklmnopqrs'],
+      pendingSquadMembersEmailInvite: ['alec+897234@tabforacause.org'],
+      rejectedSquadMembers: [],
+    })
+    const results = await inviteUserToMission(...mockParams)
     expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
+    expect(results.successfulEmailAddresses.length).toEqual(1)
+    expect(results.failedEmailAddresses.length).toEqual(1)
     expect(MissionModel.update).toHaveBeenCalledWith(expect.anything(), {
       id: '123456789',
       pendingSquadMembersEmailInvite: [
@@ -85,7 +91,7 @@ describe('invite users to mission', () => {
         'test123',
       ],
       pendingSquadMembersExisting: ['efghijklmnopqrs'],
-      rejectedSquadMembers: ['test124'],
+      rejectedSquadMembers: [],
     })
   })
 

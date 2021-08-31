@@ -46,7 +46,6 @@ class Mission extends BaseModel {
       tabGoal: types
         .number()
         .integer()
-        .default(self.fieldDefaults.tabGoal)
         .description(`number of tabs for goal`),
       missionType: types
         .string()
@@ -93,7 +92,6 @@ class Mission extends BaseModel {
   static get fieldDefaults() {
     return {
       missionType: 'cats',
-      tabGoal: 1000,
       acceptedSquadMembers: [],
       pendingSquadMembersExisting: [],
       pendingSquadMembersEmailInvite: [],

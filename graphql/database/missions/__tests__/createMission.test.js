@@ -9,37 +9,21 @@ jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
 jest.mock('../MissionModel', () => ({
   create: jest.fn(),
-  get: jest.fn(),
 }))
 jest.mock('../UserMissionModel', () => ({
   create: jest.fn(),
-  query: () => ({ execute: jest.fn().mockReturnValue([]) }),
 }))
 jest.mock('../../users/UserModel', () => ({
   get: jest.fn(),
   update: jest.fn(),
-  getBatch: jest.fn().mockReturnValue([]),
 }))
 beforeEach(() => {
   jest.clearAllMocks()
 })
-const mockDefaultMissionReturn = {
-  id: '123456789',
-  status: 'pending',
-  squadName: 'TestSquad',
-  tabGoal: 1000,
-  endOfMissionAwards: [],
-  created: '2017-07-19T03:05:12Z',
-  tabCount: 0,
-  acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73'],
-  pendingSquadMembersExisting: [],
-  pendingSquadMembersEmailInvite: [],
-  rejectedSquadMembers: [],
-  missionType: 'cats',
-}
+
 describe('createMission tests', () => {
   it('it creates a mission, user mission, and returns the squad id', async () => {
-    expect.assertions(3)
+    expect.assertions(4)
     const user = {
       id: 'abcdefghijklmno',
       email: 'kevin@example.com',
@@ -47,7 +31,6 @@ describe('createMission tests', () => {
       joined: '2017-07-18T20:45:53Z',
     }
     UserModel.get.mockReturnValueOnce(user)
-    MissionModel.get.mockReturnValue(mockDefaultMissionReturn)
     const returnObject = await createMission(
       getMockUserContext(),
       'abcdefghijklmno',
@@ -55,7 +38,8 @@ describe('createMission tests', () => {
     )
     expect(MissionModel.create).toHaveBeenCalled()
     expect(UserMissionModel.create).toHaveBeenCalled()
-    expect(returnObject.currentMission.missionId).toEqual('123456789')
+    expect(typeof returnObject.squadId).toEqual('string')
+    expect(returnObject.squadId.length).toEqual(9)
   })
 
   it('it throws an error if user is already in an ongoing mission', async () => {

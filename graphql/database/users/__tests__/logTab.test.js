@@ -721,14 +721,13 @@ describe('logTab', () => {
 
     await logTab(userContext, userId)
 
-    expect(getCurrentUserMission).toHaveBeenCalledWith({
-      currentMissionId: '123456789',
-      id: 'abcdefghijklmno',
-    })
+    expect(getCurrentUserMission).toHaveBeenCalledWith(
+      mockDefaultMissionReturn.missionId,
+      userId
+    )
 
     expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
       userId,
-      missionId: '123456789',
       tabs: { $add: 1 },
       missionMaxTabsDay: {
         maxDay: {
@@ -832,14 +831,13 @@ describe('logTab', () => {
 
     await logTab(userContext, userId)
 
-    expect(getCurrentUserMission).toHaveBeenCalledWith({
-      currentMissionId: '123456789',
-      id: 'abcdefghijklmno',
-    })
+    expect(getCurrentUserMission).toHaveBeenCalledWith(
+      mockDefaultMissionReturn.missionId,
+      userId
+    )
 
     expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
       userId,
-      missionId: '123456789',
       tabs: { $add: 1 },
       missionMaxTabsDay: {
         maxDay: {
