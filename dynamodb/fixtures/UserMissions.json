@@ -8,7 +8,16 @@
       "longestTabStreak": 4,
       "currentTabStreak": 2
     },
-    "missionMaxTabsDay": 10,
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": false
   },
@@ -21,7 +30,16 @@
       "longestTabStreak": 4,
       "currentTabStreak": 2
     },
-    "missionMaxTabsDay": 10,
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": false
   },
@@ -34,7 +52,16 @@
       "longestTabStreak": 4,
       "currentTabStreak": 2
     },
-    "missionMaxTabsDay": 10,
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": true
   },
@@ -47,7 +74,98 @@
       "longestTabStreak": 4,
       "currentTabStreak": 2
     },
-    "missionMaxTabsDay": 10,
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true
+  },
+  {
+    "missionId": "113456789",
+    "created": "2017-07-19T03:05:12Z",
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
+    "longestTabStreak": 4,
+    "tabs": 234,
+    "currentTabStreak": 2,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true,
+    "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73"
+  },
+  {
+    "missionId": "113456789",
+    "created": "2017-06-19T03:05:12Z",
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
+    "longestTabStreak": 4,
+    "tabs": 66,
+    "currentTabStreak": 2,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true,
+    "userId": "abcdefghijklmno"
+  },
+  {
+    "missionId": "111456789",
+    "created": "2017-07-19T03:05:12Z",
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
+    "longestTabStreak": 4,
+    "tabs": 234,
+    "currentTabStreak": 2,
+    "acknowledgedMissionStarted": true,
+    "acknowledgedMissionComplete": true,
+    "userId": "cL5KcFKHd9fEU5C9Vstj3g4JAc73"
+  },
+  {
+    "userId": "abcdefghijklmno",
+    "missionId": "111456789",
+    "created": "2017-07-19T03:05:12Z",
+    "tabs": 24,
+    "tabStreak": {
+      "longestTabStreak": 4,
+      "currentTabStreak": 2
+    },
+    "missionMaxTabsDay": {
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 4
+      }
+    },
     "acknowledgedMissionStarted": true,
     "acknowledgedMissionComplete": true
   }

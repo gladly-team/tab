@@ -620,6 +620,7 @@ describe('logTab', () => {
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: undefined,
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
@@ -721,13 +722,14 @@ describe('logTab', () => {
 
     await logTab(userContext, userId)
 
-    expect(getCurrentUserMission).toHaveBeenCalledWith(
-      mockDefaultMissionReturn.missionId,
-      userId
-    )
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
 
     expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
       userId,
+      missionId: '123456789',
       tabs: { $add: 1 },
       missionMaxTabsDay: {
         maxDay: {
@@ -831,13 +833,14 @@ describe('logTab', () => {
 
     await logTab(userContext, userId)
 
-    expect(getCurrentUserMission).toHaveBeenCalledWith(
-      mockDefaultMissionReturn.missionId,
-      userId
-    )
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
 
     expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
       userId,
+      missionId: '123456789',
       tabs: { $add: 1 },
       missionMaxTabsDay: {
         maxDay: {

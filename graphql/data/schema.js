@@ -84,6 +84,12 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 import getCurrentUserMission from '../database/missions/getCurrentUserMission'
 import getPastUserMissions from '../database/missions/getPastUserMissions'
+import {
+  getLongestTabStreak,
+  getCurrentTabStreak,
+  getMaxTabsDay,
+  getMissionCurrentTabsDay,
+} from '../database/missions/utils'
 import createMission from '../database/missions/createMission'
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -657,6 +663,10 @@ const userType = new GraphQLObjectType({
         )
       ),
     },
+    hasSeenSquads: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether a v4 user has been introduced to squads in the ui',
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1214,17 +1224,24 @@ const SquadMemberInfo = new GraphQLObjectType({
     longestTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the longest tab streak in days so far',
+      resolve: squadMember => getLongestTabStreak(squadMember),
     },
     currentTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tab streak in days so far',
+      resolve: squadMember => getCurrentTabStreak(squadMember),
     },
 
     missionMaxTabsDay: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the most tabs in a single day',
+      resolve: squadMember => getMaxTabsDay(squadMember),
     },
-
+    missionCurrentTabsDay: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'the current tabs today',
+      resolve: squadMember => getMissionCurrentTabsDay(squadMember),
+    },
     tabs: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'users tab contribution',
@@ -1305,6 +1322,14 @@ const MissionType = new GraphQLObjectType({
       type: new GraphQLNonNull(new GraphQLList(EndOfMissionAward)),
       description:
         'the end of mission awards calculated when mission completes',
+    },
+    started: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the mission started',
+    },
+    completed: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the mission completed',
     },
   }),
 })
@@ -1482,33 +1507,9 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
     inviterMessage: { type: GraphQLString },
   },
   outputFields: {
-    successfulEmailAddresses: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'successfulSquadEmailAddresses',
-          fields: () => ({ email: { type: GraphQLString } }),
-        })
-      ),
-    },
-    existingUserInvited: {
-      type: new GraphQLList(GraphQLString),
-      description: 'a list of invited emails for existing users',
-    },
-    failedEmailAddresses: {
-      type: new GraphQLList(
-        new GraphQLObjectType({
-          name: 'failedSquadEmailAddresses',
-          fields: () => ({
-            email: { type: GraphQLString },
-            error: { type: GraphQLString },
-          }),
-        })
-      ),
-    },
-    existingUserRejected: {
-      type: new GraphQLList(GraphQLString),
-      description:
-        'a list of invited emails for existing users rejected bc they are already in a mission',
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
     },
   },
   mutateAndGetPayload: (input, context) => {
@@ -1533,8 +1534,9 @@ const createNewMissionMutation = mutationWithClientMutationId({
     squadName: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    squadId: {
-      type: GraphQLString,
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
     },
   },
   mutateAndGetPayload: (input, context) => {

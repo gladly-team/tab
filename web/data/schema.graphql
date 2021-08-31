@@ -346,7 +346,8 @@ input CreateNewMissionInput {
 }
 
 type CreateNewMissionPayload {
-  squadId: String
+  """the current active mission for a user"""
+  currentMission: Mission
   clientMutationId: String
 }
 
@@ -376,16 +377,8 @@ input CreateSquadInvitesInput {
 }
 
 type CreateSquadInvitesPayload {
-  successfulEmailAddresses: [successfulSquadEmailAddresses]
-
-  """a list of invited emails for existing users"""
-  existingUserInvited: [String]
-  failedEmailAddresses: [failedSquadEmailAddresses]
-
-  """
-  a list of invited emails for existing users rejected bc they are already in a mission
-  """
-  existingUserRejected: [String]
+  """the current active mission for a user"""
+  currentMission: Mission
   clientMutationId: String
 }
 
@@ -547,11 +540,6 @@ type failedEmailAddresses {
   error: String
 }
 
-type failedSquadEmailAddresses {
-  email: String
-  error: String
-}
-
 """inviting user"""
 type InvitingUser {
   """inviting user user id"""
@@ -709,6 +697,12 @@ type Mission {
 
   """the end of mission awards calculated when mission completes"""
   endOfMissionAwards: [EndOfMissionAward]!
+
+  """ISO datetime string of when the mission started"""
+  started: String
+
+  """ISO datetime string of when the mission completed"""
+  completed: String
 }
 
 """A connection to a list of items."""
@@ -977,15 +971,14 @@ type SquadMemberInfo {
   """the most tabs in a single day"""
   missionMaxTabsDay: Int!
 
+  """the current tabs today"""
+  missionCurrentTabsDay: Int
+
   """users tab contribution"""
   tabs: Int!
 }
 
 type successfulEmailAddresses {
-  email: String
-}
-
-type successfulSquadEmailAddresses {
   email: String
 }
 
@@ -1176,6 +1169,9 @@ type User implements Node {
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
   pendingMissionInvites: [PendingMissionInvite]!
+
+  """whether a v4 user has been introduced to squads in the ui"""
+  hasSeenSquads: Boolean!
 }
 
 """a user's charity specific impact"""
