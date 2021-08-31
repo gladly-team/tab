@@ -122,7 +122,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   },
   time: {
     start: '2021-08-25T14:00:00.000Z',
-    end: '2021-09-01T18:00:00.000Z',
+    end: '2021-09-03T18:00:00.000Z',
   },
 })
 
