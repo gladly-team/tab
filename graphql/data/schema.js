@@ -72,6 +72,7 @@ import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
 import deleteUser from '../database/users/deleteUser'
 import squadInviteResponse from '../database/missions/squadInviteResponse'
 import updateMissionNotification from '../database/missions/updateMissionNotification'
+import setHasSeenSquads from '../database/users/setHasSeenSquads'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -91,6 +92,7 @@ import {
   getMissionCurrentTabsDay,
 } from '../database/missions/utils'
 import createMission from '../database/missions/createMission'
+
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
   getTotalRecruitsCount,
@@ -2235,6 +2237,23 @@ const updateMissionNotificationMutation = mutationWithClientMutationId({
   },
 })
 
+const setHasSeenSquadsMutation = mutationWithClientMutationId({
+  name: 'SetHasSeenSquads',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setHasSeenSquads(context.user, userGlobalObj.id)
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2316,6 +2335,7 @@ const mutationType = new GraphQLObjectType({
 
     squadInviteResponse: squadInviteResponseMutation,
     updateMissionNotification: updateMissionNotificationMutation,
+    setHasSeenSquads: setHasSeenSquadsMutation,
   }),
 })
 

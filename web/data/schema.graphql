@@ -762,6 +762,7 @@ type Mutation {
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
 }
 
 """An object with an ID"""
@@ -842,6 +843,16 @@ input SetEmailInput {
 type SetEmailPayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetHasSeenSquadsInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenSquadsPayload {
+  user: User
   clientMutationId: String
 }
 
