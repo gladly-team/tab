@@ -110,7 +110,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
       const memberInfo = userMission.squadMembers.find(member => {
         return member.userId === user.id
       })
-      if (userMission.status !== 'completed') {
+      if (userMission.status === 'started') {
         const missionMaxTabsDay = calculateMaxTabs(
           todayTabCount,
           memberInfo.missionMaxTabsDay

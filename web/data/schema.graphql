@@ -972,7 +972,7 @@ type SquadMemberInfo {
   missionMaxTabsDay: Int!
 
   """the current tabs today"""
-  missionCurrentTabsDay: Int
+  missionCurrentTabsDay: Int!
 
   """users tab contribution"""
   tabs: Int!

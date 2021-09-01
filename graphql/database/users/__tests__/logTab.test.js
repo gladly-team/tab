@@ -640,6 +640,73 @@ describe('logTab', () => {
     expect(getCurrentUserMission).not.toHaveBeenCalled()
   })
 
+  test('when current mission is still pending, does not interact with missions tab code', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: '123456789',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    const mockDefaultMissionReturn = {
+      missionId: '123456789',
+      status: 'pending',
+      squadName: 'TestSquad',
+      tabGoal: 1000,
+      endOfMissionAwards: [],
+      created: '2017-07-19T03:05:12Z',
+      tabCount: 0,
+      squadMembers: [
+        {
+          userId: 'abcdefghijklmno',
+          username: 'alec',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 0,
+            currentTabStreak: 0,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 0,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 0,
+            },
+          },
+          tabs: 0,
+        },
+      ],
+    }
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    addVc.mockResolvedValue(mockUser)
+    getCurrentUserMission.mockResolvedValue(mockDefaultMissionReturn)
+
+    const updateUserMissionMethod = jest.spyOn(UserMissionModel, 'update')
+
+    await logTab(userContext, userId)
+
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
+    expect(updateUserMissionMethod).not.toHaveBeenCalled()
+  })
+
   test('correctly updates user when they are part of a mission', async () => {
     expect.assertions(3)
     const mockDefaultMissionReturn = {
