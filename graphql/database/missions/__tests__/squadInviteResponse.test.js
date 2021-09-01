@@ -158,4 +158,77 @@ describe('squadInviteResponse', () => {
       updated: moment.utc().toISOString(),
     })
   })
+  it('it starts the mission if this is the first user to accept an invite', async () => {
+    expect.assertions(4)
+
+    const defaultUserContext = getMockUserContext()
+    const getOrCreateUserMissionMethod = jest.spyOn(
+      UserMissionModel,
+      'getOrCreate'
+    )
+    const updateUserMethod = jest.spyOn(UserModel, 'update')
+    const updateMissionMethod = jest.spyOn(MissionModel, 'update')
+
+    const mockMission = {
+      id: '123456789',
+      squadName: 'TestSquad',
+      created: '2017-07-19T03:05:12Z',
+      tabGoal: 1000,
+      acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73'],
+      pendingSquadMembersExisting: [
+        'efghijklmnopqrs',
+        defaultUserContext.id,
+        'tuvwxyzabcde',
+      ],
+      pendingSquadMembersEmailInvite: ['alec+897234@tabforacause.org'],
+      rejectedSquadMembers: ['bcdefghijklmnop'],
+    }
+
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: mockMission,
+        })
+      }
+    )
+    const expectedDBParams = {
+      TableName: MissionModel.tableName,
+      Key: {
+        id: mockMission.id,
+      },
+    }
+
+    await squadInviteResponse(
+      defaultUserContext,
+      defaultUserContext.id,
+      mockMission.id,
+      true
+    )
+
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+
+    expect(updateUserMethod).toHaveBeenCalledWith(defaultUserContext, {
+      id: defaultUserContext.id,
+      currentMissionId: mockMission.id,
+      updated: moment.utc().toISOString(),
+    })
+
+    expect(updateMissionMethod).toHaveBeenCalledWith(override, {
+      id: mockMission.id,
+      acceptedSquadMembers: [
+        'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
+        defaultUserContext.id,
+      ],
+      pendingSquadMembersExisting: ['efghijklmnopqrs', 'tuvwxyzabcde'],
+      updated: moment.utc().toISOString(),
+      started: '2017-05-19T13:59:46.000Z',
+    })
+
+    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
+      userId: defaultUserContext.id,
+      missionId: mockMission.id,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+  })
 })

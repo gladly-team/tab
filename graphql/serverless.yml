@@ -175,7 +175,7 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}Missions-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}Missions-${self:provider.stage}/index/*"
-    # UserMissions table
+    # UserMissions table 
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"

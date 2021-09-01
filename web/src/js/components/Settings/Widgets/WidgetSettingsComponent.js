@@ -5,7 +5,7 @@ import WidgetConfig from 'js/components/Settings/Widgets/WidgetConfigComponent'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import { cardHeaderTitleStyle } from 'js/theme/default'
 import { getWidgetIconFromWidgetType } from 'js/components/Widget/widget-utils'
-
+import { YAHOO_USER_ID } from 'js/constants'
 import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'
 import UpdateWidgetConfigMutation from 'js/mutations/UpdateWidgetConfigMutation'
 
@@ -19,14 +19,24 @@ class WidgetSettings extends React.Component {
   }
 
   componentDidMount() {
-    const { appWidget, widget } = this.props
+    const { appWidget, widget, user } = this.props
 
     var config
     if (widget && widget.config) {
       config = JSON.parse(widget.config)
     }
 
-    const settings = this.getConfig(JSON.parse(appWidget.settings), config)
+    let settings = this.getConfig(JSON.parse(appWidget.settings), config)
+
+    // Quick fix: add Yahoo as an option for the Yahoo demo
+    if (user.id === YAHOO_USER_ID) {
+      settings = settings.map(setting => {
+        if (setting.field === 'engine') {
+          setting.choices.unshift('Yahoo')
+        }
+        return setting
+      })
+    }
 
     this.setState({
       settings: settings,
@@ -95,7 +105,7 @@ class WidgetSettings extends React.Component {
   }
 
   render() {
-    const { appWidget, widget } = this.props
+    const { appWidget, widget, user } = this.props
     const enabled = widget && widget.enabled
     const settings = this.state.settings || []
 
@@ -139,6 +149,9 @@ class WidgetSettings extends React.Component {
 
     const WidgetIcon = getWidgetIconFromWidgetType(appWidget.type)
 
+    // Quick fix: hide the search toggle for Yahoo demo
+    const hideToggle = user.id === YAHOO_USER_ID && appWidget.name === 'Search'
+
     return (
       <Card style={cardStyle}>
         <CardHeader
@@ -164,11 +177,13 @@ class WidgetSettings extends React.Component {
           actAsExpander={false}
           showExpandableButton={false}
         >
-          <Toggle
-            style={enableToggleStyle}
-            defaultToggled={enabled}
-            onToggle={this.onWidgetEnableChange.bind(this)}
-          />
+          {hideToggle ? null : (
+            <Toggle
+              style={enableToggleStyle}
+              defaultToggled={enabled}
+              onToggle={this.onWidgetEnableChange.bind(this)}
+            />
+          )}
         </CardHeader>
         {settingsComponent}
       </Card>

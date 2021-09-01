@@ -1,12 +1,27 @@
 import moment from 'moment'
+import get from 'lodash/get'
 import { random } from 'lodash/number'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
+import UserMissionModel from '../missions/UserMissionModel'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import addVc from './addVc'
-import { calculateMaxTabs, getTodayTabCount } from './user-utils'
+import {
+  calculateMaxTabs,
+  calculateTabStreak,
+  getTodayTabCount,
+} from './user-utils'
 import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import getCurrentUserMission from '../missions/getCurrentUserMission'
+import completeMission from '../missions/completeMission'
+import {
+  getPermissionsOverride,
+  MISSIONS_OVERRIDE,
+} from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
+
+const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -77,6 +92,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
   }
   const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
+
   const maxTabsDay = calculateMaxTabs(todayTabCount, user.maxTabsDay)
 
   try {
@@ -84,6 +100,40 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     if (isValid) {
       // Only increment VC if we consider this a valid tab.
       user = await addVc(userContext, userId, 1)
+    }
+
+    if (isValid && !!get(user, 'currentMissionId', undefined)) {
+      const userMission = await getCurrentUserMission({
+        currentMissionId: user.currentMissionId,
+        id: userId,
+      })
+      const memberInfo = userMission.squadMembers.find(member => {
+        return member.userId === user.id
+      })
+      if (userMission.status === 'started') {
+        const missionMaxTabsDay = calculateMaxTabs(
+          todayTabCount,
+          memberInfo.missionMaxTabsDay
+        )
+        const tabStreak = calculateTabStreak(
+          memberInfo.missionMaxTabsDay,
+          memberInfo.tabStreak
+        )
+        try {
+          await UserMissionModel.update(missionsOverride, {
+            missionId: user.currentMissionId,
+            userId,
+            tabs: { $add: 1 },
+            missionMaxTabsDay,
+            tabStreak,
+          })
+          if (userMission.tabCount + 1 >= userMission.tabGoal) {
+            completeMission(userId, user.currentMissionId)
+          }
+        } catch (e) {
+          logger.error(e)
+        }
+      }
     }
 
     // Increment the user's tab count and (if a valid tab) valid tab count.

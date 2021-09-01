@@ -253,7 +253,7 @@ describe('Yahoo Search Demo', () => {
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
     wrapper
       .find(Button)
-      .at(1)
+      .at(2)
       .simulate('click')
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
@@ -281,7 +281,7 @@ describe('Yahoo Search Demo', () => {
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
     wrapper
       .find(Button)
-      .at(0)
+      .at(1)
       .simulate('click')
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
@@ -308,7 +308,7 @@ describe('Yahoo Search Demo', () => {
     wrapper.update()
     wrapper
       .find(Button)
-      .at(1)
+      .at(2)
       .simulate('click')
     wrapper.update()
     searchInput.simulate('click')

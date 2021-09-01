@@ -73,6 +73,7 @@ const createUser = async (
         image: backgroundCatImage.image,
         timestamp: moment.utc().toISOString(),
       },
+      hasSeenSquads: !!missionId,
     }
   }
 

@@ -1,25 +1,100 @@
 [
   {
-    "id": "123456789",
+    "endOfMissionAwards": [
+      {
+        "user": "abcdefghijklmno",
+        "unit": "6",
+        "awardType": "Consistent Kitty"
+      },
+      {
+        "user": "abcdefghijklmno",
+        "unit": 20,
+        "awardType": "Hot Paws"
+      },
+      {
+        "user": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+        "unit": 258,
+        "awardType": "All-Star Fur Ball"
+      }
+    ],
     "squadName": "TestSquad",
-    "created": "2017-07-19T03:05:12Z",
-    "started": "2017-07-19T03:05:12Z",
+    "created": "2017-07-21T08:05:12Z",
     "tabGoal": 1000,
-    "acceptedSquadMembers": ["cL5KcFKHd9fEU5C9Vstj3g4JAc73", "abcdefghijklmno"],
+    "pendingSquadMembersEmailInvite": [
+      "alec+897234@tabforacause.org",
+      "alec+1s@tabforacause.org"
+    ],
     "pendingSquadMembersExisting": ["efghijklmnopqrs"],
-    "pendingSquadMembersEmailInvite": ["alec+897234@tabforacause.org"],
-    "rejectedSquadMembers": []
+    "started": "2017-07-11T03:05:12Z",
+    "id": "123456789",
+    "rejectedSquadMembers": [],
+    "updated": "2021-08-09T23:19:11.738Z",
+    "acceptedSquadMembers": ["cL5KcFKHd9fEU5C9Vstj3g4JAc73", "abcdefghijklmno"]
   },
   {
-    "id": "113456789",
+    "endOfMissionAwards": [
+      {
+        "user": "abcdefghijklmno",
+        "unit": "6",
+        "awardType": "Consistent Kitty"
+      },
+      {
+        "user": "abcdefghijklmno",
+        "unit": 20,
+        "awardType": "Hot Paws"
+      },
+      {
+        "user": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+        "unit": 258,
+        "awardType": "All-Star Fur Ball"
+      }
+    ],
     "squadName": "TestSquad",
-    "created": "2017-07-19T03:05:12Z",
-    "started": "2017-07-19T03:05:12Z",
-    "completed": "2017-07-19T03:05:12Z",
+    "created": "2017-04-21T08:05:12Z",
     "tabGoal": 1000,
-    "acceptedSquadMembers": ["cL5KcFKHd9fEU5C9Vstj3g4JAc73", "abcdefghijklmno"],
+    "pendingSquadMembersEmailInvite": [
+      "alec+897234@tabforacause.org",
+      "alec+1s@tabforacause.org"
+    ],
     "pendingSquadMembersExisting": ["efghijklmnopqrs"],
-    "pendingSquadMembersEmailInvite": ["alec+897234@tabforacause.org"],
-    "rejectedSquadMembers": []
+    "started": "2017-05-11T03:05:12Z",
+    "completed": "2017-05-19T07:05:12Z",
+    "id": "111456789",
+    "rejectedSquadMembers": [],
+    "updated": "2021-08-09T23:19:11.738Z",
+    "acceptedSquadMembers": ["cL5KcFKHd9fEU5C9Vstj3g4JAc73", "abcdefghijklmno"]
+  },
+  {
+    "endOfMissionAwards": [
+      {
+        "user": "abcdefghijklmno",
+        "unit": "6",
+        "awardType": "Consistent Kitty"
+      },
+      {
+        "user": "abcdefghijklmno",
+        "unit": 20,
+        "awardType": "Hot Paws"
+      },
+      {
+        "user": "cL5KcFKHd9fEU5C9Vstj3g4JAc73",
+        "unit": 258,
+        "awardType": "All-Star Fur Ball"
+      }
+    ],
+    "squadName": "TestSquad",
+    "created": "2017-07-21T08:05:12Z",
+    "tabGoal": 1000,
+    "pendingSquadMembersEmailInvite": [
+      "alec+897234@tabforacause.org",
+      "alec+1s@tabforacause.org"
+    ],
+    "pendingSquadMembersExisting": ["efghijklmnopqrs"],
+    "started": "2017-06-11T03:05:12Z",
+    "completed": "2017-06-19T07:05:12Z",
+    "id": "113456789",
+    "rejectedSquadMembers": [],
+    "updated": "2021-08-09T23:19:11.738Z",
+    "acceptedSquadMembers": ["cL5KcFKHd9fEU5C9Vstj3g4JAc73", "abcdefghijklmno"]
   }
 ]

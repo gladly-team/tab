@@ -1,3 +1,4 @@
+import moment from 'moment'
 import UserModel from '../users/UserModel'
 import UserMissionModel from './UserMissionModel'
 import MissionModel from './MissionModel'
@@ -36,11 +37,16 @@ const squadInviteResponse = async (
     const newPendingSquadMembersExisting = pendingSquadMembersExisting.filter(
       pendingUser => pendingUser !== userId
     )
-    await MissionModel.update(override, {
+    const missionModelUpdate = {
       id: missionId,
       acceptedSquadMembers,
       pendingSquadMembersExisting: newPendingSquadMembersExisting,
-    })
+    }
+    // start mission once second user joins
+    if (missionModel.started === undefined) {
+      missionModelUpdate.started = moment.utc().toISOString()
+    }
+    await MissionModel.update(override, missionModelUpdate)
   } else {
     // Move the user to rejectedSquadMembers
     const { rejectedSquadMembers } = missionModel

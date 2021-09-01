@@ -164,6 +164,9 @@ class FirebaseAuthenticationUI extends React.Component {
           provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
           requireDisplayName: false,
         },
+        {
+          provider: 'apple.com',
+        },
       ],
       // Allow anonymous users to sign in.
       autoUpgradeAnonymousUsers: true,

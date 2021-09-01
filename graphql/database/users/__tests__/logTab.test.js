@@ -4,6 +4,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import UserModel from '../UserModel'
 import UserTabsLogModel from '../UserTabsLogModel'
+import UserMissionModel from '../../missions/UserMissionModel'
 import logTab from '../logTab'
 import addVc from '../addVc'
 import {
@@ -15,19 +16,28 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
+import {
+  getPermissionsOverride,
+  MISSIONS_OVERRIDE,
+} from '../../../utils/permissions-overrides'
 // We use an export from the mock file.
 // eslint-disable-next-line import/named
 import getCampaign, { mockCampaign } from '../../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
+import getCurrentUserMission from '../../missions/getCurrentUserMission'
+import completeMission from '../../missions/completeMission'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../../globals/getCampaign')
 jest.mock('../../globals/globals')
+jest.mock('../../missions/getCurrentUserMission')
+jest.mock('../../missions/completeMission')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
+const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -602,6 +612,324 @@ describe('logTab', () => {
         numTabs: 1, // added 1
       },
     })
+  })
+
+  test('when no current mission, does not interact with missions tab code', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: undefined,
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    await logTab(userContext, userId)
+    expect(getCurrentUserMission).not.toHaveBeenCalled()
+  })
+
+  test('when current mission is still pending, does not interact with missions tab code', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: '123456789',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    const mockDefaultMissionReturn = {
+      missionId: '123456789',
+      status: 'pending',
+      squadName: 'TestSquad',
+      tabGoal: 1000,
+      endOfMissionAwards: [],
+      created: '2017-07-19T03:05:12Z',
+      tabCount: 0,
+      squadMembers: [
+        {
+          userId: 'abcdefghijklmno',
+          username: 'alec',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 0,
+            currentTabStreak: 0,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 0,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 0,
+            },
+          },
+          tabs: 0,
+        },
+      ],
+    }
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    addVc.mockResolvedValue(mockUser)
+    getCurrentUserMission.mockResolvedValue(mockDefaultMissionReturn)
+
+    const updateUserMissionMethod = jest.spyOn(UserMissionModel, 'update')
+
+    await logTab(userContext, userId)
+
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
+    expect(updateUserMissionMethod).not.toHaveBeenCalled()
+  })
+
+  test('correctly updates user when they are part of a mission', async () => {
+    expect.assertions(3)
+    const mockDefaultMissionReturn = {
+      missionId: '123456789',
+      status: 'started',
+      squadName: 'TestSquad',
+      tabGoal: 1000,
+      endOfMissionAwards: [],
+      created: '2017-07-19T03:05:12Z',
+      tabCount: 258,
+      squadMembers: [
+        {
+          userId: 'abcdefghijklmno',
+          username: 'alec',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 4,
+            currentTabStreak: 2,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 2,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 2,
+            },
+          },
+          tabs: 234,
+        },
+        {
+          userId: 'omnlkjihgfedcba',
+          username: 'kevin',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 4,
+            currentTabStreak: 2,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2017-01-01T10:50:44.942Z',
+              numTabs: 5,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 5,
+            },
+          },
+          tabs: 24,
+        },
+      ],
+    }
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: '123456789',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    addVc.mockResolvedValue(mockUser)
+    getCurrentUserMission.mockResolvedValue(mockDefaultMissionReturn)
+
+    const updateUserMissionMethod = jest.spyOn(UserMissionModel, 'update')
+
+    await logTab(userContext, userId)
+
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
+
+    expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
+      userId,
+      missionId: '123456789',
+      tabs: { $add: 1 },
+      missionMaxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 149,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 149,
+        },
+      },
+      tabStreak: {
+        longestTabStreak: 4,
+        currentTabStreak: 2,
+      },
+      updated: moment.utc().toISOString(),
+    })
+
+    expect(completeMission).not.toHaveBeenCalled()
+  })
+
+  test('correctly updates user and ends mission if applicable', async () => {
+    expect.assertions(3)
+    const mockDefaultMissionReturn = {
+      missionId: '123456789',
+      status: 'started',
+      squadName: 'TestSquad',
+      tabGoal: 1000,
+      endOfMissionAwards: [],
+      created: '2017-07-19T03:05:12Z',
+      tabCount: 999,
+      squadMembers: [
+        {
+          userId: 'abcdefghijklmno',
+          username: 'alec',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 4,
+            currentTabStreak: 2,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 2,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 2,
+            },
+          },
+          tabs: 234,
+        },
+        {
+          userId: 'omnlkjihgfedcba',
+          username: 'kevin',
+          status: 'accepted',
+          tabStreak: {
+            longestTabStreak: 4,
+            currentTabStreak: 2,
+          },
+          missionMaxTabsDay: {
+            maxDay: {
+              date: '2017-01-01T10:50:44.942Z',
+              numTabs: 5,
+            },
+            recentDay: {
+              date: '2018-01-01T10:50:44.942Z',
+              numTabs: 5,
+            },
+          },
+          tabs: 765,
+        },
+      ],
+    }
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      currentMissionId: '123456789',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+    addVc.mockResolvedValue(mockUser)
+    getCurrentUserMission.mockResolvedValue(mockDefaultMissionReturn)
+
+    const updateUserMissionMethod = jest.spyOn(UserMissionModel, 'update')
+
+    await logTab(userContext, userId)
+
+    expect(getCurrentUserMission).toHaveBeenCalledWith({
+      currentMissionId: '123456789',
+      id: 'abcdefghijklmno',
+    })
+
+    expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
+      userId,
+      missionId: '123456789',
+      tabs: { $add: 1 },
+      missionMaxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 149,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 149,
+        },
+      },
+      tabStreak: {
+        longestTabStreak: 4,
+        currentTabStreak: 2,
+      },
+      updated: moment.utc().toISOString(),
+    })
+
+    expect(completeMission).toHaveBeenCalledWith(
+      userId,
+      mockDefaultMissionReturn.missionId
+    )
   })
 })
 

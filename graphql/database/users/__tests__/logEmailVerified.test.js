@@ -38,6 +38,14 @@ describe('logEmailVerified', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = true
 
@@ -56,6 +64,14 @@ describe('logEmailVerified', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: false,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = false
 
@@ -73,6 +89,14 @@ describe('logEmailVerified', () => {
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
 
     const logEmailVerified = require('../logEmailVerified').default
     await logEmailVerified(userContext, userContext.id)
@@ -104,6 +128,15 @@ describe('logEmailVerified', () => {
 
     const modifiedUserContext = cloneDeep(userContext)
     modifiedUserContext.emailVerified = true
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
     })
@@ -166,6 +199,52 @@ describe('logEmailVerified', () => {
       acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
       id: '123456789',
       pendingSquadMembersExisting: [],
+      updated: '2017-05-19T13:59:46.000Z',
+    })
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        created: '2017-05-19T13:59:46.000Z',
+        missionId: '123456789',
+        updated: '2017-05-19T13:59:46.000Z',
+        userId: 'abcdefghijklmno',
+      },
+      expect.anything()
+    )
+  })
+
+  it('updates the mission and starts the mission if this is the first user to join', async () => {
+    expect.assertions(2)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = true
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: { currentMissionId: '123456789' },
+    })
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: {
+        id: '123456789',
+        squadName: 'TestSquad',
+        created: '2017-07-19T03:05:12Z',
+        tabGoal: 1000,
+        acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73'],
+        pendingSquadMembersExisting: ['efghijklmnopqrs'],
+        pendingSquadMembersEmailInvite: ['foo@bar.com'],
+        rejectedSquadMembers: [],
+      },
+    })
+    const updateSpy = jest.spyOn(MissionModel, 'update')
+    const createSpy = jest.spyOn(UserMissionModel, 'create')
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
+      acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
+      id: '123456789',
+      pendingSquadMembersExisting: [],
+      started: '2017-05-19T13:59:46.000Z',
       updated: '2017-05-19T13:59:46.000Z',
     })
     expect(createSpy).toHaveBeenCalledWith(
