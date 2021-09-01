@@ -1,3 +1,4 @@
+import moment from 'moment'
 import UserModel from './UserModel'
 import rewardReferringUser from './rewardReferringUser'
 import logger from '../../utils/logger'
@@ -62,12 +63,17 @@ const logEmailVerified = async (userContext, userId) => {
           const newPendingSquadMembersEmailInvite = pendingSquadMembersEmailInvite.filter(
             pendingUser => pendingUser !== userContext.email
           )
+          const missionModelUpdate = {
+            id: currentMissionId,
+            acceptedSquadMembers,
+            pendingSquadMembersExisting: newPendingSquadMembersEmailInvite,
+          }
+          // start mission once second user joins
+          if (missionModel.started === undefined) {
+            missionModelUpdate.started = moment.utc().toISOString()
+          }
           await Promise.all([
-            MissionModel.update(override, {
-              id: currentMissionId,
-              acceptedSquadMembers,
-              pendingSquadMembersExisting: newPendingSquadMembersEmailInvite,
-            }),
+            MissionModel.update(override, missionModelUpdate),
             UserMissionModel.getOrCreate(override, {
               userId,
               missionId: currentMissionId,
