@@ -129,6 +129,7 @@ describe('FirebaseAuthenticationUI tests', function() {
       'google.com',
       'facebook.com',
       'password',
+      'apple.com',
     ])
   })
 
