@@ -542,9 +542,6 @@ type failedEmailAddresses {
 
 """inviting user"""
 type InvitingUser {
-  """inviting user user id"""
-  userId: String!
-
   """the name entered in invite"""
   name: String!
 }
@@ -960,7 +957,8 @@ input SquadInviteResponseInput {
 }
 
 type SquadInviteResponsePayload {
-  success: Boolean!
+  """the current active mission for a user"""
+  currentMission: Mission
   clientMutationId: String
 }
 

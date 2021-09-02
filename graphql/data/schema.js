@@ -649,10 +649,6 @@ const userType = new GraphQLObjectType({
                   name: 'InvitingUser',
                   description: 'inviting user',
                   fields: () => ({
-                    userId: {
-                      type: new GraphQLNonNull(GraphQLString),
-                      description: 'inviting user user id',
-                    },
                     name: {
                       type: new GraphQLNonNull(GraphQLString),
                       description: 'the name entered in invite',
@@ -2211,12 +2207,19 @@ const squadInviteResponseMutation = mutationWithClientMutationId({
     accepted: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   outputFields: {
-    success: {
-      type: new GraphQLNonNull(GraphQLBoolean),
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
     },
   },
   mutateAndGetPayload: ({ userId, missionId, accepted }, context) => {
-    return squadInviteResponse(context.user, userId, missionId, accepted)
+    const userGlobalObj = fromGlobalId(userId)
+    return squadInviteResponse(
+      context.user,
+      userGlobalObj.id,
+      missionId,
+      accepted
+    )
   },
 })
 
@@ -2233,7 +2236,8 @@ const updateMissionNotificationMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({ userId, missionId, action }) => {
-    return updateMissionNotification(userId, missionId, action)
+    const userGlobalObj = fromGlobalId(userId)
+    return updateMissionNotification(userGlobalObj.id, missionId, action)
   },
 })
 
