@@ -15199,10 +15199,10 @@ tab-cmp@^0.13.0:
   resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.13.0.tgz#76aa959c91b5b1763b5646537138438eaa0b9021"
   integrity sha512-+U8Z1XAOmWwZ0aymjvHj0tKp+k0ojoqnRjD+v7d1l7NvHSVGlT6GByQQnMTrhLHdugb9HpVVvpGb9MmddbC1tg==
 
-tab-e2e@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-1.0.6.tgz#1bf6821d2c9d173ec966fd75f72617ce6cb7d8d0"
-  integrity sha512-nivn6a8Q3ezwAI4tl/iFg4PbKpjXYU5NVUFWAWmuuSFvx/IXthNoew5SeXMTUgiGEgjQdFMLRdVTokbgfw/RRw==
+tab-e2e@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-1.1.0.tgz#b2bac4efe94eb7de8dcfffaf74f3a85c53617ed2"
+  integrity sha512-FSW2L5mLfpI2wlTGyUfRVMvaGFOi7EkUJ6/16+Dp+R6bGe6ek44llvWAEgYauTTej3nHPrjjbet1xWAFDyo6aw==
   dependencies:
     chromedriver "^90.0.0"
     mailosaur "^7.2.1"
