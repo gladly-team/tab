@@ -13,7 +13,7 @@ import {
 } from '../../../utils/permissions-overrides'
 
 jest.mock('../../databaseClient')
-
+jest.mock('../getCurrentUserMission')
 beforeAll(() => {
   mockDate.on()
 })
@@ -47,15 +47,12 @@ const getMockMission = pendingUserId => {
 }
 
 describe('squadInviteResponse', () => {
-  it('creates UserToMission and updates Mission if not accepted', async () => {
+  it('creates updates Mission and User if not accepted', async () => {
     expect.assertions(3)
 
     const userInfo = getMockUserInfo()
     const defaultUserContext = getMockUserContext()
-    const getOrCreateUserMissionMethod = jest.spyOn(
-      UserMissionModel,
-      'getOrCreate'
-    )
+    const updateUserModel = jest.spyOn(UserModel, 'update')
     const updateMissionMethod = jest.spyOn(MissionModel, 'update')
 
     const mockMission = getMockMission(defaultUserContext.id)
@@ -90,11 +87,10 @@ describe('squadInviteResponse', () => {
       updated: moment.utc().toISOString(),
     })
 
-    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
-      userId: userInfo.id,
-      missionId: mockMission.id,
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString(),
+    expect(updateUserModel).toHaveBeenCalledWith(defaultUserContext, {
+      id: 'abcdefghijklmno',
+      pendingMissionInvites: [],
+      updated: '2017-05-19T13:59:46.000Z',
     })
   })
 
@@ -138,6 +134,7 @@ describe('squadInviteResponse', () => {
       id: defaultUserContext.id,
       currentMissionId: mockMission.id,
       updated: moment.utc().toISOString(),
+      pendingMissionInvites: [],
     })
 
     expect(updateMissionMethod).toHaveBeenCalledWith(override, {
@@ -156,6 +153,7 @@ describe('squadInviteResponse', () => {
       missionId: mockMission.id,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      acknowledgedMissionStarted: true,
     })
   })
   it('it starts the mission if this is the first user to accept an invite', async () => {
@@ -211,6 +209,7 @@ describe('squadInviteResponse', () => {
       id: defaultUserContext.id,
       currentMissionId: mockMission.id,
       updated: moment.utc().toISOString(),
+      pendingMissionInvites: [],
     })
 
     expect(updateMissionMethod).toHaveBeenCalledWith(override, {
@@ -229,6 +228,7 @@ describe('squadInviteResponse', () => {
       missionId: mockMission.id,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      acknowledgedMissionStarted: true,
     })
   })
 })

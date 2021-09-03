@@ -542,9 +542,6 @@ type failedEmailAddresses {
 
 """inviting user"""
 type InvitingUser {
-  """inviting user user id"""
-  userId: String!
-
   """the name entered in invite"""
   name: String!
 }
@@ -762,6 +759,7 @@ type Mutation {
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
 }
 
 """An object with an ID"""
@@ -842,6 +840,16 @@ input SetEmailInput {
 type SetEmailPayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetHasSeenSquadsInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenSquadsPayload {
+  user: User
   clientMutationId: String
 }
 
@@ -949,7 +957,8 @@ input SquadInviteResponseInput {
 }
 
 type SquadInviteResponsePayload {
-  success: Boolean!
+  """the current active mission for a user"""
+  currentMission: Mission
   clientMutationId: String
 }
 
