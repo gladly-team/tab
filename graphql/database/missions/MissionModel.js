@@ -1,7 +1,7 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { MISSION } from '../constants'
+import { MISSION, TAB_GOAL_FOR_TRAINING_SESSION } from '../constants'
 
 /*
  * @extends BaseModel
@@ -93,7 +93,7 @@ class Mission extends BaseModel {
   static get fieldDefaults() {
     return {
       missionType: 'cats',
-      tabGoal: 1000,
+      tabGoal: TAB_GOAL_FOR_TRAINING_SESSION,
       acceptedSquadMembers: [],
       pendingSquadMembersExisting: [],
       pendingSquadMembersEmailInvite: [],

@@ -36,3 +36,6 @@ export const CATS_CHARITY_ID = '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z'
 export const SQUAD_EMAIL_TEMPLATE_ID = 'd-cc8834e9b4694194b575ea60f5ea8230'
 export const GENERAL_EMAIL_INVITE_TEMPLATE_ID =
   'd-69707bd6c49a444fa68a99505930f801'
+
+// 14 tabs for 1 treat * 36 treats for 1 session = 504 tabs for 1 cat mission
+export const TAB_GOAL_FOR_TRAINING_SESSION = 504
