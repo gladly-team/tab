@@ -8,6 +8,7 @@ import {
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
 import getCurrentUserMission from './getCurrentUserMission'
+import { NODE_ENV } from '../../config'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
@@ -34,6 +35,10 @@ export default async (userContext, userId, squadName) => {
   const userMission = {
     missionId,
     userId,
+  }
+  // lower tab goal for end to end tests in test environment
+  if (NODE_ENV === 'test') {
+    newMission.tabGoal = 3
   }
   await Promise.all([
     MissionModel.create(override, newMission),
