@@ -66,7 +66,7 @@ const logEmailVerified = async (userContext, userId) => {
           const missionModelUpdate = {
             id: currentMissionId,
             acceptedSquadMembers,
-            pendingSquadMembersExisting: newPendingSquadMembersEmailInvite,
+            pendingSquadMembersEmailInvite: newPendingSquadMembersEmailInvite,
           }
           // start mission once second user joins
           if (missionModel.started === undefined) {
