@@ -198,7 +198,7 @@ describe('logEmailVerified', () => {
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
       id: '123456789',
-      pendingSquadMembersExisting: [],
+      pendingSquadMembersEmailInvite: [],
       updated: '2017-05-19T13:59:46.000Z',
     })
     expect(createSpy).toHaveBeenCalledWith(
@@ -243,7 +243,7 @@ describe('logEmailVerified', () => {
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
       id: '123456789',
-      pendingSquadMembersExisting: [],
+      pendingSquadMembersEmailInvite: [],
       started: '2017-05-19T13:59:46.000Z',
       updated: '2017-05-19T13:59:46.000Z',
     })
