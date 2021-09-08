@@ -30,7 +30,11 @@ const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
  *   boolean: true if we rewarded a referring user, false
  *   otherwise.
  */
-const rewardReferringUser = async (userContext, userId) => {
+const rewardReferringUser = async (
+  userContext,
+  userId,
+  currentMissionId = false
+) => {
   // If the user does not have a referring user, return.
   let referringUserId
   try {
@@ -81,45 +85,48 @@ const rewardReferringUser = async (userContext, userId) => {
   } catch (e) {
     throw e
   }
-  // if user is on v4, altruistically reward both the referring user and referred user in UserImpact
+  // if user is on v4 and is not in a mission, altruistically reward both the referring user and referred user in UserImpact
   try {
-    // get Referring User Impact
-    const userImpactRecordReferringUser = await UserImpactModel.get(
-      override,
-      referringUserId,
-      CATS_CHARITY_ID
-    )
-    const {
-      pendingUserReferralImpact: pendingUserReferralImpactReferringUser,
-      pendingUserReferralCount: pendingUserReferralCountReferringUser,
-    } = userImpactRecordReferringUser
+    // also if user is not part of a squad invite
+    if (!currentMissionId) {
+      // get Referring User Impact
+      const userImpactRecordReferringUser = await UserImpactModel.get(
+        override,
+        referringUserId,
+        CATS_CHARITY_ID
+      )
+      const {
+        pendingUserReferralImpact: pendingUserReferralImpactReferringUser,
+        pendingUserReferralCount: pendingUserReferralCountReferringUser,
+      } = userImpactRecordReferringUser
 
-    // get Referred User Impact
-    const userImpactRecordReferredUser = (await UserImpactModel.getOrCreate(
-      override,
-      {
-        userId,
-        charityId: CATS_CHARITY_ID,
-      }
-    )).item
-    const {
-      pendingUserReferralImpact: pendingUserReferralImpactReferredUser,
-    } = userImpactRecordReferredUser
+      // get Referred User Impact
+      const userImpactRecordReferredUser = (await UserImpactModel.getOrCreate(
+        override,
+        {
+          userId,
+          charityId: CATS_CHARITY_ID,
+        }
+      )).item
+      const {
+        pendingUserReferralImpact: pendingUserReferralImpactReferredUser,
+      } = userImpactRecordReferredUser
 
-    // reward both Reffering and Referred users
-    await Promise.all([
-      UserImpactModel.update(override, {
-        ...userImpactRecordReferringUser,
-        pendingUserReferralImpact:
-          pendingUserReferralImpactReferringUser + USER_IMPACT_REFERRAL_BONUS,
-        pendingUserReferralCount: pendingUserReferralCountReferringUser + 1,
-      }),
-      UserImpactModel.update(override, {
-        ...userImpactRecordReferredUser,
-        pendingUserReferralImpact:
-          pendingUserReferralImpactReferredUser + USER_IMPACT_REFERRAL_BONUS,
-      }),
-    ])
+      // reward both Reffering and Referred users
+      await Promise.all([
+        UserImpactModel.update(override, {
+          ...userImpactRecordReferringUser,
+          pendingUserReferralImpact:
+            pendingUserReferralImpactReferringUser + USER_IMPACT_REFERRAL_BONUS,
+          pendingUserReferralCount: pendingUserReferralCountReferringUser + 1,
+        }),
+        UserImpactModel.update(override, {
+          ...userImpactRecordReferredUser,
+          pendingUserReferralImpact:
+            pendingUserReferralImpactReferredUser + USER_IMPACT_REFERRAL_BONUS,
+        }),
+      ])
+    }
   } catch (e) {
     if (!(e instanceof DatabaseItemDoesNotExistException)) {
       throw e

@@ -145,7 +145,42 @@ describe('logEmailVerified', () => {
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
     expect(rewardReferringUser).toHaveBeenCalledWith(
       modifiedUserContext,
-      modifiedUserContext.id
+      modifiedUserContext.id,
+      undefined
+    )
+    expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
+      invitedEmail: 'foo@bar.com',
+      invitedId: 'abcdefghijklmno',
+      inviterId: 'someInviterId',
+      updated: '2017-05-19T13:59:46.000Z',
+    })
+  })
+
+  it('does notreward the referring user when the email is verified but referral is a squad invite', async () => {
+    expect.assertions(2)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = true
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+      currentMissionId: '123456789',
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
+    })
+    const updateSpy = jest.spyOn(InvitedUsersModel, 'update')
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(rewardReferringUser).toHaveBeenCalledWith(
+      modifiedUserContext,
+      modifiedUserContext.id,
+      '123456789'
     )
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       invitedEmail: 'foo@bar.com',
