@@ -760,6 +760,8 @@ type Mutation {
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
   setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
+  setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
+  restartMission(input: RestartMissionInput!): RestartMissionPayload
 }
 
 """An object with an ID"""
@@ -812,6 +814,18 @@ input ReferralData {
   referringChannel: String
 }
 
+input RestartMissionInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type RestartMissionPayload {
+  """the current active mission for a user"""
+  currentMission: Mission
+  clientMutationId: String
+}
+
 """Info about any rate-limiting for VC earned from search queries"""
 type SearchRateLimit {
   """
@@ -840,6 +854,17 @@ input SetEmailInput {
 type SetEmailPayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetHasSeenCompletedMissionInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenCompletedMissionPayload {
+  success: Boolean!
   clientMutationId: String
 }
 

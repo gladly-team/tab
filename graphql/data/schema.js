@@ -72,6 +72,8 @@ import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
 import deleteUser from '../database/users/deleteUser'
 import squadInviteResponse from '../database/missions/squadInviteResponse'
 import updateMissionNotification from '../database/missions/updateMissionNotification'
+import setHasSeenCompletedMission from '../database/missions/hasSeenCompletedMission'
+import restartMission from '../database/missions/restartMission'
 import setHasSeenSquads from '../database/users/setHasSeenSquads'
 
 import CharityModel from '../database/charities/CharityModel'
@@ -2257,6 +2259,39 @@ const setHasSeenSquadsMutation = mutationWithClientMutationId({
     return setHasSeenSquads(context.user, userGlobalObj.id)
   },
 })
+const setHasSeenCompletedMissionMutation = mutationWithClientMutationId({
+  name: 'SetHasSeenCompletedMission',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setHasSeenCompletedMission(context.user, userGlobalObj.id, missionId)
+  },
+})
+const restartMissionMutation = mutationWithClientMutationId({
+  name: 'RestartMission',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return restartMission(context.user, userGlobalObj.id, missionId)
+  },
+})
 
 /**
  * This is the type that will be the root of our query,
@@ -2340,6 +2375,8 @@ const mutationType = new GraphQLObjectType({
     squadInviteResponse: squadInviteResponseMutation,
     updateMissionNotification: updateMissionNotificationMutation,
     setHasSeenSquads: setHasSeenSquadsMutation,
+    setHasSeenCompletedMission: setHasSeenCompletedMissionMutation,
+    restartMission: restartMissionMutation,
   }),
 })
 
