@@ -28,7 +28,7 @@ export default async (userContext, userId, missionId) => {
   }
   const newMissionId = nanoid(9)
   const otherTeamMembers = previousMission.acceptedSquadMembers.filter(
-    otherUsers => otherUsers === userId
+    otherUsers => otherUsers !== userId
   )
   const newMission = {
     id: newMissionId,
@@ -40,21 +40,22 @@ export default async (userContext, userId, missionId) => {
     newMission.tabGoal = 3
   }
   // lower tab goal for end to end tests in test environment
-
   await Promise.all([
     // create actual mission
     MissionModel.create(override, newMission),
     // update mission info for user recreating the mission
     UserMissionModel.create(override, {
-      missionId,
+      missionId: newMissionId,
       userId,
     }),
     UserModel.update(userContext, {
       id: userId,
-      currentMissionId: missionId,
+      currentMissionId: newMissionId,
     }),
-    // invite other users who accepted previous mission
-    ...otherTeamMembers.map(async teamMemberId => {
+  ])
+  // invite other users who accepted previous mission
+  await Promise.all(
+    otherTeamMembers.map(async teamMemberId => {
       const existingUser = await UserModel.get(override, teamMemberId)
       const { pendingMissionInvites } = existingUser
       pendingMissionInvites.push({
@@ -69,14 +70,9 @@ export default async (userContext, userId, missionId) => {
           id: existingUser.id,
           pendingMissionInvites,
         }),
-        UserMissionModel.create(override, {
-          userId: existingUser.id,
-          missionId: newMissionId,
-        }),
       ])
-    }),
-  ])
-
+    })
+  )
   const newlyCreatedMission = await getCurrentUserMission({
     currentMissionId: newMissionId,
     id: userId,

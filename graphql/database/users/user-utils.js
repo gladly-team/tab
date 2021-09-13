@@ -40,7 +40,11 @@ export const getTodaySearchCount = user => {
  * @param {int} todayTabCount number of tabs logged today
  * @return {object} The updated max day object
  */
-export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
+export const calculateMaxTabs = (
+  todayTabCount,
+  maxDayObject,
+  maxPossibleSquadTabs
+) => {
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
   // for the user's "current day" tab count.
@@ -54,7 +58,14 @@ export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
     },
     recentDay: {
       date: moment.utc().toISOString(),
-      numTabs: todayTabCount,
+
+      // we have an issue where we calculate the max tabs on a users entire day
+      // but a user can join a mission at any point in the day.  This ensures we only count
+      // tabs on the first day after the user joined the mission for max tabs
+      numTabs:
+        maxPossibleSquadTabs && maxPossibleSquadTabs < todayTabCount
+          ? maxPossibleSquadTabs + 1
+          : todayTabCount,
     },
   }
 }
@@ -75,8 +86,9 @@ export const calculateTabStreak = (maxDayObject, tabStreakObject) => {
       .subtract(1, 'days')
       .startOf('day')
   )
-  let newCurrentTabStreak = tabStreakObject.currentTabStreak
-  let newLongestTabStreak = tabStreakObject.longestTabStreak
+  // if this is invoked, then tabstreak should atleast be 1
+  let newCurrentTabStreak = tabStreakObject.currentTabStreak || 1
+  let newLongestTabStreak = tabStreakObject.longestTabStreak || 1
 
   if (isYesterday) {
     newCurrentTabStreak += 1

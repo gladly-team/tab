@@ -64,16 +64,10 @@ export const verifyAndSendInvite = async ({
           name: inviterName,
         },
       })
-      await Promise.all([
-        UserModel.update(override, {
-          id: existingUser.id,
-          pendingMissionInvites,
-        }),
-        UserMissionModel.create(override, {
-          userId: existingUser.id,
-          missionId: currentMissionId,
-        }),
-      ])
+      await UserModel.update(override, {
+        id: existingUser.id,
+        pendingMissionInvites,
+      })
       return {
         existingUserEmail: inviteEmail,
         existingUserId: existingUser.id,

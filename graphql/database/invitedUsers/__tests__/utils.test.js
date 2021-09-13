@@ -85,7 +85,7 @@ describe('verifyAndSendInvite general email', () => {
   })
 
   it('it successfully invites an existing user to a squad', async () => {
-    expect.assertions(4)
+    expect.assertions(3)
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [
         {
@@ -99,11 +99,9 @@ describe('verifyAndSendInvite general email', () => {
       Items: [{ email: 'test123' }],
     })
     const createInvitedUserMethod = jest.spyOn(InvitedUsersModel, 'create')
-    const createUserMissionMethod = jest.spyOn(UserMissionModel, 'create')
     const updateUserMethod = jest.spyOn(UserModel, 'update')
     const results = await verifyAndSendInvite(mockSquadParams)
     expect(createInvitedUserMethod).not.toHaveBeenCalled()
-    expect(createUserMissionMethod).toHaveBeenCalled()
     expect(updateUserMethod).toHaveBeenCalledWith(expect.anything(), {
       id: 'abcdefghijklmno',
       pendingMissionInvites: [
