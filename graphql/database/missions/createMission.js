@@ -8,7 +8,7 @@ import {
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
 import getCurrentUserMission from './getCurrentUserMission'
-import { NODE_ENV } from '../../config'
+import { E2E_MISSIONS_TEST_TAB_GOAL } from '../../config'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
@@ -37,7 +37,7 @@ export default async (userContext, userId, squadName) => {
     userId,
   }
   // lower tab goal for end to end tests in test environment
-  if (NODE_ENV === 'test') {
+  if (E2E_MISSIONS_TEST_TAB_GOAL === 'true') {
     newMission.tabGoal = 3
   }
   await Promise.all([
