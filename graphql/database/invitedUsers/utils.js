@@ -4,7 +4,6 @@ import moment from 'moment'
 import sgMail from '@sendgrid/mail'
 import xssFilters from 'xss-filters'
 import InvitedUsersModel from './InvitedUsersModel'
-import UserMissionModel from '../missions/UserMissionModel'
 import UserModel from '../users/UserModel'
 import {
   ADMIN_MANAGEMENT,

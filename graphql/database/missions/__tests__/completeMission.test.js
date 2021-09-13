@@ -5,7 +5,6 @@ import completeMission from '../completeMission'
 import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
-  USERS_OVERRIDE,
 } from '../../../utils/permissions-overrides'
 import { mockDate } from '../../test-utils'
 import MissionModel from '../MissionModel'
@@ -28,7 +27,6 @@ afterEach(() => {
 })
 
 const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
-const usersOverride = getPermissionsOverride(USERS_OVERRIDE)
 
 const mockDefaultMissionReturnIncomplete = {
   missionId: '123456789',

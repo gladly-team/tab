@@ -1,8 +1,5 @@
 /* eslint-env jest */
-import buildMissionReturnType from '../utils'
 import restartMission from '../restartMission'
-import MissionModel from '../MissionModel'
-import UserMission from '../UserMissionModel'
 import UserModel from '../../users/UserModel'
 import {
   DatabaseOperation,
@@ -58,19 +55,19 @@ describe('restartMission tests', () => {
       Item: mockUser,
     })
     const updateUserModel = jest.spyOn(UserModel, 'update')
-    const currentMission = await restartMission(
+    await restartMission(
       mockUserContext,
       'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
       '123456789'
     )
     expect(updateUserModel).toHaveBeenCalledTimes(2)
-    const [[arg1, arg2], [arg3, arg4]] = updateUserModel.mock.calls
-    expect(arg2).toEqual({
+    const [call1, call2] = updateUserModel.mock.calls
+    expect(call1[1]).toEqual({
       id: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
       currentMissionId: expect.any(String),
       updated: expect.any(String),
     })
-    expect(arg4).toEqual({
+    expect(call2[1]).toEqual({
       id: undefined,
       pendingMissionInvites: [
         {
