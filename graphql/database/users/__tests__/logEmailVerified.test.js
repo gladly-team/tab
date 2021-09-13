@@ -145,8 +145,7 @@ describe('logEmailVerified', () => {
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
     expect(rewardReferringUser).toHaveBeenCalledWith(
       modifiedUserContext,
-      modifiedUserContext.id,
-      undefined
+      modifiedUserContext.id
     )
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       invitedEmail: 'foo@bar.com',
@@ -156,7 +155,7 @@ describe('logEmailVerified', () => {
     })
   })
 
-  it('does notreward the referring user when the email is verified but referral is a squad invite', async () => {
+  it('does not reward the referring user when the email is verified but referral is a squad invite', async () => {
     expect.assertions(2)
 
     const modifiedUserContext = cloneDeep(userContext)
@@ -177,11 +176,7 @@ describe('logEmailVerified', () => {
     const updateSpy = jest.spyOn(InvitedUsersModel, 'update')
     const logEmailVerified = require('../logEmailVerified').default
     await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
-    expect(rewardReferringUser).toHaveBeenCalledWith(
-      modifiedUserContext,
-      modifiedUserContext.id,
-      '123456789'
-    )
+    expect(rewardReferringUser).not.toHaveBeenCalled()
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       invitedEmail: 'foo@bar.com',
       invitedId: 'abcdefghijklmno',

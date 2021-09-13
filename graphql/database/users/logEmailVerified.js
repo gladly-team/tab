@@ -30,11 +30,9 @@ const logEmailVerified = async (userContext, userId) => {
   // so it's okay that we might call it more than once.
   if (userContext.emailVerified) {
     try {
-      await rewardReferringUser(
-        userContext,
-        userId,
-        returnedUser.currentMissionId
-      )
+      if (!returnedUser.currentMissionId) {
+        await rewardReferringUser(userContext, userId)
+      }
       const override = getPermissionsOverride(ADMIN_MANAGEMENT)
       const originalInvitedUsers = await InvitedUsersModel.query(
         override,
