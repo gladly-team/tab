@@ -68,7 +68,7 @@ describe('createMission tests', () => {
       username: 'kevin',
       joined: '2017-07-18T20:45:53Z',
     }
-    config.NODE_ENV = 'test'
+    config.E2E_MISSIONS_TEST_TAB_GOAL = 'true'
     MissionModel.create.mockReset()
     UserModel.get.mockReturnValueOnce(user)
     MissionModel.get.mockReturnValue(mockDefaultMissionReturn)

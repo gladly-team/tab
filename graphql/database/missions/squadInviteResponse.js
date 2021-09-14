@@ -53,7 +53,7 @@ const squadInviteResponse = async (
         currentMissionId: missionId,
         pendingMissionInvites: user.pendingMissionInvites.slice(1),
       }),
-      UserMissionModel.getOrCreate(override, {
+      UserMissionModel.getOrCreate(userContext, {
         userId,
         missionId,
         acknowledgedMissionStarted: true,

@@ -20,6 +20,7 @@ env:
   # environment for testing.
   # @material-ui-1-todo
   - TEST_NODE_ENV=test
+  - TEST_E2E_MISSIONS_TEST_TAB_GOAL=true
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
@@ -94,6 +95,7 @@ env:
   ########## Dev stage ##########
   - DEV_NODE_ENV=production
   - DEV_AWS_REGION=us-west-2
+  - DEV_E2E_MISSIONS_TEST_TAB_GOAL=false
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
   # Web app
@@ -162,6 +164,7 @@ env:
   ########## Production stage ##########
   - PROD_NODE_ENV=production
   - PROD_AWS_REGION=us-west-2
+  - PROD_E2E_MISSIONS_TEST_TAB_GOAL=false
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error
   # Web app

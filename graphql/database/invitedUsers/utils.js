@@ -4,7 +4,6 @@ import moment from 'moment'
 import sgMail from '@sendgrid/mail'
 import xssFilters from 'xss-filters'
 import InvitedUsersModel from './InvitedUsersModel'
-import UserMissionModel from '../missions/UserMissionModel'
 import UserModel from '../users/UserModel'
 import {
   ADMIN_MANAGEMENT,
@@ -64,16 +63,10 @@ export const verifyAndSendInvite = async ({
           name: inviterName,
         },
       })
-      await Promise.all([
-        UserModel.update(override, {
-          id: existingUser.id,
-          pendingMissionInvites,
-        }),
-        UserMissionModel.create(override, {
-          userId: existingUser.id,
-          missionId: currentMissionId,
-        }),
-      ])
+      await UserModel.update(override, {
+        id: existingUser.id,
+        pendingMissionInvites,
+      })
       return {
         existingUserEmail: inviteEmail,
         existingUserId: existingUser.id,

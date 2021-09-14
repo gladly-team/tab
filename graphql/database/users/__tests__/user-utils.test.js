@@ -141,6 +141,31 @@ describe('user utils', () => {
     })
   })
 
+  test('calculateMaxTabs for mission correctly only counts recent day tabs after a user joined the mission', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment.utc().toISOString(),
+        numTabs: 0,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // not today
+        numTabs: 0,
+      },
+    }
+    const maxPossibleSquadTabs = 7
+    const { calculateMaxTabs } = require('../user-utils')
+    expect(calculateMaxTabs(15, mockMaxDay, maxPossibleSquadTabs)).toEqual({
+      maxDay: {
+        date: moment.utc().toISOString(),
+        numTabs: 8,
+      },
+      recentDay: {
+        date: moment.utc().toISOString(), // today
+        numTabs: 8,
+      },
+    })
+  })
+
   test('calculateTabStreak correctly updates current tab streak and longest tab streak', () => {
     const mockMaxDay = {
       maxDay: {
@@ -163,6 +188,31 @@ describe('user utils', () => {
     expect(calculateTabStreak(mockMaxDay, tabStreakObject)).toEqual({
       currentTabStreak: 3,
       longestTabStreak: 3,
+    })
+  })
+
+  test('calculateTabStreak correctly ensure that current tab streak and longest tab streak are no less than 1', () => {
+    const mockMaxDay = {
+      maxDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(),
+        numTabs: 10,
+      },
+      recentDay: {
+        date: moment
+          .utc()
+          .subtract(5, 'days')
+          .toISOString(), // not today
+        numTabs: 10,
+      },
+    }
+    const { calculateTabStreak } = require('../user-utils')
+    const tabStreakObject = { currentTabStreak: 0, longestTabStreak: 0 }
+    expect(calculateTabStreak(mockMaxDay, tabStreakObject)).toEqual({
+      currentTabStreak: 1,
+      longestTabStreak: 1,
     })
   })
 
@@ -211,7 +261,7 @@ describe('user utils', () => {
     const tabStreakObject = { currentTabStreak: 2, longestTabStreak: 4 }
     const { calculateTabStreak } = require('../user-utils')
     expect(calculateTabStreak(mockMaxDay, tabStreakObject)).toEqual({
-      currentTabStreak: 0,
+      currentTabStreak: 1,
       longestTabStreak: 4,
     })
   })

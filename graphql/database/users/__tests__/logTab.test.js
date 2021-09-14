@@ -16,10 +16,6 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import {
-  getPermissionsOverride,
-  MISSIONS_OVERRIDE,
-} from '../../../utils/permissions-overrides'
 // We use an export from the mock file.
 // eslint-disable-next-line import/named
 import getCampaign, { mockCampaign } from '../../globals/getCampaign'
@@ -37,7 +33,6 @@ jest.mock('../../missions/completeMission')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
-const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -794,7 +789,7 @@ describe('logTab', () => {
       id: 'abcdefghijklmno',
     })
 
-    expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
+    expect(updateUserMissionMethod).toHaveBeenCalledWith(userContext, {
       userId,
       missionId: '123456789',
       tabs: { $add: 1 },
@@ -905,7 +900,7 @@ describe('logTab', () => {
       id: 'abcdefghijklmno',
     })
 
-    expect(updateUserMissionMethod).toHaveBeenCalledWith(missionsOverride, {
+    expect(updateUserMissionMethod).toHaveBeenCalledWith(userContext, {
       userId,
       missionId: '123456789',
       tabs: { $add: 1 },

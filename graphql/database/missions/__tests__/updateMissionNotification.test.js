@@ -3,13 +3,7 @@ import moment from 'moment'
 import UserMissionModel from '../UserMissionModel'
 import updateMissionNotification from '../updateMissionNotification'
 import { getMockUserContext, mockDate } from '../../test-utils'
-import {
-  getPermissionsOverride,
-  MISSIONS_OVERRIDE,
-} from '../../../utils/permissions-overrides'
 import { MISSION_COMPLETE, MISSION_STARTED } from '../constants'
-
-const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 jest.mock('../../databaseClient')
 
@@ -34,12 +28,13 @@ describe('updateMissionNotification', () => {
     const defaultUserContext = getMockUserContext()
     const missionId = 'abc123'
     await updateMissionNotification(
+      defaultUserContext,
       defaultUserContext.id,
       missionId,
       MISSION_COMPLETE
     )
 
-    expect(updateMethod).toHaveBeenCalledWith(override, {
+    expect(updateMethod).toHaveBeenCalledWith(defaultUserContext, {
       userId: defaultUserContext.id,
       missionId,
       acknowledgedMissionComplete: true,
@@ -55,12 +50,13 @@ describe('updateMissionNotification', () => {
     const defaultUserContext = getMockUserContext()
     const missionId = 'abc123'
     const result = await updateMissionNotification(
+      defaultUserContext,
       defaultUserContext.id,
       missionId,
       MISSION_STARTED
     )
 
-    expect(updateMethod).toHaveBeenCalledWith(override, {
+    expect(updateMethod).toHaveBeenCalledWith(defaultUserContext, {
       userId: defaultUserContext.id,
       missionId,
       acknowledgedMissionStarted: true,
@@ -77,12 +73,13 @@ describe('updateMissionNotification', () => {
     const defaultUserContext = getMockUserContext()
     const missionId = 'abc123'
     const result = await updateMissionNotification(
+      defaultUserContext,
       defaultUserContext.id,
       missionId,
       MISSION_STARTED
     )
 
-    expect(updateMethod).toHaveBeenCalledWith(override, {
+    expect(updateMethod).toHaveBeenCalledWith(defaultUserContext, {
       userId: defaultUserContext.id,
       missionId,
       acknowledgedMissionStarted: true,
@@ -99,6 +96,7 @@ describe('updateMissionNotification', () => {
     const defaultUserContext = getMockUserContext()
     const missionId = 'abc123'
     const result = await updateMissionNotification(
+      defaultUserContext,
       defaultUserContext.id,
       missionId,
       'not an action'

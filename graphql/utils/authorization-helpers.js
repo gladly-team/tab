@@ -34,4 +34,6 @@ export const createGraphQLContext = userClaims => ({
 export const permissionAuthorizers = {}
 permissionAuthorizers.userIdMatchesHashKey = (user, hashKey) =>
   user.id === hashKey
+permissionAuthorizers.userIdMatchesRangeKey = (user, _hashKey, rangeKey) =>
+  user.id === rangeKey
 permissionAuthorizers.allowAll = () => true

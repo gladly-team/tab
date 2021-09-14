@@ -72,6 +72,8 @@ import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
 import deleteUser from '../database/users/deleteUser'
 import squadInviteResponse from '../database/missions/squadInviteResponse'
 import updateMissionNotification from '../database/missions/updateMissionNotification'
+import setHasSeenCompletedMission from '../database/missions/hasSeenCompletedMission'
+import restartMission from '../database/missions/restartMission'
 import setHasSeenSquads from '../database/users/setHasSeenSquads'
 
 import CharityModel from '../database/charities/CharityModel'
@@ -2235,9 +2237,14 @@ const updateMissionNotificationMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean),
     },
   },
-  mutateAndGetPayload: ({ userId, missionId, action }) => {
+  mutateAndGetPayload: ({ userId, missionId, action }, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return updateMissionNotification(userGlobalObj.id, missionId, action)
+    return updateMissionNotification(
+      context.user,
+      userGlobalObj.id,
+      missionId,
+      action
+    )
   },
 })
 
@@ -2255,6 +2262,39 @@ const setHasSeenSquadsMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({ userId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setHasSeenSquads(context.user, userGlobalObj.id)
+  },
+})
+const setHasSeenCompletedMissionMutation = mutationWithClientMutationId({
+  name: 'SetHasSeenCompletedMission',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setHasSeenCompletedMission(context.user, userGlobalObj.id, missionId)
+  },
+})
+const restartMissionMutation = mutationWithClientMutationId({
+  name: 'RestartMission',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    missionId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    currentMission: {
+      type: MissionType,
+      description: 'the current active mission for a user',
+    },
+  },
+  mutateAndGetPayload: ({ userId, missionId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return restartMission(context.user, userGlobalObj.id, missionId)
   },
 })
 
@@ -2340,6 +2380,8 @@ const mutationType = new GraphQLObjectType({
     squadInviteResponse: squadInviteResponseMutation,
     updateMissionNotification: updateMissionNotificationMutation,
     setHasSeenSquads: setHasSeenSquadsMutation,
+    setHasSeenCompletedMission: setHasSeenCompletedMissionMutation,
+    restartMission: restartMissionMutation,
   }),
 })
 

@@ -148,13 +148,16 @@ describe('squadInviteResponse', () => {
       updated: moment.utc().toISOString(),
     })
 
-    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
-      userId: defaultUserContext.id,
-      missionId: mockMission.id,
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString(),
-      acknowledgedMissionStarted: true,
-    })
+    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(
+      defaultUserContext,
+      {
+        userId: defaultUserContext.id,
+        missionId: mockMission.id,
+        created: moment.utc().toISOString(),
+        updated: moment.utc().toISOString(),
+        acknowledgedMissionStarted: true,
+      }
+    )
   })
   it('it starts the mission if this is the first user to accept an invite', async () => {
     expect.assertions(4)
@@ -223,12 +226,15 @@ describe('squadInviteResponse', () => {
       started: '2017-05-19T13:59:46.000Z',
     })
 
-    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(override, {
-      userId: defaultUserContext.id,
-      missionId: mockMission.id,
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString(),
-      acknowledgedMissionStarted: true,
-    })
+    expect(getOrCreateUserMissionMethod).toHaveBeenCalledWith(
+      defaultUserContext,
+      {
+        userId: defaultUserContext.id,
+        missionId: mockMission.id,
+        created: moment.utc().toISOString(),
+        updated: moment.utc().toISOString(),
+        acknowledgedMissionStarted: true,
+      }
+    )
   })
 })
