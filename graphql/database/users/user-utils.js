@@ -51,10 +51,16 @@ export const calculateMaxTabs = (
   // If today is also the day of all time max tabs,
   // update the max tabs day value.
   const isTodayMax = todayTabCount >= maxDayObject.maxDay.numTabs
+  const highestPossibleTabCount =
+    maxPossibleSquadTabs && maxPossibleSquadTabs < todayTabCount
+      ? maxPossibleSquadTabs + 1
+      : todayTabCount
   return {
     maxDay: {
       date: isTodayMax ? moment.utc().toISOString() : maxDayObject.maxDay.date,
-      numTabs: isTodayMax ? todayTabCount : maxDayObject.maxDay.numTabs,
+      numTabs: isTodayMax
+        ? highestPossibleTabCount
+        : maxDayObject.maxDay.numTabs,
     },
     recentDay: {
       date: moment.utc().toISOString(),
@@ -62,10 +68,7 @@ export const calculateMaxTabs = (
       // we have an issue where we calculate the max tabs on a users entire day
       // but a user can join a mission at any point in the day.  This ensures we only count
       // tabs on the first day after the user joined the mission for max tabs
-      numTabs:
-        maxPossibleSquadTabs && maxPossibleSquadTabs < todayTabCount
-          ? maxPossibleSquadTabs + 1
-          : todayTabCount,
+      numTabs: highestPossibleTabCount,
     },
   }
 }
@@ -96,7 +99,7 @@ export const calculateTabStreak = (maxDayObject, tabStreakObject) => {
       newLongestTabStreak = newCurrentTabStreak
     }
   } else if (isPreviousDay) {
-    newCurrentTabStreak = 0
+    newCurrentTabStreak = 1
   }
 
   return {

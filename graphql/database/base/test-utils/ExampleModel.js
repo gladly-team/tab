@@ -10,6 +10,10 @@ class ExampleModel extends BaseModel {
     return 'id'
   }
 
+  static get rangeKey() {
+    return 'range'
+  }
+
   static get tableName() {
     return 'ExamplesTable'
   }
@@ -18,6 +22,7 @@ class ExampleModel extends BaseModel {
     const self = this
     return {
       id: types.uuid(),
+      range: types.string(),
       name: types.string().default(self.fieldDefaults.name),
       thing: types.string().forbidden(),
     }

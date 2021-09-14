@@ -42,7 +42,7 @@ export default async (userContext, userId, squadName) => {
   }
   await Promise.all([
     MissionModel.create(override, newMission),
-    UserMissionModel.create(override, userMission),
+    UserMissionModel.create(userContext, userMission),
   ])
   await UserModel.update(userContext, {
     id: userId,

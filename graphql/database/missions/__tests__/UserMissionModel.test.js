@@ -41,13 +41,13 @@ describe('UserMissionModel', () => {
 
   it('has the correct get permission', () => {
     expect(UserMission.permissions.get).toBe(
-      permissionAuthorizers.userIdMatchesHashKey
+      permissionAuthorizers.userIdMatchesRangeKey
     )
   })
 
   it('has the correct update permission', () => {
     expect(UserMission.permissions.update).toBe(
-      permissionAuthorizers.userIdMatchesHashKey
+      permissionAuthorizers.userIdMatchesRangeKey
     )
   })
 
@@ -57,7 +57,7 @@ describe('UserMissionModel', () => {
       email: 'foo@bar.com',
       emailVerified: true,
     }
-    expect(UserMission.permissions.create(userContext, 'abc')).toBe(true)
+    expect(UserMission.permissions.create(userContext, '123', 'abc')).toBe(true)
   })
 
   it('does not allow create when the item is not provided', () => {
@@ -84,11 +84,10 @@ describe('UserMissionModel', () => {
   it('does not throw an error when a `get` returns an item', () => {
     const userContext = getMockUserContext()
     const mockItemId = userContext.id
-    const mockInvitedEmail = 'some-email'
     // Set mock response from DB client.
     setMockDBResponse(DatabaseOperation.GET, {
       Item: {
-        userId: 'cL5KcFKHd9fEU5C9Vstj3g4JAc73',
+        userId: userContext.id,
         missionId: '123456789',
         squadName: 'TestSquad',
         tabs: 234,
@@ -112,7 +111,7 @@ describe('UserMissionModel', () => {
     })
 
     return expect(
-      UserMission.get(userContext, mockItemId, mockInvitedEmail)
+      UserMission.get(userContext, mockItemId, userContext.id)
     ).resolves.toBeDefined()
   })
 

@@ -76,7 +76,7 @@ const logEmailVerified = async (userContext, userId) => {
           }
           await Promise.all([
             MissionModel.update(override, missionModelUpdate),
-            UserMissionModel.getOrCreate(override, {
+            UserMissionModel.getOrCreate(userContext, {
               userId,
               missionId: currentMissionId,
             }),

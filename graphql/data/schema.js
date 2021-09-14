@@ -2237,9 +2237,14 @@ const updateMissionNotificationMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean),
     },
   },
-  mutateAndGetPayload: ({ userId, missionId, action }) => {
+  mutateAndGetPayload: ({ userId, missionId, action }, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return updateMissionNotification(userGlobalObj.id, missionId, action)
+    return updateMissionNotification(
+      context.user,
+      userGlobalObj.id,
+      missionId,
+      action
+    )
   },
 })
 

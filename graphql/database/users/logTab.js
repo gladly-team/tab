@@ -15,13 +15,7 @@ import getCampaign from '../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 import getCurrentUserMission from '../missions/getCurrentUserMission'
 import completeMission from '../missions/completeMission'
-import {
-  getPermissionsOverride,
-  MISSIONS_OVERRIDE,
-} from '../../utils/permissions-overrides'
 import logger from '../../utils/logger'
-
-const missionsOverride = getPermissionsOverride(MISSIONS_OVERRIDE)
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -121,7 +115,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
           memberInfo.tabStreak
         )
         try {
-          await UserMissionModel.update(missionsOverride, {
+          await UserMissionModel.update(userContext, {
             missionId: user.currentMissionId,
             userId,
             tabs: { $add: 1 },

@@ -36,15 +36,15 @@ export default async (userContext, userId, missionId) => {
     acceptedSquadMembers: [userId],
     pendingSquadMembersExisting: otherTeamMembers,
   }
+  // lower tab goal for end to end tests in test environment
   if (E2E_MISSIONS_TEST_TAB_GOAL === 'true') {
     newMission.tabGoal = 3
   }
-  // lower tab goal for end to end tests in test environment
   await Promise.all([
     // create actual mission
     MissionModel.create(override, newMission),
     // update mission info for user recreating the mission
-    UserMissionModel.create(override, {
+    UserMissionModel.create(userContext, {
       missionId: newMissionId,
       userId,
     }),
