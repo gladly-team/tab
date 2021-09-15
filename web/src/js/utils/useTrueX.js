@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { requestAd } from 'js/utils/truex'
+import useWindowSize from 'js/utils/hooks/useWindowSize'
 
 const log = msg => {
   console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), msg)
@@ -42,6 +43,8 @@ const useTrueX = ({
 
   useEffect(() => {
     // If an ad exists, add event handlers.
+    log('adding event handlers')
+
     if (trueX.ad) {
       onAdAvailable()
 
@@ -90,17 +93,33 @@ const useTrueX = ({
     trueX.ad,
   ])
 
+  // TODO: probably just use container size.
+  const windowSize = useWindowSize()
+  console.log(windowSize)
+
   useEffect(() => {
-    if (open && adContainer) {
-      // TODO
-      console.log('TODO: mount ad')
-      //   trueX.client.loadActivityIntoContainer(
-      //   trueX.ad,
-      //   document.getElementById('content'),
-      //   { width: '960px', height: '540px' }
-      // )
+    if (open) {
+      console.log('mounting ad')
+      if (!adContainer) {
+        log('PROBLEM: no ad container')
+        return
+      }
+
+      trueX.client.loadActivityIntoContainer(trueX.ad, adContainer, {
+        // width: `${windowSize.width}px`,
+        // height: `${windowSize.height}px`,
+        width: '100vw',
+        height: '100vh',
+      })
     }
-  }, [adContainer, open])
+  }, [
+    adContainer,
+    open,
+    trueX.ad,
+    trueX.client,
+    windowSize.height,
+    windowSize.width,
+  ])
 
   return
 }

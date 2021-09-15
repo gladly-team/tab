@@ -2,17 +2,19 @@ import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import MovieFilterIcon from '@material-ui/icons/MovieFilter'
-// import Dialog from '@material-ui/core/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 import useTrueX from 'js/utils/useTrueX'
 
 const VideoEngagementComponent = ({ iconProps }) => {
   const [isAdAvailable, setIsAdAvailable] = useState(false)
   const [isAdOpen, setIsAdOpen] = useState(false)
 
+  const [adContainerElem, setAdContainerElem] = useState(null)
+
   const config = useMemo(
     () => ({
       open: isAdOpen,
-      adContainer: null, // TODO
+      adContainer: adContainerElem,
       onAdAvailable: () => {
         setIsAdAvailable(true)
       },
@@ -22,7 +24,7 @@ const VideoEngagementComponent = ({ iconProps }) => {
       },
       // onFinish: () => {},
     }),
-    [isAdOpen]
+    [isAdOpen, adContainerElem]
   )
   useTrueX(config)
 
@@ -32,6 +34,10 @@ const VideoEngagementComponent = ({ iconProps }) => {
       return
     }
     setIsAdOpen(true)
+  }
+
+  const onModalClose = () => {
+    setIsAdOpen(false)
   }
 
   return (
@@ -44,7 +50,12 @@ const VideoEngagementComponent = ({ iconProps }) => {
           }}
         />
       </ButtonBase>
-      {isAdOpen ? <div>TODO</div> : null}
+      <Dialog open={isAdOpen} onClose={onModalClose} fullWidth maxWidth={false}>
+        <div
+          ref={newRef => setAdContainerElem(newRef)}
+          style={{ width: '100vw', height: '100vh' }}
+        />
+      </Dialog>
     </div>
   )
 }
