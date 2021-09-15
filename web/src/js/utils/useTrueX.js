@@ -15,14 +15,22 @@ const useTrueX = ({
   onClose = () => {},
   onFinish = () => {},
 }) => {
-  const [trueXClient, setTrueXClient] = useState()
-  const [trueXAd, setTrueXAd] = useState()
-
+  const [trueX, setTrueX] = useState({
+    ad: undefined,
+    client: undefined,
+  })
+  const [fetchComplete, setFetchComplete] = useState(false)
   const fetchAd = useCallback(() => {
     const fetch = async () => {
-      const { ad: tXAd, client: tXClient } = await requestAd()
-      setTrueXClient(tXClient)
-      setTrueXAd(tXAd)
+      log('fetching ad')
+      setFetchComplete(false)
+      const { ad, client } = await requestAd()
+      setTrueX({
+        ad,
+        client,
+      })
+      log('fetch complete')
+      setFetchComplete(true)
     }
     fetch()
   }, [])
@@ -34,23 +42,23 @@ const useTrueX = ({
 
   useEffect(() => {
     // If an ad exists, add event handlers.
-    if (trueXAd) {
+    if (trueX.ad) {
       onAdAvailable()
 
       // Ad started.
-      trueXAd.onStart(activity => {
+      trueX.ad.onStart(activity => {
         log('start')
         onStart()
       })
 
       // User spent 30 seconds and interacted at least once.
-      trueXAd.onCredit(engagement => {
+      trueX.ad.onCredit(engagement => {
         log('credit!')
         console.log(engagement)
       })
 
       // User closed the ad unit.
-      trueXAd.onClose(activity => {
+      trueX.ad.onClose(activity => {
         log('close')
         onClose()
 
@@ -59,25 +67,35 @@ const useTrueX = ({
       })
 
       // User got to end of ad.
-      trueXAd.onFinish(activity => {
+      trueX.ad.onFinish(activity => {
         log('finish')
         onFinish()
       })
 
-      trueXAd.onMessage(payload => {
+      trueX.ad.onMessage(payload => {
         log('onMessage = ' + payload)
       })
     } else {
-      log('No ads available.')
+      if (fetchComplete) {
+        log('No ads available.')
+      }
     }
-  }, [fetchAd, onAdAvailable, onClose, onFinish, onStart, trueXAd])
+  }, [
+    fetchAd,
+    fetchComplete,
+    onAdAvailable,
+    onClose,
+    onFinish,
+    onStart,
+    trueX.ad,
+  ])
 
   useEffect(() => {
     if (open && adContainer) {
       // TODO
       console.log('TODO: mount ad')
-      //   trueXClient.loadActivityIntoContainer(
-      //   trueXAd,
+      //   trueX.client.loadActivityIntoContainer(
+      //   trueX.ad,
       //   document.getElementById('content'),
       //   { width: '960px', height: '540px' }
       // )
