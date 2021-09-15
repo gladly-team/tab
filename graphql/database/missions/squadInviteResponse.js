@@ -6,6 +6,7 @@ import {
   getPermissionsOverride,
   MISSIONS_OVERRIDE,
 } from '../../utils/permissions-overrides'
+import getCurrentUserMission from './getCurrentUserMission'
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 
@@ -23,13 +24,12 @@ const squadInviteResponse = async (
   missionId,
   accepted
 ) => {
-  const missionModel = await MissionModel.get(override, missionId)
+  const [missionModel, user] = await Promise.all([
+    MissionModel.get(override, missionId),
+    UserModel.get(userContext, userId),
+  ])
 
   if (accepted) {
-    await UserModel.update(userContext, {
-      id: userId,
-      currentMissionId: missionId,
-    })
     // Move the user to acceptedSquadMembers
     const { acceptedSquadMembers } = missionModel
     acceptedSquadMembers.push(userId)
@@ -46,7 +46,19 @@ const squadInviteResponse = async (
     if (missionModel.started === undefined) {
       missionModelUpdate.started = moment.utc().toISOString()
     }
-    await MissionModel.update(override, missionModelUpdate)
+    await Promise.all([
+      MissionModel.update(override, missionModelUpdate),
+      UserModel.update(userContext, {
+        id: userId,
+        currentMissionId: missionId,
+        pendingMissionInvites: user.pendingMissionInvites.slice(1),
+      }),
+      UserMissionModel.getOrCreate(userContext, {
+        userId,
+        missionId,
+        acknowledgedMissionStarted: true,
+      }),
+    ])
   } else {
     // Move the user to rejectedSquadMembers
     const { rejectedSquadMembers } = missionModel
@@ -55,21 +67,23 @@ const squadInviteResponse = async (
     const newPendingSquadMembersExisting = pendingSquadMembersExisting.filter(
       pendingUser => pendingUser !== userId
     )
-    await MissionModel.update(override, {
-      id: missionId,
-      rejectedSquadMembers,
-      pendingSquadMembersExisting: newPendingSquadMembersExisting,
-    })
+    await Promise.all([
+      MissionModel.update(override, {
+        id: missionId,
+        rejectedSquadMembers,
+        pendingSquadMembersExisting: newPendingSquadMembersExisting,
+      }),
+      UserModel.update(userContext, {
+        id: userId,
+        pendingMissionInvites: user.pendingMissionInvites.slice(1),
+      }),
+    ])
   }
-
-  await UserMissionModel.getOrCreate(override, {
-    userId,
-    missionId,
+  const updatedUserMission = await getCurrentUserMission({
+    id: userId,
+    currentMissionId: accepted ? missionId : undefined,
   })
-
-  return {
-    success: true,
-  }
+  return { currentMission: updatedUserMission }
 }
 
 export default squadInviteResponse

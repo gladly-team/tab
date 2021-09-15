@@ -117,13 +117,15 @@ class UserMission extends BaseModel {
 
   static get permissions() {
     return {
-      get: permissionAuthorizers.userIdMatchesHashKey,
-      update: permissionAuthorizers.userIdMatchesHashKey,
-      create: permissionAuthorizers.userIdMatchesHashKey,
+      get: permissionAuthorizers.userIdMatchesRangeKey,
+      update: permissionAuthorizers.userIdMatchesRangeKey,
+      create: permissionAuthorizers.userIdMatchesRangeKey,
+      query: permissionAuthorizers.userIdMatchesRangeKey,
       indexPermissions: {
         userMissionsByDate: {
-          get: permissionAuthorizers.userIdMatchesHashKey,
-          getAll: permissionAuthorizers.userIdMatchesHashKey,
+          get: permissionAuthorizers.userIdMatchesRangeKey,
+          getAll: permissionAuthorizers.userIdMatchesRangeKey,
+          query: permissionAuthorizers.userIdMatchesRangeKey,
         },
       },
     }

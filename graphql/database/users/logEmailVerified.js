@@ -30,7 +30,9 @@ const logEmailVerified = async (userContext, userId) => {
   // so it's okay that we might call it more than once.
   if (userContext.emailVerified) {
     try {
-      await rewardReferringUser(userContext, userId)
+      if (!returnedUser.currentMissionId) {
+        await rewardReferringUser(userContext, userId)
+      }
       const override = getPermissionsOverride(ADMIN_MANAGEMENT)
       const originalInvitedUsers = await InvitedUsersModel.query(
         override,
@@ -66,7 +68,7 @@ const logEmailVerified = async (userContext, userId) => {
           const missionModelUpdate = {
             id: currentMissionId,
             acceptedSquadMembers,
-            pendingSquadMembersExisting: newPendingSquadMembersEmailInvite,
+            pendingSquadMembersEmailInvite: newPendingSquadMembersEmailInvite,
           }
           // start mission once second user joins
           if (missionModel.started === undefined) {
@@ -74,7 +76,7 @@ const logEmailVerified = async (userContext, userId) => {
           }
           await Promise.all([
             MissionModel.update(override, missionModelUpdate),
-            UserMissionModel.getOrCreate(override, {
+            UserMissionModel.getOrCreate(userContext, {
               userId,
               missionId: currentMissionId,
             }),

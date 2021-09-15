@@ -81,8 +81,9 @@ const rewardReferringUser = async (userContext, userId) => {
   } catch (e) {
     throw e
   }
-  // if user is on v4, altruistically reward both the referring user and referred user in UserImpact
+  // if user is on v4 and is not in a mission, altruistically reward both the referring user and referred user in UserImpact
   try {
+    // also if user is not part of a squad invite
     // get Referring User Impact
     const userImpactRecordReferringUser = await UserImpactModel.get(
       override,

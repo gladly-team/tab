@@ -346,7 +346,7 @@ class BaseModel {
   static async create(userContext, item, overwrite = false) {
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const hashKey = item[this.hashKey]
-
+    const rangeKey = item[this.rangeKey]
     // Add 'created' and 'updated' fields if they're not already set.
     if (!item.created) {
       // TODO: fix rule violation
@@ -359,7 +359,9 @@ class BaseModel {
       item.updated = moment.utc().toISOString()
     }
 
-    if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
+    if (
+      !this.isQueryAuthorized(userContext, 'create', hashKey, rangeKey, item)
+    ) {
       throw new UnauthorizedQueryException()
     }
     try {

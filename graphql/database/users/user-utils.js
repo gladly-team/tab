@@ -40,21 +40,35 @@ export const getTodaySearchCount = user => {
  * @param {int} todayTabCount number of tabs logged today
  * @return {object} The updated max day object
  */
-export const calculateMaxTabs = (todayTabCount, maxDayObject) => {
+export const calculateMaxTabs = (
+  todayTabCount,
+  maxDayObject,
+  maxPossibleSquadTabs
+) => {
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
   // for the user's "current day" tab count.
   // If today is also the day of all time max tabs,
   // update the max tabs day value.
   const isTodayMax = todayTabCount >= maxDayObject.maxDay.numTabs
+  const highestPossibleTabCount =
+    maxPossibleSquadTabs && maxPossibleSquadTabs < todayTabCount
+      ? maxPossibleSquadTabs + 1
+      : todayTabCount
   return {
     maxDay: {
       date: isTodayMax ? moment.utc().toISOString() : maxDayObject.maxDay.date,
-      numTabs: isTodayMax ? todayTabCount : maxDayObject.maxDay.numTabs,
+      numTabs: isTodayMax
+        ? highestPossibleTabCount
+        : maxDayObject.maxDay.numTabs,
     },
     recentDay: {
       date: moment.utc().toISOString(),
-      numTabs: todayTabCount,
+
+      // we have an issue where we calculate the max tabs on a users entire day
+      // but a user can join a mission at any point in the day.  This ensures we only count
+      // tabs on the first day after the user joined the mission for max tabs
+      numTabs: highestPossibleTabCount,
     },
   }
 }
@@ -75,8 +89,9 @@ export const calculateTabStreak = (maxDayObject, tabStreakObject) => {
       .subtract(1, 'days')
       .startOf('day')
   )
-  let newCurrentTabStreak = tabStreakObject.currentTabStreak
-  let newLongestTabStreak = tabStreakObject.longestTabStreak
+  // if this is invoked, then tabstreak should atleast be 1
+  let newCurrentTabStreak = tabStreakObject.currentTabStreak || 1
+  let newLongestTabStreak = tabStreakObject.longestTabStreak || 1
 
   if (isYesterday) {
     newCurrentTabStreak += 1
@@ -84,7 +99,7 @@ export const calculateTabStreak = (maxDayObject, tabStreakObject) => {
       newLongestTabStreak = newCurrentTabStreak
     }
   } else if (isPreviousDay) {
-    newCurrentTabStreak = 0
+    newCurrentTabStreak = 1
   }
 
   return {

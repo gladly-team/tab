@@ -155,6 +155,36 @@ describe('logEmailVerified', () => {
     })
   })
 
+  it('does not reward the referring user when the email is verified but referral is a squad invite', async () => {
+    expect.assertions(2)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = true
+
+    // Mock DB response.
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      emailVerified: true,
+      currentMissionId: '123456789',
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [{ inviterId: 'someInviterId', invitedEmail: 'foo@bar.com' }],
+    })
+    const updateSpy = jest.spyOn(InvitedUsersModel, 'update')
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(rewardReferringUser).not.toHaveBeenCalled()
+    expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
+      invitedEmail: 'foo@bar.com',
+      invitedId: 'abcdefghijklmno',
+      inviterId: 'someInviterId',
+      updated: '2017-05-19T13:59:46.000Z',
+    })
+  })
+
   it('does not call to reward the referring user when the email is not verified', async () => {
     expect.assertions(2)
 
@@ -198,7 +228,7 @@ describe('logEmailVerified', () => {
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
       id: '123456789',
-      pendingSquadMembersExisting: [],
+      pendingSquadMembersEmailInvite: [],
       updated: '2017-05-19T13:59:46.000Z',
     })
     expect(createSpy).toHaveBeenCalledWith(
@@ -243,7 +273,7 @@ describe('logEmailVerified', () => {
     expect(updateSpy).toHaveBeenCalledWith(expect.anything(), {
       acceptedSquadMembers: ['cL5KcFKHd9fEU5C9Vstj3g4JAc73', 'abcdefghijklmno'],
       id: '123456789',
-      pendingSquadMembersExisting: [],
+      pendingSquadMembersEmailInvite: [],
       started: '2017-05-19T13:59:46.000Z',
       updated: '2017-05-19T13:59:46.000Z',
     })

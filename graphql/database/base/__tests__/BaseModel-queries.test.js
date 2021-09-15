@@ -286,9 +286,10 @@ describe('BaseModel queries', () => {
         updated: moment.utc().toISOString(),
       },
       TableName: ExampleModel.tableName,
-      ConditionExpression: '(#id <> :id)',
+      ConditionExpression: '(#id <> :id) AND (#range <> :range)',
       ExpressionAttributeNames: {
         '#id': 'id',
+        '#range': 'range',
       },
       ExpressionAttributeValues: {
         ':id': item.id,
@@ -326,9 +327,10 @@ describe('BaseModel queries', () => {
         updated: moment.utc().toISOString(),
       },
       TableName: ExampleModel.tableName,
-      ConditionExpression: '(#id <> :id)',
+      ConditionExpression: '(#id <> :id) AND (#range <> :range)',
       ExpressionAttributeNames: {
         '#id': 'id',
+        '#range': 'range',
       },
       ExpressionAttributeValues: {
         ':id': createdItem.id,
@@ -678,8 +680,8 @@ describe('BaseModel queries', () => {
     // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual({
-      ConditionExpression: '(#id <> :id)',
-      ExpressionAttributeNames: { '#id': 'id' },
+      ConditionExpression: '(#id <> :id) AND (#range <> :range)',
+      ExpressionAttributeNames: { '#id': 'id', '#range': 'range' },
       ExpressionAttributeValues: {
         ':id': createdItem.id,
       },
@@ -808,9 +810,10 @@ describe('BaseModel queries', () => {
         updated: '2017-12-25T07:15:02.025Z',
       },
       TableName: ExampleModel.tableName,
-      ConditionExpression: '(#id <> :id)',
+      ConditionExpression: '(#id <> :id) AND (#range <> :range)',
       ExpressionAttributeNames: {
         '#id': 'id',
+        '#range': 'range',
       },
       ExpressionAttributeValues: {
         ':id': item.id,

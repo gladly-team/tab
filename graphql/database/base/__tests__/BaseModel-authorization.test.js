@@ -355,14 +355,34 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
     const hashKeyVal = 'yx5082cc-151a-4a9a-9289-06906670fd4e'
     const item = {
       id: hashKeyVal,
-      name: 'thing',
     }
     await TestModel.create(user, item).catch(() => {}) // Ignore any authorization errors
     expect(authorizationCheck).toBeCalledWith(
       user,
       'create',
       hashKeyVal,
-      null,
+      undefined,
+      item
+    )
+  })
+
+  it('passes correct params to `create` authorization check if there is a range key', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'yx5082cc-151a-4a9a-9289-06906670fd4e'
+    const item = {
+      id: hashKeyVal,
+      range: 'thing',
+    }
+    await TestModel.create(user, item).catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(
+      user,
+      'create',
+      hashKeyVal,
+      'thing',
       item
     )
   })

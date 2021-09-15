@@ -29,7 +29,7 @@
     "relay-runtime": "^4.0.0",
     "serverless": "^1.67.0",
     "source-map-explorer": "^1.8.0",
-    "tab-e2e": "^1.0.4"
+    "tab-e2e": "^1.1.0"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
