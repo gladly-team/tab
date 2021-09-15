@@ -43,6 +43,7 @@ export const envVars = [
   { name: 'REACT_APP_GAM_DEV_ENVIRONMENT', optional: true },
   // GraphQL / Lambda
   { name: 'GQL_LOGGER' },
+  { name: 'E2E_MISSIONS_TEST_TAB_GOAL' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
   { name: 'GQL_SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
