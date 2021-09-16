@@ -64,6 +64,60 @@ describe('invite users to mission', () => {
     })
   })
 
+  it('it successfully invites existing users', async () => {
+    expect.assertions(2)
+    getUserInvites.mockReturnValueOnce([
+      getMockUserInstance(),
+      [{ user: 'test' }],
+    ])
+    verifyAndSendInvite.mockReturnValueOnce({
+      existingUserEmail: 'test123@',
+      existingUserId: 'some-user-id',
+      existingUserName: 'existing-username',
+      status: 'invited',
+    })
+    verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
+    MissionModel.get.mockReturnValue(mockMissionDocument)
+    await inviteUserToMission(...mockParams)
+    expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
+    expect(MissionModel.update).toHaveBeenCalledWith(expect.anything(), {
+      id: '123456789',
+      pendingSquadMembersEmailInvite: [
+        'alec+897234@tabforacause.org',
+        'test124',
+      ],
+      pendingSquadMembersExisting: ['efghijklmnopqrs', 'some-user-id'],
+      rejectedSquadMembers: [],
+    })
+  })
+
+  it('it successfully rejects existing users currently in a mission', async () => {
+    expect.assertions(2)
+    getUserInvites.mockReturnValueOnce([
+      getMockUserInstance(),
+      [{ user: 'test' }],
+    ])
+    verifyAndSendInvite.mockReturnValueOnce({
+      existingUserEmail: 'test123@',
+      existingUserId: 'some-user-id',
+      existingUserName: 'existing-username',
+      status: 'rejected',
+    })
+    verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
+    MissionModel.get.mockReturnValue(mockMissionDocument)
+    await inviteUserToMission(...mockParams)
+    expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
+    expect(MissionModel.update).toHaveBeenCalledWith(expect.anything(), {
+      id: '123456789',
+      pendingSquadMembersEmailInvite: [
+        'alec+897234@tabforacause.org',
+        'test124',
+      ],
+      pendingSquadMembersExisting: ['efghijklmnopqrs'],
+      rejectedSquadMembers: ['some-user-id'],
+    })
+  })
+
   it('it seperates failed email creations from succesful email creations', async () => {
     expect.assertions(2)
     getUserInvites.mockReturnValueOnce([
