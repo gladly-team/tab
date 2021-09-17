@@ -475,5 +475,19 @@
     "updated": "2021-07-15T16:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "910ed420-e479-4d77-b806-27dc9e3350c7",
+    "name": "Hispanic Heritage Month: United We Dream",
+    "category": "Human Rights",
+    "logo": "united-we-dream.jpg",
+    "image": "united-we-dream.jpg",
+    "website": "https://unitedwedream.org/",
+    "impact": "United We Dream is working to ensure all immigrants, regardless of documentation status or country of origin, are provided with resources to ensure they are supported and empowered. This month we celebrate the Hispanic community that has shaped so much of American culture and history throughout time.",
+    "description": "Working to empower people to develop leadership, organizing skills, and their own campaigns to fight for justice and dignity for immigrants and all people.",
+    "created": "2021-09-15T10:00:00.000Z",
+    "updated": "2021-09-15T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": true
   }
 ]
