@@ -1,8 +1,10 @@
-// Requires true[X] tag to have loaded.
 // Docs:
 // https://github.com/socialvibe/truex-ads-docs/blob/master/js_ad_api.md
 // Demo:
 // https://codesandbox.io/s/true-x-integration-sandbox-forked-1prqo?file=/index.js:500-514
+
+// Initializes to window.truex
+require('@truex/js-ad-client')()
 
 const options = {
   // TODO: hashed UID
