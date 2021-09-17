@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   adContainer: {
     margin: 'auto',
-    marginTop: 16,
+    marginTop: 8,
   },
 })
 
