@@ -41,9 +41,16 @@ const VideoEngagementComponent = ({ classes, iconProps }) => {
   const [isAdOpen, setIsAdOpen] = useState(false)
   const [adContainerElem, setAdContainerElem] = useState(null)
 
+  // TODO: send a hashed user ID for user privacy.
+  // Note that true[X] appears to rate-limit a user ID even
+  // in the test environment, so change this if you're not seeing
+  // any ad availability.
+  const trueXUserId = 'fake-hashed-uid-1'
+
   const trueX = useTrueX({
     open: isAdOpen,
     adContainer: adContainerElem,
+    hashedUserId: trueXUserId,
   })
   console.log('true[X]', trueX)
   const { adAvailable, credited, status } = trueX

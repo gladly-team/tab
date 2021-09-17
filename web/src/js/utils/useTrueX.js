@@ -23,7 +23,7 @@ export const CLOSED = 'CLOSED'
 
 // Requests an ad on mount, calls event handlers, and mounts the ad
 // in an ad container when opened.
-const useTrueX = ({ open = false, adContainer = null }) => {
+const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
   const [trueX, setTrueX] = useState({
     ad: undefined,
     client: undefined,
@@ -40,7 +40,9 @@ const useTrueX = ({ open = false, adContainer = null }) => {
       log('fetching ad')
       setFetchInProgress(true)
       setFetchComplete(false)
-      const { ad, client } = await requestAd()
+      const { ad, client } = await requestAd({
+        userId: hashedUserId,
+      })
       setTrueX({
         ad,
         client,
@@ -50,7 +52,7 @@ const useTrueX = ({ open = false, adContainer = null }) => {
       setFetchInProgress(false)
     }
     fetch()
-  }, [])
+  }, [hashedUserId])
 
   // On mount, see if an ad is available.
   useEffect(() => {
@@ -88,6 +90,10 @@ const useTrueX = ({ open = false, adContainer = null }) => {
       trueX.ad.onCredit(engagement => {
         log('credit earned')
         log('engagement:', engagement)
+
+        // TODO: call backend to verify signature, validate rate-limiting,
+        // and credit user.
+
         setCredited(true)
       })
 
