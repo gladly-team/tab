@@ -6,7 +6,9 @@
 
 const options = {
   // TODO: hashed UID
-  network_user_id: 'test_user_1',
+  // Note that true[X] appears to rate-limit a user ID even
+  // in the test environment.
+  network_user_id: 'test_user_2',
   // TODO: env var
   partner_config_hash: '0c79a35271f1371e201a54744343a2ecf8ce9e7e',
 }

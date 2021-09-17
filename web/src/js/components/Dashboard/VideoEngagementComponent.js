@@ -1,44 +1,39 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import MovieFilterIcon from '@material-ui/icons/MovieFilter'
 import Dialog from '@material-ui/core/Dialog'
-import useTrueX from 'js/utils/useTrueX'
+import useTrueX, { CLOSED } from 'js/utils/useTrueX'
 
 const VideoEngagementComponent = ({ iconProps }) => {
-  const [isAdAvailable, setIsAdAvailable] = useState(false)
   const [isAdOpen, setIsAdOpen] = useState(false)
-
   const [adContainerElem, setAdContainerElem] = useState(null)
 
-  const config = useMemo(
-    () => ({
-      open: isAdOpen,
-      adContainer: adContainerElem,
-      onAdAvailable: () => {
-        setIsAdAvailable(true)
-      },
-      // onStart = () => {},
-      onClose: () => {
-        setIsAdOpen(false)
-      },
-      // onFinish: () => {},
-    }),
-    [isAdOpen, adContainerElem]
-  )
-  useTrueX(config)
+  const trueX = useTrueX({
+    open: isAdOpen,
+    adContainer: adContainerElem,
+  })
+  console.log('true[X]', trueX)
+  const { adAvailable, status } = trueX
 
   const openAd = () => {
-    if (!isAdAvailable) {
+    if (!adAvailable) {
       console.log('No ad. Cannot open anything.')
       return
     }
     setIsAdOpen(true)
   }
 
-  const onModalClose = () => {
+  const closeModal = () => {
     setIsAdOpen(false)
   }
+
+  // If true[X] triggers a close, then close our modal.
+  useEffect(() => {
+    if (status === CLOSED) {
+      closeModal()
+    }
+  }, [status])
 
   return (
     <div>
@@ -46,11 +41,11 @@ const VideoEngagementComponent = ({ iconProps }) => {
         <MovieFilterIcon
           {...iconProps}
           style={{
-            color: isAdAvailable ? 'gold' : 'inherit',
+            color: adAvailable ? 'gold' : 'inherit',
           }}
         />
       </ButtonBase>
-      <Dialog open={isAdOpen} onClose={onModalClose} maxWidth={false}>
+      <Dialog open={isAdOpen} onClose={closeModal} maxWidth={false}>
         <div ref={newRef => setAdContainerElem(newRef)} />
       </Dialog>
     </div>
