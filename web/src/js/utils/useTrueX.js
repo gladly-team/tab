@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
 import { requestAd } from 'js/utils/truex'
-import useWindowSize from 'js/utils/hooks/useWindowSize'
 
 const log = msg => {
   console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), msg)
@@ -21,6 +20,8 @@ const useTrueX = ({
     client: undefined,
   })
   const [fetchComplete, setFetchComplete] = useState(false)
+  const [adMounted, setAdMounted] = useState(false)
+
   const fetchAd = useCallback(() => {
     const fetch = async () => {
       log('fetching ad')
@@ -41,8 +42,8 @@ const useTrueX = ({
     fetchAd()
   }, [fetchAd])
 
+  // If an ad exists, add event handlers.
   useEffect(() => {
-    // If an ad exists, add event handlers.
     log('adding event handlers')
 
     if (trueX.ad) {
@@ -63,6 +64,7 @@ const useTrueX = ({
       // User closed the ad unit.
       trueX.ad.onClose(activity => {
         log('close')
+        setAdMounted(false)
         onClose()
 
         // Refresh ads to see if another is available.
@@ -93,33 +95,31 @@ const useTrueX = ({
     trueX.ad,
   ])
 
-  // TODO: probably just use container size.
-  const windowSize = useWindowSize()
-  console.log(windowSize)
-
+  // If the parent container is not open, mark the ad
+  // as unmounted.
   useEffect(() => {
-    if (open) {
-      console.log('mounting ad')
-      if (!adContainer) {
-        log('PROBLEM: no ad container')
-        return
-      }
-
-      trueX.client.loadActivityIntoContainer(trueX.ad, adContainer, {
-        // width: `${windowSize.width}px`,
-        // height: `${windowSize.height}px`,
-        width: '100vw',
-        height: '100vh',
-      })
+    if (!open) {
+      setAdMounted(false)
     }
-  }, [
-    adContainer,
-    open,
-    trueX.ad,
-    trueX.client,
-    windowSize.height,
-    windowSize.width,
-  ])
+  }, [open])
+
+  // Mount the ad when the parent container is open.
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+    if (!adContainer) {
+      log('PROBLEM: no ad container')
+      return
+    }
+    if (adMounted) {
+      log('not mounting, ad already mounted.')
+      return
+    }
+    log('mounting ad')
+    setAdMounted(true) // prevent mounting more than once
+    trueX.client.loadActivityIntoContainer(trueX.ad, adContainer)
+  }, [adContainer, adMounted, open, trueX.ad, trueX.client])
 
   return
 }

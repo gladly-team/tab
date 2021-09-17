@@ -50,11 +50,8 @@ const VideoEngagementComponent = ({ iconProps }) => {
           }}
         />
       </ButtonBase>
-      <Dialog open={isAdOpen} onClose={onModalClose} fullWidth maxWidth={false}>
-        <div
-          ref={newRef => setAdContainerElem(newRef)}
-          style={{ width: '100vw', height: '100vh' }}
-        />
+      <Dialog open={isAdOpen} onClose={onModalClose} maxWidth={false}>
+        <div ref={newRef => setAdContainerElem(newRef)} />
       </Dialog>
     </div>
   )
