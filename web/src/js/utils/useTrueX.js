@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import { requestAd } from 'js/utils/truex'
 
-const log = msg => {
-  console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), msg)
+const log = (...msg) => {
+  console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), ...msg)
 }
 
 // Awaiting true[X] setup or fetching an ad.
@@ -87,7 +87,7 @@ const useTrueX = ({ open = false, adContainer = null }) => {
       // User spent 30 seconds and interacted at least once.
       trueX.ad.onCredit(engagement => {
         log('credit earned')
-        console.log('engagement:', engagement)
+        log('engagement:', engagement)
         setCredited(true)
       })
 
