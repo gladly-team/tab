@@ -107,6 +107,17 @@ const useTrueX = ({ open = false, adContainer = null }) => {
         log('onMessage = ' + payload)
       })
 
+      // "Triggered when an error has occurred with the ad.
+      // This should be considered an exception. It's best
+      // practice to remove the ad container when this occurs."
+      // https://github.com/socialvibe/truex-ads-docs/blob/master/js_ad_api.md#ad-object
+      trueX.ad.onError(error => {
+        log('error = ' + error)
+
+        // The parent should close the container.
+        setStatus(CLOSED)
+      })
+
       // Set that true[X] is ready to go.
       setStatus(READY)
       setAdAvailable(true)
