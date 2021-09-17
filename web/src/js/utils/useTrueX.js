@@ -59,6 +59,7 @@ const useTrueX = ({ open = false, adContainer = null }) => {
 
   // Cleanup: call when the ad has been closed
   const reset = useCallback(() => {
+    log('resetting')
     setStatus(WAITING)
     setAdMounted(false)
     setCredited(false)
@@ -93,7 +94,6 @@ const useTrueX = ({ open = false, adContainer = null }) => {
       trueX.ad.onClose(activity => {
         log('closed')
         setStatus(CLOSED)
-        reset()
       })
 
       // User got to end of ad.
