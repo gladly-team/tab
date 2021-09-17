@@ -61,6 +61,7 @@ const useTrueX = ({ open = false, adContainer = null }) => {
   const reset = useCallback(() => {
     log('resetting')
     setStatus(WAITING)
+    setAdAvailable(false)
     setAdMounted(false)
     setCredited(false)
 
