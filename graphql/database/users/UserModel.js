@@ -396,9 +396,9 @@ class User extends BaseModel {
       vcDonatedAllTime: 0,
       numUsersRecruited: 0,
       backgroundImage: () => ({
-        id: '9308b921-44c7-4b4e-845d-3b01fa73fa2b',
-        image: '94bbd29b17fe4fa3b45777281a392f21.jpg',
-        thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
+        id: '7e73d6d7-b915-4366-b01a-ffc126466d5b',
+        image: '3acd54614b1d4d7fbce85d965de3de25.jpg',
+        thumbnail: '71a27d6823244354acb85e0806d0dff1.jpg',
         timestamp: moment.utc().toISOString(),
       }),
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
