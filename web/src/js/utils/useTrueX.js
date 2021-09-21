@@ -82,7 +82,10 @@ const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
     if (trueX.ad) {
       // Ad started.
       trueX.ad.onStart(activity => {
-        log('start')
+        log('start', activity)
+
+        // TODO: call backend to log ad start
+
         setStatus(STARTED)
       })
 
