@@ -6,9 +6,8 @@
 // Initializes to window.truex
 require('@truex/js-ad-client')()
 
-// TODO: env var
-// TODO: Need production value. This is for testing only.
-const TRUEX_PLACEMENT_HASH = '0c79a35271f1371e201a54744343a2ecf8ce9e7e'
+// TODO: Need production value. This is currently set to our testing value.
+const TRUEX_PLACEMENT_HASH = process.env.TRUEX_PLACEMENT_HASH
 
 let initCalled = false
 let trueXClient
