@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
 import Typography from '@material-ui/core/Typography'
@@ -11,6 +11,7 @@ import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import VideoEngagement from 'js/components/Dashboard/VideoEngagementComponent'
 import { logout } from 'js/authentication/user'
+import { showVideoAds } from 'js/utils/feature-flags'
 import {
   goTo,
   inviteFriendsURL,
@@ -29,7 +30,11 @@ jest.mock('js/components/Dashboard/SettingsButtonComponent')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/logger')
-
+jest.mock('js/utils/feature-flags', () => {
+  return {
+    showVideoAds: jest.fn(),
+  }
+})
 const getMockProps = () => {
   return {
     browser: 'chrome',
@@ -573,9 +578,12 @@ describe('User menu component: sparkly search intro button', () => {
 })
 
 describe('User menu component: video ads components', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   it('displays the video ad icon when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
+    showVideoAds.mockReturnValue(true)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -586,7 +594,7 @@ describe('User menu component: video ads components', () => {
 
   it('does not displays the video ad icon when enable video ads is set to false', () => {
     const mockProps = getMockProps()
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
+    showVideoAds.mockReturnValue(false)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -597,7 +605,7 @@ describe('User menu component: video ads components', () => {
 
   it('mounts the video ad component when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
+    showVideoAds.mockReturnValue(true)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -606,7 +614,7 @@ describe('User menu component: video ads components', () => {
 
   it('does not mount the video ad component when enable video ads is set to false', () => {
     const mockProps = getMockProps()
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
+    showVideoAds.mockReturnValue(false)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()

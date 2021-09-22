@@ -81,4 +81,16 @@ describe('feature flags', () => {
     process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'true'
     expect(isGAMDevEnvironment()).toBe(true)
   })
+
+  test('showVideoAds is false if the env var is "false"', () => {
+    const showVideoAds = require('js/utils/feature-flags').showVideoAds
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
+    expect(showVideoAds()).toBe(false)
+  })
+
+  test('showVideoAds is true if the env var is "true"', () => {
+    const showVideoAds = require('js/utils/feature-flags').showVideoAds
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
+    expect(showVideoAds()).toBe(true)
+  })
 })
