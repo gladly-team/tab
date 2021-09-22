@@ -1119,6 +1119,9 @@ type User implements Node {
   """User's email"""
   email: String
 
+  """a unique user ID sent to video ad partner truex"""
+  truexId: String!
+
   """ISO datetime string of when the user joined"""
   joined: String
   justCreated: Boolean
