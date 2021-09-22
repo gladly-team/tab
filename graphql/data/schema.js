@@ -59,6 +59,7 @@ import logRevenue from '../database/userRevenue/logRevenue'
 import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
 import mergeIntoExistingUser from '../database/users/mergeIntoExistingUser'
 import setActiveWidget from '../database/users/setActiveWidget'
+import getBackgroundImage from '../database/users/getBackgroundImage'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
 import setBackgroundColor from '../database/users/setBackgroundColor'
@@ -458,6 +459,7 @@ const userType = new GraphQLObjectType({
     backgroundImage: {
       type: backgroundImageType,
       description: "Users's background image",
+      resolve: (user, args, context) => getBackgroundImage(context.user, user),
     },
     username: {
       type: GraphQLString,
