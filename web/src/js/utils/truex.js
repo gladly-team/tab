@@ -7,7 +7,7 @@
 require('@truex/js-ad-client')()
 
 // TODO: Need production value. This is currently set to our testing value.
-const TRUEX_PLACEMENT_HASH = process.env.TRUEX_PLACEMENT_HASH
+const TRUEX_PLACEMENT_HASH = process.env.REACT_APP_TRUEX_PLACEMENT_HASH
 
 let initCalled = false
 let trueXClient

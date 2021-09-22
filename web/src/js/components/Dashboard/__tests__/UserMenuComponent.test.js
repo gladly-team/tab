@@ -575,7 +575,7 @@ describe('User menu component: sparkly search intro button', () => {
 describe('User menu component: video ads components', () => {
   it('displays the video ad icon when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    process.env.ENABLE_VIDEO_ADS = 'true'
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -586,7 +586,7 @@ describe('User menu component: video ads components', () => {
 
   it('does not displays the video ad icon when enable video ads is set to false', () => {
     const mockProps = getMockProps()
-    process.env.ENABLE_VIDEO_ADS = 'false'
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -597,7 +597,7 @@ describe('User menu component: video ads components', () => {
 
   it('mounts the video ad component when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    process.env.ENABLE_VIDEO_ADS = 'true'
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
@@ -606,7 +606,7 @@ describe('User menu component: video ads components', () => {
 
   it('does not mount the video ad component when enable video ads is set to false', () => {
     const mockProps = getMockProps()
-    process.env.ENABLE_VIDEO_ADS = 'false'
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
