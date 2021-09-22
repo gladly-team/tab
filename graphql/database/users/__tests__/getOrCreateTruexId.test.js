@@ -1,10 +1,15 @@
 /* eslint-env jest */
 
 import { nanoid } from 'nanoid'
-import { getMockUserContext, getMockUserInstance } from '../../test-utils'
-
+import {
+  DatabaseOperation,
+  getMockUserContext,
+  getMockUserInstance,
+  setMockDBResponse,
+} from '../../test-utils'
 import UserModel from '../UserModel'
 
+jest.mock('../../databaseClient')
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -33,8 +38,11 @@ describe('getOrCreateTruexId', () => {
     const mockUser = {
       ...getMockUserInstance(),
     }
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: { ...mockUser, truexId: '123' },
+    })
     const response = await getOrCreateTruexId(userContext, mockUser)
     expect(updateSpy).toHaveBeenCalled()
-    expect(updateSpy.mock.calls[0][1].truexId).toEqual(response)
+    expect(response).toEqual('123')
   })
 })
