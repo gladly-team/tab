@@ -1891,6 +1891,11 @@
   resolved "https://registry.yarnpkg.com/@testim/chrome-version/-/chrome-version-1.0.7.tgz#0cd915785ec4190f08a3a6acc9b61fc38fb5f1a9"
   integrity sha512-8UT/J+xqCYfn3fKtOznAibsHpiuDshCb0fwgWxRazTT19Igp9ovoXMPhXyLD6m3CKQGTMHgqoxaFfMWaL40Rnw==
 
+"@truex/js-ad-client@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@truex/js-ad-client/-/js-ad-client-0.0.13.tgz#76262ca856b2ff4211236cc0c8069347361cd118"
+  integrity sha512-DdqZZGn5Iw30RNe4sw+DVfC0zSS8/6lamIAm2vWYVbCkcyO7Ec6V5IHPIS7nEwjiTh64TuGzck4zl1ssiVENyg==
+
 "@types/babel__core@^7.1.0":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.2.tgz#608c74f55928033fce18b99b213c16be4b3d114f"
