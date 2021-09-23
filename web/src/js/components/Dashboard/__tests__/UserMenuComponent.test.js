@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
 import Typography from '@material-ui/core/Typography'
@@ -9,7 +9,9 @@ import { mountWithHOC } from 'js/utils/test-utils'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+import VideoEngagement from 'js/components/Dashboard/VideoEngagementComponent'
 import { logout } from 'js/authentication/user'
+import { showVideoAds } from 'js/utils/feature-flags'
 import {
   goTo,
   inviteFriendsURL,
@@ -28,7 +30,11 @@ jest.mock('js/components/Dashboard/SettingsButtonComponent')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/logger')
-
+jest.mock('js/utils/feature-flags', () => {
+  return {
+    showVideoAds: jest.fn(),
+  }
+})
 const getMockProps = () => {
   return {
     browser: 'chrome',
@@ -571,36 +577,109 @@ describe('User menu component: sparkly search intro button', () => {
   })
 })
 
-describe('User menu component: campaign reopen button', () => {
-  it('displays the campaign reopen button when the showCampaignReopenButton prop is true', () => {
+describe('User menu component: video ads components', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  it('displays the video ad icon when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    mockProps.showCampaignReopenButton = true
+    showVideoAds.mockReturnValue(true)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="campaign-reopen"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test-id="video-ad-circle-icon"]').exists()).toBe(
+      true
+    )
   })
 
-  it('does not display the campaign reopen button when the showCampaignReopenButton prop is false', () => {
+  it('does not displays the video ad icon when enable video ads is set to false', () => {
     const mockProps = getMockProps()
-    mockProps.showCampaignReopenButton = false
+    showVideoAds.mockReturnValue(false)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="campaign-reopen"]').exists()).toBe(
+    expect(wrapper.find('[data-test-id="video-ad-circle-icon"]').exists()).toBe(
       false
     )
   })
 
-  it('calls the onClickCampaignReopen prop when clicked', () => {
+  it('mounts the video ad component when enable video ads is set to true', () => {
     const mockProps = getMockProps()
-    mockProps.showCampaignReopenButton = true
-    mockProps.user.recruits.recruitsWithAtLeastOneTab = 182
+    showVideoAds.mockReturnValue(true)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(mockProps.onClickCampaignReopen).not.toHaveBeenCalled()
-    wrapper.find('[data-test-id="campaign-reopen"]').simulate('click')
-    expect(mockProps.onClickCampaignReopen).toHaveBeenCalledTimes(1)
+    expect(wrapper.find(VideoEngagement).exists()).toBe(true)
+  })
+
+  it('does not mount the video ad component when enable video ads is set to false', () => {
+    const mockProps = getMockProps()
+    showVideoAds.mockReturnValue(false)
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find(VideoEngagement).exists()).toBe(false)
+  })
+})
+
+describe('User menu component: Hearts dropdown component', () => {
+  it('receives the "user" and "app" props', () => {
+    const mockProps = getMockProps()
+    mockProps.app = {
+      hi: 'there',
+      campaign: {},
+    }
+    mockProps.user = {
+      some: 'thing',
+      abc: 123,
+      recruits: {
+        recruitsWithAtLeastOneTab: 1,
+      },
+    }
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('app')).toEqual(mockProps.app)
+    expect(dropdownElem.prop('user')).toEqual(mockProps.user)
+  })
+
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorElement')).toBe(mockAnchorElement)
+  })
+
+  it('sets a marginTop', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
 })
