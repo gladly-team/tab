@@ -28,6 +28,10 @@ const allFixtures = [
     jsonFile: 'UserMissions.json',
   },
   {
+    tableName: 'VideoAdLog',
+    jsonFile: 'VideoAdLog.json',
+  },
+  {
     tableName: 'UserLevels',
     jsonFile: 'UserLevels.json',
   },

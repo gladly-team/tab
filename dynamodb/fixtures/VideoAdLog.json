@@ -1,0 +1,16 @@
+[
+  {
+    "userId": "abcdefghijklmno",
+    "timestamp": "2017-07-18T20:45:53Z",
+    "completed": false,
+    "id": "1234567890asdfgh"
+  },
+  {
+    "userId": "abcdefghijklmno",
+    "timestamp": "2017-07-17T20:45:53Z",
+    "completed": true,
+    "id": "1234567890asdfgh",
+    "truexEngagementId": "asdf",
+    "truexCreativeId": "1234"
+  }
+]
