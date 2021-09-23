@@ -1,5 +1,6 @@
 import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
+import { nanoid } from 'nanoid'
 import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
@@ -46,6 +47,7 @@ const createUser = async (
       // to the user).
       email: userContext.email || null,
       joined: moment.utc().toISOString(),
+      truexId: nanoid(),
       currentMissionId: missionId || undefined,
     },
     !isNil(extensionInstallId)

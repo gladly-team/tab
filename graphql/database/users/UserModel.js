@@ -72,6 +72,12 @@ class User extends BaseModel {
         .description(
           `an optional field currently added when a user invites someone new via email invite`
         ),
+      truexId: types
+        .string()
+        .required()
+        .description(
+          `The unique user truex Id passed to truex integration when we show video ads`
+        ),
       joined: types
         .string()
         .isoDate()

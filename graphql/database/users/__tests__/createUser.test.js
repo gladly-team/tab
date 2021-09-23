@@ -49,6 +49,7 @@ afterEach(() => {
 function getExpectedCreateItemFromUserInfo(userInfo) {
   return Object.assign({}, addTimestampFieldsToItem(userInfo), {
     joined: moment.utc().toISOString(),
+    truexId: expect.any(String),
   })
 }
 
@@ -505,7 +506,7 @@ describe('createUser when user does not exist', () => {
     // Mock database responses.
     const userInfo = getMockUserInfo()
     const userReturnedFromCreate = getMockUserInstance(
-      Object.assign({}, userInfo)
+      Object.assign({ truexId: expect.any(String) }, userInfo)
     )
     const dbQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
       Attributes: userReturnedFromCreate,

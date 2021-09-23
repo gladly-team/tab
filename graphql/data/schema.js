@@ -71,6 +71,7 @@ import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
 import setV4Enabled from '../database/users/setV4Enabled'
 import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
 import deleteUser from '../database/users/deleteUser'
+import getOrCreateTruexId from '../database/users/getOrCreateTruexId'
 import squadInviteResponse from '../database/missions/squadInviteResponse'
 import updateMissionNotification from '../database/missions/updateMissionNotification'
 import setHasSeenCompletedMission from '../database/missions/hasSeenCompletedMission'
@@ -459,7 +460,7 @@ const userType = new GraphQLObjectType({
     backgroundImage: {
       type: backgroundImageType,
       description: "Users's background image",
-      resolve: (user, args, context) => getBackgroundImage(context.user, user),
+      resolve: (user, _args, context) => getBackgroundImage(context.user, user),
     },
     username: {
       type: GraphQLString,
@@ -468,6 +469,11 @@ const userType = new GraphQLObjectType({
     email: {
       type: GraphQLString,
       description: "User's email",
+    },
+    truexId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'a unique user ID sent to video ad partner truex',
+      resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
     },
     joined: {
       type: GraphQLString,
