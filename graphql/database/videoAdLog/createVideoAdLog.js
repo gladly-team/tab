@@ -1,11 +1,6 @@
 import { nanoid } from 'nanoid'
+import moment from 'moment'
 import VideoAdLogModel from './VideoAdLogModel'
-import {
-  getPermissionsOverride,
-  MISSIONS_OVERRIDE,
-} from '../../utils/permissions-overrides'
-
-const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 /**
  * @param {Object} userContext - The user context.
  * @param {string} userId - The user's Id
@@ -13,4 +8,8 @@ const override = getPermissionsOverride(MISSIONS_OVERRIDE)
  */
 
 export default async (userContext, userId) =>
-  VideoAdLogModel.create(userContext, { userId, id: nanoid(16) })
+  VideoAdLogModel.create(userContext, {
+    userId,
+    id: nanoid(16),
+    timestamp: moment.utc().toISOString(),
+  })

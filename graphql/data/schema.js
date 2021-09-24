@@ -30,6 +30,7 @@ import {
   USER_RECRUITS,
   INVITED_USERS,
   MISSION,
+  VIDEO_AD_LOG,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -81,6 +82,8 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
+import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
+import isVideoAdEligible from '../database/videoAdLog/isVideoAdEligible'
 import UserImpactModel from '../database/userImpact/UserImpactModel'
 import donateVc from '../database/donations/donateVc'
 import getCharityVcReceived from '../database/donations/getCharityVcReceived'
@@ -475,6 +478,12 @@ const userType = new GraphQLObjectType({
       description: 'a unique user ID sent to video ad partner truex',
       resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
     },
+    videoAdEligible: {
+      type: GraphQLBoolean,
+      description:
+        'whether a user has completed 3 video ads in the last 24 hours',
+      resolve: (user, _args, context) => isVideoAdEligible(context.user, user),
+    },
     joined: {
       type: GraphQLString,
       description: 'ISO datetime string of when the user joined',
@@ -745,6 +754,17 @@ const widgetType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const videoAdLogType = new GraphQLObjectType({
+  name: VIDEO_AD_LOG,
+  description: 'Vidieo Ad Log type',
+  fields: () => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'A unique document identifier',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const charityType = new GraphQLObjectType({
   name: CHARITY,
   description: 'A charitable charity',
@@ -2305,7 +2325,19 @@ const restartMissionMutation = mutationWithClientMutationId({
     return restartMission(context.user, userGlobalObj.id, missionId)
   },
 })
-
+const createVideoAdLogMutation = mutationWithClientMutationId({
+  name: 'CreateVideoAdLog',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    videoAdLog: { type: videoAdLogType },
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return createVideoAdLog(context.user, userGlobalObj.id)
+  },
+})
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2390,6 +2422,7 @@ const mutationType = new GraphQLObjectType({
     setHasSeenSquads: setHasSeenSquadsMutation,
     setHasSeenCompletedMission: setHasSeenCompletedMissionMutation,
     restartMission: restartMissionMutation,
+    createVideoAdLog: createVideoAdLogMutation,
   }),
 })
 

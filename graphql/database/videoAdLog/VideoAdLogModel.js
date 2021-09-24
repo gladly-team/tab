@@ -1,7 +1,8 @@
+import moment from 'moment'
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER_MISSION } from '../constants'
+import { VIDEO_AD_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
@@ -9,7 +10,7 @@ import { permissionAuthorizers } from '../../utils/authorization-helpers'
  */
 class VideoAdLog extends BaseModel {
   static get name() {
-    return USER_MISSION
+    return VIDEO_AD_LOG
   }
 
   static get hashKey() {
@@ -24,19 +25,19 @@ class VideoAdLog extends BaseModel {
     return [
       {
         hashKey: 'id',
-        name: 'logsByUniqueId',
+        name: 'VideoAdLogsByUniqueId',
         type: 'global',
       },
       {
         hashKey: 'truexEngagementId',
-        name: 'logsByEngagementId',
+        name: 'VideoAdLogsByEngagementId',
         type: 'global',
       },
     ]
   }
 
   static get tableName() {
-    return tableNames.VideoAdLog
+    return tableNames.videoAdLog
   }
 
   static get schema() {
@@ -51,6 +52,7 @@ class VideoAdLog extends BaseModel {
       timestamp: types
         .string()
         .isoDate()
+        .default(self.fieldDefaults.timestamp)
         .description(`time of creation`)
         .required(),
       completed: types
@@ -59,14 +61,15 @@ class VideoAdLog extends BaseModel {
         .description('user has aknowledged that the mission has completed'),
       id: types
         .string()
-        .length(9)
+        .length(16)
         .required()
         .description(`The unique item id`),
       truexEngagementId: types
         .string()
         .default(self.fieldDefaults.truexEngagementId)
         .description('the truex engagement "key" field'),
-      truexCreativeId: types.string
+      truexCreativeId: types
+        .string()
         .default(self.fieldDefaults.truexCreativeId)
         .description('true[X] engagement “ad.creative_id” field'),
     }
@@ -74,9 +77,8 @@ class VideoAdLog extends BaseModel {
 
   static get fieldDefaults() {
     return {
-      truexEngagementId: null,
-      truexCreativeId: null,
       completed: false,
+      timestamp: moment.utc().toISOString(),
     }
   }
 
@@ -86,13 +88,6 @@ class VideoAdLog extends BaseModel {
       update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
       query: permissionAuthorizers.userIdMatchesHashKey,
-      indexPermissions: {
-        userMissionsByDate: {
-          get: permissionAuthorizers.userIdMatchesRangeKey,
-          getAll: permissionAuthorizers.userIdMatchesRangeKey,
-          query: permissionAuthorizers.userIdMatchesRangeKey,
-        },
-      },
     }
   }
 }

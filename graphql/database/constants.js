@@ -19,7 +19,7 @@ export const USER_REVENUE = 'UserRevenue'
 export const USER_DATA_CONSENT = 'UserDataConsent'
 export const MISSION = 'Mission'
 export const USER_MISSION = 'UserMission'
-
+export const VIDEO_AD_LOG = 'VideoAdLog'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
