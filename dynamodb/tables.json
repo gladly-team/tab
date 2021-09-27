@@ -239,6 +239,57 @@
     }
   },
   {
+    "TableName": "VideoAdLog",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "timestamp", "AttributeType": "S" },
+      { "AttributeName": "truexEngagementId", "AttributeType": "S" },
+      { "AttributeName": "id", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    },
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "VideoAdLogsByEngagementId",
+        "KeySchema": [
+          {
+            "AttributeName": "truexEngagementId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "VideoAdLogsByUniqueId",
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
     "TableName": "UserDataConsentLog",
     "KeySchema": [
       { "AttributeName": "userId", "KeyType": "HASH" },

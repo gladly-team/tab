@@ -382,6 +382,16 @@ type CreateSquadInvitesPayload {
   clientMutationId: String
 }
 
+input CreateVideoAdLogInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type CreateVideoAdLogPayload {
+  videoAdLog: VideoAdLog
+  clientMutationId: String
+}
+
 """For expected errors, such as during form validation"""
 type CustomError {
   """The error code"""
@@ -762,6 +772,7 @@ type Mutation {
   setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
   setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
   restartMission(input: RestartMissionInput!): RestartMissionPayload
+  createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
 }
 
 """An object with an ID"""
@@ -1122,6 +1133,9 @@ type User implements Node {
   """a unique user ID sent to video ad partner truex"""
   truexId: String!
 
+  """whether a user has completed 3 video ads in the last 24 hours"""
+  videoAdEligible: Boolean
+
   """ISO datetime string of when the user joined"""
   joined: String
   justCreated: Boolean
@@ -1271,6 +1285,12 @@ type UserRecruitsEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""Video Ad Log type"""
+type VideoAdLog implements Node {
+  """The ID of an object"""
+  id: ID!
 }
 
 """App widget"""

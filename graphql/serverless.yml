@@ -226,6 +226,15 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}UserRevenueLog-${self:provider.stage}"
+    # VideoAdLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource: "${self:custom.dbTableArnBase}VideoAdLog-${self:provider.stage}"
     # UserDataConsentLog table
     - Effect: "Allow"
       Action:
