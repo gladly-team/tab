@@ -82,6 +82,7 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
+import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
 import isVideoAdEligible from '../database/videoAdLog/isVideoAdEligible'
 import UserImpactModel from '../database/userImpact/UserImpactModel'
@@ -161,6 +162,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
+    if (type === VIDEO_AD_LOG) {
+      return VideoAdLogModel.get(context.user, id)
+    }
     return null
   },
   obj => {
@@ -189,6 +193,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof BackgroundImageModel) {
       // eslint-disable-next-line no-use-before-define
       return backgroundImageType
+    }
+    if (obj instanceof VideoAdLogModel) {
+      // eslint-disable-next-line no-use-before-define
+      return videoAdLogType
     }
     return null
   }
@@ -758,10 +766,7 @@ const videoAdLogType = new GraphQLObjectType({
   name: VIDEO_AD_LOG,
   description: 'Video Ad Log type',
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'A unique document identifier',
-    },
+    id: globalIdField(VIDEO_AD_LOG),
   }),
   interfaces: [nodeInterface],
 })

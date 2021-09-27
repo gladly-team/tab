@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import uuid from 'uuid/v4'
 import moment from 'moment'
 import VideoAdLogModel from './VideoAdLogModel'
 /**
@@ -10,6 +10,6 @@ import VideoAdLogModel from './VideoAdLogModel'
 export default async (userContext, userId) =>
   VideoAdLogModel.create(userContext, {
     userId,
-    id: nanoid(16),
+    id: uuid(),
     timestamp: moment.utc().toISOString(),
   })

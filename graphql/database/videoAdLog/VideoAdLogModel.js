@@ -60,8 +60,7 @@ class VideoAdLog extends BaseModel {
         .default(self.fieldDefaults.completed)
         .description('user completed ad engagement and is credited'),
       id: types
-        .string()
-        .length(16)
+        .uuid()
         .required()
         .description(`The unique item id`),
       truexEngagementId: types

@@ -43,7 +43,7 @@ describe('createVideoAdLog tests', () => {
     })
 
     // testing nanoid
-    expect(result.id.length).toEqual(16)
+    expect(result.id.length).toEqual(36)
   })
 
   it('throws if user id does not match user context', async () => {
