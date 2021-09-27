@@ -46,7 +46,7 @@ describe('createVideoAdLog tests', () => {
     expect(result.id.length).toEqual(16)
   })
 
-  it('throws if user id does not match user context false if user has  3 completed video ad logs in the last 24 hours', async () => {
+  it('throws if user id does not match user context', async () => {
     expect.assertions(1)
     const createVideoAdLog = require('../createVideoAdLog').default
     await expect(createVideoAdLog(userContext, 'wrongid')).rejects.toThrow(

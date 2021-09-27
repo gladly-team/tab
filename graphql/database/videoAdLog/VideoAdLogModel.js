@@ -58,7 +58,7 @@ class VideoAdLog extends BaseModel {
       completed: types
         .boolean()
         .default(self.fieldDefaults.completed)
-        .description('user has aknowledged that the mission has completed'),
+        .description('user completed ad engagement and is credited'),
       id: types
         .string()
         .length(16)

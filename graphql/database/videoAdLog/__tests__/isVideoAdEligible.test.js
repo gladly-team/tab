@@ -64,4 +64,31 @@ describe('isVideoAdEligible', () => {
     const result = await isVideoAdEligible(userContext, user)
     expect(result).toEqual(false)
   })
+
+  it('it forms the database query with a completed filter as expected', async () => {
+    expect.assertions(1)
+    const isVideoAdEligible = require('../isVideoAdEligible').default
+    // Mock videoAdLog query
+    const videoAdLogQuery = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
+    await isVideoAdEligible(userContext, user)
+    expect(videoAdLogQuery.mock.calls[0][0]).toEqual({
+      ExpressionAttributeNames: {
+        '#completed': 'completed',
+        '#timestamp': 'timestamp',
+        '#userId': 'userId',
+      },
+      ExpressionAttributeValues: {
+        ':completed': true,
+        ':timestamp': '2017-05-18T13:59:46.000Z',
+        ':timestamp_2': '2017-05-18T13:59:46.000Z',
+        ':userId': 'abcdefghijklmno',
+      },
+      FilterExpression: '(#completed = :completed)',
+      KeyConditionExpression:
+        '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#userId = :userId)',
+      TableName: 'VideoAdLog',
+    })
+  })
 })

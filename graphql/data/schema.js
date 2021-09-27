@@ -756,7 +756,7 @@ const widgetType = new GraphQLObjectType({
 
 const videoAdLogType = new GraphQLObjectType({
   name: VIDEO_AD_LOG,
-  description: 'Vidieo Ad Log type',
+  description: 'Video Ad Log type',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLString),
