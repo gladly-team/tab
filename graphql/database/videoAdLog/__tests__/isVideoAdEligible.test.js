@@ -6,6 +6,7 @@ import {
   DatabaseOperation,
   setMockDBResponse,
 } from '../../test-utils'
+import VideoAdLogModel from '../VideoAdLogModel'
 
 jest.mock('../../databaseClient')
 beforeAll(() => {
@@ -88,7 +89,7 @@ describe('isVideoAdEligible', () => {
       FilterExpression: '(#completed = :completed)',
       KeyConditionExpression:
         '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#userId = :userId)',
-      TableName: 'VideoAdLog',
+      TableName: VideoAdLogModel.tableName,
     })
   })
 })
