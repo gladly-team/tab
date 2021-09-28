@@ -6,6 +6,9 @@ const mutation = graphql`
   mutation LogVideoAdCompleteMutation($input: LogVideoAdCompleteInput!) {
     logVideoAdComplete(input: $input) {
       success
+      user {
+        vcCurrent
+      }
     }
   }
 `

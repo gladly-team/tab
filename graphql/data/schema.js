@@ -2353,7 +2353,13 @@ const logVideoAdCompleteMutation = mutationWithClientMutationId({
     truexCreativeId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    success: { type: new GraphQLNonNull(GraphQLBoolean) },
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    user: {
+      type: userType,
+      resolve: data => data.user,
+    },
   },
   mutateAndGetPayload: async (input, context) =>
     logVideoAdComplete(context.user, {

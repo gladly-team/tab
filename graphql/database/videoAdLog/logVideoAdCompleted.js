@@ -2,6 +2,7 @@ import jsSHA from 'jssha'
 import VideoAdLogModel from './VideoAdLogModel'
 import isVideoAdEligible from './isVideoAdEligible'
 import addVc from '../users/addVc'
+import UserModel from '../users/UserModel'
 import { TRUEX_APPLICATION_SECRET } from '../../config'
 import {
   getPermissionsOverride,
@@ -19,8 +20,12 @@ const override = getPermissionsOverride(VIDEO_ADS_OVERRIDE)
  * @param {string} truexCreativeId - maps to DB field truexCreativeId
  * @return {Promise<Object>}  A promise that resolves into an object containing a log id
  */
-const failure = { success: false }
+
 const applicationSecret = TRUEX_APPLICATION_SECRET
+const failure = async (userContext, userId) => ({
+  success: false,
+  user: await UserModel.get(userContext, userId),
+})
 export default async (
   userContext,
   {
@@ -34,7 +39,7 @@ export default async (
 ) => {
   const isEligible = await isVideoAdEligible(userContext, { id: userId })
   if (!isEligible) {
-    return failure
+    return failure(userContext, userId)
   }
   // eslint-disable-next-line new-cap
   const shaObj = new jsSHA('SHA-256', 'TEXT', {
@@ -42,21 +47,21 @@ export default async (
   })
   shaObj.update(signatureArgumentString)
   if (shaObj.getHash('HEX') !== signature) {
-    return failure
+    return failure(userContext, userId)
   }
   const alreadyCreditedLog = await VideoAdLogModel.query(override, truexAdId)
     .usingIndex('VideoAdLogsByEngagementId')
     .execute()
   if (alreadyCreditedLog.length) {
-    return failure
+    return failure(userContext, userId)
   }
   const videoAdLog = (await VideoAdLogModel.query(override, videoAdId)
     .usingIndex('VideoAdLogsByUniqueId')
     .execute())[0]
   if (!videoAdLog) {
-    return failure
+    return failure(userContext, userId)
   }
-  await Promise.all([
+  const [updatedUser] = await Promise.all([
     addVc(userContext, userId, 100),
     VideoAdLogModel.update(userContext, {
       ...videoAdLog,
@@ -65,5 +70,5 @@ export default async (
       completed: true,
     }),
   ])
-  return { success: true }
+  return { success: true, user: updatedUser }
 }

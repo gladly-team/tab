@@ -5,6 +5,7 @@ import {
   DatabaseOperation,
   setMockDBResponse,
   clearAllMockDBResponses,
+  getMockUserInstance,
 } from '../../test-utils'
 import VideoAdLogModel from '../VideoAdLogModel'
 import addVc from '../../users/addVc'
@@ -21,6 +22,7 @@ afterEach(() => {
 afterAll(() => {
   mockDate.off()
 })
+const mockUser = getMockUserInstance()
 const userContext = getMockUserContext()
 const mockCreditProps = {
   userId: 'abcdefghijklmno',
@@ -99,6 +101,10 @@ describe('logVideoAdCompleted', () => {
         },
       ],
     })
+    // return user with failure
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const result = await logVideoAdCompleted(userContext, mockCreditProps)
     expect(result.success).toEqual(false)
     expect(adLogUpdateSpy).not.toHaveBeenCalled()
@@ -125,6 +131,10 @@ describe('logVideoAdCompleted', () => {
         },
       ],
     })
+    // return user with failure
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const result = await logVideoAdCompleted(userContext, mockCreditProps)
     expect(result.success).toEqual(false)
     expect(adLogUpdateSpy).not.toHaveBeenCalled()
@@ -146,6 +156,10 @@ describe('logVideoAdCompleted', () => {
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
+    // return user with failure
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const result = await logVideoAdCompleted(userContext, mockCreditProps)
     expect(result.success).toEqual(false)
     expect(adLogUpdateSpy).not.toHaveBeenCalled()
@@ -166,6 +180,10 @@ describe('logVideoAdCompleted', () => {
     // Mock return started videoAdLog
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [mockStartedLog],
+    })
+    // return user with failure
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
     })
     const result = await logVideoAdCompleted(userContext, {
       ...mockCreditProps,
@@ -190,6 +208,10 @@ describe('logVideoAdCompleted', () => {
     // Mock return started videoAdLog
     setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [mockStartedLog],
+    })
+    // return user with failure
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
     })
     const result = await logVideoAdCompleted(userContext, {
       ...mockCreditProps,
