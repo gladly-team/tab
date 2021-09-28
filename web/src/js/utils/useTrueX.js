@@ -41,7 +41,7 @@ const useTrueX = ({
   const [adMounted, setAdMounted] = useState(false)
   const [status, setStatus] = useState(WAITING)
   const [credited, setCredited] = useState(false)
-  const [uniqueVideoAdId, setUniqueVideoAdId] = useState('')
+  const [uniqueVideoAdId, setUniqueVideoAdId] = useState(undefined)
   const fetchAd = useCallback(() => {
     const fetch = async () => {
       log('fetching ad')

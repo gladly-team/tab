@@ -657,7 +657,7 @@ input LogVideoAdCompleteInput {
 }
 
 type LogVideoAdCompletePayload {
-  success: Boolean
+  success: Boolean!
   clientMutationId: String
 }
 
