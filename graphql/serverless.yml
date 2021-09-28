@@ -234,7 +234,9 @@ provider:
         - "dynamodb:PutItem"
         - "dynamodb:Query"
         - "dynamodb:UpdateItem"
-      Resource: "${self:custom.dbTableArnBase}VideoAdLog-${self:provider.stage}"
+      Resource: 
+        - "${self:custom.dbTableArnBase}VideoAdLog-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}VideoAdLog-${self:provider.stage}/index/*"
     # UserDataConsentLog table
     - Effect: "Allow"
       Action:
