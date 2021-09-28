@@ -608,7 +608,7 @@ describe('User menu component: video ads components', () => {
     showVideoAds.mockReturnValue(true)
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const wrapper = mount(<UserMenuComponent {...mockProps} />)
     expect(wrapper.find(VideoEngagement).exists()).toBe(true)
   })
 

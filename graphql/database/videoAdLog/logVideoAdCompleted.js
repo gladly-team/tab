@@ -1,0 +1,69 @@
+import jsSHA from 'jssha'
+import VideoAdLogModel from './VideoAdLogModel'
+import isVideoAdEligible from './isVideoAdEligible'
+import addVc from '../users/addVc'
+import { TRUEX_APPLICATION_SECRET } from '../../config'
+import {
+  getPermissionsOverride,
+  VIDEO_ADS_OVERRIDE,
+} from '../../utils/permissions-overrides'
+
+const override = getPermissionsOverride(VIDEO_ADS_OVERRIDE)
+/**
+ * @param {Object} userContext - The user context.
+ * @param {string} userId - The user's Id
+ * @param {string} signatureArgumentString - the engagement’s signature_argument_string
+ * @param {string} signature - the engagement’s signature
+ * @param {string} videoAdId - returned from SetVideoAdStarted
+ * @param {string} truexAdId - maps to DB field truexEngagementId
+ * @param {string} truexCreativeId - maps to DB field truexCreativeId
+ * @return {Promise<Object>}  A promise that resolves into an object containing a log id
+ */
+const failure = { success: false }
+const applicationSecret = TRUEX_APPLICATION_SECRET
+export default async (
+  userContext,
+  {
+    userId,
+    signatureArgumentString,
+    signature,
+    videoAdId,
+    truexAdId,
+    truexCreativeId,
+  }
+) => {
+  const isEligible = await isVideoAdEligible(userContext, { id: userId })
+  if (!isEligible) {
+    return failure
+  }
+  // eslint-disable-next-line new-cap
+  const shaObj = new jsSHA('SHA-256', 'TEXT', {
+    hmacKey: { value: applicationSecret, format: 'TEXT' },
+  })
+  shaObj.update(signatureArgumentString)
+  if (shaObj.getHash('HEX') !== signature) {
+    return failure
+  }
+  const alreadyCreditedLog = await VideoAdLogModel.query(override, truexAdId)
+    .usingIndex('VideoAdLogsByEngagementId')
+    .execute()
+  if (alreadyCreditedLog.length) {
+    return failure
+  }
+  const videoAdLog = (await VideoAdLogModel.query(override, videoAdId)
+    .usingIndex('VideoAdLogsByUniqueId')
+    .execute())[0]
+  if (!videoAdLog) {
+    return failure
+  }
+  await Promise.all([
+    addVc(userContext, userId, 100),
+    VideoAdLogModel.update(userContext, {
+      ...videoAdLog,
+      truexEngagementId: truexAdId,
+      truexCreativeId,
+      completed: true,
+    }),
+  ])
+  return { success: true }
+}

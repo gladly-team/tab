@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
+import { disabledColor } from 'js/theme/default'
 
 const styles = theme => ({
   modalContent: {
@@ -37,7 +38,11 @@ const styles = theme => ({
   },
 })
 
-const VideoEngagementComponent = ({ classes, iconProps }) => {
+const VideoEngagementComponent = ({
+  user: { id, truexId, videoAdEligible },
+  classes,
+  iconProps,
+}) => {
   const [isAdOpen, setIsAdOpen] = useState(false)
   const [adContainerElem, setAdContainerElem] = useState(null)
 
@@ -45,12 +50,13 @@ const VideoEngagementComponent = ({ classes, iconProps }) => {
   // Note that true[X] appears to rate-limit a user ID even
   // in the test environment, so change this if you're not seeing
   // any ad availability.
-  const trueXUserId = 'fake-hashed-uid-1'
 
   const trueX = useTrueX({
     open: isAdOpen,
     adContainer: adContainerElem,
-    hashedUserId: trueXUserId,
+    truexUserId: truexId,
+    userId: id,
+    videoAdEligible,
   })
   console.log('true[X]', trueX)
   const { adAvailable, credited, status } = trueX
@@ -76,11 +82,11 @@ const VideoEngagementComponent = ({ classes, iconProps }) => {
 
   return (
     <div>
-      <ButtonBase onClick={openAd}>
+      <ButtonBase onClick={openAd} disabled={!adAvailable}>
         <MovieFilterIcon
           {...iconProps}
           style={{
-            color: adAvailable ? 'gold' : 'inherit',
+            color: adAvailable ? 'gold' : disabledColor,
           }}
         />
       </ButtonBase>

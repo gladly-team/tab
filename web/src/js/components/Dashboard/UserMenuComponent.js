@@ -34,7 +34,7 @@ import {
 } from 'js/constants'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import StarIcon from '@material-ui/icons/Star'
-import VideoEngagement from 'js/components/Dashboard/VideoEngagementComponent'
+import VideoEngagement from 'js/components/Dashboard/VideoEngagementContainer'
 import { showVideoAds } from 'js/utils/feature-flags'
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -293,7 +293,7 @@ class UserMenu extends React.Component {
           />
           {showVideoAds() && (
             <>
-              <VideoEngagement />
+              <VideoEngagement user={user} />
               <CircleIcon
                 data-test-id={'video-ad-circle-icon'}
                 style={{
