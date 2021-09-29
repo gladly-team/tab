@@ -14,6 +14,7 @@ export default createFragmentContainer(UserMenu, {
     fragment UserMenuContainer_user on User {
       ...HeartsContainer_user
       ...HeartsDropdownContainer_user
+      ...VideoEngagementContainer_user
     }
   `,
 })

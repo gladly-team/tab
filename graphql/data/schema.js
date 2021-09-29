@@ -84,6 +84,7 @@ import getCharities from '../database/charities/getCharities'
 
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
+import logVideoAdComplete from '../database/videoAdLog/logVideoAdCompleted'
 import isVideoAdEligible from '../database/videoAdLog/isVideoAdEligible'
 import UserImpactModel from '../database/userImpact/UserImpactModel'
 import donateVc from '../database/donations/donateVc'
@@ -2336,12 +2337,36 @@ const createVideoAdLogMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    videoAdLog: { type: videoAdLogType },
+    VideoAdLog: { type: videoAdLogType, resolve: log => log },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    const userGlobalObj = fromGlobalId(userId)
-    return createVideoAdLog(context.user, userGlobalObj.id)
+  mutateAndGetPayload: async ({ userId }, context) =>
+    createVideoAdLog(context.user, fromGlobalId(userId).id),
+})
+const logVideoAdCompleteMutation = mutationWithClientMutationId({
+  name: 'LogVideoAdComplete',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    signatureArgumentString: { type: new GraphQLNonNull(GraphQLString) },
+    signature: { type: new GraphQLNonNull(GraphQLString) },
+    videoAdId: { type: new GraphQLNonNull(GraphQLString) },
+    truexAdId: { type: new GraphQLNonNull(GraphQLString) },
+    truexCreativeId: { type: new GraphQLNonNull(GraphQLString) },
   },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    user: {
+      type: new GraphQLNonNull(userType),
+      resolve: data => data.user,
+    },
+  },
+  mutateAndGetPayload: async (input, context) =>
+    logVideoAdComplete(context.user, {
+      ...input,
+      userId: fromGlobalId(input.userId).id,
+      videoAdId: fromGlobalId(input.videoAdId).id,
+    }),
 })
 /**
  * This is the type that will be the root of our query,
@@ -2428,6 +2453,7 @@ const mutationType = new GraphQLObjectType({
     setHasSeenCompletedMission: setHasSeenCompletedMissionMutation,
     restartMission: restartMissionMutation,
     createVideoAdLog: createVideoAdLogMutation,
+    logVideoAdComplete: logVideoAdCompleteMutation,
   }),
 })
 

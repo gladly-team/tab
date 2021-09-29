@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { requestAd } from 'js/utils/truex'
-
+import CreateVideoAdLogMutation from 'js/mutations/CreateVideoAdLogMutation'
+import LogVideoAdCompleteMutation from 'js/mutations/LogVideoAdCompleteMutation'
 const log = (...msg) => {
   console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), ...msg)
 }
@@ -23,7 +24,13 @@ export const CLOSED = 'CLOSED'
 
 // Requests an ad on mount, calls event handlers, and mounts the ad
 // in an ad container when opened.
-const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
+const useTrueX = ({
+  truexUserId,
+  userId,
+  videoAdEligible,
+  open = false,
+  adContainer = null,
+}) => {
   const [trueX, setTrueX] = useState({
     ad: undefined,
     client: undefined,
@@ -34,14 +41,14 @@ const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
   const [adMounted, setAdMounted] = useState(false)
   const [status, setStatus] = useState(WAITING)
   const [credited, setCredited] = useState(false)
-
+  const [uniqueVideoAdId, setUniqueVideoAdId] = useState()
   const fetchAd = useCallback(() => {
     const fetch = async () => {
       log('fetching ad')
       setFetchInProgress(true)
       setFetchComplete(false)
       const { ad, client } = await requestAd({
-        userId: hashedUserId,
+        userId: truexUserId,
       })
       setTrueX({
         ad,
@@ -52,12 +59,14 @@ const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
       setFetchInProgress(false)
     }
     fetch()
-  }, [hashedUserId])
+  }, [truexUserId])
 
-  // On mount, see if an ad is available.
+  // On mount, see if an ad is available if user has not completed 3 ads already.
   useEffect(() => {
-    fetchAd()
-  }, [fetchAd])
+    if (videoAdEligible) {
+      fetchAd()
+    }
+  }, [fetchAd, videoAdEligible])
 
   // Cleanup: call when the ad has been closed
   const reset = useCallback(() => {
@@ -81,23 +90,44 @@ const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
 
     if (trueX.ad) {
       // Ad started.
-      trueX.ad.onStart(activity => {
+      trueX.ad.onStart(async activity => {
         log('start', activity)
-
+        const {
+          createVideoAdLog: {
+            VideoAdLog: { id: adId },
+          },
+        } = await CreateVideoAdLogMutation({ userId })
+        setUniqueVideoAdId(adId)
         // TODO: call backend to log ad start
 
         setStatus(STARTED)
       })
 
       // User spent 30 seconds and interacted at least once.
-      trueX.ad.onCredit(engagement => {
+      trueX.ad.onCredit(async engagement => {
         log('credit earned')
         log('engagement:', engagement)
-
+        const {
+          ad: { creative_id },
+          key,
+          signature,
+          signature_argument_string,
+        } = engagement
         // TODO: call backend to verify signature, validate rate-limiting,
         // and credit user.
-
-        setCredited(true)
+        const {
+          logVideoAdComplete: { success },
+        } = await LogVideoAdCompleteMutation({
+          userId,
+          signatureArgumentString: signature_argument_string,
+          signature,
+          videoAdId: uniqueVideoAdId,
+          truexAdId: key,
+          truexCreativeId: creative_id,
+        })
+        if (success) {
+          setCredited(true)
+        }
       })
 
       // User closed the ad unit.
@@ -136,7 +166,7 @@ const useTrueX = ({ hashedUserId, open = false, adContainer = null }) => {
         log('No ads available.')
       }
     }
-  }, [fetchAd, fetchComplete, reset, trueX.ad])
+  }, [fetchAd, fetchComplete, reset, trueX.ad, userId, uniqueVideoAdId])
 
   // If the parent container closes during an ad, reset
   // all state.

@@ -388,7 +388,7 @@ input CreateVideoAdLogInput {
 }
 
 type CreateVideoAdLogPayload {
-  videoAdLog: VideoAdLog
+  VideoAdLog: VideoAdLog
   clientMutationId: String
 }
 
@@ -646,6 +646,22 @@ type LogUserRevenuePayload {
   clientMutationId: String
 }
 
+input LogVideoAdCompleteInput {
+  userId: String!
+  signatureArgumentString: String!
+  signature: String!
+  videoAdId: String!
+  truexAdId: String!
+  truexCreativeId: String!
+  clientMutationId: String
+}
+
+type LogVideoAdCompletePayload {
+  success: Boolean!
+  user: User
+  clientMutationId: String
+}
+
 """Info about the user's day of most searches"""
 type MaxSearchesDay {
   """The day (datetime)the most searches occurred"""
@@ -773,6 +789,7 @@ type Mutation {
   setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
   restartMission(input: RestartMissionInput!): RestartMissionPayload
   createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
+  logVideoAdComplete(input: LogVideoAdCompleteInput!): LogVideoAdCompletePayload
 }
 
 """An object with an ID"""
