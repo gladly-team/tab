@@ -2357,7 +2357,7 @@ const logVideoAdCompleteMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean),
     },
     user: {
-      type: userType,
+      type: new GraphQLNonNull(userType),
       resolve: data => data.user,
     },
   },
