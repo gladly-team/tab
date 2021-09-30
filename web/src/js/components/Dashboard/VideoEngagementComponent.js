@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import ButtonBase from '@material-ui/core/ButtonBase'
-import MovieFilterIcon from '@material-ui/icons/MovieFilter'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
-import { disabledColor } from 'js/theme/default'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import VideoDotIcon from 'js/components/Dashboard/VideoDotIcon'
+import OndemandVideoIcon from '@material-ui/icons/OndemandVideo'
 const styles = theme => ({
   modalContent: {
     display: 'flex',
@@ -60,7 +60,6 @@ const VideoEngagementComponent = ({
     videoAdEligible,
   })
   const { adAvailable, credited, status, error } = trueX
-
   const openAd = () => {
     if (!adAvailable) {
       console.log('No ad. Cannot open anything.')
@@ -84,21 +83,29 @@ const VideoEngagementComponent = ({
       <div
         ref={poppoverRef}
         onClick={!adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+        style={{ cursor: 'pointer' }}
       >
         <ButtonBase
           onClick={openAd}
           disabled={!adAvailable}
           onMouseEnter={adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+          onMouseLeave={() => setIsPoppoverOpen(false)}
         >
-          <MovieFilterIcon
-            {...iconProps}
-            style={{
-              color: adAvailable ? 'gold' : disabledColor,
-            }}
-          />
+          {adAvailable ? (
+            <VideoDotIcon {...iconProps} />
+          ) : (
+            <OndemandVideoIcon
+              style={{ opacity: adAvailable ? 1 : 0.54 }}
+              {...iconProps}
+            />
+          )}
         </ButtonBase>
       </div>
       <DashboardPopover
+        style={{
+          pointerEvents: adAvailable ? 'none' : undefined,
+          marginTop: 6,
+        }}
         anchorEl={poppoverRef.current}
         onClose={
           adAvailable
@@ -115,7 +122,6 @@ const VideoEngagementComponent = ({
             padding: 10,
             width: 268,
           }}
-          onMouseLeave={() => setIsPoppoverOpen(false)}
         >
           <Typography
             variant={'body1'}
