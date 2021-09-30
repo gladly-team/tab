@@ -2,10 +2,6 @@ import { useEffect, useState, useCallback } from 'react'
 import { requestAd } from 'js/utils/truex'
 import CreateVideoAdLogMutation from 'js/mutations/CreateVideoAdLogMutation'
 import LogVideoAdCompleteMutation from 'js/mutations/LogVideoAdCompleteMutation'
-const log = (...msg) => {
-  console.log('true[X]: [%s] - %s', new Date().toLocaleTimeString(), ...msg)
-}
-
 // Awaiting true[X] setup or fetching an ad.
 export const WAITING = 'WAITING'
 
@@ -41,10 +37,10 @@ const useTrueX = ({
   const [adMounted, setAdMounted] = useState(false)
   const [status, setStatus] = useState(WAITING)
   const [credited, setCredited] = useState(false)
+  const [error, setError] = useState(false)
   const [uniqueVideoAdId, setUniqueVideoAdId] = useState()
   const fetchAd = useCallback(() => {
     const fetch = async () => {
-      log('fetching ad')
       setFetchInProgress(true)
       setFetchComplete(false)
       const { ad, client } = await requestAd({
@@ -54,7 +50,6 @@ const useTrueX = ({
         ad,
         client,
       })
-      log('fetch complete')
       setFetchComplete(true)
       setFetchInProgress(false)
     }
@@ -70,7 +65,6 @@ const useTrueX = ({
 
   // Cleanup: call when the ad has been closed
   const reset = useCallback(() => {
-    log('resetting')
     setStatus(WAITING)
     setAdAvailable(false)
     setAdMounted(false)
@@ -78,7 +72,6 @@ const useTrueX = ({
 
     // Refresh ads to see if another is available.
     if (fetchInProgress) {
-      log('not fetching, fetch already in progress')
     } else {
       fetchAd()
     }
@@ -86,12 +79,9 @@ const useTrueX = ({
 
   // If an ad exists, add event handlers.
   useEffect(() => {
-    log('adding event handlers')
-
     if (trueX.ad) {
       // Ad started.
       trueX.ad.onStart(async activity => {
-        log('start', activity)
         const {
           createVideoAdLog: {
             VideoAdLog: { id: adId },
@@ -105,8 +95,6 @@ const useTrueX = ({
 
       // User spent 30 seconds and interacted at least once.
       trueX.ad.onCredit(async engagement => {
-        log('credit earned')
-        log('engagement:', engagement)
         const {
           ad: { creative_id },
           key,
@@ -127,34 +115,30 @@ const useTrueX = ({
         })
         if (success) {
           setCredited(true)
+        } else {
+          setError(true)
         }
       })
 
       // User closed the ad unit.
       trueX.ad.onClose(activity => {
-        log('closed')
         setStatus(CLOSED)
       })
 
       // User got to end of ad.
       trueX.ad.onFinish(activity => {
-        log('finished')
         setStatus(COMPLETED)
       })
 
-      trueX.ad.onMessage(payload => {
-        log('onMessage = ' + payload)
-      })
+      trueX.ad.onMessage(payload => {})
 
       // "Triggered when an error has occurred with the ad.
       // This should be considered an exception. It's best
       // practice to remove the ad container when this occurs."
       // https://github.com/socialvibe/truex-ads-docs/blob/master/js_ad_api.md#ad-object
       trueX.ad.onError(error => {
-        log('error = ' + error)
-
-        // The parent should close the container.
-        setStatus(CLOSED)
+        // show error message, user can click away
+        setError(true)
       })
 
       // Set that true[X] is ready to go.
@@ -163,7 +147,6 @@ const useTrueX = ({
     } else {
       if (fetchComplete) {
         setStatus(READY)
-        log('No ads available.')
       }
     }
   }, [fetchAd, fetchComplete, reset, trueX.ad, userId, uniqueVideoAdId])
@@ -172,8 +155,6 @@ const useTrueX = ({
   // all state.
   const adInProgress = [STARTED, COMPLETED, CLOSED].indexOf(status) > -1
   useEffect(() => {
-    // log(`parent closed - open = ${open}`)
-    // log(`parent  - adInProgress = ${adInProgress}`)
     if (!open && adInProgress) {
       reset()
     }
@@ -185,14 +166,11 @@ const useTrueX = ({
       return
     }
     if (!adContainer) {
-      log('problem: no ad container')
       return
     }
     if (adMounted) {
-      log('not mounting, ad already mounted.')
       return
     }
-    log('mounting ad')
     setAdMounted(true) // prevent mounting more than once
     trueX.client.loadActivityIntoContainer(trueX.ad, adContainer)
   }, [adContainer, adMounted, open, trueX.ad, trueX.client])
@@ -201,6 +179,7 @@ const useTrueX = ({
     adAvailable,
     status,
     credited,
+    error,
   }
 }
 

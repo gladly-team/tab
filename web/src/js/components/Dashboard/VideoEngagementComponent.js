@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import ButtonBase from '@material-ui/core/ButtonBase'
@@ -9,7 +9,7 @@ import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
 import { disabledColor } from 'js/theme/default'
-
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 const styles = theme => ({
   modalContent: {
     display: 'flex',
@@ -45,7 +45,8 @@ const VideoEngagementComponent = ({
 }) => {
   const [isAdOpen, setIsAdOpen] = useState(false)
   const [adContainerElem, setAdContainerElem] = useState(null)
-
+  const [isPoppoverOpen, setIsPoppoverOpen] = useState(false)
+  const poppoverRef = useRef()
   // TODO: send a hashed user ID for user privacy.
   // Note that true[X] appears to rate-limit a user ID even
   // in the test environment, so change this if you're not seeing
@@ -58,8 +59,7 @@ const VideoEngagementComponent = ({
     userId: id,
     videoAdEligible,
   })
-  console.log('true[X]', trueX)
-  const { adAvailable, credited, status } = trueX
+  const { adAvailable, credited, status, error } = trueX
 
   const openAd = () => {
     if (!adAvailable) {
@@ -79,30 +79,86 @@ const VideoEngagementComponent = ({
       closeModal()
     }
   }, [status])
-
   return (
     <div>
-      <ButtonBase onClick={openAd} disabled={!adAvailable}>
-        <MovieFilterIcon
-          {...iconProps}
+      <div
+        ref={poppoverRef}
+        onClick={!adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+      >
+        <ButtonBase
+          onClick={openAd}
+          disabled={!adAvailable}
+          onMouseEnter={adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+        >
+          <MovieFilterIcon
+            {...iconProps}
+            style={{
+              color: adAvailable ? 'gold' : disabledColor,
+            }}
+          />
+        </ButtonBase>
+      </div>
+      <DashboardPopover
+        anchorEl={poppoverRef.current}
+        onClose={
+          adAvailable
+            ? () => {
+                setIsPoppoverOpen(false)
+                openAd()
+              }
+            : () => setIsPoppoverOpen(false)
+        }
+        open={isPoppoverOpen}
+      >
+        <div
           style={{
-            color: adAvailable ? 'gold' : disabledColor,
+            padding: 10,
+            width: 268,
           }}
-        />
-      </ButtonBase>
+          onMouseLeave={() => setIsPoppoverOpen(false)}
+        >
+          <Typography
+            variant={'body1'}
+            style={{ color: '#fff', marginBottom: '10px' }}
+          >
+            Watch a video, earn 100 hearts!
+          </Typography>
+          {adAvailable ? (
+            <>
+              <Typography variant={'body2'} gutterBottom>
+                An easy way to do more good!
+              </Typography>
+              <Typography variant={'body2'} gutterBottom>
+                You’ll earn 100 hearts and raise more money for charity.
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="body2">
+              No videos available right now, but we’ll let you know when one is.
+            </Typography>
+          )}
+        </div>
+      </DashboardPopover>
       <Modal open={isAdOpen} onClose={closeModal}>
         <div className={classes.modalContent}>
           <IconButton className={classes.closeIconButton} onClick={closeModal}>
             <CloseIcon className={classes.closeIcon} />
           </IconButton>
           <div className={classes.messageContainer}>
-            {credited ? (
+            {!error && credited && (
               <Typography variant={'body2'}>
-                You just earned 100 Hearts! Thank you!
+                You’ve earned 100 hearts! Congrats, and thanks!
               </Typography>
-            ) : (
+            )}
+            {!error && !credited && (
               <Typography variant={'body2'}>
-                Complete this ad to earn 100 Hearts.
+                Complete and interact with this video to earn 100 hearts!
+              </Typography>
+            )}
+            {error && (
+              <Typography variant={'body2'}>
+                I’m sorry, something went wrong: we failed to give you 100
+                hearts.
               </Typography>
             )}
           </div>
