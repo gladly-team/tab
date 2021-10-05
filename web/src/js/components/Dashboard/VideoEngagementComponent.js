@@ -63,10 +63,6 @@ const VideoEngagementComponent = ({
   const { adAvailable, credited, status, error } = trueX
   const showAd = videoAdEligible && adAvailable
   const openAd = () => {
-    if (!adAvailable) {
-      console.log('No ad. Cannot open anything.')
-      return
-    }
     setIsAdOpen(true)
   }
 
