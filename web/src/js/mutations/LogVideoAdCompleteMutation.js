@@ -8,6 +8,7 @@ const mutation = graphql`
       success
       user {
         vcCurrent
+        videoAdEligible
       }
     }
   }
