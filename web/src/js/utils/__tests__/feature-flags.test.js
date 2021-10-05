@@ -93,4 +93,16 @@ describe('feature flags', () => {
     process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
     expect(showVideoAds()).toBe(true)
   })
+
+  test('showVideoAds is true if the env var is "false" but the email matches regex', () => {
+    const showVideoAds = require('js/utils/feature-flags').showVideoAds
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
+    expect(showVideoAds('blah+truextest123@tabforacause.org')).toBe(true)
+  })
+
+  test('showVideoAds is false if the env var is "false" and the email does not match regex', () => {
+    const showVideoAds = require('js/utils/feature-flags').showVideoAds
+    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
+    expect(showVideoAds('blah+truetest123@tabforacause.org')).toBe(false)
+  })
 })
