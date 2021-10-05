@@ -88,8 +88,6 @@ const useTrueX = ({
           },
         } = await CreateVideoAdLogMutation({ userId })
         setUniqueVideoAdId(adId)
-        // TODO: call backend to log ad start
-
         setStatus(STARTED)
       })
 
@@ -140,16 +138,17 @@ const useTrueX = ({
         // show error message, user can click away
         setError(true)
       })
-
-      // Set that true[X] is ready to go.
-      setStatus(READY)
-      setAdAvailable(true)
+      // Set that true[X] is ready to go from waiting.
+      if (status === WAITING) {
+        setStatus(READY)
+        setAdAvailable(true)
+      }
     } else {
       if (fetchComplete) {
         setStatus(READY)
       }
     }
-  }, [fetchAd, fetchComplete, reset, trueX.ad, userId, uniqueVideoAdId])
+  }, [fetchAd, fetchComplete, reset, trueX.ad, userId, uniqueVideoAdId, status])
 
   // If the parent container closes during an ad, reset
   // all state.
@@ -174,7 +173,12 @@ const useTrueX = ({
     setAdMounted(true) // prevent mounting more than once
     trueX.client.loadActivityIntoContainer(trueX.ad, adContainer)
   }, [adContainer, adMounted, open, trueX.ad, trueX.client])
-
+  // detect if container admounts
+  useEffect(() => {
+    if (adContainer === null && adMounted === true) {
+      setAdMounted(false)
+    }
+  }, [adMounted, adContainer])
   return {
     adAvailable,
     status,
