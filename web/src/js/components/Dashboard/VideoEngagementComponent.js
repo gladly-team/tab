@@ -52,7 +52,6 @@ const VideoEngagementComponent = ({
   // Note that true[X] appears to rate-limit a user ID even
   // in the test environment, so change this if you're not seeing
   // any ad availability.
-
   const trueX = useTrueX({
     open: isAdOpen,
     adContainer: adContainerElem,
@@ -83,23 +82,31 @@ const VideoEngagementComponent = ({
     <div>
       <div
         ref={poppoverRef}
-        onClick={!adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+        onClick={
+          !adAvailable || !videoAdEligible
+            ? () => setIsPoppoverOpen(true)
+            : undefined
+        }
         style={{ cursor: 'pointer' }}
       >
         <ButtonBase
           onClick={openAd}
-          disabled={!adAvailable}
-          onMouseEnter={adAvailable ? () => setIsPoppoverOpen(true) : undefined}
+          disabled={!adAvailable || !videoAdEligible}
+          onMouseEnter={
+            adAvailable && videoAdEligible
+              ? () => setIsPoppoverOpen(true)
+              : undefined
+          }
           onMouseLeave={() => setIsPoppoverOpen(false)}
         >
           <Badge
             variant="dot"
             color="primary"
             classes={{ badge: classes.badgeRoot }}
-            invisible={!adAvailable}
+            invisible={!adAvailable || !videoAdEligible}
           >
             <OndemandVideoIcon
-              style={{ opacity: adAvailable ? 1 : 0.54 }}
+              style={{ opacity: adAvailable && videoAdEligible ? 1 : 0.54 }}
               {...iconProps}
             />
           </Badge>
