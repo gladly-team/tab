@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo'
+import { showVideoAds } from 'js/utils/feature-flags'
 const styles = theme => ({
   modalContent: {
     display: 'flex',
@@ -60,6 +61,7 @@ const VideoEngagementComponent = ({
     videoAdEligible,
   })
   const { adAvailable, credited, status, error } = trueX
+  const showAd = videoAdEligible && adAvailable
   const openAd = () => {
     if (!adAvailable) {
       console.log('No ad. Cannot open anything.')
@@ -82,31 +84,23 @@ const VideoEngagementComponent = ({
     <div>
       <div
         ref={poppoverRef}
-        onClick={
-          !adAvailable || !videoAdEligible
-            ? () => setIsPoppoverOpen(true)
-            : undefined
-        }
+        onClick={showAd ? undefined : () => setIsPoppoverOpen(true)}
         style={{ cursor: 'pointer' }}
       >
         <ButtonBase
           onClick={openAd}
-          disabled={!adAvailable || !videoAdEligible}
-          onMouseEnter={
-            adAvailable && videoAdEligible
-              ? () => setIsPoppoverOpen(true)
-              : undefined
-          }
+          disabled={!showAd}
+          onMouseEnter={showAd ? () => setIsPoppoverOpen(true) : undefined}
           onMouseLeave={() => setIsPoppoverOpen(false)}
         >
           <Badge
             variant="dot"
             color="primary"
             classes={{ badge: classes.badgeRoot }}
-            invisible={!adAvailable || !videoAdEligible}
+            invisible={!showAd}
           >
             <OndemandVideoIcon
-              style={{ opacity: adAvailable && videoAdEligible ? 1 : 0.54 }}
+              style={{ opacity: showAd ? 1 : 0.54 }}
               {...iconProps}
             />
           </Badge>
@@ -114,12 +108,12 @@ const VideoEngagementComponent = ({
       </div>
       <DashboardPopover
         style={{
-          pointerEvents: adAvailable ? 'none' : undefined,
+          pointerEvents: showAd ? 'none' : undefined,
           marginTop: 6,
         }}
         anchorEl={poppoverRef.current}
         onClose={
-          adAvailable
+          showAd
             ? () => {
                 setIsPoppoverOpen(false)
                 openAd()
@@ -140,7 +134,7 @@ const VideoEngagementComponent = ({
           >
             Watch a video, earn 100 hearts!
           </Typography>
-          {adAvailable ? (
+          {showAd ? (
             <>
               <Typography variant={'body2'} gutterBottom>
                 An easy way to do more good!

@@ -34,8 +34,8 @@ const mockRequestAd = {
   onError: jest.fn(),
 }
 const mockRef = <div />
-describe('useData', () => {
-  it.skip('returns expected variables with initial inputs and null ref', async () => {
+describe('useTruex', () => {
+  it('returns expected variables with initial inputs and null ref', async () => {
     expect.assertions(1)
 
     requestAd.mockReturnValue({ ad: mockRequestAd, client: jest.fn() })
@@ -57,7 +57,7 @@ describe('useData', () => {
     })
   })
 
-  it.skip('requests an ad and sets status to waiting and user is video ad eligible and ref hasnt mounted', async () => {
+  it('requests an ad and sets status to waiting and user is video ad eligible and ref hasnt mounted', async () => {
     expect.assertions(1)
 
     const { result, rerender, waitForNextUpdate } = renderHook(

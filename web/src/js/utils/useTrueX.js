@@ -171,7 +171,7 @@ const useTrueX = ({
     setAdMounted(true) // prevent mounting more than once
     trueX.client.loadActivityIntoContainer(trueX.ad, adContainer)
   }, [adContainer, adMounted, open, trueX.ad, trueX.client])
-  // detect if container admounts
+  // detect if container unmounts
   useEffect(() => {
     if (adContainer === null && adMounted === true) {
       setAdMounted(false)
