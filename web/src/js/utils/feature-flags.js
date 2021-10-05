@@ -22,5 +22,7 @@ export const showSearchIntroductionMessage = () => false
 
 export const isGAMDevEnvironment = () =>
   process.env.REACT_APP_GAM_DEV_ENVIRONMENT === 'true'
-export const showVideoAds = () =>
+
+export const showVideoAds = (email = '') =>
+  /[a-zA-Z]+\+truextest[0-9]+@[a-zA-Z]+\.[a-zA-Z]+/i.test(email) ||
   process.env.REACT_APP_ENABLE_VIDEO_ADS === 'true'

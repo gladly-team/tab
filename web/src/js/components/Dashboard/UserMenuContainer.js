@@ -15,6 +15,7 @@ export default createFragmentContainer(UserMenu, {
       ...HeartsContainer_user
       ...HeartsDropdownContainer_user
       ...VideoEngagementContainer_user
+      email
     }
   `,
 })

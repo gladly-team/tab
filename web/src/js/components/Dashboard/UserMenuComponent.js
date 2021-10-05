@@ -291,7 +291,7 @@ class UserMenu extends React.Component {
               root: classes.circleIcon,
             }}
           />
-          {showVideoAds() && (
+          {showVideoAds(get(user, 'email')) && (
             <>
               <VideoEngagement user={user} />
               <CircleIcon
