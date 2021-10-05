@@ -5,10 +5,10 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Modal from '@material-ui/core/Modal'
+import Badge from '@material-ui/core/Badge'
 import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import VideoDotIcon from 'js/components/Dashboard/VideoDotIcon'
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo'
 const styles = theme => ({
   modalContent: {
@@ -36,6 +36,7 @@ const styles = theme => ({
     margin: 'auto',
     marginTop: 8,
   },
+  badgeRoot: { top: '3px' },
 })
 
 const VideoEngagementComponent = ({
@@ -47,7 +48,7 @@ const VideoEngagementComponent = ({
   const [adContainerElem, setAdContainerElem] = useState(null)
   const [isPoppoverOpen, setIsPoppoverOpen] = useState(false)
   const poppoverRef = useRef()
-  // TODO: send a hashed user ID for user privacy.
+
   // Note that true[X] appears to rate-limit a user ID even
   // in the test environment, so change this if you're not seeing
   // any ad availability.
@@ -91,14 +92,17 @@ const VideoEngagementComponent = ({
           onMouseEnter={adAvailable ? () => setIsPoppoverOpen(true) : undefined}
           onMouseLeave={() => setIsPoppoverOpen(false)}
         >
-          {adAvailable ? (
-            <VideoDotIcon {...iconProps} />
-          ) : (
+          <Badge
+            variant="dot"
+            color="primary"
+            classes={{ badge: classes.badgeRoot }}
+            invisible={!adAvailable}
+          >
             <OndemandVideoIcon
               style={{ opacity: adAvailable ? 1 : 0.54 }}
               {...iconProps}
             />
-          )}
+          </Badge>
         </ButtonBase>
       </div>
       <DashboardPopover

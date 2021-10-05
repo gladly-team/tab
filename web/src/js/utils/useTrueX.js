@@ -99,8 +99,6 @@ const useTrueX = ({
           signature,
           signature_argument_string,
         } = engagement
-        // TODO: call backend to verify signature, validate rate-limiting,
-        // and credit user.
         const {
           logVideoAdComplete: { success },
         } = await LogVideoAdCompleteMutation({
