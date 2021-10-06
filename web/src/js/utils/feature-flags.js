@@ -24,5 +24,8 @@ export const isGAMDevEnvironment = () =>
   process.env.REACT_APP_GAM_DEV_ENVIRONMENT === 'true'
 
 export const showVideoAds = (email = '') =>
-  /[a-zA-Z]+\+truextest[0-9]+@[a-zA-Z]+\.[a-zA-Z]+/i.test(email) ||
-  process.env.REACT_APP_ENABLE_VIDEO_ADS === 'true'
+  // "Good enough" email regex match:
+  // https://regex101.com/r/wE8gwg/1/
+  /[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+\+truextest[0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+/i.test(
+    email
+  ) || process.env.REACT_APP_ENABLE_VIDEO_ADS === 'true'
