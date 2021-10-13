@@ -15278,17 +15278,17 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.3.tgz#c578dc9135752eb08e3c10e87b065d97954701a4"
-  integrity sha512-B8ciOEQI/EOGTNSST58uI+YVTwIVUFZmZfQyJcnPSqAvla6hP8jXWFVpJJIqFjPSKfqsczi3D+77DuuzUWsrQg==
+tab-ads@1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.4.tgz#d93b352ea3d500a437c5bc010d03052b22aadfe8"
+  integrity sha512-lAOWI4zaOXrNXWXtDmvord2QeE1LBMib4vj8peAwSd89xf9bJJYlqxKQ8lVr+FjwIy5T8vea64kHXiZ4ejvNRw==
   dependencies:
     lodash "^4.17.21"
 
-tab-cmp@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.13.0.tgz#76aa959c91b5b1763b5646537138438eaa0b9021"
-  integrity sha512-+U8Z1XAOmWwZ0aymjvHj0tKp+k0ojoqnRjD+v7d1l7NvHSVGlT6GByQQnMTrhLHdugb9HpVVvpGb9MmddbC1tg==
+tab-cmp@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.14.0.tgz#b32c6fa57e6dd6ac66ec8dc9bfec97e10df7a664"
+  integrity sha512-8u/kHNYbJpRacywKxqeNdIWke3qswXNf9JVDaBfou+sMiu3eYQ4HFdV37mMwIFMqDaZrcZYHlrlS/VNDM7B/lQ==
 
 tab-e2e@^1.1.0:
   version "1.1.0"
