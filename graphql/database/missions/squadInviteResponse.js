@@ -46,19 +46,23 @@ const squadInviteResponse = async (
     if (missionModel.started === undefined) {
       missionModelUpdate.started = moment.utc().toISOString()
     }
+    // update mission first
     await Promise.all([
       MissionModel.update(override, missionModelUpdate),
-      UserModel.update(userContext, {
-        id: userId,
-        currentMissionId: missionId,
-        pendingMissionInvites: user.pendingMissionInvites.slice(1),
-      }),
       UserMissionModel.getOrCreate(userContext, {
         userId,
         missionId,
         acknowledgedMissionStarted: true,
       }),
     ])
+    // if mission update succeeds update user.  If this call fails mission will continue as if user never accepted
+    await UserModel.update(userContext, {
+      id: userId,
+      currentMissionId: missionId,
+      pendingMissionInvites: user.pendingMissionInvites.filter(
+        invite => invite.missionId !== missionId
+      ),
+    })
   } else {
     // Move the user to rejectedSquadMembers
     const { rejectedSquadMembers } = missionModel
