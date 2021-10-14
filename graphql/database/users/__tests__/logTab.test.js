@@ -22,7 +22,6 @@ import getCampaign, { mockCampaign } from '../../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 import getCurrentUserMission from '../../missions/getCurrentUserMission'
 import completeMission from '../../missions/completeMission'
-import squadInviteResponse from '../../missions/squadInviteResponse'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
@@ -31,7 +30,6 @@ jest.mock('../../globals/getCampaign')
 jest.mock('../../globals/globals')
 jest.mock('../../missions/getCurrentUserMission')
 jest.mock('../../missions/completeMission')
-jest.mock('../../missions/squadInviteResponse')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -810,144 +808,6 @@ describe('logTab', () => {
         currentTabStreak: 2,
       },
       updated: moment.utc().toISOString(),
-    })
-
-    expect(completeMission).not.toHaveBeenCalled()
-  })
-
-  test('corrects mission if user is part of a squad but mission failed to update', async () => {
-    expect.assertions(4)
-    const mockCorruptedMissionReturn = {
-      missionId: '123456789',
-      status: 'started',
-      squadName: 'TestSquad',
-      tabGoal: 1000,
-      endOfMissionAwards: [],
-      created: '2017-07-19T03:05:12Z',
-      tabCount: 24,
-      squadMembers: [
-        {
-          userId: 'omnlkjihgfedcba',
-          username: 'kevin',
-          status: 'accepted',
-          tabStreak: {
-            longestTabStreak: 4,
-            currentTabStreak: 2,
-          },
-          missionMaxTabsDay: {
-            maxDay: {
-              date: '2017-01-01T10:50:44.942Z',
-              numTabs: 5,
-            },
-            recentDay: {
-              date: '2018-01-01T10:50:44.942Z',
-              numTabs: 5,
-            },
-          },
-          tabs: 24,
-        },
-      ],
-    }
-    const mockFixedMissionReturn = {
-      missionId: '123456789',
-      status: 'started',
-      squadName: 'TestSquad',
-      tabGoal: 1000,
-      endOfMissionAwards: [],
-      created: '2017-07-19T03:05:12Z',
-      tabCount: 5,
-      squadMembers: [
-        {
-          userId: 'abcdefghijklmno',
-          username: 'alec',
-          status: 'accepted',
-          tabStreak: {
-            longestTabStreak: 0,
-            currentTabStreak: 0,
-          },
-          missionMaxTabsDay: {
-            maxDay: {
-              date: '2018-01-01T10:50:44.942Z',
-              numTabs: 0,
-            },
-            recentDay: {
-              date: '2018-01-01T10:50:44.942Z',
-              numTabs: 0,
-            },
-          },
-          tabs: 0,
-        },
-        {
-          userId: 'omnlkjihgfedcba',
-          username: 'kevin',
-          status: 'accepted',
-          tabStreak: {
-            longestTabStreak: 4,
-            currentTabStreak: 2,
-          },
-          missionMaxTabsDay: {
-            maxDay: {
-              date: '2017-01-01T10:50:44.942Z',
-              numTabs: 5,
-            },
-            recentDay: {
-              date: '2018-01-01T10:50:44.942Z',
-              numTabs: 5,
-            },
-          },
-          tabs: 24,
-        },
-      ],
-    }
-    const userId = userContext.id
-
-    // Mock fetching the user.
-    const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
-      currentMissionId: '123456789',
-      maxTabsDay: {
-        maxDay: {
-          date: moment.utc().toISOString(),
-          numTabs: 400,
-        },
-        recentDay: {
-          date: moment.utc().toISOString(),
-          numTabs: 148, // valid: below daily maximum
-        },
-      },
-    })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockUser,
-    })
-    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
-
-    addVc.mockResolvedValue(mockUser)
-    getCurrentUserMission.mockResolvedValueOnce(mockCorruptedMissionReturn)
-    getCurrentUserMission.mockResolvedValue(mockFixedMissionReturn)
-    const updateUserMissionMethod = jest.spyOn(UserMissionModel, 'update')
-
-    await logTab(userContext, userId)
-
-    expect(getCurrentUserMission).toHaveBeenCalledWith({
-      currentMissionId: '123456789',
-      id: 'abcdefghijklmno',
-    })
-    expect(squadInviteResponse).toHaveBeenCalledWith(
-      userContext,
-      userId,
-      mockUser.currentMissionId,
-      true
-    )
-    expect(updateUserMissionMethod).toHaveBeenCalledWith(userContext, {
-      missionId: '123456789',
-      missionMaxTabsDay: {
-        maxDay: { date: '2017-06-22T01:13:28.000Z', numTabs: 149 },
-        recentDay: { date: '2017-06-22T01:13:28.000Z', numTabs: 149 },
-      },
-      tabStreak: { currentTabStreak: 1, longestTabStreak: 1 },
-      tabs: { $add: 1 },
-      updated: '2017-06-22T01:13:28.000Z',
-      userId: 'abcdefghijklmno',
     })
 
     expect(completeMission).not.toHaveBeenCalled()
