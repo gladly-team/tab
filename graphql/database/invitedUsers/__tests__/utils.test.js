@@ -46,7 +46,6 @@ const mockParams = {
 const mockSquadParams = {
   ...mockParams,
   currentMissionId: '123456789',
-  invitedExistingUsers: [],
 }
 describe('verifyAndSendInvite general email', () => {
   it('it successfully creates a new invite user document,sends email, and returns expected value for Squads', async () => {
@@ -140,38 +139,6 @@ describe('verifyAndSendInvite general email', () => {
     const createUserMissionMethod = jest.spyOn(UserMissionModel, 'create')
     const updateUserMethod = jest.spyOn(UserModel, 'update')
     const results = await verifyAndSendInvite(mockSquadParams)
-    expect(createInvitedUserMethod).not.toHaveBeenCalled()
-    expect(createUserMissionMethod).not.toHaveBeenCalled()
-    expect(updateUserMethod).not.toHaveBeenCalled()
-    expect(results).toEqual({
-      existingUserId: 'abcdefghijklmno',
-      status: 'rejected',
-      existingUserName: 'test1',
-      existingUserEmail: 'test123',
-    })
-  })
-
-  it('it successfully rejects an existing user already invited into the squad', async () => {
-    expect.assertions(4)
-    setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: [
-        {
-          ...getMockUserInstance({ username: 'test1' }),
-          email: 'test123',
-          pendingMissionInvites: [],
-        },
-      ],
-    })
-    setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: [{ email: 'test123' }],
-    })
-    const createInvitedUserMethod = jest.spyOn(InvitedUsersModel, 'create')
-    const createUserMissionMethod = jest.spyOn(UserMissionModel, 'create')
-    const updateUserMethod = jest.spyOn(UserModel, 'update')
-    const results = await verifyAndSendInvite({
-      ...mockSquadParams,
-      invitedExistingUsers: [userId],
-    })
     expect(createInvitedUserMethod).not.toHaveBeenCalled()
     expect(createUserMissionMethod).not.toHaveBeenCalled()
     expect(updateUserMethod).not.toHaveBeenCalled()

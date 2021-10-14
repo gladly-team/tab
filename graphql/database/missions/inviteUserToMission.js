@@ -63,7 +63,6 @@ const createInvitedUsers = async (
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
           currentMissionId: currentMission.id,
-          invitedExistingUsers: currentMission.pendingSquadMembersExisting,
         })
       )
     )

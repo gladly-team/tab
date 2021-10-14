@@ -16,7 +16,7 @@ import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 import getCurrentUserMission from '../missions/getCurrentUserMission'
 import completeMission from '../missions/completeMission'
 import logger from '../../utils/logger'
-import SquadInviteResponse from '../missions/squadInviteResponse'
+
 /**
  * Return whether a tab opened now is "valid" for this user;
  * in other words, whether enough time has passed since the
@@ -95,45 +95,26 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
       // Only increment VC if we consider this a valid tab.
       user = await addVc(userContext, userId, 1)
     }
-    // we'll swallow squad tab updates for now so the app does not crash
-    try {
-      if (isValid && !!get(user, 'currentMissionId', undefined)) {
-        let userMission = await getCurrentUserMission({
-          currentMissionId: user.currentMissionId,
-          id: userId,
-        })
-        let memberInfo = userMission.squadMembers.find(member => {
-          return member.userId === user.id
-        })
 
-        if (memberInfo === undefined) {
-          // user accepted invite but the mission failed to update so try updating again -- should never happen but just incase
-          await SquadInviteResponse(
-            userContext,
-            userId,
-            user.currentMissionId,
-            true
-          )
-          // refetch user mission correctly now that user is part of mission
-          userMission = await getCurrentUserMission({
-            currentMissionId: user.currentMissionId,
-            id: userId,
-          })
-          memberInfo = userMission.squadMembers.find(member => {
-            return member.userId === user.id
-          })
-        }
-
-        if (userMission.status === 'started') {
-          const missionMaxTabsDay = calculateMaxTabs(
-            todayTabCount,
-            memberInfo.missionMaxTabsDay,
-            memberInfo.tabs
-          )
-          const tabStreak = calculateTabStreak(
-            memberInfo.missionMaxTabsDay,
-            memberInfo.tabStreak
-          )
+    if (isValid && !!get(user, 'currentMissionId', undefined)) {
+      const userMission = await getCurrentUserMission({
+        currentMissionId: user.currentMissionId,
+        id: userId,
+      })
+      const memberInfo = userMission.squadMembers.find(member => {
+        return member.userId === user.id
+      })
+      if (userMission.status === 'started') {
+        const missionMaxTabsDay = calculateMaxTabs(
+          todayTabCount,
+          memberInfo.missionMaxTabsDay,
+          memberInfo.tabs
+        )
+        const tabStreak = calculateTabStreak(
+          memberInfo.missionMaxTabsDay,
+          memberInfo.tabStreak
+        )
+        try {
           await UserMissionModel.update(userContext, {
             missionId: user.currentMissionId,
             userId,
@@ -144,10 +125,10 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
           if (userMission.tabCount + 1 >= userMission.tabGoal) {
             completeMission(userId, user.currentMissionId)
           }
+        } catch (e) {
+          logger.error(e)
         }
       }
-    } catch (e) {
-      logger.error(e)
     }
 
     // Increment the user's tab count and (if a valid tab) valid tab count.
