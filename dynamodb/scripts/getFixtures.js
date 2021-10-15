@@ -55,6 +55,10 @@ const allFixtures = [
     tableName: 'ReferralDataLog',
     jsonFile: 'ReferralDataLog.json',
   },
+  {
+    tableName: 'Causes',
+    jsonFile: 'Causes.json',
+  },
 ]
 
 const getFixtures = () => {
