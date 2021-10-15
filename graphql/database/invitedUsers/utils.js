@@ -26,7 +26,6 @@ export const verifyAndSendInvite = async ({
   inviterName,
   inviterMessage,
   currentMissionId,
-  invitedExistingUsers,
 }) => {
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(SENDGRID_API_KEY)
@@ -49,14 +48,6 @@ export const verifyAndSendInvite = async ({
     // for squads
     if (currentMissionId) {
       if (existingUser.currentMissionId) {
-        return {
-          existingUserEmail: inviteEmail,
-          existingUserId: existingUser.id,
-          existingUserName: existingUser.username,
-          status: REJECTED,
-        }
-      }
-      if (invitedExistingUsers.indexOf(existingUser.id) > -1) {
         return {
           existingUserEmail: inviteEmail,
           existingUserId: existingUser.id,
