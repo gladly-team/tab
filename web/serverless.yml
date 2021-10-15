@@ -205,6 +205,30 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
+            # Next.js API on Vercel.
+            - PathPattern: 'newtab/api/*'
+              MinTTL: 0
+              DefaultTTL: 0
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: 63115200 # two years
+              AllowedMethods:
+                - HEAD
+                - DELETE
+                - POST
+                - GET
+                - OPTIONS
+                - PUT
+                - PATCH
+              TargetOriginId: nextjs-tab-web.now.sh
+              ForwardedValues:
+                # Cannot use '*', as that sends the Host header:
+                # https://stackoverflow.com/a/32825414 
+                Headers:
+                  - Authorization
+                QueryString: true
+                Cookies:
+                  Forward: all
+              ViewerProtocolPolicy: redirect-to-https
             # New tab app
             - PathPattern: 'newtab*'
               MinTTL: 0
