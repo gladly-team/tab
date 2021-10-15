@@ -31,6 +31,7 @@ import {
   INVITED_USERS,
   MISSION,
   VIDEO_AD_LOG,
+  CAUSE,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -81,6 +82,7 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
+import CauseModel from '../database/cause/CauseModel'
 
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
@@ -116,6 +118,11 @@ import {
 } from '../database/globals/globals'
 import getCampaign from '../database/globals/getCampaign'
 
+import {
+  getPermissionsOverride,
+  CAUSES_OVERRIDE,
+} from '../utils/permissions-overrides'
+
 class App {
   constructor(id) {
     this.id = id
@@ -125,6 +132,8 @@ class App {
     return new App(id)
   }
 }
+
+const causeOverride = getPermissionsOverride(CAUSES_OVERRIDE)
 
 /**
  * We get the node interface and field from the Relay library.
@@ -166,6 +175,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === VIDEO_AD_LOG) {
       return VideoAdLogModel.get(context.user, id)
     }
+    if (type === CAUSE) {
+      return CauseModel.get(CAUSES_OVERRIDE, id)
+    }
     return null
   },
   obj => {
@@ -198,6 +210,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof VideoAdLogModel) {
       // eslint-disable-next-line no-use-before-define
       return videoAdLogType
+    }
+    if (obj instanceof CauseModel) {
+      // eslint-disable-next-line no-use-before-define
+      return causeType
     }
     return null
   }
@@ -693,8 +709,187 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether a v4 user has been introduced to squads in the ui',
     },
+    cause: {
+      type: causeType,
+      description: 'cause type for the user',
+      args: {
+        causeId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, { causeId }) => CauseModel.get(causeOverride, causeId),
+    },
   }),
   interfaces: [nodeInterface],
+})
+
+const squadCopyType = new GraphQLObjectType({
+  name: 'SquadCopy',
+  description: 'Copy for squad related widgets',
+  fields: () => ({
+    squadCounterText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for SquadCounter for normal case',
+    },
+    currentMissionSummary: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for CurrentMission summary',
+    },
+    currentMissionDetails: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for CurrentMission details',
+    },
+    currentMissionAlert: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for CurrentMission alert',
+    },
+    currentMissionStep2: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for current mission step 2',
+    },
+    currentMissionStep3: {
+      type: GraphQLString,
+      description: 'Copy for current mission step 3',
+    },
+    missionCompleteAlert: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Mission Complete alert',
+    },
+    missionCompleteDescription: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Mission Complete Description',
+    },
+    missionCompleteSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Mission Complete Subtitle',
+    },
+  }),
+})
+
+const impactCopyType = new GraphQLObjectType({
+  name: 'ImpactCopy',
+  description: 'Copy for impact related widgets',
+  fields: () => ({
+    impactCounterText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Text for ImpactCounter for normal case',
+    },
+    impactCounterInMissionsText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for ImpactCounter for when user is in mission',
+    },
+    referralRewardsTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Title copy for referralReward notification',
+    },
+    referralRewardSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Subtitle copy for referralReward notification',
+    },
+    claimImpactTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Title copy for claimImpact notification',
+    },
+    claimImpactSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Subtitle Copy for claim Impact notification',
+    },
+    newlyReferredText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for newlyReferred notification',
+    },
+    impactWalkthroughText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for impact walkthrough notification',
+    },
+    confirmImpactText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for confirm impact notification',
+    },
+  }),
+})
+
+const socialCopyType = new GraphQLObjectType({
+  name: 'socialCopy',
+  description: 'Copy for impact related widgets',
+  fields: () => ({
+    redditButtonText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Reddit',
+    },
+    facebookButtonText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Facebook',
+    },
+    tumblrTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Tumblr Title',
+    },
+    tumblrCaption: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Tumblr Caption',
+    },
+    emailInviteTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Email Invite title',
+    },
+    emailInviteCaption: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Email Invite Caption',
+    },
+  }),
+})
+
+const onboardingStepType = new GraphQLObjectType({
+  name: 'onboardingStep',
+  description: 'Copy for impact related widgets',
+  fields: () => ({
+    step: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'Step Number',
+    },
+    titleCopy: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Onboarding Slide',
+    },
+    subtitleCopy: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Copy for Subtitle Slide',
+    },
+  }),
+})
+
+const causeType = new GraphQLObjectType({
+  name: CAUSE,
+  description: 'A cause vertical that tab supports',
+  fields: () => ({
+    causeId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the cause id',
+    },
+    charity: {
+      type: charityType,
+      description: 'the charity that this cause generates impact for',
+    },
+    tabsForImpact: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'number of views to generate a unit of impact',
+    },
+    impactCopy: {
+      type: new GraphQLNonNull(impactCopyType),
+      description: 'copy for impact related components',
+    },
+    squadsCopy: {
+      type: new GraphQLNonNull(squadCopyType),
+      description: 'copy for mission related components',
+    },
+    socialCopy: {
+      type: new GraphQLNonNull(socialCopyType),
+      description: 'copy for social sharing components',
+    },
+    onboardingCopy: {
+      type: new GraphQLNonNull(GraphQLList(onboardingStepType)),
+      description: 'copy / steps for onboarding flow for this vertical',
+    },
+  }),
 })
 
 const userRecruitType = new GraphQLObjectType({
