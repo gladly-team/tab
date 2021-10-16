@@ -147,7 +147,7 @@ export const searchExternalHelpURL =
   'https://gladly.zendesk.com/hc/en-us/categories/360001779552-Search-for-a-Cause'
 
 // Tab V4 API
-export const tabV4BetaOptInURL = '/v4/api/beta-opt-in'
+export const tabV4BetaOptInURL = '/newtab/api/beta-opt-in'
 
 // Homepage
 
