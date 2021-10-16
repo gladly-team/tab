@@ -268,6 +268,7 @@ describe('UserModel', () => {
       hasViewedIntroFlow: false,
       deleted: false,
       hasSeenSquads: false,
+      causeId: '7f8476b9-f83f-47ac-8173-4a1c2ec3dc29',
     })
   })
 

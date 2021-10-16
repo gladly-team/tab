@@ -377,6 +377,10 @@ class User extends BaseModel {
         .boolean()
         .description('if a user has been introduced to squads')
         .default(self.fieldDefaults.hasSeenSquads),
+      causeId: types
+        .string()
+        .description('id for cause user belongs to')
+        .default(self.fieldDefaults.causeId),
     }
   }
 
@@ -424,6 +428,8 @@ class User extends BaseModel {
       deleted: false,
       pendingMissionInvites: [],
       hasSeenSquads: false,
+      // cats cause ID for default.
+      causeId: '7f8476b9-f83f-47ac-8173-4a1c2ec3dc29',
     }
   }
 
