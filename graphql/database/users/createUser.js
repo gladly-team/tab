@@ -24,6 +24,8 @@ import { BACKGROUND_IMAGE_CAT_CATEGORY } from '../constants'
  * @param {object|null} experimentGroups - Any experimental test groups to
  *   which the user has been assigned.
  * @param {bool} v4BetaEnabled - Whether or not the new user is enabled for v4 Beta
+ * @param {string|null} missionId - Mission ID corresponding to the mission that the new user is joining
+ * @param {string|null} causeId - Cause that the new user belongs to.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (
@@ -35,8 +37,13 @@ const createUser = async (
   extensionInstallId = null,
   extensionInstallTimeApprox = null,
   v4BetaEnabled = false,
-  missionId = false
+  missionId = false,
+  causeId = false
 ) => {
+  // Throw an error if v4BetaEnabled is true and causeId is set.
+  if (!v4BetaEnabled && causeId) {
+    throw new Error('User must be on v4 if they belong to a cause.')
+  }
   // Get or create the user.
   let userInfo = Object.assign(
     {
@@ -49,6 +56,7 @@ const createUser = async (
       joined: moment.utc().toISOString(),
       truexId: nanoid(),
       currentMissionId: missionId || undefined,
+      causeId: causeId || undefined,
     },
     !isNil(extensionInstallId)
       ? {
