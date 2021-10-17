@@ -92,6 +92,16 @@ class Cause extends BaseModel {
             `markdown string: copy for confirm impact notification in UserImpact`
           ),
       }),
+      theme: types.object({
+        primaryColor: types
+          .string()
+          .required()
+          .description(`the primary color hex value`),
+        secondayColor: types
+          .string()
+          .required()
+          .description(`the seconday color hex value`),
+      }),
       squads: types.object({
         squadCounterText: types
           .string()
