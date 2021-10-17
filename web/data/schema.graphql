@@ -269,7 +269,7 @@ type CampaignTime {
   end: String!
 }
 
-"""A person who uses our app"""
+"""all cause specific data and ui content"""
 type Cause implements Node {
   """The ID of an object"""
   id: ID!
@@ -283,16 +283,58 @@ type Cause implements Node {
   impactVisits: Int!
 
   """the impact object on cause model"""
-  impact: impactUI!
+  impact: CauseSpecificImpactUI!
 
-  """the impact object on cause model"""
-  theme: theme!
+  """the theme object on cause model"""
+  theme: CauseTheming!
 
-  """the impact object on cause model"""
-  sharing: sharingUI!
+  """the sharing object on cause model"""
+  sharing: SharingUICopy!
 
   """the onboarding object on cause model"""
-  onboarding: onboardingUi!
+  onboarding: OnboardingUICopy!
+}
+
+"""cause specific UI content around impact"""
+type CauseSpecificImpactUI {
+  """markdown string: copy for ImpactCounter for normal case"""
+  impactCounterText: String!
+
+  """markdown string: title copy for referralReward UserImpact notification"""
+  referralRewardTitle: String!
+
+  """
+  markdown string: subtitle copy for referralReward UserImpact notification
+  """
+  referralRewardSubtitle: String!
+
+  """markdown string: title for claimImpact notification in UserImpact"""
+  claimImpactTitle: String!
+
+  """markdown string: subtitle for claimImpact notification in UserImpact"""
+  claimImpactSubtitle: String!
+
+  """
+  markdown string: title for the newly referred notification in UserImpact
+  """
+  newlyReferredTitle: String!
+
+  """
+  markdown string: copy for impact walkthrough notification in UserImpact
+  """
+  impactWalkthroughText: String!
+
+  """markdown string: copy for confirm impact notification in UserImpact"""
+  confirmImpactText: String!
+}
+
+"""css properties for a specific cause"""
+type CauseTheming {
+  """the primary color hex value"""
+  primaryColor: String!
+
+  """the secondary color hex value"""
+  secondaryColor: String!
 }
 
 """Fields on which to filter the list of charities."""
@@ -576,39 +618,6 @@ type failedEmailAddresses {
   error: String
 }
 
-"""cause specific UI content around impact"""
-type impactUI {
-  """markdown string: copy for ImpactCounter for normal case"""
-  impactCounterText: String!
-
-  """markdown string: title copy for referralReward UserImpact notification"""
-  referralRewardTitle: String!
-
-  """
-  markdown string: subtitle copy for referralReward UserImpact notification
-  """
-  referralRewardSubtitle: String!
-
-  """markdown string: title for claimImpact notification in UserImpact"""
-  claimImpactTitle: String!
-
-  """markdown string: subtitle for claimImpact notification in UserImpact"""
-  claimImpactSubtitle: String!
-
-  """
-  markdown string: title for the newly referred notification in UserImpact
-  """
-  newlyReferredTitle: String!
-
-  """
-  markdown string: copy for impact walkthrough notification in UserImpact
-  """
-  impactWalkthroughText: String!
-
-  """markdown string: copy for confirm impact notification in UserImpact"""
-  confirmImpactText: String!
-}
-
 """inviting user"""
 type InvitingUser {
   """the name entered in invite"""
@@ -864,7 +873,7 @@ type notifications {
 }
 
 """cause specific UI content around onboarding"""
-type onboardingUi {
+type OnboardingUICopy {
   """the steps array in onboarding"""
   steps: [onboardingUIStep]!
 
@@ -917,7 +926,6 @@ type Query {
   app: App
   user(userId: String!): User
   userImpact(userId: String!, charityId: String!): UserImpact
-  cause(userId: String!): Cause
 }
 
 input ReferralData {
@@ -1079,7 +1087,7 @@ type SetV4BetaPayload {
 }
 
 """cause specific UI content around sharing"""
-type sharingUI {
+type SharingUICopy {
   """markdown for modal title"""
   title: String!
 
@@ -1154,15 +1162,6 @@ type SquadMemberInfo {
 
 type successfulEmailAddresses {
   email: String
-}
-
-"""css properties for a specific cause"""
-type theme {
-  """the primary color hex value"""
-  primaryColor: String!
-
-  """the secondary color hex value"""
-  secondaryColor: String!
 }
 
 input UpdateImpactInput {
@@ -1271,8 +1270,8 @@ type User implements Node {
   """a unique user ID sent to video ad partner truex"""
   truexId: String!
 
-  """the id of the user's current causue"""
-  causeId: String!
+  """cause type for the user"""
+  cause: Cause
 
   """whether a user has completed 3 video ads in the last 24 hours"""
   videoAdEligible: Boolean
