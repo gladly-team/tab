@@ -67,6 +67,10 @@ describe('CauseModel', () => {
           impactWalkthroughText: 'impactWalkthroughText',
           confirmImpactText: 'confirmImpactText',
         },
+        theme: {
+          primaryColor: '#5094FB',
+          secondayColor: '#29BEBA',
+        },
         squads: {
           squadCounterText: 'squadCounterText',
           currentMissionSummary: 'currentMissionSummary',
@@ -99,6 +103,10 @@ describe('CauseModel', () => {
         newlyReferredTitle: 'newlyReferredTitle',
         impactWalkthroughText: 'impactWalkthroughText',
         confirmImpactText: 'confirmImpactText',
+      },
+      theme: {
+        primaryColor: '#5094FB',
+        secondayColor: '#29BEBA',
       },
       squads: {
         squadCounterText: 'squadCounterText',
