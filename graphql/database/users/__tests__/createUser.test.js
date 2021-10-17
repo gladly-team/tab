@@ -934,4 +934,89 @@ describe('createUser when user already exists (should be idempotent)', () => {
       expectedCreateItem
     )
   })
+
+  it('sets the cause ID for a v4 user', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const userContext = cloneDeep(defaultUserContext)
+    const backgroundImage = {
+      id: 'random-cat-image',
+      image: 'ramdom-cat-image.jpg',
+      timestamp: moment.utc().toISOString(),
+    }
+    const causeId = '123456789'
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expectedCreateItem = {
+      ...expectedCreateItem,
+      backgroundImage,
+      currentMissionId: undefined,
+      hasSeenSquads: false,
+      causeId,
+    }
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null,
+      {},
+      null,
+      null,
+      true,
+      false,
+      causeId
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+  })
+
+  it('throws an error if v4 is unset and cause is set', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const userContext = cloneDeep(defaultUserContext)
+
+    const causeId = '123456789'
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    expect(
+      createUser(
+        userContext,
+        userInfo.id,
+        userInfo.email,
+        null,
+        {},
+        null,
+        null,
+        false,
+        false,
+        causeId
+      )
+    ).rejects.toThrow('User must be on v4 if they belong to a cause.')
+  })
 })

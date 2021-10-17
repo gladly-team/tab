@@ -1993,6 +1993,7 @@ const createNewUserMutation = mutationWithClientMutationId({
     extensionInstallTimeApprox: { type: GraphQLString },
     v4BetaEnabled: { type: GraphQLBoolean },
     missionId: { type: GraphQLString },
+    causeId: { type: GraphQLString },
   },
   outputFields: {
     user: {
@@ -2010,6 +2011,7 @@ const createNewUserMutation = mutationWithClientMutationId({
       extensionInstallTimeApprox,
       v4BetaEnabled,
       missionId,
+      causeId,
     },
     context
   ) =>
@@ -2022,7 +2024,8 @@ const createNewUserMutation = mutationWithClientMutationId({
       extensionInstallId,
       extensionInstallTimeApprox,
       v4BetaEnabled,
-      missionId
+      missionId,
+      causeId
     ),
 })
 
