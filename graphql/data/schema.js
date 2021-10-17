@@ -25,6 +25,7 @@ import {
   WIDGET,
   CHARITY,
   USER,
+  CAUSE,
   BACKGROUND_IMAGE,
   USER_IMPACT,
   USER_RECRUITS,
@@ -52,6 +53,7 @@ import setEmail from '../database/users/setEmail'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import updateImpact from '../database/userImpact/updateImpact'
+import getUserImpact from '../database/userImpact/getUserImpact'
 import createInvitedUsers from '../database/invitedUsers/createInvitedUsers'
 import createSquadInvite from '../database/missions/inviteUserToMission'
 import logSearch from '../database/users/logSearch'
@@ -81,6 +83,8 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
+
+import getCause from '../database/cause/getCause'
 
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
@@ -487,6 +491,10 @@ const userType = new GraphQLObjectType({
       description: 'a unique user ID sent to video ad partner truex',
       resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
     },
+    causeId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "the id of the user's current causue",
+    },
     videoAdEligible: {
       type: GraphQLBoolean,
       description:
@@ -697,6 +705,182 @@ const userType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const causeType = new GraphQLObjectType({
+  name: CAUSE,
+  description: 'A person who uses our app',
+  fields: () => ({
+    id: globalIdField(CAUSE),
+    landingPagePath: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `URL path for the landing page belonging to this cause`,
+    },
+    impactVisits: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: `number of visits required for each impact unit (e.g. 14 for cat charity)`,
+    },
+    impact: {
+      type: new GraphQLNonNull(
+        new GraphQLObjectType({
+          name: 'impactUI',
+          description: 'cause specific UI content around impact',
+          fields: () => ({
+            impactCounterText: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: copy for ImpactCounter for normal case',
+            },
+            referralRewardTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: title copy for referralReward UserImpact notification',
+            },
+            referralRewardSubtitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: subtitle copy for referralReward UserImpact notification',
+            },
+            claimImpactTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: title for claimImpact notification in UserImpact',
+            },
+            claimImpactSubtitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: subtitle for claimImpact notification in UserImpact',
+            },
+            newlyReferredTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: title for the newly referred notification in UserImpact',
+            },
+            impactWalkthroughText: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: copy for impact walkthrough notification in UserImpact',
+            },
+            confirmImpactText: {
+              type: new GraphQLNonNull(GraphQLString),
+              description:
+                'markdown string: copy for confirm impact notification in UserImpact',
+            },
+          }),
+        })
+      ),
+      description: 'the impact object on cause model',
+      resolve: cause => cause.impact,
+    },
+    theme: {
+      type: new GraphQLNonNull(
+        new GraphQLObjectType({
+          name: 'theme',
+          description: 'css properties for a specific cause',
+          fields: () => ({
+            primaryColor: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'the primary color hex value',
+            },
+            secondaryColor: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'the secondary color hex value',
+            },
+          }),
+        })
+      ),
+      description: 'the impact object on cause model',
+      resolve: cause => cause.theme,
+    },
+    sharing: {
+      type: new GraphQLNonNull(
+        new GraphQLObjectType({
+          name: 'sharingUI',
+          description: 'cause specific UI content around sharing',
+          fields: () => ({
+            title: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'markdown for modal title',
+            },
+            subtitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'markdown for modal subtitle',
+            },
+            imgCategory: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: `value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’`,
+            },
+            redditButtonTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'copy for reddit button',
+            },
+            facebookButtonTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'copy for facebook button',
+            },
+            twitterButtonTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'copy for twitter button',
+            },
+            tumblrTitle: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'copy for tumblr button',
+            },
+            tumblrCaption: {
+              type: new GraphQLNonNull(GraphQLString),
+              description: 'copy for tumblr caption',
+            },
+          }),
+        })
+      ),
+      description: 'the impact object on cause model',
+      resolve: cause => cause.sharing,
+    },
+    onboarding: {
+      type: new GraphQLNonNull(
+        new GraphQLObjectType({
+          name: 'onboardingUi',
+          description: 'cause specific UI content around onboarding',
+          fields: () => ({
+            steps: {
+              type: new GraphQLNonNull(
+                GraphQLList(
+                  new GraphQLObjectType({
+                    name: 'onboardingUIStep',
+                    description: 'ui content for each onboarding step',
+                    fields: () => ({
+                      title: {
+                        type: new GraphQLNonNull(GraphQLString),
+                        description: 'markdown title for onboarding step',
+                      },
+                      subtitle: {
+                        type: new GraphQLNonNull(GraphQLString),
+                        description: 'markdown subtitle for onboarding step',
+                      },
+                      imgName: {
+                        type: new GraphQLNonNull(GraphQLString),
+                        description: 'name of image to show',
+                      },
+                    }),
+                  })
+                )
+              ),
+              description: 'the steps array in onboarding',
+              resolve: onboarding => onboarding.steps,
+            },
+            firstTabIntroDescription: {
+              type: new GraphQLNonNull(GraphQLString),
+              resolve: onboarding => onboarding.firstTabIntroDescription,
+              description:
+                'markdown string shown when prompting the user to open their first tab, currently info about cat treats',
+            },
+          }),
+        })
+      ),
+      resolve: cause => cause.onboarding,
+      description: 'the onboarding object on cause model',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',
@@ -2392,15 +2576,21 @@ const queryType = new GraphQLObjectType({
       type: userImpactType,
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) },
+        // currently still taking charity id to not cause breaking changes
         charityId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, args, context) => {
-        const { userId, charityId } = args
-        return (await UserImpactModel.getOrCreate(context.user, {
-          userId,
-          charityId,
-        })).item
+        const { userId } = args
+        const userImpact = await getUserImpact(context.user, userId)
+        return userImpact
       },
+    },
+    cause: {
+      type: causeType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, args, context) => getCause(context.user, args.userId),
     },
   }),
 })

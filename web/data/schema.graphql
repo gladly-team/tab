@@ -269,6 +269,32 @@ type CampaignTime {
   end: String!
 }
 
+"""A person who uses our app"""
+type Cause implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """URL path for the landing page belonging to this cause"""
+  landingPagePath: String!
+
+  """
+  number of visits required for each impact unit (e.g. 14 for cat charity)
+  """
+  impactVisits: Int!
+
+  """the impact object on cause model"""
+  impact: impactUI!
+
+  """the impact object on cause model"""
+  theme: theme!
+
+  """the impact object on cause model"""
+  sharing: sharingUI!
+
+  """the onboarding object on cause model"""
+  onboarding: onboardingUi!
+}
+
 """Fields on which to filter the list of charities."""
 input CharitiesFilters {
   isPermanentPartner: Boolean
@@ -550,6 +576,39 @@ type failedEmailAddresses {
   error: String
 }
 
+"""cause specific UI content around impact"""
+type impactUI {
+  """markdown string: copy for ImpactCounter for normal case"""
+  impactCounterText: String!
+
+  """markdown string: title copy for referralReward UserImpact notification"""
+  referralRewardTitle: String!
+
+  """
+  markdown string: subtitle copy for referralReward UserImpact notification
+  """
+  referralRewardSubtitle: String!
+
+  """markdown string: title for claimImpact notification in UserImpact"""
+  claimImpactTitle: String!
+
+  """markdown string: subtitle for claimImpact notification in UserImpact"""
+  claimImpactSubtitle: String!
+
+  """
+  markdown string: title for the newly referred notification in UserImpact
+  """
+  newlyReferredTitle: String!
+
+  """
+  markdown string: copy for impact walkthrough notification in UserImpact
+  """
+  impactWalkthroughText: String!
+
+  """markdown string: copy for confirm impact notification in UserImpact"""
+  confirmImpactText: String!
+}
+
 """inviting user"""
 type InvitingUser {
   """the name entered in invite"""
@@ -804,6 +863,29 @@ type notifications {
   code: String
 }
 
+"""cause specific UI content around onboarding"""
+type onboardingUi {
+  """the steps array in onboarding"""
+  steps: [onboardingUIStep]!
+
+  """
+  markdown string shown when prompting the user to open their first tab, currently info about cat treats
+  """
+  firstTabIntroDescription: String!
+}
+
+"""ui content for each onboarding step"""
+type onboardingUIStep {
+  """markdown title for onboarding step"""
+  title: String!
+
+  """markdown subtitle for onboarding step"""
+  subtitle: String!
+
+  """name of image to show"""
+  imgName: String!
+}
+
 """Information about pagination in a connection."""
 type PageInfo {
   """When paginating forwards, are there more items?"""
@@ -835,6 +917,7 @@ type Query {
   app: App
   user(userId: String!): User
   userImpact(userId: String!, charityId: String!): UserImpact
+  cause(userId: String!): Cause
 }
 
 input ReferralData {
@@ -995,6 +1078,35 @@ type SetV4BetaPayload {
   clientMutationId: String
 }
 
+"""cause specific UI content around sharing"""
+type sharingUI {
+  """markdown for modal title"""
+  title: String!
+
+  """markdown for modal subtitle"""
+  subtitle: String!
+
+  """
+  value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’
+  """
+  imgCategory: String!
+
+  """copy for reddit button"""
+  redditButtonTitle: String!
+
+  """copy for facebook button"""
+  facebookButtonTitle: String!
+
+  """copy for twitter button"""
+  twitterButtonTitle: String!
+
+  """copy for tumblr button"""
+  tumblrTitle: String!
+
+  """copy for tumblr caption"""
+  tumblrCaption: String!
+}
+
 """whether a user has accepted rejected or is pending invitation"""
 enum squadAcceptedStatus {
   pending
@@ -1042,6 +1154,15 @@ type SquadMemberInfo {
 
 type successfulEmailAddresses {
   email: String
+}
+
+"""css properties for a specific cause"""
+type theme {
+  """the primary color hex value"""
+  primaryColor: String!
+
+  """the secondary color hex value"""
+  secondaryColor: String!
 }
 
 input UpdateImpactInput {
@@ -1149,6 +1270,9 @@ type User implements Node {
 
   """a unique user ID sent to video ad partner truex"""
   truexId: String!
+
+  """the id of the user's current causue"""
+  causeId: String!
 
   """whether a user has completed 3 video ads in the last 24 hours"""
   videoAdEligible: Boolean

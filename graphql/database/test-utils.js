@@ -3,6 +3,7 @@
 import moment from 'moment'
 import databaseClient from './databaseClient'
 import UserModel from './users/UserModel'
+import CauseModel from './cause/CauseModel'
 import { USER_VISIT_IMPACT_VALUE } from './constants'
 
 export const DatabaseOperation = {
@@ -135,6 +136,50 @@ export const getMockUserImpact = () => ({
 export const mockDate = {}
 mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
+export const getMockCauseInstance = attributes => {
+  return new CauseModel(
+    Object.assign(
+      {},
+      {
+        id: '123456789',
+        charityId: 'abcdefghijklmnop',
+        landingPagePath: '/test',
+        impactVisits: 10,
+        impact: {
+          impactCounterText: 'impactCounterText',
+          referralRewardTitle: 'referralRewardTitle',
+          referralRewardSubtitle: 'referralRewardSubtitle',
+          claimImpactTitle: 'claimImpactTitle',
+          claimImpactSubtitle: 'claimImpactSubtitle',
+          newlyReferredTitle: 'newlyReferredTitle',
+          impactWalkthroughText: 'impactWalkthroughText',
+          confirmImpactText: 'confirmImpactText',
+        },
+        theme: {
+          primaryColor: '#5094FB',
+          secondayColor: '#29BEBA',
+        },
+        squads: {
+          squadCounterText: 'squadCounterText',
+          currentMissionSummary: 'currentMissionSummary',
+          currentMissionDetails: 'currentMissionDetails',
+          currentMissionAlert: 'currentMissionAlert',
+          currentMissionStep2: 'currentMissionStep2',
+          currentMissionStep3: 'currentMissionStep3',
+          missionCompleteAlert: 'missionCompleteAlert',
+          missionCompleteDescription: 'missionCompleteDescription',
+          missionCompleteSubtitle: 'missionCompleteSubtitle',
+          impactCounterText: 'impactCounterText',
+        },
+        onboarding: {
+          steps: [],
+          firstTabIntroDescription: 'firstTabIntroDescription',
+        },
+      },
+      attributes
+    )
+  )
+}
 /**
  * Get a mock User instance.
  * @param {Object} attributes - Attributes to override when getting the mock user.

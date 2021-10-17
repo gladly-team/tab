@@ -1,6 +1,6 @@
 [
   {
-    "id": "123456789",
+    "id": "7f8476b9-f83f-47ac-8173-4a1c2ec3dc29",
     "charityId": "abcdefghijklmnop",
     "landingPagePath": "/test",
     "impactVisits": 10,
@@ -16,7 +16,7 @@
     },
     "theme": {
       "primaryColor": "#5094FB",
-      "secondayColor": "#29BEBA"
+      "secondaryColor": "#29BEBA"
     },
     "squads": {
       "squadCounterText": "squadCounterText",
@@ -30,8 +30,25 @@
       "missionCompleteSubtitle": "missionCompleteSubtitle",
       "impactCounterText": "impactCounterText"
     },
+    "sharing": {
+      "title": "sharingTitle",
+      "subtitle": "sharingSubtitle",
+      "imgCategory": "currentMissionDetails",
+      "redditButtonTitle": "redditButtonTitle",
+      "facebookButtonTitle": "facebookButtonTitle",
+      "currentMissionStep3": "currentMissionStep3",
+      "twitterButtonTitle": "twitterButtonTitle",
+      "tumblrTitle": "tumblrTitle",
+      "tumblrCaption": "tumblrCaption"
+    },
     "onboarding": {
-      "steps": [],
+      "steps": [
+        {
+          "title": "onboarding-title-1",
+          "subtitle": "onboarding-subtitle-1",
+          "imgName": "onboarding-imgName-1"
+        }
+      ],
       "firstTabIntroDescription": "firstTabIntroDescription"
     }
   }
