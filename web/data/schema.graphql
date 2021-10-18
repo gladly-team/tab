@@ -300,13 +300,14 @@ type CauseSpecificImpactUI {
   """markdown string: copy for ImpactCounter for normal case"""
   impactCounterText: String!
 
-  """markdown string: title copy for referralReward UserImpact notification"""
+  """markdown string: title copy for referralReward UserImpact modal"""
   referralRewardTitle: String!
 
-  """
-  markdown string: subtitle copy for referralReward UserImpact notification
-  """
+  """markdown string: subtitle copy for referralReward UserImpact modal"""
   referralRewardSubtitle: String!
+
+  """markdown string: copy for referral reward notification"""
+  referralRewardNotification: String!
 
   """markdown string: title for claimImpact notification in UserImpact"""
   claimImpactTitle: String!
@@ -314,18 +315,24 @@ type CauseSpecificImpactUI {
   """markdown string: subtitle for claimImpact notification in UserImpact"""
   claimImpactSubtitle: String!
 
+  """string: name of the icon to use in impact counter"""
+  impactIcon: String!
+
+  """string: file name of the gif to use in walk me"""
+  walkMeGif: String!
+
   """
-  markdown string: title for the newly referred notification in UserImpact
+  markdown string: copy for impact walkthrough notification in UserImpact when user is referred
   """
-  newlyReferredTitle: String!
+  newlyReferredImpactWalkthroughText: String!
 
   """
   markdown string: copy for impact walkthrough notification in UserImpact
   """
   impactWalkthroughText: String!
 
-  """markdown string: copy for confirm impact notification in UserImpact"""
-  confirmImpactText: String!
+  """markdown string: copy for confirm impact modal in UserImpact"""
+  confirmImpactSubtitle: String!
 }
 
 """css properties for a specific cause"""
@@ -1260,6 +1267,9 @@ type User implements Node {
 
   """Users's background image"""
   backgroundImage: BackgroundImage
+
+  """A user's charity specific impact"""
+  userImpact: UserImpact
 
   """Users's username"""
   username: String
