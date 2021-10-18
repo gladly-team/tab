@@ -171,7 +171,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return VideoAdLogModel.get(context.user, id)
     }
     if (type === CAUSE) {
-      return getCause(context.user, context.user.id)
+      return CauseModel(context.user, id)
     }
     return null
   },
@@ -484,6 +484,12 @@ const userType = new GraphQLObjectType({
       description: "Users's background image",
       resolve: (user, _args, context) => getBackgroundImage(context.user, user),
     },
+    userImpact: {
+      type: userImpactType,
+      description: "A user's charity specific impact",
+      resolve: async (user, _args, context) =>
+        getUserImpact(context.user, user.id),
+    },
     username: {
       type: GraphQLString,
       description: "Users's username",
@@ -722,12 +728,16 @@ const CauseImpactCopy = new GraphQLObjectType({
     referralRewardTitle: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'markdown string: title copy for referralReward UserImpact notification',
+        'markdown string: title copy for referralReward UserImpact modal',
     },
     referralRewardSubtitle: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'markdown string: subtitle copy for referralReward UserImpact notification',
+        'markdown string: subtitle copy for referralReward UserImpact modal',
+    },
+    referralRewardNotification: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'markdown string: copy for referral reward notification',
     },
     claimImpactTitle: {
       type: new GraphQLNonNull(GraphQLString),
@@ -739,20 +749,28 @@ const CauseImpactCopy = new GraphQLObjectType({
       description:
         'markdown string: subtitle for claimImpact notification in UserImpact',
     },
-    newlyReferredTitle: {
+    impactIcon: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'string: name of the icon to use in impact counter',
+    },
+    walkMeGif: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'string: file name of the gif to use in walk me',
+    },
+    newlyReferredImpactWalkthroughText: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'markdown string: title for the newly referred notification in UserImpact',
+        'markdown string: copy for impact walkthrough notification in UserImpact when user is referred',
     },
     impactWalkthroughText: {
       type: new GraphQLNonNull(GraphQLString),
       description:
         'markdown string: copy for impact walkthrough notification in UserImpact',
     },
-    confirmImpactText: {
+    confirmImpactSubtitle: {
       type: new GraphQLNonNull(GraphQLString),
       description:
-        'markdown string: copy for confirm impact notification in UserImpact',
+        'markdown string: copy for confirm impact modal in UserImpact',
     },
   }),
 })
@@ -2583,9 +2601,11 @@ const queryType = new GraphQLObjectType({
         charityId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, args, context) => {
-        const { userId } = args
-        const userImpact = await getUserImpact(context.user, userId)
-        return userImpact
+        const { userId, charityId } = args
+        return (await UserImpactModel.getOrCreate(context.user, {
+          userId,
+          charityId,
+        })).item
       },
     },
   }),

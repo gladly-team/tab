@@ -1,5 +1,6 @@
 import UserImpactModel from './UserImpactModel'
 import { USER_VISIT_IMPACT_VALUE } from '../constants'
+import getUserImpact from './getUserImpact'
 /**
  * updates a user impact record
  * @param {object} userContext - The user authorizer object.
@@ -15,8 +16,8 @@ const shouldShowImpactNotification = userImpactMetric => {
     (userImpactMetric >= 20 && userImpactMetric % 10 === 0)
   )
 }
-const updateImpact = async (userContext, userId, charityId, updates) => {
-  let userImpact = await UserImpactModel.get(userContext, userId, charityId)
+const updateImpact = async (userContext, userId, _charityId, updates) => {
+  let userImpact = await getUserImpact(userContext, userId)
   const {
     logImpact,
     claimPendingUserReferralImpact,

@@ -47,25 +47,25 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(
-            `markdown string: copy for ImpactCounter for normal case`
+            `markdown string: copy for ImpactCounter dropdown for normal case`
           ),
         referralRewardTitle: types
           .string()
           .required()
           .description(
-            `markdown string: title copy for referralReward UserImpact notification`
+            `markdown string: title copy for referralReward UserImpact modal`
           ),
         referralRewardSubtitle: types
           .string()
           .required()
           .description(
-            `markdown string: subtitle copy for referralReward UserImpact notification`
+            `markdown string: subtitle copy for referralReward UserImpact modal`
           ),
-        claimImpactTitle: types
+        referralRewardNotification: types
           .string()
           .required()
           .description(
-            `markdown string: title for claimImpact notification in UserImpact`
+            `markdown string: copy for referral reward notification`
           ),
         claimImpactSubtitle: types
           .string()
@@ -73,23 +73,31 @@ class Cause extends BaseModel {
           .description(
             `markdown string: title for claimImpact notification in UserImpact`
           ),
-        newlyReferredTitle: types
+        impactIcon: types
           .string()
           .required()
-          .description(
-            `markdown string: title for the newly referred notification in UserImpact`
-          ),
+          .description(`string: name of the icon to use in impact counter`),
+        walkMeGif: types
+          .string()
+          .required()
+          .description(`string: file name of the gif to use in walk me`),
         impactWalkthroughText: types
           .string()
           .required()
           .description(
             `markdown string: copy for impact walkthrough notification in UserImpact`
           ),
-        confirmImpactText: types
+        newlyReferredImpactWalkthroughText: types
           .string()
           .required()
           .description(
-            `markdown string: copy for confirm impact notification in UserImpact`
+            `markdown string: copy for impact walkthrough notification in UserImpact when user is referred`
+          ),
+        confirmImpactSubtitle: types
+          .string()
+          .required()
+          .description(
+            `markdown string: copy for confirm impact modal in UserImpact`
           ),
       }),
       theme: types.object({
