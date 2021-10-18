@@ -20,7 +20,6 @@ afterEach(() => {
 describe('causes', () => {
   it('returns an array', () => {
     const causes = require('../causes').default
-    // console.log(causes)
     expect(causes).toBeInstanceOf(Array)
   })
 

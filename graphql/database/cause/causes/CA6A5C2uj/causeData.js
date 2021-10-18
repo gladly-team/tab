@@ -1,11 +1,18 @@
 // Cause: cats
+
+import { join } from 'path'
+import { readFileSync } from 'fs'
+
+const getFileContents = fileName =>
+  readFileSync(join(__dirname, fileName), 'utf-8')
+
 const data = {
   id: 'CA6A5C2uj',
   charityId: 'TODO',
   landingPagePath: '/cats',
   impactVisits: 14,
   impact: {
-    impactCounterText: 'impactCounterText',
+    impactCounterText: getFileContents('./impact.impactCounterText.md'),
     referralRewardTitle: 'referralRewardTitle',
     referralRewardSubtitle: 'referralRewardSubtitle',
     claimImpactTitle: 'claimImpactTitle',

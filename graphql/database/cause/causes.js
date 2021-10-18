@@ -1,8 +1,9 @@
 import Joi from 'joi'
 import CauseModel from './CauseModel'
+import dataCA6A5C2uj from './causes/CA6A5C2uj/causeData'
 import dataSGa6zohkY from './causes/SGa6zohkY/causeData'
 
-const causes = [new CauseModel(dataSGa6zohkY)]
+const causes = [new CauseModel(dataCA6A5C2uj), new CauseModel(dataSGa6zohkY)]
 
 // Validate data.
 // TODO: this should eventually live in a better ORM.
