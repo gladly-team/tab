@@ -1,11 +1,17 @@
 // Cause: teamseas
+
+import { fileGetter } from '../../utils'
+
+const ID = 'SGa6zohkY'
+const getContents = fileGetter(ID)
+
 const data = {
-  id: 'SGa6zohkY',
+  id: ID,
   charityId: 'TODO',
   landingPagePath: '/teamseas',
   impactVisits: 10,
   impact: {
-    impactCounterText: 'impactCounterText',
+    impactCounterText: getContents('./impact.impactCounterText.md'),
     referralRewardTitle: 'referralRewardTitle',
     referralRewardSubtitle: 'referralRewardSubtitle',
     claimImpactTitle: 'claimImpactTitle',

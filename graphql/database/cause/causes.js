@@ -5,6 +5,9 @@ import dataSGa6zohkY from './causes/SGa6zohkY/causeData'
 
 const causes = [new CauseModel(dataCA6A5C2uj), new CauseModel(dataSGa6zohkY)]
 
+// TODO: remove after populating data
+// console.log('causes:', causes)
+
 // Validate data.
 // TODO: this should eventually live in a better ORM.
 const causeSchema = Joi.object(CauseModel.schema)

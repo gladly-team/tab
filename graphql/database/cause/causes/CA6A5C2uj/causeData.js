@@ -1,18 +1,16 @@
 // Cause: cats
+import { fileGetter } from '../../utils'
 
-import { join } from 'path'
-import { readFileSync } from 'fs'
-
-const getFileContents = fileName =>
-  readFileSync(join(__dirname, fileName), 'utf-8')
+const ID = 'CA6A5C2uj'
+const getContents = fileGetter(ID)
 
 const data = {
-  id: 'CA6A5C2uj',
+  id: ID,
   charityId: 'TODO',
   landingPagePath: '/cats',
   impactVisits: 14,
   impact: {
-    impactCounterText: getFileContents('./impact.impactCounterText.md'),
+    impactCounterText: getContents('./impact.impactCounterText.md'),
     referralRewardTitle: 'referralRewardTitle',
     referralRewardSubtitle: 'referralRewardSubtitle',
     claimImpactTitle: 'claimImpactTitle',
