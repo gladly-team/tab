@@ -121,7 +121,7 @@ export const getMockUserInfo = () => ({
  */
 export const getMockUserImpact = () => ({
   userId: 'abcdefghijklmno',
-  charityId: 'mock-charity',
+  charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
   updated: '2017-06-22T01:13:28.000Z',
   visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
   pendingUserReferralImpact: 0,

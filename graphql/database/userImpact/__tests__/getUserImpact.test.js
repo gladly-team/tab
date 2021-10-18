@@ -22,7 +22,9 @@ beforeAll(() => {
     mockCurrentTimeOnly: true,
   })
 })
-
+beforeEach(() => {
+  jest.clearAllMocks()
+})
 const userId = userContext.id
 
 describe('getUserImpact', () => {
@@ -43,6 +45,21 @@ describe('getUserImpact', () => {
     expect(getOrCreate).toHaveBeenCalledWith(userContext, {
       userId: 'abcdefghijklmno',
       charityId: 'mock-charity-id',
+      created: '2017-06-22T01:13:28.000Z',
+      updated: '2017-06-22T01:13:28.000Z',
+    })
+  })
+
+  it('gets the default cats user impact when no causeId', async () => {
+    const mockUser = getMockUserInstance()
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const getOrCreate = jest.spyOn(UserImpactModel, 'getOrCreate')
+    await getUserImpact(userContext, userId)
+    expect(getOrCreate).toHaveBeenCalledWith(userContext, {
+      userId: 'abcdefghijklmno',
+      charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
       created: '2017-06-22T01:13:28.000Z',
       updated: '2017-06-22T01:13:28.000Z',
     })
