@@ -147,13 +147,16 @@ export const getMockCauseInstance = attributes => {
         impactVisits: 10,
         impact: {
           impactCounterText: 'impactCounterText',
+          claimImpactSubtitle: 'claimImpactSubtitle',
+          referralRewardNotification: 'referralRewardNotification',
+          impactIcon: 'jellyfish',
+          walkMeGif: 'dolphin.gif',
           referralRewardTitle: 'referralRewardTitle',
           referralRewardSubtitle: 'referralRewardSubtitle',
-          claimImpactTitle: 'claimImpactTitle',
-          claimImpactSubtitle: 'claimImpactSubtitle',
-          newlyReferredTitle: 'newlyReferredTitle',
+          newlyReferredImpactWalkthroughText:
+            'newlyReferredImpactWalkthroughText',
           impactWalkthroughText: 'impactWalkthroughText',
-          confirmImpactText: 'confirmImpactText',
+          confirmImpactSubtitle: 'confirmImpactSubtitle',
         },
         theme: {
           primaryColor: '#5094FB',
