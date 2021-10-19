@@ -6,6 +6,7 @@ import {
   getMockUserInstance,
 } from '../../test-utils'
 
+// We don't mock getCause.js.
 jest.mock('../../databaseClient')
 
 const MOCK_CAUSE_1 = {

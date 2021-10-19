@@ -1,7 +1,5 @@
-import { find } from 'lodash/collection'
 import UserModel from '../users/UserModel'
-import causes from './causes'
-import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
+import getCause from './getCause'
 
 /**
  * Get a cause record based on user record
@@ -12,11 +10,7 @@ import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
 const getCauseByUser = async (userContext, userId) => {
   const user = await UserModel.get(userContext, userId)
-  const cause = find(causes, { id: user.causeId })
-  if (!cause) {
-    throw new DatabaseItemDoesNotExistException()
-  }
-  return cause
+  return getCause(user.causeId)
 }
 
 export default getCauseByUser
