@@ -26,7 +26,6 @@ const tables = {
   missions: 'Missions',
   userMissions: 'UserMissions',
   videoAdLog: 'VideoAdLog',
-  causes: 'Causes',
 }
 
 export default mapValues(tables, name => `${name}${tableNameAppendix}`)
