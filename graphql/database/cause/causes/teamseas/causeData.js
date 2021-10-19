@@ -31,7 +31,7 @@ const data = {
     walkMeGif: 'dolphin.gif',
   },
   onboarding: {
-    firstTabIntroDescription: 'firstTabIntroDescription',
+    firstTabIntroDescription: 'TODO',
     steps: [
       {
         title: 'TODO',
