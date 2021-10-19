@@ -84,7 +84,7 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
-import getCause from '../database/cause/getCause'
+import getCauseByUser from '../database/cause/getCauseByUser'
 import CauseModel from '../database/cause/CauseModel'
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
@@ -506,7 +506,7 @@ const userType = new GraphQLObjectType({
     cause: {
       type: CauseType,
       description: 'cause type for the user',
-      resolve: (user, _args, context) => getCause(context.user, user.id),
+      resolve: (user, _args, context) => getCauseByUser(context.user, user.id),
     },
     videoAdEligible: {
       type: GraphQLBoolean,

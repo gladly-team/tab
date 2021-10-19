@@ -10,7 +10,7 @@ import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
  * @return {Promise<User>}  A promise that resolves into a Cause instance.
  */
 
-const getCause = async (userContext, userId) => {
+const getCauseByUser = async (userContext, userId) => {
   const user = await UserModel.get(userContext, userId)
   const cause = find(causes, { id: user.causeId })
   if (!cause) {
@@ -19,4 +19,4 @@ const getCause = async (userContext, userId) => {
   return cause
 }
 
-export default getCause
+export default getCauseByUser

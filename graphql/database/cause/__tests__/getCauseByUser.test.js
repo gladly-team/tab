@@ -27,7 +27,7 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('getCause', () => {
+describe('getCauseByUser', () => {
   it('gets the user cause mapped to cause id on user', async () => {
     expect.assertions(1)
     const userContext = getMockUserContext()
@@ -39,8 +39,8 @@ describe('getCause', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
-    const getCause = require('../getCause').default
-    const cause = await getCause(userContext, userId)
+    const getCauseByUser = require('../getCauseByUser').default
+    const cause = await getCauseByUser(userContext, userId)
     expect(cause).toEqual(MOCK_CAUSE_2)
   })
 
@@ -55,8 +55,8 @@ describe('getCause', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
-    const getCause = require('../getCause').default
-    await expect(getCause(userContext, userId)).rejects.toThrow(
+    const getCauseByUser = require('../getCauseByUser').default
+    await expect(getCauseByUser(userContext, userId)).rejects.toThrow(
       'The database does not contain an item with these keys.'
     )
   })

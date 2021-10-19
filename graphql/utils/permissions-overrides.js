@@ -32,6 +32,8 @@ const validOverrides = {
   [MISSIONS_OVERRIDE]: `${MISSIONS_OVERRIDE}${validOverridesAppendix}`,
   [USERS_OVERRIDE]: `${USERS_OVERRIDE}${validOverridesAppendix}`,
   [VIDEO_ADS_OVERRIDE]: `${VIDEO_ADS_OVERRIDE}${validOverridesAppendix}`,
+
+  // TODO: remove
   [CAUSES_OVERRIDE]: `${CAUSES_OVERRIDE}${validOverridesAppendix}`,
   // TODO: remove after migration
   [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`,
