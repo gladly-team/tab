@@ -70,7 +70,6 @@
     "start": "babel-watch ./server.js",
     "build": "rm -rf ./build && yarn run build:run",
     "build:run": "cross-env NODE_ENV=production babel --out-dir='build' ./ && yarn run build:copy-cpm-codes  && yarn run build:config",
-    "build:copy-markdown": "babel --out-dir='build' ./ --include='**/*.md'",
     "build:copy-cpm-codes": "cp ./database/userRevenue/amazon-cpm-codes.json ./build/database/userRevenue/amazon-cpm-codes.json",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "yarn run build && serverless deploy -v",
