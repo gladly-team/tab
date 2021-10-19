@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import jsSHA from 'jssha'
 import {
   getMockUserContext,
   mockDate,
@@ -10,6 +11,7 @@ import {
 import VideoAdLogModel from '../VideoAdLogModel'
 import addVc from '../../users/addVc'
 
+jest.mock('jssha')
 jest.mock('../../databaseClient')
 jest.mock('../../users/addVc')
 beforeAll(() => {
@@ -40,9 +42,17 @@ const mockStartedLog = {
   id: 'bb7a085b-5363-40af-ab3e-31e69b352355',
 }
 const adLogUpdateSpy = jest.spyOn(VideoAdLogModel, 'update')
+
 describe('logVideoAdCompleted', () => {
   it('successfully logs the video ad as complete and adds 100 vc', async () => {
     expect.assertions(3)
+
+    // Mock that the signature is valid.
+    jsSHA.mockImplementationOnce(() => ({
+      getHash: jest.fn(() => mockCreditProps.signature),
+      update: jest.fn(),
+    }))
+
     const logVideoAdCompleted = require('../logVideoAdCompleted').default
     // Mock is video ad eligible
     setMockDBResponse(DatabaseOperation.QUERY, {
