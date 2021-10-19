@@ -1,80 +1,63 @@
 /* eslint-env jest */
-import getCause from '../getCause'
 import {
   DatabaseOperation,
   getMockUserContext,
-  mockDate,
   setMockDBResponse,
   getMockUserInstance,
-  getMockCauseInstance,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../../globals/globals')
 
-const userContext = getMockUserContext()
-const mockCurrentTime = '2017-06-22T01:13:28.000Z'
+const MOCK_CAUSE_1 = {
+  id: 'mock-cause-id',
+  charityId: 'some-id-1',
+  landingPagePath: '/foo',
+}
+const MOCK_CAUSE_2 = {
+  id: 'mock-cause-id-2',
+  charityId: 'some-id-2',
+  landingPagePath: '/bar',
+}
 
-beforeAll(() => {
-  mockDate.on(mockCurrentTime, {
-    mockCurrentTimeOnly: true,
-  })
+jest.mock('../causes', () => {
+  return [MOCK_CAUSE_1, MOCK_CAUSE_2]
 })
 
-const userId = userContext.id
+afterEach(() => {
+  jest.resetModules()
+})
 
-describe('getUserImpact', () => {
+describe('getCause', () => {
   it('gets the user cause mapped to cause id on user', async () => {
-    const mockUser = getMockUserInstance({ causeId: 'mock-cause-id' })
-    const mockCause = getMockCauseInstance({
-      id: 'mock-cause-id',
-      charityId: 'mock-charity-id',
+    expect.assertions(1)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      causeId: 'mock-cause-id-2',
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockCause,
-    })
+    const getCause = require('../getCause').default
     const cause = await getCause(userContext, userId)
-    expect(cause).toEqual({
-      charityId: 'mock-charity-id',
-      id: 'mock-cause-id',
-      impact: {
-        impactCounterText: 'impactCounterText',
-        claimImpactSubtitle: 'claimImpactSubtitle',
-        referralRewardNotification: 'referralRewardNotification',
-        impactIcon: 'jellyfish',
-        walkMeGif: 'dolphin.gif',
-        referralRewardTitle: 'referralRewardTitle',
-        referralRewardSubtitle: 'referralRewardSubtitle',
-        newlyReferredImpactWalkthroughText:
-          'newlyReferredImpactWalkthroughText',
-        impactWalkthroughText: 'impactWalkthroughText',
-        confirmImpactSubtitle: 'confirmImpactSubtitle',
-      },
-      impactVisits: 10,
-      landingPagePath: '/test',
-      onboarding: {
-        firstTabIntroDescription: 'firstTabIntroDescription',
-        steps: [],
-      },
-      squads: {
-        currentMissionAlert: 'currentMissionAlert',
-        currentMissionDetails: 'currentMissionDetails',
-        currentMissionStep2: 'currentMissionStep2',
-        currentMissionStep3: 'currentMissionStep3',
-        currentMissionSummary: 'currentMissionSummary',
-        impactCounterText: 'impactCounterText',
-        missionCompleteAlert: 'missionCompleteAlert',
-        missionCompleteDescription: 'missionCompleteDescription',
-        missionCompleteSubtitle: 'missionCompleteSubtitle',
-        squadCounterText: 'squadCounterText',
-      },
-      theme: {
-        primaryColor: '#5094FB',
-        secondayColor: '#29BEBA',
-      },
+    expect(cause).toEqual(MOCK_CAUSE_2)
+  })
+
+  it('throws if the cause does not exist', async () => {
+    expect.assertions(1)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      causeId: 'blah-blah', // does not exist
     })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const getCause = require('../getCause').default
+    await expect(getCause(userContext, userId)).rejects.toThrow(
+      'The database does not contain an item with these keys.'
+    )
   })
 })

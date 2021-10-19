@@ -21,6 +21,7 @@ class Cause extends BaseModel {
 
   static get schema() {
     return {
+      // TODO: additional restrictions, e.g. for nanoid
       id: types
         .string()
         .required()
