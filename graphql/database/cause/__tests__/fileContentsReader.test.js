@@ -1,18 +1,8 @@
 /* eslint-env jest */
 import { join } from 'path'
 import { readFileSync } from 'fs'
-// import fileContentsReader from '../fileContentsReader'
 
-// jest.mock('path')
 jest.mock('fs')
-
-beforeEach(() => {
-  // join.mockImplementation((_, ...otherArgs) => {
-  //   const mockDirName = '/some/mock/directory/'
-  //   return [mockDirName, ...otherArgs].join('')
-  // })
-  // global.__dirname = 'foo'
-})
 
 describe('fileContentsReader', () => {
   it('calls readFileSync with the expected path', () => {

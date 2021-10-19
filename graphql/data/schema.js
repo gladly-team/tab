@@ -86,6 +86,7 @@ import getCharities from '../database/charities/getCharities'
 
 import getCauseByUser from '../database/cause/getCauseByUser'
 import getCause from '../database/cause/getCause'
+import CauseModel from '../database/cause/CauseModel'
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
 import logVideoAdComplete from '../database/videoAdLog/logVideoAdCompleted'
@@ -2601,7 +2602,6 @@ const queryType = new GraphQLObjectType({
       type: userImpactType,
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) },
-        // currently still taking charity id to not cause breaking changes
         charityId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, args, context) => {
