@@ -435,6 +435,7 @@ input CreateNewUserInput {
   extensionInstallTimeApprox: String
   v4BetaEnabled: Boolean
   missionId: String
+  causeId: String
   clientMutationId: String
 }
 
@@ -1268,7 +1269,9 @@ type User implements Node {
   """Users's background image"""
   backgroundImage: BackgroundImage
 
-  """A user's charity specific impact"""
+  """
+  A user's cause-specific impact for the cause they are currently supporting
+  """
   userImpact: UserImpact
 
   """Users's username"""
