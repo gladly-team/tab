@@ -1,6 +1,5 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
-import tableNames from '../tables'
 import { CAUSE } from '../constants'
 
 /*
@@ -16,7 +15,8 @@ class Cause extends BaseModel {
   }
 
   static get tableName() {
-    return tableNames.causes
+    // This ORM assumes a DynamoDB table, but we're not using one here.
+    return 'UNUSED_Causes'
   }
 
   static get schema() {

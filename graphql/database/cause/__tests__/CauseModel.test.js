@@ -1,12 +1,7 @@
 /* eslint-env jest */
 
-import tableNames from '../../tables'
 import Cause from '../CauseModel'
-import {
-  DatabaseOperation,
-  mockDate,
-  setMockDBResponse,
-} from '../../test-utils'
+import { mockDate } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
@@ -28,7 +23,7 @@ describe('CauseModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(Cause.tableName).toBe(tableNames.causes)
+    expect(Cause.tableName).toBe('UNUSED_Causes')
   })
 
   it('constructs as expected with default values', () => {
