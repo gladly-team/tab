@@ -106,10 +106,10 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`the primary color hex value`),
-        secondayColor: types
+        secondaryColor: types
           .string()
           .required()
-          .description(`the seconday color hex value`),
+          .description(`the secondary color hex value`),
       }),
       squads: types.object({
         squadCounterText: types
