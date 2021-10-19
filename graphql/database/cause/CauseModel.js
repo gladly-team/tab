@@ -27,7 +27,7 @@ class Cause extends BaseModel {
         .required()
         .description(`The ID for the cause.`),
 
-      // Fields here alphabetized (non-objects first).
+      // Fields here are alphabetized (non-objects first).
 
       charityId: types
         .string()
@@ -58,6 +58,12 @@ class Cause extends BaseModel {
           .required()
           .description(
             `markdown string: copy for confirm impact modal in UserImpact`
+          ),
+        impactCounterText: types
+          .string()
+          .required()
+          .description(
+            `markdown string: copy for ImpactCounter dropdown for normal case`
           ),
         impactIcon: types
           .string()
@@ -97,12 +103,6 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`string: file name of the gif to use in walk me`),
-        impactCounterText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for ImpactCounter dropdown for normal case`
-          ),
       }),
       onboarding: types.object({
         firstTabIntroDescription: types
@@ -154,6 +154,10 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`markdown for modal subtitle`),
+        title: types
+          .string()
+          .required()
+          .description(`markdown for modal title`),
         tumblrCaption: types
           .string()
           .required()
@@ -166,10 +170,6 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`copy for twitter button`),
-        title: types
-          .string()
-          .required()
-          .description(`markdown for modal title`),
       }),
       squads: types.object({
         currentMissionAlert: types
