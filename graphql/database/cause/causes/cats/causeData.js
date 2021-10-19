@@ -6,27 +6,31 @@ const getContents = fileContentsReader(SLUG)
 
 const data = {
   id: 'CA6A5C2uj',
-  charityId: 'TODO',
+  charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
   impactVisits: 14,
   landingPagePath: '/cats/',
   slug: SLUG,
+
+  // TODO: set all copy
   impact: {
-    claimImpactSubtitle:
-      '##### You did it! You just turned your tabs into removing trash from rivers and oceans.  Keep it up, and do good with every new tab!',
-    confirmImpactSubtitle:
-      "##### Each time you open a tab, you'll be helping restore the environment and fight climate change by [removing trash from our oceans and rivers](https://teamseas.org/).  Ready to get started?",
+    claimImpactSubtitle: getContents('./impact.claimImpactSubtitle.md'),
+    confirmImpactSubtitle: getContents('./impact.confirmImpactSubtitle.md'),
     impactCounterText: getContents('./impact.impactCounterText.md'),
     impactIcon: 'jellyfish',
-    impactWalkthroughText:
-      "##### When you do, you'll donate enough to remove a plastic water bottle from a river or ocean.  We'll track how many water bottles you've helped clean up on the top of the page",
-    newlyReferredImpactWalkthroughText:
-      "##### Your friend started you off giving you credit for removing  5 plastic water bottles from our rivers and oceans, which is crucial to cleaning up our environment and fighting climate change. Open a new tab now to clean up your 6th waterbottle! We'll track how many water bottles you've helped clean up on the top of the page",
-    referralRewardNotification:
-      "##### #teamseas.  To celebrate, we'll remove an extra ${pendingUserReferralImpact} water bottle${isPlural(pendingUserReferralImpact)} from our oceans and rivers",
-    referralRewardSubtitle:
-      "##### Congratulations! You're making a huge impact on our oceans and rivers. Want to help our seas even more? Invite a few more friends!",
-    referralRewardTitle:
-      '##### **You just cleaned up ${pendingUserReferralImpact} waterbottle${isPlural(pendingUserReferralImpact)} from our oceans and rivers**',
+    impactWalkthroughText: getContents('./impact.impactWalkthroughText.md'),
+    newlyReferredImpactWalkthroughText: getContents(
+      './impact.newlyReferredImpactWalkthroughText.md'
+    ),
+    referralRewardNotification: getContents(
+      './impact.referralRewardNotification.md'
+    ),
+    referralRewardSubtitle: getContents('./impact.referralRewardSubtitle.md'),
+
+    // TODO: add template to include the # of people recruited.
+    //   "You recruited X friend[s] to..."
+    referralRewardTitle: getContents('./impact.referralRewardTitle.md'),
+
+    // TODO: update
     walkMeGif: 'dolphin.gif',
   },
   onboarding: {
@@ -39,6 +43,8 @@ const data = {
       },
     ],
   },
+
+  // TODO
   sharing: {
     facebookButtonTitle: 'TODO',
     imgCategory: 'TODO',
@@ -63,7 +69,7 @@ const data = {
     squadCounterText: 'TODO',
   },
   theme: {
-    primaryColor: '#5094FB',
+    primaryColor: '#9d4ba3', // purple
     secondaryColor: '#29BEBA',
   },
 }

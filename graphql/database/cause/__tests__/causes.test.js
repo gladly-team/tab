@@ -1,12 +1,12 @@
 /* eslint-env jest */
 
-jest.mock('../causes/SGa6zohkY/causeData', () => {
+jest.mock('../causes/teamseas/causeData', () => {
   const module = {
     // Can spy on getters:
     // https://jestjs.io/docs/jest-object#jestspyonobject-methodname-accesstype
     __esModule: true,
     get default() {
-      return jest.requireActual('../causes/SGa6zohkY/causeData').default
+      return jest.requireActual('../causes/teamseas/causeData').default
     },
   }
   return module
@@ -36,9 +36,9 @@ describe('causes', () => {
   })
 
   it('throws if provided data fails CauseModel schema validation', () => {
-    const dataModule = require('../causes/SGa6zohkY/causeData')
+    const dataModule = require('../causes/teamseas/causeData')
     jest.spyOn(dataModule, 'default', 'get').mockImplementation(() => {
-      const realData = jest.requireActual('../causes/SGa6zohkY/causeData')
+      const realData = jest.requireActual('../causes/teamseas/causeData')
         .default
       const brokenData = {
         ...realData,

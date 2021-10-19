@@ -7,7 +7,7 @@ const getContents = fileContentsReader(SLUG)
 
 const data = {
   id: 'SGa6zohkY',
-  charityId: 'TODO',
+  charityId: 'TODO', // TODO
   impactVisits: 10,
   landingPagePath: '/teamseas/',
   slug: SLUG,
@@ -40,6 +40,8 @@ const data = {
       },
     ],
   },
+
+  // TODO
   sharing: {
     facebookButtonTitle: 'TODO',
     imgCategory: 'TODO',
@@ -64,7 +66,7 @@ const data = {
     squadCounterText: 'TODO',
   },
   theme: {
-    primaryColor: '#9d4ba3', // purple
+    primaryColor: '#5094FB', // blue
     secondaryColor: '#29BEBA',
   },
 }
