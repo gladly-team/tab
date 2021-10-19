@@ -23,60 +23,19 @@ describe('causes', () => {
     expect(causes).toBeInstanceOf(Array)
   })
 
-  // TODO: update
-  it.skip('returns an item with the expected Cause shape', () => {
+  it('returns an item with the expected Cause shape', () => {
     const causes = require('../causes').default
-    const expectedShape = {
+    const causeSubset = {
       id: expect.any(String),
       charityId: expect.any(String),
       landingPagePath: expect.any(String),
       impactVisits: expect.any(Number),
-      impact: {
-        impactCounterText: expect.any(String),
-        referralRewardTitle: expect.any(String),
-        referralRewardSubtitle: expect.any(String),
-        claimImpactTitle: expect.any(String),
-        claimImpactSubtitle: expect.any(String),
-        newlyReferredTitle: expect.any(String),
-        impactWalkthroughText: expect.any(String),
-        confirmImpactText: expect.any(String),
-      },
-      theme: {
-        primaryColor: expect.any(String),
-        secondayColor: expect.any(String),
-      },
-      squads: {
-        squadCounterText: expect.any(String),
-        currentMissionSummary: expect.any(String),
-        currentMissionDetails: expect.any(String),
-        currentMissionAlert: expect.any(String),
-        currentMissionStep2: expect.any(String),
-        currentMissionStep3: expect.any(String),
-        missionCompleteAlert: expect.any(String),
-        missionCompleteDescription: expect.any(String),
-        missionCompleteSubtitle: expect.any(String),
-        impactCounterText: expect.any(String),
-      },
-      sharing: {
-        title: expect.any(String),
-        subtitle: expect.any(String),
-        imgCategory: expect.any(String),
-        redditButtonTitle: expect.any(String),
-        facebookButtonTitle: expect.any(String),
-        twitterButtonTitle: expect.any(String),
-        tumblrTitle: expect.any(String),
-        tumblrCaption: expect.any(String),
-        sendgridEmailTemplateId: expect.any(String),
-      },
-      onboarding: {
-        steps: expect.any(Array),
-        firstTabIntroDescription: expect.any(String),
-      },
+      // ... other fields here
     }
-    expect(causes[0]).toEqual(expect.objectContaining(expectedShape))
+    expect(causes[0]).toMatchObject(expect.objectContaining(causeSubset))
   })
 
-  it('throws if provided data fails CauseModel schema validation2', () => {
+  it('throws if provided data fails CauseModel schema validation', () => {
     const dataModule = require('../causes/SGa6zohkY/causeData')
     jest.spyOn(dataModule, 'default', 'get').mockImplementation(() => {
       const realData = jest.requireActual('../causes/SGa6zohkY/causeData')
