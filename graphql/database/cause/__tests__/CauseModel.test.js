@@ -7,12 +7,6 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import {
-  getPermissionsOverride,
-  CAUSES_OVERRIDE,
-} from '../../../utils/permissions-overrides'
-
-const override = getPermissionsOverride(CAUSES_OVERRIDE)
 
 jest.mock('../../databaseClient')
 
@@ -35,18 +29,6 @@ describe('CauseModel', () => {
 
   it('implements the tableName property', () => {
     expect(Cause.tableName).toBe(tableNames.causes)
-  })
-
-  it('does not throw an error when a `get` returns an item', () => {
-    const mockItemId = '123456789'
-    // Set mock response from DB client. Just setting a dummy object.
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: {
-        id: '123456789',
-      },
-    })
-
-    return expect(Cause.get(override, mockItemId)).resolves.toBeDefined()
   })
 
   it('constructs as expected with default values', () => {

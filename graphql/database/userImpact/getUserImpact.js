@@ -1,13 +1,8 @@
 import UserImpactModel from './UserImpactModel'
 import UserModel from '../users/UserModel'
-import CauseModel from '../cause/CauseModel'
 import { CATS_CHARITY_ID } from '../constants'
-import {
-  getPermissionsOverride,
-  CAUSES_OVERRIDE,
-} from '../../utils/permissions-overrides'
+import getCause from '../cause/getCause'
 
-const override = getPermissionsOverride(CAUSES_OVERRIDE)
 /**
  * gets a user impact record
  * @param {object} userContext - The user authorizer object.
@@ -17,7 +12,7 @@ const override = getPermissionsOverride(CAUSES_OVERRIDE)
 const getUserImpact = async (userContext, userId) => {
   try {
     const user = await UserModel.get(userContext, userId)
-    const cause = await CauseModel.get(override, user.causeId)
+    const cause = await getCause(user.causeId)
     return (await UserImpactModel.getOrCreate(userContext, {
       userId,
       charityId: cause.charityId,

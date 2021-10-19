@@ -16,7 +16,6 @@ export const USERS_OVERRIDE = 'USERS_OVERRIDE'
 // TODO: remove after migration
 export const MIGRATION_OVERRIDE = 'MIGRATION_OVERRIDE'
 export const VIDEO_ADS_OVERRIDE = 'VIDEO_ADS_OVERRIDE'
-export const CAUSES_OVERRIDE = 'CAUSES_OVERRIDE'
 // Make it less likely for somebody to use the override
 // string value directly.
 const rand = random(10000, 99999)
@@ -32,9 +31,6 @@ const validOverrides = {
   [MISSIONS_OVERRIDE]: `${MISSIONS_OVERRIDE}${validOverridesAppendix}`,
   [USERS_OVERRIDE]: `${USERS_OVERRIDE}${validOverridesAppendix}`,
   [VIDEO_ADS_OVERRIDE]: `${VIDEO_ADS_OVERRIDE}${validOverridesAppendix}`,
-
-  // TODO: remove
-  [CAUSES_OVERRIDE]: `${CAUSES_OVERRIDE}${validOverridesAppendix}`,
   // TODO: remove after migration
   [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`,
 }

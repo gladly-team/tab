@@ -10,9 +10,11 @@ import {
   getMockUserInstance,
   getMockCauseInstance,
 } from '../../test-utils'
+import getCause from '../../cause/getCause'
 
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
+jest.mock('../../cause/getCause')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -37,9 +39,7 @@ describe('getUserImpact', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockCause,
-    })
+    getCause.mockReturnValueOnce(mockCause)
     const getOrCreate = jest.spyOn(UserImpactModel, 'getOrCreate')
     await getUserImpact(userContext, userId)
     expect(getOrCreate).toHaveBeenCalledWith(userContext, {

@@ -85,7 +85,7 @@ import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
 import getCauseByUser from '../database/cause/getCauseByUser'
-import CauseModel from '../database/cause/CauseModel'
+import getCause from '../database/cause/getCause'
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
 import logVideoAdComplete from '../database/videoAdLog/logVideoAdCompleted'
@@ -171,7 +171,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return VideoAdLogModel.get(context.user, id)
     }
     if (type === CAUSE) {
-      return CauseModel(context.user, id)
+      return getCause(id)
     }
     return null
   },
@@ -486,7 +486,8 @@ const userType = new GraphQLObjectType({
     },
     userImpact: {
       type: userImpactType,
-      description: "A user's charity specific impact",
+      description:
+        "A user's cause-specific impact for the cause they are currently supporting",
       resolve: async (user, _args, context) =>
         getUserImpact(context.user, user.id),
     },
