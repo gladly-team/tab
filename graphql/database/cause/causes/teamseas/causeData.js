@@ -1,9 +1,9 @@
 // Cause: teamseas
 
-import { fileGetter } from '../../utils'
+import fileContentsReader from '../../fileContentsReader'
 
 const SLUG = 'teamseas'
-const getContents = fileGetter(SLUG)
+const getContents = fileContentsReader(SLUG)
 
 const data = {
   id: 'SGa6zohkY',

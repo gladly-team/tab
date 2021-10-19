@@ -1,8 +1,8 @@
 // Cause: cats
-import { fileGetter } from '../../utils'
+import fileContentsReader from '../../fileContentsReader'
 
 const SLUG = 'cats'
-const getContents = fileGetter(SLUG)
+const getContents = fileContentsReader(SLUG)
 
 const data = {
   id: 'CA6A5C2uj',
