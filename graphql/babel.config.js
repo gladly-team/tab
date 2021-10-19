@@ -8,4 +8,13 @@ module.exports = {
       },
     ],
   ],
+  ignore: [
+    'build',
+    'coverage',
+    '**/__mocks__',
+    '**/__tests__',
+    '**/integration-tests',
+    'node_modules',
+    'server.js',
+  ],
 }
