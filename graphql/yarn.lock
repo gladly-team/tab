@@ -2258,6 +2258,11 @@ babel-jest@^24.8.0:
     chalk "^2.4.2"
     slash "^2.0.0"
 
+babel-plugin-content-transformer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-content-transformer/-/babel-plugin-content-transformer-0.2.0.tgz#0e3818c332ffe953d3dbc3c878f43463d6e5871f"
+  integrity sha512-pMWrqd+YprEdsT4CNgdnQbb0aLAnyr153zI/y/nfDHK+VAVjXdMFoqKrFttUaVxASl/bDIWAfIPQpBnrlU+1HA==
+
 babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.3.3.tgz#84fda19c976ec5c6defef57f9427b3def66e17a3"

@@ -7,14 +7,17 @@ module.exports = {
         regenerator: true,
       },
     ],
-  ],
-  ignore: [
-    'build',
-    'coverage',
-    '**/__mocks__',
-    '**/__tests__',
-    '**/integration-tests',
-    'node_modules',
-    'server.js',
+    [
+      'content-transformer',
+      {
+        transformers: [
+          // Convert import statements ending with ".md" into strings
+          {
+            file: /\.md$/,
+            format: 'string',
+          },
+        ],
+      },
+    ],
   ],
 }

@@ -1,34 +1,37 @@
 // Cause: cats
-import fileContentsReader from '../../fileContentsReader'
-
-const SLUG = 'cats'
-const getContents = fileContentsReader(SLUG)
+import claimImpactSubtitle from './impact.claimImpactSubtitle.md'
+import confirmImpactSubtitle from './impact.confirmImpactSubtitle.md'
+import impactCounterText from './impact.impactCounterText.md'
+import impactWalkthroughText from './impact.impactWalkthroughText.md'
+import newlyReferredImpactWalkthroughText from './impact.newlyReferredImpactWalkthroughText.md'
+import referralRewardNotification from './impact.referralRewardNotification.md'
+import referralRewardSubtitle from './impact.referralRewardSubtitle.md'
+import referralRewardTitle from './impact.referralRewardTitle.md'
 
 const data = {
   id: 'CA6A5C2uj',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
   impactVisits: 14,
   landingPagePath: '/cats/',
-  slug: SLUG,
+  slug: 'cats',
 
   // TODO: set all copy
   impact: {
-    claimImpactSubtitle: getContents('./impact.claimImpactSubtitle.md'),
-    confirmImpactSubtitle: getContents('./impact.confirmImpactSubtitle.md'),
-    impactCounterText: getContents('./impact.impactCounterText.md'),
+    claimImpactSubtitle,
+    confirmImpactSubtitle,
+    impactCounterText,
+
+    // TODO: update
     impactIcon: 'jellyfish',
-    impactWalkthroughText: getContents('./impact.impactWalkthroughText.md'),
-    newlyReferredImpactWalkthroughText: getContents(
-      './impact.newlyReferredImpactWalkthroughText.md'
-    ),
-    referralRewardNotification: getContents(
-      './impact.referralRewardNotification.md'
-    ),
-    referralRewardSubtitle: getContents('./impact.referralRewardSubtitle.md'),
+
+    impactWalkthroughText,
+    newlyReferredImpactWalkthroughText,
+    referralRewardNotification,
+    referralRewardSubtitle,
 
     // TODO: add template to include the # of people recruited.
     //   "You recruited X friend[s] to..."
-    referralRewardTitle: getContents('./impact.referralRewardTitle.md'),
+    referralRewardTitle,
 
     // TODO: update
     walkMeGif: 'dolphin.gif',

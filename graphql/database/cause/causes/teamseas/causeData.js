@@ -1,33 +1,32 @@
 // Cause: teamseas
-
-import fileContentsReader from '../../fileContentsReader'
-
-const SLUG = 'teamseas'
-const getContents = fileContentsReader(SLUG)
+import claimImpactSubtitle from './impact.claimImpactSubtitle.md'
+import confirmImpactSubtitle from './impact.confirmImpactSubtitle.md'
+import impactCounterText from './impact.impactCounterText.md'
+import impactWalkthroughText from './impact.impactWalkthroughText.md'
+import newlyReferredImpactWalkthroughText from './impact.newlyReferredImpactWalkthroughText.md'
+import referralRewardNotification from './impact.referralRewardNotification.md'
+import referralRewardSubtitle from './impact.referralRewardSubtitle.md'
+import referralRewardTitle from './impact.referralRewardTitle.md'
 
 const data = {
   id: 'SGa6zohkY',
   charityId: 'TODO', // TODO
   impactVisits: 10,
   landingPagePath: '/teamseas/',
-  slug: SLUG,
+  slug: 'teamseas',
   impact: {
-    claimImpactSubtitle: getContents('./impact.claimImpactSubtitle.md'),
-    confirmImpactSubtitle: getContents('./impact.confirmImpactSubtitle.md'),
-    impactCounterText: getContents('./impact.impactCounterText.md'),
+    claimImpactSubtitle,
+    confirmImpactSubtitle,
+    impactCounterText,
     impactIcon: 'jellyfish',
-    impactWalkthroughText: getContents('./impact.impactWalkthroughText.md'),
-    newlyReferredImpactWalkthroughText: getContents(
-      './impact.newlyReferredImpactWalkthroughText.md'
-    ),
-    referralRewardNotification: getContents(
-      './impact.referralRewardNotification.md'
-    ),
-    referralRewardSubtitle: getContents('./impact.referralRewardSubtitle.md'),
+    impactWalkthroughText,
+    newlyReferredImpactWalkthroughText,
+    referralRewardNotification,
+    referralRewardSubtitle,
 
     // TODO: add template to include the # of people recruited.
     //   "You recruited X friend[s] to..."
-    referralRewardTitle: getContents('./impact.referralRewardTitle.md'),
+    referralRewardTitle,
     walkMeGif: 'dolphin.gif',
   },
   onboarding: {
