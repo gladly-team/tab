@@ -1,5 +1,4 @@
 import UserImpactModel from './UserImpactModel'
-import UserModel from '../users/UserModel'
 import getUserImpactAndCause from './getUserImpactAndCause'
 /**
  * updates a user impact record
