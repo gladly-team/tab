@@ -1,15 +1,15 @@
-// Cause: teamseas
-
+// Cause: cats
 import { fileGetter } from '../../utils'
 
-const ID = 'SGa6zohkY'
-const getContents = fileGetter(ID)
+const SLUG = 'cats'
+const getContents = fileGetter(SLUG)
 
 const data = {
-  id: ID,
+  id: 'CA6A5C2uj',
   charityId: 'TODO',
-  impactVisits: 10,
-  landingPagePath: '/teamseas/',
+  impactVisits: 14,
+  landingPagePath: '/cats/',
+  slug: SLUG,
   impact: {
     claimImpactSubtitle:
       '##### You did it! You just turned your tabs into removing trash from rivers and oceans.  Keep it up, and do good with every new tab!',
@@ -63,7 +63,7 @@ const data = {
     squadCounterText: 'TODO',
   },
   theme: {
-    primaryColor: '#9d4ba3', // purple
+    primaryColor: '#5094FB',
     secondaryColor: '#29BEBA',
   },
 }

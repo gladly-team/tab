@@ -46,6 +46,12 @@ class Cause extends BaseModel {
         .string()
         .required()
         .description(`URL path for the landing page belonging to this cause`),
+      slug: types
+        .string()
+        .required()
+        .description(
+          `A short, unique, URL-safe description of the cause, such as "cats" or "teamseas"`
+        ),
       impact: types.object({
         claimImpactSubtitle: types
           .string()
