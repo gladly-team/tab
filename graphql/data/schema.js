@@ -25,6 +25,7 @@ import {
   WIDGET,
   CHARITY,
   USER,
+  CAUSE,
   BACKGROUND_IMAGE,
   USER_IMPACT,
   USER_RECRUITS,
@@ -52,6 +53,7 @@ import setEmail from '../database/users/setEmail'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import updateImpact from '../database/userImpact/updateImpact'
+import getUserImpact from '../database/userImpact/getUserImpact'
 import createInvitedUsers from '../database/invitedUsers/createInvitedUsers'
 import createSquadInvite from '../database/missions/inviteUserToMission'
 import logSearch from '../database/users/logSearch'
@@ -82,6 +84,9 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
+import getCauseByUser from '../database/cause/getCauseByUser'
+import getCause from '../database/cause/getCause'
+import CauseModel from '../database/cause/CauseModel'
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
 import logVideoAdComplete from '../database/videoAdLog/logVideoAdCompleted'
@@ -166,6 +171,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === VIDEO_AD_LOG) {
       return VideoAdLogModel.get(context.user, id)
     }
+    if (type === CAUSE) {
+      return getCause(id)
+    }
     return null
   },
   obj => {
@@ -198,6 +206,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof VideoAdLogModel) {
       // eslint-disable-next-line no-use-before-define
       return videoAdLogType
+    }
+    if (obj instanceof CauseModel) {
+      return CauseType
     }
     return null
   }
@@ -474,6 +485,13 @@ const userType = new GraphQLObjectType({
       description: "Users's background image",
       resolve: (user, _args, context) => getBackgroundImage(context.user, user),
     },
+    userImpact: {
+      type: userImpactType,
+      description:
+        "A user's cause-specific impact for the cause they are currently supporting",
+      resolve: async (user, _args, context) =>
+        getUserImpact(context.user, user.id),
+    },
     username: {
       type: GraphQLString,
       description: "Users's username",
@@ -486,6 +504,11 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'a unique user ID sent to video ad partner truex',
       resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
+    },
+    cause: {
+      type: CauseType,
+      description: 'cause type for the user',
+      resolve: (user, _args, context) => getCauseByUser(context.user, user.id),
     },
     videoAdEligible: {
       type: GraphQLBoolean,
@@ -696,7 +719,191 @@ const userType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface],
 })
+const CauseImpactCopy = new GraphQLObjectType({
+  name: 'CauseSpecificImpactUI',
+  description: 'cause specific UI content around impact',
+  fields: () => ({
+    impactCounterText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'markdown string: copy for ImpactCounter for normal case',
+    },
+    referralRewardTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: title copy for referralReward UserImpact modal',
+    },
+    referralRewardSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: subtitle copy for referralReward UserImpact modal',
+    },
+    referralRewardNotification: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'markdown string: copy for referral reward notification',
+    },
+    claimImpactTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: title for claimImpact notification in UserImpact',
+    },
+    claimImpactSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: subtitle for claimImpact notification in UserImpact',
+    },
+    impactIcon: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'string: name of the icon to use in impact counter',
+    },
+    walkMeGif: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'string: file name of the gif to use in walk me',
+    },
+    newlyReferredImpactWalkthroughText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: copy for impact walkthrough notification in UserImpact when user is referred',
+    },
+    impactWalkthroughText: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: copy for impact walkthrough notification in UserImpact',
+    },
+    confirmImpactSubtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'markdown string: copy for confirm impact modal in UserImpact',
+    },
+  }),
+})
 
+const CauseThemeType = new GraphQLObjectType({
+  name: 'CauseTheming',
+  description: 'css properties for a specific cause',
+  fields: () => ({
+    primaryColor: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the primary color hex value',
+    },
+    secondaryColor: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the secondary color hex value',
+    },
+  }),
+})
+
+const CauseSharingCopyType = new GraphQLObjectType({
+  name: 'SharingUICopy',
+  description: 'cause specific UI content around sharing',
+  fields: () => ({
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'markdown for modal title',
+    },
+    subtitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'markdown for modal subtitle',
+    },
+    imgCategory: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’`,
+    },
+    redditButtonTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'copy for reddit button',
+    },
+    facebookButtonTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'copy for facebook button',
+    },
+    twitterButtonTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'copy for twitter button',
+    },
+    tumblrTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'copy for tumblr button',
+    },
+    tumblrCaption: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'copy for tumblr caption',
+    },
+  }),
+})
+const CauseOnboardingCopyType = new GraphQLObjectType({
+  name: 'OnboardingUICopy',
+  description: 'cause specific UI content around onboarding',
+  fields: () => ({
+    steps: {
+      type: new GraphQLNonNull(
+        GraphQLList(
+          new GraphQLObjectType({
+            name: 'onboardingUIStep',
+            description: 'ui content for each onboarding step',
+            fields: () => ({
+              title: {
+                type: new GraphQLNonNull(GraphQLString),
+                description: 'markdown title for onboarding step',
+              },
+              subtitle: {
+                type: new GraphQLNonNull(GraphQLString),
+                description: 'markdown subtitle for onboarding step',
+              },
+              imgName: {
+                type: new GraphQLNonNull(GraphQLString),
+                description: 'name of image to show',
+              },
+            }),
+          })
+        )
+      ),
+      description: 'the steps array in onboarding',
+      resolve: onboarding => onboarding.steps,
+    },
+    firstTabIntroDescription: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: onboarding => onboarding.firstTabIntroDescription,
+      description:
+        'markdown string shown when prompting the user to open their first tab, currently info about cat treats',
+    },
+  }),
+})
+const CauseType = new GraphQLObjectType({
+  name: CAUSE,
+  description: 'all cause specific data and ui content',
+  fields: () => ({
+    id: globalIdField(CAUSE),
+    landingPagePath: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `URL path for the landing page belonging to this cause`,
+    },
+    impactVisits: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: `number of visits required for each impact unit (e.g. 14 for cat charity)`,
+    },
+    impact: {
+      type: new GraphQLNonNull(CauseImpactCopy),
+      description: 'the impact object on cause model',
+      resolve: cause => cause.impact,
+    },
+    theme: {
+      type: new GraphQLNonNull(CauseThemeType),
+      description: 'the theme object on cause model',
+      resolve: cause => cause.theme,
+    },
+    sharing: {
+      type: new GraphQLNonNull(CauseSharingCopyType),
+      description: 'the sharing object on cause model',
+      resolve: cause => cause.sharing,
+    },
+    onboarding: {
+      type: new GraphQLNonNull(CauseOnboardingCopyType),
+      resolve: cause => cause.onboarding,
+      description: 'the onboarding object on cause model',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',

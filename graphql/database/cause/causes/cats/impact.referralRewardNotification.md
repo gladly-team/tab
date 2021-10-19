@@ -1,0 +1,1 @@
+##### Congrats! You recruited a friend to support #teamseas. To celebrate, we'll remove an extra ${pendingUserReferralImpact} water bottle${isPlural(pendingUserReferralImpact)} from our oceans and rivers.
