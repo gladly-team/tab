@@ -3,18 +3,24 @@
 import UserImpactModel from '../UserImpactModel'
 import updateImpact from '../updateImpact'
 import { USER_VISIT_IMPACT_VALUE } from '../../constants'
-import getUserImpact from '../getUserImpact'
+import getUserImpactAndCause from '../getUserImpactAndCause'
 import {
   getMockUserContext,
   getMockUserImpact,
   mockDate,
+  getMockCauseInstance,
 } from '../../test-utils'
 
+jest.mock('../../cause/getCause')
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
-jest.mock('../getUserImpact')
+jest.mock('../getUserImpactAndCause')
 const userContext = getMockUserContext()
+const mockCause = getMockCauseInstance({
+  charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
+  impactVisits: 14,
+})
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
 beforeAll(() => {
@@ -22,10 +28,11 @@ beforeAll(() => {
     mockCurrentTimeOnly: true,
   })
 })
-
+afterEach(() => {
+  jest.clearAllMocks()
+})
 const userId = userContext.id
 const defaultResponse = getMockUserImpact()
-
 describe('updateImpact', () => {
   it('when a user has confirmed and logs impact, it decrements the visitsUntilNextImpact', async () => {
     const mockUserImpact = new UserImpactModel({
@@ -35,7 +42,10 @@ describe('updateImpact', () => {
       userImpactMetric: 1,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -56,7 +66,10 @@ describe('updateImpact', () => {
       charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
       confirmedImpact: true,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -78,7 +91,10 @@ describe('updateImpact', () => {
       confirmedImpact: false,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -100,7 +116,10 @@ describe('updateImpact', () => {
       visitsUntilNextImpact: 1,
       confirmedImpact: true,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -123,7 +142,10 @@ describe('updateImpact', () => {
       visitsUntilNextImpact: 1,
       confirmedImpact: true,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -147,7 +169,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       userImpactMetric: 1,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -171,7 +196,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       userImpactMetric: 2,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -195,7 +223,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       userImpactMetric: 3,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -219,7 +250,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       userImpactMetric: 19,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -244,7 +278,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
@@ -269,7 +306,10 @@ describe('updateImpact', () => {
       confirmedImpact: true,
       visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
     })
-    getUserImpact.mockReturnValue(mockUserImpact)
+    getUserImpactAndCause.mockReturnValue({
+      cause: mockCause,
+      userImpact: mockUserImpact,
+    })
     const updateMethod = jest.spyOn(UserImpactModel, 'update')
     await updateImpact(
       userContext,
