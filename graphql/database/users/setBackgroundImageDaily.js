@@ -1,5 +1,6 @@
 import moment from 'moment'
 import UserModel from './UserModel'
+import getCause from '../cause/getCause'
 import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
 import {
   USER_BACKGROUND_OPTION_DAILY,
@@ -12,12 +13,14 @@ import {
  * @param {string} userId - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const setBackgroundImageDaily = async (
-  userContext,
-  category = BACKGROUND_IMAGE_LEGACY_CATEGORY,
-  userId
-) => {
+const setBackgroundImageDaily = async (userContext, userId) => {
   try {
+    const user = await UserModel.get(userContext, userId)
+    let category = BACKGROUND_IMAGE_LEGACY_CATEGORY
+    if (user.v4BetaEnabled) {
+      const { backgroundImageCategory } = await getCause(user.causeId)
+      category = backgroundImageCategory
+    }
     const image = await getRandomBackgroundImage(userContext, category)
     const userInstance = await UserModel.update(userContext, {
       id: userId,

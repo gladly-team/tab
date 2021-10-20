@@ -18,6 +18,7 @@ const data = {
   id: 'SGa6zohkY',
   charityId: 'TODO', // TODO
   impactVisits: 10,
+  backgroundImageCategory: 'seas',
   landingPagePath: '/teamseas/',
   slug: 'teamseas',
   impact: {

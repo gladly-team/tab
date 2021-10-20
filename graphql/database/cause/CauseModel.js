@@ -42,6 +42,12 @@ class Cause extends BaseModel {
         .description(
           `number of visits required for each impact unit (e.g. 14 for cat charity)`
         ),
+      backgroundImageCategory: types
+        .string()
+        .required()
+        .description(
+          `the backgroundground Image Category to show by default for a cause`
+        ),
       landingPagePath: types
         .string()
         .required()

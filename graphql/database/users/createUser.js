@@ -2,6 +2,7 @@ import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import { nanoid } from 'nanoid'
 import moment from 'moment'
+import getCause from '../cause/getCause'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import logEmailVerified from './logEmailVerified'
@@ -10,7 +11,6 @@ import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
 import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
-import { BACKGROUND_IMAGE_CAT_CATEGORY } from '../constants'
 
 /**
  * Create a new user and performs other setup actions.
@@ -40,10 +40,6 @@ const createUser = async (
   missionId = false,
   causeId = false
 ) => {
-  // Throw an error if v4BetaEnabled is true and causeId is set.
-  if (!v4BetaEnabled && causeId) {
-    throw new Error('User must be on v4 if they belong to a cause.')
-  }
   // Get or create the user.
   let userInfo = Object.assign(
     {
@@ -72,9 +68,10 @@ const createUser = async (
 
   // Set default background image to a cat image if user is enabled for v4 beta
   if (v4BetaEnabled) {
+    const { backgroundImageCategory } = await getCause(causeId)
     const backgroundCatImage = await getRandomBackgroundImage(
       userContext,
-      BACKGROUND_IMAGE_CAT_CATEGORY
+      backgroundImageCategory
     )
     userInfo = {
       ...userInfo,
