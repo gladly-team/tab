@@ -1,3 +1,3 @@
-##### **Your pawsitive impact!**
+"##### **Your #teamseas impact!**
 
-This shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!
+This shows how many plastic bottles you've helped remove from the ocean. Every tab you open helps. Keep it up!
