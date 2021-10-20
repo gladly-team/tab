@@ -29,6 +29,7 @@ import {
   getBrowserExtensionInstallTime,
   isTabV4BetaUser,
   getMissionId,
+  getCauseId,
 } from 'js/utils/local-user-data-mgr'
 import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
 import environment from 'js/relay-env'
@@ -638,7 +639,8 @@ describe('createNewUser tests', () => {
         v4Enabled,
         onCompleted,
         onError,
-        missionId
+        missionId,
+        causeId
       ) => {
         onCompleted({
           createNewUser: {
@@ -665,6 +667,7 @@ describe('createNewUser tests', () => {
       true,
       expect.any(Function),
       expect.any(Function),
+      undefined,
       undefined
     )
   })
@@ -705,7 +708,8 @@ describe('createNewUser tests', () => {
         v4Enabled,
         onCompleted,
         onError,
-        missionId
+        missionId,
+        causeId
       ) => {
         onCompleted({
           createNewUser: {
@@ -732,7 +736,77 @@ describe('createNewUser tests', () => {
       true,
       expect.any(Function),
       expect.any(Function),
-      '123456789'
+      '123456789',
+      undefined
+    )
+  })
+
+  it('passes along the cause ID from local storage', async () => {
+    expect.assertions(1)
+    getUserToken.mockResolvedValue('some-token')
+    getReferralData.mockImplementationOnce(() => null)
+    const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
+    getBrowserExtensionInstallId.mockReturnValueOnce(mockUUID)
+    const mockExtensionInstallTime = '2018-08-18T01:12:59.187Z'
+    getBrowserExtensionInstallTime.mockReturnValueOnce(mockExtensionInstallTime)
+    isTabV4BetaUser.mockReturnValueOnce(true)
+    getCauseId.mockReturnValueOnce('mock-cause')
+    getUserTestGroupsForMutation.mockReturnValueOnce({
+      anonSignIn: 'ANONYMOUS_ALLOWED',
+    })
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        v4Enabled,
+        onCompleted,
+        onError,
+        missionId,
+        causeId
+      ) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true,
+          },
+        })
+      }
+    )
+
+    const createNewUser = require('js/authentication/helpers').createNewUser
+    await createNewUser()
+
+    expect(CreateNewUserMutation).toHaveBeenCalledWith(
+      environment,
+      'abc123',
+      'somebody@example.com',
+      null,
+      { anonSignIn: 'ANONYMOUS_ALLOWED' },
+      mockUUID,
+      mockExtensionInstallTime,
+      true,
+      expect.any(Function),
+      expect.any(Function),
+      undefined,
+      'mock-cause'
     )
   })
 

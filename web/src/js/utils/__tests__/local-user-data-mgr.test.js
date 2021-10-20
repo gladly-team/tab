@@ -4,7 +4,10 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import MockDate from 'mockdate'
 import localStorageMgr, { __mockClear } from 'js/utils/localstorage-mgr'
-import { STORAGE_REFERRAL_DATA_MISSION_ID } from 'js/constants'
+import {
+  STORAGE_REFERRAL_DATA_MISSION_ID,
+  STORAGE_NEW_USER_CAUSE_ID,
+} from 'js/constants'
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('uuid/v4')
 
@@ -505,7 +508,7 @@ describe('local user data manager', () => {
     localStorageMgr.removeItem('tab.newUser.clickedNewTabSearchIntroV2')
     expect(isTabV4BetaUser()).toBe(false)
   })
-  // isTabV4BetaUser
+
   it('returns the currentMissionId from  localStorage', () => {
     localStorageMgr.setItem(STORAGE_REFERRAL_DATA_MISSION_ID, '123456789')
     const { getMissionId } = require('js/utils/local-user-data-mgr')
@@ -513,5 +516,13 @@ describe('local user data manager', () => {
     expect(getMissionId()).toBe('123456789')
     localStorageMgr.removeItem(STORAGE_REFERRAL_DATA_MISSION_ID)
     expect(getMissionId()).toBe(undefined)
+  })
+
+  it('returns the causeId from  localStorage', () => {
+    localStorageMgr.setItem(STORAGE_NEW_USER_CAUSE_ID, 'mock-cause')
+    const { getCauseId } = require('js/utils/local-user-data-mgr')
+    expect(getCauseId()).toBe('mock-cause')
+    localStorageMgr.removeItem(STORAGE_NEW_USER_CAUSE_ID)
+    expect(getCauseId()).toBe(undefined)
   })
 })
