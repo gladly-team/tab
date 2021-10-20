@@ -7,9 +7,12 @@ import newlyReferredImpactWalkthroughText from './impact.newlyReferredImpactWalk
 import referralRewardNotification from './impact.referralRewardNotification.md'
 import referralRewardSubtitle from './impact.referralRewardSubtitle.md'
 import referralRewardTitle from './impact.referralRewardTitle.md'
-import onboardingStep1 from './onboarding.step1.md'
-import onboardingStep2 from './onboarding.step2.md'
-import onboardingStep3 from './onboarding.step3.md'
+import onboardingSubtitle1 from './onboarding.step1.subtitle.md'
+import onboardingSubtitle2 from './onboarding.step2.subtitle.md'
+import onboardingSubtitle3 from './onboarding.step3.subtitle.md'
+import onboardingTitle1 from './onboarding.step1.title.md'
+import onboardingTitle2 from './onboarding.step2.title.md'
+import onboardingTitle3 from './onboarding.step3.title.md'
 
 const data = {
   id: 'CA6A5C2uj',
@@ -43,18 +46,18 @@ const data = {
     firstTabIntroDescription: 'TODO',
     steps: [
       {
-        title: 'Your tabs are doing great things',
-        subtitle: onboardingStep1,
+        title: onboardingTitle1,
+        subtitle: onboardingSubtitle1,
         imgName: 'cattabs',
       },
       {
-        title: 'Help more cats with squads',
-        subtitle: onboardingStep2,
+        title: onboardingTitle2,
+        subtitle: onboardingSubtitle2,
         imgName: 'squadcat',
       },
       {
-        title: "It doesn't cost you a thing",
-        subtitle: onboardingStep3,
+        title: onboardingTitle3,
+        subtitle: onboardingSubtitle3,
         imgName: 'adcat',
       },
     ],
