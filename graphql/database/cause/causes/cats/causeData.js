@@ -7,6 +7,9 @@ import newlyReferredImpactWalkthroughText from './impact.newlyReferredImpactWalk
 import referralRewardNotification from './impact.referralRewardNotification.md'
 import referralRewardSubtitle from './impact.referralRewardSubtitle.md'
 import referralRewardTitle from './impact.referralRewardTitle.md'
+import onboardingStep1 from './onboarding.step1.md'
+import onboardingStep2 from './onboarding.step2.md'
+import onboardingStep3 from './onboarding.step3.md'
 
 const data = {
   id: 'CA6A5C2uj',
@@ -40,9 +43,19 @@ const data = {
     firstTabIntroDescription: 'TODO',
     steps: [
       {
-        title: 'TODO',
-        subtitle: 'TODO',
-        imgName: 'TODO',
+        title: 'Your tabs are doing great things',
+        subtitle: onboardingStep1,
+        imgName: 'cattabs',
+      },
+      {
+        title: 'Help more cats with squads',
+        subtitle: onboardingStep2,
+        imgName: 'squadcat',
+      },
+      {
+        title: "It doesn't cost you a thing",
+        subtitle: onboardingStep3,
+        imgName: 'adcat',
       },
     ],
   },
