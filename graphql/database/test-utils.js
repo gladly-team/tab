@@ -3,6 +3,7 @@
 import moment from 'moment'
 import databaseClient from './databaseClient'
 import UserModel from './users/UserModel'
+import CauseModel from './cause/CauseModel'
 import { USER_VISIT_IMPACT_VALUE } from './constants'
 
 export const DatabaseOperation = {
@@ -120,7 +121,7 @@ export const getMockUserInfo = () => ({
  */
 export const getMockUserImpact = () => ({
   userId: 'abcdefghijklmno',
-  charityId: 'mock-charity',
+  charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
   updated: '2017-06-22T01:13:28.000Z',
   visitsUntilNextImpact: USER_VISIT_IMPACT_VALUE,
   pendingUserReferralImpact: 0,
@@ -135,6 +136,53 @@ export const getMockUserImpact = () => ({
 export const mockDate = {}
 mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
+export const getMockCauseInstance = attributes => {
+  return new CauseModel(
+    Object.assign(
+      {},
+      {
+        id: '123456789',
+        charityId: 'abcdefghijklmnop',
+        landingPagePath: '/test',
+        impactVisits: 10,
+        impact: {
+          impactCounterText: 'impactCounterText',
+          claimImpactSubtitle: 'claimImpactSubtitle',
+          referralRewardNotification: 'referralRewardNotification',
+          impactIcon: 'jellyfish',
+          walkMeGif: 'dolphin.gif',
+          referralRewardTitle: 'referralRewardTitle',
+          referralRewardSubtitle: 'referralRewardSubtitle',
+          newlyReferredImpactWalkthroughText:
+            'newlyReferredImpactWalkthroughText',
+          impactWalkthroughText: 'impactWalkthroughText',
+          confirmImpactSubtitle: 'confirmImpactSubtitle',
+        },
+        theme: {
+          primaryColor: '#5094FB',
+          secondayColor: '#29BEBA',
+        },
+        squads: {
+          squadCounterText: 'squadCounterText',
+          currentMissionSummary: 'currentMissionSummary',
+          currentMissionDetails: 'currentMissionDetails',
+          currentMissionAlert: 'currentMissionAlert',
+          currentMissionStep2: 'currentMissionStep2',
+          currentMissionStep3: 'currentMissionStep3',
+          missionCompleteAlert: 'missionCompleteAlert',
+          missionCompleteDescription: 'missionCompleteDescription',
+          missionCompleteSubtitle: 'missionCompleteSubtitle',
+          impactCounterText: 'impactCounterText',
+        },
+        onboarding: {
+          steps: [],
+          firstTabIntroDescription: 'firstTabIntroDescription',
+        },
+      },
+      attributes
+    )
+  )
+}
 /**
  * Get a mock User instance.
  * @param {Object} attributes - Attributes to override when getting the mock user.

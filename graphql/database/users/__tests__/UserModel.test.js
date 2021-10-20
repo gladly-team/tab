@@ -268,6 +268,7 @@ describe('UserModel', () => {
       hasViewedIntroFlow: false,
       deleted: false,
       hasSeenSquads: false,
+      causeId: 'CA6A5C2uj',
     })
   })
 

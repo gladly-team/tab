@@ -1,4 +1,5 @@
 // A script to put items into DynamoDB.
+//
 // Usage:
 //
 //   AWS_REGION=us-west-2 TABLE_NAME=Something-dev \
@@ -6,7 +7,11 @@
 //     node scripts/upload-data-to-ddb.js ./fixtures.json
 //
 // Test on local DynamoDB (localhost endpoint) before
-// modifying dev/prod.
+// modifying dev/prod:
+//
+//   AWS_REGION=us-west-2 TABLE_NAME=Something \
+//   DYNAMODB_ENDPOINT=http:localhost:8000 \
+//     node scripts/upload-data-to-ddb.js ~/fixtures.json
 //
 /* eslint import/no-extraneous-dependencies: 0 */
 const AWS = require('aws-sdk')

@@ -123,7 +123,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
             tabStreak,
           })
           if (userMission.tabCount + 1 >= userMission.tabGoal) {
-            completeMission(userId, user.currentMissionId)
+            await completeMission(userId, user.currentMissionId)
           }
         } catch (e) {
           logger.error(e)

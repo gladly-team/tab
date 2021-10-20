@@ -47,7 +47,7 @@ const processImage = async fileName => {
   return {
     id,
     image: newFileName,
-    category: 'cats', // change or add input var as needed
+    category: 'seas', // change or add input var as needed
     created: processTime,
     updated: processTime,
   }

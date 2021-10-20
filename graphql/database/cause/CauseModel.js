@@ -1,6 +1,5 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
-import tableNames from '../tables'
 import { CAUSE } from '../constants'
 
 /*
@@ -16,25 +15,26 @@ class Cause extends BaseModel {
   }
 
   static get tableName() {
-    return tableNames.causes
+    // This ORM assumes a DynamoDB table, but we're not using one here.
+    return 'UNUSED_Causes'
   }
 
   static get schema() {
     return {
+      // TODO: additional restrictions, e.g. for nanoid
       id: types
         .string()
         .required()
         .description(`The ID for the cause.`),
+
+      // Fields here are alphabetized (non-objects first).
+
       charityId: types
         .string()
         .required()
         .description(
           `Charity that this cause is currently generating impact for`
         ),
-      landingPagePath: types
-        .string()
-        .required()
-        .description(`URL path for the landing page belonging to this cause`),
       impactVisits: types
         .number()
         .integer()
@@ -42,144 +42,81 @@ class Cause extends BaseModel {
         .description(
           `number of visits required for each impact unit (e.g. 14 for cat charity)`
         ),
+      landingPagePath: types
+        .string()
+        .required()
+        .description(`URL path for the landing page belonging to this cause`),
+      slug: types
+        .string()
+        .required()
+        .description(
+          `A short, unique, URL-safe description of the cause, such as "cats" or "teamseas"`
+        ),
       impact: types.object({
-        impactCounterText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for ImpactCounter for normal case`
-          ),
-        referralRewardTitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: title copy for referralReward UserImpact notification`
-          ),
-        referralRewardSubtitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: subtitle copy for referralReward UserImpact notification`
-          ),
-        claimImpactTitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: title for claimImpact notification in UserImpact`
-          ),
         claimImpactSubtitle: types
           .string()
           .required()
           .description(
             `markdown string: title for claimImpact notification in UserImpact`
           ),
-        newlyReferredTitle: types
+        confirmImpactSubtitle: types
           .string()
           .required()
           .description(
-            `markdown string: title for the newly referred notification in UserImpact`
+            `markdown string: copy for confirm impact modal in UserImpact`
           ),
+        impactCounterText: types
+          .string()
+          .required()
+          .description(
+            `markdown string: copy for ImpactCounter dropdown for normal case`
+          ),
+        impactIcon: types
+          .string()
+          .required()
+          .description(`string: name of the icon to use in impact counter`),
         impactWalkthroughText: types
           .string()
           .required()
           .description(
             `markdown string: copy for impact walkthrough notification in UserImpact`
           ),
-        confirmImpactText: types
+        newlyReferredImpactWalkthroughText: types
           .string()
           .required()
           .description(
-            `markdown string: copy for confirm impact notification in UserImpact`
+            `markdown string: copy for impact walkthrough notification in UserImpact when user is referred`
           ),
-      }),
-      squads: types.object({
-        squadCounterText: types
-          .string()
-          .required()
-          .description(`markdown string: copy for SquadCounter`),
-        currentMissionSummary: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission summary`),
-        currentMissionDetails: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission details`),
-        currentMissionAlert: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission alert`),
-        currentMissionStep2: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission step 2`),
-        currentMissionStep3: types
-          .string()
-          .description(
-            `optional markdown string: copy for CurrentMission step 3`
-          ),
-        missionCompleteAlert: types
-          .string()
-          .required()
-          .description(`markdown string: copy for MissionComplete alert`),
-        missionCompleteDescription: types
-          .string()
-          .required()
-          .description(`markdown string: copy for MissionComplete copy text`),
-        missionCompleteSubtitle: types
+        referralRewardNotification: types
           .string()
           .required()
           .description(
-            `optional markdown string: copy for MissionComplete subtitle`
+            `markdown string: copy for referral reward notification`
           ),
-        impactCounterText: types
+        referralRewardSubtitle: types
           .string()
           .required()
           .description(
-            `markdown string: copy for ImpactCounter caption when user is in mission`
+            `markdown string: subtitle copy for referralReward UserImpact modal`
           ),
-      }),
-      sharing: types.object({
-        title: types
-          .string()
-          .required()
-          .description(`markdown for modal title`),
-        subtitle: types
-          .string()
-          .required()
-          .description(`markdown for modal subtitle`),
-        imgCategory: types
+        referralRewardTitle: types
           .string()
           .required()
           .description(
-            `value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’`
+            `markdown string: title copy for referralReward UserImpact modal`
           ),
-        redditButtonTitle: types
+        walkMeGif: types
           .string()
           .required()
-          .description(`copy for reddit button`),
-        facebookButtonTitle: types
-          .string()
-          .required()
-          .description(`copy for facebook button`),
-        twitterButtonTitle: types
-          .string()
-          .required()
-          .description(`copy for twitter button`),
-        tumblrTitle: types
-          .string()
-          .required()
-          .description(`copy for tumblr button`),
-        tumblrCaption: types
-          .string()
-          .required()
-          .description(`copy for tumblr caption`),
-        sendgridEmailTemplateId: types
-          .string()
-          .required()
-          .description(`id for sendgridEmailTemplate`),
+          .description(`string: file name of the gif to use in walk me`),
       }),
       onboarding: types.object({
+        firstTabIntroDescription: types
+          .string()
+          .required()
+          .description(
+            `markdown string shown when prompting the user to open their first tab, currently info about cat treats`
+          ),
         steps: types
           .array()
           .items(
@@ -199,12 +136,103 @@ class Cause extends BaseModel {
             })
           )
           .required(),
-        firstTabIntroDescription: types
+      }),
+      sharing: types.object({
+        facebookButtonTitle: types
+          .string()
+          .required()
+          .description(`copy for facebook button`),
+        imgCategory: types
           .string()
           .required()
           .description(
-            `markdown string shown when prompting the user to open their first tab, currently info about cat treats`
+            `value to use for img switch statement on frontend; e.g. "cats" or "seas"`
           ),
+        redditButtonTitle: types
+          .string()
+          .required()
+          .description(`copy for reddit button`),
+        sendgridEmailTemplateId: types
+          .string()
+          .required()
+          .description(`id for sendgridEmailTemplate`),
+        subtitle: types
+          .string()
+          .required()
+          .description(`markdown for modal subtitle`),
+        title: types
+          .string()
+          .required()
+          .description(`markdown for modal title`),
+        tumblrCaption: types
+          .string()
+          .required()
+          .description(`copy for tumblr caption`),
+        tumblrTitle: types
+          .string()
+          .required()
+          .description(`copy for tumblr button`),
+        twitterButtonTitle: types
+          .string()
+          .required()
+          .description(`copy for twitter button`),
+      }),
+      squads: types.object({
+        currentMissionAlert: types
+          .string()
+          .required()
+          .description(`markdown string: copy for CurrentMission alert`),
+        currentMissionDetails: types
+          .string()
+          .required()
+          .description(`markdown string: copy for CurrentMission details`),
+        currentMissionStep2: types
+          .string()
+          .required()
+          .description(`markdown string: copy for CurrentMission step 2`),
+        currentMissionStep3: types
+          .string()
+          .description(
+            `optional markdown string: copy for CurrentMission step 3`
+          ),
+        currentMissionSummary: types
+          .string()
+          .required()
+          .description(`markdown string: copy for CurrentMission summary`),
+        impactCounterText: types
+          .string()
+          .required()
+          .description(
+            `markdown string: copy for ImpactCounter caption when user is in mission`
+          ),
+        missionCompleteAlert: types
+          .string()
+          .required()
+          .description(`markdown string: copy for MissionComplete alert`),
+        missionCompleteDescription: types
+          .string()
+          .required()
+          .description(`markdown string: copy for MissionComplete copy text`),
+        missionCompleteSubtitle: types
+          .string()
+          .required()
+          .description(
+            `optional markdown string: copy for MissionComplete subtitle`
+          ),
+        squadCounterText: types
+          .string()
+          .required()
+          .description(`markdown string: copy for SquadCounter`),
+      }),
+      theme: types.object({
+        primaryColor: types
+          .string()
+          .required()
+          .description(`the primary color hex value`),
+        secondaryColor: types
+          .string()
+          .required()
+          .description(`the secondary color hex value`),
       }),
     }
   }

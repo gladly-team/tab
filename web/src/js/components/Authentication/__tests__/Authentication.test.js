@@ -25,7 +25,8 @@ import Logo from 'js/components/Logo/Logo'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
+import { isTabV4BetaUser, getCauseId } from 'js/utils/local-user-data-mgr'
+import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import { flushAllPromises } from 'js/utils/test-utils'
 
@@ -1001,7 +1002,7 @@ describe('Authentication.js tests', function() {
     expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(0)
   })
 
-  it('it shows a cat background during email verification when v4 is enabled in local storage', () => {
+  it('it shows a cat background by default during email verification when v4 is enabled in local storage', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
@@ -1009,6 +1010,27 @@ describe('Authentication.js tests', function() {
     isTabV4BetaUser.mockReturnValue(true)
     const wrapper = shallow(<Authentication {...mockProps} />)
     expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(1)
+  })
+  it('it shows a cat background during email verification when v4 is enabled and causeId is set to cats in local storage', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    isTabV4BetaUser.mockReturnValue(true)
+    getCauseId.mockReturnValue(STORAGE_CATS_CAUSE_ID)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="cats-background"]').length).toEqual(1)
+  })
+
+  it('it shows a seas background during email verification when v4 is enabled and causeId is set to seas in local storage', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    isTabV4BetaUser.mockReturnValue(true)
+    getCauseId.mockReturnValue(STORAGE_SEAS_CAUSE_ID)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find('[data-test-id="seas-background"]').length).toEqual(1)
   })
 
   it('it does not show a cat background during email verification when v4 is not enabled in local storage', () => {

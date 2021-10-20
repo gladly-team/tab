@@ -133,5 +133,26 @@
     "category": "cats",
     "created": "2021-02-16T23:17:05.806Z",
     "updated": "2021-02-16T23:17:05.806Z"
+  },
+  {
+    "id": "c45ab947-c54c-404e-b4a,2-4bf7b68430ad",
+    "image": "c45ab947-c54c-404e-b4a2-4bf7b68430ad.jpg",
+    "category": "seas",
+    "created": "2021-10-17T19:41:19.786Z",
+    "updated": "2021-10-17T19:41:19.786Z"
+  },
+  {
+    "id": "8907622e-40f7-46ea-92e4-535b9dbdfdfe",
+    "image": "8907622e-40f7-46ea-92e4-535b9dbdfdfe.jpg",
+    "category": "seas",
+    "created": "2021-10-17T19:41:19.786Z",
+    "updated": "2021-10-17T19:41:19.786Z"
+  },
+  {
+    "id": "a3e3c0b2-9e16-4d1a-b258-fee638a96df8",
+    "image": "a3e3c0b2-9e16-4d1a-b258-fee638a96df8.jpg",
+    "category": "seas",
+    "created": "2021-10-17T19:41:19.786Z",
+    "updated": "2021-10-17T19:41:19.786Z"
   }
 ]

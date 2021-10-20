@@ -1,5 +1,5 @@
 import UserImpactModel from './UserImpactModel'
-import { USER_VISIT_IMPACT_VALUE } from '../constants'
+import getUserImpactAndCause from './getUserImpactAndCause'
 /**
  * updates a user impact record
  * @param {object} userContext - The user authorizer object.
@@ -15,8 +15,10 @@ const shouldShowImpactNotification = userImpactMetric => {
     (userImpactMetric >= 20 && userImpactMetric % 10 === 0)
   )
 }
-const updateImpact = async (userContext, userId, charityId, updates) => {
-  let userImpact = await UserImpactModel.get(userContext, userId, charityId)
+const updateImpact = async (userContext, userId, _charityId, updates) => {
+  const causeAndImpact = await getUserImpactAndCause(userContext, userId)
+  let { userImpact } = causeAndImpact
+  const userVisitImpactValue = causeAndImpact.cause.impactVisits
   const {
     logImpact,
     claimPendingUserReferralImpact,
@@ -38,7 +40,7 @@ const updateImpact = async (userContext, userId, charityId, updates) => {
     if (visitsUntilNextImpact > 1) {
       visitsUntilNextImpact -= 1
     } else {
-      visitsUntilNextImpact = USER_VISIT_IMPACT_VALUE
+      visitsUntilNextImpact = userVisitImpactValue
       userImpactMetric += 1
       hasClaimedLatestReward = !hasClaimedLatestReward
         ? false

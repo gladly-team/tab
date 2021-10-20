@@ -1075,6 +1075,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
+    # TODO: remove and delete tables
     causeTable:  
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain

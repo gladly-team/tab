@@ -15,7 +15,7 @@ describe('optIntoV4Beta', () => {
     expect.assertions(1)
     const optIntoV4Beta = require('js/utils/v4-beta-opt-in').default
     await optIntoV4Beta()
-    expect(fetch.mock.calls[0][0]).toEqual('/v4/api/beta-opt-in')
+    expect(fetch.mock.calls[0][0]).toEqual('/newtab/api/beta-opt-in')
   })
 
   it('calls with the expected data', async () => {
@@ -38,7 +38,7 @@ describe('optIntoV4Beta', () => {
     expect.assertions(1)
     const optIntoV4Beta = require('js/utils/v4-beta-opt-in').default
     await optIntoV4Beta()
-    expect(fetch.mock.calls[0][0]).toEqual('/v4/api/beta-opt-in')
+    expect(fetch.mock.calls[0][0]).toEqual('/newtab/api/beta-opt-in')
   })
 
   it('throws if the response is not 200', async () => {
