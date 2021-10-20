@@ -15,6 +15,7 @@ import {
   STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO_V2,
   STORAGE_NEW_USER_IS_TAB_V4_BETA,
   STORAGE_REFERRAL_DATA_MISSION_ID,
+  STORAGE_NEW_USER_CAUSE_ID,
 } from 'js/constants'
 
 /**
@@ -345,4 +346,7 @@ export const isTabV4BetaUser = () => {
 
 export const getMissionId = () => {
   return localStorageMgr.getItem(STORAGE_REFERRAL_DATA_MISSION_ID)
+}
+export const getCauseId = () => {
+  return localStorageMgr.getItem(STORAGE_NEW_USER_CAUSE_ID)
 }
