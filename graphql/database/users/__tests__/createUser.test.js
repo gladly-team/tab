@@ -867,6 +867,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
       backgroundImage,
       currentMissionId: undefined,
       hasSeenSquads: false,
+      causeId: 'CA6A5C2uj',
     }
 
     await createUser(
@@ -877,7 +878,9 @@ describe('createUser when user already exists (should be idempotent)', () => {
       {},
       null,
       null,
-      true
+      true,
+      undefined,
+      'CA6A5C2uj'
     )
     expect(getOrCreateMethod).toHaveBeenCalledWith(
       userContext,
@@ -916,6 +919,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
       backgroundImage,
       currentMissionId: missionId,
       hasSeenSquads: true,
+      causeId: 'CA6A5C2uj',
     }
 
     await createUser(
@@ -927,7 +931,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
       null,
       null,
       true,
-      missionId
+      missionId,
+      'CA6A5C2uj'
     )
     expect(getOrCreateMethod).toHaveBeenCalledWith(
       userContext,
@@ -935,8 +940,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
   })
 
-  it('sets the cause ID for a v4 user', async () => {
-    expect.assertions(1)
+  it('sets the cause ID for a v4 user and gets a cats background', async () => {
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -953,7 +958,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
       image: 'ramdom-cat-image.jpg',
       timestamp: moment.utc().toISOString(),
     }
-    const causeId = '123456789'
+    const causeId = 'CA6A5C2uj'
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
     getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
@@ -984,10 +989,10 @@ describe('createUser when user already exists (should be idempotent)', () => {
       userContext,
       expectedCreateItem
     )
+    expect(getRandomBackgroundImage).toHaveBeenCalledWith(userContext, 'cats')
   })
-
-  it('throws an error if v4 is unset and cause is set', async () => {
-    expect.assertions(1)
+  it('sets the cause ID for a v4 user and gets a seas background', async () => {
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -999,24 +1004,42 @@ describe('createUser when user already exists (should be idempotent)', () => {
     })
 
     const userContext = cloneDeep(defaultUserContext)
-
-    const causeId = '123456789'
+    const backgroundImage = {
+      id: 'random-seas-image',
+      image: 'ramdom-seas-image.jpg',
+      timestamp: moment.utc().toISOString(),
+    }
+    const causeId = 'SGa6zohkY'
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
 
-    expect(
-      createUser(
-        userContext,
-        userInfo.id,
-        userInfo.email,
-        null,
-        {},
-        null,
-        null,
-        false,
-        false,
-        causeId
-      )
-    ).rejects.toThrow('User must be on v4 if they belong to a cause.')
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expectedCreateItem = {
+      ...expectedCreateItem,
+      backgroundImage,
+      currentMissionId: undefined,
+      hasSeenSquads: false,
+      causeId,
+    }
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null,
+      {},
+      null,
+      null,
+      true,
+      false,
+      causeId
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+    expect(getRandomBackgroundImage).toHaveBeenCalledWith(userContext, 'seas')
   })
 })

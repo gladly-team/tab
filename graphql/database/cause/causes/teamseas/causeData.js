@@ -7,11 +7,18 @@ import newlyReferredImpactWalkthroughText from './impact.newlyReferredImpactWalk
 import referralRewardNotification from './impact.referralRewardNotification.md'
 import referralRewardSubtitle from './impact.referralRewardSubtitle.md'
 import referralRewardTitle from './impact.referralRewardTitle.md'
+import onboardingSubtitle1 from './onboarding.step1.subtitle.md'
+import onboardingSubtitle2 from './onboarding.step2.subtitle.md'
+import onboardingSubtitle3 from './onboarding.step3.subtitle.md'
+import onboardingTitle1 from './onboarding.step1.title.md'
+import onboardingTitle2 from './onboarding.step2.title.md'
+import onboardingTitle3 from './onboarding.step3.title.md'
 
 const data = {
   id: 'SGa6zohkY',
   charityId: 'TODO', // TODO
   impactVisits: 10,
+  backgroundImageCategory: 'seas',
   landingPagePath: '/teamseas/',
   slug: 'teamseas',
   impact: {
@@ -33,9 +40,19 @@ const data = {
     firstTabIntroDescription: 'TODO',
     steps: [
       {
-        title: 'TODO',
-        subtitle: 'TODO',
-        imgName: 'TODO',
+        title: onboardingTitle1,
+        subtitle: onboardingSubtitle1,
+        imgName: 'seas1',
+      },
+      {
+        title: onboardingTitle2,
+        subtitle: onboardingSubtitle2,
+        imgName: 'seas2',
+      },
+      {
+        title: onboardingTitle3,
+        subtitle: onboardingSubtitle3,
+        imgName: 'seas3',
       },
     ],
   },
