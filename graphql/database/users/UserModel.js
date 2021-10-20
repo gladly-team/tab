@@ -429,7 +429,7 @@ class User extends BaseModel {
       pendingMissionInvites: [],
       hasSeenSquads: false,
       // cats cause ID for default.
-      causeId: '7f8476b9-f83f-47ac-8173-4a1c2ec3dc29',
+      causeId: 'CA6A5C2uj',
     }
   }
 
