@@ -1,6 +1,4 @@
 /* eslint-env jest */
-
-import UserImpactModel from '../UserImpactModel'
 import getUserImpactAndCause from '../getUserImpactAndCause'
 import {
   DatabaseOperation,
