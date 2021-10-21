@@ -10,10 +10,6 @@ import {
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
 import { SENDGRID_API_KEY } from '../../config'
-import {
-  GENERAL_EMAIL_INVITE_TEMPLATE_ID,
-  SQUAD_EMAIL_TEMPLATE_ID,
-} from '../constants'
 
 const INVITED = 'invited'
 const REJECTED = 'rejected'
@@ -26,6 +22,7 @@ export const verifyAndSendInvite = async ({
   inviterName,
   inviterMessage,
   currentMissionId,
+  templateId,
 }) => {
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(SENDGRID_API_KEY)
@@ -82,9 +79,7 @@ export const verifyAndSendInvite = async ({
   const msg = {
     to: inviteEmail,
     from: invitingUser.email,
-    templateId: currentMissionId
-      ? SQUAD_EMAIL_TEMPLATE_ID
-      : GENERAL_EMAIL_INVITE_TEMPLATE_ID,
+    templateId,
     dynamicTemplateData: {
       name: inviterName,
       username: encodeURIComponent(invitingUser.username),

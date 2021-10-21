@@ -2,7 +2,9 @@
 import { verifyAndSendInvite, getUserInvites } from '../utils'
 import createInvitedUsers from '../createInvitedUsers'
 import { getMockUserContext, getMockUserInstance } from '../../test-utils'
+import getCause from '../../cause/getCause'
 
+jest.mock('../../cause/getCause')
 jest.mock('../utils', () => ({
   verifyAndSendInvite: jest.fn(),
   sanitize: string => string,
@@ -23,15 +25,53 @@ describe('createInvitedUsers', () => {
       getMockUserInstance(),
       [{ user: 'test' }],
     ])
+    getCause.mockReturnValueOnce({
+      sharing: {
+        sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
+      },
+    })
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test123' })
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
     const results = await createInvitedUsers(...mockParams)
+    expect(verifyAndSendInvite).toHaveBeenCalledWith(
+      expect.objectContaining({
+        templateId: 'd-69707bd6c49a444fa68a99505930f801',
+      })
+    )
+    expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
+    expect(results.successfulEmailAddresses.length).toEqual(2)
+    expect(results.failedEmailAddresses.length).toEqual(0)
+  })
+
+  it('it successfully emails and invites new users to #TEAMSEAS', async () => {
+    getUserInvites.mockReturnValueOnce([
+      getMockUserInstance(),
+      [{ user: 'test' }],
+    ])
+    getCause.mockReturnValueOnce({
+      sharing: {
+        sendgridEmailTemplateId: 'd-ff97cd972da342a6a208f09235671479',
+      },
+    })
+    verifyAndSendInvite.mockReturnValueOnce({ email: 'test123' })
+    verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
+    const results = await createInvitedUsers(...mockParams)
+    expect(verifyAndSendInvite).toHaveBeenCalledWith(
+      expect.objectContaining({
+        templateId: 'd-ff97cd972da342a6a208f09235671479',
+      })
+    )
     expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
     expect(results.successfulEmailAddresses.length).toEqual(2)
     expect(results.failedEmailAddresses.length).toEqual(0)
   })
 
   it('it seperates failed email creations from succesful email creations', async () => {
+    getCause.mockReturnValueOnce({
+      sharing: {
+        sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
+      },
+    })
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),
       [{ user: 'test' }],
@@ -48,6 +88,11 @@ describe('createInvitedUsers', () => {
   })
 
   it('it throws an error if user tries to create more than 50 invites in 24 hours', async () => {
+    getCause.mockReturnValueOnce({
+      sharing: {
+        sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
+      },
+    })
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),
       [{ user: 'test' }],

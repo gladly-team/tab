@@ -68,7 +68,7 @@ const data = {
     facebookButtonTitle: 'TODO',
     imgCategory: 'TODO',
     redditButtonTitle: 'TODO',
-    sendgridEmailTemplateId: 'TODO',
+    sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
     subtitle: 'TODO',
     title: 'TODO',
     tumblrCaption: 'TODO',
@@ -86,6 +86,7 @@ const data = {
     missionCompleteDescription: 'TODO',
     missionCompleteSubtitle: 'TODO',
     squadCounterText: 'TODO',
+    squadInviteTemplateId: 'd-cc8834e9b4694194b575ea60f5ea8230',
   },
   theme: {
     primaryColor: '#9d4ba3', // purple

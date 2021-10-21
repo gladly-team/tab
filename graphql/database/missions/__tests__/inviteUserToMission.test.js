@@ -9,6 +9,7 @@ jest.mock('../../invitedUsers/utils', () => ({
   sanitize: string => string,
   getUserInvites: jest.fn(),
 }))
+// jest.mock('../../cause/getCause')
 jest.mock('../../databaseClient')
 jest.mock('../../globals/globals')
 jest.mock('../MissionModel', () => ({
@@ -42,7 +43,7 @@ const userId = userContext.id
 const mockParams = [userContext, userId, ['test123', 'test124'], 'alec']
 describe('invite users to mission', () => {
   it('it successfully emails and invites new users', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),
       [{ user: 'test' }],
@@ -51,6 +52,11 @@ describe('invite users to mission', () => {
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test124' })
     MissionModel.get.mockReturnValue(mockMissionDocument)
     await inviteUserToMission(...mockParams)
+    expect(verifyAndSendInvite).toHaveBeenCalledWith(
+      expect.objectContaining({
+        templateId: 'd-cc8834e9b4694194b575ea60f5ea8230',
+      })
+    )
     expect(verifyAndSendInvite).toHaveBeenCalledTimes(2)
     expect(MissionModel.update).toHaveBeenCalledWith(expect.anything(), {
       id: '123456789',
