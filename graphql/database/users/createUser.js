@@ -40,10 +40,6 @@ const createUser = async (
   missionId = false,
   causeId = false
 ) => {
-  // Throw an error if v4BetaEnabled is true and causeId is set.
-  if (!v4BetaEnabled && causeId) {
-    throw new Error('User must be on v4 if they belong to a cause.')
-  }
   // Get or create the user.
   let userInfo = Object.assign(
     {
