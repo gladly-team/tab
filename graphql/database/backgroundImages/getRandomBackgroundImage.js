@@ -1,5 +1,4 @@
 import { sample } from 'lodash/collection'
-import { BACKGROUND_IMAGE_LEGACY_CATEGORY } from '../constants'
 import getBackgroundImages from './getBackgroundImages'
 
 /**
@@ -8,10 +7,7 @@ import getBackgroundImages from './getBackgroundImages'
  * into a BackgroundImage instance.
  */
 
-export default async (
-  userContext,
-  category = BACKGROUND_IMAGE_LEGACY_CATEGORY
-) => {
+export default async (userContext, category) => {
   const images = await getBackgroundImages(userContext, category)
   return sample(images)
 }

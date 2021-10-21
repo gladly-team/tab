@@ -63,7 +63,7 @@ describe('setBackgroundImageDaily', () => {
     expect(returnedUser).toEqual(expectedReturnedUser)
   })
 
-  it('passes along cat the legacy category to get random background image if user is not on v4', async () => {
+  it('passes along the legacy category to get random background image if user is not on v4', async () => {
     const userId = userContext.id
     setMockDBResponse(DatabaseOperation.GET, {
       Item: getMockUserInstance({

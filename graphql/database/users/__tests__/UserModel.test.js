@@ -244,6 +244,7 @@ describe('UserModel', () => {
       vcDonatedAllTime: 0,
       numUsersRecruited: 0,
       backgroundImage: {
+        category: 'legacy',
         id: '7e73d6d7-b915-4366-b01a-ffc126466d5b',
         image: '3acd54614b1d4d7fbce85d965de3de25.jpg',
         thumbnail: '71a27d6823244354acb85e0806d0dff1.jpg',

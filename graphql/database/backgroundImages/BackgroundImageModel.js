@@ -5,6 +5,7 @@ import {
   BACKGROUND_IMAGE,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
   BACKGROUND_IMAGE_CAT_CATEGORY,
+  BACKGROUND_IMAGE_SEAS_CATEGORY,
 } from '../constants'
 import config from '../../config'
 
@@ -46,7 +47,10 @@ class BackgroundImage extends BaseModel {
       // Absolute URL. Only returned during deserialization.
       imageURL: types.string().forbidden(),
       // category of the image
-      category: types.string().valid(...self.allowedValues.category),
+      category: types
+        .string()
+        .valid(...self.allowedValues.category)
+        .default(self.fieldDefaults.category),
       // Filename.
       thumbnail: types.string(),
       // Absolute URL. Only returned during deserialization.
@@ -95,6 +99,7 @@ class BackgroundImage extends BaseModel {
       category: [
         BACKGROUND_IMAGE_LEGACY_CATEGORY,
         BACKGROUND_IMAGE_CAT_CATEGORY,
+        BACKGROUND_IMAGE_SEAS_CATEGORY,
       ],
     }
   }

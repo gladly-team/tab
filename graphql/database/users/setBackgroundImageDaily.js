@@ -16,6 +16,8 @@ import {
 const setBackgroundImageDaily = async (userContext, userId) => {
   try {
     const user = await UserModel.get(userContext, userId)
+    // not sure if this is needed since we have a default value on user now
+    // keeping it to ensure that we hadnt overwritten the value to null
     let category = BACKGROUND_IMAGE_LEGACY_CATEGORY
     if (user.v4BetaEnabled) {
       const { backgroundImageCategory } = await getCause(user.causeId)
@@ -28,6 +30,7 @@ const setBackgroundImageDaily = async (userContext, userId) => {
         id: image.id,
         image: image.image,
         timestamp: moment.utc().toISOString(),
+        category: image.category,
       },
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
     })
