@@ -1,6 +1,4 @@
 /* eslint-env jest */
-
-import UserImpactModel from '../UserImpactModel'
 import getUserImpactAndCause from '../getUserImpactAndCause'
 import {
   DatabaseOperation,
@@ -40,11 +38,16 @@ describe('getUserImpactAndCause', () => {
       Item: mockUser,
     })
     getCause.mockReturnValueOnce(mockCause)
-    const getOrCreate = jest.spyOn(UserImpactModel, 'getOrCreate')
     const returnValue = await getUserImpactAndCause(userContext, userId)
-    expect(getOrCreate).toHaveBeenCalledWith(userContext, {
+    expect(returnValue.userImpact).toEqual({
+      confirmedImpact: false,
       userId: 'abcdefghijklmno',
+      hasClaimedLatestReward: true,
+      pendingUserReferralCount: 0,
+      pendingUserReferralImpact: 0,
       charityId: 'mock-charity-id',
+      userImpactMetric: 0,
+      visitsUntilNextImpact: 1,
       created: '2017-06-22T01:13:28.000Z',
       updated: '2017-06-22T01:13:28.000Z',
     })

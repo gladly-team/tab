@@ -173,6 +173,7 @@ export const getMockCauseInstance = attributes => {
           missionCompleteDescription: 'missionCompleteDescription',
           missionCompleteSubtitle: 'missionCompleteSubtitle',
           impactCounterText: 'impactCounterText',
+          squadInviteTemplateId: 'template-id',
         },
         onboarding: {
           steps: [],

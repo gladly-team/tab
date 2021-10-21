@@ -229,6 +229,10 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`markdown string: copy for SquadCounter`),
+        squadInviteTemplateId: types
+          .string()
+          .required()
+          .description(`the sendgrid email template for a squad invite`),
       }),
       theme: types.object({
         primaryColor: types
