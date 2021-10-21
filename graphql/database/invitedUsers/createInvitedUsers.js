@@ -1,6 +1,7 @@
 import uniq from 'lodash/uniq'
 import { verifyAndSendInvite, sanitize, getUserInvites } from './utils'
-
+import UserModel from '../users/UserModel'
+import getCause from '../cause/getCause'
 /**
  * conditionally creates a new invited user and sends a sendgrid email if user has not already
  * been invited OR if inviting user has exceeded the max amount of invites in 24 hours
@@ -34,6 +35,10 @@ const createInvitedUsers = async (
     if (userInvites.length + sanitizedEmails.length > 50) {
       throw new Error('user is trying to invite too many people in 24 hours')
     }
+
+    // get template id
+    const user = await UserModel.get(userContext, inviterId)
+    const cause = await getCause(user.causeId)
     const verifiedAndSentEmails = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite({
@@ -43,6 +48,7 @@ const createInvitedUsers = async (
           invitingUser,
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
+          templateId: cause.sharing.sendgridEmailTemplateId,
         })
       )
     )

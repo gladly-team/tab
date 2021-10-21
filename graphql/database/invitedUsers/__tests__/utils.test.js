@@ -12,12 +12,9 @@ import {
   setMockDBResponse,
   getMockUserInstance,
 } from '../../test-utils'
-import {
-  GENERAL_EMAIL_INVITE_TEMPLATE_ID,
-  SQUAD_EMAIL_TEMPLATE_ID,
-} from '../../constants'
 
 jest.mock('../../databaseClient')
+jest.mock('../../cause/getCause')
 jest.mock('@sendgrid/mail', () => ({ send: jest.fn(), setApiKey: jest.fn() }))
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -42,10 +39,12 @@ const mockParams = {
   inviteEmail: 'test123',
   invitingUser: getMockUserInstance({ username: 'test1' }),
   inviterName: 'alec',
+  templateId: 'mock-default-template',
 }
 const mockSquadParams = {
   ...mockParams,
   currentMissionId: '123456789',
+  templateId: 'mock-squad-template',
 }
 describe('verifyAndSendInvite general email', () => {
   it('it successfully creates a new invite user document,sends email, and returns expected value for Squads', async () => {
@@ -75,7 +74,7 @@ describe('verifyAndSendInvite general email', () => {
       },
       from: 'foo@bar.com',
       category: 'squadReferral',
-      templateId: SQUAD_EMAIL_TEMPLATE_ID,
+      templateId: 'mock-squad-template',
       to: 'test123',
       asm: { group_id: 3861, groups_to_display: [3861] },
     })
@@ -181,7 +180,7 @@ describe('verifyAndSendInvite general email', () => {
       dynamicTemplateData: { name: 'alec', username: 'test1' },
       from: 'foo@bar.com',
       category: 'referral',
-      templateId: GENERAL_EMAIL_INVITE_TEMPLATE_ID,
+      templateId: 'mock-default-template',
       to: 'test123',
       asm: { group_id: 3861, groups_to_display: [3861] },
     })

@@ -11,6 +11,8 @@ import {
   getUserInvites,
 } from '../invitedUsers/utils'
 import getCurrentUserMission from './getCurrentUserMission'
+import UserModel from '../users/UserModel'
+import getCause from '../cause/getCause'
 
 const INVITED = 'invited'
 /**
@@ -53,6 +55,9 @@ const createInvitedUsers = async (
       override,
       invitingUser.currentMissionId
     )
+    // get template id
+    const user = await UserModel.get(userContext, inviterId)
+    const cause = await getCause(user.causeId)
     const verifiedAndSentInvites = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite({
@@ -63,6 +68,7 @@ const createInvitedUsers = async (
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
           currentMissionId: currentMission.id,
+          templateId: cause.squads.squadInviteTemplateId,
         })
       )
     )
