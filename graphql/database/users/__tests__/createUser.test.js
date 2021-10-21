@@ -966,4 +966,38 @@ describe('createUser when user already exists (should be idempotent)', () => {
       expectedCreateItem
     )
   })
+
+  it('does not throw an error if v4 is unset and cause is set', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const userContext = cloneDeep(defaultUserContext)
+
+    const causeId = '123456789'
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    return expect(() =>
+      createUser(
+        userContext,
+        userInfo.id,
+        userInfo.email,
+        null,
+        {},
+        null,
+        null,
+        false,
+        false,
+        causeId
+      )
+    ).not.toThrow()
+  })
 })
