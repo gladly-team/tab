@@ -28,7 +28,7 @@ export const USER_BACKGROUND_OPTION_COLOR = 'color'
 export const USER_BACKGROUND_OPTION_PHOTO = 'photo'
 export const BACKGROUND_IMAGE_LEGACY_CATEGORY = 'legacy'
 export const BACKGROUND_IMAGE_CAT_CATEGORY = 'cats'
-
+export const BACKGROUND_IMAGE_SEAS_CATEGORY = 'seas'
 // Fixed values
 export const USER_REFERRAL_VC_REWARD = 350
 export const USER_VISIT_IMPACT_VALUE = 14

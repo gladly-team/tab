@@ -3,7 +3,13 @@ import moment from 'moment'
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER, USER_BACKGROUND_OPTION_DAILY } from '../constants'
+import {
+  USER,
+  USER_BACKGROUND_OPTION_DAILY,
+  BACKGROUND_IMAGE_LEGACY_CATEGORY,
+  BACKGROUND_IMAGE_CAT_CATEGORY,
+  BACKGROUND_IMAGE_SEAS_CATEGORY,
+} from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
 import { getTodayTabCount, getTodaySearchCount } from './user-utils'
@@ -188,6 +194,13 @@ class User extends BaseModel {
           id: types.string().required(),
           image: types.string().required(),
           thumbnail: types.string(),
+          category: types
+            .string()
+            .valid([
+              BACKGROUND_IMAGE_LEGACY_CATEGORY,
+              BACKGROUND_IMAGE_CAT_CATEGORY,
+              BACKGROUND_IMAGE_SEAS_CATEGORY,
+            ]),
           imageURL: types.string().forbidden(), // only set in deserializer
           thumbnailURL: types.string().forbidden(), // only set in deserializer
           timestamp: types
@@ -410,6 +423,7 @@ class User extends BaseModel {
         image: '3acd54614b1d4d7fbce85d965de3de25.jpg',
         thumbnail: '71a27d6823244354acb85e0806d0dff1.jpg',
         timestamp: moment.utc().toISOString(),
+        category: BACKGROUND_IMAGE_LEGACY_CATEGORY,
       }),
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
       searches: 0,

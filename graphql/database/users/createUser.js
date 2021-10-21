@@ -2,7 +2,6 @@ import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import { nanoid } from 'nanoid'
 import moment from 'moment'
-import getCause from '../cause/getCause'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import logEmailVerified from './logEmailVerified'
@@ -10,7 +9,6 @@ import logUserExperimentGroups from './logUserExperimentGroups'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
-import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
 
 /**
  * Create a new user and performs other setup actions.
@@ -68,18 +66,8 @@ const createUser = async (
 
   // Set default background image to a cat image if user is enabled for v4 beta
   if (v4BetaEnabled) {
-    const { backgroundImageCategory } = await getCause(causeId)
-    const backgroundCatImage = await getRandomBackgroundImage(
-      userContext,
-      backgroundImageCategory
-    )
     userInfo = {
       ...userInfo,
-      backgroundImage: {
-        id: backgroundCatImage.id,
-        image: backgroundCatImage.image,
-        timestamp: moment.utc().toISOString(),
-      },
       hasSeenSquads: !!missionId,
     }
   }
