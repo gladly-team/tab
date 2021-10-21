@@ -986,7 +986,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
   })
 
-  it('throws an error if v4 is unset and cause is set', async () => {
+  it('does not throw an error if v4 is unset and cause is set', async () => {
     expect.assertions(1)
 
     // Mock database responses.
@@ -1004,7 +1004,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    expect(
+    return expect(() =>
       createUser(
         userContext,
         userInfo.id,
@@ -1017,6 +1017,6 @@ describe('createUser when user already exists (should be idempotent)', () => {
         false,
         causeId
       )
-    ).rejects.toThrow('User must be on v4 if they belong to a cause.')
+    ).not.toThrow()
   })
 })
