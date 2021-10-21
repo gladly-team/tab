@@ -2025,6 +2025,7 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgDailyImage',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
+    //  TODO - remove once we update FE to not send category ID up anymore
     category: { type: GraphQLString },
   },
   outputFields: {
@@ -2033,9 +2034,9 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId, category }, context) => {
+  mutateAndGetPayload: ({ userId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return setBackgroundImageDaily(context.user, category, userGlobalObj.id)
+    return setBackgroundImageDaily(context.user, userGlobalObj.id)
   },
 })
 

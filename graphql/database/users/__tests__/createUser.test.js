@@ -9,7 +9,6 @@ import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
 import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import logUserExperimentGroups from '../logUserExperimentGroups'
-import getRandomBackgroundImage from '../../backgroundImages/getRandomBackgroundImage'
 import {
   addTimestampFieldsToItem,
   MockAWSConditionalCheckFailedError,
@@ -837,54 +836,6 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
   })
 
-  it('sets background image to a random background image if a v4 user', async () => {
-    expect.assertions(1)
-
-    // Mock database responses.
-    const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(
-      Object.assign({}, userInfo)
-    )
-    setMockDBResponse(DatabaseOperation.CREATE, {
-      Attributes: userReturnedFromCreate,
-    })
-
-    const referralData = null
-    const userContext = cloneDeep(defaultUserContext)
-    const backgroundImage = {
-      id: 'random-cat-image',
-      image: 'ramdom-cat-image.jpg',
-      timestamp: moment.utc().toISOString(),
-    }
-    userContext.emailVerified = false
-    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
-    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
-
-    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
-    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expectedCreateItem = {
-      ...expectedCreateItem,
-      backgroundImage,
-      currentMissionId: undefined,
-      hasSeenSquads: false,
-    }
-
-    await createUser(
-      userContext,
-      userInfo.id,
-      userInfo.email,
-      referralData,
-      {},
-      null,
-      null,
-      true
-    )
-    expect(getOrCreateMethod).toHaveBeenCalledWith(
-      userContext,
-      expectedCreateItem
-    )
-  })
-
   it('sets the mission ID for a v4 user is a squad invite', async () => {
     expect.assertions(1)
 
@@ -899,23 +850,17 @@ describe('createUser when user already exists (should be idempotent)', () => {
 
     const referralData = null
     const userContext = cloneDeep(defaultUserContext)
-    const backgroundImage = {
-      id: 'random-cat-image',
-      image: 'ramdom-cat-image.jpg',
-      timestamp: moment.utc().toISOString(),
-    }
     const missionId = '123456789'
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
-    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expectedCreateItem = {
       ...expectedCreateItem,
-      backgroundImage,
       currentMissionId: missionId,
       hasSeenSquads: true,
+      causeId: 'CA6A5C2uj',
     }
 
     await createUser(
@@ -927,7 +872,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
       null,
       null,
       true,
-      missionId
+      missionId,
+      'CA6A5C2uj'
     )
     expect(getOrCreateMethod).toHaveBeenCalledWith(
       userContext,
@@ -948,21 +894,56 @@ describe('createUser when user already exists (should be idempotent)', () => {
     })
 
     const userContext = cloneDeep(defaultUserContext)
-    const backgroundImage = {
-      id: 'random-cat-image',
-      image: 'ramdom-cat-image.jpg',
-      timestamp: moment.utc().toISOString(),
-    }
-    const causeId = '123456789'
+    const causeId = 'CA6A5C2uj'
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
-    getRandomBackgroundImage.mockResolvedValueOnce(backgroundImage)
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expectedCreateItem = {
       ...expectedCreateItem,
-      backgroundImage,
+      currentMissionId: undefined,
+      hasSeenSquads: false,
+      causeId,
+    }
+
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null,
+      {},
+      null,
+      null,
+      true,
+      false,
+      causeId
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+  })
+  it('sets the cause ID for a v4 user on seas', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const userContext = cloneDeep(defaultUserContext)
+    const causeId = 'SGa6zohkY'
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expectedCreateItem = {
+      ...expectedCreateItem,
       currentMissionId: undefined,
       hasSeenSquads: false,
       causeId,
