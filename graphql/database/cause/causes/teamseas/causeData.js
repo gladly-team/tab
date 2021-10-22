@@ -60,7 +60,7 @@ const data = {
   // TODO
   sharing: {
     facebookButtonTitle: 'TODO',
-    imgCategory: 'TODO',
+    imgCategory: 'seas',
     redditButtonTitle: 'TODO',
     sendgridEmailTemplateId: 'd-ff97cd972da342a6a208f09235671479',
     subtitle: 'TODO',
