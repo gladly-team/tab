@@ -1,6 +1,6 @@
-### About the Cause
+### About #TeamSeas
 
-Tab for #TeamSeas is proud to support the internet-led initiative [#TeamSeas](https://teamseas.org) to help raise \$30 million to clean up 30 million pounds of trash from oceans, rivers, and lakes around the world. To do this, #TeamSeas has directly partnered with The Ocean Cleanup and Ocean Conservancy.
+**Tab for #TeamSeas** is proud to support the internet-led initiative **[#TeamSeas](https://teamseas.org)** to help raise \$30 million to clean up 30 million pounds of trash from oceans, rivers, and lakes around the world. To do this, #TeamSeas has directly partnered with The Ocean Cleanup and Ocean Conservancy.
 
 [The Ocean Cleanup](http://theoceancleanup.com) is #TeamSeas' implementation partner for rivers. The Ocean Cleanup has developed technology that is helping clean up pollution in our rivers and has a goal of achieving a 90% reduction of floating ocean plastic by 2040.
 
