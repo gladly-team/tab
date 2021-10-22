@@ -31,6 +31,7 @@ describe('CauseModel', () => {
       {},
       new Cause({
         id: '123456789',
+        about: '### Something something',
         charityId: 'abcdefghijklmnop',
         landingPagePath: '/test',
         impactVisits: 10,
@@ -68,6 +69,7 @@ describe('CauseModel', () => {
     )
     expect(item).toEqual({
       id: '123456789',
+      about: '### Something something',
       charityId: 'abcdefghijklmnop',
       landingPagePath: '/test',
       impactVisits: 10,
