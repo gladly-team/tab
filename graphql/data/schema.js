@@ -873,6 +873,11 @@ const CauseType = new GraphQLObjectType({
   description: 'all cause specific data and ui content',
   fields: () => ({
     id: globalIdField(CAUSE),
+    causeId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "Cause's id",
+      resolve: cause => cause.id,
+    },
     landingPagePath: {
       type: new GraphQLNonNull(GraphQLString),
       description: `URL path for the landing page belonging to this cause`,
