@@ -274,6 +274,9 @@ type Cause implements Node {
   """The ID of an object"""
   id: ID!
 
+  """Markdown - content that populates an "About the Cause" page"""
+  about: String!
+
   """URL path for the landing page belonging to this cause"""
   landingPagePath: String!
 

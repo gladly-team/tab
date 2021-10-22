@@ -1,4 +1,5 @@
 // Cause: cats
+import about from './about.md'
 import claimImpactSubtitle from './impact.claimImpactSubtitle.md'
 import confirmImpactSubtitle from './impact.confirmImpactSubtitle.md'
 import impactCounterText from './impact.impactCounterText.md'
@@ -16,19 +17,16 @@ import onboardingTitle3 from './onboarding.step3.title.md'
 
 const data = {
   id: 'CA6A5C2uj',
+  about,
+  backgroundImageCategory: 'cats',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
   impactVisits: 14,
-  backgroundImageCategory: 'cats',
   landingPagePath: '/cats/',
   slug: 'cats',
-
-  // TODO: set all copy
   impact: {
     claimImpactSubtitle,
     confirmImpactSubtitle,
     impactCounterText,
-
-    // TODO: update
     impactIcon: 'jellyfish',
 
     impactWalkthroughText,
@@ -39,9 +37,7 @@ const data = {
     // TODO: add template to include the # of people recruited.
     //   "You recruited X friend[s] to..."
     referralRewardTitle,
-
-    // TODO: update
-    walkMeGif: 'dolphin.gif',
+    walkMeGif: 'cats.gif',
   },
   onboarding: {
     firstTabIntroDescription: 'TODO',
@@ -63,8 +59,6 @@ const data = {
       },
     ],
   },
-
-  // TODO
   sharing: {
     facebookButtonTitle: 'TODO',
     imgCategory: 'TODO',
@@ -77,6 +71,7 @@ const data = {
     twitterButtonTitle: 'TODO',
   },
   squads: {
+    // TODO
     currentMissionAlert: 'TODO',
     currentMissionDetails: 'TODO',
     currentMissionStep2: 'TODO',

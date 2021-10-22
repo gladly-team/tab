@@ -29,6 +29,12 @@ class Cause extends BaseModel {
 
       // Fields here are alphabetized (non-objects first).
 
+      about: types
+        .string()
+        .required()
+        .description(
+          `Markdown - content that populates an "About the Cause" page`
+        ),
       charityId: types
         .string()
         .required()
