@@ -25,6 +25,7 @@ beforeEach(() => {
 
 describe('setUserCause', () => {
   it('sets users cause ID', async () => {
+    expect.assertions(1)
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
     const causeId = 'abcd'
@@ -38,6 +39,7 @@ describe('setUserCause', () => {
   })
 
   it('throws if cause doesnt exist', async () => {
+    expect.assertions(1)
     const error = new DatabaseItemDoesNotExistException()
     getCause.mockImplementationOnce(() => {
       throw error
@@ -49,6 +51,7 @@ describe('setUserCause', () => {
   })
 
   it('throws if calling the DB throws', async () => {
+    expect.assertions(1)
     const UserModel = require('../UserModel').default
     const causeId = 'abcd'
     const mockErr = new Error('No good.')
@@ -62,6 +65,7 @@ describe('setUserCause', () => {
   })
 
   it('logs an error if calling the DB throws', async () => {
+    expect.assertions(1)
     const UserModel = require('../UserModel').default
     const causeId = 'abcd'
     const mockErr = new Error('No good.')
