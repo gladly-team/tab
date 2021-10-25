@@ -38,7 +38,6 @@ const data = {
     walkMeGif: 'cats.gif',
   },
   onboarding: {
-    firstTabIntroDescription: 'TODO',
     steps: [
       {
         title: onboardingTitle1,
@@ -73,8 +72,8 @@ const data = {
     twitterButtonTitle:
       "The purr-fect new way to help shelter cats get adopted: open a new browser tab (with super cute cat pictures!) and raise money to support shelter cats. Check it out - it's free!",
   },
+  // TODO
   squads: {
-    // TODO
     currentMissionAlert: 'TODO',
     currentMissionDetails: 'TODO',
     currentMissionStep2: 'TODO',

@@ -38,7 +38,6 @@ const data = {
     walkMeGif: 'dolphin.gif',
   },
   onboarding: {
-    firstTabIntroDescription: 'TODO',
     steps: [
       {
         title: onboardingTitle1,
@@ -72,6 +71,7 @@ const data = {
     twitterButtonTitle:
       'I joined Tab for #TeamSeas, and now every tab I open helps clean up our rivers and oceans. Check it out - it’s free:',
   },
+  // TODO
   squads: {
     currentMissionAlert: 'TODO',
     currentMissionDetails: 'TODO',
