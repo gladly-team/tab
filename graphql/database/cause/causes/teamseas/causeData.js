@@ -34,9 +34,6 @@ const data = {
     newlyReferredImpactWalkthroughText,
     referralRewardNotification,
     referralRewardSubtitle,
-
-    // TODO: add template to include the # of people recruited.
-    //   "You recruited X friend[s] to..."
     referralRewardTitle,
     walkMeGif: 'dolphin.gif',
   },
