@@ -874,6 +874,10 @@ const CauseType = new GraphQLObjectType({
   description: 'all cause specific data and ui content',
   fields: () => ({
     id: globalIdField(CAUSE),
+    about: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Markdown - content that populates an "About the Cause" page`,
+    },
     causeId: {
       type: new GraphQLNonNull(GraphQLString),
       description: "Cause's id",
