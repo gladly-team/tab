@@ -91,7 +91,7 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(
-            `markdown string: copy for impact walkthrough notification in UserImpact`
+            `markdown string: an intro description of impact. Used when onboarding in UserImpact.`
           ),
         newlyReferredImpactWalkthroughText: types
           .string()
@@ -123,12 +123,6 @@ class Cause extends BaseModel {
           .description(`string: file name of the gif to use in walk me`),
       }),
       onboarding: types.object({
-        firstTabIntroDescription: types
-          .string()
-          .required()
-          .description(
-            `markdown string shown when prompting the user to open their first tab, currently info about cat treats`
-          ),
         steps: types
           .array()
           .items(

@@ -1,1 +1,1 @@
-We display a couple of small ads at the bottom of your screen and redistribute that money to charity. No fees or hidden costs!
+Ads on the new tab page raise money that we give to nonprofits. Most ads aren't good—but these ones are :)

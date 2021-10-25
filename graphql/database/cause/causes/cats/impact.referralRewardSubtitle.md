@@ -1,1 +1,1 @@
-##### Congratulations! You're making a huge impact on our oceans and rivers. Want to help our seas even more? Invite a few more friends!
+##### Congratulations! You're making a huge impact for these animals in need. Want to help even more cats? Invite a few more friends!

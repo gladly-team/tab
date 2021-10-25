@@ -29,20 +29,15 @@ const data = {
     claimImpactSubtitle,
     confirmImpactSubtitle,
     impactCounterText,
-    impactIcon: 'jellyfish',
-
+    impactIcon: 'paw',
     impactWalkthroughText,
     newlyReferredImpactWalkthroughText,
     referralRewardNotification,
     referralRewardSubtitle,
-
-    // TODO: add template to include the # of people recruited.
-    //   "You recruited X friend[s] to..."
     referralRewardTitle,
     walkMeGif: 'cats.gif',
   },
   onboarding: {
-    firstTabIntroDescription: 'TODO',
     steps: [
       {
         title: onboardingTitle1,
@@ -63,22 +58,22 @@ const data = {
   },
   sharing: {
     facebookButtonTitle:
-      'I just found, purr-haps, the most claw-ver browser extension ever! With Tab for a Cause’s latest project, Tab for Cats, I can give a cat a treat to a shelter cat for positive reinforcement training everytime I open a new tab. Check it out:',
+      "I just found, purr-haps, the most claw-ver browser extension ever! With Tab for Cats, I'm helping shelter cats get adopted every time I open a new tab. Check it out - it's free!",
     imgCategory: 'cats',
     redditButtonTitle:
-      'Looking for the purr-fect way to help shelter cats get adopted? Check out Tab for Cats!',
+      'The purr-fect way to help shelter cats get adopted, for free',
     sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
     subtitle: socialSubtitle,
     title: socialTitle,
     tumblrCaption:
-      'Every time I open a new tab I am able to give a treat to a cat for positive reinforcement training with Tab for a Cause’s latest project, Tab for a Cats! Download it for free with my link and give 10 treats right away!',
+      "The purr-fect new way to help shelter cats get adopted: open a new browser tab (with super cute cat pictures!) and raise money to support shelter cats. Check it out - it's free!",
     tumblrTitle:
       'Want to make a paw-sitive impact? Help give shelter cats a new chance for a forever home!',
     twitterButtonTitle:
-      'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab (with super cute cat pictures!) on Tab for Cats! Check it out:',
+      "The purr-fect new way to help shelter cats get adopted: open a new browser tab (with super cute cat pictures!) and raise money to support shelter cats. Check it out - it's free!",
   },
+  // TODO
   squads: {
-    // TODO
     currentMissionAlert: 'TODO',
     currentMissionDetails: 'TODO',
     currentMissionStep2: 'TODO',

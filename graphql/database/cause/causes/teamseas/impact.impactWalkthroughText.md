@@ -1,1 +1,1 @@
-##### When you do, you'll donate enough to remove a plastic water bottle from a river or ocean. We'll track how many water bottles you've helped clean up on the top of the page.
+##### When you do, you'll remove a plastic water bottle's worth of trash from a river or ocean. We'll track how many plastic bottles' of trash you've helped clean up on the top of the page:
