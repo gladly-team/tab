@@ -2603,7 +2603,8 @@ const setUserCauseMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({ userId, causeId }, context) => {
-    return setUserCause(context.user, userId, causeId)
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserCause(context.user, userGlobalObj.id, causeId)
   },
 })
 /**

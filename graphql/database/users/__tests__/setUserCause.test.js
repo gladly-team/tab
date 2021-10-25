@@ -5,8 +5,11 @@ import { getMockUserContext, mockDate } from '../../test-utils'
 import getCause from '../../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
 import UserModel from '../UserModel'
+import setBackgroundImageDaily from '../setBackgroundImageDaily'
 
+jest.mock('../setBackgroundImageDaily')
 jest.mock('../../../utils/logger')
+jest.mock('')
 jest.mock('../../cause/getCause')
 jest.mock('../UserModel', () => ({ update: jest.fn() }))
 const userContext = getMockUserContext()
@@ -25,7 +28,7 @@ beforeEach(() => {
 
 describe('setUserCause', () => {
   it('sets users cause ID', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     UserModel.update.mockResolvedValue({})
     const causeId = 'abcd'
@@ -35,6 +38,10 @@ describe('setUserCause', () => {
       id: userContext.id,
       causeId,
     })
+    expect(setBackgroundImageDaily).toHaveBeenCalledWith(
+      userContext,
+      userContext.id
+    )
   })
 
   it('throws if cause doesnt exist', async () => {
