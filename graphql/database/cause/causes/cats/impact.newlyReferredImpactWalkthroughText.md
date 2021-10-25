@@ -1,1 +1,1 @@
-##### Your friend started you off giving you credit for removing 5 plastic water bottles from our rivers and oceans, which is crucial to cleaning up our environment and fighting climate change. Open a new tab now to clean up your 6th waterbottle! We'll track how many water bottles you've helped clean up on the top of the page.
+##### Your friend started you off with 5 cat treats, which are crucial to getting shelter cats adopted. Open a new tab now to earn your 6th treat! We'll track how many treats you've given on the top of the page:

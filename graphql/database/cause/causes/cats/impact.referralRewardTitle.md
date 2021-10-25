@@ -1,1 +1,1 @@
-##### **You just cleaned up \${pendingUserReferralImpact} water bottles' worth of trash from our oceans and rivers**
+##### **You just put \${pendingUserReferralImpact} cat\${isPlural(referralImpact)}** on track for adoption!
