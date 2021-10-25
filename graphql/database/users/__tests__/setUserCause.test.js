@@ -1,14 +1,14 @@
 /* eslint-env jest */
 
-import moment from 'moment'
 import logger from '../../../utils/logger'
 import { getMockUserContext, mockDate } from '../../test-utils'
 import getCause from '../../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
+import UserModel from '../UserModel'
 
 jest.mock('../../../utils/logger')
 jest.mock('../../cause/getCause')
-
+jest.mock('../UserModel', () => ({ update: jest.fn() }))
 const userContext = getMockUserContext()
 
 beforeAll(() => {
@@ -26,15 +26,14 @@ beforeEach(() => {
 describe('setUserCause', () => {
   it('sets users cause ID', async () => {
     expect.assertions(1)
-    const UserModel = require('../UserModel').default
-    const updateQuery = jest.spyOn(UserModel, 'update')
+
+    UserModel.update.mockResolvedValue({})
     const causeId = 'abcd'
     const setUserCause = require('../setUserCause').default
     await setUserCause(userContext, userContext.id, causeId)
-    expect(updateQuery).toHaveBeenCalledWith(userContext, {
+    expect(UserModel.update).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       causeId,
-      updated: moment.utc().toISOString(),
     })
   })
 
@@ -52,12 +51,9 @@ describe('setUserCause', () => {
 
   it('throws if calling the DB throws', async () => {
     expect.assertions(1)
-    const UserModel = require('../UserModel').default
     const causeId = 'abcd'
     const mockErr = new Error('No good.')
-    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => {
-      throw mockErr
-    })
+    UserModel.update.mockRejectedValueOnce(mockErr)
     const setUserCause = require('../setUserCause').default
     await expect(
       setUserCause(userContext, userContext.id, causeId)
@@ -66,12 +62,9 @@ describe('setUserCause', () => {
 
   it('logs an error if calling the DB throws', async () => {
     expect.assertions(1)
-    const UserModel = require('../UserModel').default
     const causeId = 'abcd'
     const mockErr = new Error('No good.')
-    jest.spyOn(UserModel, 'update').mockImplementationOnce(() => {
-      throw mockErr
-    })
+    UserModel.update.mockRejectedValueOnce(mockErr)
     const setUserCause = require('../setUserCause').default
 
     try {
