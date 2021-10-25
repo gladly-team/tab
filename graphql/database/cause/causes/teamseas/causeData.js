@@ -13,6 +13,8 @@ import onboardingSubtitle3 from './onboarding.step3.subtitle.md'
 import onboardingTitle1 from './onboarding.step1.title.md'
 import onboardingTitle2 from './onboarding.step2.title.md'
 import onboardingTitle3 from './onboarding.step3.title.md'
+import socialTitle from './social.title.md'
+import socialSubtitle from './social.subtitle.md'
 
 const data = {
   id: 'SGa6zohkY',
@@ -65,8 +67,8 @@ const data = {
     redditButtonTitle:
       'Surf the web and clean up our ocean, rivers, and lakes with Tab for #TeamSeas',
     sendgridEmailTemplateId: 'd-ff97cd972da342a6a208f09235671479',
-    subtitle: 'TODO',
-    title: 'TODO',
+    subtitle: socialSubtitle,
+    title: socialTitle,
     tumblrCaption:
       'Every time I open a new tab I am helping clean up our planet through Tab for #TeamSeas. Download it for free with my link and automatically help remove 5 plastic bottles worth of trash from oceans, rivers, and lakes around the world.',
     tumblrTitle: 'Save the planet while surfing the web on Tab for #TeamSeas!',
