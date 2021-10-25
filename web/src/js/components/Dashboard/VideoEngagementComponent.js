@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography'
 import useTrueX, { CLOSED } from 'js/utils/useTrueX'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo'
-import { showVideoAds } from 'js/utils/feature-flags'
 const styles = theme => ({
   modalContent: {
     display: 'flex',

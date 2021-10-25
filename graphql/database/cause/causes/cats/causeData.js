@@ -1,4 +1,5 @@
 // Cause: cats
+import about from './about.md'
 import claimImpactSubtitle from './impact.claimImpactSubtitle.md'
 import confirmImpactSubtitle from './impact.confirmImpactSubtitle.md'
 import impactCounterText from './impact.impactCounterText.md'
@@ -18,19 +19,16 @@ import socialSubtitle from './social.subtitle.md'
 
 const data = {
   id: 'CA6A5C2uj',
+  about,
+  backgroundImageCategory: 'cats',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
   impactVisits: 14,
-  backgroundImageCategory: 'cats',
   landingPagePath: '/cats/',
   slug: 'cats',
-
-  // TODO: set all copy
   impact: {
     claimImpactSubtitle,
     confirmImpactSubtitle,
     impactCounterText,
-
-    // TODO: update
     impactIcon: 'jellyfish',
 
     impactWalkthroughText,
@@ -41,9 +39,7 @@ const data = {
     // TODO: add template to include the # of people recruited.
     //   "You recruited X friend[s] to..."
     referralRewardTitle,
-
-    // TODO: update
-    walkMeGif: 'dolphin.gif',
+    walkMeGif: 'cats.gif',
   },
   onboarding: {
     firstTabIntroDescription: 'TODO',
@@ -65,8 +61,6 @@ const data = {
       },
     ],
   },
-
-  // TODO
   sharing: {
     facebookButtonTitle:
       'I just found, purr-haps, the most claw-ver browser extension ever! With Tab for a Cause’s latest project, Tab for Cats, I can give a cat a treat to a shelter cat for positive reinforcement training everytime I open a new tab. Check it out:',
@@ -84,6 +78,7 @@ const data = {
       'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab (with super cute cat pictures!) on Tab for Cats! Check it out:',
   },
   squads: {
+    // TODO
     currentMissionAlert: 'TODO',
     currentMissionDetails: 'TODO',
     currentMissionStep2: 'TODO',

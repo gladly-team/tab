@@ -1,4 +1,5 @@
 // Cause: teamseas
+import about from './about.md'
 import claimImpactSubtitle from './impact.claimImpactSubtitle.md'
 import confirmImpactSubtitle from './impact.confirmImpactSubtitle.md'
 import impactCounterText from './impact.impactCounterText.md'
@@ -18,9 +19,10 @@ import socialSubtitle from './social.subtitle.md'
 
 const data = {
   id: 'SGa6zohkY',
+  about,
+  backgroundImageCategory: 'seas',
   charityId: 'TODO', // TODO
   impactVisits: 10,
-  backgroundImageCategory: 'seas',
   landingPagePath: '/teamseas/',
   slug: 'teamseas',
   impact: {
