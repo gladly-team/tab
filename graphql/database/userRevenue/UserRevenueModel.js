@@ -37,6 +37,7 @@ class UserRevenue extends BaseModel {
       tabId: types.string().uuid(),
       adSize: types.string(),
       isV4: types.boolean(),
+      causeId: types.string(),
     }
   }
 

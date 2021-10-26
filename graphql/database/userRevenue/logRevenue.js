@@ -4,6 +4,7 @@ import { random } from 'lodash/number'
 import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import UserRevenueModel from './UserRevenueModel'
 import decodeAmazonCPM from './decodeAmazonCPM'
+import UserModel from '../users/UserModel'
 
 const AMAZON_CPM_REVENUE_TYPE = 'AMAZON_CPM'
 const AGGREGATION_MAX = 'MAX'
@@ -159,7 +160,11 @@ const logRevenue = async (
       aggregationOperation
     )
   }
-
+  let causeId
+  if (isV4) {
+    const { causeId: userCauseId } = await UserModel.get(userContext, userId)
+    causeId = userCauseId
+  }
   const ISOTimestamp = moment.utc().toISOString()
   function createRevenueLogItem() {
     const createdISOTimestamp = addMillisecondsToISODatetime(ISOTimestamp)
@@ -172,6 +177,7 @@ const logRevenue = async (
       ...(revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }),
       ...(adUnitCode && { adUnitCode }),
       isV4,
+      ...(isV4 && { causeId }),
     })
   }
 
