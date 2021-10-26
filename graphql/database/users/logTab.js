@@ -156,6 +156,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
         timestamp: addMillisecondsToISODatetime(logTabTimestamp),
         ...(tabId && { tabId }),
         isV4,
+        ...(isV4 && { causeId: user.causeId }),
       })
       break // successfully logged
     } catch (e) {

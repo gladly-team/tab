@@ -33,6 +33,7 @@ class userTabsLog extends BaseModel {
         .required(),
       tabId: types.string().uuid(),
       isV4: types.boolean(),
+      causeId: types.string(),
     }
   }
 
