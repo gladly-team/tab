@@ -5,6 +5,7 @@ import { DatabaseConditionalCheckFailedException } from '../../utils/exceptions'
 import UserRevenueModel from './UserRevenueModel'
 import decodeAmazonCPM from './decodeAmazonCPM'
 import UserModel from '../users/UserModel'
+
 const AMAZON_CPM_REVENUE_TYPE = 'AMAZON_CPM'
 const AGGREGATION_MAX = 'MAX'
 
