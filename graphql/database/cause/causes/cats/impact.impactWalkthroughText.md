@@ -1,1 +1,1 @@
-##### When you do, you'll donate enough to remove a plastic water bottle from a river or ocean. We'll track how many water bottles you've helped clean up on the top of the page.
+##### When you do, you'll give a shelter cat a treat used during positive-reinforcement training. We'll track how many treats you've given on the top of the page:

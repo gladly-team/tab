@@ -393,6 +393,20 @@
     "isPermanentPartner": false
   },
   {
+    "id": "f3c349d0-61ab-4301-b3dd-d56895dbbd4e",
+    "name": "The Ocean Cleanup & Ocean Conservancy",
+    "category": "seas",
+    "logo": "--",
+    "image": "--",
+    "website": "--",
+    "impact": "--",
+    "description": "The partners for #TeamSeas' ambitious goal to clean up 30 million pounds of trash from oceans, rivers, and lakes around the world",
+    "created": "2021-10-25T10:00:00.000Z",
+    "updated": "2021-10-25T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
+  },
+  {
     "id": "6aec7956-7637-4547-80db-575db8beb277",
     "name": "Black Women’s Health Imperative",
     "category": "Health",

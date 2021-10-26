@@ -1,1 +1,1 @@
-##### Each time you open a tab, you'll be helping restore the environment and fight climate change by [removing trash from our oceans and rivers](https://teamseas.org/). Ready to get started?
+##### Each time you open a tab, you'll be helping shelter cats get adopted by [providing treats to be used in positive reinforcement training](https://greatergood.org/jackson-galaxy). Ready to get started?
