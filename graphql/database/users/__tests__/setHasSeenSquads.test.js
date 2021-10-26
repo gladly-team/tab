@@ -5,7 +5,6 @@ import logger from '../../../utils/logger'
 import { getMockUserContext, mockDate } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../getUserByUsername')
 jest.mock('../../../utils/logger')
 
 const userContext = getMockUserContext()
@@ -23,7 +22,7 @@ beforeEach(() => {
 })
 
 describe('setHasSeenSquads', () => {
-  it('sets the value when enabled === true', async () => {
+  it('sets hasSeenSquads', async () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
     const setHasSeenSquads = require('../setHasSeenSquads').default

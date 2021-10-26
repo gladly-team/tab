@@ -70,6 +70,7 @@ import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 import logUserExperimentActions from '../database/users/logUserExperimentActions'
 import constructExperimentActionsType from '../database/users/constructExperimentActionsType'
+import setUserCause from '../database/users/setUserCause'
 import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
 import setV4Enabled from '../database/users/setV4Enabled'
 import setHasViewedIntroFlow from '../database/users/setHasViewedIntroFlow'
@@ -2588,6 +2589,24 @@ const logVideoAdCompleteMutation = mutationWithClientMutationId({
       videoAdId: fromGlobalId(input.videoAdId).id,
     }),
 })
+
+const setUserCauseMutation = mutationWithClientMutationId({
+  name: 'SetUserCause',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    causeId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, causeId }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserCause(context.user, userGlobalObj.id, causeId)
+  },
+})
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2664,6 +2683,7 @@ const mutationType = new GraphQLObjectType({
     logUserExperimentActions: logUserExperimentActionsMutation,
     setV4Beta: setV4BetaMutation,
     setHasViewedIntroFlow: setHasViewedIntroFlowMutation,
+    setUserCause: setUserCauseMutation,
 
     deleteUser: deleteUserMutation,
 
