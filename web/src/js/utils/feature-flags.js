@@ -29,3 +29,6 @@ export const showVideoAds = (email = '') =>
   /[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+\+truextest[0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+/i.test(
     email
   ) || process.env.REACT_APP_ENABLE_VIDEO_ADS === 'true'
+
+export const showSwitchCauseWidget = () =>
+  process.env.NODE_ENV === 'development'

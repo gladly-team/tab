@@ -16,6 +16,7 @@ const setUserCause = async (userContext, userId, causeId) => {
     await UserModel.update(userContext, {
       id: userId,
       causeId,
+      v4BetaEnabled: true,
     })
     const userUpdatedWithImage = setBackgroundImageDaily(userContext, userId)
     return userUpdatedWithImage

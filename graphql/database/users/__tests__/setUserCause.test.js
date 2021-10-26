@@ -37,6 +37,7 @@ describe('setUserCause', () => {
     expect(UserModel.update).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       causeId,
+      v4BetaEnabled: true,
     })
     expect(setBackgroundImageDaily).toHaveBeenCalledWith(
       userContext,

@@ -5,6 +5,8 @@ import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import initializeCMP from 'js/utils/initializeCMP'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import tabCMP from 'tab-cmp'
@@ -19,6 +21,13 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import PaperItem from 'js/components/General/PaperItem'
 import { deleteUser } from 'js/authentication/user'
+import { showSwitchCauseWidget } from 'js/utils/feature-flags'
+import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
+import { mdiJellyfish } from '@mdi/js'
+import PetsIcon from '@material-ui/icons/Pets'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
+import { goTo, accountURL } from 'js/navigation/navigation'
 
 export const AccountItem = props => (
   <div
@@ -151,6 +160,11 @@ class Account extends React.Component {
       .catch(error => console.error(error))
   }
 
+  switchCause(event, newCause) {
+    SetUserCauseMutation(this.props.user.id, newCause)
+    goTo(accountURL)
+  }
+
   render() {
     const { user } = this.props
     return (
@@ -184,6 +198,36 @@ class Account extends React.Component {
             </Button>
           }
         />
+        {showSwitchCauseWidget() && (
+          <span>
+            <Divider />
+            <AccountItem
+              name={'Change Your Cause'}
+              actionButton={
+                <ToggleButtonGroup
+                  color="primary"
+                  exclusive
+                  onChange={this.switchCause.bind(this)}
+                >
+                  <ToggleButton value={STORAGE_CATS_CAUSE_ID}>
+                    <PetsIcon />
+                  </ToggleButton>
+                  <ToggleButton value={STORAGE_SEAS_CAUSE_ID}>
+                    <SvgIcon>
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d={mdiJellyfish}
+                        fill="inherit"
+                      />
+                    </SvgIcon>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              }
+              testId="switch-cause"
+            />
+          </span>
+        )}
         {this.state.doesGDPRApply ? (
           <span>
             <Divider />

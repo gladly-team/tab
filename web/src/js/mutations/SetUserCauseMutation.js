@@ -1,5 +1,6 @@
 import graphql from 'babel-plugin-relay/macro'
 import commitMutation from 'relay-commit-mutation-promise'
+import environment from 'js/relay-env'
 
 const mutation = graphql`
   mutation SetUserCauseMutation($input: SetUserCauseInput!) {
@@ -14,13 +15,7 @@ const mutation = graphql`
   }
 `
 
-function commit(
-  environment,
-  userId,
-  causeId,
-  onCompleted = () => {},
-  onError = () => {}
-) {
+function commit(userId, causeId, onCompleted = () => {}, onError = () => {}) {
   return commitMutation(environment, {
     mutation,
     variables: {

@@ -37,6 +37,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.30",
+    "@mdi/js": "^6.4.95",
     "@sentry/browser": "^5.14.2",
     "@sentry/integrations": "^5.14.2",
     "@truex/js-ad-client": "^0.0.13",

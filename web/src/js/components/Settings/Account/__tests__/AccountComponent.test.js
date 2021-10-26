@@ -12,12 +12,18 @@ import { loginURL, replaceUrl } from 'js/navigation/navigation'
 import { getUrlParameters } from 'js/utils/utils'
 import { AccountItem } from 'js/components/Settings/Account/AccountComponent'
 import { deleteUser, reloadUser } from 'js/authentication/user'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import { showSwitchCauseWidget } from 'js/utils/feature-flags'
+import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
 
 jest.mock('tab-cmp')
 jest.mock('js/utils/initializeCMP')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
 jest.mock('js/authentication/user')
+jest.mock('js/utils/feature-flags')
+jest.mock('js/mutations/SetUserCauseMutation')
 
 const getMockUserData = () => {
   return {
@@ -439,5 +445,41 @@ describe('Account component', () => {
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
       accountDeleted: true,
     })
+  })
+
+  it('displays switch cause toggle for dev env', () => {
+    showSwitchCauseWidget.mockReturnValue(true)
+    expect.assertions(1)
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = mount(<AccountComponent user={getMockUserData()} />)
+    const switchCause = wrapper.find(ToggleButtonGroup)
+    expect(switchCause.exists()).toBe(true)
+  })
+
+  it('does not display switch cause toggle for prod env', () => {
+    showSwitchCauseWidget.mockReturnValue(false)
+    expect.assertions(1)
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = mount(<AccountComponent user={getMockUserData()} />)
+    const switchCause = wrapper.find(ToggleButtonGroup)
+    expect(switchCause.exists()).toBe(false)
+  })
+
+  it('toggling to other cause updates user cause', () => {
+    showSwitchCauseWidget.mockReturnValue(true)
+    expect.assertions(1)
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
+      .default
+    const wrapper = mount(<AccountComponent user={getMockUserData()} />)
+    wrapper
+      .find(ToggleButton)
+      .at(1)
+      .simulate('click')
+    expect(SetUserCauseMutation).toHaveBeenCalledWith(
+      'user-abc-123',
+      'SGa6zohkY'
+    )
   })
 })

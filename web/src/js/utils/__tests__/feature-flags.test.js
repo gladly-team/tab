@@ -81,6 +81,20 @@ describe('feature flags', () => {
     process.env.REACT_APP_GAM_DEV_ENVIRONMENT = 'true'
     expect(isGAMDevEnvironment()).toBe(true)
   })
+
+  test('showSwitchCauseWidget is false if the NODE_ENV is development', () => {
+    const showSwitchCauseWidget = require('js/utils/feature-flags')
+      .showSwitchCauseWidget
+    process.env.NODE_ENV = 'development'
+    expect(showSwitchCauseWidget()).toBe(true)
+  })
+
+  test('isGAMDevEnvironment is true if the NODE_ENV var is production', () => {
+    const showSwitchCauseWidget = require('js/utils/feature-flags')
+      .showSwitchCauseWidget
+    process.env.NODE_ENV = 'production'
+    expect(showSwitchCauseWidget()).toBe(false)
+  })
 })
 
 describe('showVideoAds', () => {
