@@ -864,6 +864,7 @@ type Mutation {
   logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
   setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
+  setUserCause(input: SetUserCauseInput!): SetUserCausePayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
@@ -1073,6 +1074,17 @@ input SetUserBkgImageInput {
 }
 
 type SetUserBkgImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserCauseInput {
+  userId: String!
+  causeId: String!
+  clientMutationId: String
+}
+
+type SetUserCausePayload {
   user: User
   clientMutationId: String
 }
