@@ -36,365 +36,365 @@ custom:
       usersTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       charitiesTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userImpactTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.60
       invitedUsersTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.60
       missionsTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.60
       userMissionsTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 12
           usage: 0.60
       widgetsTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userLevelsTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       vcDonationLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       vcDonationByCharityTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userRevenueLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       videoAdLog:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userDataConsentLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userWidgetsTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userTabsLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       userSearchLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       referralDataLogTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       referralLinkClickLog:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
       causeTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 12
           usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
         read:
           minimum: 80
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 40
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       charitiesTable:
         read:
           minimum: 5
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       userImpactTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.60
       invitedUsersTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.60
       missionsTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.60
       userMissionsTable:
         read:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 100
+          maximum: 40000
           usage: 0.60          
       widgetsTable:
         read:
           minimum: 10
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       userLevelsTable:
         read:
           minimum: 5
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       vcDonationLogTable:
         read:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 5
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       vcDonationByCharityTable:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 5
-          maximum: 1000
+          maximum: 40000
           usage: 0.60
       userRevenueLogTable:
         read:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           # Fairly high capacity needed, because it's one write per ad
           minimum: 20
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       videoAdLog:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 40000
           usage: 0.60
       userDataConsentLogTable:
         read:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 5
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       userWidgetsTable:
         read:
-          minimum: 90
-          maximum: 9001
+          minimum: 5
+          maximum: 40000
           usage: 0.75
         write:
-          minimum: 50
-          maximum: 9001
+          minimum: 2
+          maximum: 40000
           usage: 0.60
       userTabsLogTable:
         read:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
-          minimum: 30
-          maximum: 9001
+          minimum: 20
+          maximum: 40000
           usage: 0.60
       userSearchLogTable:
         read:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
       referralDataLogTable:
         read:
-          minimum: 20
-          maximum: 9001
+          minimum: 1
+          maximum: 40000
           usage: 0.75
         write:
-          minimum: 10
-          maximum: 9001
+          minimum: 1
+          maximum: 40000
           usage: 0.60
       referralLinkClickLog:
         read:
           minimum: 1
-          maximum: 1000
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 1
-          maximum: 1000
+          maximum: 40000
           usage: 0.60
       causeTable:
         read:
           minimum: 80
-          maximum: 9001
+          maximum: 40000
           usage: 0.75
         write:
           minimum: 40
-          maximum: 9001
+          maximum: 40000
           usage: 0.60
 
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
