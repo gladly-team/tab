@@ -13,6 +13,7 @@ import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from 'js/components/Authentication/SignInIframeMessage'
 import MissingEmailMessage from 'js/components/Authentication/MissingEmailMessage'
 import { sendVerificationEmail } from 'js/authentication/user'
+import styles from './Authentication.css'
 import {
   redirectToAuthIfNeeded,
   createNewUser,
@@ -37,7 +38,7 @@ import {
 } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
-import tabTheme from 'js/theme/defaultV1'
+import tabTheme, { seasTheme } from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import {
   SEARCH_APP,
@@ -257,11 +258,17 @@ class Authentication extends React.Component {
     // Show a different logo depending on the app for which the user is
     // signing in.
     const app = this.getApp()
+    const isV4Enabled = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
+    const cause = getCauseId()
     // Set a different theme depending on the app.
     let theme = tabTheme
     switch (app) {
       case TAB_APP:
-        theme = tabTheme
+        if (cause === STORAGE_SEAS_CAUSE_ID) {
+          theme = seasTheme
+        } else {
+          theme = tabTheme
+        }
         break
       case SEARCH_APP:
         theme = searchTheme
@@ -270,8 +277,6 @@ class Authentication extends React.Component {
         theme = tabTheme
     }
     const defaultTheme = createMuiTheme(theme)
-    const isV4Enabled = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
-    const cause = getCauseId()
     let backgroundImage
     let dataTestId = 'cats-background'
     // map background image to cause here
@@ -324,7 +329,7 @@ class Authentication extends React.Component {
                 right: 0,
                 left: 0,
                 zIndex: '-1',
-                backgroundColor: `rgba(0, 0, 0, 0.15)`,
+                backgroundColor: `rgba(0, 0, 0, 0.35)`,
               }}
             />
           </>
