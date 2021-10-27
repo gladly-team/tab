@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import _styles from './Authentication.css'
 import { FirebaseAuth } from 'react-firebaseui'
 import { Route } from 'react-router-dom'
 import FirebaseAuthenticationUIAction from 'js/components/Authentication/FirebaseAuthenticationUIAction'
@@ -21,6 +22,7 @@ import logger from 'js/utils/logger'
 import environment from 'js/relay-env'
 import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
+import { isTabV4BetaUser, getCauseId } from 'js/utils/local-user-data-mgr'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor(props) {
@@ -31,7 +33,6 @@ class FirebaseAuthenticationUI extends React.Component {
   componentWillUnmount() {
     this.removeButtonClickListeners()
   }
-
   socialButtonClicked(e) {
     signupPageButtonClick()
     signupPageSocialButtonClick()
@@ -98,7 +99,18 @@ class FirebaseAuthenticationUI extends React.Component {
       'firebaseui-idp-button firebaseui-idp-password'
     )
     if (emailButton) {
-      emailButton.addEventListener('click', this.emailButtonClicked)
+      emailButton.addEventListener('click', this.emailButtonClicked.bind(this))
+    }
+
+    // TODO - make this better
+    // firebase ui doesn't expose classnames
+    // manually, conditionally changing tos color
+    const tos = await this.getElementByClassNamePolling(
+      'firebaseui-tospp-full-message'
+    )
+    const cause = getCauseId()
+    if (cause && isTabV4BetaUser()) {
+      tos.classList.add('white-tos')
     }
   }
 

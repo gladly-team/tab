@@ -1257,6 +1257,7 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = ''
+    getCauseId.mockReturnValueOnce(undefined)
     const wrapper = shallow(<Authentication {...mockProps} />)
     expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
       createMuiTheme(tabTheme)
@@ -1268,6 +1269,7 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?app=tab'
+    getCauseId.mockReturnValueOnce(undefined)
     const wrapper = shallow(<Authentication {...mockProps} />)
     expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
       createMuiTheme(tabTheme)
@@ -1278,6 +1280,7 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    getCauseId.mockReturnValueOnce(undefined)
     mockProps.location.search = '?app=blahblah'
     const wrapper = shallow(<Authentication {...mockProps} />)
     expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
