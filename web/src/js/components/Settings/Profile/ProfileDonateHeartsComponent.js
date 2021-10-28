@@ -7,7 +7,7 @@ import SwitchToV4 from 'js/components/Donate/SwitchToV4Container'
 import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
-import catImage from 'js/assets/catCharity.png'
+import catImage from 'js/assets/cats.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   //  STORAGE_SEAS_CAUSE_ID
