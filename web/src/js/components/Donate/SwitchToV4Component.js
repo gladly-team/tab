@@ -4,20 +4,22 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import catImage from 'js/assets/catCharity.png'
 import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
 import { reloadDashboard } from 'js/navigation/navigation'
 import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
+import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
 
 class SwitchToV4Component extends React.Component {
   async switchToV4() {
+    const { causeId, user } = this.props
     await optIntoV4Beta()
+    await SetUserCauseMutation(this.props.relay.environment, user.id, causeId)
     await localStorageMgr.setItem(STORAGE_NEW_USER_IS_TAB_V4_BETA, 'true')
     await SetBackgroundDailyImageMutation(
       this.props.relay.environment,
-      this.props.user.id,
+      user.id,
       () => {},
       () => {},
       'cats'
@@ -29,6 +31,7 @@ class SwitchToV4Component extends React.Component {
     reloadDashboard()
   }
   render() {
+    const { causeName, causeShortDesc, imgSrc, title } = this.props
     return (
       <Paper
         style={Object.assign(
@@ -55,7 +58,7 @@ class SwitchToV4Component extends React.Component {
             }}
           >
             <img
-              alt={`Logo for the charity Tab For Cats`}
+              alt={`Logo for the charity ${causeName}`}
               style={{
                 cursor: 'pointer',
                 maxWidth: '100%',
@@ -63,7 +66,7 @@ class SwitchToV4Component extends React.Component {
                 maxHeight: '150px',
                 minHeight: '150px',
               }}
-              src={catImage}
+              src={imgSrc}
             />
           </span>
           <Typography
@@ -74,7 +77,7 @@ class SwitchToV4Component extends React.Component {
               textAlign: 'center',
             }}
           >
-            Help Shelter Cats (Beta)
+            {title}
           </Typography>
           <Typography
             variant={'body2'}
@@ -86,10 +89,10 @@ class SwitchToV4Component extends React.Component {
               display: 'block',
             }}
           >
-            Turn your tabs into helping shelter cats get adopted!{' '}
+            {causeShortDesc}{' '}
             <span style={{ fontWeight: 'bold' }}>Still in beta:</span>
             {''} some features like widgets are missing, but you can always
-            switch back to Tab for a Cause.
+            switch back to {causeName}.
           </Typography>
           <span
             style={Object.assign(
@@ -108,7 +111,7 @@ class SwitchToV4Component extends React.Component {
               variant={'contained'}
               onClick={this.switchToV4.bind(this)}
             >
-              Try Tab For Cats
+              Try {causeName}
             </Button>
           </span>
         </span>
@@ -121,6 +124,11 @@ SwitchToV4Component.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
+  title: PropTypes.string.isRequired, // e.g.: Help Shelter Cats (Beta)
+  causeId: PropTypes.string.isRequired,
+  causeName: PropTypes.string.isRequired, // e.g.: Tab for Cats
+  causeShortDesc: PropTypes.string.isRequired, // e.g.: Turn your tabs into helping shelter cats get adopted!
+  imgSrc: PropTypes.string.isRequired,
 }
 
 SwitchToV4Component.defaultProps = {}

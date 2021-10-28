@@ -3,10 +3,17 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Charity from 'js/components/Donate/CharityContainer'
-import CatCharity from 'js/components/Donate/SwitchToCatsContainer'
+import SwitchToV4 from 'js/components/Donate/SwitchToV4Container'
 import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
+import catImage from 'js/assets/catCharity.png'
+import {
+  STORAGE_CATS_CAUSE_ID,
+  //  STORAGE_SEAS_CAUSE_ID
+} from 'js/constants'
+
+// const SHOW_TEAMSEAS_CAUSE = true
 
 const spacingPx = 6
 
@@ -70,7 +77,14 @@ class ProfileDonateHearts extends React.Component {
               />
             )
           })}
-          <CatCharity user={user} />
+          <SwitchToV4
+            user={user}
+            title="Help Shelter Cats (Beta)"
+            causeId={STORAGE_CATS_CAUSE_ID}
+            causeName="Tab for Cats"
+            causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
+            imgSrc={catImage}
+          />
         </span>
       </div>
     )
