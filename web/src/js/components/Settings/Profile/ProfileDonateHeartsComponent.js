@@ -8,12 +8,11 @@ import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
 import catImage from 'js/assets/cats.png'
-import {
-  STORAGE_CATS_CAUSE_ID,
-  //  STORAGE_SEAS_CAUSE_ID
-} from 'js/constants'
+import seasImage from 'js/assets/seas1.svg'
+import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
 
-// const SHOW_TEAMSEAS_CAUSE = true
+// TODO: make permanently true on prod when ready
+const SHOW_TEAMSEAS_CAUSE = true
 
 const spacingPx = 6
 
@@ -85,6 +84,16 @@ class ProfileDonateHearts extends React.Component {
             causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
             imgSrc={catImage}
           />
+          {SHOW_TEAMSEAS_CAUSE && (
+            <SwitchToV4
+              user={user}
+              title="Join #TeamSeas (Beta)"
+              causeId={STORAGE_SEAS_CAUSE_ID}
+              causeName="Tab for #TeamSeas"
+              causeShortDesc="Open tabs, remove trash from our seas!"
+              imgSrc={seasImage}
+            />
+          )}
         </span>
       </div>
     )
