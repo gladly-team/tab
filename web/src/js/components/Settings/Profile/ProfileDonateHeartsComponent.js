@@ -3,10 +3,16 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Charity from 'js/components/Donate/CharityContainer'
-import CatCharity from 'js/components/Donate/SwitchToCatsContainer'
+import SwitchToV4 from 'js/components/Donate/SwitchToV4Container'
 import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
+import catImage from 'js/assets/cats.png'
+import seasImage from 'js/assets/seas1.svg'
+import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
+
+// TODO: make permanently true on prod when ready
+const SHOW_TEAMSEAS_CAUSE = false
 
 const spacingPx = 6
 
@@ -70,7 +76,24 @@ class ProfileDonateHearts extends React.Component {
               />
             )
           })}
-          <CatCharity user={user} />
+          <SwitchToV4
+            user={user}
+            title="Help Shelter Cats (Beta)"
+            causeId={STORAGE_CATS_CAUSE_ID}
+            causeName="Tab for Cats"
+            causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
+            imgSrc={catImage}
+          />
+          {SHOW_TEAMSEAS_CAUSE && (
+            <SwitchToV4
+              user={user}
+              title="Join #TeamSeas (Beta)"
+              causeId={STORAGE_SEAS_CAUSE_ID}
+              causeName="Tab for #TeamSeas"
+              causeShortDesc="Open tabs, remove trash from our seas!"
+              imgSrc={seasImage}
+            />
+          )}
         </span>
       </div>
     )
