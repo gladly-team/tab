@@ -12,7 +12,7 @@ import seasImage from 'js/assets/seas1.svg'
 import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
 
 // TODO: make permanently true on prod when ready
-const SHOW_TEAMSEAS_CAUSE = true
+const SHOW_TEAMSEAS_CAUSE = false
 
 const spacingPx = 6
 
