@@ -502,8 +502,8 @@ class Dashboard extends React.Component {
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        We're working with #TeamSeas to help remove trash from
-                        our oceans! Learn more about it{' '}
+                        We're working with #TeamSeas to help remove 30M pounds
+                        of trash from our oceans! Learn more about it{' '}
                         <Link
                           to="https://youtu.be/fCedFp5Wmyc"
                           target="_blank"
@@ -552,8 +552,8 @@ class Dashboard extends React.Component {
                   //                       </Typography>
                   //                     </>
                   //                   }
-                  buttonText={'Vote'}
-                  buttonURL={'https://forms.gle/vK7LSNcL82mts5v49'}
+                  buttonText={'Watch'}
+                  buttonURL={'https://youtu.be/fCedFp5Wmyc'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
