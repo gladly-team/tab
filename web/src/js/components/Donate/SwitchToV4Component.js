@@ -92,7 +92,7 @@ class SwitchToV4Component extends React.Component {
             {causeShortDesc}{' '}
             <span style={{ fontWeight: 'bold' }}>Still in beta:</span>
             {''} some features like widgets are missing, but you can always
-            switch back to {causeName}.
+            switch back.
           </Typography>
           <span
             style={Object.assign(
