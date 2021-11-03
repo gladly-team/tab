@@ -299,7 +299,9 @@ package:
 functions:
   graphql:
     handler: build/handler.serverlessHandler
-    timeout: 10 # in seconds; default is 6
+    # In seconds. Should remain ~2-4 seconds for graphql, whose requests
+    # should typically complete in ~300ms.
+    timeout: 4
     events:
       - http:
           path: graphql/
