@@ -23,9 +23,4 @@ export const showSearchIntroductionMessage = () => false
 export const isGAMDevEnvironment = () =>
   process.env.REACT_APP_GAM_DEV_ENVIRONMENT === 'true'
 
-export const showVideoAds = (email = '') =>
-  // "Good enough" email regex match:
-  // https://regex101.com/r/MpSo6T/1
-  /[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+\+truextest[0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+/i.test(
-    email
-  ) || process.env.REACT_APP_ENABLE_VIDEO_ADS === 'true'
+export const showVideoAds = () => true
