@@ -84,42 +84,8 @@ describe('feature flags', () => {
 })
 
 describe('showVideoAds', () => {
-  it('is false if the env var is "false"', () => {
+  it('returns true', () => {
     const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
-    expect(showVideoAds()).toBe(false)
-  })
-
-  it('is true if the env var is "true"', () => {
-    const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'true'
     expect(showVideoAds()).toBe(true)
-  })
-
-  it('is true if the env var is "false" but the email matches regex', () => {
-    const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
-    expect(showVideoAds('blah+truextest123@example.com')).toBe(true)
-    expect(showVideoAds('blah+truextest123@foo.com')).toBe(true)
-  })
-
-  it('is true if the env var is "false" but the email matches regex with other characters', () => {
-    const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
-    expect(showVideoAds('blah.blah1+blah2+truextest123@example.com')).toBe(true)
-  })
-
-  it('is true if the env var is "false" but the email matches regex with only numbers', () => {
-    const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
-    expect(showVideoAds('123123+truextest123@123.com')).toBe(true)
-  })
-
-  it('is false if the env var is "false" and the email does not match regex', () => {
-    const showVideoAds = require('js/utils/feature-flags').showVideoAds
-    process.env.REACT_APP_ENABLE_VIDEO_ADS = 'false'
-    expect(showVideoAds('blah@example.com')).toBe(false)
-    expect(showVideoAds('blah+truetest123@example.com')).toBe(false)
-    expect(showVideoAds('blah+blah@foo.com')).toBe(false)
   })
 })
