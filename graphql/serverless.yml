@@ -299,7 +299,20 @@ package:
 functions:
   graphql:
     handler: build/handler.serverlessHandler
-    timeout: 10 # in seconds; default is 6
+    # In seconds. Should remain ~2-4 seconds for graphql, whose requests
+    # should typically complete in ~300ms.
+    # We manually set the API Gateway "TimeoutInMillis" in the AWS console:
+    #   API -> Route -> Method -> Integration request ->
+    #   Uncheck Default Timeout
+    # It's configurable in CloudFormation but doesn't appear to be supported
+    # by Serverless for the v1 "REST" API, only the v2 "HTTP" API.
+    # CloudFormation:
+    #   https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-timeoutinmillis
+    # Relevant StackOverflow question:
+    #   https://stackoverflow.com/a/60609096
+    # Support of "TimeoutInMillis" in Serverless for v2 API Gateway:
+    #   https://github.com/serverless/serverless/issues/7052
+    timeout: 4
     events:
       - http:
           path: graphql/
