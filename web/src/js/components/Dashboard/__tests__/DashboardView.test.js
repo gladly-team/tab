@@ -80,6 +80,8 @@ describe('DashboardView', () => {
     const wrapper = mount(<DashboardView {...mockProps} />)
     expect(wrapper.find(QueryRendererWithUser).prop('variables')).toEqual({
       userId: 'example-user-id', // from the authUser prop
+      customCampaignStartTime: expect.any(String),
+      customCampaignEndTime: expect.any(String),
     })
   })
 

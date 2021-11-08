@@ -114,19 +114,19 @@
     "id": "tuvwxyzabcdefgh",
     "email": "colton@example.com",
     "username": "colton",
-    "joined": "2017-07-23T01:18:11Z",
-    "vcCurrent": 0,
-    "vcAllTime": 0,
+    "joined": "2021-11-08T13:18:11Z",
+    "vcCurrent": 1,
+    "vcAllTime": 1,
     "level": 1,
-    "tabs": 0,
+    "tabs": 1,
     "validTabs": 0,
     "maxTabsDay": {
       "maxDay": {
-        "date": "2017-07-23T01:18:11Z",
-        "numTabs": 0
+        "date": "2021-11-08T13:18:11Z",
+        "numTabs": 1
       },
       "recentDay": {
-        "date": "2017-07-23T01:18:11Z",
+        "date": "2021-11-08T13:18:11Z",
         "numTabs": 0
       }
     },
@@ -143,7 +143,7 @@
     "backgroundColor": null,
     "customImage": null,
     "lastTabTimestamp": null,
-    "created": "2017-07-23T01:18:11Z",
-    "updated": "2017-07-23T01:18:11Z"
+    "created": "2021-11-08T13:18:11Z",
+    "updated": "2021-11-08T13:18:11Z"
   }
 ]

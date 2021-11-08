@@ -243,7 +243,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   )
 }
 
-TreePlantingCampaign.propTypes = {
+Nov2021Campaign.propTypes = {
   app: PropTypes.shape({
     campaign: PropTypes.shape({
       goal: PropTypes.shape({
@@ -266,4 +266,4 @@ TreePlantingCampaign.propTypes = {
   onDismiss: PropTypes.func.isRequired,
 }
 
-export default TreePlantingCampaign
+export default Nov2021Campaign
