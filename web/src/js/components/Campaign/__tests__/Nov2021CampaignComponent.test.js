@@ -11,7 +11,6 @@ import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Link from 'js/components/General/Link'
 import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
 
-//
 jest.mock('js/components/General/Link')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
@@ -47,16 +46,16 @@ const getMockProps = () => ({
   onDismiss: () => {},
 })
 
-describe('Tree planting campaign component', () => {
+describe('Nov2021 campaign component', () => {
   it('renders without error', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     shallow(<TreePlantingCampaign {...mockProps} />).dive()
   })
 
   it('displays the correct title text when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
@@ -70,7 +69,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the correct title text when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
@@ -88,7 +87,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays no "completed" trees when the user has not recruited any users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 0
@@ -100,7 +99,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays one "completed" tree when the user has recruited 1 user', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 1
@@ -112,7 +111,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays two "completed" trees when the user has recruited 2 users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 2
@@ -124,7 +123,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays all "completed" trees when the user has recruited 3 users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 3
@@ -136,7 +135,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the "invite friend" component when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
@@ -149,7 +148,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('does not display the "invite friend" component when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
@@ -162,7 +161,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
@@ -179,7 +178,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
@@ -198,7 +197,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('links to the tree planting FAQ page', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
@@ -208,7 +207,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('sets the correct value on the progress bar', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.campaign.treesPlantedGoal = 30000
@@ -219,7 +218,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text above the progress bar when the campaign is live and zero trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 0
@@ -237,7 +236,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text above the progress bar when the campaign is live and one tree has been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 1
@@ -255,7 +254,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text above the progress bar when the campaign is live and two trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 2
@@ -273,7 +272,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected text above the progress bar when the campaign is live and a large number of trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 38911
@@ -291,7 +290,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('displays the expected "goal" text above the progress bar', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.campaign.treesPlantedGoal = 35000
@@ -309,7 +308,7 @@ describe('Tree planting campaign component', () => {
   })
 
   it('does not displays any text above the progress bar when the campaign is has ended', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/TreePlantingCampaignComponent')
+    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.

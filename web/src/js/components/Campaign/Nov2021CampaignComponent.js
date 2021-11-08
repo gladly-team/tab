@@ -14,7 +14,7 @@ import {
 } from 'js/navigation/navigation'
 import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
 
-const TreePlantingCampaign = ({ app, user, campaign, onDismiss }) => {
+const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   const {
     recruits: { recruitsWithAtLeastOneTab = {} },
   } = user

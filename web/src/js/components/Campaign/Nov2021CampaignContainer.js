@@ -1,11 +1,10 @@
 import graphql from 'babel-plugin-relay/macro'
 import { createFragmentContainer } from 'react-relay'
+import Nov2021Campaign from 'js/components/Campaign/Nov2021CampaignComponent'
 
-import TreePlantingCampaign from 'js/components/Campaign/TreePlantingCampaignComponent'
-
-export default createFragmentContainer(TreePlantingCampaign, {
+export default createFragmentContainer(Nov2021Campaign, {
   app: graphql`
-    fragment TreePlantingCampaignContainer_app on App {
+    fragment Nov2021CampaignContainer_app on App {
       campaign {
         goal {
           currentNumber
@@ -14,7 +13,7 @@ export default createFragmentContainer(TreePlantingCampaign, {
     }
   `,
   user: graphql`
-    fragment TreePlantingCampaignContainer_user on User
+    fragment Nov2021CampaignContainer_user on User
       @argumentDefinitions(
         startTime: { type: "String" }
         endTime: { type: "String" }
