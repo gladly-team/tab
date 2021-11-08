@@ -3,40 +3,37 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import TreeIcon from 'mdi-material-ui/PineTree'
+import AppleIcon from 'mdi-material-ui/Apple'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
-import {
-  treePlantingCampaignHomepageURL,
-  treePlantingCampaignCompetitionHomepageURL,
-} from 'js/navigation/navigation'
 import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
+
+// TODO
+const campaignInfoURL = '/'
 
 const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   const {
     recruits: { recruitsWithAtLeastOneTab = {} },
   } = user
-  const { time, treesPlantedGoal } = campaign
+  const { time, goal } = campaign
   const hasCampaignEnded = moment().isAfter(time.end)
   const { currentNumber: numNewUsers } = app.campaign.goal
-  const treesPlantedAbbreviated = abbreviateNumber(numNewUsers)
-  const treesPlantedGoalAbbreviated = abbreviateNumber(treesPlantedGoal)
-  const progress = (100 * numNewUsers) / treesPlantedGoal
-  const treesWord = numNewUsers === 1 ? 'tree' : 'trees'
+  const progressNumAbbreviated = abbreviateNumber(numNewUsers)
+  const goalNumAbbreviated = abbreviateNumber(goal)
+  const progress = (100 * numNewUsers) / goal
+  const kidsWord = numNewUsers === 1 ? 'kid' : 'kids'
 
-  const ACCENT_COLOR = '#028502'
-
-  // Tree icon style
-  const treeStyle = {
+  const ACCENT_COLOR = '#C41E3A'
+  const goalIconStyle = {
     height: 60,
     width: 60,
   }
-  const plantedTreeStyle = Object.assign({}, treeStyle, {
+  const completedGoalStyle = Object.assign({}, goalIconStyle, {
     color: ACCENT_COLOR,
   })
-  const incompleteTreeStyle = Object.assign({}, treeStyle, {
+  const incompletedGoalStyle = Object.assign({}, goalIconStyle, {
     color: '#BBB',
   })
 
@@ -53,8 +50,8 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
         }}
       >
         {hasCampaignEnded
-          ? 'Thanks for planting trees!'
-          : 'Recruit a friend, plant a tree'}
+          ? 'Thanks for keeping kids fed!'
+          : 'Recruit a friend, feed 10 kids'}
       </Typography>
       <div
         style={{
@@ -87,23 +84,23 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
               >
                 <div>
                   {recruitsWithAtLeastOneTab > 0 ? (
-                    <TreeIcon style={plantedTreeStyle} />
+                    <AppleIcon style={completedGoalStyle} />
                   ) : (
-                    <TreeIcon style={incompleteTreeStyle} />
+                    <AppleIcon style={incompletedGoalStyle} />
                   )}
                   {recruitsWithAtLeastOneTab > 1 ? (
-                    <TreeIcon style={plantedTreeStyle} />
+                    <AppleIcon style={completedGoalStyle} />
                   ) : (
-                    <TreeIcon style={incompleteTreeStyle} />
+                    <AppleIcon style={incompletedGoalStyle} />
                   )}
                   {recruitsWithAtLeastOneTab > 2 ? (
-                    <TreeIcon style={plantedTreeStyle} />
+                    <AppleIcon style={completedGoalStyle} />
                   ) : (
-                    <TreeIcon style={incompleteTreeStyle} />
+                    <AppleIcon style={incompletedGoalStyle} />
                   )}
                 </div>
                 <Typography variant={'body2'} gutterBottom>
-                  {recruitsWithAtLeastOneTab}/3 trees planted
+                  {recruitsWithAtLeastOneTab * 10}/30 kids fed
                 </Typography>
               </div>
             </div>
@@ -114,7 +111,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                 user={user}
                 InputProps={{ style: { fontSize: 14 } }}
                 label={'Share this link with a friend'}
-                helperText={"and you'll plant a tree when they join!"}
+                helperText={"and you'll feed 10 kids when they join!"}
                 style={{
                   minWidth: 280,
                 }}
@@ -125,111 +122,84 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
             {hasCampaignEnded ? (
               <>
                 <Typography variant={'body2'} paragraph>
-                  Thank you for joining us in planting trees with{' '}
+                  Thank you for joining us in keeping kids fed through{' '}
                   <Link
-                    to="https://edenprojects.org/"
+                    to="https://www.nokidhungry.org/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: ACCENT_COLOR }}
                   >
-                    Eden Reforestation Projects
+                    No Kid Hungry
                   </Link>
-                  ! Because of you,
-                  <b> more than 10,000 trees will be planted</b> to combat
-                  carbon sequestration, guard land erosion, provide habitat for
-                  countless organisms, and provide economic resources for
-                  surrounding communities!
+                  ! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                  maximus vel nunc sed tincidunt.
                 </Typography>
                 <Typography variant={'body2'} gutterBottom={false} paragraph>
-                  We loved all the creative submissions to our Tik Tok/Instagram
-                  video challenge, and now it is time to decide a winner.{' '}
-                  <Link
-                    to="https://forms.gle/YimwK55ECcoNMYmu7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: ACCENT_COLOR }}
-                  >
-                    View our top 5 submissions
-                  </Link>{' '}
-                  and pick your favorite content creator to receive $500 to the
-                  charity of their choice! Thank you to everyone who submitted a
-                  video and helped spread the word about Tab for a Cause.
+                  Praesent id fringilla est. Duis vitae placerat odio. Etiam
+                  congue volutpat neque, et tristique risus mattis eu. Donec
+                  efficitur condimentum risus, sed volutpat ligula venenatis et.
+                  Praesent tempor in ex nec scelerisque. Nullam nec iaculis
+                  arcu. Sed aliquam purus risus, pharetra dapibus tortor mollis
+                  in. Duis a pretium magna, sed finibus turpis.
                 </Typography>
               </>
             ) : (
               <>
                 <Typography variant={'body2'} gutterBottom>
-                  Now until January 5,{' '}
+                  Now until December 6,{' '}
                   <Link
-                    to={treePlantingCampaignHomepageURL}
+                    to={campaignInfoURL}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: ACCENT_COLOR }}
                   >
-                    we're planting a tree
+                    we're feeding 10 kids
                   </Link>{' '}
-                  for every person who joins Tab for a Cause! Use TikTok/Insta?{' '}
-                  <Link
-                    to={treePlantingCampaignCompetitionHomepageURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: ACCENT_COLOR }}
-                  >
-                    Join our challenge
-                  </Link>{' '}
-                  and win{' '}
-                  <Link
-                    to={'https://shop.spreadshirt.com/tab-for-a-cause/'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: ACCENT_COLOR }}
-                  >
-                    merch
-                  </Link>{' '}
-                  + $500 for your favorite charity.
+                  for every person who joins Tab for a Cause! Lorem ipsum dolor
+                  sit amet, consectetur adipiscing elit. Sed felis lectus,
+                  sagittis et tempus sit amet, venenatis a purus. Proin et
+                  viverra arcu.
                 </Typography>
               </>
             )}
           </div>
         </div>
       </div>
-      {hasCampaignEnded ? null : (
+      <div
+        style={{
+          marginTop: 8,
+          marginBottom: 8,
+          textAlign: 'center',
+        }}
+      >
         <div
+          data-test-id={'custom-campaign-progress-bar'}
           style={{
-            marginTop: 8,
-            marginBottom: 8,
-            textAlign: 'center',
+            marginLeft: 10,
+            marginRight: 10,
           }}
         >
-          <div
-            data-test-id={'trees-planted-progress-bar'}
+          <span
             style={{
-              marginLeft: 10,
-              marginRight: 10,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
-            {hasCampaignEnded ? null : (
-              <span
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Typography variant={'caption'}>
-                  {treesPlantedAbbreviated} {treesWord} planted
-                </Typography>
-                <Typography variant={'caption'}>
-                  Goal: {treesPlantedGoalAbbreviated}
-                </Typography>
-              </span>
-            )}
-            <LinearProgress
-              color={'primary'}
-              variant={'determinate'}
-              value={progress}
-            />
-          </div>
+            <Typography variant={'caption'}>
+              {progressNumAbbreviated} {kidsWord} fed
+            </Typography>
+            <Typography variant={'caption'}>
+              Goal: {goalNumAbbreviated}
+            </Typography>
+          </span>
+          <LinearProgress
+            color={'primary'}
+            variant={'determinate'}
+            value={progress}
+          />
+        </div>
+        {hasCampaignEnded ? null : (
           <Typography variant={'caption'}>
             <CountdownClock
               campaignStartDatetime={time.start}
@@ -237,8 +207,8 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
             />{' '}
             remaining
           </Typography>
-        </div>
-      )}
+        )}
+      </div>
     </CampaignWrapper>
   )
 }
@@ -256,7 +226,7 @@ Nov2021Campaign.propTypes = {
       start: PropTypes.instanceOf(moment).isRequired,
       end: PropTypes.instanceOf(moment).isRequired,
     }),
-    treesPlantedGoal: PropTypes.number.isRequired,
+    goal: PropTypes.number.isRequired,
   }).isRequired,
   user: PropTypes.shape({
     recruits: PropTypes.shape({
