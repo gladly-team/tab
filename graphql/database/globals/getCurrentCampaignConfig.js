@@ -53,10 +53,11 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     showProgressBarLabel: true,
     showProgressBarEndText: false,
     targetNumber: 100,
-    // transformNumberSourceValue: num => {
-    //   // return 9e6
-    //   return Math.floor(num / 50)
-    // },
+    transformNumberSourceValue: num => {
+      // @nov-2021-campaign
+      // Provide 10 meals per new user.
+      return Math.floor(num * 10)
+    },
   },
   // Modifications to the campaign when the campaign has
   // ended.
