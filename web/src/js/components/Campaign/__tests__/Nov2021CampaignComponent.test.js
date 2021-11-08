@@ -5,15 +5,17 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-import TreeIcon from 'mdi-material-ui/PineTree'
+import AppleIcon from 'mdi-material-ui/Apple'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Link from 'js/components/General/Link'
-import { treePlantingCampaignHomepageURL } from 'js/navigation/navigation'
 
 jest.mock('js/components/General/Link')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
+
+const ICON_COLOR_COMPLETED = '#C41E3A' // red
+const ICON_COLOR_NOT_COMPLETED = '#BBB'
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
@@ -41,130 +43,136 @@ const getMockProps = () => ({
       start: moment('2017-05-12T10:00:00.000Z'),
       end: moment('2017-05-22T10:00:00.000Z'),
     },
-    treesPlantedGoal: 20000,
+    goal: 20000,
   },
   onDismiss: () => {},
 })
 
 describe('Nov2021 campaign component', () => {
   it('renders without error', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    shallow(<CustomCampaign {...mockProps} />).dive()
   })
 
   it('displays the correct title text when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
         .filterWhere(e => e.prop('variant') === 'h6')
         .render()
         .text()
-    ).toEqual('Recruit a friend, plant a tree')
+    ).toEqual('Recruit a friend, feed 10 kids')
   })
 
   it('displays the correct title text when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
     MockDate.set(moment('2017-05-23T12:14:00.000Z'))
 
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
         .filterWhere(e => e.prop('variant') === 'h6')
         .render()
         .text()
-    ).toEqual('Thanks for planting trees!')
+    ).toEqual('Thanks for keeping kids fed!')
   })
 
-  it('displays no "completed" trees when the user has not recruited any users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays no "completed" goal icons when the user has not recruited any users', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 0
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const treeIcons = wrapper.find(TreeIcon)
-    treeIcons.forEach(icon => {
-      expect(icon.prop('style').color).toEqual('#BBB') // grey
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
+    const goalIcons = wrapper.find(AppleIcon)
+    goalIcons.forEach(icon => {
+      expect(icon.prop('style').color).toEqual(ICON_COLOR_NOT_COMPLETED)
     })
   })
 
-  it('displays one "completed" tree when the user has recruited 1 user', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays one "completed" icon when the user has recruited 1 user', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 1
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const treeIcons = wrapper.find(TreeIcon)
-    expect(treeIcons.at(0).prop('style').color).toEqual('#028502') // green
-    expect(treeIcons.at(1).prop('style').color).toEqual('#BBB')
-    expect(treeIcons.at(2).prop('style').color).toEqual('#BBB')
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
+    const goalIcons = wrapper.find(AppleIcon)
+    expect(goalIcons.at(0).prop('style').color).toEqual(ICON_COLOR_COMPLETED)
+    expect(goalIcons.at(1).prop('style').color).toEqual(
+      ICON_COLOR_NOT_COMPLETED
+    )
+    expect(goalIcons.at(2).prop('style').color).toEqual(
+      ICON_COLOR_NOT_COMPLETED
+    )
   })
 
-  it('displays two "completed" trees when the user has recruited 2 users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays two "completed" icons when the user has recruited 2 users', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 2
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const treeIcons = wrapper.find(TreeIcon)
-    expect(treeIcons.at(0).prop('style').color).toEqual('#028502') // green
-    expect(treeIcons.at(1).prop('style').color).toEqual('#028502') // green
-    expect(treeIcons.at(2).prop('style').color).toEqual('#BBB')
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
+    const goalIcons = wrapper.find(AppleIcon)
+    expect(goalIcons.at(0).prop('style').color).toEqual(ICON_COLOR_COMPLETED)
+    expect(goalIcons.at(1).prop('style').color).toEqual(ICON_COLOR_COMPLETED)
+    expect(goalIcons.at(2).prop('style').color).toEqual(
+      ICON_COLOR_NOT_COMPLETED
+    )
   })
 
-  it('displays all "completed" trees when the user has recruited 3 users', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays all "completed" icons when the user has recruited 3 users', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user.recruits.recruitsWithAtLeastOneTab = 3
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const treeIcons = wrapper.find(TreeIcon)
-    treeIcons.forEach(icon => {
-      expect(icon.prop('style').color).toEqual('#028502') // green
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
+    const goalIcons = wrapper.find(AppleIcon)
+    goalIcons.forEach(icon => {
+      expect(icon.prop('style').color).toEqual(ICON_COLOR_COMPLETED)
     })
   })
 
   it('displays the "invite friend" component when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const comp = wrapper.find(InviteFriend)
     expect(comp.exists()).toBe(true)
     expect(comp.prop('label')).toBe('Share this link with a friend')
     expect(comp.prop('helperText')).toBe(
-      "and you'll plant a tree when they join!"
+      "and you'll feed 10 kids when they join!"
     )
   })
 
   it('does not display the "invite friend" component when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
     MockDate.set(moment('2017-05-23T12:14:00.000Z'))
 
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const comp = wrapper.find(InviteFriend)
     expect(comp.exists()).toBe(false)
   })
 
   it('displays the expected text when the campaign is in progress', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
@@ -173,19 +181,19 @@ describe('Nov2021 campaign component', () => {
         .render()
         .text()
     ).toMatch(
-      /Now until January 5, we're planting a tree for every person who joins Tab for a Cause!/
+      /Now until December 6, we're feeding 10 kids for every person who joins Tab for a Cause!/
     )
   })
 
   it('displays the expected text when the campaign is complete', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
     MockDate.set(moment('2017-05-23T12:14:00.000Z'))
 
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
@@ -193,38 +201,28 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toMatch(/Thank you for joining us in planting trees/)
-  })
-
-  it('links to the tree planting FAQ page', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
-    const link = wrapper.find(Link).first()
-    expect(link.prop('to')).toEqual(treePlantingCampaignHomepageURL)
-    expect(link.render().text()).toEqual("we're planting a tree")
+    ).toMatch(/Thank you for joining us in keeping kids fed/)
   })
 
   it('sets the correct value on the progress bar', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.campaign.treesPlantedGoal = 30000
+    mockProps.campaign.goal = 30000
     mockProps.app.campaign.goal.currentNumber = 6000
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBar = wrapper.find(LinearProgress)
     expect(progressBar.prop('value')).toEqual(20)
   })
 
   it('displays the expected text above the progress bar when the campaign is live and zero trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 0
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
     expect(
       progressBarContainer
@@ -232,17 +230,17 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('0 trees planted')
+    ).toEqual('0 kids fed')
   })
 
-  it('displays the expected text above the progress bar when the campaign is live and one tree has been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays the expected text above the progress bar when the campaign is live and one kid has been fed', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.goal.currentNumber = 1
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    mockProps.app.campaign.goal.currentNumber = 10
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
     expect(
       progressBarContainer
@@ -250,17 +248,17 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('1 tree planted')
+    ).toEqual('10 kids fed')
   })
 
-  it('displays the expected text above the progress bar when the campaign is live and two trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('displays the expected text above the progress bar when the campaign is live and 10 kids have been fed', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.app.campaign.goal.currentNumber = 2
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    mockProps.app.campaign.goal.currentNumber = 20
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
     expect(
       progressBarContainer
@@ -268,17 +266,17 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('2 trees planted')
+    ).toEqual('20 kids fed')
   })
 
   it('displays the expected text above the progress bar when the campaign is live and a large number of trees have been planted', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
     mockProps.app.campaign.goal.currentNumber = 38911
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
     expect(
       progressBarContainer
@@ -286,17 +284,17 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('38.9K trees planted')
+    ).toEqual('38.9K kids fed')
   })
 
   it('displays the expected "goal" text above the progress bar', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.campaign.treesPlantedGoal = 35000
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    mockProps.campaign.goal = 35000
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
     expect(
       progressBarContainer
@@ -307,18 +305,18 @@ describe('Nov2021 campaign component', () => {
     ).toEqual('Goal: 35K')
   })
 
-  it('does not displays any text above the progress bar when the campaign is has ended', () => {
-    const TreePlantingCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
+  it('still displays text above the progress bar when the campaign has ended', () => {
+    const CustomCampaign = require('js/components/Campaign/Nov2021CampaignComponent')
       .default
 
     // Mock that now is after the campaign end time.
     MockDate.set(moment('2017-05-23T12:14:00.000Z'))
 
     const mockProps = getMockProps()
-    const wrapper = shallow(<TreePlantingCampaign {...mockProps} />).dive()
+    const wrapper = shallow(<CustomCampaign {...mockProps} />).dive()
     const progressBarContainer = wrapper.find(
-      '[data-test-id="trees-planted-progress-bar"]'
+      '[data-test-id="custom-campaign-progress-bar"]'
     )
-    expect(progressBarContainer.find(Typography).exists()).toBe(false)
+    expect(progressBarContainer.find(Typography).exists()).toBe(true)
   })
 })
