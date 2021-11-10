@@ -10,15 +10,13 @@ import { abbreviateNumber } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
 import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
 
-// TODO
-const campaignInfoURL = '/'
-
 const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   const {
     recruits: { recruitsWithAtLeastOneTab = {} },
   } = user
   const { time, goal } = campaign
-  const hasCampaignEnded = moment().isAfter(time.end)
+  // const hasCampaignEnded = moment().isAfter(time.end)
+  const hasCampaignEnded = true
   const { currentNumber: numNewUsers } = app.campaign.goal
   const progressNumAbbreviated = abbreviateNumber(numNewUsers)
   const goalNumAbbreviated = abbreviateNumber(goal)
@@ -50,8 +48,8 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
         }}
       >
         {hasCampaignEnded
-          ? 'Thanks for keeping kids fed!'
-          : 'Recruit a friend, feed 10 kids'}
+          ? 'Thank you for keeping kids fed!'
+          : 'Recruit a friend, feed 10 children in need'}
       </Typography>
       <div
         style={{
@@ -131,34 +129,33 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   >
                     No Kid Hungry
                   </Link>
-                  ! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                  maximus vel nunc sed tincidunt.
+                  ! Each meal handed out works to ensure all children have the
+                  opportunity to grow up strong, happy, and healthy.
                 </Typography>
-                <Typography variant={'body2'} gutterBottom={false} paragraph>
-                  Praesent id fringilla est. Duis vitae placerat odio. Etiam
-                  congue volutpat neque, et tristique risus mattis eu. Donec
-                  efficitur condimentum risus, sed volutpat ligula venenatis et.
-                  Praesent tempor in ex nec scelerisque. Nullam nec iaculis
-                  arcu. Sed aliquam purus risus, pharetra dapibus tortor mollis
-                  in. Duis a pretium magna, sed finibus turpis.
+                <Typography variant={'body2'} gutterBottom={false}>
+                  Happy holidays & happy tabbing!
                 </Typography>
               </>
             ) : (
               <>
-                <Typography variant={'body2'} gutterBottom>
-                  Now until December 6,{' '}
+                <Typography variant={'body2'} paragraph>
+                  Every child needs three meals a day to grow up strong, happy,
+                  and healthy. With{' '}
                   <Link
-                    to={campaignInfoURL}
+                    to="https://www.nokidhungry.org/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: ACCENT_COLOR }}
                   >
-                    we're feeding 10 kids
-                  </Link>{' '}
-                  for every person who joins Tab for a Cause! Lorem ipsum dolor
-                  sit amet, consectetur adipiscing elit. Sed felis lectus,
-                  sagittis et tempus sit amet, venenatis a purus. Proin et
-                  viverra arcu.
+                    No Kid Hungry
+                  </Link>
+                  , this can be a reality thanks to their school and early
+                  childhood meal programs.
+                </Typography>
+                <Typography variant={'body2'} paragraph>
+                  Now through <b>December 6</b>, we’re feeding 10 children for
+                  every person you recruit to Tab for a Cause! Maximize your
+                  impact by getting at least 3 friends on board today. ❤️
                 </Typography>
               </>
             )}
