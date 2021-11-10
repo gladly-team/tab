@@ -6,7 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import AppleIcon from 'mdi-material-ui/Apple'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
-import { abbreviateNumber } from 'js/utils/utils'
+import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 import Link from 'js/components/General/Link'
 import CampaignWrapper from 'js/components/Campaign/CampaignWrapper'
 
@@ -15,10 +15,11 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
     recruits: { recruitsWithAtLeastOneTab = {} },
   } = user
   const { time, goal } = campaign
-  // const hasCampaignEnded = moment().isAfter(time.end)
-  const hasCampaignEnded = true
+  const hasCampaignEnded = moment().isAfter(time.end)
+  // const hasCampaignEnded = true
   const { currentNumber: numNewUsers } = app.campaign.goal
   const progressNumAbbreviated = abbreviateNumber(numNewUsers)
+  const progressNumCommaFormatted = commaFormatted(numNewUsers)
   const goalNumAbbreviated = abbreviateNumber(goal)
   const progress = (100 * numNewUsers) / goal
   const kidsWord = numNewUsers === 1 ? 'kid' : 'kids'
@@ -129,8 +130,18 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   >
                     No Kid Hungry
                   </Link>
-                  ! Each meal handed out works to ensure all children have the
+                  ! Together,{' '}
+                  <b>
+                    our community provided {progressNumCommaFormatted} meals to
+                    kids in need.
+                  </b>{' '}
+                  Each meal handed out works to ensure all children have the
                   opportunity to grow up strong, happy, and healthy.
+                </Typography>
+                <Typography variant={'body2'} paragraph>
+                  Your help was critical: rather than spending our marketing
+                  budget on ads, we’re able to turn it into thousands of meals
+                  for kids, thanks to you.
                 </Typography>
                 <Typography variant={'body2'} gutterBottom={false}>
                   Happy holidays & happy tabbing!
@@ -153,9 +164,13 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   childhood meal programs.
                 </Typography>
                 <Typography variant={'body2'} paragraph>
-                  Now through <b>December 6</b>, we’re feeding 10 children for
-                  every person you recruit to Tab for a Cause! Maximize your
-                  impact by getting at least 3 friends on board today. ❤️
+                  Now until December 6,{' '}
+                  <b>
+                    we're feeding 10 children for every person you recruit to
+                    Tab for a Cause!
+                  </b>{' '}
+                  Quadruple your impact by getting at least 3 friends on board
+                  today. ❤️
                 </Typography>
               </>
             )}
