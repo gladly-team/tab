@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import AppleIcon from 'mdi-material-ui/Apple'
+import AppleIcon from 'mdi-material-ui/FoodApple'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
@@ -16,7 +16,6 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   } = user
   const { time, goal } = campaign
   const hasCampaignEnded = moment().isAfter(time.end)
-  // const hasCampaignEnded = true
   const { currentNumber: numNewUsers } = app.campaign.goal
   const progressNumAbbreviated = abbreviateNumber(numNewUsers)
   const progressNumCommaFormatted = commaFormatted(numNewUsers)
@@ -139,9 +138,9 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   opportunity to grow up strong, happy, and healthy.
                 </Typography>
                 <Typography variant={'body2'} paragraph>
-                  Your help was critical: rather than spending our marketing
-                  budget on ads, we’re able to turn it into thousands of meals
-                  for kids, thanks to you.
+                  The more people tabbing, the more we can accomplish together.
+                  Continue helping us spread the word about the easiest way to
+                  give back to the causes you are most passionate about.
                 </Typography>
                 <Typography variant={'body2'} gutterBottom={false}>
                   Happy holidays & happy tabbing!
@@ -160,17 +159,15 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   >
                     No Kid Hungry
                   </Link>
-                  , this can be a reality thanks to their school and early
+                  , this can be a reality, thanks to their school and early
                   childhood meal programs.
                 </Typography>
                 <Typography variant={'body2'} paragraph>
-                  Now until December 6,{' '}
-                  <b>
-                    we're feeding 10 children for every person you recruit to
-                    Tab for a Cause!
-                  </b>{' '}
-                  Quadruple your impact by getting at least 3 friends on board
-                  today. ❤️
+                  Now until <b>December 6</b>, we’re feeding 10 children for
+                  every person you recruit to Tab for a Cause! Let your friends
+                  know how easy it is to start Tabbing and help them turn their
+                  internet habit into a powerful force for good. Together we can
+                  change the world! ❤️
                 </Typography>
               </>
             )}
