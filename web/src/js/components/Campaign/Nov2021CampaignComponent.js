@@ -163,7 +163,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   childhood meal programs.
                 </Typography>
                 <Typography variant={'body2'} paragraph>
-                  Now until <b>December 6</b>, we’re feeding 10 children for
+                  Now until <b>December 6</b>, we're feeding 10 children for
                   every person you recruit to Tab for a Cause! Let your friends
                   know how easy it is to start Tabbing and help them turn their
                   internet habit into a powerful force for good. Together we can

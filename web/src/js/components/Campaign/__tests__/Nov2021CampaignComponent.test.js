@@ -5,10 +5,9 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-import AppleIcon from 'mdi-material-ui/Apple'
+import AppleIcon from 'mdi-material-ui/FoodApple'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
-import Link from 'js/components/General/Link'
 
 jest.mock('js/components/General/Link')
 
@@ -67,7 +66,7 @@ describe('Nov2021 campaign component', () => {
         .filterWhere(e => e.prop('variant') === 'h6')
         .render()
         .text()
-    ).toEqual('Recruit a friend, feed 10 kids')
+    ).toEqual('Recruit a friend, feed 10 children in need')
   })
 
   it('displays the correct title text when the campaign is complete', () => {
@@ -85,7 +84,7 @@ describe('Nov2021 campaign component', () => {
         .filterWhere(e => e.prop('variant') === 'h6')
         .render()
         .text()
-    ).toEqual('Thanks for keeping kids fed!')
+    ).toEqual('Thank you for keeping kids fed!')
   })
 
   it('displays no "completed" goal icons when the user has not recruited any users', () => {
@@ -180,9 +179,7 @@ describe('Nov2021 campaign component', () => {
         .last()
         .render()
         .text()
-    ).toMatch(
-      /Now until December 6, we're feeding 10 kids for every person who joins Tab for a Cause!/
-    )
+    ).toMatch(/Now until December 6, we're feeding 10 children/)
   })
 
   it('displays the expected text when the campaign is complete', () => {
