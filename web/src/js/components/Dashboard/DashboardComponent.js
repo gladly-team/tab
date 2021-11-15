@@ -78,7 +78,7 @@ import Nov2021Campaign from 'js/components/Campaign/Nov2021CampaignContainer'
 
 // @nov-2021-campaign
 // TODO: update (dashboard view, dashboard component, server-side)
-const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-08T10:00:00.000Z'
+const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
 const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
 const NOV2021_CAMPAIGN_START_MOMENT = moment(NOV2021_CAMPAIGN_START_TIME_ISO)
 const NOV2021_CAMPAIGN_END_MOMENT = moment(NOV2021_CAMPAIGN_END_TIME_ISO)

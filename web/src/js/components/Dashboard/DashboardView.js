@@ -10,7 +10,7 @@ import withUser from 'js/components/General/withUser'
 
 // @nov-2021-campaign
 // TODO: update (dashboard view, dashboard component, server-side)
-const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-08T10:00:00.000Z'
+const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
 const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
 
 class DashboardView extends React.Component {
