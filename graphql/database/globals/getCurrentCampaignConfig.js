@@ -55,8 +55,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     targetNumber: 100,
     transformNumberSourceValue: num => {
       // @nov-2021-campaign
-      // Provide 10 meals per new user.
-      return Math.floor(num * 10)
+      // Provide 1 meal per new user.
+      return num
     },
   },
   // Modifications to the campaign when the campaign has

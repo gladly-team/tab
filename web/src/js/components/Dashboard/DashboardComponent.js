@@ -740,7 +740,7 @@ class Dashboard extends React.Component {
                       start: NOV2021_CAMPAIGN_START_MOMENT,
                       end: NOV2021_CAMPAIGN_END_MOMENT,
                     },
-                    goal: 25000,
+                    goal: 2500,
                   }}
                   onDismiss={() => {
                     this.setState({

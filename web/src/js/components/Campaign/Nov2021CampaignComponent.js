@@ -21,7 +21,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
   const progressNumCommaFormatted = commaFormatted(numNewUsers)
   const goalNumAbbreviated = abbreviateNumber(goal)
   const progress = (100 * numNewUsers) / goal
-  const kidsWord = numNewUsers === 1 ? 'kid' : 'kids'
+  const mealsWord = numNewUsers === 1 ? 'meal' : 'meals'
 
   const ACCENT_COLOR = '#C41E3A'
   const goalIconStyle = {
@@ -49,7 +49,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
       >
         {hasCampaignEnded
           ? 'Thank you for keeping kids fed!'
-          : 'Recruit a friend, feed 10 children in need'}
+          : 'Recruit a friend, feed a child in need'}
       </Typography>
       <div
         style={{
@@ -98,7 +98,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   )}
                 </div>
                 <Typography variant={'body2'} gutterBottom>
-                  {recruitsWithAtLeastOneTab * 10}/30 kids fed
+                  {recruitsWithAtLeastOneTab}/3 meals provided
                 </Typography>
               </div>
             </div>
@@ -109,7 +109,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                 user={user}
                 InputProps={{ style: { fontSize: 14 } }}
                 label={'Share this link with a friend'}
-                helperText={"and you'll feed 10 kids when they join!"}
+                helperText={'and they’ll feed a kid when they join!'}
                 style={{
                   minWidth: 280,
                 }}
@@ -163,9 +163,9 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                   childhood meal programs.
                 </Typography>
                 <Typography variant={'body2'} paragraph>
-                  Now until <b>December 6</b>, we're feeding 10 children for
-                  every person you recruit to Tab for a Cause! Let your friends
-                  know how easy it is to start Tabbing and help them turn their
+                  Now until <b>December 6</b>, we're giving a child a meal for
+                  every person who joins Tab for a Cause! Let your friends know
+                  how easy it is to start Tabbing and help them turn their
                   internet habit into a powerful force for good. Together we can
                   change the world! ❤️
                 </Typography>
@@ -196,7 +196,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
             }}
           >
             <Typography variant={'caption'}>
-              {progressNumAbbreviated} {kidsWord} fed
+              {progressNumAbbreviated} {mealsWord} provided
             </Typography>
             <Typography variant={'caption'}>
               Goal: {goalNumAbbreviated}
