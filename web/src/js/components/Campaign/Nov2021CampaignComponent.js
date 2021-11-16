@@ -109,7 +109,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                 user={user}
                 InputProps={{ style: { fontSize: 14 } }}
                 label={'Share this link with a friend'}
-                helperText={'and they’ll feed a kid when they join!'}
+                helperText={"and they'll feed a kid when they join!"}
                 style={{
                   minWidth: 280,
                 }}

@@ -66,7 +66,7 @@ describe('Nov2021 campaign component', () => {
         .filterWhere(e => e.prop('variant') === 'h6')
         .render()
         .text()
-    ).toEqual('Recruit a friend, feed 10 children in need')
+    ).toEqual('Recruit a friend, feed a child in need')
   })
 
   it('displays the correct title text when the campaign is complete', () => {
@@ -150,7 +150,7 @@ describe('Nov2021 campaign component', () => {
     expect(comp.exists()).toBe(true)
     expect(comp.prop('label')).toBe('Share this link with a friend')
     expect(comp.prop('helperText')).toBe(
-      "and you'll feed 10 kids when they join!"
+      "and they'll feed a kid when they join!"
     )
   })
 
@@ -179,7 +179,7 @@ describe('Nov2021 campaign component', () => {
         .last()
         .render()
         .text()
-    ).toMatch(/Now until December 6, we're feeding 10 children/)
+    ).toMatch(/Now until December 6, we're giving a child a meal/)
   })
 
   it('displays the expected text when the campaign is complete', () => {
@@ -227,7 +227,7 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('0 kids fed')
+    ).toEqual('0 meals provided')
   })
 
   it('displays the expected text above the progress bar when the campaign is live and one kid has been fed', () => {
@@ -245,7 +245,7 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('10 kids fed')
+    ).toEqual('10 meals provided')
   })
 
   it('displays the expected text above the progress bar when the campaign is live and 10 kids have been fed', () => {
@@ -263,7 +263,7 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('20 kids fed')
+    ).toEqual('20 meals provided')
   })
 
   it('displays the expected text above the progress bar when the campaign is live and a large number of trees have been planted', () => {
@@ -281,7 +281,7 @@ describe('Nov2021 campaign component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('38.9K kids fed')
+    ).toEqual('38.9K meals provided')
   })
 
   it('displays the expected "goal" text above the progress bar', () => {
