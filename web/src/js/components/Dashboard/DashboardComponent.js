@@ -74,13 +74,21 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
+import Nov2021Campaign from 'js/components/Campaign/Nov2021CampaignContainer'
+
+// @nov-2021-campaign
+// TODO: update (dashboard view, dashboard component, server-side)
+const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
+const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
+const NOV2021_CAMPAIGN_START_MOMENT = moment(NOV2021_CAMPAIGN_START_TIME_ISO)
+const NOV2021_CAMPAIGN_END_MOMENT = moment(NOV2021_CAMPAIGN_END_TIME_ISO)
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
-const CampaignGeneric = lazy(() =>
-  import('js/components/Campaign/CampaignGenericView')
-)
+// const CampaignGeneric = lazy(() =>
+//   import('js/components/Campaign/CampaignGenericView')
+// )
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -704,20 +712,64 @@ class Dashboard extends React.Component {
           isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
         />
+
+        {/* @nov-2021-campaign: remove when done */}
         {showCampaign && app && user ? (
           <FadeInDashboardAnimation>
-            <Suspense fallback={null}>
-              <CampaignGeneric
-                onDismiss={() => {
-                  this.setState({
-                    hasUserDismissedCampaignRecently: true,
-                  })
-                }}
-                showError={this.showError.bind(this)}
-              />
-            </Suspense>
+            <div
+              style={{
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                boxSizing: 'border-box',
+                pointerEvents: 'none',
+              }}
+            >
+              <div style={{ width: 500, marginBottom: 100 }}>
+                <Nov2021Campaign
+                  app={app}
+                  user={user}
+                  campaign={{
+                    time: {
+                      start: NOV2021_CAMPAIGN_START_MOMENT,
+                      end: NOV2021_CAMPAIGN_END_MOMENT,
+                    },
+                    goal: 5000,
+                  }}
+                  onDismiss={() => {
+                    this.setState({
+                      hasUserDismissedCampaignRecently: true,
+                    })
+                  }}
+                  showError={this.showError.bind(this)}
+                />
+              </div>
+            </div>
           </FadeInDashboardAnimation>
         ) : null}
+
+        {/* @nov-2021-campaign: reenable when done */}
+
+        {/* {showCampaign && app && user ? ( */}
+        {/*   <FadeInDashboardAnimation> */}
+        {/*     <Suspense fallback={null}> */}
+        {/*       <CampaignGeneric */}
+        {/*         onDismiss={() => { */}
+        {/*           this.setState({ */}
+        {/*             hasUserDismissedCampaignRecently: true, */}
+        {/*           }) */}
+        {/*         }} */}
+        {/*         showError={this.showError.bind(this)} */}
+        {/*       /> */}
+        {/*     </Suspense> */}
+        {/*   </FadeInDashboardAnimation> */}
+        {/* ) : null} */}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />
