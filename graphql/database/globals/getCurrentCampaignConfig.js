@@ -41,7 +41,7 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
   // Logic on when to end the campaign.
   endTriggers: {
     whenGoalAchieved: false,
-    whenTimeEnds: false,
+    whenTimeEnds: true,
   },
   goal: {
     impactUnitSingular: 'heart',
