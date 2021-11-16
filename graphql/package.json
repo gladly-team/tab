@@ -8,7 +8,7 @@
     "@hapi/joi": "^17.1.1",
     "@sendgrid/mail": "^7.4.4",
     "@sentry/node": "^5.14.2",
-    "aws-sdk": "^2.632.0",
+    "aws-sdk": "^2.814.0",
     "aws4": "^1.8.0",
     "babel-watch": "^7.5.0",
     "bluebird": "^3.5.4",
