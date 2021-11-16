@@ -165,7 +165,7 @@ const Nov2021Campaign = ({ app, user, campaign, onDismiss }) => {
                 <Typography variant={'body2'} paragraph>
                   Now until <b>December 6</b>, we're giving a child a meal for
                   every person who joins Tab for a Cause! Let your friends know
-                  how easy it is to start Tabbing and help them turn their
+                  how easy it is to start tabbing and help them turn their
                   internet habit into a powerful force for good. Together we can
                   change the world! ❤️
                 </Typography>
