@@ -878,6 +878,10 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `Markdown - content that populates an "About the Cause" page`,
     },
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `String used to describe cause in account page`,
+    },
     causeId: {
       type: new GraphQLNonNull(GraphQLString),
       description: "Cause's id",
