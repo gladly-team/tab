@@ -1,1 +1,1 @@
-##### **You just put \${pendingUserReferralImpact} cat\${isPlural(referralImpact)}** on track for adoption!
+#### You just put \${claimedReferralImpact} cats on track for adoption!
