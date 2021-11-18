@@ -1125,6 +1125,12 @@ type SharingUICopy {
   """
   imgCategory: String!
 
+  """Image to use in email invite dialog"""
+  shareImage: String!
+
+  """Image shown after email invite sent"""
+  sentImage: String!
+
   """copy for reddit button"""
   redditButtonTitle: String!
 
@@ -1192,7 +1198,7 @@ type successfulEmailAddresses {
 
 input UpdateImpactInput {
   userId: String!
-  charityId: String!
+  charityId: String
   logImpact: Boolean
   claimPendingUserReferralImpact: Boolean
   confirmImpact: Boolean

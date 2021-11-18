@@ -809,6 +809,14 @@ const CauseSharingCopyType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’`,
     },
+    shareImage: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Image to use in email invite dialog',
+    },
+    sentImage: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Image shown after email invite sent',
+    },
     redditButtonTitle: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'copy for reddit button',
@@ -1679,7 +1687,7 @@ const updateImpactMutation = mutationWithClientMutationId({
   name: 'UpdateImpact',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: GraphQLString },
     logImpact: { type: GraphQLBoolean },
     claimPendingUserReferralImpact: { type: GraphQLBoolean },
     confirmImpact: { type: GraphQLBoolean },

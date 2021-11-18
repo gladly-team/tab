@@ -154,6 +154,14 @@ class Cause extends BaseModel {
           .description(
             `value to use for img switch statement on frontend; e.g. "cats" or "seas"`
           ),
+        shareImage: types
+          .string()
+          .required()
+          .description('Image to use in email invite dialog'),
+        sentImage: types
+          .string()
+          .required()
+          .description('Image shown after email invite sent'),
         redditButtonTitle: types
           .string()
           .required()
