@@ -20,6 +20,7 @@ import socialSubtitle from './social.subtitle.md'
 const data = {
   id: 'SGa6zohkY',
   about,
+  name: '#TeamSeas',
   backgroundImageCategory: 'seas',
   charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e',
   impactVisits: 10,

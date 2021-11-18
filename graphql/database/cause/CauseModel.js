@@ -35,6 +35,10 @@ class Cause extends BaseModel {
         .description(
           `Markdown - content that populates an "About the Cause" page`
         ),
+      name: types
+        .string()
+        .required()
+        .description(`String used to describe Cause in account page`),
       charityId: types
         .string()
         .required()
