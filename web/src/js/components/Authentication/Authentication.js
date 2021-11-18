@@ -39,17 +39,10 @@ import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGrou
 import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
-import {
-  SEARCH_APP,
-  TAB_APP,
-  STORAGE_CATS_CAUSE_ID,
-  STORAGE_SEAS_CAUSE_ID,
-} from 'js/constants'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import { isTabV4BetaUser, getCauseId } from 'js/utils/local-user-data-mgr'
+import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
-import catsBackgroundImage from 'js/assets/defaultBackground.jpg'
-import seasBackgroundImage from 'js/assets/defaultSeasBackground.jpg'
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
 //     to the app if they are; otherwise: ->
