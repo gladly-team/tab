@@ -16,6 +16,7 @@ import onboardingTitle2 from './onboarding.step2.title.md'
 import onboardingTitle3 from './onboarding.step3.title.md'
 import socialTitle from './social.title.md'
 import socialSubtitle from './social.subtitle.md'
+import emailAbout from './social.email.about.md'
 
 const data = {
   id: 'SGa6zohkY',
@@ -63,7 +64,17 @@ const data = {
     imgCategory: 'seas',
     redditButtonTitle:
       'Clean up our seas with every tab you open, for free, with Tab for #TeamSeas',
-    sendgridEmailTemplateId: 'd-ff97cd972da342a6a208f09235671479',
+    email: {
+      image:
+        'http://dev-tab2017-media.gladly.io/img/cause/seas/seasEmailInvite.svg',
+      title:
+        "Life is better with friends... and a clean planet!  That's why {{name}} thinks you should join them on Tab for #TeamSeas.",
+      about: emailAbout,
+      sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
+      faq:
+        'We’ve partnered with #TeamSeas to ensure the money raised will support their goal of raising $30 million to remove 30 million pounds of trash to protect and clean up our planet’s oceans, rivers, and lakes.',
+    },
+    sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     subtitle: socialSubtitle,
     title: socialTitle,
     tumblrCaption:

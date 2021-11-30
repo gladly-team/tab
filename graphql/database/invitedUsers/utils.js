@@ -23,7 +23,9 @@ export const verifyAndSendInvite = async ({
   inviterMessage,
   currentMissionId,
   templateId,
+  templateData,
 }) => {
+  console.log(templateData)
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(SENDGRID_API_KEY)
   const [existingUserDocs, hasUserBeenInvitedRecently] = await Promise.all([
@@ -85,6 +87,8 @@ export const verifyAndSendInvite = async ({
       username: encodeURIComponent(invitingUser.username),
       personalMessage: inviterMessage,
       missionId: currentMissionId,
+      ...templateData,
+      title: templateData.title.replace('{{name}}', inviterName),
     },
     category: currentMissionId ? 'squadReferral' : 'referral',
     asm: {

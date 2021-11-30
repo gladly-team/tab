@@ -162,6 +162,30 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`copy for reddit button`),
+        email: types.object({
+          image: types
+            .string()
+            .required()
+            .description(`url of landing image in email`),
+          title: types
+            .string()
+            .required()
+            .description(`title of email invite`),
+          about: types
+            .string()
+            .required()
+            .description(`stringified html about section`),
+          faq: types
+            .string()
+            .required()
+            .description(
+              `cause sepcific faq info.  Can be pure string or stringified html`
+            ),
+          sendgridEmailTemplateId: types
+            .string()
+            .required()
+            .description(`id for sendgridEmailTemplate`),
+        }),
         sendgridEmailTemplateId: types
           .string()
           .required()

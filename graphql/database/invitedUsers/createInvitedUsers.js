@@ -39,6 +39,7 @@ const createInvitedUsers = async (
     // get template id
     const user = await UserModel.get(userContext, inviterId)
     const cause = await getCause(user.causeId)
+    console.log(cause, ' my cause')
     const verifiedAndSentEmails = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite({
@@ -49,9 +50,14 @@ const createInvitedUsers = async (
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
           templateId: cause.sharing.sendgridEmailTemplateId,
+          templateData: {
+            ...cause.sharing.email,
+            landingPagePath: cause.landingPagePath,
+            cause: cause.name,
+          },
         })
       )
-    )
+    )``
     const sortedResults = verifiedAndSentEmails.reduce(
       (acum, item) => {
         acum[
