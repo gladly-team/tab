@@ -36,24 +36,24 @@ const data = {
     referralRewardNotification,
     referralRewardSubtitle,
     referralRewardTitle,
-    walkMeGif: 'cats.gif',
+    walkMeGif: 'cats/tickle.gif',
   },
   onboarding: {
     steps: [
       {
         title: onboardingTitle1,
         subtitle: onboardingSubtitle1,
-        imgName: 'cattabs',
+        imgName: 'cats/cattabs.svg',
       },
       {
         title: onboardingTitle2,
         subtitle: onboardingSubtitle2,
-        imgName: 'squadcat',
+        imgName: 'cats/squadcat.svg',
       },
       {
         title: onboardingTitle3,
         subtitle: onboardingSubtitle3,
-        imgName: 'adcat',
+        imgName: 'cats/adcat.svg',
       },
     ],
   },
@@ -61,6 +61,8 @@ const data = {
     facebookButtonTitle:
       "I just found, purr-haps, the most claw-ver browser extension ever! With Tab for Cats, I'm helping shelter cats get adopted every time I open a new tab. Check it out - it's free!",
     imgCategory: 'cats',
+    shareImage: 'cats/shareCats.png',
+    sentImage: 'cats/catsSent.png',
     redditButtonTitle:
       'The purr-fect way to help shelter cats get adopted, for free',
     sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
