@@ -268,6 +268,7 @@ install: yarn run all:install
 # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
 script:
   - 'yarn run ci:test'
+  - yarn run ci:deploy test
   - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
       yarn run ci:deploy test || travis_terminate 1;
       yarn run ci:test:integration || travis_terminate 1;
@@ -282,6 +283,14 @@ deploy:
     on:
       # all_branches: true
       branch: dev
+    # don't reset working directory after script step
+    skip_cleanup: true
+  # QA stage deploy
+  - provider: script
+    script: yarn run ci:deploy test
+    on:
+      # all_branches: true
+      branch: qa
     # don't reset working directory after script step
     skip_cleanup: true
   # Prod stage deploy
