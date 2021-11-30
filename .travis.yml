@@ -253,7 +253,10 @@ before_install:
   # Gulp (used in Prebid.js build)
   - yarn global add gulp
   # AWS CLI
-  - python --version
+  - sudo apt-get update
+  - sudo apt purge python2.7-minimal
+  - sudo apt-get install python3 python3-pip python3-setuptools
+  - pip3 install --upgrade pip
   - pip3 install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
