@@ -37,24 +37,24 @@ const data = {
     referralRewardNotification,
     referralRewardSubtitle,
     referralRewardTitle,
-    walkMeGif: 'dolphin.gif',
+    walkMeGif: 'seas/dolphin.gif',
   },
   onboarding: {
     steps: [
       {
         title: onboardingTitle1,
         subtitle: onboardingSubtitle1,
-        imgName: 'seas1',
+        imgName: 'seas/seas1.svg',
       },
       {
         title: onboardingTitle2,
         subtitle: onboardingSubtitle2,
-        imgName: 'seas2',
+        imgName: 'seas/seas2.svg',
       },
       {
         title: onboardingTitle3,
         subtitle: onboardingSubtitle3,
-        imgName: 'seas3',
+        imgName: 'seas/seas3.svg',
       },
     ],
   },
@@ -62,6 +62,8 @@ const data = {
     facebookButtonTitle:
       'I joined Tab for #TeamSeas, and now every tab I open helps clean up our rivers and oceans. Check it out - it’s free!',
     imgCategory: 'seas',
+    shareImage: 'seas/seasEmailInvite.svg',
+    sentImage: 'seas/seasEmailInvite.svg',
     redditButtonTitle:
       'Clean up our seas with every tab you open, for free, with Tab for #TeamSeas',
     email: {
