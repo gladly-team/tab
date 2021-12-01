@@ -39,7 +39,6 @@ const createInvitedUsers = async (
     // get template id
     const user = await UserModel.get(userContext, inviterId)
     const cause = await getCause(user.causeId)
-    console.log(cause, ' my cause')
     const verifiedAndSentEmails = await Promise.all(
       sanitizedEmails.map(inviteEmail =>
         verifyAndSendInvite({
