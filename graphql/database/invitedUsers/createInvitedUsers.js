@@ -56,7 +56,7 @@ const createInvitedUsers = async (
           },
         })
       )
-    )``
+    )
     const sortedResults = verifiedAndSentEmails.reduce(
       (acum, item) => {
         acum[
