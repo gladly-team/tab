@@ -66,7 +66,7 @@ const data = {
       'Clean up our seas with every tab you open, for free, with Tab for #TeamSeas',
     email: {
       image:
-        'http://dev-tab2017-media.gladly.io/img/cause/seas/seasEmailInvite.svg',
+        'https://prod-tab2017-media.gladly.io/img/cause/seas/seasEmailInvite.svg',
       title:
         "Life is better with friends... and a clean planet!  That's why {{name}} thinks you should join them on Tab for #TeamSeas.",
       about: emailAbout,

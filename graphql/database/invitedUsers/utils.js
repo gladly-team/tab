@@ -25,7 +25,6 @@ export const verifyAndSendInvite = async ({
   templateId,
   templateData,
 }) => {
-  console.log(templateData)
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(SENDGRID_API_KEY)
   const [existingUserDocs, hasUserBeenInvitedRecently] = await Promise.all([

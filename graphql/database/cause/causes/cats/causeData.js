@@ -18,6 +18,7 @@ import socialTitle from './social.title.md'
 import socialSubtitle from './social.subtitle.md'
 import emailAbout from './social.email.about.md'
 import emailFAQ from './social.email.faq.md'
+
 const data = {
   id: 'CA6A5C2uj',
   about,
@@ -65,7 +66,8 @@ const data = {
     redditButtonTitle:
       'The purr-fect way to help shelter cats get adopted, for free',
     email: {
-      image: 'http://dev-tab2017-media.gladly.io/img/cause/cats/emailCats.png',
+      image:
+        'https://prod-tab2017-media.gladly.io/img/cause/cats/emailCats.png',
       title:
         "Life is better with friends... and cats!  That's why {{name}} thinks you should join them on Tab for Cats.",
       about: emailAbout,
