@@ -87,6 +87,7 @@ import getCharities from '../database/charities/getCharities'
 
 import getCauseByUser from '../database/cause/getCauseByUser'
 import getCause from '../database/cause/getCause'
+import getCauses from '../database/cause/getCauses'
 import CauseModel from '../database/cause/CauseModel'
 import VideoAdLogModel from '../database/videoAdLog/VideoAdLogModel'
 import createVideoAdLog from '../database/videoAdLog/createVideoAdLog'
@@ -1441,6 +1442,14 @@ const appType = new GraphQLObjectType({
         )
       },
     },
+    causes: {
+      type: causeConnection,
+      description: 'All the causes',
+      args: connectionArgs,
+      resolve: (_, args, context) => {
+        return connectionFromPromisedArray(getCauses(context.user), args)
+      },
+    },
     backgroundImages: {
       type: backgroundImageConnection,
       description: 'Get all the "legacy" (uncategorized) background Images',
@@ -1624,6 +1633,10 @@ const { connectionType: widgetConnection } = connectionDefinitions({
 const { connectionType: charityConnection } = connectionDefinitions({
   name: CHARITY,
   nodeType: charityType,
+})
+const { connectionType: causeConnection } = connectionDefinitions({
+  name: CAUSE,
+  nodeType: CauseType,
 })
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
