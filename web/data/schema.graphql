@@ -15,6 +15,9 @@ type App implements Node {
   """All the charities"""
   charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
 
+  """All the causes"""
+  causes(after: String, first: Int, before: String, last: Int): CauseConnection
+
   """Get all the "legacy" (uncategorized) background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
 
@@ -302,6 +305,24 @@ type Cause implements Node {
 
   """the onboarding object on cause model"""
   onboarding: OnboardingUICopy!
+}
+
+"""A connection to a list of items."""
+type CauseConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CauseEdge]
+}
+
+"""An edge in a connection."""
+type CauseEdge {
+  """The item at the end of the edge"""
+  node: Cause
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """cause specific UI content around impact"""
