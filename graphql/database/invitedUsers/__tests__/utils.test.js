@@ -40,6 +40,11 @@ const mockParams = {
   invitingUser: getMockUserInstance({ username: 'test1' }),
   inviterName: 'alec',
   templateId: 'mock-default-template',
+  templateData: {
+    title: 'mock title {{name}}',
+    about: 'this is an about',
+    faq: 'this is an faq',
+  },
 }
 const mockSquadParams = {
   ...mockParams,
@@ -67,16 +72,20 @@ describe('verifyAndSendInvite general email', () => {
       missionId: '123456789',
     })
     expect(sgMail.send).toHaveBeenCalledWith({
+      asm: { group_id: 3861, groups_to_display: [3861] },
+      category: 'squadReferral',
       dynamicTemplateData: {
-        name: 'alec',
-        username: 'test1',
+        about: 'this is an about',
+        faq: 'this is an faq',
         missionId: '123456789',
+        name: 'alec',
+        personalMessage: undefined,
+        title: 'mock title alec',
+        username: 'test1',
       },
       from: 'foo@bar.com',
-      category: 'squadReferral',
       templateId: 'mock-squad-template',
       to: 'test123',
-      asm: { group_id: 3861, groups_to_display: [3861] },
     })
     expect(createUserMissionMethod).not.toHaveBeenCalled()
     expect(updateUserMethod).not.toHaveBeenCalled()
@@ -177,12 +186,20 @@ describe('verifyAndSendInvite general email', () => {
     })
     await verifyAndSendInvite(mockParams)
     expect(sgMail.send).toHaveBeenCalledWith({
-      dynamicTemplateData: { name: 'alec', username: 'test1' },
-      from: 'foo@bar.com',
+      asm: { group_id: 3861, groups_to_display: [3861] },
       category: 'referral',
+      dynamicTemplateData: {
+        about: 'this is an about',
+        faq: 'this is an faq',
+        missionId: undefined,
+        name: 'alec',
+        personalMessage: undefined,
+        title: 'mock title alec',
+        username: 'test1',
+      },
+      from: 'foo@bar.com',
       templateId: 'mock-default-template',
       to: 'test123',
-      asm: { group_id: 3861, groups_to_display: [3861] },
     })
   })
 
