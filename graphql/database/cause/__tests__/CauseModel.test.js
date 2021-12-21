@@ -73,6 +73,7 @@ describe('CauseModel', () => {
       charityId: 'abcdefghijklmnop',
       landingPagePath: '/test',
       impactVisits: 10,
+      isAvailableToSelect: false,
       impact: {
         impactCounterText: 'impactCounterText',
         referralRewardTitle: 'referralRewardTitle',
