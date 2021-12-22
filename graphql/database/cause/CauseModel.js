@@ -20,6 +20,7 @@ class Cause extends BaseModel {
   }
 
   static get schema() {
+    const self = this
     return {
       // TODO: additional restrictions, e.g. for nanoid
       id: types
@@ -45,6 +46,10 @@ class Cause extends BaseModel {
         .description(
           `Charity that this cause is currently generating impact for`
         ),
+      isAvailableToSelect: types
+        .boolean()
+        .description('if a user can select this cause')
+        .default(self.fieldDefaults.isAvailableToSelect),
       impactVisits: types
         .number()
         .integer()
@@ -284,7 +289,7 @@ class Cause extends BaseModel {
   }
 
   static get fieldDefaults() {
-    return {}
+    return { isAvailableToSelect: false }
   }
 }
 

@@ -891,6 +891,10 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `String used to describe cause in account page`,
     },
+    isAvailableToSelect: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'boolean if cause is available to select in ui',
+    },
     causeId: {
       type: new GraphQLNonNull(GraphQLString),
       description: "Cause's id",
@@ -1445,9 +1449,24 @@ const appType = new GraphQLObjectType({
     causes: {
       type: causeConnection,
       description: 'All the causes',
-      args: connectionArgs,
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: new GraphQLInputObjectType({
+            name: 'CausesFilters',
+            description: 'Fields on which to filter the list of charities.',
+            fields: {
+              isAvailableToSelect: { type: GraphQLBoolean },
+            },
+          }),
+        },
+      },
       resolve: (_, args, context) => {
-        return connectionFromPromisedArray(getCauses(context.user), args)
+        const { filters } = args
+        return connectionFromPromisedArray(
+          getCauses(context.user, filters),
+          args
+        )
       },
     },
     backgroundImages: {
