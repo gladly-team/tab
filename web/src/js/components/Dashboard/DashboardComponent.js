@@ -515,32 +515,15 @@ class Dashboard extends React.Component {
                       </Typography>
 
                       <Typography variant={'body2'}>
-                        Have a suggestion for an organization you would like to
-                        see in the future? DM us or reply to one of our posts on{' '}
+                        Have a suggestion for an organization you'd like to see
+                        in the future?{' '}
                         <Link
-                          to={instagramPageURL}
+                          to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          Instagram
+                          Tell us here.
                         </Link>
-                        ,{' '}
-                        <Link
-                          to={twitterPageURL}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Twitter
-                        </Link>
-                        , or{' '}
-                        <Link
-                          to={facebookPageURL}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Facebook
-                        </Link>{' '}
-                        @tabforacause to let us know!
                       </Typography>
                     </>
                   }
