@@ -45,9 +45,9 @@ import {
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
-  // facebookPageURL,
-  // instagramPageURL,
-  // twitterPageURL,
+  facebookPageURL,
+  instagramPageURL,
+  twitterPageURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
@@ -506,62 +506,46 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Like clean oceans? Us too.`}
+                  title={`Vote for the January Charity Spotlight`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        We're working with #TeamSeas to help remove 30M pounds
-                        of trash from our oceans! Learn more about it{' '}
+                        Let us know what nonprofit we should spotlight this
+                        month!
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        Have a suggestion for an organization you would like to
+                        see in the future? DM us or reply to one of our posts on{' '}
                         <Link
-                          to="https://youtu.be/fCedFp5Wmyc"
+                          to={instagramPageURL}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          in our video
+                          Instagram
                         </Link>
-                        .
+                        ,{' '}
+                        <Link
+                          to={twitterPageURL}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Twitter
+                        </Link>
+                        , or{' '}
+                        <Link
+                          to={facebookPageURL}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Facebook
+                        </Link>{' '}
+                        @tabforacause to let us know!
                       </Typography>
                     </>
                   }
-                  //                   message={
-                  //                     <>
-                  //                       <Typography variant={'body2'} gutterBottom>
-                  //                         Let us know what nonprofit we should spotlight this
-                  //                         month!
-                  //                       </Typography>
-                  //
-                  //                       <Typography variant={'body2'}>
-                  //                         Have a suggestion for an organization you would like to
-                  //                         see in the future? DM us or reply to one of our posts on{' '}
-                  //                         <Link
-                  //                           to={instagramPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Instagram
-                  //                         </Link>
-                  //                         ,{' '}
-                  //                         <Link
-                  //                           to={twitterPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Twitter
-                  //                         </Link>
-                  //                         , or{' '}
-                  //                         <Link
-                  //                           to={facebookPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Facebook
-                  //                         </Link>{' '}
-                  //                         @tabforacause to let us know!
-                  //                       </Typography>
-                  //                     </>
-                  //                   }
-                  buttonText={'Watch'}
-                  buttonURL={'https://youtu.be/fCedFp5Wmyc'}
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
