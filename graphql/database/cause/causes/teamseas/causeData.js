@@ -25,6 +25,7 @@ const data = {
   isAvailableToSelect: true,
   backgroundImageCategory: 'seas',
   charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e',
+  individualImpactEnabled: true,
   impactVisits: 10,
   landingPagePath: '/teamseas/',
   slug: 'teamseas',
