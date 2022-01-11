@@ -904,12 +904,16 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `URL path for the landing page belonging to this cause`,
     },
+    individualImpactEnabled: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: `Whether or not the current cause supports individual impact`,
+    },
     impactVisits: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: GraphQLInt,
       description: `number of visits required for each impact unit (e.g. 14 for cat charity)`,
     },
     impact: {
-      type: new GraphQLNonNull(CauseImpactCopy),
+      type: CauseImpactCopy,
       description: 'the impact object on cause model',
       resolve: cause => cause.impact,
     },
