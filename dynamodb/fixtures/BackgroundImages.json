@@ -154,5 +154,26 @@
     "category": "seas",
     "created": "2021-10-17T19:41:19.786Z",
     "updated": "2021-10-17T19:41:19.786Z"
+  },
+  {
+    "id": "87fe1385-388c-4c17-98ce-80163a8ac352",
+    "image": "87fe1385-388c-4c17-98ce-80163a8ac352.jpg",
+    "category": "black-photographers",
+    "created": "2022-01-11T16:43:34.506Z",
+    "updated": "2022-01-11T16:43:34.506Z"
+  },
+  {
+    "id": "3d1299fb-3ad5-4405-8cb4-5236bffd1660",
+    "image": "3d1299fb-3ad5-4405-8cb4-5236bffd1660.jpg",
+    "category": "black-photographers",
+    "created": "2022-01-11T16:43:34.506Z",
+    "updated": "2022-01-11T16:43:34.506Z"
+  },
+  {
+    "id": "d588d58c-bc0c-48c6-a815-0e4cddbcd397",
+    "image": "d588d58c-bc0c-48c6-a815-0e4cddbcd397.jpg",
+    "category": "black-photographers",
+    "created": "2022-01-11T16:43:34.506Z",
+    "updated": "2022-01-11T16:43:34.506Z"
   }
 ]
