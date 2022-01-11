@@ -3,11 +3,6 @@
 import tableNames from '../../tables'
 import BackgroundImageModel from '../BackgroundImageModel'
 import config from '../../../config'
-import {
-  BACKGROUND_IMAGE_LEGACY_CATEGORY,
-  BACKGROUND_IMAGE_CAT_CATEGORY,
-  BACKGROUND_IMAGE_SEAS_CATEGORY,
-} from '../../constants'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 jest.mock('../../databaseClient')
@@ -62,14 +57,6 @@ describe('BackgroundImageModel', () => {
     expect(
       BackgroundImageModel.permissions.indexPermissions.ImagesByCategory.create
     ).toBeUndefined()
-  })
-
-  it('returns a list of allowed categories', () => {
-    expect(BackgroundImageModel.allowedValues.category).toEqual([
-      BACKGROUND_IMAGE_LEGACY_CATEGORY,
-      BACKGROUND_IMAGE_CAT_CATEGORY,
-      BACKGROUND_IMAGE_SEAS_CATEGORY,
-    ])
   })
 
   it('constructs as expected', () => {

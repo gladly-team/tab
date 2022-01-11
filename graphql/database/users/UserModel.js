@@ -7,8 +7,6 @@ import {
   USER,
   USER_BACKGROUND_OPTION_DAILY,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
-  BACKGROUND_IMAGE_CAT_CATEGORY,
-  BACKGROUND_IMAGE_SEAS_CATEGORY,
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
@@ -194,13 +192,7 @@ class User extends BaseModel {
           id: types.string().required(),
           image: types.string().required(),
           thumbnail: types.string(),
-          category: types
-            .string()
-            .valid([
-              BACKGROUND_IMAGE_LEGACY_CATEGORY,
-              BACKGROUND_IMAGE_CAT_CATEGORY,
-              BACKGROUND_IMAGE_SEAS_CATEGORY,
-            ]),
+          category: types.string(),
           imageURL: types.string().forbidden(), // only set in deserializer
           thumbnailURL: types.string().forbidden(), // only set in deserializer
           timestamp: types
