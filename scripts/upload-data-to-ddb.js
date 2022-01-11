@@ -10,7 +10,7 @@
 // modifying dev/prod:
 //
 //   AWS_REGION=us-west-2 TABLE_NAME=Something \
-//   DYNAMODB_ENDPOINT=http:localhost:8000 \
+//   DYNAMODB_ENDPOINT=http://localhost:8000 \
 //     node scripts/upload-data-to-ddb.js ~/fixtures.json
 //
 /* eslint import/no-extraneous-dependencies: 0 */
