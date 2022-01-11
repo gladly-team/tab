@@ -16,7 +16,7 @@ const data = {
   name: 'blackEquity',
   isAvailableToSelect: false,
   backgroundImageCategory: 'black-photographers',
-  charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d830a', // bail project charity id
+  charityId: 'b7a78116-9a62-4208-b016-03aae6a3414a', // bail project charity id
   individualImpactEnabled: false,
   impactVisits: null,
   landingPagePath: '/blackEquity/',
@@ -49,7 +49,7 @@ const data = {
     redditButtonTitle: 'Promote Black equity with each tab',
     email: {
       image:
-        'https://dev-tab2017-media.gladly.io/img/cause/backEquity/blackEquityEmailInvite.svg',
+        'https://prod-tab2017-media.gladly.io/img/cause/backEquity/blackEquityEmailInvite.svg',
       title:
         'We all have a part to play in promoting racial equity.That’s why {{name}} thinks you should join them on Tab for Black Equity',
       about: emailAbout,
