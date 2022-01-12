@@ -44,10 +44,9 @@ describe('getCurrentCampaignConfig: transformNumberSourceValue', () => {
 
     // Test campaign-specific transform logic here.
     expect(transformFunc(0)).toEqual(0)
-    expect(transformFunc(1)).toEqual(1)
-    expect(transformFunc(1.26)).toEqual(1)
-    expect(transformFunc(49)).toEqual(49)
-    expect(transformFunc(50)).toEqual(50)
-    expect(transformFunc(4902)).toEqual(4902)
+    expect(transformFunc(49)).toEqual(0)
+    expect(transformFunc(50)).toEqual(1)
+    expect(transformFunc(51)).toEqual(1)
+    expect(transformFunc(4902)).toEqual(98)
   })
 })

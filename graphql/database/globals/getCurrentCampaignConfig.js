@@ -1,24 +1,19 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-// @nov-2021-campaign
-// TODO: update (dashboard view, dashboard component, server-side)
-const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
-const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
-
-// @nov-2021-campaign
-// The Nov2021 campaign has hardcoded copy, so much of
-// this is currently unused.
-
-const campaignTitle = '## X'
+const campaignTitle = '## Happy Hispanic Heritage Month!'
 const campaignDescription = `
-#### X
+#### In celebration of Hispanic Heritage Month, Tab for a Cause is proud to support [United We Dream](https://unitedwedream.org/) through October 15.
+
+#### United We Dream is a youth-led organization working to ensure all immigrants, regardless of documentation status or country of origin, are provided with resources to ensure they are supported and empowered.
+
+#### To stay involved with this celebration follow us on Instagram and TikTok (@tabforacause)! We will be posting interesting information and personal stories all month long.
 `
 
 // const campaignDescriptionTwo = ``
 
-const campaignEndTitle = '## X'
+const campaignEndTitle = '## Happy Hispanic Heritage Month!'
 const campaignEndDescription = `
-#### X
+#### In celebration of Hispanic Heritage Month, Tab for a Cause is proud to support [United We Dream](https://unitedwedream.org/) through October 15.
 `
 
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
@@ -28,20 +23,20 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'Nov2021Custom',
-  charityId: '910ed420-e479-4d77-b806-27dc9e3350c7', // nov-2021-campaign: TODO
+  campaignId: 'UWDSep2021',
+  charityId: '910ed420-e479-4d77-b806-27dc9e3350c7',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
     // descriptionMarkdownTwo: campaignDescriptionTwo,
   },
   countMoneyRaised: false,
-  countNewUsers: true,
+  countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
     whenGoalAchieved: false,
-    whenTimeEnds: true,
+    whenTimeEnds: false,
   },
   goal: {
     impactUnitSingular: 'heart',
@@ -49,15 +44,14 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
     limitProgressToTargetMax: false,
-    numberSource: 'newUsers', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
     targetNumber: 100,
-    transformNumberSourceValue: num => {
-      // @nov-2021-campaign
-      // Provide 1 meal per new user.
-      return Math.floor(num)
-    },
+    // transformNumberSourceValue: num => {
+    //   // return 9e6
+    //   return Math.floor(num / 50)
+    // },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -130,8 +124,8 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     },
   },
   time: {
-    start: NOV2021_CAMPAIGN_START_TIME_ISO,
-    end: NOV2021_CAMPAIGN_END_TIME_ISO,
+    start: '2021-09-15T10:00:00.000Z',
+    end: '2021-10-15T18:00:00.000Z',
   },
 })
 
