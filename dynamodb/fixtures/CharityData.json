@@ -502,6 +502,20 @@
     "created": "2021-09-15T10:00:00.000Z",
     "updated": "2021-09-15T10:00:00.000Z",
     "inactive": false,
-    "isPermanentPartner": true
+    "isPermanentPartner": false
+  },
+  {
+    "id": "bfc0b825-5495-4aa3-89c6-05a38a0d2ecd",
+    "name": "Coral Reef Alliance",
+    "category": "The Environment",
+    "logo": "coral-reef-alliance.jpg",
+    "image": "coral-reef-alliance.jpg",
+    "website": "https://coral.org",
+    "impact": "Thanks for supporting Coral Reef Alliance! These funds raised will help support science-based conservation strategies that will promote a healthier and happier planet long-term. ",
+    "description": "Working to save the world's coral reefs",
+    "created": "2022-01-12T10:00:00.000Z",
+    "updated": "2022-01-12T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
