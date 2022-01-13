@@ -379,6 +379,20 @@
     "isPermanentPartner": true
   },
   {
+    "id": "b7a78116-9a62-4208-b016-03aae6a3414a",
+    "name": "Tab for Black Equity",
+    "category": "Human Rights",
+    "logo": "--",
+    "image": "--",
+    "website": "--",
+    "impact": "--",
+    "description": "",
+    "created": "2022-01-11T10:00:00.000Z",
+    "updated": "2022-01-11T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
+  },
+  {
     "id": "6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z",
     "name": "Greater Good",
     "category": "cats",
