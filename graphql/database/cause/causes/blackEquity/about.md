@@ -6,4 +6,4 @@
 
 [The Thurgood Marshall College Fund](https://www.tmcf.org/) is a 501(c)(3) organization that advocates for students and public Historically Black Colleges and Universities (HBCUs), provides scholarships, and supports educational and career-driven programs. Its goal is to prepare the next generation of workforce talent through leadership development.
 
-For more information, please email us at contact @tabforacause.org.
+For more information, please email us at contact@tabforacause.org.

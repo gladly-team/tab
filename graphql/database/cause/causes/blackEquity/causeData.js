@@ -1,4 +1,4 @@
-// Cause: teamseas
+// Cause: black equity
 import about from './about.md'
 import onboardingSubtitle1 from './onboarding.step1.subtitle.md'
 import onboardingSubtitle2 from './onboarding.step2.subtitle.md'
@@ -13,14 +13,14 @@ import emailAbout from './social.email.about.md'
 const data = {
   id: 'q1FFsAhbV',
   about,
-  name: 'blackEquity',
+  name: 'Black Equity',
   isAvailableToSelect: false,
   backgroundImageCategory: 'black-photographers',
   charityId: 'b7a78116-9a62-4208-b016-03aae6a3414a', // bail project charity id
   individualImpactEnabled: false,
   impactVisits: null,
-  landingPagePath: '/blackEquity/',
-  slug: 'blackEquity',
+  landingPagePath: '/black-equity/',
+  slug: 'black-equity',
   onboarding: {
     steps: [
       {
@@ -49,7 +49,7 @@ const data = {
     redditButtonTitle: 'Promote Black equity with each tab',
     email: {
       image:
-        'https://prod-tab2017-media.gladly.io/img/cause/backEquity/blackEquityEmailInvite.svg',
+        'https://prod-tab2017-media.gladly.io/img/cause/blackEquity/blackEquityEmailInvite.svg',
       title:
         'We all have a part to play in promoting racial equity.That’s why {{name}} thinks you should join them on Tab for Black Equity',
       about: emailAbout,
