@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import { getMockUserContext } from '../../test-utils'
+
 const MOCK_CAUSE_1 = {
   id: 'abc123',
   charityId: 'some-id-1',
