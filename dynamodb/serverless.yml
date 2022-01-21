@@ -222,6 +222,15 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
+      userSearchSettingsLogTable:
+        read:
+          minimum: 1
+          maximum: 12
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 12
+          usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
@@ -406,6 +415,15 @@ custom:
           maximum: 40000
           usage: 0.60
       userSwitchSearchPromptLogTable:
+        read:
+          minimum: 1
+          maximum: 40000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 40000
+          usage: 0.60
+      userSearchSettingsLogTable:
         read:
           minimum: 1
           maximum: 40000
@@ -623,6 +641,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userSwitchSearchPromptLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userSwitchSearchPromptLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userSwitchSearchPromptLogTable.write.usage}
+    - table: userSearchSettingsLogTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.usage}
 
 resources:
   Resources:
@@ -1125,6 +1152,26 @@ resources:
       UpdateReplacePolicy: Retain
       Properties:  
         TableName: UserSwitchSearchPromptLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    
+    userSearchSettingsLogTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: UserSearchSettingsLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
