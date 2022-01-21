@@ -55,6 +55,10 @@ const allFixtures = [
     tableName: 'ReferralDataLog',
     jsonFile: 'ReferralDataLog.json',
   },
+  {
+    tableName: 'UserSwitchSearchPromptLog',
+    jsonFile: 'UserSwitchSearchPromptLog.json',
+  },
 ]
 
 const getFixtures = () => {

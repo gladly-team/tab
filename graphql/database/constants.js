@@ -21,6 +21,7 @@ export const MISSION = 'Mission'
 export const USER_MISSION = 'UserMission'
 export const VIDEO_AD_LOG = 'VideoAdLog'
 export const CAUSE = 'Cause'
+export const USER_SWITCH_SEARCH_PROMPT_LOG = 'UserSwitchSearchPromptLog'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
