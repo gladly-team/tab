@@ -22,7 +22,7 @@
     "jssha": "^3.2.0",
     "lodash": "^4.17.21",
     "moment": "^2.24.0",
-    "nanoid": "^3.1.23",
+    "nanoid": "^3.1.31",
     "node-fetch": "^2.6.1",
     "uuid": "3.3.2",
     "xss-filters": "^1.2.7"
