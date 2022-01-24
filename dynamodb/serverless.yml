@@ -407,11 +407,11 @@ custom:
           usage: 0.60
       userSwitchSearchPromptLogTable:
         read:
-          minimum: 80
+          minimum: 1
           maximum: 40000
           usage: 0.75
         write:
-          minimum: 40
+          minimum: 1
           maximum: 40000
           usage: 0.60
 

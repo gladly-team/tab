@@ -59,10 +59,7 @@ class UserSwitchSearchExperimentModel extends BaseModel {
 
   static get permissions() {
     return {
-      get: permissionAuthorizers.userIdMatchesHashKey,
-      update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
-      query: permissionAuthorizers.userIdMatchesHashKey,
     }
   }
 }
