@@ -105,6 +105,7 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import getBackgroundImages from '../database/backgroundImages/getBackgroundImages'
 import getCurrentUserMission from '../database/missions/getCurrentUserMission'
 import getPastUserMissions from '../database/missions/getPastUserMissions'
+import createUserExperiment from '../database/experiments/createUserExperiment'
 import {
   getLongestTabStreak,
   getCurrentTabStreak,
@@ -2730,6 +2731,32 @@ const createSearchEnginePromptLogMutation = mutationWithClientMutationId({
   },
 })
 
+const createUserExperimentMutation = mutationWithClientMutationId({
+  name: 'CreateUserExperiment',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    experimentId: { type: new GraphQLNonNull(GraphQLString) },
+    variationId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: async (
+    { userId, experimentId, variationId },
+    context
+  ) => {
+    const userGlobalObj = fromGlobalId(userId)
+    createUserExperiment(
+      context.user,
+      userGlobalObj.id,
+      experimentId,
+      variationId
+    )
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2821,6 +2848,8 @@ const mutationType = new GraphQLObjectType({
     setYahooSearchOptIn: setYahooSearchOptInMutation,
     setUserSearchEngine: setUserSearchEngineMutation,
     createSearchEnginePromptLog: createSearchEnginePromptLogMutation,
+
+    createUserExperiment: createUserExperimentMutation,
   }),
 })
 
