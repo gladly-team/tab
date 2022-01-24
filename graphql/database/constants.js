@@ -40,3 +40,5 @@ export const GENERAL_EMAIL_INVITE_TEMPLATE_ID =
 
 // 14 tabs for 1 treat * 36 treats for 1 session = 504 tabs for 1 cat mission
 export const TAB_GOAL_FOR_TRAINING_SESSION = 504
+
+export const VALID_SEARCH_ENGINES = ['Ecosia', 'DuckDuckgo', 'Google', 'Bing']

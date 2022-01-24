@@ -1,7 +1,7 @@
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER_SEARCH_LOG } from '../constants'
+import { USER_SEARCH_LOG, VALID_SEARCH_ENGINES } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
@@ -32,6 +32,7 @@ class UserSearchLog extends BaseModel {
         .isoDate()
         .required(),
       source: types.string(),
+      searchEngine: types.string().valid(VALID_SEARCH_ENGINES),
     }
   }
 
