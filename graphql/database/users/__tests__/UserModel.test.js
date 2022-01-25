@@ -270,6 +270,7 @@ describe('UserModel', () => {
       deleted: false,
       hasSeenSquads: false,
       causeId: 'CA6A5C2uj',
+      yahooPaidSearchRewardOptIn: false,
     })
   })
 
@@ -321,5 +322,15 @@ describe('UserModel', () => {
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       searchesToday: 47,
     })
+  })
+
+  it('only allows valid search engines', () => {
+    const model = new User({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      email: 'foo@bar.com',
+      username: 'Foo Bar',
+      searchEngine: 'invalid-search-engine',
+    })
+    expect(() => User.validate(model)).toThrow()
   })
 })

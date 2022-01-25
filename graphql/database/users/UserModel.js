@@ -7,6 +7,7 @@ import {
   USER,
   USER_BACKGROUND_OPTION_DAILY,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
+  VALID_SEARCH_ENGINES,
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
@@ -386,6 +387,29 @@ class User extends BaseModel {
         .string()
         .description('id for cause user belongs to')
         .default(self.fieldDefaults.causeId),
+      searchEngine: types
+        .string()
+        .valid(VALID_SEARCH_ENGINES)
+        .description('search engine user has selected'),
+      yahooPaidSearchRewardOptIn: types
+        .boolean()
+        .description(
+          'whether or not a user has opted into earning a heart per search'
+        )
+        .default(self.fieldDefaults.yahooPaidSearchRewardOptIn),
+      yahooSearchSwitchPrompt: types.object({
+        hasSeenPrompt: types
+          .boolean()
+          .description(
+            'whether or not the user has seen the yahoo search switch prompt'
+          ),
+        timestamp: types
+          .string()
+          .isoDate()
+          .description(
+            'when the user responded to the yahoo search switch prompt'
+          ),
+      }),
     }
   }
 
@@ -436,6 +460,7 @@ class User extends BaseModel {
       hasSeenSquads: false,
       // cats cause ID for default.
       causeId: 'CA6A5C2uj',
+      yahooPaidSearchRewardOptIn: false,
     }
   }
 
