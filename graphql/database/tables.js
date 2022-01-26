@@ -17,6 +17,7 @@ const tables = {
   userRevenueLog: 'UserRevenueLog',
   userDataConsentLog: 'UserDataConsentLog',
   backgroundImages: 'BackgroundImages',
+  backgroundImageCategory: 'BackgroundImageCategory',
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',
   userTabsLog: 'UserTabsLog',

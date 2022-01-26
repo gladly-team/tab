@@ -241,6 +241,14 @@ const backgroundImageType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'the category that the image falls into',
     },
+    collectionLink: {
+      type: GraphQLString,
+      description: 'the link to the collection in unsplash',
+    },
+    collectionDescription: {
+      type: GraphQLString,
+      description: 'the description of the collection',
+    },
     thumbnail: {
       type: GraphQLString,
       description: 'The image thumbnail filename',

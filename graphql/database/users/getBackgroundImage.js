@@ -4,7 +4,7 @@ import {
 } from '../constants'
 import setBackgroundImage from './setBackgroundImage'
 import setBackgroundImageDaily from './setBackgroundImageDaily'
-
+import BackgroundImageCategoryModel from '../backgroundImages/BackgroundImageCategoryModel'
 const DEPRECATED_IMG_IDS = ['9308b921-44c7-4b4e-845d-3b01fa73fa2b']
 const REPLACEMENT_IMG_ID = '7e73d6d7-b915-4366-b01a-ffc126466d5b'
 
@@ -45,9 +45,36 @@ const getBackgroundImage = async (
       REPLACEMENT_IMG_ID,
       mode
     )
+    try {
+      const {
+        collectionLink,
+        collectionDescription,
+      } = await BackgroundImageCategoryModel.get(
+        userContext,
+        updatedUser.backgroundImage.category
+      )
+      updatedUser.backgroundImage = {
+        ...updatedUser.backgroundImage,
+        collectionLink,
+        collectionDescription,
+      }
+    } catch (e) {
+      // fail silently because this category doesn't have a collection link or description
+    }
     return updatedUser.backgroundImage
   }
-  return backgroundImage
+  try {
+    const {
+      collectionLink,
+      collectionDescription,
+    } = await BackgroundImageCategoryModel.get(
+      userContext,
+      backgroundImage.category
+    )
+    return { ...backgroundImage, collectionLink, collectionDescription }
+  } catch (e) {
+    return backgroundImage
+  }
 }
 
 export default getBackgroundImage
