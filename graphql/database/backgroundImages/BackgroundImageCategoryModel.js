@@ -21,7 +21,6 @@ class BackgroundImageCategory extends BaseModel {
 
   static get schema() {
     return {
-      id: types.uuid().required(),
       name: types
         .string()
         .required()
