@@ -2,9 +2,11 @@ import {
   USER_BACKGROUND_OPTION_DAILY,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
 } from '../constants'
+import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import setBackgroundImage from './setBackgroundImage'
 import setBackgroundImageDaily from './setBackgroundImageDaily'
 import BackgroundImageCategoryModel from '../backgroundImages/BackgroundImageCategoryModel'
+
 const DEPRECATED_IMG_IDS = ['9308b921-44c7-4b4e-845d-3b01fa73fa2b']
 const REPLACEMENT_IMG_ID = '7e73d6d7-b915-4366-b01a-ffc126466d5b'
 
@@ -60,7 +62,11 @@ const getBackgroundImage = async (
       }
     } catch (e) {
       // fail silently because this category doesn't have a collection link or description
+      if (e.code !== DatabaseItemDoesNotExistException.code) {
+        throw e
+      }
     }
+
     return updatedUser.backgroundImage
   }
   try {

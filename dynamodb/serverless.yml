@@ -159,6 +159,15 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
+      backgroundImageCategoryTable:
+        read:
+          minimum: 1
+          maximum: 12
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 12
+          usage: 0.60
       userWidgetsTable:
         read:
           minimum: 1
@@ -350,6 +359,15 @@ custom:
         write:
           minimum: 1
           maximum: 40000
+          usage: 0.60
+      backgroundImageCategoryTable:
+        read:
+          minimum: 1
+          maximum: 12
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 12
           usage: 0.60
       userWidgetsTable:
         read:
@@ -556,6 +574,17 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.usage}
+    - table: backgroundImageCategoryTable
+      index:
+      - CollectionByName
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImageCategoryTable.write.usage}
     - table: userWidgetsTable
       index:
         - Widgets
@@ -980,6 +1009,31 @@ resources:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
 
+    backgroundImageCategoryTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: BackgroundImageCategory-${self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: CollectionByName
+            KeySchema:
+              - AttributeName: name
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
     userWidgetsTable:  
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain

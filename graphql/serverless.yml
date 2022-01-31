@@ -153,6 +153,16 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}/index/*"
+    # BackgroundImageCategory table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+      Resource:
+        - "${self:custom.dbTableArnBase}BackgroundImageCategory-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}BackgroundImageCategory-${self:provider.stage}/index/*"
     # UserImpact table
     - Effect: "Allow"
       Action:

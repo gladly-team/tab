@@ -15,26 +15,43 @@ class BackgroundImageCategory extends BaseModel {
     return 'name'
   }
 
+  static get indexes() {
+    return [
+      {
+        hashKey: 'name',
+        name: 'CollectionByName',
+        type: 'global',
+      },
+    ]
+  }
+
   static get tableName() {
     return tableNames.backgroundImageCategory
   }
 
   static get schema() {
     return {
+      id: types
+        .string()
+        .length(9)
+        .required()
+        .description(`The unique nanoid for the category`),
       name: types
         .string()
         .required()
         .description(
           `the backgroundground Image Category name that connects to images`
         ),
-      collectionLink: types
-        .string()
-        .required()
-        .description('the link to the unsplash collection'),
-      collectionDescription: types
-        .string()
-        .required()
-        .description('the description of the collection shown in the UI'),
+      collection: types.object({
+        collectionLink: types
+          .string()
+          .required()
+          .description('the link to the unsplash collection'),
+        collectionDescription: types
+          .string()
+          .required()
+          .description('the description of the collection shown in the UI'),
+      }),
     }
   }
 

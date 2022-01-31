@@ -44,6 +44,10 @@ const allFixtures = [
     jsonFile: 'BackgroundImages.json',
   },
   {
+    tableName: 'BackgroundImageCategory',
+    jsonFile: 'BackgroundImageCategory.json',
+  },
+  {
     tableName: 'Widgets',
     jsonFile: 'WidgetsData.json',
   },

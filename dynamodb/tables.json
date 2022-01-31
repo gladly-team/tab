@@ -335,6 +335,36 @@
     }
   },
   {
+    "TableName": "BackgroundImageCategory",
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [
+      { "AttributeName": "id", "AttributeType": "S" },
+      { "AttributeName": "name", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "CollectionByName",
+        "KeySchema": [
+          {
+            "AttributeName": "name",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
     "TableName": "UserWidgets",
     "KeySchema": [
       { "AttributeName": "userId", "KeyType": "HASH" },
