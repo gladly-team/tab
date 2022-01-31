@@ -1,14 +1,22 @@
 /* eslint-env jest */
 
-import { getMockUserContext, getMockUserInstance } from '../../test-utils'
+import {
+  getMockUserContext,
+  getMockUserInstance,
+  DatabaseOperation,
+  setMockDBResponse,
+  clearAllMockDBResponses,
+} from '../../test-utils'
 
 const EXAMPLE_DEPRECATED_IMG_ID = '9308b921-44c7-4b4e-845d-3b01fa73fa2b'
 const REPLACEMENT_IMG_ID = '7e73d6d7-b915-4366-b01a-ffc126466d5b'
 
+jest.mock('../../databaseClient')
 jest.mock('../setBackgroundImage')
-
+// jest.mock('../../backgroundImages/BackgroundImageCategoryModel.js')
 afterEach(() => {
   jest.clearAllMocks()
+  clearAllMockDBResponses()
 })
 
 describe('getBackgroundImage', () => {
@@ -26,8 +34,47 @@ describe('getBackgroundImage', () => {
       ...getMockUserInstance(),
       backgroundImage: exampleImg,
     }
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const response = await getBackgroundImage(userContext, mockUser)
     expect(response).toEqual(exampleImg)
+  })
+
+  it('includes the collection information if there is some', async () => {
+    expect.assertions(1)
+    const getBackgroundImage = require('../getBackgroundImage').default
+    const userContext = getMockUserContext()
+    const exampleImg = {
+      id: 'some-img-id',
+      name: 'I am an image',
+      image: 'abc.jpg',
+      thumbnail: 'def.jpg',
+    }
+    const mockUser = {
+      ...getMockUserInstance(),
+      backgroundImage: exampleImg,
+    }
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [
+        {
+          id: '123456789',
+          name: 'black-photographers',
+          collectionLink:
+            'https://unsplash.com/collections/l26tWeG5IJw/black-equity',
+          collectionDescription: 'Photos taken by black photographers',
+        },
+      ],
+    })
+    const response = await getBackgroundImage(userContext, mockUser)
+    expect(response).toEqual({
+      ...exampleImg,
+      imageCollection: {
+        collectionDescription: 'Photos taken by black photographers',
+        collectionLink:
+          'https://unsplash.com/collections/l26tWeG5IJw/black-equity',
+      },
+    })
   })
 
   it('does not call setBackgroundImage by default', async () => {
@@ -36,6 +83,9 @@ describe('getBackgroundImage', () => {
     const userContext = getMockUserContext()
     const mockUser = getMockUserInstance()
     const setBackgroundImage = require('../setBackgroundImage').default
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     await getBackgroundImage(userContext, mockUser)
     expect(setBackgroundImage).not.toHaveBeenCalled()
   })
@@ -53,6 +103,9 @@ describe('getBackgroundImage', () => {
         thumbnail: 'def.jpg',
       },
     }
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const setBackgroundImage = require('../setBackgroundImage').default
     const newImg = {
       id: REPLACEMENT_IMG_ID,
@@ -94,6 +147,9 @@ describe('getBackgroundImage', () => {
       image: '3acd54614b1d4d7fbce85d965de3de25.jpg',
       thumbnail: '71a27d6823244354acb85e0806d0dff1.jpg',
     }
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     setBackgroundImage.mockImplementationOnce(async (_, __, imgId) => {
       if (imgId === REPLACEMENT_IMG_ID) {
         return {
@@ -133,6 +189,9 @@ describe('getBackgroundImage', () => {
       image: '3acd54614b1d4d7fbce85d965de3de25.jpg',
       thumbnail: '71a27d6823244354acb85e0806d0dff1.jpg',
     }
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     setBackgroundImage.mockImplementationOnce(async (_, __, imgId) => {
       if (imgId === REPLACEMENT_IMG_ID) {
         return {
