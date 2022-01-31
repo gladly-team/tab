@@ -2,7 +2,6 @@ import {
   USER_BACKGROUND_OPTION_DAILY,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
 } from '../constants'
-import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import setBackgroundImage from './setBackgroundImage'
 import setBackgroundImageDaily from './setBackgroundImageDaily'
 import BackgroundImageCategoryModel from '../backgroundImages/BackgroundImageCategoryModel'
@@ -47,40 +46,35 @@ const getBackgroundImage = async (
       REPLACEMENT_IMG_ID,
       mode
     )
-    try {
-      const {
-        collectionLink,
-        collectionDescription,
-      } = await BackgroundImageCategoryModel.get(
-        userContext,
-        updatedUser.backgroundImage.category
-      )
-      updatedUser.backgroundImage = {
-        ...updatedUser.backgroundImage,
-        collectionLink,
-        collectionDescription,
-      }
-    } catch (e) {
-      // fail silently because this category doesn't have a collection link or description
-      if (e.code !== DatabaseItemDoesNotExistException.code) {
-        throw e
-      }
-    }
-
-    return updatedUser.backgroundImage
-  }
-  try {
-    const {
-      collectionLink,
-      collectionDescription,
-    } = await BackgroundImageCategoryModel.get(
+    const collection = (await BackgroundImageCategoryModel.query(
       userContext,
       backgroundImage.category
     )
-    return { ...backgroundImage, collectionLink, collectionDescription }
-  } catch (e) {
-    return backgroundImage
+      .usingIndex('CollectionByName')
+      .execute())[0]
+    if (collection) {
+      const { collectionLink, collectionDescription } = collection
+      updatedUser.backgroundImage = {
+        ...updatedUser.backgroundImage,
+        imageCollection: { collectionLink, collectionDescription },
+      }
+    }
+    return updatedUser.backgroundImage
   }
+  const collection = (await BackgroundImageCategoryModel.query(
+    userContext,
+    backgroundImage.category
+  )
+    .usingIndex('CollectionByName')
+    .execute())[0]
+  if (collection) {
+    const { collectionLink, collectionDescription } = collection
+    return {
+      ...backgroundImage,
+      imageCollection: { collectionLink, collectionDescription },
+    }
+  }
+  return backgroundImage
 }
 
 export default getBackgroundImage

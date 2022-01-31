@@ -41,6 +41,7 @@ type BackgroundImage implements Node {
 
   """the category that the image falls into"""
   category: String!
+  imageCollection: collection
 
   """The image thumbnail filename"""
   thumbnail: String
@@ -439,6 +440,15 @@ type CharityEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""the image collection information"""
+type collection {
+  """the link to the collection in unsplash"""
+  collectionLink: String
+
+  """the description of the collection"""
+  collectionDescription: String
 }
 
 input CreateInvitedUsersInput {

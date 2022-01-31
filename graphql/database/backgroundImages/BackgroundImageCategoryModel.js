@@ -42,16 +42,14 @@ class BackgroundImageCategory extends BaseModel {
         .description(
           `the backgroundground Image Category name that connects to images`
         ),
-      collection: types.object({
-        collectionLink: types
-          .string()
-          .required()
-          .description('the link to the unsplash collection'),
-        collectionDescription: types
-          .string()
-          .required()
-          .description('the description of the collection shown in the UI'),
-      }),
+      collectionLink: types
+        .string()
+        .required()
+        .description('the link to the unsplash collection'),
+      collectionDescription: types
+        .string()
+        .required()
+        .description('the description of the collection shown in the UI'),
     }
   }
 
@@ -59,6 +57,13 @@ class BackgroundImageCategory extends BaseModel {
     return {
       get: () => true,
       getAll: () => true,
+      indexPermissions: {
+        CollectionByName: {
+          get: () => true,
+          getAll: () => true,
+          query: () => true,
+        },
+      },
     }
   }
 }

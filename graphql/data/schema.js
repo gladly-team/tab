@@ -241,20 +241,23 @@ const backgroundImageType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'the category that the image falls into',
     },
-    imageCollection: new GraphQLObjectType({
-      name: 'collection',
-      description: 'the image collection information',
-      fields: () => ({
-        collectionLink: {
-          type: GraphQLString,
-          description: 'the link to the collection in unsplash',
-        },
-        collectionDescription: {
-          type: GraphQLString,
-          description: 'the description of the collection',
-        },
+    imageCollection: {
+      type: new GraphQLObjectType({
+        name: 'collection',
+        description: 'the image collection information',
+        fields: () => ({
+          collectionLink: {
+            type: GraphQLString,
+            description: 'the link to the collection in unsplash',
+          },
+          collectionDescription: {
+            type: GraphQLString,
+            description: 'the description of the collection',
+          },
+        }),
+        resolve: backgroundImage => backgroundImage.imageCollection,
       }),
-    }),
+    },
     thumbnail: {
       type: GraphQLString,
       description: 'The image thumbnail filename',
