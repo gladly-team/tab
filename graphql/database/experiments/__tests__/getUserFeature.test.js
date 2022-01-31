@@ -8,22 +8,14 @@ const user = getMockUserInstance()
 describe('getUserFeatures tests', () => {
   it('gets userFeatures as expected', async () => {
     expect.assertions(1)
-    const getUserFeatures = require('../getUserFeatures').default
+    const getUserFeature = require('../getUserFeature').default
 
-    const result = await getUserFeatures(userContext, user)
-    expect(result).toEqual([
+    const result = await getUserFeature(userContext, user, 'test-feature')
+    expect(result).toEqual(
       new Feature({
         featureName: 'test-feature',
         variation: false,
-      }),
-      new Feature({
-        featureName: 'yahoo-search-existing-users',
-        variation: false,
-      }),
-      new Feature({
-        featureName: 'yahoo-search-new-users',
-        variation: 'Google',
-      }),
-    ])
+      })
+    )
   })
 })

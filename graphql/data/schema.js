@@ -135,6 +135,7 @@ import {
   getDollarsPerDayRate,
 } from '../database/globals/globals'
 import getCampaign from '../database/globals/getCampaign'
+import getUserSearchEngine from '../database/users/getUserSearchEngine'
 
 class App {
   constructor(id) {
@@ -745,6 +746,16 @@ const userType = new GraphQLObjectType({
       type: new GraphQLList(featureType),
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context, user),
+    },
+    searchEngine: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the User’s search engine',
+      resolve: user => getUserSearchEngine(user),
+    },
+    showYahooPrompt: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether to show the yahoo search prompt',
+      resolve: user => !user.yahooSearchSwitchPrompt.hasSeenPrompt,
     },
   }),
   interfaces: [nodeInterface],
