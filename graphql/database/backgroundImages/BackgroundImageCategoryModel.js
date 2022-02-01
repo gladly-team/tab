@@ -12,7 +12,7 @@ class BackgroundImageCategory extends BaseModel {
   }
 
   static get hashKey() {
-    return 'name'
+    return 'id'
   }
 
   static get indexes() {

@@ -11,7 +11,7 @@ describe('BackgroundImageCategoryModel', () => {
   })
 
   it('implements the hashKey property', () => {
-    expect(BackgroundImageCategoryModel.hashKey).toBe('name')
+    expect(BackgroundImageCategoryModel.hashKey).toBe('id')
   })
 
   it('implements the tableName property', () => {
