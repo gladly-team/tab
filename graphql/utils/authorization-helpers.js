@@ -37,3 +37,10 @@ permissionAuthorizers.userIdMatchesHashKey = (user, hashKey) =>
 permissionAuthorizers.userIdMatchesRangeKey = (user, _hashKey, rangeKey) =>
   user.id === rangeKey
 permissionAuthorizers.allowAll = () => true
+
+export const showInternalOnly = (email = '') => {
+  if (email.includes('@tabforacause.org') || email.includes('@gladly.io')) {
+    return true
+  }
+  return false
+}

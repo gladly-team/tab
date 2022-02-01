@@ -49,6 +49,11 @@ const createInvitedUsers = async (
           inviterName: santiziedInviterName,
           inviterMessage: sanitizedMessage,
           templateId: cause.sharing.sendgridEmailTemplateId,
+          templateData: {
+            ...cause.sharing.email,
+            landingPagePath: cause.landingPagePath,
+            cause: cause.name,
+          },
         })
       )
     )

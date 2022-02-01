@@ -4,6 +4,7 @@ import {
 } from '../constants'
 import setBackgroundImage from './setBackgroundImage'
 import setBackgroundImageDaily from './setBackgroundImageDaily'
+import BackgroundImageCategoryModel from '../backgroundImages/BackgroundImageCategoryModel'
 
 const DEPRECATED_IMG_IDS = ['9308b921-44c7-4b4e-845d-3b01fa73fa2b']
 const REPLACEMENT_IMG_ID = '7e73d6d7-b915-4366-b01a-ffc126466d5b'
@@ -45,7 +46,33 @@ const getBackgroundImage = async (
       REPLACEMENT_IMG_ID,
       mode
     )
+    const collection = (await BackgroundImageCategoryModel.query(
+      userContext,
+      backgroundImage.category
+    )
+      .usingIndex('CollectionByName')
+      .execute())[0]
+    if (collection) {
+      const { collectionLink, collectionDescription } = collection
+      updatedUser.backgroundImage = {
+        ...updatedUser.backgroundImage,
+        imageCollection: { collectionLink, collectionDescription },
+      }
+    }
     return updatedUser.backgroundImage
+  }
+  const collection = (await BackgroundImageCategoryModel.query(
+    userContext,
+    backgroundImage.category
+  )
+    .usingIndex('CollectionByName')
+    .execute())[0]
+  if (collection) {
+    const { collectionLink, collectionDescription } = collection
+    return {
+      ...backgroundImage,
+      imageCollection: { collectionLink, collectionDescription },
+    }
   }
   return backgroundImage
 }

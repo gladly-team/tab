@@ -155,11 +155,6 @@ class CampaignGenericComponent extends React.Component {
                   <Markdown children={content.descriptionMarkdown} />
                 </div>
               </div>
-              {showSocialSharing ? (
-                <div className={classes.socialSharing}>
-                  <SocialShare {...socialSharing} />
-                </div>
-              ) : null}
               {showHeartsDonationButton ? (
                 <DonateHeartsControls
                   charity={charity}
@@ -170,6 +165,11 @@ class CampaignGenericComponent extends React.Component {
               {content.descriptionMarkdownTwo ? (
                 <div className={classes.description}>
                   <Markdown children={content.descriptionMarkdownTwo} />
+                </div>
+              ) : null}
+              {showSocialSharing ? (
+                <div className={classes.socialSharing}>
+                  <SocialShare {...socialSharing} />
                 </div>
               ) : null}
               <div className={classes.bottomContent}>

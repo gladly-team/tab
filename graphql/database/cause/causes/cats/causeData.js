@@ -16,13 +16,17 @@ import onboardingTitle2 from './onboarding.step2.title.md'
 import onboardingTitle3 from './onboarding.step3.title.md'
 import socialTitle from './social.title.md'
 import socialSubtitle from './social.subtitle.md'
+import emailAbout from './social.email.about.md'
+import emailFAQ from './social.email.faq.md'
 
 const data = {
   id: 'CA6A5C2uj',
   about,
   name: 'Cats',
+  isAvailableToSelect: true,
   backgroundImageCategory: 'cats',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
+  individualImpactEnabled: true,
   impactVisits: 14,
   landingPagePath: '/cats/',
   slug: 'cats',
@@ -65,7 +69,16 @@ const data = {
     sentImage: 'cats/catsSent.png',
     redditButtonTitle:
       'The purr-fect way to help shelter cats get adopted, for free',
-    sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
+    email: {
+      image:
+        'https://prod-tab2017-media.gladly.io/img/cause/cats/emailCats.png',
+      title:
+        "Life is better with friends... and cats!  That's why {{name}} thinks you should join them on Tab for Cats.",
+      about: emailAbout,
+      sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
+      faq: emailFAQ,
+    },
+    sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     subtitle: socialSubtitle,
     title: socialTitle,
     tumblrCaption:

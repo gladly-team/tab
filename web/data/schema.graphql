@@ -16,7 +16,7 @@ type App implements Node {
   charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
 
   """All the causes"""
-  causes(after: String, first: Int, before: String, last: Int): CauseConnection
+  causes(after: String, first: Int, before: String, last: Int, filters: CausesFilters): CauseConnection
 
   """Get all the "legacy" (uncategorized) background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
@@ -41,6 +41,7 @@ type BackgroundImage implements Node {
 
   """the category that the image falls into"""
   category: String!
+  imageCollection: collection
 
   """The image thumbnail filename"""
   thumbnail: String
@@ -283,19 +284,25 @@ type Cause implements Node {
   """String used to describe cause in account page"""
   name: String!
 
+  """boolean if cause is available to select in ui"""
+  isAvailableToSelect: Boolean!
+
   """Cause's id"""
   causeId: String!
 
   """URL path for the landing page belonging to this cause"""
   landingPagePath: String!
 
+  """Whether or not the current cause supports individual impact"""
+  individualImpactEnabled: Boolean!
+
   """
   number of visits required for each impact unit (e.g. 14 for cat charity)
   """
-  impactVisits: Int!
+  impactVisits: Int
 
   """the impact object on cause model"""
-  impact: CauseSpecificImpactUI!
+  impact: CauseSpecificImpactUI
 
   """the theme object on cause model"""
   theme: CauseTheming!
@@ -323,6 +330,11 @@ type CauseEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""Fields on which to filter the list of charities."""
+input CausesFilters {
+  isAvailableToSelect: Boolean
 }
 
 """cause specific UI content around impact"""
@@ -428,6 +440,15 @@ type CharityEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""the image collection information"""
+type collection {
+  """the link to the collection in unsplash"""
+  collectionLink: String
+
+  """the description of the collection"""
+  collectionDescription: String
 }
 
 input CreateInvitedUsersInput {

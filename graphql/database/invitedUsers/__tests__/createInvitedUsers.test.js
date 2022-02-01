@@ -28,6 +28,11 @@ describe('createInvitedUsers', () => {
     getCause.mockReturnValueOnce({
       sharing: {
         sendgridEmailTemplateId: 'd-69707bd6c49a444fa68a99505930f801',
+        email: {
+          title: 'this is a title',
+          faq: 'this is a faq',
+          about: 'this is about',
+        },
       },
     })
     verifyAndSendInvite.mockReturnValueOnce({ email: 'test123' })

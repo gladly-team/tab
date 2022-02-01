@@ -2,8 +2,13 @@ import Joi from 'joi'
 import CauseModel from './CauseModel'
 import dataCats from './causes/cats/causeData'
 import dataTeamseas from './causes/teamseas/causeData'
+import dataBlackEquity from './causes/blackEquity/causeData'
 
-const causes = [new CauseModel(dataCats), new CauseModel(dataTeamseas)]
+const causes = [
+  new CauseModel(dataCats),
+  new CauseModel(dataTeamseas),
+  new CauseModel(dataBlackEquity),
+]
 
 // TODO: remove after populating data
 // console.log('causes:', causes)

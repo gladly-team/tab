@@ -20,6 +20,105 @@ class Cause extends BaseModel {
   }
 
   static get schema() {
+    const self = this
+
+    const mapFieldsToRequired = fields => {
+      const copy = Object.assign({}, fields)
+      Object.keys(copy).forEach(key => {
+        copy[key] = copy[key].required()
+      })
+      return copy
+    }
+
+    const impactFields = {
+      claimImpactSubtitle: types
+        .string()
+        .description(
+          `markdown string: title for claimImpact notification in UserImpact`
+        ),
+      confirmImpactSubtitle: types
+        .string()
+        .description(
+          `markdown string: copy for confirm impact modal in UserImpact`
+        ),
+      impactCounterText: types
+        .string()
+        .description(
+          `markdown string: copy for ImpactCounter dropdown for normal case`
+        ),
+      impactIcon: types
+        .string()
+        .description(`string: name of the icon to use in impact counter`),
+      impactWalkthroughText: types
+        .string()
+        .description(
+          `markdown string: an intro description of impact. Used when onboarding in UserImpact.`
+        ),
+      newlyReferredImpactWalkthroughText: types
+        .string()
+        .description(
+          `markdown string: copy for impact walkthrough notification in UserImpact when user is referred`
+        ),
+      referralRewardNotification: types
+        .string()
+        .description(`markdown string: copy for referral reward notification`),
+      referralRewardSubtitle: types
+        .string()
+        .description(
+          `markdown string: subtitle copy for referralReward UserImpact modal`
+        ),
+      referralRewardTitle: types
+        .string()
+        .description(
+          `markdown string: title copy for referralReward UserImpact modal`
+        ),
+      walkMeGif: types
+        .string()
+        .description(`string: file name of the gif to use in walk me`),
+    }
+
+    const squadsFields = {
+      currentMissionAlert: types
+        .string()
+        .description(`markdown string: copy for CurrentMission alert`),
+      currentMissionDetails: types
+        .string()
+        .description(`markdown string: copy for CurrentMission details`),
+      currentMissionStep2: types
+        .string()
+        .description(`markdown string: copy for CurrentMission step 2`),
+      currentMissionStep3: types
+        .string()
+        .description(
+          `optional markdown string: copy for CurrentMission step 3`
+        ),
+      currentMissionSummary: types
+        .string()
+        .description(`markdown string: copy for CurrentMission summary`),
+      impactCounterText: types
+        .string()
+        .description(
+          `markdown string: copy for ImpactCounter caption when user is in mission`
+        ),
+      missionCompleteAlert: types
+        .string()
+        .description(`markdown string: copy for MissionComplete alert`),
+      missionCompleteDescription: types
+        .string()
+        .description(`markdown string: copy for MissionComplete copy text`),
+      missionCompleteSubtitle: types
+        .string()
+        .description(
+          `optional markdown string: copy for MissionComplete subtitle`
+        ),
+      squadCounterText: types
+        .string()
+        .description(`markdown string: copy for SquadCounter`),
+      squadInviteTemplateId: types
+        .string()
+        .description(`the sendgrid email template for a squad invite`),
+    }
+
     return {
       // TODO: additional restrictions, e.g. for nanoid
       id: types
@@ -45,13 +144,32 @@ class Cause extends BaseModel {
         .description(
           `Charity that this cause is currently generating impact for`
         ),
-      impactVisits: types
-        .number()
-        .integer()
+      isAvailableToSelect: types
+        .boolean()
+        .description('if a user can select this cause')
+        .default(self.fieldDefaults.isAvailableToSelect),
+      individualImpactEnabled: types
+        .boolean()
         .required()
         .description(
-          `number of visits required for each impact unit (e.g. 14 for cat charity)`
+          `whether or not there is an individual impact metric for this cause`
         ),
+      impactVisits: types.alternatives().when('individualImpactEnabled', {
+        is: true,
+        then: types
+          .number()
+          .integer()
+          .required()
+          .description(
+            `number of visits required for each impact unit (e.g. 14 for cat charity)`
+          ),
+        otherwise: types
+          .number()
+          .integer()
+          .description(
+            `number of visits required for each impact unit (e.g. 14 for cat charity)`
+          ),
+      }),
       backgroundImageCategory: types
         .string()
         .required()
@@ -68,63 +186,10 @@ class Cause extends BaseModel {
         .description(
           `A short, unique, URL-safe description of the cause, such as "cats" or "teamseas"`
         ),
-      impact: types.object({
-        claimImpactSubtitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: title for claimImpact notification in UserImpact`
-          ),
-        confirmImpactSubtitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for confirm impact modal in UserImpact`
-          ),
-        impactCounterText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for ImpactCounter dropdown for normal case`
-          ),
-        impactIcon: types
-          .string()
-          .required()
-          .description(`string: name of the icon to use in impact counter`),
-        impactWalkthroughText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: an intro description of impact. Used when onboarding in UserImpact.`
-          ),
-        newlyReferredImpactWalkthroughText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for impact walkthrough notification in UserImpact when user is referred`
-          ),
-        referralRewardNotification: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for referral reward notification`
-          ),
-        referralRewardSubtitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: subtitle copy for referralReward UserImpact modal`
-          ),
-        referralRewardTitle: types
-          .string()
-          .required()
-          .description(
-            `markdown string: title copy for referralReward UserImpact modal`
-          ),
-        walkMeGif: types
-          .string()
-          .required()
-          .description(`string: file name of the gif to use in walk me`),
+      impact: types.alternatives().when('individualImpactEnabled', {
+        is: true,
+        then: types.object(impactFields),
+        otherwise: types.object(mapFieldsToRequired(impactFields)),
       }),
       onboarding: types.object({
         steps: types
@@ -170,6 +235,30 @@ class Cause extends BaseModel {
           .string()
           .required()
           .description(`copy for reddit button`),
+        email: types.object({
+          image: types
+            .string()
+            .required()
+            .description(`url of landing image in email`),
+          title: types
+            .string()
+            .required()
+            .description(`title of email invite`),
+          about: types
+            .string()
+            .required()
+            .description(`stringified html about section`),
+          faq: types
+            .string()
+            .required()
+            .description(
+              `cause sepcific faq info.  Can be pure string or stringified html`
+            ),
+          sendgridEmailTemplateId: types
+            .string()
+            .required()
+            .description(`id for sendgridEmailTemplate`),
+        }),
         sendgridEmailTemplateId: types
           .string()
           .required()
@@ -195,56 +284,10 @@ class Cause extends BaseModel {
           .required()
           .description(`copy for twitter button`),
       }),
-      squads: types.object({
-        currentMissionAlert: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission alert`),
-        currentMissionDetails: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission details`),
-        currentMissionStep2: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission step 2`),
-        currentMissionStep3: types
-          .string()
-          .description(
-            `optional markdown string: copy for CurrentMission step 3`
-          ),
-        currentMissionSummary: types
-          .string()
-          .required()
-          .description(`markdown string: copy for CurrentMission summary`),
-        impactCounterText: types
-          .string()
-          .required()
-          .description(
-            `markdown string: copy for ImpactCounter caption when user is in mission`
-          ),
-        missionCompleteAlert: types
-          .string()
-          .required()
-          .description(`markdown string: copy for MissionComplete alert`),
-        missionCompleteDescription: types
-          .string()
-          .required()
-          .description(`markdown string: copy for MissionComplete copy text`),
-        missionCompleteSubtitle: types
-          .string()
-          .required()
-          .description(
-            `optional markdown string: copy for MissionComplete subtitle`
-          ),
-        squadCounterText: types
-          .string()
-          .required()
-          .description(`markdown string: copy for SquadCounter`),
-        squadInviteTemplateId: types
-          .string()
-          .required()
-          .description(`the sendgrid email template for a squad invite`),
+      squads: types.alternatives().when('individualImpactEnabled', {
+        is: true,
+        then: types.object(squadsFields),
+        otherwise: types.object(mapFieldsToRequired(squadsFields)),
       }),
       theme: types.object({
         primaryColor: types
@@ -260,7 +303,7 @@ class Cause extends BaseModel {
   }
 
   static get fieldDefaults() {
-    return {}
+    return { isAvailableToSelect: false }
   }
 }
 

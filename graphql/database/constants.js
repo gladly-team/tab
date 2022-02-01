@@ -12,6 +12,7 @@ export const USER_TABS_LOG = 'UserTabsLog'
 export const USER_SEARCH_LOG = 'UserSearchLog'
 export const USER_LEVEL = 'UserLevel'
 export const BACKGROUND_IMAGE = 'BackgroundImage'
+export const BACKGROUND_IMAGE_CATEGORY = 'BackgroundImageCategory'
 export const USER_RECRUITS = 'UserRecruits'
 export const REFERRAL_DATA = 'ReferralData'
 export const REFERRAL_LINK_CLICK_LOG = 'ReferralLinkClickLog'
@@ -21,6 +22,7 @@ export const MISSION = 'Mission'
 export const USER_MISSION = 'UserMission'
 export const VIDEO_AD_LOG = 'VideoAdLog'
 export const CAUSE = 'Cause'
+export const USER_SWITCH_SEARCH_PROMPT_LOG = 'UserSwitchSearchPromptLog'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
@@ -40,3 +42,5 @@ export const GENERAL_EMAIL_INVITE_TEMPLATE_ID =
 
 // 14 tabs for 1 treat * 36 treats for 1 session = 504 tabs for 1 cat mission
 export const TAB_GOAL_FOR_TRAINING_SESSION = 504
+
+export const VALID_SEARCH_ENGINES = ['Ecosia', 'DuckDuckgo', 'Google', 'Bing']

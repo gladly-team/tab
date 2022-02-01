@@ -17,6 +17,7 @@ const tables = {
   userRevenueLog: 'UserRevenueLog',
   userDataConsentLog: 'UserDataConsentLog',
   backgroundImages: 'BackgroundImages',
+  backgroundImageCategory: 'BackgroundImageCategory',
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',
   userTabsLog: 'UserTabsLog',
@@ -26,6 +27,7 @@ const tables = {
   missions: 'Missions',
   userMissions: 'UserMissions',
   videoAdLog: 'VideoAdLog',
+  userSwitchSearchPromptLog: 'UserSwitchSearchPromptLog',
 }
 
 export default mapValues(tables, name => `${name}${tableNameAppendix}`)

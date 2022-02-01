@@ -44,6 +44,10 @@ const allFixtures = [
     jsonFile: 'BackgroundImages.json',
   },
   {
+    tableName: 'BackgroundImageCategory',
+    jsonFile: 'BackgroundImageCategory.json',
+  },
+  {
     tableName: 'Widgets',
     jsonFile: 'WidgetsData.json',
   },
@@ -54,6 +58,10 @@ const allFixtures = [
   {
     tableName: 'ReferralDataLog',
     jsonFile: 'ReferralDataLog.json',
+  },
+  {
+    tableName: 'UserSwitchSearchPromptLog',
+    jsonFile: 'UserSwitchSearchPromptLog.json',
   },
 ]
 

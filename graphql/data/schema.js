@@ -241,6 +241,23 @@ const backgroundImageType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'the category that the image falls into',
     },
+    imageCollection: {
+      type: new GraphQLObjectType({
+        name: 'collection',
+        description: 'the image collection information',
+        fields: () => ({
+          collectionLink: {
+            type: GraphQLString,
+            description: 'the link to the collection in unsplash',
+          },
+          collectionDescription: {
+            type: GraphQLString,
+            description: 'the description of the collection',
+          },
+        }),
+        resolve: backgroundImage => backgroundImage.imageCollection,
+      }),
+    },
     thumbnail: {
       type: GraphQLString,
       description: 'The image thumbnail filename',
@@ -891,6 +908,10 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `String used to describe cause in account page`,
     },
+    isAvailableToSelect: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'boolean if cause is available to select in ui',
+    },
     causeId: {
       type: new GraphQLNonNull(GraphQLString),
       description: "Cause's id",
@@ -900,12 +921,16 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `URL path for the landing page belonging to this cause`,
     },
+    individualImpactEnabled: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: `Whether or not the current cause supports individual impact`,
+    },
     impactVisits: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: GraphQLInt,
       description: `number of visits required for each impact unit (e.g. 14 for cat charity)`,
     },
     impact: {
-      type: new GraphQLNonNull(CauseImpactCopy),
+      type: CauseImpactCopy,
       description: 'the impact object on cause model',
       resolve: cause => cause.impact,
     },
@@ -1445,9 +1470,24 @@ const appType = new GraphQLObjectType({
     causes: {
       type: causeConnection,
       description: 'All the causes',
-      args: connectionArgs,
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: new GraphQLInputObjectType({
+            name: 'CausesFilters',
+            description: 'Fields on which to filter the list of charities.',
+            fields: {
+              isAvailableToSelect: { type: GraphQLBoolean },
+            },
+          }),
+        },
+      },
       resolve: (_, args, context) => {
-        return connectionFromPromisedArray(getCauses(context.user), args)
+        const { filters } = args
+        return connectionFromPromisedArray(
+          getCauses(context.user, filters),
+          args
+        )
       },
     },
     backgroundImages: {

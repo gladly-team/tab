@@ -153,6 +153,16 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}/index/*"
+    # BackgroundImageCategory table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+      Resource:
+        - "${self:custom.dbTableArnBase}BackgroundImageCategory-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}BackgroundImageCategory-${self:provider.stage}/index/*"
     # UserImpact table
     - Effect: "Allow"
       Action:
@@ -265,6 +275,12 @@ provider:
         - "dynamodb:Query"
       Resource:
         - "${self:custom.dbTableArnBase}Causes-${self:provider.stage}"
+    # UserSwitchSearchPromptLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource:
+        - "${self:custom.dbTableArnBase}UserSwitchSearchPromptLog-${self:provider.stage}"
     # @service/redis - Uncomment this if we re-launch the Redis service.
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html

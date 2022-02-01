@@ -38,4 +38,14 @@ describe('UserSearchLogModel', () => {
       permissionAuthorizers.userIdMatchesHashKey
     )
   })
+
+  it('only allows valid search engines', () => {
+    const model = new UserSearchLogModel({
+      userId: 'abcdefghijklmno',
+      timestamp: '2017-07-17T20:45:53Z',
+      source: 'test',
+      searchEngine: 'non-existent-engine',
+    })
+    expect(() => UserSearchLogModel.validate(model)).toThrow()
+  })
 })

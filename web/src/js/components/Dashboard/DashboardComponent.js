@@ -45,9 +45,9 @@ import {
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
-  // facebookPageURL,
-  // instagramPageURL,
-  // twitterPageURL,
+  facebookPageURL,
+  instagramPageURL,
+  twitterPageURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
@@ -74,21 +74,13 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
-import Nov2021Campaign from 'js/components/Campaign/Nov2021CampaignContainer'
-
-// @nov-2021-campaign
-// TODO: update (dashboard view, dashboard component, server-side)
-const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
-const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
-const NOV2021_CAMPAIGN_START_MOMENT = moment(NOV2021_CAMPAIGN_START_TIME_ISO)
-const NOV2021_CAMPAIGN_END_MOMENT = moment(NOV2021_CAMPAIGN_END_TIME_ISO)
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
-// const CampaignGeneric = lazy(() =>
-//   import('js/components/Campaign/CampaignGenericView')
-// )
+const CampaignGeneric = lazy(() =>
+  import('js/components/Campaign/CampaignGenericView')
+)
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -506,62 +498,29 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Like clean oceans? Us too.`}
+                  title={`Vote for the January Charity Spotlight`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        We're working with #TeamSeas to help remove 30M pounds
-                        of trash from our oceans! Learn more about it{' '}
+                        Let us know what nonprofit we should spotlight this
+                        month!
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        Have a suggestion for an organization you'd like to see
+                        in the future?{' '}
                         <Link
-                          to="https://youtu.be/fCedFp5Wmyc"
+                          to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          in our video
+                          Tell us here.
                         </Link>
-                        .
                       </Typography>
                     </>
                   }
-                  //                   message={
-                  //                     <>
-                  //                       <Typography variant={'body2'} gutterBottom>
-                  //                         Let us know what nonprofit we should spotlight this
-                  //                         month!
-                  //                       </Typography>
-                  //
-                  //                       <Typography variant={'body2'}>
-                  //                         Have a suggestion for an organization you would like to
-                  //                         see in the future? DM us or reply to one of our posts on{' '}
-                  //                         <Link
-                  //                           to={instagramPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Instagram
-                  //                         </Link>
-                  //                         ,{' '}
-                  //                         <Link
-                  //                           to={twitterPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Twitter
-                  //                         </Link>
-                  //                         , or{' '}
-                  //                         <Link
-                  //                           to={facebookPageURL}
-                  //                           target="_blank"
-                  //                           style={{ color: '#9d4ba3' }}
-                  //                         >
-                  //                           Facebook
-                  //                         </Link>{' '}
-                  //                         @tabforacause to let us know!
-                  //                       </Typography>
-                  //                     </>
-                  //                   }
-                  buttonText={'Watch'}
-                  buttonURL={'https://youtu.be/fCedFp5Wmyc'}
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
@@ -712,64 +671,20 @@ class Dashboard extends React.Component {
           isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
         />
-
-        {/* @nov-2021-campaign: remove when done */}
         {showCampaign && app && user ? (
           <FadeInDashboardAnimation>
-            <div
-              style={{
-                zIndex: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                boxSizing: 'border-box',
-                pointerEvents: 'none',
-              }}
-            >
-              <div style={{ width: 500, marginBottom: 100 }}>
-                <Nov2021Campaign
-                  app={app}
-                  user={user}
-                  campaign={{
-                    time: {
-                      start: NOV2021_CAMPAIGN_START_MOMENT,
-                      end: NOV2021_CAMPAIGN_END_MOMENT,
-                    },
-                    goal: 5000,
-                  }}
-                  onDismiss={() => {
-                    this.setState({
-                      hasUserDismissedCampaignRecently: true,
-                    })
-                  }}
-                  showError={this.showError.bind(this)}
-                />
-              </div>
-            </div>
+            <Suspense fallback={null}>
+              <CampaignGeneric
+                onDismiss={() => {
+                  this.setState({
+                    hasUserDismissedCampaignRecently: true,
+                  })
+                }}
+                showError={this.showError.bind(this)}
+              />
+            </Suspense>
           </FadeInDashboardAnimation>
         ) : null}
-
-        {/* @nov-2021-campaign: reenable when done */}
-
-        {/* {showCampaign && app && user ? ( */}
-        {/*   <FadeInDashboardAnimation> */}
-        {/*     <Suspense fallback={null}> */}
-        {/*       <CampaignGeneric */}
-        {/*         onDismiss={() => { */}
-        {/*           this.setState({ */}
-        {/*             hasUserDismissedCampaignRecently: true, */}
-        {/*           }) */}
-        {/*         }} */}
-        {/*         showError={this.showError.bind(this)} */}
-        {/*       /> */}
-        {/*     </Suspense> */}
-        {/*   </FadeInDashboardAnimation> */}
-        {/* ) : null} */}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />

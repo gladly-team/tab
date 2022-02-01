@@ -1,24 +1,19 @@
 import createCampaignConfiguration from './createCampaignConfiguration'
 
-// @nov-2021-campaign
-// TODO: update (dashboard view, dashboard component, server-side)
-const NOV2021_CAMPAIGN_START_TIME_ISO = '2021-11-17T16:00:00.000Z'
-const NOV2021_CAMPAIGN_END_TIME_ISO = '2021-12-06T16:00:00.000Z'
-
-// @nov-2021-campaign
-// The Nov2021 campaign has hardcoded copy, so much of
-// this is currently unused.
-
-const campaignTitle = '## X'
+const campaignTitle = '## Join us in supporting Coral Reef Alliance!'
 const campaignDescription = `
-#### X
+#### Did you know that **25% of all marine life depends on coral**, yet **75% of coral reefs are currently under attack today**? We must work together to protect coral reefs around the world and create safer environments for them to thrive. This month, Tabbers voted to support Coral Reef Alliance in using science and community engagement to protect coral reefs as January's Spotlight charity.
 `
 
-// const campaignDescriptionTwo = ``
+const campaignDescriptionTwo = `
+#### Already donated? Invite your friends to support this campaign! ❤️
+`
 
-const campaignEndTitle = '## X'
+const campaignEndTitle = '## Thanks for supporting Coral Reef Alliance'
 const campaignEndDescription = `
-#### X
+#### With your help, we were able to support an incredible organization working to protect our planet through the conservation of coral reefs. Together, we can protect our planet for generations to come!
+
+#### Have a charity suggestion for our next Spotlight Campaign? [Let us know!](https://docs.google.com/forms/d/e/1FAIpQLSfSev1tppuOPKNiZBPQNY1qBkdFdkhydz-0n05kqHMLYr-pqA/viewform)
 `
 
 // #### If you have a charitable cause that is close to your heart and want it featured as a Spotlight Charity, contact us or drop a comment through our Instagram [@tabforacause](https://www.instagram.com/tabforacause/) to tell us about it!
@@ -28,15 +23,15 @@ const campaignEndDescription = `
 
 // Hardcode campaign data here.
 const CURRENT_CAMPAIGN = createCampaignConfiguration({
-  campaignId: 'Nov2021Custom',
-  charityId: '910ed420-e479-4d77-b806-27dc9e3350c7', // nov-2021-campaign: TODO
+  campaignId: 'CRAJan2022',
+  charityId: 'bfc0b825-5495-4aa3-89c6-05a38a0d2ecd',
   content: {
     titleMarkdown: campaignTitle,
     descriptionMarkdown: campaignDescription,
-    // descriptionMarkdownTwo: campaignDescriptionTwo,
+    descriptionMarkdownTwo: campaignDescriptionTwo,
   },
   countMoneyRaised: false,
-  countNewUsers: true,
+  countNewUsers: false,
   countTabsOpened: false,
   // Logic on when to end the campaign.
   endTriggers: {
@@ -49,15 +44,14 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     impactVerbPastParticiple: 'donated',
     impactVerbPastTense: 'donated',
     limitProgressToTargetMax: false,
-    numberSource: 'newUsers', // One of: hearts, moneyRaised, newUsers, tabsOpened
+    numberSource: 'hearts', // One of: hearts, moneyRaised, newUsers, tabsOpened
     showProgressBarLabel: true,
     showProgressBarEndText: false,
-    targetNumber: 100,
-    transformNumberSourceValue: num => {
-      // @nov-2021-campaign
-      // Provide 1 meal per new user.
-      return Math.floor(num)
-    },
+    targetNumber: 8e6,
+    // transformNumberSourceValue: num => {
+    //   // return 9e6
+    //   return Math.floor(num / 50)
+    // },
   },
   // Modifications to the campaign when the campaign has
   // ended.
@@ -79,59 +73,58 @@ const CURRENT_CAMPAIGN = createCampaignConfiguration({
     //   url: 'https://tab.gladly.io',
     //   FacebookShareButtonProps: {
     //     quote:
-    //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
+    //       'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week.',
     //   },
-    //   // RedditShareButtonProps: {
-    //   //   title:
-    //   //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
-    //   // },
-    //   TumblrShareButtonProps: {
+    //   RedditShareButtonProps: {
     //     title:
-    //       'Browser tabs transformed into PPE & temporary hospitals in India',
+    //       'Browser tabs transformed into healthier coral reefs through Tab for a Cause & Coral Reef Alliance',
+    //   },
+    //   TumblrShareButtonProps: {
+    //     title: 'Browser tabs transformed into healthier coral reefs',
     //     caption:
-    //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs!',
+    //       'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week. 🌊🤍',
     //   },
     //   TwitterShareButtonProps: {
     //     title:
-    //       'I just helped raise money for CARE India to help provide access to PPE & temporary hospitals for those affected by COVID-19. With numbers rising every day, these resources are needed more than ever, & I was able to make a difference by just opening browser tabs! @TabForACause',
+    //       'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week. 🌊🤍',
     //     related: ['@TabForACause'],
     //   },
     // },
   },
-  showCountdownTimer: false,
+  showCountdownTimer: true,
   showHeartsDonationButton: true,
-  showProgressBar: false,
-  showSocialSharing: false,
-  // socialSharing: {
-  //   url: 'https://tab.gladly.io',
-  //   FacebookShareButtonProps: {
-  //     quote:
-  //       'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
-  //   },
-  //   // RedditShareButtonProps: {
-  //   //   title:
-  //   //     'Browser tabs transformed into bailouts for low-income people through Tab for a Cause & The Bail Project',
-  //   // },
-  //   TumblrShareButtonProps: {
-  //     title: 'Support Trans Lifeline by opening browser tabs',
-  //     caption:
-  //       'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
-  //   },
-  //   TwitterShareButtonProps: {
-  //     title:
-  //       'This week, I am helping 100 students learn to read through an amazing organization, Room to Read. The best part is I am doing it for free! Join Tab for a Cause to help us meet our goal by the end of the week. 📖❤️',
-  //     related: ['@TabForACause'],
-  //   },
-  // },
+  showProgressBar: true,
+  showSocialSharing: true,
+  socialSharing: {
+    url: 'https://tab.gladly.io',
+    FacebookShareButtonProps: {
+      quote:
+        'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week.',
+    },
+    // RedditShareButtonProps: {
+    //   title:
+    //     'Browser tabs transformed into healthier coral reefs through Tab for a Cause & Coral Reef Alliance',
+    // },
+    TumblrShareButtonProps: {
+      title: 'Browser tabs transformed into healthier coral reefs',
+      caption:
+        'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week. 🌊🤍',
+    },
+    TwitterShareButtonProps: {
+      title:
+        'Our coral reefs are under attack, and we all need to do our part to help. Join me in supporting Coral Reef Alliance (for free!) on @tabforacause this week. 🌊🤍',
+      related: ['@TabForACause'],
+    },
+  },
   theme: {
     color: {
-      main: '#f26122',
+      main: '#0093d7',
       light: '#94989e',
     },
   },
   time: {
-    start: NOV2021_CAMPAIGN_START_TIME_ISO,
-    end: NOV2021_CAMPAIGN_END_TIME_ISO,
+    start: '2022-01-12T10:00:00.000Z',
+    end: '2022-01-20T21:00:00.000Z',
   },
 })
 
