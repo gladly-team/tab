@@ -498,29 +498,67 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Vote for the January Charity Spotlight`}
+                  title={`Happy Black History Month! `}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Let us know what nonprofit we should spotlight this
-                        month!
-                      </Typography>
-
-                      <Typography variant={'body2'}>
-                        Have a suggestion for an organization you'd like to see
-                        in the future?{' '}
+                        During this month, we will be sharing ongoing issues and
+                        highlighting educators in the Black community. Check out
+                        our{' '}
                         <Link
-                          to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
+                          to={'https://www.instagram.com/tabforacause/'}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          Tell us here.
+                          Instagram
                         </Link>
+                        ,{' '}
+                        <Link
+                          to={'https://www.tiktok.com/@tabforacause'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          TikTok
+                        </Link>
+                        , or{' '}
+                        <Link
+                          to={'https://twitter.com/TabForACause'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Twitter
+                        </Link>{' '}
+                        to learn more about how you can continue to make a
+                        difference all year long!
                       </Typography>
                     </>
+
+                    //                 <Notification
+                    //                   data-test-id={'global-notification'}
+                    //                   useGlobalDismissalTime
+                    //                   title={`Vote for the January Charity Spotlight`}
+                    //                   message={
+                    //                     <>
+                    //                       <Typography variant={'body2'} gutterBottom>
+                    //                         Let us know what nonprofit we should spotlight this
+                    //                         month!
+                    //                       </Typography>
+                    //
+                    //                       <Typography variant={'body2'}>
+                    //                         Have a suggestion for an organization you'd like to see
+                    //                         in the future?{' '}
+                    //                         <Link
+                    //                           to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
+                    //                           target="_blank"
+                    //                           style={{ color: '#9d4ba3' }}
+                    //                         >
+                    //                           Tell us here.
+                    //                         </Link>
+                    //                       </Typography>
+                    //                     </>
                   }
-                  buttonText={'Vote'}
-                  buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
+                  // buttonText={'Vote'}
+                  // buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
