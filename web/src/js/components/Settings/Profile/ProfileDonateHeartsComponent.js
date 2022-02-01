@@ -9,7 +9,12 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
 import catImage from 'js/assets/cats.png'
 import seasImage from 'js/assets/seas1.svg'
-import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
+import blackEquityImage from 'js/assets/blackEquity.png'
+import {
+  STORAGE_CATS_CAUSE_ID,
+  STORAGE_SEAS_CAUSE_ID,
+  STORAGE_BLACK_EQUITY_CAUSE_ID,
+} from 'js/constants'
 
 const SHOW_TEAMSEAS_CAUSE = true
 
@@ -75,6 +80,14 @@ class ProfileDonateHearts extends React.Component {
               />
             )
           })}
+          <SwitchToV4
+            user={user}
+            title="Support Black Equity (Beta)"
+            causeId={STORAGE_BLACK_EQUITY_CAUSE_ID}
+            causeName="Tab for Black Equity"
+            causeShortDesc="Support Black empowerment and systemic reform."
+            imgSrc={blackEquityImage}
+          />
           <SwitchToV4
             user={user}
             title="Help Shelter Cats (Beta)"
