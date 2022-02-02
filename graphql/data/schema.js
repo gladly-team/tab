@@ -2655,6 +2655,25 @@ const setUserCauseMutation = mutationWithClientMutationId({
     return setUserCause(context.user, userGlobalObj.id, causeId)
   },
 })
+
+const setYahooSearchOptInMutation = mutationWithClientMutationId({
+  name: 'SetYahooSearchOptIn',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    optIn: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, optIn }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserCause(context.user, userGlobalObj.id, optIn)
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2742,6 +2761,8 @@ const mutationType = new GraphQLObjectType({
     restartMission: restartMissionMutation,
     createVideoAdLog: createVideoAdLogMutation,
     logVideoAdComplete: logVideoAdCompleteMutation,
+
+    setYahooSearchOptIn: setYahooSearchOptInMutation,
   }),
 })
 
