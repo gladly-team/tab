@@ -2,7 +2,10 @@ import moment from 'moment'
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { USER_SWITCH_SEARCH_PROMPT_LOG } from '../constants'
+import {
+  USER_SWITCH_SEARCH_PROMPT_LOG,
+  VALID_SEARCH_ENGINES,
+} from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
@@ -37,6 +40,7 @@ class UserSwitchSearchExperimentModel extends BaseModel {
       searchEnginePrompted: types
         .string()
         .required()
+        .valid(VALID_SEARCH_ENGINES)
         .description(`The search engine for which the user has been prompted`),
       switched: types
         .boolean()

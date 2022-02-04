@@ -83,6 +83,7 @@ import restartMission from '../database/missions/restartMission'
 import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import setYahooSearchOptIn from '../database/users/setYahooSearchOptIn'
 import setUserSearchEngine from '../database/users/setUserSearchEngine'
+import createSearchEnginePromptLog from '../database/users/createSearchEnginePromptLog'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -2694,6 +2695,32 @@ const setUserSearchEngineMutation = mutationWithClientMutationId({
   },
 })
 
+const createSearchEnginePromptLogMutation = mutationWithClientMutationId({
+  name: 'CreateSearchEnginePromptLog',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    searchEnginePrompted: { type: new GraphQLNonNull(GraphQLString) },
+    switched: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: (
+    { userId, searchEnginePrompted, switched },
+    context
+  ) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return createSearchEnginePromptLog(
+      context.user,
+      userGlobalObj.id,
+      searchEnginePrompted,
+      switched
+    )
+  },
+})
+
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
@@ -2784,6 +2811,7 @@ const mutationType = new GraphQLObjectType({
 
     setYahooSearchOptIn: setYahooSearchOptInMutation,
     setUserSearchEngine: setUserSearchEngineMutation,
+    createSearchEnginePromptLog: createSearchEnginePromptLogMutation,
   }),
 })
 
