@@ -985,7 +985,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    return expect(() =>
+    await expect(
       createUser(
         userContext,
         userInfo.id,
@@ -998,6 +998,6 @@ describe('createUser when user already exists (should be idempotent)', () => {
         false,
         causeId
       )
-    ).not.toThrow()
+    ).resolves.not.toThrow()
   })
 })

@@ -24,7 +24,7 @@
     "patch-package": "^6.2.1",
     "postinstall-postinstall": "^2.0.0",
     "prettier": "1.17.1",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^4.0.0",
     "react-snap": "^1.23.0",
     "react-test-renderer": "^17.0.2",
     "relay-compiler": "^4.0.0",

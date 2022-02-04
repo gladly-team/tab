@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const actualCreateCampConf = require.requireActual(
+const actualCreateCampConf = jest.requireActual(
   '../createCampaignConfiguration'
 ).default
 

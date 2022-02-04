@@ -2,7 +2,7 @@
 
 process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
 process.env.REACT_APP_WEBSITE_DOMAIN = 'tab-test-env.gladly.io'
-const navigationActual = require.requireActual('../navigation')
+const navigationActual = jest.requireActual('../navigation')
 
 const navigationMock = navigationActual
 navigationMock.goTo = jest.fn()
