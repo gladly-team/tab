@@ -81,6 +81,8 @@ import updateMissionNotification from '../database/missions/updateMissionNotific
 import setHasSeenCompletedMission from '../database/missions/hasSeenCompletedMission'
 import restartMission from '../database/missions/restartMission'
 import setHasSeenSquads from '../database/users/setHasSeenSquads'
+import setYahooSearchOptIn from '../database/users/setYahooSearchOptIn'
+import setUserSearchEngine from '../database/users/setUserSearchEngine'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -2670,7 +2672,25 @@ const setYahooSearchOptInMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({ userId, optIn }, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return setUserCause(context.user, userGlobalObj.id, optIn)
+    return setYahooSearchOptIn(context.user, userGlobalObj.id, optIn)
+  },
+})
+
+const setUserSearchEngineMutation = mutationWithClientMutationId({
+  name: 'SetUserSearchEngine',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    searchEngine: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, searchEngine }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserSearchEngine(context.user, userGlobalObj.id, searchEngine)
   },
 })
 
@@ -2763,6 +2783,7 @@ const mutationType = new GraphQLObjectType({
     logVideoAdComplete: logVideoAdCompleteMutation,
 
     setYahooSearchOptIn: setYahooSearchOptInMutation,
+    setUserSearchEngine: setUserSearchEngineMutation,
   }),
 })
 
