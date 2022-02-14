@@ -76,4 +76,14 @@ describe('UserSwitchSearchPromptLogModel', () => {
       timestamp: '2017-05-19T13:59:46.000Z',
     })
   })
+
+  it('only allows valid search engines', () => {
+    const invalidNewEngine = new UserSwitchSearchPromptLog({
+      userId: 'abcdefghijklmno',
+      searchEnginePrompted: 'not-an-engine',
+      switched: true,
+      timestamp: '2017-05-19T13:59:46.000Z',
+    })
+    expect(() => UserSwitchSearchPromptLog.validate(invalidNewEngine)).toThrow()
+  })
 })

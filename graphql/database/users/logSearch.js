@@ -46,7 +46,9 @@ const logSearch = async (userContext, userId, searchData = {}) => {
     // prevent abuse.
     const { limitReached } = await checkSearchRateLimit(userContext, userId)
     if (!limitReached) {
-      user = await addVc(userContext, userId, 1)
+      if (user.searchEngine === 'Yahoo' && user.yahooPaidSearchRewardOptIn) {
+        user = await addVc(userContext, userId, 1)
+      }
     }
 
     // Increment the user's search count.

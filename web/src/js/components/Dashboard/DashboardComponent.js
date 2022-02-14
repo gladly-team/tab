@@ -498,13 +498,13 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Happy Black History Month! `}
+                  title={`Learn how to make an impact all year long!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        During this month, we will be sharing ongoing issues and
-                        highlighting educators in the Black community. Check out
-                        our{' '}
+                        In honor of Black History Month, we have been sharing
+                        ongoing issues and highlighting educators in the Black
+                        community. Check out our{' '}
                         <Link
                           to={'https://www.instagram.com/tabforacause/'}
                           target="_blank"
@@ -528,8 +528,7 @@ class Dashboard extends React.Component {
                         >
                           Twitter
                         </Link>{' '}
-                        to learn more about how you can continue to make a
-                        difference all year long!
+                        for these resources and to join in the conversation.
                       </Typography>
                     </>
 

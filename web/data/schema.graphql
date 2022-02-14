@@ -485,6 +485,18 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
+input CreateSearchEnginePromptLogInput {
+  userId: String!
+  searchEnginePrompted: String!
+  switched: Boolean!
+  clientMutationId: String
+}
+
+type CreateSearchEnginePromptLogPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
@@ -908,6 +920,9 @@ type Mutation {
   restartMission(input: RestartMissionInput!): RestartMissionPayload
   createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
   logVideoAdComplete(input: LogVideoAdCompleteInput!): LogVideoAdCompletePayload
+  setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
+  setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
+  createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
 }
 
 """An object with an ID"""
@@ -1136,6 +1151,17 @@ type SetUsernamePayload {
   clientMutationId: String
 }
 
+input SetUserSearchEngineInput {
+  userId: String!
+  searchEngine: String!
+  clientMutationId: String
+}
+
+type SetUserSearchEnginePayload {
+  user: User
+  clientMutationId: String
+}
+
 input SetV4BetaInput {
   userId: String!
   enabled: Boolean!
@@ -1143,6 +1169,17 @@ input SetV4BetaInput {
 }
 
 type SetV4BetaPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetYahooSearchOptInInput {
+  userId: String!
+  optIn: Boolean!
+  clientMutationId: String
+}
+
+type SetYahooSearchOptInPayload {
   user: User
   clientMutationId: String
 }

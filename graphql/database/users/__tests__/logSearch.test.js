@@ -51,6 +51,98 @@ afterAll(() => {
 })
 
 describe('logSearch', () => {
+  const cases = [
+    getMockUserInstance({
+      // neither search engine yahoo nor opted in
+      lastSearchTimestamp: mockCurrentTime,
+      maxSearchesDay: {
+        maxDay: {
+          date: mockCurrentTime,
+          numSearches: 400,
+        },
+        recentDay: {
+          date: mockCurrentTime,
+          numSearches: 148,
+        },
+      },
+    }),
+    getMockUserInstance({
+      // not opted in
+      lastSearchTimestamp: mockCurrentTime,
+      maxSearchesDay: {
+        maxDay: {
+          date: mockCurrentTime,
+          numSearches: 400,
+        },
+        recentDay: {
+          date: mockCurrentTime,
+          numSearches: 148,
+        },
+      },
+      searchEngine: 'Yahoo',
+    }),
+    getMockUserInstance({
+      // doesn't currently have yahoo as search engine
+      lastSearchTimestamp: mockCurrentTime,
+      maxSearchesDay: {
+        maxDay: {
+          date: mockCurrentTime,
+          numSearches: 400,
+        },
+        recentDay: {
+          date: mockCurrentTime,
+          numSearches: 148,
+        },
+      },
+      yahooPaidSearchRewardOptIn: false,
+    }),
+  ]
+  test.each(cases)(
+    'when the user should not receive VC, it does not increment the VC',
+    async mockUser => {
+      expect.assertions(2)
+
+      const userId = userContext.id
+      setMockDBResponse(DatabaseOperation.GET, {
+        Item: mockUser,
+      })
+
+      // Mock that the user SHOULD receive a heart.
+      checkSearchRateLimit.mockResolvedValue(
+        mockCheckSearchRateLimitResponse({
+          limitReached: false,
+          reason: 'NONE',
+        })
+      )
+
+      const updateMethod = jest
+        .spyOn(UserModel, 'update')
+        .mockImplementationOnce(() => mockUser)
+
+      await logSearch(userContext, userId)
+
+      // VC should increment.
+      expect(addVc).not.toHaveBeenCalled()
+
+      // It should update searches and maxSearchesDay values.
+      expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+        id: userId,
+        searches: { $add: 1 },
+        lastSearchTimestamp: moment.utc().toISOString(),
+        maxSearchesDay: {
+          maxDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 400,
+          },
+          recentDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 149,
+          },
+        },
+      })
+    }
+  )
+
   test('when the user should receive VC, it increments the VC', async () => {
     expect.assertions(2)
 
@@ -67,6 +159,8 @@ describe('logSearch', () => {
           numSearches: 148,
         },
       },
+      yahooPaidSearchRewardOptIn: true,
+      searchEngine: 'Yahoo',
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
