@@ -28,13 +28,7 @@ plugins:
 
 custom:
   stageDefault: dev
-
-  # Enable DynamoDB streams only on prod.
-  dynamoStreamsEnabled:
-    test: false
-    dev: false
-    prod: true
-
+  
   # Set DynamoDB scaling capacities based on stage.
   customCapacities:
     # test stage table capacities: use same as dev
@@ -702,7 +696,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     charitiesTable:  
@@ -721,7 +714,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userImpactTable:  
@@ -745,7 +737,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     invitedUsersTable:  
@@ -793,7 +784,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     missionsTable:  
@@ -812,7 +802,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userMissionsTable:  
@@ -849,7 +838,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     widgetsTable:  
@@ -868,7 +856,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userLevelsTable:  
@@ -887,7 +874,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationLogTable:  
@@ -911,7 +897,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationByCharityTable:  
@@ -934,7 +919,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userRevenueLogTable:  
@@ -958,7 +942,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     videoAdLogTable:  
@@ -986,7 +969,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: VideoAdLogsByUniqueId
@@ -1028,7 +1010,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     backgroundImagesTable:  
@@ -1049,7 +1030,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: ImagesByCategory
@@ -1092,7 +1072,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userTabsLogTable:  
@@ -1116,7 +1095,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     userSearchLogTable:  
@@ -1140,7 +1118,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralDataLogTable:  
@@ -1176,7 +1153,6 @@ resources:
           WriteCapacityUnits: 1
         ### Manually set in AWS Console. 
         # StreamSpecification:
-        #   StreamEnabled: true
         #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralLinkClickLog:  
@@ -1199,7 +1175,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
 
     # TODO: remove and delete tables
@@ -1219,7 +1194,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userSwitchSearchPromptLogTable:  
@@ -1242,7 +1216,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
     
     userSearchSettingsLogTable:  
@@ -1265,5 +1238,4 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
-          StreamEnabled: ${self:custom.dynamoStreamsEnabled.${self:provider.stage}}
           StreamViewType: NEW_AND_OLD_IMAGES
