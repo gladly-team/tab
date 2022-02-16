@@ -28,6 +28,7 @@ const tables = {
   videoAdLog: 'VideoAdLog',
   userSwitchSearchPromptLog: 'UserSwitchSearchPromptLog',
   userSearchSettingsLog: 'UserSearchSettingsLog',
+  userExperiment: 'UserExperiment',
 }
 
 export default mapValues(tables, name => `${name}${tableNameAppendix}`)

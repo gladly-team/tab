@@ -28,6 +28,8 @@ plugins:
 
 custom:
   stageDefault: dev
+  
+  # Set DynamoDB scaling capacities based on stage.
   customCapacities:
     # test stage table capacities: use same as dev
     test: ${self:custom.customCapacities.dev}
@@ -223,6 +225,15 @@ custom:
           maximum: 12
           usage: 0.60
       userSearchSettingsLogTable:
+        read:
+          minimum: 1
+          maximum: 12
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 12
+          usage: 0.60
+      userExperimentTable:
         read:
           minimum: 1
           maximum: 12
@@ -430,6 +441,15 @@ custom:
           usage: 0.75
         write:
           minimum: 1
+          maximum: 40000
+          usage: 0.60
+      userExperimentTable:
+        read:
+          minimum: 1
+          maximum: 40000
+          usage: 0.75
+        write:
+          minimum: 5
           maximum: 40000
           usage: 0.60
 
@@ -650,7 +670,16 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.usage}
-
+    - table: userExperimentsTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.usage}
+    
 resources:
   Resources:
 
@@ -692,6 +721,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     charitiesTable:  
       Type: AWS::DynamoDB::Table
@@ -708,6 +740,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     userImpactTable:  
       Type: AWS::DynamoDB::Table
@@ -728,6 +762,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     invitedUsersTable:  
       Type: AWS::DynamoDB::Table
@@ -773,6 +810,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     missionsTable:  
       Type: AWS::DynamoDB::Table
@@ -789,6 +828,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     userMissionsTable:  
       Type: AWS::DynamoDB::Table
@@ -823,6 +864,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     widgetsTable:  
       Type: AWS::DynamoDB::Table
@@ -839,6 +882,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     userLevelsTable:  
       Type: AWS::DynamoDB::Table
@@ -855,6 +900,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationLogTable:  
       Type: AWS::DynamoDB::Table
@@ -875,6 +922,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationByCharityTable:  
       Type: AWS::DynamoDB::Table
@@ -895,6 +945,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     userRevenueLogTable:  
       Type: AWS::DynamoDB::Table
@@ -915,6 +967,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     videoAdLogTable:  
       Type: AWS::DynamoDB::Table
@@ -939,6 +994,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: VideoAdLogsByUniqueId
             KeySchema:
@@ -978,6 +1036,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
@@ -996,6 +1056,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: ImagesByCategory
             KeySchema:
@@ -1036,6 +1098,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     userTabsLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1056,6 +1120,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     userSearchLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1076,6 +1143,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralDataLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1108,6 +1178,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralLinkClickLog:  
       Type: AWS::DynamoDB::Table
@@ -1128,6 +1201,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
     # TODO: remove and delete tables
     causeTable:  
@@ -1145,12 +1220,14 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
-    userSwitchSearchPromptLogTable:  
+    userSwitchSearchPromptLogTable:
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain
       UpdateReplacePolicy: Retain
-      Properties:  
+      Properties:    
         TableName: UserSwitchSearchPromptLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -1165,6 +1242,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
     
     userSearchSettingsLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1185,3 +1264,27 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+    userExperimentTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: UserExperiment-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: experimentId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: experimentId
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
