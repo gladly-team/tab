@@ -692,8 +692,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     charitiesTable:  
       Type: AWS::DynamoDB::Table
@@ -711,6 +713,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userImpactTable:  
@@ -732,8 +735,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     invitedUsersTable:  
       Type: AWS::DynamoDB::Table
@@ -780,6 +785,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     missionsTable:  
@@ -798,6 +804,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userMissionsTable:  
@@ -834,6 +841,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     widgetsTable:  
@@ -852,6 +860,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userLevelsTable:  
@@ -870,6 +879,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationLogTable:  
@@ -891,8 +901,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     vcDonationByCharityTable:  
       Type: AWS::DynamoDB::Table
@@ -914,6 +926,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userRevenueLogTable:  
@@ -935,8 +948,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     videoAdLogTable:  
       Type: AWS::DynamoDB::Table
@@ -961,8 +976,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: VideoAdLogsByUniqueId
             KeySchema:
@@ -1003,6 +1020,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     backgroundImagesTable:  
@@ -1023,6 +1041,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: ImagesByCategory
@@ -1065,6 +1084,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userTabsLogTable:  
@@ -1086,8 +1106,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     userSearchLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1108,8 +1130,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralDataLogTable:  
       Type: AWS::DynamoDB::Table
@@ -1142,8 +1166,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+        ### Manually set in AWS Console. 
+        # StreamSpecification:
+        #   StreamEnabled: true
+        #   StreamViewType: NEW_AND_OLD_IMAGES
 
     referralLinkClickLog:  
       Type: AWS::DynamoDB::Table
@@ -1165,6 +1191,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
 
     # TODO: remove and delete tables
@@ -1184,6 +1211,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: false # unused elsewhere
           StreamViewType: NEW_AND_OLD_IMAGES
 
     userSwitchSearchPromptLogTable:  
@@ -1206,6 +1234,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
     
     userSearchSettingsLogTable:  
@@ -1228,4 +1257,5 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         StreamSpecification:
+          StreamEnabled: true
           StreamViewType: NEW_AND_OLD_IMAGES
