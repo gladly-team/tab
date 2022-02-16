@@ -132,7 +132,7 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
-      videoAdLog:
+      videoAdLogTable:
         read:
           minimum: 1
           maximum: 12
@@ -333,7 +333,7 @@ custom:
           minimum: 20
           maximum: 40000
           usage: 0.60
-      videoAdLog:
+      videoAdLogTable:
         read:
           minimum: 1
           maximum: 40000
