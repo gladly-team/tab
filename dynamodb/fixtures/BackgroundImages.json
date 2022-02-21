@@ -175,5 +175,19 @@
     "category": "black-photographers",
     "created": "2022-01-11T16:43:34.506Z",
     "updated": "2022-01-11T16:43:34.506Z"
+  },
+  {
+    "id": "7a8b04cc-fd88-4af3-bf73-3b6459e7eccb",
+    "image": "7a8b04cc-fd88-4af3-bf73-3b6459e7eccb.jpg",
+    "category": "trees",
+    "created": "2022-02-21T19:19:26.376Z",
+    "updated": "2022-02-21T19:19:26.376Z"
+  },
+  {
+    "id": "98c444cd-040d-4484-a25a-267194e9de45",
+    "image": "98c444cd-040d-4484-a25a-267194e9de45.jpg",
+    "category": "trees",
+    "created": "2022-02-21T19:19:26.376Z",
+    "updated": "2022-02-21T19:19:26.376Z"
   }
 ]
