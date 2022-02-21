@@ -1,5 +1,8 @@
 // Cause: trees
 
+// We have a little templating "engine" that replaces placeholders.
+/* eslint no-template-curly-in-string: 0 */
+
 const data = {
   id: 'tdU_PsRIM',
   about:
@@ -17,8 +20,6 @@ const data = {
       '##### **Your tree tracker!**\n\nThis shows how many trees your tabs can plant. Every tab you open helps. Keep it up!\n\n',
     claimImpactSubtitle:
       '##### You did it! Your opened tabs have become a tree. Keep it up!',
-    impactCounterText:
-      '##### **Your tree tracker!**\n\nThis shows how many trees your tabs can plant. Every tab you open helps. Keep it up!\n\n',
     impactIcon: 'pine-tree',
     referralRewardNotification:
       "##### Congrats! You recruited a friend to help fight climate change just by opening tabs. To celebrate, we'll have Eden Reforestation Projects plant ${pendingUserReferralImpact} extra tree${isPlural(pendingUserReferralImpact)} on your behalf.\n\n",
