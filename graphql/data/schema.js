@@ -761,8 +761,8 @@ const CauseImpactCopy = new GraphQLObjectType({
       description: 'string: name of the icon to use in impact counter',
     },
     walkMeGif: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'string: file name of the gif to use in walk me',
+      type: GraphQLString,
+      description: 'file name of the cause GIF to use during onboarding',
     },
     newlyReferredImpactWalkthroughText: {
       type: new GraphQLNonNull(GraphQLString),

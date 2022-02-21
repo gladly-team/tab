@@ -359,8 +359,8 @@ type CauseSpecificImpactUI {
   """string: name of the icon to use in impact counter"""
   impactIcon: String!
 
-  """string: file name of the gif to use in walk me"""
-  walkMeGif: String!
+  """file name of the cause GIF to use during onboarding"""
+  walkMeGif: String
 
   """
   markdown string: copy for impact walkthrough notification in UserImpact when user is referred
