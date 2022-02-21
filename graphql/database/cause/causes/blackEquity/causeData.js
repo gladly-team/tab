@@ -49,7 +49,7 @@ const data = {
     redditButtonTitle: 'Promote Black equity with each tab',
     email: {
       image:
-        'https://prod-tab2017-media.gladly.io/img/cause/blackEquity/blackEquityEmailInvite.svg',
+        'https://prod-tab2017-media.gladly.io/img/cause/blackEquity/emailInviteBlackEquity.jpg',
       title:
         'We all have a part to play in promoting racial equity. That’s why {{name}} thinks you should join them on Tab for Black Equity',
       about: emailAbout,
