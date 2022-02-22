@@ -8,7 +8,7 @@ const data = {
   about:
     '### About Tab for Trees\n\nTab for Trees is proud to support **Eden Reforestation Projects**. With each tab opened, you are making a positive impact on our planet that will affect generations to come.\n\n[Eden Reforestation Projects](https://www.edenprojects.org/) works to combat deforestation and create job opportunities in local communities by planting trees. Deforestation can bring on flooding, erosion, and animal extinction, and Eden Reforestation Projects is able to enact change by planting trees in affected communities to help both the local ecosystem and economy.\n\n**Your tabs are making an impact**. The counter on your new tab page (with the tree icon) estimates how many trees you have helped plant. Eden Reforestation Projects plants trees and employs local communities to restore and protect their natural environment. Thank you for making a difference!',
   name: 'Trees',
-  isAvailableToSelect: false,
+  isAvailableToSelect: true,
   backgroundImageCategory: 'trees',
   charityId: '17099402-4e53-4b42-ad0b-6b89492b61cb',
   individualImpactEnabled: true,
