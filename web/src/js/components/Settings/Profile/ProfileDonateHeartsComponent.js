@@ -9,14 +9,14 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Typography from '@material-ui/core/Typography'
 import catImage from 'js/assets/cats.png'
 import seasImage from 'js/assets/seas1.svg'
+import treesImage from 'js/assets/trees.png'
 import blackEquityImage from 'js/assets/blackEquity.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
   STORAGE_BLACK_EQUITY_CAUSE_ID,
+  STORAGE_TREES_CAUSE_ID,
 } from 'js/constants'
-
-const SHOW_TEAMSEAS_CAUSE = true
 
 const spacingPx = 6
 
@@ -82,6 +82,14 @@ class ProfileDonateHearts extends React.Component {
           })}
           <SwitchToV4
             user={user}
+            title="Fight Climate Change (Beta)"
+            causeId={STORAGE_TREES_CAUSE_ID}
+            causeName="Tab for Trees"
+            causeShortDesc="Open tabs, plant trees!"
+            imgSrc={treesImage}
+          />
+          <SwitchToV4
+            user={user}
             title="Support Black Equity (Beta)"
             causeId={STORAGE_BLACK_EQUITY_CAUSE_ID}
             causeName="Tab for Black Equity"
@@ -96,16 +104,14 @@ class ProfileDonateHearts extends React.Component {
             causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
             imgSrc={catImage}
           />
-          {SHOW_TEAMSEAS_CAUSE && (
-            <SwitchToV4
-              user={user}
-              title="Join #TeamSeas (Beta)"
-              causeId={STORAGE_SEAS_CAUSE_ID}
-              causeName="Tab for #TeamSeas"
-              causeShortDesc="Open tabs, remove trash from our seas!"
-              imgSrc={seasImage}
-            />
-          )}
+          <SwitchToV4
+            user={user}
+            title="Join #TeamSeas (Beta)"
+            causeId={STORAGE_SEAS_CAUSE_ID}
+            causeName="Tab for #TeamSeas"
+            causeShortDesc="Open tabs, remove trash from our seas!"
+            imgSrc={seasImage}
+          />
         </span>
       </div>
     )
