@@ -85,7 +85,7 @@ class ProfileDonateHearts extends React.Component {
             title="Fight Climate Change (Beta)"
             causeId={STORAGE_TREES_CAUSE_ID}
             causeName="Tab for Trees"
-            causeShortDesc="Open tabs, plant trees"
+            causeShortDesc="Open tabs, plant trees!"
             imgSrc={treesImage}
           />
           <SwitchToV4
