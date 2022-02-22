@@ -531,5 +531,19 @@
     "updated": "2022-01-12T10:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "17099402-4e53-4b42-ad0b-6b89492b61cb",
+    "name": "Eden Reforestation Projects",
+    "category": "The Environment",
+    "logo": "--",
+    "image": "--",
+    "website": "--",
+    "impact": "--",
+    "description": "Works to combat deforestation and create job opportunities in local communities by planting trees",
+    "created": "2022-02-21T10:00:00.000Z",
+    "updated": "2022-02-21T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]

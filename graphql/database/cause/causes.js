@@ -3,11 +3,13 @@ import CauseModel from './CauseModel'
 import dataCats from './causes/cats/causeData'
 import dataTeamseas from './causes/teamseas/causeData'
 import dataBlackEquity from './causes/blackEquity/causeData'
+import dataTrees from './causes/trees/causeData'
 
 const causes = [
   new CauseModel(dataCats),
   new CauseModel(dataTeamseas),
   new CauseModel(dataBlackEquity),
+  new CauseModel(dataTrees),
 ]
 
 // TODO: remove after populating data
