@@ -36,9 +36,17 @@ const data = {
     impactIcon: 'jellyfish',
     impactWalkthroughText,
     newlyReferredImpactWalkthroughText,
+
+    // Note: this is not used until we generalize referral incentives.
+    // @feature/generalize-referral-reward
     referralRewardNotification,
+
     referralRewardSubtitle,
+
+    // Note: this is not used until we generalize referral incentives.
+    // @feature/generalize-referral-reward
     referralRewardTitle,
+
     walkMeGif: 'seas/dolphin.gif',
   },
   onboarding: {
@@ -79,6 +87,9 @@ const data = {
         'We’ve partnered with #TeamSeas to ensure the money raised will support their goal of raising $30 million to remove 30 million pounds of trash to protect and clean up our planet’s oceans, rivers, and lakes.',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
+    // @feature/generalize-referral-reward
+    // After generalizing referral rewards, change this to:
+    // ##### Do even more for our seas! When a friend signs up, you'll each remove 5 plastic water bottles' worth of trash from our rivers and oceans!
     subtitle: socialSubtitle,
     title: socialTitle,
     tumblrCaption:

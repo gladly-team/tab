@@ -21,14 +21,21 @@ const data = {
     claimImpactSubtitle:
       '##### You did it! Your opened tabs have become a tree. Keep it up!',
     impactIcon: 'pine-tree',
+    // @feature/generalize-referral-reward
+    // Note: this is not used until we generalize referral incentives:
+    // https://github.com/gladly-team/tab/blob/master/graphql/database/users/rewardReferringUser.js#L91
     referralRewardNotification:
       "##### Congrats! You recruited a friend to help fight climate change just by opening tabs. To celebrate, we'll have Eden Reforestation Projects plant ${pendingUserReferralImpact} extra tree${isPlural(pendingUserReferralImpact)} on your behalf.\n\n",
+    // Note: this is not used until we generalize referral incentives.
+    // @feature/generalize-referral-reward
     referralRewardTitle:
       '#### You just planted ${claimedReferralImpact} tree${isPlural(claimedReferralImpact)}!\n\n',
     referralRewardSubtitle:
       "##### Congratulations! You're making a huge impact to fight climate change. Want to help plant even more trees? Invite a few more friends!",
     impactWalkthroughText:
       "##### When you do, you'll plant a tree to fight climate change. We'll track how many trees you've planted on the top of the page:\n\n",
+    // @feature/generalize-referral-reward
+    // Note: this is not used until we generalize referral incentives.
     newlyReferredImpactWalkthroughText:
       "##### Your friend has started you off with a tree! Open a new tab now to plant your second tree. We'll track how many trees you've planted on the top of the page.\n\n",
     confirmImpactSubtitle:
