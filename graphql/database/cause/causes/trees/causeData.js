@@ -39,7 +39,7 @@ const data = {
     newlyReferredImpactWalkthroughText:
       "##### Your friend has started you off with a tree! Open a new tab now to plant your second tree. We'll track how many trees you've planted on the top of the page.\n\n",
     confirmImpactSubtitle:
-      "##### Each time you open a tab, you'll be helping plant trees to combat climate change. Ready to get started?",
+      "##### Each time you open a tab, you'll be helping plant trees to combat climate change. Ready to get started?\n\n",
     // walkMeGif: undefined,
   },
   onboarding: {

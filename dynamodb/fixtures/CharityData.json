@@ -540,9 +540,23 @@
     "image": "--",
     "website": "--",
     "impact": "--",
-    "description": "Works to combat deforestation and create job opportunities in local communities by planting trees",
+    "description": "--",
     "created": "2022-02-21T10:00:00.000Z",
     "updated": "2022-02-21T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
+  },
+  {
+    "id": "cb7ab7e4-bda6-4fdf-825a-30db05911705",
+    "name": "Partners in Health",
+    "category": "Health",
+    "logo": "--",
+    "image": "--",
+    "website": "--",
+    "impact": "--",
+    "description": "--",
+    "created": "2022-02-24T10:00:00.000Z",
+    "updated": "2022-02-24T10:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
   }
