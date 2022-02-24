@@ -148,6 +148,10 @@ class Cause extends BaseModel {
         .boolean()
         .description('if a user can select this cause')
         .default(self.fieldDefaults.isAvailableToSelect),
+      icon: types
+        .string()
+        .description(`string: name of the icon`)
+        .required(),
       individualImpactEnabled: types
         .boolean()
         .required()

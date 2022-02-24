@@ -23,6 +23,7 @@ const data = {
   about,
   name: '#TeamSeas',
   isAvailableToSelect: true,
+  icon: 'jellyfish',
   backgroundImageCategory: 'seas',
   charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e',
   individualImpactEnabled: true,

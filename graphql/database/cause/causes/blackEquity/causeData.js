@@ -15,6 +15,7 @@ const data = {
   about,
   name: 'Black Equity',
   isAvailableToSelect: true,
+  icon: 'handshake',
   backgroundImageCategory: 'black-photographers',
   charityId: 'b7a78116-9a62-4208-b016-03aae6a3414a', // bail project charity id
   individualImpactEnabled: false,
