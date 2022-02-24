@@ -49,19 +49,19 @@ const data = {
         title: '### Your tabs have a tree-mendous impact!',
         subtitle:
           'Now, every tab you open works to fight climate change by replanting forests around the world.\n\nTabbers like you are supporting critical nonprofit work to ensure our planet is happy and healthy for years to come. Thank you!\n\n',
-        imgName: 'trees/onboarding1.svg',
+        imgName: 'globalHealth/onboarding1.svg',
       },
       {
         title: '### Do more with your squad',
         subtitle:
           'Plant trees even faster with a squad!\n\nYou and your friends can team up to plant a forest in no time.',
-        imgName: 'trees/onboarding2.svg',
+        imgName: 'globalHealth/onboarding2.svg',
       },
       {
         title: "### It doesn't cost you a thing",
         subtitle:
           "Ads on the new tab page raise money that we give to nonprofits. Most ads aren't good—but these ones are :)\n\n",
-        imgName: 'trees/onboarding3.svg',
+        imgName: 'globalHealth/onboarding3.svg',
       },
     ],
   },
@@ -69,12 +69,12 @@ const data = {
     title: '### **Get a friend on board**',
     subtitle:
       '##### Everyone can and _should_ make a difference to protect our planet: invite a friend to join in.\n\n',
-    shareImage: 'trees/treesInvite.svg',
-    sentImage: 'trees/treesInvite.svg',
+    shareImage: 'globalHealth/sharing.svg',
+    sentImage: 'globalHealth/sharing.svg',
     imgCategory: 'trees',
     email: {
       image:
-        'https://prod-tab2017-media.gladly.io/img/cause/trees/emailInviteTrees.jpg',
+        'https://prod-tab2017-media.gladly.io/img/cause/globalHealth/emailInvite.jpg',
       title:
         'We all have a part to play in protecting our planet from the harmful effects of climate change. That’s why {{name}} thinks you should join them on Tab for Trees.',
       about:
