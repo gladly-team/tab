@@ -289,6 +289,9 @@ type Cause implements Node {
   """Cause's id"""
   causeId: String!
 
+  """Name of an icon, mapping to an icon component on the frontend"""
+  icon: String!
+
   """URL path for the landing page belonging to this cause"""
   landingPagePath: String!
 

@@ -903,6 +903,10 @@ const CauseType = new GraphQLObjectType({
       description: "Cause's id",
       resolve: cause => cause.id,
     },
+    icon: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Name of an icon, mapping to an icon component on the frontend`,
+    },
     landingPagePath: {
       type: new GraphQLNonNull(GraphQLString),
       description: `URL path for the landing page belonging to this cause`,
