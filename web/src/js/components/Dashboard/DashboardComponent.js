@@ -48,6 +48,7 @@ import {
   facebookPageURL,
   instagramPageURL,
   twitterPageURL,
+  donateURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
@@ -498,37 +499,21 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Learn how to make an impact all year long!`}
+                  title={`Support the people of Ukraine`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        In honor of Black History Month, we have been sharing
-                        ongoing issues and highlighting educators in the Black
-                        community. Check out our{' '}
-                        <Link
-                          to={'https://www.instagram.com/tabforacause/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Instagram
+                        The people of Ukraine deserve ongoing and comprehensive
+                        support in the wake of war. Join us on Tab for Ukraine
+                        to provide basic needs to vulnerable families, including
+                        food, shelter, clothing, cash grants, and medicine.
+                      </Typography>
+                      <Typography variant={'body2'}>
+                        To join in, click “Try Tab for Ukraine” on your{' '}
+                        <Link to={donateURL} style={{ color: '#9d4ba3' }}>
+                          donate hearts page
                         </Link>
-                        ,{' '}
-                        <Link
-                          to={'https://www.tiktok.com/@tabforacause'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          TikTok
-                        </Link>
-                        , or{' '}
-                        <Link
-                          to={'https://twitter.com/TabForACause'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Twitter
-                        </Link>{' '}
-                        for these resources and to join in the conversation.
+                        .
                       </Typography>
                     </>
 
@@ -555,6 +540,31 @@ class Dashboard extends React.Component {
                     //                         </Link>
                     //                       </Typography>
                     //                     </>
+
+                    /***** Social *****/
+                    // <Link
+                    //   to={'https://www.instagram.com/tabforacause/'}
+                    //   target="_blank"
+                    //   style={{ color: '#9d4ba3' }}
+                    // >
+                    //   Instagram
+                    // </Link>
+                    // ,{' '}
+                    // <Link
+                    //   to={'https://www.tiktok.com/@tabforacause'}
+                    //   target="_blank"
+                    //   style={{ color: '#9d4ba3' }}
+                    // >
+                    //   TikTok
+                    // </Link>
+                    // , or{' '}
+                    // <Link
+                    //   to={'https://twitter.com/TabForACause'}
+                    //   target="_blank"
+                    //   style={{ color: '#9d4ba3' }}
+                    // >
+                    //   Twitter
+                    // </Link>{' '}
                   }
                   // buttonText={'Vote'}
                   // buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
