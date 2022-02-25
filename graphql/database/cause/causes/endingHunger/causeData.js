@@ -1,17 +1,17 @@
-// Cause: global health
+// Cause: ending hunger
 
 // We have a little templating "engine" that replaces placeholders.
 /* eslint no-template-curly-in-string: 0 */
 
 const data = {
-  id: 'sPFpWRT7q',
+  id: '1HCq9sFTp',
   about:
     '### About Tab for Global Health\n\n**Tab for Global Health** is proud to support [Partners In Health](https://www.pih.org/) and Dr. Paul Farmer’s legacy. With each tab opened, you are helping provide access to health care to those in need and strengthening public health systems all around the world. \n \nPartners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.\n \nThey draw on the resources of the world’s leading medical and academic institutions and on the lived experience of the world’s most impoverished communities. At its root, their mission is both medical and moral. It is based on solidarity, rather than charity alone.\n \nWhen their patients are ill and have no access to care, their team of health professionals, scholars, and activists will do whatever it takes to make them well.\n \nPartners In Health has used a community-based model to provide health care and support for the last 30 years and now serves millions of patients across 12 countries.\n \n**Your tabs are making an impact**. The counter on your new tab page (with the medical bag icon) estimates how many in-home visits from a [community health worker](https://www.pih.org/programs/community-health-workers) your tabs have helped support.  Each counter increment represents raising ~1/50th of the money needed to support an in-home visit. Thank you for making a difference!',
-  name: 'Global Health',
-  isAvailableToSelect: true,
+  name: 'Ending Hunger',
+  isAvailableToSelect: false,
   icon: 'medical-bag',
   backgroundImageCategory: 'trees', // TODO: update with new collection
-  charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705',
+  charityId: '8d1ceba8-1aee-439f-a49b-65a318e92306',
   individualImpactEnabled: true,
   impactVisits: 131,
   landingPagePath: '/global-health/',
