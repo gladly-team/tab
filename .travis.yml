@@ -277,9 +277,9 @@ script:
   ### We still want to deploy to QA to enable E2E tests for other
   ### parts of our stack.
   ### TODO: remove after above is enabled
-  # - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
-  #     yarn run ci:deploy test || travis_terminate 1;
-  #   fi'
+  - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
+      yarn run ci:deploy test || travis_terminate 1;
+    fi'
 
 # TODO: master branch deploy to prod; other logic for test/dev
 # Note: travis_wait doesn't work well in deploy:
