@@ -6,6 +6,7 @@ import dataBlackEquity from './causes/blackEquity/causeData'
 import dataTrees from './causes/trees/causeData'
 import dataGlobalHealth from './causes/globalHealth/causeData'
 import dataEndingHunger from './causes/endingHunger/causeData'
+import dataUkraine from './causes/ukraine/causeData'
 
 const causes = [
   new CauseModel(dataCats),
@@ -14,6 +15,7 @@ const causes = [
   new CauseModel(dataTrees),
   new CauseModel(dataGlobalHealth),
   new CauseModel(dataEndingHunger),
+  new CauseModel(dataUkraine),
 ]
 
 // TODO: remove after populating data
