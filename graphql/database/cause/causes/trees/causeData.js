@@ -32,7 +32,7 @@ const data = {
     referralRewardTitle:
       '#### You just planted ${claimedReferralImpact} tree${isPlural(claimedReferralImpact)}!\n\n',
     referralRewardSubtitle:
-      "##### Congratulations! You're making a huge impact to fight climate change. Want to help plant even more trees? Invite a few more friends!",
+      "##### Congratulations! You're making a huge impact to fight climate change. Want to help plant even more trees? Invite a few more friends!\n\n",
     impactWalkthroughText:
       "##### When you do, you'll plant a tree to fight climate change. We'll track how many trees you've planted on the top of the page:\n\n",
     // @feature/generalize-referral-reward
