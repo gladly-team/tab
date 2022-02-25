@@ -6,7 +6,7 @@
 const data = {
   id: 'JmClR7bmy',
   about:
-    '### About Tab for Ukraine\n\n**Tab for Ukraine** is proud to support [Save the Children](https://ukraine.savethechildren.net/), an incredible organization working to save lives and provide ongoing humanitarian aid to Ukrainian families.\n\n**Save the Children** has been working to provide lifesaving interventions in Ukraine since 2014. They work to provide the basic needs of the most vulnerable families including food, shelter, clothing, cash grants, and medicine. They also provide children and their caregivers with psychosocial support as well as work with schools to increase awareness of the dangers of mines and other remnants of war.\n\nIf you would like to make an immediate monetary impact, donations to Save the Children can be made [here](https://support.savethechildren.org/site/Donation2?df_id=1620&1620.donation=form1).\n\n**Your tabs are making an impact**. The counter on your new tab page (with the water icon) estimates how many water purifying aquatabs your tabs have funded. **This is a representation of just one small part of the humanitarian aid that Save the Children provides.** The money you raise for Save the Children will support whatever supplies and support are most needed.',
+    '### About Tab for Ukraine\n\n**Tab for Ukraine** is proud to support [Save the Children](https://ukraine.savethechildren.net/), an incredible organization working to save lives and provide ongoing humanitarian aid to Ukrainian families.\n\n**Save the Children** has been working to provide lifesaving interventions in Ukraine since 2014. They work to provide the basic needs of the most vulnerable families including food, shelter, clothing, cash grants, and medicine. They also provide children and their caregivers with psychosocial support as well as work with schools to increase awareness of the dangers of mines and other remnants of war.\n\nIf you would like to make an immediate monetary impact, donations to Save the Children can be made [here](https://support.savethechildren.org/site/Donation2?df_id=1620&1620.donation=form1).\n\n**Your tabs are making an impact**. The counter on your new tab page (with the water icon) estimates how many water-purifying aquatabs your tabs have funded. **This is a representation of just one small part of the humanitarian aid that Save the Children provides.** The money you raise for Save the Children will support whatever supplies and support are most needed.',
   name: 'Ukraine',
   isAvailableToSelect: true,
   icon: 'water',
@@ -18,7 +18,7 @@ const data = {
   slug: 'ukraine',
   impact: {
     impactCounterText:
-      '##### **Your positive impact!**\n\nThis shows how many water purifying aquatabs your tabs can provide to families in Ukraine.\n\nThis is a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support they determine is most needed.\n\nEvery tab you open helps. Keep it up!\n\n',
+      '##### **Your positive impact!**\n\nThis shows how many water-purifying aquatabs your tabs can provide to families in Ukraine.\n\nThis is a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support they determine is most needed.\n\nEvery tab you open helps. Keep it up!\n\n',
     claimImpactSubtitle:
       '##### You did it! You just turned your tab into a water-purifying aquatab. Keep it up!\n\n##### This is a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies are most needed.\n\n',
     impactIcon: 'water',
@@ -33,11 +33,11 @@ const data = {
     referralRewardSubtitle:
       "##### Thank you! You're making a huge impact by supporting ongoing humanitarian relief to families in Ukraine. Want to help even more people for free? Invite a few more friends.\n\n",
     impactWalkthroughText:
-      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\n##### We've chosen water purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support are most needed.\n\n##### We'll track how many aquatabs you’ve provided on the top of the page:\n\n",
+      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\n##### We've chosen water-purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support are most needed.\n\n##### We'll track how many aquatabs you’ve provided on the top of the page:\n\n",
     // @feature/generalize-referral-reward
     // Note: this is not used until we generalize referral incentives.
     newlyReferredImpactWalkthroughText:
-      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\n##### We've chosen water purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support are most needed.\n\n##### We'll track how many aquatabs you’ve provided on the top of the page:\n\n",
+      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\n##### We've chosen water-purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies and support are most needed.\n\n##### We'll track how many aquatabs you’ve provided on the top of the page:\n\n",
     confirmImpactSubtitle:
       "##### Each time you open a tab, you'll be helping Save the Children provide ongoing humanitarian aid to Ukrainian families. Ready to get started?\n\n",
     // walkMeGif: undefined,
