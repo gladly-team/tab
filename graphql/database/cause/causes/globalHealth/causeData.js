@@ -33,7 +33,7 @@ const data = {
     referralRewardSubtitle:
       "##### Congratulations! You're making a huge impact to support the wellbeing of people around the world. Want to do more? Invite a few more friends!",
     impactWalkthroughText:
-      "##### When you do, we will chip in a little extra to help provide at-home healthcare visits to people in need of Partners In Health’s support. We'll track your progress at the top of the page:\n\n",
+      "##### When you do, you’ll help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
     // @feature/generalize-referral-reward
     // Note: this is not used until we generalize referral incentives.
     newlyReferredImpactWalkthroughText:
