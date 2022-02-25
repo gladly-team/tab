@@ -6,40 +6,40 @@
 const data = {
   id: 'JmClR7bmy',
   about:
-    '### About Tab for Global Health\n\n**Tab for Global Health** is proud to support [Partners In Health](https://www.pih.org/) and Dr. Paul Farmer’s legacy. With each tab opened, you are helping provide access to health care to those in need and strengthening public health systems all around the world. \n \nPartners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.\n \nThey draw on the resources of the world’s leading medical and academic institutions and on the lived experience of the world’s most impoverished communities. At its root, their mission is both medical and moral. It is based on solidarity, rather than charity alone.\n \nWhen their patients are ill and have no access to care, their team of health professionals, scholars, and activists will do whatever it takes to make them well.\n \nPartners In Health has used a community-based model to provide health care and support for the last 30 years and now serves millions of patients across 12 countries.\n \n**Your tabs are making an impact**. The counter on your new tab page (with the medical bag icon) estimates how many in-home visits from a [community health worker](https://www.pih.org/programs/community-health-workers) your tabs have helped support.  Each counter increment represents raising ~1/50th of the money needed to support an in-home visit. Thank you for making a difference!',
+    '### About Tab for Ukraine\n\n**Tab for Ukraine** is proud to support [Save the Children](https://ukraine.savethechildren.net/), an incredible organization working to save lives and provide ongoing humanitarian aid to Ukrainian families.\n\n**Save the Children** has been working to provide lifesaving interventions in Ukraine since 2014. They work to provide the basic needs of the most vulnerable families including food, shelter, clothing, cash grants, and medicine. They also provide children and their caregivers with psychosocial support as well as work with schools to increase awareness of the dangers of mines and other remnants of war.\n\nIf you would like to make an immediate monetary impact, donations to Save the Children can be made [here](https://support.savethechildren.org/site/Donation2?df_id=1620&1620.donation=form1).\n\n**Your tabs are making an impact**. The counter on your new tab page (with the water icon) estimates how many water purifying aquatabs your tabs have funded. **This is a representation of just one small part of the humanitarian aid that Save the Children provides.** The money this page raises for Save the Children will support whatever supplies and support are most needed.',
   name: 'Ukraine',
   isAvailableToSelect: false,
-  icon: 'medical-bag',
+  icon: 'water',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: '90bfe202-54a9-4eea-9003-5e91572387dd',
   individualImpactEnabled: true,
-  impactVisits: 131,
-  landingPagePath: '/global-health/',
-  slug: 'global-health',
+  impactVisits: 13,
+  landingPagePath: '/ukraine/',
+  slug: 'ukraine',
   impact: {
     impactCounterText:
-      '##### **Your positive impact!**\n\nThis counter shows your progress toward helping provide an at-home medical visit. Every tab you open helps. Keep it up!\n\n',
+      '##### **Your positive impact!**\n\nThis shows how many water purifying aquatabs your tabs can provide to families in Ukraine.\n\nThis is a representation of just one small part of the humanitarian aid that Save the Children provides. The money this page raises for Save the Children will support whatever supplies and support they determine is most needed.\n\nEvery tab you open helps. Keep it up!\n\n',
     claimImpactSubtitle:
-      '##### You did it! Your tabs are on their way to providing an at-home medical visit.',
-    impactIcon: 'medical-bag',
+      '##### You did it! You just turned your tab into a water-purifying aquatab. Keep it up!\n\n##### This is a representation of just one small part of the humanitarian aid that Save the Children provides. The money you raise for Save the Children will support whatever supplies are most needed.',
+    impactIcon: 'water',
     // @feature/generalize-referral-reward
     // Note: this is not used until we generalize referral incentives:
     // https://github.com/gladly-team/tab/blob/master/graphql/database/users/rewardReferringUser.js#L91
     referralRewardNotification:
-      '##### Congrats! You recruited a friend to help provide access to health care around the world.\n\n',
+      '##### Thank you! You recruited a friend to support ongoing humanitarian relief to families in Ukraine.\n\n',
     // Note: this is not used until we generalize referral incentives.
     // @feature/generalize-referral-reward
-    referralRewardTitle: '#### You just moved global health forward!\n\n',
+    referralRewardTitle: '#### You are doing good\n\n',
     referralRewardSubtitle:
-      "##### Congratulations! You're making a huge impact to support the wellbeing of people around the world. Want to do more? Invite a few more friends!\n\n",
+      "##### Thank you! You're making a huge impact by supporting ongoing humanitarian relief to families in Ukraine. Want to help even more people for free? Invite a few more friends.\n\n",
     impactWalkthroughText:
-      "##### When you do, you’ll help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
+      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\nWe have chosen water purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money this page raises for Save the Children will support whatever supplies and support are most needed. \n\nWe'll track how many aquatabs you’ve provided on the top of the page:\n\n",
     // @feature/generalize-referral-reward
     // Note: this is not used until we generalize referral incentives.
     newlyReferredImpactWalkthroughText:
-      "##### Your friend has started you off with some impact! Open a new tab now to help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
+      "##### When you do, you'll provide ongoing humanitarian relief to families in Ukraine.\n\nWe have chosen water purifying aquatabs as a representation of just one small part of the humanitarian aid that Save the Children provides. The money this page raises for Save the Children will support whatever supplies and support are most needed. \n\nWe'll track how many aquatabs you’ve provided on the top of the page:\n\n",
     confirmImpactSubtitle:
-      "##### Each time you open a tab, you'll be helping provide at-home healthcare visits through Partners In Health. Ready to get started?\n\n",
+      "##### Each time you open a tab, you'll be helping Save the Children provide ongoing humanitarian aid to Ukrainian families. Ready to get started?\n\n",
     // walkMeGif: undefined,
   },
   onboarding: {
@@ -47,20 +47,20 @@ const data = {
       {
         title: '### Your tabs are doing great things',
         subtitle:
-          'Now, every tab you open helps train and support community healthcare workers to provide at-home visits.\n\nTabbers like you are supporting critical nonprofit work all around the world. Thank you!\n\n',
-        imgName: 'globalHealth/onboarding1.svg',
+          'Now, every tab you open supports ongoing humanitarian aid to Ukrainian families. Tabbers like you are supporting critical nonprofit work. Thank you!\n\n',
+        imgName: 'ukraine/onboarding1.svg',
       },
       {
         title: '### Do more with your squad',
         subtitle:
-          'With your squad, help even more people access safe health care!\n\nYou and your friends can team up to do more good.\n\n',
-        imgName: 'globalHealth/onboarding2.svg',
+          'With a squad, you and your friends can team up to provide even more humanitarian aid.\n\n',
+        imgName: 'ukraine/onboarding2.svg',
       },
       {
         title: "### It doesn't cost you a thing",
         subtitle:
           "Ads on the new tab page raise money that we give to nonprofits. Most ads aren't good—but these ones are :)\n\n",
-        imgName: 'globalHealth/onboarding3.svg',
+        imgName: 'ukraine/onboarding3.svg',
       },
     ],
   },
@@ -68,29 +68,29 @@ const data = {
     title: '### **Get a friend on board**',
     subtitle:
       '##### Everyone can and _should_ make a difference: invite a friend to join in.\n\n',
-    shareImage: 'globalHealth/sharing.svg',
-    sentImage: 'globalHealth/sharing.svg',
-    imgCategory: 'global-health',
+    shareImage: 'ukraine/sharing.svg',
+    sentImage: 'ukraine/sharing.svg',
+    imgCategory: 'ukraine',
     email: {
       image:
-        'https://prod-tab2017-media.gladly.io/img/cause/globalHealth/emailInvite.jpg',
+        'https://prod-tab2017-media.gladly.io/img/cause/ukraine/emailInvite.jpg',
       title:
-        'With Tab for Global Health, supporting healthcare access has never been easier.',
+        'We all can and should support the people of Ukraine. Turn your internet browsing into ongoing support.',
       about:
-        '<div>Tab for Global Health turns your web browser into a force for good. With each tab opened, ad revenue supports community healthcare training through Partners In Health. This training helps ensure the people in need of care will receive it, long term.</div>\n\n',
+        '<div>Tab for Ukraine turns your web browser into a force for good. With each tab opened, ad revenue supports Save the Children, which has been working to provide lifesaving interventions in Ukraine since 2014.</div>\n\n',
       faq:
-        'We’re partnered with Partners In Health to ensure the money raised will directly support their mission of providing high-quality health care globally to those who need it.',
+        'Save the Children ensures the money raised will directly support Ukrainian families affected by the war.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     facebookButtonTitle:
-      'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
+      'The people of Ukraine are under attack and need support. Now, with Tab for Ukraine, every tab I open helps raise money for Save the Children to provide ongoing humanitarian support to Ukrainian families. Check it out - it’s free!',
     twitterButtonTitle:
-      'People around the world are struggling to access quality health care, but this is a problem we can solve. Now, with Tab for Global Health, every tab I open raises money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
-    redditButtonTitle: 'Help provide quality healthcare around the world',
-    tumblrTitle: 'Help provide quality healthcare around the world ',
+      'The people of Ukraine are under attack and need support. Now, with Tab for Ukraine, every tab I open helps raise money for Save the Children to provide ongoing humanitarian support to Ukrainian families. Check it out - it’s free!',
+    redditButtonTitle: 'Help support Ukrainian families',
+    tumblrTitle: 'Help support Ukrainian families',
     tumblrCaption:
-      'Every time I open a new tab with Tab for Global Health I am raising money to train healthcare workers through Partners In Health. Join today for free! ',
+      'Every time I open a new tab with Tab for Ukraine I am raising money for Save the Children to provide ongoing humanitarian support to Ukrainian families. Join today for free!',
   },
   // TODO
   squads: {
