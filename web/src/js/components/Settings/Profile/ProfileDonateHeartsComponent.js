@@ -88,7 +88,7 @@ class ProfileDonateHearts extends React.Component {
             causeId={STORAGE_GLOBAL_HEALTH_CAUSE_ID}
             causeName="Tab for Global Health"
             causeShortDesc="Open tabs, give quality health care to those who need it most."
-            imgSrc={treesImage}
+            imgSrc={globalHealthImage}
           />
           <SwitchToV4
             user={user}
@@ -96,7 +96,7 @@ class ProfileDonateHearts extends React.Component {
             causeId={STORAGE_TREES_CAUSE_ID}
             causeName="Tab for Trees"
             causeShortDesc="Open tabs, plant trees!"
-            imgSrc={globalHealthImage}
+            imgSrc={treesImage}
           />
           <SwitchToV4
             user={user}
