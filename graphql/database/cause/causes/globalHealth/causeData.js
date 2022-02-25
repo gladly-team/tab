@@ -10,7 +10,7 @@ const data = {
   name: 'Global Health',
   isAvailableToSelect: false,
   icon: 'medical-bag',
-  backgroundImageCategory: 'legacy',
+  backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705',
   individualImpactEnabled: true,
   impactVisits: 131,
@@ -33,7 +33,7 @@ const data = {
     referralRewardSubtitle:
       "##### Congratulations! You're making a huge impact to support the wellbeing of people around the world. Want to do more? Invite a few more friends!",
     impactWalkthroughText:
-      "##### When you do, we will chip in a little extra to help provide at-home healthcare visits to people in need of Partners In Health’s support. We'll track your progress at the top of the page:\n\n",
+      "##### When you do, you’ll help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
     // @feature/generalize-referral-reward
     // Note: this is not used until we generalize referral incentives.
     newlyReferredImpactWalkthroughText:
@@ -86,7 +86,7 @@ const data = {
     facebookButtonTitle:
       'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
     twitterButtonTitle:
-      'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
+      'People around the world are struggling to access quality health care, but this is a problem we can solve. Now, with Tab for Global Health, every tab I open raises money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
     redditButtonTitle: 'Help provide quality healthcare around the world',
     tumblrTitle: 'Help provide quality healthcare around the world ',
     tumblrCaption:
