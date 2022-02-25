@@ -11,11 +11,13 @@ import catImage from 'js/assets/cats.png'
 import seasImage from 'js/assets/seas1.svg'
 import treesImage from 'js/assets/trees.png'
 import blackEquityImage from 'js/assets/blackEquity.png'
+import globalHealthImage from 'js/assets/globalHealth.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
   STORAGE_BLACK_EQUITY_CAUSE_ID,
   STORAGE_TREES_CAUSE_ID,
+  STORAGE_GLOBAL_HEALTH_CAUSE_ID,
 } from 'js/constants'
 
 const spacingPx = 6
@@ -82,11 +84,19 @@ class ProfileDonateHearts extends React.Component {
           })}
           <SwitchToV4
             user={user}
+            title="Support Global Health (Beta)"
+            causeId={STORAGE_GLOBAL_HEALTH_CAUSE_ID}
+            causeName="Tab for Global Health"
+            causeShortDesc="Open tabs, give quality health care to those who need it most."
+            imgSrc={treesImage}
+          />
+          <SwitchToV4
+            user={user}
             title="Fight Climate Change (Beta)"
             causeId={STORAGE_TREES_CAUSE_ID}
             causeName="Tab for Trees"
             causeShortDesc="Open tabs, plant trees!"
-            imgSrc={treesImage}
+            imgSrc={globalHealthImage}
           />
           <SwitchToV4
             user={user}

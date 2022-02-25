@@ -79,6 +79,7 @@ export const STORAGE_CATS_CAUSE_ID = 'CA6A5C2uj'
 export const STORAGE_SEAS_CAUSE_ID = 'SGa6zohkY'
 export const STORAGE_TREES_CAUSE_ID = 'tdU_PsRIM'
 export const STORAGE_BLACK_EQUITY_CAUSE_ID = 'q1FFsAhbV'
+export const STORAGE_GLOBAL_HEALTH_CAUSE_ID = 'sPFpWRT7q'
 export const STORAGE_REFERRAL_DATA_MISSION_ID = 'tab.referralData.missionId'
 // tab.experiments: values related to split-testing features
 // We may assign other values to localStorage with the tab.experiments.*
