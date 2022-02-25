@@ -75,7 +75,7 @@ const data = {
       image:
         'https://prod-tab2017-media.gladly.io/img/cause/globalHealth/emailInvite.jpg',
       title:
-        'We all can <em>and should</em> make a difference where we can! With Tab for Global Health, supporting healthcare access has never been easier.',
+        'With Tab for Global Health, supporting healthcare access has never been easier.',
       about:
         '<div>Tab for Global Health turns your web browser into a force for good. With each tab opened, ad revenue supports community healthcare training through Partners In Health. This training helps ensure the people in need of care will receive it, long term.</div>\n\n',
       faq:
