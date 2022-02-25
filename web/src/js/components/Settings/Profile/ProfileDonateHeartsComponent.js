@@ -12,13 +12,19 @@ import seasImage from 'js/assets/seas1.svg'
 import treesImage from 'js/assets/trees.png'
 import blackEquityImage from 'js/assets/blackEquity.png'
 import globalHealthImage from 'js/assets/globalHealth.png'
+import ukraineImage from 'js/assets/ukraine.png'
+import endingHungerImage from 'js/assets/endingHunger.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
   STORAGE_BLACK_EQUITY_CAUSE_ID,
   STORAGE_TREES_CAUSE_ID,
   STORAGE_GLOBAL_HEALTH_CAUSE_ID,
+  STORAGE_ENDING_HUNGER_CAUSE_ID,
+  STORAGE_UKRAINE_CAUSE_ID,
 } from 'js/constants'
+
+const SHOW_ENDING_HUNGER = false
 
 const spacingPx = 6
 
@@ -69,6 +75,14 @@ class ProfileDonateHearts extends React.Component {
           </Typography>
         </Paper>
         <span className={classes.charitiesContainer}>
+          <SwitchToV4
+            user={user}
+            title="Support Ukraine (Beta)"
+            causeId={STORAGE_UKRAINE_CAUSE_ID}
+            causeName="Tab for Ukraine"
+            causeShortDesc="Open new tabs, raise money to support Ukrainian families."
+            imgSrc={ukraineImage}
+          />
           {app.charities.edges.map(edge => {
             return (
               <Charity
@@ -122,6 +136,16 @@ class ProfileDonateHearts extends React.Component {
             causeShortDesc="Open tabs, remove trash from our seas!"
             imgSrc={seasImage}
           />
+          {SHOW_ENDING_HUNGER && (
+            <SwitchToV4
+              user={user}
+              title="Help End Hunger (Beta)"
+              causeId={STORAGE_ENDING_HUNGER_CAUSE_ID}
+              causeName="Tab for Ending Hunger"
+              causeShortDesc="Help people facing severe hunger."
+              imgSrc={endingHungerImage}
+            />
+          )}
         </span>
       </div>
     )
