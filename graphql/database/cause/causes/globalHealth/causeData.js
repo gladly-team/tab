@@ -86,7 +86,7 @@ const data = {
     facebookButtonTitle:
       'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
     twitterButtonTitle:
-      'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
+      'People around the world are struggling to access quality health care, but this is a problem we can solve. Now, with Tab for Global Health, every tab I open raises money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
     redditButtonTitle: 'Help provide quality healthcare around the world',
     tumblrTitle: 'Help provide quality healthcare around the world ',
     tumblrCaption:
