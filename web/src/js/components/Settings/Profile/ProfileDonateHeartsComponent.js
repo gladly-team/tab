@@ -24,7 +24,7 @@ import {
   STORAGE_UKRAINE_CAUSE_ID,
 } from 'js/constants'
 
-const SHOW_ENDING_HUNGER = false
+const SHOW_ENDING_HUNGER = true
 
 const spacingPx = 6
 
