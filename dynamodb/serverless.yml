@@ -445,7 +445,7 @@ custom:
           usage: 0.60
       userExperimentTable:
         read:
-          minimum: 1
+          minimum: 5
           maximum: 40000
           usage: 0.75
         write:
