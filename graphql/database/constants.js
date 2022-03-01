@@ -23,6 +23,7 @@ export const VIDEO_AD_LOG = 'VideoAdLog'
 export const CAUSE = 'Cause'
 export const USER_SWITCH_SEARCH_PROMPT_LOG = 'UserSwitchSearchPromptLog'
 export const USER_SEARCH_SETTINGS_LOG = 'UserSearchSettingsLog'
+export const USER_EXPERIMENT = 'UserExperiment'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'

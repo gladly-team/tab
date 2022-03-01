@@ -32,6 +32,7 @@ import {
   INVITED_USERS,
   MISSION,
   VIDEO_AD_LOG,
+  USER_EXPERIMENT,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -111,6 +112,7 @@ import {
   getMissionCurrentTabsDay,
 } from '../database/missions/utils'
 import createMission from '../database/missions/createMission'
+import UserExperimentModel from '../database/experiments/UserExperimentModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -175,6 +177,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (type === VIDEO_AD_LOG) {
       return VideoAdLogModel.get(context.user, id)
+    }
+    if (type === USER_EXPERIMENT) {
+      return UserExperimentModel.get(context.user, id)
     }
     if (type === CAUSE) {
       return getCause(id)

@@ -476,5 +476,20 @@
       "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
+  },
+  {
+    "TableName": "UserExperiment",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "experimentId", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "experimentId", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
   }
 ]
