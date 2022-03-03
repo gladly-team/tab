@@ -514,6 +514,18 @@ type CreateSquadInvitesPayload {
   clientMutationId: String
 }
 
+input CreateUserExperimentInput {
+  userId: String!
+  experimentId: String!
+  variationId: String!
+  clientMutationId: String
+}
+
+type CreateUserExperimentPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 input CreateVideoAdLogInput {
   userId: String!
   clientMutationId: String
@@ -926,6 +938,7 @@ type Mutation {
   setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
   setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
   createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
+  createUserExperiment(input: CreateUserExperimentInput!): CreateUserExperimentPayload
 }
 
 """An object with an ID"""
