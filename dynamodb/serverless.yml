@@ -670,15 +670,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchSettingsLogTable.write.usage}
-    - table: userExperimentsTable
+    - table: userExperimentTable
       read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.read.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.read.usage}
       write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperiments.write.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.usage}
     
 resources:
   Resources:
