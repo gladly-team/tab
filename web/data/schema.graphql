@@ -23,6 +23,9 @@ type App implements Node {
 
   """Campaigns (or "charity spotlights") shown to users."""
   campaign: Campaign
+
+  """All the search engines"""
+  searchEngines: SearchEngineConnection
 }
 
 """A background image"""
@@ -334,7 +337,7 @@ type CauseEdge {
   cursor: String!
 }
 
-"""Fields on which to filter the list of charities."""
+"""Fields on which to filter the list of causes."""
 input CausesFilters {
   isAvailableToSelect: Boolean
 }
@@ -1024,6 +1027,45 @@ type RestartMissionPayload {
   """the current active mission for a user"""
   currentMission: Mission
   clientMutationId: String
+}
+
+"""all important data for a search engine."""
+type SearchEngine implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Name of the Search Engine"""
+  name: String!
+
+  """query string to redirect the user to after using the search bar"""
+  searchUrl: String!
+
+  """what order to display the search engine in a list"""
+  rank: Int!
+
+  """Whether or not the user can earn extra impact with this Search Engine"""
+  isCharitable: Boolean!
+
+  """Display string to display in the search bar"""
+  inputPrompt: String!
+}
+
+"""A connection to a list of items."""
+type SearchEngineConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SearchEngineEdge]
+}
+
+"""An edge in a connection."""
+type SearchEngineEdge {
+  """The item at the end of the edge"""
+  node: SearchEngine
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """Info about any rate-limiting for VC earned from search queries"""
