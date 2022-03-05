@@ -35,6 +35,7 @@ import {
   VIDEO_AD_LOG,
   USER_EXPERIMENT,
   SEARCH_ENGINE,
+  FEATURE,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -119,6 +120,7 @@ import searchEngines from '../database/search/searchEngines'
 import UserExperimentModel from '../database/experiments/UserExperimentModel'
 import getSearchEngine from '../database/search/getSearchEngine'
 import SearchEngineModel from '../database/search/SearchEngineModel'
+import getUserFeatures from '../database/experiments/getUserFeatures'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -738,8 +740,27 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether a v4 user has been introduced to squads in the ui',
     },
+    userFeatures: {
+      type: new GraphQLList(featureType),
+      description: 'feature values for this specific user',
+      resolve: (user, args, context) => getUserFeatures(context, user),
+    },
   }),
   interfaces: [nodeInterface],
+})
+const featureType = new GraphQLObjectType({
+  name: FEATURE,
+  description: 'all important data a user assigned to a feature.',
+  fields: () => ({
+    featureName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Name of the Search Engine`,
+    },
+    variation: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'the value of the variation for this specific user',
+    },
+  }),
 })
 const CauseImpactCopy = new GraphQLObjectType({
   name: 'CauseSpecificImpactUI',
