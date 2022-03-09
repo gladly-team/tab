@@ -20,6 +20,7 @@ import {
   mutationWithClientMutationId,
   nodeDefinitions,
   connectionFromPromisedArray,
+  connectionFromArray,
 } from 'graphql-relay'
 import {
   WIDGET,
@@ -33,6 +34,7 @@ import {
   MISSION,
   VIDEO_AD_LOG,
   USER_EXPERIMENT,
+  SEARCH_ENGINE,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -113,7 +115,10 @@ import {
   getMissionCurrentTabsDay,
 } from '../database/missions/utils'
 import createMission from '../database/missions/createMission'
+import searchEngines from '../database/search/searchEngines'
 import UserExperimentModel from '../database/experiments/UserExperimentModel'
+import getSearchEngine from '../database/search/getSearchEngine'
+import SearchEngineModel from '../database/search/SearchEngineModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -185,6 +190,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === CAUSE) {
       return getCause(id)
     }
+    if (type === SEARCH_ENGINE) {
+      return getSearchEngine(id)
+    }
     return null
   },
   obj => {
@@ -220,6 +228,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (obj instanceof CauseModel) {
       return CauseType
+    }
+    if (obj instanceof SearchEngineModel) {
+      return SearchEngineType
     }
     return null
   }
@@ -948,6 +959,35 @@ const CauseType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface],
 })
+const SearchEngineType = new GraphQLObjectType({
+  name: SEARCH_ENGINE,
+  description: 'all important data for a search engine.',
+  fields: () => ({
+    id: globalIdField(SEARCH_ENGINE),
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Name of the Search Engine`,
+    },
+    searchUrl: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'query string to redirect the user to after using the search bar',
+    },
+    rank: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'what order to display the search engine in a list',
+    },
+    isCharitable: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: `Whether or not the user can earn extra impact with this Search Engine`,
+    },
+    inputPrompt: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Display string to display in the search bar`,
+    },
+  }),
+  interfaces: [nodeInterface],
+})
 const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',
@@ -1471,7 +1511,7 @@ const appType = new GraphQLObjectType({
         filters: {
           type: new GraphQLInputObjectType({
             name: 'CausesFilters',
-            description: 'Fields on which to filter the list of charities.',
+            description: 'Fields on which to filter the list of causes.',
             fields: {
               isAvailableToSelect: { type: GraphQLBoolean },
             },
@@ -1497,6 +1537,11 @@ const appType = new GraphQLObjectType({
       type: campaignType,
       description: 'Campaigns (or "charity spotlights") shown to users.',
       resolve: (_, args, context) => getCampaign(context.user),
+    },
+    searchEngines: {
+      type: searchEngineConnection,
+      description: 'All the search engines',
+      resolve: (_, args) => connectionFromArray(searchEngines, args),
     },
   }),
   interfaces: [nodeInterface],
@@ -1673,6 +1718,10 @@ const { connectionType: charityConnection } = connectionDefinitions({
 const { connectionType: causeConnection } = connectionDefinitions({
   name: CAUSE,
   nodeType: CauseType,
+})
+const { connectionType: searchEngineConnection } = connectionDefinitions({
+  name: SEARCH_ENGINE,
+  nodeType: SearchEngineType,
 })
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
