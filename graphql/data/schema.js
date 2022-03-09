@@ -118,6 +118,7 @@ import createMission from '../database/missions/createMission'
 import searchEngines from '../database/search/searchEngines'
 import UserExperimentModel from '../database/experiments/UserExperimentModel'
 import getSearchEngine from '../database/search/getSearchEngine'
+import SearchEngineModel from '../database/search/SearchEngineModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -227,6 +228,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (obj instanceof CauseModel) {
       return CauseType
+    }
+    if (obj instanceof SearchEngineModel) {
+      return SearchEngineType
     }
     return null
   }
