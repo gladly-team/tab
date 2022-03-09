@@ -19,7 +19,7 @@ describe('google-analytics tests', () => {
     expect(window.gtag).toHaveBeenCalledWith('some', 'event', { my: 'data' })
   })
 
-  test('a FB analytics error is caught', () => {
+  test('an error is caught', () => {
     window.gtag.mockImplementationOnce(() => {
       throw new Error('Whoops')
     })
