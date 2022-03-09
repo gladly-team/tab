@@ -38,6 +38,7 @@ class LogAccountCreation extends React.Component {
 
 LogAccountCreation.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     tabs: PropTypes.number.isRequired,
   }).isRequired,
 }
