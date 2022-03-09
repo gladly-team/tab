@@ -39,7 +39,7 @@ describe('LogAccountCreation component', function() {
     const LogAccountCreationComponent = require('js/components/Dashboard/LogAccountCreationComponent')
       .default
     const mockUserData = {
-      id: 'some-user-id-123',
+      id: 'abc-123',
       tabs: 1,
     }
     shallow(<LogAccountCreationComponent user={mockUserData} />)
