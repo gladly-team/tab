@@ -1,5 +1,6 @@
 import fbq from 'js/analytics/facebook-analytics'
 import rdt from 'js/analytics/reddit-analytics'
+import gtag from 'js/analytics/google-analytics'
 import logger from 'js/utils/logger'
 
 // We automatically track most pageviews on location change.
@@ -26,8 +27,11 @@ export const signupPageEmailButtonClick = () => {
 }
 
 export const accountCreated = () => {
+  // Should match v4:
+  // https://github.com/gladly-team/tab-web/pull/302
   fbq('track', 'CompleteRegistration', { content_name: 'AccountCreated' })
   rdt('track', 'SignUp')
+  gtag('event', 'sign_up')
 }
 
 // TODO: later
