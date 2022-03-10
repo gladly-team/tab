@@ -488,7 +488,8 @@ const userType = new GraphQLObjectType({
     id: globalIdField(USER),
     userId: {
       type: GraphQLString,
-      description: "Users's username",
+      description:
+        "The users's Firebase ID (not Relay global ID, unlike the `id` field",
       resolve: user => user.id,
     },
     backgroundImage: {

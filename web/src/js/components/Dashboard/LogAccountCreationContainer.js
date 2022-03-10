@@ -6,7 +6,7 @@ import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationCompon
 export default createFragmentContainer(LogAccountCreation, {
   user: graphql`
     fragment LogAccountCreationContainer_user on User {
-      id
+      userId
       tabs
     }
   `,

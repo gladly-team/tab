@@ -16,8 +16,9 @@ class LogAccountCreation extends React.Component {
     // Really, we'd want to hoist this up
     if (user) {
       gtag('set', 'user_properties', {
-        ...(user.id && {
-          tfac_user_id: user.id,
+        ...(user.userId && {
+          // The user's ID (not Relay global ID)
+          tfac_user_id: user.userId,
         }),
       })
     }
@@ -38,7 +39,7 @@ class LogAccountCreation extends React.Component {
 
 LogAccountCreation.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
     tabs: PropTypes.number.isRequired,
   }).isRequired,
 }
