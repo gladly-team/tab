@@ -1,6 +1,8 @@
 /* eslint-env jest */
 import { getMockUserInstance, getMockUserContext } from '../../test-utils'
 import Feature from '../FeatureModel'
+import { showInternalOnly } from '../../../utils/authorization-helpers'
+import features from '../features'
 
 jest.mock('../createUserExperiment')
 jest.mock('../features', () => {
@@ -14,6 +16,7 @@ jest.mock('../features', () => {
   }
   return module
 })
+jest.mock('@growthbook/growthbook')
 
 afterEach(() => {
   jest.resetModules()
@@ -41,6 +44,45 @@ describe('getUserFeatures tests', () => {
       }),
     ])
     expect(createUserExperiment).not.toHaveBeenCalled()
+  })
+
+  it('properly sets growthbook attributes based on user properties', async () => {
+    expect.assertions(1)
+    const getUserFeatures = require('../getUserFeatures').default
+
+    const { GrowthBook } = require('@growthbook/growthbook')
+    const mockGrowthbook = {
+      feature: jest.fn().mockReturnValue({ value: true }),
+      setFeatures: jest.fn(),
+      setAttributes: jest.fn(),
+    }
+    GrowthBook.mockImplementation(() => mockGrowthbook)
+
+    await getUserFeatures(userContext, user)
+    expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
+      id: user.id,
+      env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+      causeId: user.causeId,
+      v4BetaEnabled: user.v4BetaEnabled,
+      joined: user.joined,
+      isTabTeamMember: showInternalOnly(user.email),
+    })
+  })
+
+  it('properly sets growthbook features based on user properties', async () => {
+    expect.assertions(1)
+    const getUserFeatures = require('../getUserFeatures').default
+
+    const { GrowthBook } = require('@growthbook/growthbook')
+    const mockGrowthbook = {
+      feature: jest.fn().mockReturnValue({ value: true }),
+      setFeatures: jest.fn(),
+      setAttributes: jest.fn(),
+    }
+    GrowthBook.mockImplementation(() => mockGrowthbook)
+
+    await getUserFeatures(userContext, user)
+    expect(mockGrowthbook.setFeatures).toHaveBeenCalledWith(features)
   })
 
   it('logs to createUserExperiment if assigned because it is an experiment', async () => {

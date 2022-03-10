@@ -740,7 +740,7 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether a v4 user has been introduced to squads in the ui',
     },
-    userFeatures: {
+    features: {
       type: new GraphQLList(featureType),
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context, user),
@@ -750,11 +750,11 @@ const userType = new GraphQLObjectType({
 })
 const featureType = new GraphQLObjectType({
   name: FEATURE,
-  description: 'all important data a user assigned to a feature.',
+  description: 'Feature name and variation value pair applicable to a user.',
   fields: () => ({
     featureName: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Name of the Search Engine`,
+      description: `Name of the Feature`,
     },
     variation: {
       type: new GraphQLNonNull(GraphQLString),
