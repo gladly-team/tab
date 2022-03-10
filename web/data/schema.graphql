@@ -1417,7 +1417,7 @@ type User implements Node {
   """The ID of an object"""
   id: ID!
 
-  """Users's username"""
+  """The users's Firebase ID (not Relay global ID, unlike the `id` field"""
   userId: String
 
   """Users's background image"""
