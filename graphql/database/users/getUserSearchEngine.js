@@ -14,7 +14,7 @@ import getWidgets from '../widgets/getWidgets'
  * use exported logic for default search engine
  * @param {object} userContext - The user authorizer object.
  * @param {string} user - UserModel object.
- * @return {Promise<User>}  A promise that resolves into a User instance.
+ * @return {SearchEngine}  A SearchEngineModel instance representing the engine displayed to the user.
  */
 const getUserSearchEngine = async (userContext, user) => {
   // 1. If set on the UserModel, return the value

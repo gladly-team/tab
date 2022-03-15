@@ -697,6 +697,15 @@ type failedEmailAddresses {
   error: String
 }
 
+"""Feature name and variation value pair applicable to a user."""
+type Feature {
+  """Name of the Feature"""
+  featureName: String!
+
+  """the value of the variation for this specific user"""
+  variation: String!
+}
+
 """inviting user"""
 type InvitingUser {
   """the name entered in invite"""
@@ -1530,6 +1539,9 @@ type User implements Node {
 
   """whether a v4 user has been introduced to squads in the ui"""
   hasSeenSquads: Boolean!
+
+  """feature values for this specific user"""
+  features: [Feature]
 }
 
 """a user's charity specific impact"""

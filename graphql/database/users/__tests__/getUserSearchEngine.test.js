@@ -45,7 +45,7 @@ describe('getUserSearchEngine', () => {
     expect(result).toEqual('Google')
   })
 
-  it('defaults user engine to google if no widget, not in test or not set on model', async () => {
+  it('defaults user engine to user feature value if no widget, or not set on model', async () => {
     const getUserFeature = require('../../experiments/getUserFeature').default
     getUserFeature.mockResolvedValue(
       new Feature({
