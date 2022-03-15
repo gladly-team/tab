@@ -4,6 +4,7 @@ import { showInternalOnly } from '../../../utils/authorization-helpers'
 import features from '../features'
 import Feature from '../FeatureModel'
 
+jest.mock('../../../utils/logger')
 jest.mock('../createUserExperiment')
 jest.mock('../features', () => {
   const module = {
@@ -48,6 +49,32 @@ describe('growthbookUtils tests', () => {
       joined: user.joined,
       isTabTeamMember: showInternalOnly(user.email),
     })
+  })
+
+  it('getConfiguredGrowthbook correctly validates attributes object', async () => {
+    expect.assertions(3)
+    const { getConfiguredGrowthbook } = require('../growthbookUtils')
+    const logger = require('../../../utils/logger').default
+    const mockUser = {
+      id: 'abcdefghijklmno',
+      env: null,
+      causeId: 'causeId',
+      v4BetaEnabled: true,
+      joined: undefined,
+      isTabTeamMember: null,
+    }
+
+    await getConfiguredGrowthbook(mockUser)
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute env for userId abcdefghijklmno was null'
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute joined for userId abcdefghijklmno was undefined'
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute isTabTeamMember for userId abcdefghijklmno was null'
+    )
   })
 
   it('properly sets growthbook features based on user properties', async () => {
