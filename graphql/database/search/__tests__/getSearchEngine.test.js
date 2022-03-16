@@ -30,4 +30,10 @@ describe('getSearchEngine', () => {
       'The database does not contain an item with these keys.'
     )
   })
+
+  it('returns null if the search engine does not exist and ignoreUnfound set', async () => {
+    expect.assertions(1)
+    const getSearchEngine = require('../getSearchEngine').default
+    expect(await getSearchEngine('blahblah', true)).toBeNull()
+  })
 })

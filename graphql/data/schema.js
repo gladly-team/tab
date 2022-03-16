@@ -752,7 +752,7 @@ const userType = new GraphQLObjectType({
     searchEngine: {
       type: SearchEngineType,
       description: 'the User’s search engine',
-      resolve: user => getUserSearchEngine(user),
+      resolve: (user, args, context) => getUserSearchEngine(context, user),
     },
     showYahooPrompt: {
       type: new GraphQLNonNull(GraphQLBoolean),

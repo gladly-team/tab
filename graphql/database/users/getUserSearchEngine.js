@@ -2,6 +2,7 @@ import { WIDGET_TYPE_SEARCH } from '../../../web/src/js/constants'
 import { DEFAULT_SEARCH_ENGINE } from '../constants'
 import { YAHOO_SEARCH_NEW_USERS } from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
+import getSearchEngine from '../search/getSearchEngine'
 
 import getWidgets from '../widgets/getWidgets'
 
@@ -19,18 +20,24 @@ import getWidgets from '../widgets/getWidgets'
 const getUserSearchEngine = async (userContext, user) => {
   // 1. If set on the UserModel, return the value
   if (user.searchEngine) {
-    return user.searchEngine
+    return getSearchEngine(user.searchEngine)
   }
 
   // 2. If unset, see if a search widget value is set and migrate it, then return that value
   // Query Search Widgets and Find
-  const widgets = await getWidgets(userContext, user.userId, false)
+  const widgets = await getWidgets(userContext.user, user.id, false)
   const maybeSearchWidget = widgets.filter(
     widget => widget.type === WIDGET_TYPE_SEARCH
   )
   if (maybeSearchWidget.length > 0) {
     const searchWidget = maybeSearchWidget[0]
-    return JSON.parse(searchWidget.config).engine
+    const maybeSearchEngine = getSearchEngine(
+      JSON.parse(searchWidget.config).engine,
+      true
+    )
+    if (maybeSearchEngine) {
+      return maybeSearchEngine
+    }
   }
 
   // 3. If still unset, see if the user should be part of a test group to have a particular search engine and return that
@@ -40,11 +47,11 @@ const getUserSearchEngine = async (userContext, user) => {
     YAHOO_SEARCH_NEW_USERS
   )
   if (feature) {
-    return feature.variation
+    return getSearchEngine(feature.variation)
   }
 
   // 4. If still unset, return the default search engine
-  return DEFAULT_SEARCH_ENGINE
+  return getSearchEngine(DEFAULT_SEARCH_ENGINE)
 }
 
 export default getUserSearchEngine

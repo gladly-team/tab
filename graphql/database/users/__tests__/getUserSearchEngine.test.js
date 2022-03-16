@@ -14,6 +14,7 @@ import UserWidgetModel from '../../widgets/userWidget/UserWidgetModel'
 import constructFullWidget from '../../widgets/constructFullWidget'
 import Feature from '../../experiments/FeatureModel'
 import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
+import getSearchEngine from '../../search/getSearchEngine'
 
 jest.mock('../../experiments/getUserFeature')
 jest.mock('../../databaseClient')
@@ -42,7 +43,7 @@ describe('getUserSearchEngine', () => {
     getWidgets.mockResolvedValueOnce([])
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual('Google')
+    expect(result).toEqual(await getSearchEngine('Google'))
   })
 
   it('defaults user engine to user feature value if no widget, or not set on model', async () => {
@@ -56,7 +57,7 @@ describe('getUserSearchEngine', () => {
     getWidgets.mockResolvedValueOnce([])
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual(DEFAULT_SEARCH_ENGINE)
+    expect(result).toEqual(await getSearchEngine(DEFAULT_SEARCH_ENGINE))
   })
 
   it('returns the search engine on the user model', async () => {
@@ -66,10 +67,10 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    expect(result).toEqual(searchEngine)
+    expect(result).toEqual(await getSearchEngine(searchEngine))
   })
 
-  it('gets the engine from the search widget if set', async () => {
+  it('gets the engine from the search widget if search widget malformed', async () => {
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd40'
     // Set mock query responses.
     const userWidgetsToGet = [
@@ -94,6 +95,34 @@ describe('getUserSearchEngine', () => {
     getWidgets.mockResolvedValueOnce(sortedFullWidgets)
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual('test-engine')
+    expect(result).toBeNull()
+  })
+
+  it('gets the engine from the search widget if search widget', async () => {
+    const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd40'
+    // Set mock query responses.
+    const userWidgetsToGet = [
+      new UserWidgetModel({
+        userId: user.userId,
+        widgetId,
+        config: {
+          engine: 'DuckDuckGo',
+        },
+      }),
+    ]
+    const baseWidgetsToGet = [
+      new BaseWidgetModel({
+        id: widgetId,
+        position: 2,
+        type: WIDGET_TYPE_SEARCH,
+      }),
+    ]
+    const sortedFullWidgets = [
+      constructFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0]),
+    ]
+    getWidgets.mockResolvedValueOnce(sortedFullWidgets)
+
+    const result = await getUserSearchEngine(userContext, user)
+    expect(result).toEqual(await getSearchEngine('DuckDuckGo'))
   })
 })
