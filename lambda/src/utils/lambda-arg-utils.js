@@ -12,7 +12,7 @@ export const getMockLambdaContext = () => ({
 })
 
 // CloudFront event object:
-// https://docs.aws.amazon.com/lambda/latest/dg/eventsources.html#eventsources-cloudfront
+// https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html#example-viewer-request
 export const getMockCloudFrontEventObject = () => ({
   Records: [
     {
@@ -35,6 +35,18 @@ export const getMockCloudFrontEventObject = () => ({
               {
                 key: 'User-Agent',
                 value: 'curl/7.51.0',
+              },
+            ],
+            'accept-language': [
+              {
+                key: 'Accept-Language',
+                value: 'en-GB',
+              },
+            ],
+            'cloudfront-viewer-country': [
+              {
+                key: 'CloudFront-Viewer-Country',
+                value: 'UK',
               },
             ],
           },
