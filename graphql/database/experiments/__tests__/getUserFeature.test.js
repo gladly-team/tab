@@ -5,8 +5,8 @@ import Feature from '../FeatureModel'
 const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
-describe('getUserFeatures tests', () => {
-  it('gets userFeatures as expected', async () => {
+describe('getUserFeature tests', () => {
+  it('gets userFeature as expected', async () => {
     expect.assertions(1)
     const getUserFeature = require('../getUserFeature').default
 

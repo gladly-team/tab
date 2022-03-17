@@ -39,7 +39,7 @@ features[YAHOO_SEARCH_NEW_USERS] = {
         isTabTeamMember: true,
         env: 'local',
       },
-      force: 'Yahoo',
+      force: 'SearchForACause',
     },
   ],
 }

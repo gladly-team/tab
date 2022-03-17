@@ -121,7 +121,6 @@ import UserExperimentModel from '../database/experiments/UserExperimentModel'
 import getSearchEngine from '../database/search/getSearchEngine'
 import SearchEngineModel from '../database/search/SearchEngineModel'
 import getUserFeatures from '../database/experiments/getUserFeatures'
-import getUserFeature from '../database/experiments/getUserFeature'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -137,7 +136,7 @@ import {
 } from '../database/globals/globals'
 import getCampaign from '../database/globals/getCampaign'
 import getUserSearchEngine from '../database/users/getUserSearchEngine'
-import { YAHOO_SEARCH_EXISTING_USERS } from '../database/experiments/experimentConstants'
+import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt'
 
 class App {
   constructor(id) {
@@ -757,9 +756,7 @@ const userType = new GraphQLObjectType({
     showYahooPrompt: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether to show the yahoo search prompt',
-      resolve: user =>
-        !user.yahooSearchSwitchPrompt.hasSeenPrompt &&
-        getUserFeature(YAHOO_SEARCH_EXISTING_USERS).variation,
+      resolve: (user, _, context) => getShouldShowYahooPrompt(context, user),
     },
   }),
   interfaces: [nodeInterface],

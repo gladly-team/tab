@@ -3,7 +3,7 @@ import { DEFAULT_SEARCH_ENGINE } from '../constants'
 import { YAHOO_SEARCH_NEW_USERS } from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
 import getSearchEngine from '../search/getSearchEngine'
-
+import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import getWidgets from '../widgets/getWidgets'
 
 /**
@@ -31,12 +31,13 @@ const getUserSearchEngine = async (userContext, user) => {
   )
   if (maybeSearchWidget.length > 0) {
     const searchWidget = maybeSearchWidget[0]
-    const maybeSearchEngine = getSearchEngine(
-      JSON.parse(searchWidget.config).engine,
-      true
-    )
-    if (maybeSearchEngine) {
-      return maybeSearchEngine
+    try {
+      return getSearchEngine(JSON.parse(searchWidget.config).engine)
+    } catch (e) {
+      // Don't care if SearchEngine does not exist if JSON is malformed.
+      if (!(e instanceof DatabaseItemDoesNotExistException)) {
+        throw e
+      }
     }
   }
 

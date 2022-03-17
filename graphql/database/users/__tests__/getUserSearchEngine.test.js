@@ -6,7 +6,6 @@ import {
   mockDate,
   getMockUserInstance,
 } from '../../test-utils'
-import { DEFAULT_SEARCH_ENGINE } from '../../constants'
 import getWidgets from '../../widgets/getWidgets'
 import { WIDGET_TYPE_SEARCH } from '../../../../web/src/js/constants'
 import BaseWidgetModel from '../../widgets/baseWidget/BaseWidgetModel'
@@ -15,6 +14,7 @@ import constructFullWidget from '../../widgets/constructFullWidget'
 import Feature from '../../experiments/FeatureModel'
 import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
 import getSearchEngine from '../../search/getSearchEngine'
+import { DEFAULT_SEARCH_ENGINE } from '../../constants'
 
 jest.mock('../../experiments/getUserFeature')
 jest.mock('../../databaseClient')
@@ -38,6 +38,7 @@ const user = getMockUserInstance()
 
 describe('getUserSearchEngine', () => {
   it('defaults user engine to google if no widget, not in test or not set on model', async () => {
+    expect.assertions(1)
     const getUserFeature = require('../../experiments/getUserFeature').default
     getUserFeature.mockResolvedValue(undefined)
     getWidgets.mockResolvedValueOnce([])
@@ -47,20 +48,22 @@ describe('getUserSearchEngine', () => {
   })
 
   it('defaults user engine to user feature value if no widget, or not set on model', async () => {
+    expect.assertions(1)
     const getUserFeature = require('../../experiments/getUserFeature').default
-    getUserFeature.mockResolvedValue(
+    getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: YAHOO_SEARCH_NEW_USERS,
-        variation: 'Google',
+        variation: 'DuckDuckGo',
       })
     )
     getWidgets.mockResolvedValueOnce([])
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual(await getSearchEngine(DEFAULT_SEARCH_ENGINE))
+    expect(result).toEqual(await getSearchEngine('DuckDuckGo'))
   })
 
   it('returns the search engine on the user model', async () => {
+    expect.assertions(1)
     const searchEngine = 'DuckDuckGo'
     const mockUser = {
       ...getMockUserInstance(),
@@ -71,6 +74,7 @@ describe('getUserSearchEngine', () => {
   })
 
   it('gets the engine from the search widget if search widget malformed', async () => {
+    expect.assertions(1)
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd40'
     // Set mock query responses.
     const userWidgetsToGet = [
@@ -95,10 +99,11 @@ describe('getUserSearchEngine', () => {
     getWidgets.mockResolvedValueOnce(sortedFullWidgets)
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toBeNull()
+    expect(result).toEqual(await getSearchEngine(DEFAULT_SEARCH_ENGINE))
   })
 
   it('gets the engine from the search widget if search widget', async () => {
+    expect.assertions(1)
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd40'
     // Set mock query responses.
     const userWidgetsToGet = [
