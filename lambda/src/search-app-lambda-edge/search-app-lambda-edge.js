@@ -10,6 +10,10 @@ const querystring = require('querystring')
 exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request
 
+  // Needs access to headers:
+  // * Accept-Language
+  // * CloudFront-Viewer-Country
+
   // Map our search URL onto another search provider's URL.
   const SFAC_QUERY_QS_KEY = 'q'
   const SEARCH_PROVIDER_URL = 'https://www.google.com/search'

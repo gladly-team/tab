@@ -318,9 +318,14 @@ resources:
                 - OPTIONS
               TargetOriginId: ${self:custom.searchAppName}
               ForwardedValues:
-                QueryString: false
+                # Required to forward search query.
+                QueryString: true
                 Cookies:
                   Forward: none
+                Headers:
+                  # Required to forward the user to a localized SERP.
+                  - Accept-Language
+                  - CloudFront-Viewer-Country
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               LambdaFunctionAssociations:
