@@ -6,7 +6,7 @@ const querystring = require('querystring')
 // Examples of Lambda@Edge functions:
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-general-examples
 // CloudFront event object:
-// https://docs.aws.amazon.com/lambda/latest/dg/eventsources.html#eventsources-cloudfront
+// https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html
 exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request
 
