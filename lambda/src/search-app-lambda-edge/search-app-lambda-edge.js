@@ -9,13 +9,20 @@ const querystring = require('querystring')
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html
 exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request
+  const SFAC_QUERY_QS_KEY = 'q'
 
-  // Needs access to headers:
+  // Map our search URL onto another search provider's URL.
+
+  // TODO: if request path starts with /search/v2, use Yahoo partner.
+  // For v2, use Yahoo for search results.
+  // Yahoo localization needs access to headers:
   // * Accept-Language
   // * CloudFront-Viewer-Country
 
-  // Map our search URL onto another search provider's URL.
-  const SFAC_QUERY_QS_KEY = 'q'
+  // const SEARCH_PROVIDER_URL = 'TODO'
+  // const SEARCH_PROVIDER_QS_KEY = 'p'
+
+  // For v1, use Google for search results.
   const SEARCH_PROVIDER_URL = 'https://www.google.com/search'
   const SEARCH_PROVIDER_QS_KEY = 'q'
   const params = querystring.parse(request.querystring.toLowerCase())
