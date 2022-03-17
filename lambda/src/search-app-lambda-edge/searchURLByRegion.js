@@ -8,7 +8,7 @@ const urlPath = '/yhs/search?hspart=gladly&hsimp=yhs-001'
 // Special cases (language) are listed outside of this object.
 const baseURLMap = {
   // Argentina
-  RA: 'https://ar.search.yahoo.com',
+  AR: 'https://ar.search.yahoo.com',
   // Austria
   AT: 'https://at.search.yahoo.com',
   // Australia
@@ -69,7 +69,7 @@ const baseURLMap = {
   VN: 'https://vn.search.yahoo.com',
 }
 
-// Country code: CA
+const CANADA_COUNTRY_CODE = 'CA'
 const canadaBaseURLs = {
   // Canada - English
   en: 'https://ca.search.yahoo.com',
@@ -77,7 +77,7 @@ const canadaBaseURLs = {
   fr: 'https://cf.search.yahoo.com',
 }
 
-// Country code: CH
+const SWITZERLAND_COUNTRY_CODE = 'CH'
 const switzerlandBaseURLs = {
   // Switzerland - German
   de: 'https://ch.search.yahoo.com',
@@ -106,13 +106,16 @@ const espanolBaseURL = 'https://espanol.search.yahoo.com'
  *   https://github.com/mattcg/language-subtag-registry
  * @return {Boolean} Whether the new URL is for another app
  */
-const searchURLByRegion = (countryCode, acceptLanguageHeader) => {
+const searchURLByRegion = (countryCode = '', acceptLanguageHeader = '') => {
   const US_COUNTRY_CODE = 'US'
   const FALLBACK_BASE_URL = baseURLMap[US_COUNTRY_CODE]
-  let baseURL
+  const countryCodeCaps = countryCode.toUpperCase()
 
   // TODO
-  if (!baseURL) {
+  let baseURL
+  if (baseURLMap[countryCodeCaps]) {
+    baseURL = baseURLMap[countryCodeCaps]
+  } else {
     baseURL = FALLBACK_BASE_URL
   }
   return `${baseURL}${urlPath}`
