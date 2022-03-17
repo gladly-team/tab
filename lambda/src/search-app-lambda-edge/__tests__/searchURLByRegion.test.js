@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -88,5 +90,21 @@ describe('searchURLByRegion', () => {
     expect.assertions(1)
     const searchURLByRegion = require('../searchURLByRegion').default
     expect(searchURLByRegion('US')).toEqual(getExpectedURL(US_SEARCH_URL))
+  })
+
+  it('returns the Canada (English) base URL when the country code is CA (no accept-language header)', () => {
+    expect.assertions(1)
+    const searchURLByRegion = require('../searchURLByRegion').default
+    expect(searchURLByRegion('CA')).toEqual(
+      getExpectedURL('https://ca.search.yahoo.com')
+    )
+  })
+
+  it('returns the Switzerland (German) base URL when the country code is CH (no accept-language header)', () => {
+    expect.assertions(1)
+    const searchURLByRegion = require('../searchURLByRegion').default
+    expect(searchURLByRegion('CH')).toEqual(
+      getExpectedURL('https://ch.search.yahoo.com')
+    )
   })
 })

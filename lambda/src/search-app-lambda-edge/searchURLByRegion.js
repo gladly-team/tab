@@ -111,12 +111,30 @@ const searchURLByRegion = (countryCode = '', acceptLanguageHeader = '') => {
   const FALLBACK_BASE_URL = baseURLMap[US_COUNTRY_CODE]
   const countryCodeCaps = countryCode.toUpperCase()
 
-  // TODO
   let baseURL
+
+  // Use the country-specific search page if one exists.
   if (baseURLMap[countryCodeCaps]) {
     baseURL = baseURLMap[countryCodeCaps]
+  } else if (countryCodeCaps === CANADA_COUNTRY_CODE) {
+    // Handle Canada special case.
+    // TODO: select the best language based on the header
+    const language = 'en'
+    baseURL = canadaBaseURLs[language]
+  } else if (countryCodeCaps === SWITZERLAND_COUNTRY_CODE) {
+    // Handle Switzerland special case.
+    // TODO: select the best language based on the header
+    const language = 'de'
+    baseURL = switzerlandBaseURLs[language]
   } else {
-    baseURL = FALLBACK_BASE_URL
+    // TODO
+    const spanishLanguage = false
+    // If accept-language contains Spanish, return the Espanol URL.
+    if (spanishLanguage) {
+      baseURL = espanolBaseURL
+    } else {
+      baseURL = FALLBACK_BASE_URL
+    }
   }
   return `${baseURL}${urlPath}`
 }
