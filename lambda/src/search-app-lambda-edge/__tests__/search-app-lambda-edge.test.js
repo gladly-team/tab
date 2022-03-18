@@ -137,6 +137,17 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
     expect(response.headers.location[0].value).toEqual(MOCK_V2_SEARCH_URL)
   })
 
+  it('uses the v2 API if the URI has a trailing slash', () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, '/search/v2/')
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const response = callback.mock.calls[0][1]
+    expect(response.headers.location[0].value).toEqual(MOCK_V2_SEARCH_URL)
+  })
+
   it('sets the query string value if the "q" value is defined', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
