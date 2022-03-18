@@ -63,7 +63,7 @@ describe('shouldShowYahooPrompt tests', () => {
     expect(result).toEqual(true)
   })
 
-  it('returns false if users feature is true for test', async () => {
+  it('returns false if users feature is false for test', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
