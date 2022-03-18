@@ -2,7 +2,6 @@
 
 import { clone } from 'lodash/lang'
 import { setWith } from 'lodash/object'
-import querystring from 'querystring'
 import {
   getMockCloudFrontEventObject,
   getMockLambdaContext,
