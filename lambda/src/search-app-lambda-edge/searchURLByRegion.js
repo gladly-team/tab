@@ -1,3 +1,5 @@
+import langParser from 'accept-language-parser'
+
 // The URL path, which is unaffected by country/language.
 // Add a "p" URL parameter value with search terms.
 const urlPath = '/yhs/search?hspart=gladly&hsimp=yhs-001'
@@ -117,24 +119,31 @@ const searchURLByRegion = (countryCode = '', acceptLanguageHeader = '') => {
   if (baseURLMap[countryCodeCaps]) {
     baseURL = baseURLMap[countryCodeCaps]
   } else if (countryCodeCaps === CANADA_COUNTRY_CODE) {
-    // Handle Canada special case.
-    // TODO: select the best language based on the header
-    const language = 'en'
-    baseURL = canadaBaseURLs[language]
+    // For Canada, select the best language based on the Accept-Language
+    // header. This matcher will return the first language matched, not,
+    // necessarily the best match:
+    // https://github.com/opentable/accept-language-parser#parserpicksupportedlangugagesarray-acceptlanguageheader-options--
+    const language = langParser.pick(
+      Object.keys(canadaBaseURLs),
+      acceptLanguageHeader
+    )
+    baseURL =
+      canadaBaseURLs[language] || canadaBaseURLs[Object.keys(canadaBaseURLs)[0]]
   } else if (countryCodeCaps === SWITZERLAND_COUNTRY_CODE) {
-    // Handle Switzerland special case.
-    // TODO: select the best language based on the header
-    const language = 'de'
-    baseURL = switzerlandBaseURLs[language]
+    // For Switzerland, select the best language based on the Accept-Language
+    // header.
+    const language = langParser.pick(
+      Object.keys(switzerlandBaseURLs),
+      acceptLanguageHeader
+    )
+    baseURL =
+      switzerlandBaseURLs[language] ||
+      switzerlandBaseURLs[Object.keys(switzerlandBaseURLs)[0]]
   } else {
-    // TODO
-    const spanishLanguage = false
     // If accept-language contains Spanish, return the Espanol URL.
-    if (spanishLanguage) {
-      baseURL = espanolBaseURL
-    } else {
-      baseURL = FALLBACK_BASE_URL
-    }
+    // Otherwise, use default base URL.
+    const spanishLanguage = !!langParser.pick(['es'], acceptLanguageHeader)
+    baseURL = spanishLanguage ? espanolBaseURL : FALLBACK_BASE_URL
   }
   return `${baseURL}${urlPath}`
 }
