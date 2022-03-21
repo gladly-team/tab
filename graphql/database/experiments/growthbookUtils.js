@@ -3,16 +3,26 @@ import Feature from './FeatureModel'
 import createUserExperiment from './createUserExperiment'
 import { showInternalOnly } from '../../utils/authorization-helpers'
 import features from './features'
+import logger from '../../utils/logger'
 
-export const getConfiguredGrowthbook = ({
-  id,
-  causeId,
-  v4BetaEnabled,
-  joined,
-  email,
-}) => {
+const validateAttributesObject = (userId, attributes) => {
+  Object.keys(attributes).forEach(attribute => {
+    if (attributes[attribute] === null || attributes[attribute] === undefined) {
+      logger.warn(
+        `Growthbook Attribute ${attribute} for userId ${userId} was ${
+          attributes[attribute]
+        }`
+      )
+    }
+  })
+}
+
+export const getConfiguredGrowthbook = attributes => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
+  const { id, causeId, v4BetaEnabled, joined, email } = attributes
+  validateAttributesObject(id, attributes)
+
   growthbook.setAttributes({
     id,
     env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
