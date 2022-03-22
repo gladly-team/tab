@@ -7,14 +7,13 @@ import {
   getMockUserInstance,
 } from '../../test-utils'
 import getWidgets from '../../widgets/getWidgets'
-import { WIDGET_TYPE_SEARCH } from '../../../../web/src/js/constants'
 import BaseWidgetModel from '../../widgets/baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../../widgets/userWidget/UserWidgetModel'
 import constructFullWidget from '../../widgets/constructFullWidget'
 import Feature from '../../experiments/FeatureModel'
 import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
 import getSearchEngine from '../../search/getSearchEngine'
-import { DEFAULT_SEARCH_ENGINE } from '../../constants'
+import { DEFAULT_SEARCH_ENGINE, WIDGET_TYPE_SEARCH } from '../../constants'
 
 jest.mock('../../experiments/getUserFeature')
 jest.mock('../../databaseClient')

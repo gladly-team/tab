@@ -1542,6 +1542,12 @@ type User implements Node {
 
   """feature values for this specific user"""
   features: [Feature]
+
+  """the User’s search engine"""
+  searchEngine: SearchEngine
+
+  """whether to show the yahoo search prompt"""
+  showYahooPrompt: Boolean!
 }
 
 """a user's charity specific impact"""
