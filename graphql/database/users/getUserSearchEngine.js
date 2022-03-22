@@ -1,5 +1,4 @@
-import { WIDGET_TYPE_SEARCH } from '../../../web/src/js/constants'
-import { DEFAULT_SEARCH_ENGINE } from '../constants'
+import { DEFAULT_SEARCH_ENGINE, WIDGET_TYPE_SEARCH } from '../constants'
 import { YAHOO_SEARCH_NEW_USERS } from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
 import getSearchEngine from '../search/getSearchEngine'
