@@ -1043,6 +1043,9 @@ type SearchEngine implements Node {
   """The ID of an object"""
   id: ID!
 
+  """Engine's id"""
+  engineId: String!
+
   """Name of the Search Engine"""
   name: String!
 
