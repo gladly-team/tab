@@ -998,6 +998,11 @@ const SearchEngineType = new GraphQLObjectType({
   description: 'all important data for a search engine.',
   fields: () => ({
     id: globalIdField(SEARCH_ENGINE),
+    engineId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "Engine's id",
+      resolve: engine => engine.id,
+    },
     name: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Name of the Search Engine`,
