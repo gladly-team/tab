@@ -2,12 +2,8 @@
 
 jest.mock('../searchEngineData', () => {
   const module = {
-    // Can spy on getters:
-    // https://jestjs.io/docs/jest-object#jestspyonobject-methodname-accesstype
-    __esModule: true,
-    get default() {
-      return jest.requireActual('../searchEngineData').default
-    },
+    searchEngineData: jest.requireActual('../searchEngineData')
+      .searchEngineData,
   }
   return module
 })
@@ -39,11 +35,14 @@ describe('searchEngines', () => {
   })
 
   it('throws if provided data fails SearchEngineModel schema validation', () => {
-    const dataModule = require('../searchEngineData')
-    jest.spyOn(dataModule, 'default', 'get').mockImplementation(() => {
-      const realData = jest.requireActual('../searchEngineData').default
+    jest.mock('../searchEngineData', () => {
+      const realData = jest.requireActual('../searchEngineData')
+        .searchEngineData
       delete realData[0].name
-      return realData
+      const module = {
+        searchEngineData: realData,
+      }
+      return module
     })
     expect(() => require('../searchEngines').default).toThrow(
       'child "name" fails because ["name" is required]'

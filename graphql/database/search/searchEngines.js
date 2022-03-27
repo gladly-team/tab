@@ -1,8 +1,8 @@
 import Joi from 'joi'
 import SearchEngineModel from './SearchEngineModel'
-import searchEngines from './searchEngineData'
+import { searchEngineData } from './searchEngineData'
 
-const searchEngineModels = searchEngines.map(
+const searchEngineModels = searchEngineData.map(
   engineData => new SearchEngineModel(engineData)
 )
 

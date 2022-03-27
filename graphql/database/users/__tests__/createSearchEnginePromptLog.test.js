@@ -30,7 +30,7 @@ const mockReturn = {
 }
 describe('createSearchEnginePromptLog tests', () => {
   it('creates new UserSwitchSearchPromptLogModel', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
     const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
       .default
     // Mock creation query
@@ -39,7 +39,9 @@ describe('createSearchEnginePromptLog tests', () => {
     })
     const UserSwitchSearchPromptLogModel = require('../UserSwitchSearchPromptLogModel')
       .default
+    const UserModel = require('../../users/UserModel').default
     const createQuery = jest.spyOn(UserSwitchSearchPromptLogModel, 'create')
+    const userUpdateQuery = jest.spyOn(UserModel, 'update')
     const result = await createSearchEnginePromptLog(
       userContext,
       user.id,
@@ -55,6 +57,45 @@ describe('createSearchEnginePromptLog tests', () => {
       updated: '2017-05-19T13:59:46.000Z',
     })
     expect(result).toEqual({ success: true })
+    expect(userUpdateQuery).not.toHaveBeenCalled()
+  })
+
+  it('creates new UserSwitchSearchPromptLogModel and updates User if SearchForACause', async () => {
+    expect.assertions(3)
+    const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
+      .default
+    // Mock creation query
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: mockReturn,
+    })
+    const UserSwitchSearchPromptLogModel = require('../UserSwitchSearchPromptLogModel')
+      .default
+    const UserModel = require('../../users/UserModel').default
+    const createQuery = jest.spyOn(UserSwitchSearchPromptLogModel, 'create')
+    const userUpdateQuery = jest.spyOn(UserModel, 'update')
+    const result = await createSearchEnginePromptLog(
+      userContext,
+      user.id,
+      'SearchForACause',
+      switched
+    )
+    expect(createQuery).toHaveBeenCalledWith(userContext, {
+      userId: userContext.id,
+      searchEnginePrompted: testEngine,
+      switched,
+      timestamp: '2017-05-19T13:59:46.000Z',
+      created: '2017-05-19T13:59:46.000Z',
+      updated: '2017-05-19T13:59:46.000Z',
+    })
+    expect(result).toEqual({ success: true })
+    expect(userUpdateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: true,
+        timestamp: '2017-05-19T13:59:46.000Z',
+      },
+      updated: '2017-05-19T13:59:46.000Z',
+    })
   })
 
   it('throws if invalid search engine for new UserSwitchSearchPromptLogModel', async () => {
