@@ -14,7 +14,7 @@ exports.handler = (event, context, callback) => {
   const params = new URLSearchParams(request.querystring.toLowerCase())
   const searchQueryVal = params.get(SFAC_QUERY_QS_KEY)
 
-  // Map our search URL onto another search provider's URL.
+  // Get the redirect destination URL.
   let searchBaseURL
   let searchProviderQueryKey
   if (get(event, 'Records[0].cf.request.uri', '').startsWith('/search/v2')) {
