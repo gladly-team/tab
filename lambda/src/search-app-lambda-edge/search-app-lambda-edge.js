@@ -15,11 +15,12 @@ exports.handler = (event, context, callback) => {
   const searchQueryVal = params.get(SFAC_QUERY_QS_KEY)
 
   // Map our search URL onto another search provider's URL.
-  // For v2, use Yahoo for search results.
   let searchBaseURL
   let searchProviderQueryKey
   if (get(event, 'Records[0].cf.request.uri', '').startsWith('/search/v2')) {
+    // For v2, use Yahoo for search results.
     searchProviderQueryKey = 'p'
+
     // Yahoo localization needs access to headers:
     // * Accept-Language
     // * CloudFront-Viewer-Country
