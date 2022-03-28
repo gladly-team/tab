@@ -9,7 +9,7 @@ import searchURLByRegion from './searchURLByRegion'
 // CloudFront event object:
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html
 exports.handler = (event, context, callback) => {
-  const request = event.Records[0].cf.request
+  const request = get(event, 'Records[0].cf.request')
   const SFAC_QUERY_QS_KEY = 'q'
   const params = new URLSearchParams(request.querystring.toLowerCase())
   const searchQueryVal = params.get(SFAC_QUERY_QS_KEY)
@@ -23,16 +23,10 @@ exports.handler = (event, context, callback) => {
     // Yahoo localization needs access to headers:
     // * Accept-Language
     // * CloudFront-Viewer-Country
-    const headers = get(request, 'Records[0].cf.request.headers', {})
-    const countryHeader = get(headers, 'cloudfront-viewer-country.value')
-    const acceptLanguageHeader = get(headers, 'accept-language.value')
+    const headers = get(request, 'headers', {})
+    const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
+    const acceptLanguageHeader = get(headers, 'accept-language[0].value')
     searchBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
-
-    // Debugging.
-    // TODO: remove
-    console.log('headers', headers)
-    console.log('countryHeader', countryHeader)
-    console.log('acceptLanguageHeader', acceptLanguageHeader)
   } else {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'

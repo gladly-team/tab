@@ -30,6 +30,21 @@ const setEventURI = (event, uri) => {
   return setWith(clone(event), 'Records[0].cf.request.uri', uri, clone)
 }
 
+const setHeader = (event, headerName, headerVal) => {
+  return setWith(
+    clone(event),
+    `Records[0].cf.request.headers.${headerName}`,
+    [
+      {
+        // Not quite correct (the key will be Pascal-cased) but fine for these tests.
+        key: headerName,
+        value: headerVal,
+      },
+    ],
+    clone
+  )
+}
+
 describe('v1: search app Lambda@Edge function on viewer-request', () => {
   it('redirects with a 307 redirect', () => {
     expect.assertions(2)
@@ -202,5 +217,25 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&p=pizza'
     )
+  })
+
+  it('passes the expected header values to `searchURLByRegion`', () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setHeader(
+      setHeader(
+        setEventURI(defaultEvent, searchV2Path),
+        'cloudfront-viewer-country',
+        'MX'
+      ),
+      'accept-language',
+      'es'
+    )
+    event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=foo'
+    const context = getMockLambdaContext()
+    handler(event, context, callback)
+    const response = callback.mock.calls[0][1]
+    expect(searchURLByRegion).toHaveBeenCalledWith('MX', 'es')
   })
 })
