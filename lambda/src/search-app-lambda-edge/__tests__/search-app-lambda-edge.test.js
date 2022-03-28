@@ -235,7 +235,6 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=foo'
     const context = getMockLambdaContext()
     handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
     expect(searchURLByRegion).toHaveBeenCalledWith('MX', 'es')
   })
 })
