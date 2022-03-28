@@ -48,3 +48,6 @@ export const TAB_GOAL_FOR_TRAINING_SESSION = 504
 
 export const VALID_SEARCH_ENGINES = ['Ecosia', 'DuckDuckGo', 'Google', 'Bing']
 export const DEFAULT_SEARCH_ENGINE = 'Google'
+
+// For getUserSearchEngine
+export const WIDGET_TYPE_SEARCH = 'search'

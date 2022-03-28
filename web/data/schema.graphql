@@ -697,6 +697,15 @@ type failedEmailAddresses {
   error: String
 }
 
+"""Feature name and variation value pair applicable to a user."""
+type Feature {
+  """Name of the Feature"""
+  featureName: String!
+
+  """the value of the variation for this specific user"""
+  variation: String!
+}
+
 """inviting user"""
 type InvitingUser {
   """the name entered in invite"""
@@ -1033,6 +1042,9 @@ type RestartMissionPayload {
 type SearchEngine implements Node {
   """The ID of an object"""
   id: ID!
+
+  """Engine's id"""
+  engineId: String!
 
   """Name of the Search Engine"""
   name: String!
@@ -1530,6 +1542,15 @@ type User implements Node {
 
   """whether a v4 user has been introduced to squads in the ui"""
   hasSeenSquads: Boolean!
+
+  """feature values for this specific user"""
+  features: [Feature]
+
+  """the User’s search engine"""
+  searchEngine: SearchEngine
+
+  """whether to show the yahoo search prompt"""
+  showYahooPrompt: Boolean!
 }
 
 """a user's charity specific impact"""

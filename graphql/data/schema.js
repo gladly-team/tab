@@ -135,6 +135,8 @@ import {
   getDollarsPerDayRate,
 } from '../database/globals/globals'
 import getCampaign from '../database/globals/getCampaign'
+import getUserSearchEngine from '../database/users/getUserSearchEngine'
+import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt'
 
 class App {
   constructor(id) {
@@ -746,6 +748,16 @@ const userType = new GraphQLObjectType({
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context, user),
     },
+    searchEngine: {
+      type: SearchEngineType,
+      description: 'the User’s search engine',
+      resolve: (user, args, context) => getUserSearchEngine(context, user),
+    },
+    showYahooPrompt: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether to show the yahoo search prompt',
+      resolve: (user, _, context) => getShouldShowYahooPrompt(context, user),
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -986,6 +998,11 @@ const SearchEngineType = new GraphQLObjectType({
   description: 'all important data for a search engine.',
   fields: () => ({
     id: globalIdField(SEARCH_ENGINE),
+    engineId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: "Engine's id",
+      resolve: engine => engine.id,
+    },
     name: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Name of the Search Engine`,
