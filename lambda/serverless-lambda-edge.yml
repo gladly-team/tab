@@ -96,6 +96,7 @@ package:
     - node_modules/**
   include:
     - node_modules/lodash/**
+    - node_modules/accept-language-parser/**
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
