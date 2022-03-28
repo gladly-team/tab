@@ -94,6 +94,8 @@ custom:
 package:
   exclude:
     - node_modules/**
+  include:
+    - node_modules/lodash/**
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
