@@ -88,13 +88,15 @@ custom:
     automatic: true
     number: 5
 
+# Only include the build.
 # Don't include any dependencies by default. CloudFront-triggered Lambdas
 # have stricter package size limitations.
 # https://www.serverless.com/framework/docs/providers/aws/guide/packaging/
 package:
   exclude:
-    - node_modules/**
+    - ./**
   include:
+    - build/**
     - node_modules/lodash/**
     - node_modules/accept-language-parser/**
 
