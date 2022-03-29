@@ -1,3 +1,4 @@
+// Used in CloudFront origin request for `/newtab*` URI.
 /* eslint prefer-destructuring: 0 */
 
 const url = require('url')

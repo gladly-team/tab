@@ -1,3 +1,5 @@
+// Used in CloudFront origin request for `/search*` URI
+// (but not `/search/api*`).
 /* eslint prefer-destructuring: 0 */
 
 import { get } from 'lodash/object'
