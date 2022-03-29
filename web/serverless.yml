@@ -318,13 +318,23 @@ resources:
                 - OPTIONS
               TargetOriginId: ${self:custom.searchAppName}
               ForwardedValues:
-                QueryString: false
+                # Required to forward search query.
+                QueryString: true
                 Cookies:
                   Forward: none
+                Headers:
+                  # Required to forward the user to a localized SERP.
+                  - Accept-Language
+                  - CloudFront-Viewer-Country
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
               LambdaFunctionAssociations:
-                - EventType: viewer-request
+                # We can't use viewer-request with CloudFront-Viewer-Country.
+                # "CloudFront adds the CloudFront-Viewer-Country header after the viewer
+                # request event. To use this example, you must create a trigger for the
+                # origin request event."
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-redirect-based-on-country
+                - EventType: origin-request
                   LambdaFunctionARN: ${self:custom.searchAppLambdaEdgeFunctionARN}
             # GraphQL
             - PathPattern: 'graphql*'

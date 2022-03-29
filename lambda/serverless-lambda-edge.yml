@@ -13,7 +13,7 @@ frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-east-1
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   role: gladlyLambdaEdgeRole
@@ -88,12 +88,17 @@ custom:
     automatic: true
     number: 5
 
+# Only include the build.
 # Don't include any dependencies by default. CloudFront-triggered Lambdas
 # have stricter package size limitations.
 # https://www.serverless.com/framework/docs/providers/aws/guide/packaging/
 package:
   exclude:
-    - node_modules/**
+    - ./**
+  include:
+    - build/**
+    - node_modules/lodash/**
+    - node_modules/accept-language-parser/**
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
