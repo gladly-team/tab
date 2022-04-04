@@ -733,7 +733,13 @@ type LogReferralLinkClickPayload {
 }
 
 input LogSearchInput {
-  userId: String!
+  """The user Relay global ID. Provide either this or `userId`."""
+  userIdGlobal: String
+
+  """
+  The actual user ID (not the Relay global). Provide either this or `userIdGlobal`.
+  """
+  userId: String
   source: String
   clientMutationId: String
 }
