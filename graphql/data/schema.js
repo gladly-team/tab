@@ -1950,8 +1950,15 @@ const createNewMissionMutation = mutationWithClientMutationId({
 const logSearchMutation = mutationWithClientMutationId({
   name: 'LogSearch',
   inputFields: {
-    // Note that this is the raw user ID (not the Relay global).
-    userId: { type: new GraphQLNonNull(GraphQLString) },
+    userIdGlobal: {
+      type: GraphQLString,
+      description: 'The user Relay global ID. Provide either this or `userId`.',
+    },
+    userId: {
+      type: GraphQLString,
+      description:
+        'The actual user ID (not the Relay global). Provide either this or `userIdGlobal`.',
+    },
     source: { type: GraphQLString },
   },
   outputFields: {
@@ -1960,8 +1967,13 @@ const logSearchMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId, ...additionalData }, context) =>
-    logSearch(context.user, userId, additionalData),
+  mutateAndGetPayload: (
+    { userId, userIdGlobal, ...additionalData },
+    context
+  ) => {
+    const userGlobalObj = fromGlobalId(userIdGlobal)
+    return logSearch(context.user, userId || userGlobalObj.id, additionalData)
+  },
 })
 
 /**
