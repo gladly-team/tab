@@ -1971,7 +1971,7 @@ const logSearchMutation = mutationWithClientMutationId({
     { userId, userIdGlobal, ...additionalData },
     context
   ) => {
-    const userGlobalObj = fromGlobalId(userIdGlobal)
+    const userGlobalObj = userIdGlobal ? fromGlobalId(userIdGlobal) : {}
     return logSearch(context.user, userId || userGlobalObj.id, additionalData)
   },
 })
