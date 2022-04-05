@@ -20,28 +20,30 @@ const features = {
 
 features[YAHOO_SEARCH_EXISTING_USERS] = {
   defaultValue: false,
-  rules: [
-    {
-      condition: {
-        isTabTeamMember: true,
-        env: 'local',
-      },
-      force: true,
-    },
-  ],
+  // Enable when SFAC search engine is enabled.
+  // rules: [
+  //   {
+  //     condition: {
+  //       isTabTeamMember: true,
+  //       env: 'local',
+  //     },
+  //     force: true,
+  //   },
+  // ],
 }
 
 features[YAHOO_SEARCH_NEW_USERS] = {
   defaultValue: 'Google',
-  rules: [
-    {
-      condition: {
-        isTabTeamMember: true,
-        env: 'local',
-      },
-      force: 'SearchForACause',
-    },
-  ],
+  // Enable when SFAC search engine is enabled.
+  // rules: [
+  //   {
+  //     condition: {
+  //       isTabTeamMember: true,
+  //       env: 'local',
+  //     },
+  //     force: 'SearchForACause',
+  //   },
+  // ],
 }
 
 export default features
