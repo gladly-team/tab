@@ -17,7 +17,7 @@
     "graphql": "^14.3.0",
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "mockdate": "^2.0.2",
     "nodemon": "^1.19.0",
     "npm-run-all": "^4.1.3",
