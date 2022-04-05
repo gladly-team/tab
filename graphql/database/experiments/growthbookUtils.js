@@ -25,7 +25,7 @@ export const getConfiguredGrowthbook = attributes => {
 
   growthbook.setAttributes({
     id,
-    env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+    env: process.env.GROWTHBOOK_ENV,
     causeId,
     v4BetaEnabled,
     joined,
