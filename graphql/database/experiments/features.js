@@ -8,6 +8,14 @@ const features = {
     defaultValue: false,
     rules: [
       {
+        condition: {
+          isTabTeamMember: true,
+          env: 'local',
+        },
+        // Modify this for local testing.
+        force: true,
+      },
+      {
         variations: [false, true],
         coverage: 0.4,
         condition: {
