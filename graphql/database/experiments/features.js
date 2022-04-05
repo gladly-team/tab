@@ -4,15 +4,15 @@ import {
 } from './experimentConstants'
 
 const features = {
-  'test-feature': {
+  'money-raised-exclamation-point': {
     defaultValue: false,
     rules: [
       {
+        variations: [false, true],
+        coverage: 0.4,
         condition: {
-          isTabTeamMember: true,
-          env: 'local',
+          v4BetaEnabled: true,
         },
-        force: true,
       },
     ],
   },
