@@ -1557,6 +1557,9 @@ type User implements Node {
 
   """whether to show the yahoo search prompt"""
   showYahooPrompt: Boolean!
+
+  """whether or not the user has opted into searching for extra impact"""
+  yahooPaidSearchRewardOptIn: Boolean!
 }
 
 """a user's charity specific impact"""
