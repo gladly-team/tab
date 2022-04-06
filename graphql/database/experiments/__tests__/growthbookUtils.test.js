@@ -19,6 +19,10 @@ jest.mock('../features', () => {
 })
 jest.mock('@growthbook/growthbook')
 
+beforeEach(() => {
+  process.env.GROWTHBOOK_ENV = 'test'
+})
+
 afterEach(() => {
   jest.resetModules()
   jest.clearAllMocks()
@@ -43,7 +47,7 @@ describe('growthbookUtils tests', () => {
     await getConfiguredGrowthbook(user)
     expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
       id: user.id,
-      env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+      env: 'test',
       causeId: user.causeId,
       v4BetaEnabled: user.v4BetaEnabled,
       joined: user.joined,

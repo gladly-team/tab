@@ -4,7 +4,7 @@ import {
 } from './experimentConstants'
 
 const features = {
-  'test-feature': {
+  'money-raised-exclamation-point': {
     defaultValue: false,
     rules: [
       {
@@ -12,7 +12,15 @@ const features = {
           isTabTeamMember: true,
           env: 'local',
         },
+        // Modify this for local testing.
         force: true,
+      },
+      {
+        variations: [false, true],
+        coverage: 0.4,
+        condition: {
+          v4BetaEnabled: true,
+        },
       },
     ],
   },
@@ -20,28 +28,30 @@ const features = {
 
 features[YAHOO_SEARCH_EXISTING_USERS] = {
   defaultValue: false,
-  rules: [
-    {
-      condition: {
-        isTabTeamMember: true,
-        env: 'local',
-      },
-      force: true,
-    },
-  ],
+  // Enable when SFAC search engine is enabled.
+  // rules: [
+  //   {
+  //     condition: {
+  //       isTabTeamMember: true,
+  //       env: 'local',
+  //     },
+  //     force: true,
+  //   },
+  // ],
 }
 
 features[YAHOO_SEARCH_NEW_USERS] = {
   defaultValue: 'Google',
-  rules: [
-    {
-      condition: {
-        isTabTeamMember: true,
-        env: 'local',
-      },
-      force: 'SearchForACause',
-    },
-  ],
+  // Enable when SFAC search engine is enabled.
+  // rules: [
+  //   {
+  //     condition: {
+  //       isTabTeamMember: true,
+  //       env: 'local',
+  //     },
+  //     force: 'SearchForACause',
+  //   },
+  // ],
 }
 
 export default features

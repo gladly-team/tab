@@ -33,7 +33,9 @@ const getUserSearchEngine = async (userContext, user) => {
     try {
       return getSearchEngine(JSON.parse(searchWidget.config).engine)
     } catch (e) {
-      // Don't care if SearchEngine does not exist if JSON is malformed.
+      // Don't care if SearchEngine does not exist. This will happen if
+      // the user has not explicitly set any search engine, or if a
+      // previously-seleced search engine is no longer supported.
       if (!(e instanceof DatabaseItemDoesNotExistException)) {
         throw e
       }

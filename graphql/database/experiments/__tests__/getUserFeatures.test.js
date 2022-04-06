@@ -2,14 +2,43 @@
 import { getMockUserInstance, getMockUserContext } from '../../test-utils'
 import Feature from '../FeatureModel'
 
+jest.mock('../features', () => ({
+  'test-feature': {
+    defaultValue: false,
+    rules: [],
+  },
+  'some-other-feature': {
+    defaultValue: 'foo',
+    rules: [],
+  },
+}))
+jest.mock('../growthbookUtils')
+
 const userContext = getMockUserContext()
 const user = getMockUserInstance()
+
+beforeEach(() => {
+  jest.resetModules()
+  const { getAndLogFeatureForUser } = require('../growthbookUtils')
+  getAndLogFeatureForUser
+    .mockReturnValueOnce(
+      new Feature({
+        featureName: 'test-feature',
+        variation: false,
+      })
+    )
+    .mockReturnValueOnce(
+      new Feature({
+        featureName: 'some-other-feature',
+        variation: 'foo',
+      })
+    )
+})
 
 describe('getUserFeatures tests', () => {
   it('gets userFeatures as expected', async () => {
     expect.assertions(1)
     const getUserFeatures = require('../getUserFeatures').default
-
     const result = await getUserFeatures(userContext, user)
     expect(result).toEqual([
       new Feature({
@@ -17,12 +46,8 @@ describe('getUserFeatures tests', () => {
         variation: false,
       }),
       new Feature({
-        featureName: 'yahoo-search-existing-users',
-        variation: false,
-      }),
-      new Feature({
-        featureName: 'yahoo-search-new-users',
-        variation: 'Google',
+        featureName: 'some-other-feature',
+        variation: 'foo',
       }),
     ])
   })
