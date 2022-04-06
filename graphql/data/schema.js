@@ -758,6 +758,11 @@ const userType = new GraphQLObjectType({
       description: 'whether to show the yahoo search prompt',
       resolve: (user, _, context) => getShouldShowYahooPrompt(context, user),
     },
+    yahooPaidSearchRewardOptIn: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description:
+        'whether or not the user has opted into searching for extra impact',
+    },
   }),
   interfaces: [nodeInterface],
 })
