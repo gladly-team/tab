@@ -131,12 +131,10 @@ describe('growthbookUtils tests', () => {
         variation: 'variation-A',
       })
     )
-    expect(createUserExperiment).toHaveBeenCalledWith(
-      userContext,
-      user.id,
-      'yahoo-search',
-      'variation-A'
-    )
+    expect(createUserExperiment).toHaveBeenCalledWith(userContext, user.id, {
+      experimentId: 'yahoo-search',
+      variationId: 0,
+    })
   })
 
   it('does not log to createUserExperiment if assigned because it is an experiment', async () => {

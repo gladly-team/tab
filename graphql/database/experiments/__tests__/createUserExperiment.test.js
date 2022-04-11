@@ -21,7 +21,7 @@ afterAll(() => {
   mockDate.off()
 })
 const experimentId = 'test-experiment'
-const variationId = 'test-variation'
+const variationId = 2
 const userContext = getMockUserContext()
 const user = getMockUserInfo()
 
@@ -34,12 +34,10 @@ describe('createUserExperiment tests', () => {
       Attributes: {},
     })
 
-    const result = await createUserExperiment(
-      userContext,
-      user.id,
-      'test-experiment',
-      'test-variation'
-    )
+    const result = await createUserExperiment(userContext, user.id, {
+      experimentId: 'test-experiment',
+      variationId: 1,
+    })
     expect(result).toEqual({ success: true })
   })
 
@@ -62,16 +60,14 @@ describe('createUserExperiment tests', () => {
       }),
     })
 
-    const result = await createUserExperiment(
-      userContext,
-      user.id,
-      'test-experiment',
-      'test-different-variation'
-    )
+    const result = await createUserExperiment(userContext, user.id, {
+      experimentId: 'test-experiment',
+      variationId: 4,
+    })
     expect(logger.warn).toHaveBeenCalledWith(
       `Expected to see same variationId ${variationId} for userId ${
         user.id
-      } and experimentId ${experimentId}, instead received variation test-different-variation`
+      } and experimentId ${experimentId}, instead received variation 4`
     )
     expect(result).toEqual({ success: true })
   })

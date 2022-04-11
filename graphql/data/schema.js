@@ -2854,12 +2854,10 @@ const createUserExperimentMutation = mutationWithClientMutationId({
     context
   ) => {
     const userGlobalObj = fromGlobalId(userId)
-    createUserExperiment(
-      context.user,
-      userGlobalObj.id,
+    createUserExperiment(context.user, userGlobalObj.id, {
       experimentId,
-      variationId
-    )
+      variationId,
+    })
   },
 })
 

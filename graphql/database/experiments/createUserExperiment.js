@@ -10,7 +10,11 @@ import logger from '../../utils/logger'
  * @return {Promise<Object>}  A promise that resolves into an object containing a log id
  */
 
-export default async (userContext, userId, experimentId, variationId) => {
+const createUserExperiment = async (
+  userContext,
+  userId,
+  { experimentId, variationId } = {}
+) => {
   try {
     const userExperimentRecord = await UserExperimentModel.getOrCreate(
       userContext,
@@ -37,3 +41,5 @@ export default async (userContext, userId, experimentId, variationId) => {
 
   return { success: true }
 }
+
+export default createUserExperiment
