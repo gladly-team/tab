@@ -1,9 +1,6 @@
 import { get } from 'lodash/object'
 import logger from './logger'
-import {
-  UserDoesNotExistException,
-  UnauthorizedQueryException,
-} from './exceptions'
+import { UserDoesNotExistException } from './exceptions'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
