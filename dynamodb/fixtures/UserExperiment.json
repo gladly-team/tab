@@ -2,13 +2,15 @@
   {
     "userId": "abcdefghijklmno",
     "experimentId": "test-1",
-    "variationId": "variation-1",
+    "variationId": 0,
+    "variationValueStr": "false",
     "timestampAssigned": "2017-07-17T20:45:53Z"
   },
   {
     "userId": "abcdefghijklmno",
     "experimentId": "test-2",
-    "variationId": "variation-2",
+    "variationId": 2,
+    "variationValueStr": "'some value here'",
     "timestampAssigned": "2017-07-17T20:45:53Z"
   }
 ]

@@ -13,7 +13,7 @@ import logger from '../../utils/logger'
 const createUserExperiment = async (
   userContext,
   userId,
-  { experimentId, variationId } = {}
+  { experimentId, variationId, variationValueStr = '' } = {}
 ) => {
   try {
     const userExperimentRecord = await UserExperimentModel.getOrCreate(
@@ -22,6 +22,7 @@ const createUserExperiment = async (
         userId,
         experimentId,
         variationId,
+        variationValueStr,
         timestampAssigned: moment.utc().toISOString(),
       }
     )

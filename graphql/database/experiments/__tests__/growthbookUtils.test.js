@@ -31,6 +31,29 @@ afterEach(() => {
 const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
+const getMockGrowthBookFeature = () => ({
+  value: false,
+  on: false,
+  off: true,
+  source: 'experiment',
+  ruleId: '',
+
+  // Experiment properties won't exist for people not included in
+  // the experiment.
+  experiment: {
+    variations: [false, true],
+    key: 'test-experiment',
+    coverage: 1,
+  },
+  experimentResult: {
+    inExperiment: true,
+    variationId: 0,
+    value: false,
+    hashAttribute: 'id',
+    hashValue: 'abc123',
+  },
+})
+
 describe('growthbookUtils tests', () => {
   it('getConfiguredGrowthbook properly sets growthbook attributes based on user properties', async () => {
     expect.assertions(1)
@@ -38,7 +61,7 @@ describe('growthbookUtils tests', () => {
 
     const { GrowthBook } = require('@growthbook/growthbook')
     const mockGrowthbook = {
-      feature: jest.fn().mockReturnValue({ value: true }),
+      feature: jest.fn().mockReturnValue(getMockGrowthBookFeature()),
       setFeatures: jest.fn(),
       setAttributes: jest.fn(),
     }
@@ -87,7 +110,9 @@ describe('growthbookUtils tests', () => {
 
     const { GrowthBook } = require('@growthbook/growthbook')
     const mockGrowthbook = {
-      feature: jest.fn().mockReturnValue({ value: true }),
+      feature: jest
+        .fn()
+        .mockReturnValue({ ...getMockGrowthBookFeature(), value: true }),
       setFeatures: jest.fn(),
       setAttributes: jest.fn(),
     }
@@ -134,10 +159,11 @@ describe('growthbookUtils tests', () => {
     expect(createUserExperiment).toHaveBeenCalledWith(userContext, user.id, {
       experimentId: 'yahoo-search',
       variationId: 0,
+      variationValueStr: '"variation-A"',
     })
   })
 
-  it('does not log to createUserExperiment if assigned because it is an experiment', async () => {
+  it('does not log to createUserExperiment when it is not an experiment', async () => {
     expect.assertions(2)
     const mockFeatures = {
       'test-feature': {
