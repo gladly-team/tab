@@ -43,7 +43,6 @@ export const formatError = graphQLError => ({
 const shouldLogError = graphQLError => {
   const errorCodesToSkipLogging = [
     UserDoesNotExistException.code, // can happen during sign up
-    UnauthorizedQueryException.code, // can happen during logout (when storage is cleared)
   ]
   const errCode = get(graphQLError, 'originalError.code')
   return errorCodesToSkipLogging.indexOf(errCode) === -1
@@ -62,7 +61,7 @@ export const handleError = graphQLError => {
   }
 
   // TODO: probably want to return different message
-  // for some error types (e.g. UnauthorizedQueryException)
+  // for some error types.
 
   // // Format and return the error.
   // graphQLError.message = `Internal Error: ${errId}`

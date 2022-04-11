@@ -82,11 +82,13 @@ describe('error-logging', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
-  test('handleError does not log an "query not authorized" error', () => {
+  // Some number of unauthorized queries are expected in production, but
+  // a high volume might indicate an app error.
+  test('handleError *does* log an "query not authorized" error', () => {
     const mockGraphQLErr = new MockGraphQLError(
       new UnauthorizedQueryException()
     )
     handleError(mockGraphQLErr)
-    expect(logger.error).not.toHaveBeenCalled()
+    expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
   })
 })
