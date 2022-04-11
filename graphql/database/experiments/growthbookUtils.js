@@ -42,7 +42,10 @@ export const getAndLogFeatureForUser = async (
 ) => {
   const feature = growthbook.feature(featureName)
   if (feature.experimentResult && feature.experimentResult.inExperiment) {
-    await createUserExperiment(userContext, userId, featureName, feature.value)
+    await createUserExperiment(userContext, userId, {
+      experimentId: featureName,
+      variationId: feature.experimentResult.variationId,
+    })
   }
   return new Feature({
     featureName,

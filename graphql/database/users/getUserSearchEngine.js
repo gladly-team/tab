@@ -24,7 +24,7 @@ const getUserSearchEngine = async (userContext, user) => {
 
   // 2. If unset, see if a search widget value is set and migrate it, then return that value
   // Query Search Widgets and Find
-  const widgets = await getWidgets(userContext.user, user.id, false)
+  const widgets = await getWidgets(userContext, user.id, false)
   const maybeSearchWidget = widgets.filter(
     widget => widget.type === WIDGET_TYPE_SEARCH
   )

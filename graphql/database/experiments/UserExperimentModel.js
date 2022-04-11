@@ -39,7 +39,8 @@ class UserExperimentModel extends BaseModel {
         .required()
         .description(`The experiment ID from GrowthBook`),
       variationId: types
-        .string()
+        .number()
+        .integer()
         .required()
         .description(`The variation ID from GrowthBook`),
       timestampAssigned: types
