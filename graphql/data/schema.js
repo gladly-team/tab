@@ -2842,7 +2842,8 @@ const createUserExperimentMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     experimentId: { type: new GraphQLNonNull(GraphQLString) },
-    variationId: { type: new GraphQLNonNull(GraphQLString) },
+    variationId: { type: new GraphQLNonNull(GraphQLInt) },
+    variationValueStr: { type: GraphQLString },
   },
   outputFields: {
     success: {
@@ -2850,13 +2851,14 @@ const createUserExperimentMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: async (
-    { userId, experimentId, variationId },
+    { userId, experimentId, variationId, variationValueStr },
     context
   ) => {
     const userGlobalObj = fromGlobalId(userId)
     createUserExperiment(context.user, userGlobalObj.id, {
       experimentId,
       variationId,
+      variationValueStr,
     })
   },
 })

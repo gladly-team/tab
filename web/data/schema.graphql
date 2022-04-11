@@ -520,7 +520,8 @@ type CreateSquadInvitesPayload {
 input CreateUserExperimentInput {
   userId: String!
   experimentId: String!
-  variationId: String!
+  variationId: Int!
+  variationValueStr: String
   clientMutationId: String
 }
 
