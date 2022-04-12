@@ -13,14 +13,19 @@ const features = {
           v4BetaEnabled: true,
           'internalExperimentOverrides.money-raised-exclamation-point': true,
         },
-        force: true,
+        // Using variations instead of "force" also ensures other experiment
+        // logic, such as logging the experiment assignment, is working
+        // correctly.
+        variations: [true, false],
+        weights: [1.0, 0.0],
       },
       {
         condition: {
           v4BetaEnabled: true,
           'internalExperimentOverrides.money-raised-exclamation-point': false,
         },
-        force: false,
+        variations: [true, false],
+        weights: [0.0, 1.0],
       },
       /* End internal overrides */
       {
