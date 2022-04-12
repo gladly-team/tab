@@ -80,28 +80,22 @@ describe('growthbookUtils tests', () => {
   })
 
   it('getConfiguredGrowthbook correctly validates attributes object', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
     const { getConfiguredGrowthbook } = require('../growthbookUtils')
     const logger = require('../../../utils/logger').default
     const mockUser = {
       id: 'abcdefghijklmno',
       env: null,
       causeId: 'causeId',
-      v4BetaEnabled: true,
+      v4BetaEnabled: undefined,
       joined: undefined,
-      isTabTeamMember: null,
     }
-
     await getConfiguredGrowthbook(mockUser)
-
     expect(logger.warn).toHaveBeenCalledWith(
-      'Growthbook Attribute env for userId abcdefghijklmno was null'
+      'Growthbook attribute "joined" for userId abcdefghijklmno is undefined'
     )
     expect(logger.warn).toHaveBeenCalledWith(
-      'Growthbook Attribute joined for userId abcdefghijklmno was undefined'
-    )
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Growthbook Attribute isTabTeamMember for userId abcdefghijklmno was null'
+      'Growthbook attribute "v4BetaEnabled" for userId abcdefghijklmno is undefined'
     )
   })
 

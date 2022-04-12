@@ -18,7 +18,7 @@ const validateAttributesObject = (userId, attributes) => {
   requiredProperties.forEach(attribute => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
       logger.warn(
-        `Growthbook Attribute ${attribute} for userId ${userId} was ${
+        `Growthbook attribute "${attribute}" for userId ${userId} is ${
           attributes[attribute]
         }`
       )
@@ -41,7 +41,6 @@ export const getConfiguredGrowthbook = ({
     causeId,
     v4BetaEnabled,
     joined,
-    email,
     internalExperimentOverrides,
     env: process.env.GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
