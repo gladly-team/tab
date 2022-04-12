@@ -75,6 +75,7 @@ describe('growthbookUtils tests', () => {
       v4BetaEnabled: user.v4BetaEnabled,
       joined: user.joined,
       isTabTeamMember: showInternalOnly(user.email),
+      internalExperimentOverrides: {},
     })
   })
 

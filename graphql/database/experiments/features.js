@@ -7,14 +7,22 @@ const features = {
   'money-raised-exclamation-point': {
     defaultValue: false,
     rules: [
+      /* Begin internal overrides */
       {
         condition: {
-          isTabTeamMember: true,
-          env: 'local',
+          v4BetaEnabled: true,
+          'internalExperimentOverrides.money-raised-exclamation-point': true,
         },
-        // Modify this for local testing.
         force: true,
       },
+      {
+        condition: {
+          v4BetaEnabled: true,
+          'internalExperimentOverrides.money-raised-exclamation-point': false,
+        },
+        force: false,
+      },
+      /* End internal overrides */
       {
         variations: [false, true],
         coverage: 0.4,

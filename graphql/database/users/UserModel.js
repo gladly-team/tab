@@ -410,6 +410,11 @@ class User extends BaseModel {
             'when the user responded to the yahoo search switch prompt'
           ),
       }),
+      internalExperimentOverrides: types
+        .object()
+        .description(
+          'For internal use only: a property that helps manually put this user in an A/B experiment group'
+        ),
     }
   }
 
