@@ -6,10 +6,19 @@ import features from './features'
 import logger from '../../utils/logger'
 
 const validateAttributesObject = (userId, attributes) => {
-  Object.keys(attributes).forEach(attribute => {
+  // Could always use joi or similar if needed later.
+  const requiredProperties = [
+    'id',
+    'env',
+    'causeId',
+    'v4BetaEnabled',
+    'joined',
+    'isTabTeamMember',
+  ]
+  requiredProperties.forEach(attribute => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
       logger.warn(
-        `Growthbook Attribute ${attribute} for userId ${userId} was ${
+        `Growthbook attribute "${attribute}" for userId ${userId} is ${
           attributes[attribute]
         }`
       )
@@ -17,20 +26,27 @@ const validateAttributesObject = (userId, attributes) => {
   })
 }
 
-export const getConfiguredGrowthbook = attributes => {
+export const getConfiguredGrowthbook = ({
+  id: userId,
+  causeId,
+  v4BetaEnabled,
+  joined,
+  email,
+  internalExperimentOverrides = {},
+}) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
-  const { id, causeId, v4BetaEnabled, joined, email } = attributes
-  validateAttributesObject(id, attributes)
-
-  growthbook.setAttributes({
-    id,
-    env: process.env.GROWTHBOOK_ENV,
+  const attributes = {
+    id: userId,
     causeId,
     v4BetaEnabled,
     joined,
+    internalExperimentOverrides,
+    env: process.env.GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
-  })
+  }
+  validateAttributesObject(userId, attributes)
+  growthbook.setAttributes(attributes)
   return growthbook
 }
 
