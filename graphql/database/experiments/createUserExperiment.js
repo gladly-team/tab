@@ -10,7 +10,11 @@ import logger from '../../utils/logger'
  * @return {Promise<Object>}  A promise that resolves into an object containing a log id
  */
 
-export default async (userContext, userId, experimentId, variationId) => {
+const createUserExperiment = async (
+  userContext,
+  userId,
+  { experimentId, variationId, variationValueStr = '' } = {}
+) => {
   try {
     const userExperimentRecord = await UserExperimentModel.getOrCreate(
       userContext,
@@ -18,6 +22,7 @@ export default async (userContext, userId, experimentId, variationId) => {
         userId,
         experimentId,
         variationId,
+        variationValueStr,
         timestampAssigned: moment.utc().toISOString(),
       }
     )
@@ -37,3 +42,5 @@ export default async (userContext, userId, experimentId, variationId) => {
 
   return { success: true }
 }
+
+export default createUserExperiment

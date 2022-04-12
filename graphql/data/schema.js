@@ -746,17 +746,18 @@ const userType = new GraphQLObjectType({
     features: {
       type: new GraphQLList(featureType),
       description: 'feature values for this specific user',
-      resolve: (user, args, context) => getUserFeatures(context, user),
+      resolve: (user, args, context) => getUserFeatures(context.user, user),
     },
     searchEngine: {
       type: SearchEngineType,
       description: 'the User’s search engine',
-      resolve: (user, args, context) => getUserSearchEngine(context, user),
+      resolve: (user, args, context) => getUserSearchEngine(context.user, user),
     },
     showYahooPrompt: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'whether to show the yahoo search prompt',
-      resolve: (user, _, context) => getShouldShowYahooPrompt(context, user),
+      resolve: (user, _, context) =>
+        getShouldShowYahooPrompt(context.user, user),
     },
     yahooPaidSearchRewardOptIn: {
       type: new GraphQLNonNull(GraphQLBoolean),
@@ -2841,7 +2842,8 @@ const createUserExperimentMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     experimentId: { type: new GraphQLNonNull(GraphQLString) },
-    variationId: { type: new GraphQLNonNull(GraphQLString) },
+    variationId: { type: new GraphQLNonNull(GraphQLInt) },
+    variationValueStr: { type: GraphQLString },
   },
   outputFields: {
     success: {
@@ -2849,16 +2851,15 @@ const createUserExperimentMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: async (
-    { userId, experimentId, variationId },
+    { userId, experimentId, variationId, variationValueStr },
     context
   ) => {
     const userGlobalObj = fromGlobalId(userId)
-    createUserExperiment(
-      context.user,
-      userGlobalObj.id,
+    return createUserExperiment(context.user, userGlobalObj.id, {
       experimentId,
-      variationId
-    )
+      variationId,
+      variationValueStr,
+    })
   },
 })
 

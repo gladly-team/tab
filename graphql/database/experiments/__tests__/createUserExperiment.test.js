@@ -20,8 +20,6 @@ beforeAll(() => {
 afterAll(() => {
   mockDate.off()
 })
-const experimentId = 'test-experiment'
-const variationId = 'test-variation'
 const userContext = getMockUserContext()
 const user = getMockUserInfo()
 
@@ -33,19 +31,43 @@ describe('createUserExperiment tests', () => {
     setMockDBResponse(DatabaseOperation.CREATE, {
       Attributes: {},
     })
+    const userExperimentDBCall = jest.spyOn(UserExperimentModel, 'getOrCreate')
+    await createUserExperiment(userContext, user.id, {
+      experimentId: 'test-experiment',
+      variationId: 1,
+      variationValueStr: 'green',
+    })
+    expect(userExperimentDBCall).toHaveBeenCalledWith(userContext, {
+      created: '2017-05-19T13:59:46.000Z',
+      updated: '2017-05-19T13:59:46.000Z',
+      experimentId: 'test-experiment',
+      timestampAssigned: '2017-05-19T13:59:46.000Z',
+      userId: 'abcdefghijklmno',
+      variationId: 1,
+      variationValueStr: 'green',
+    })
+  })
 
-    const result = await createUserExperiment(
-      userContext,
-      user.id,
-      'test-experiment',
-      'test-variation'
-    )
+  it('returns a success value when a log is created', async () => {
+    expect.assertions(1)
+    const createUserExperiment = require('../createUserExperiment').default
+    // Mock creation query
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: {},
+    })
+
+    const result = await createUserExperiment(userContext, user.id, {
+      experimentId: 'test-experiment',
+      variationId: 1,
+      variationValueStr: 'green',
+    })
     expect(result).toEqual({ success: true })
   })
 
   it('logs if finds previously existing entity with different value', async () => {
     expect.assertions(2)
     const createUserExperiment = require('../createUserExperiment').default
+
     // Mock creation query
     setMockDBResponse(
       DatabaseOperation.CREATE,
@@ -57,21 +79,21 @@ describe('createUserExperiment tests', () => {
       Item: new UserExperimentModel({
         userId: 'abcdefghijklmno',
         timestampAssigned: '2017-07-18T20:45:53Z',
-        experimentId,
-        variationId,
+        experimentId: 'test-experiment',
+        variationId: 2,
+        variationValueStr: 'green',
       }),
     })
 
-    const result = await createUserExperiment(
-      userContext,
-      user.id,
-      'test-experiment',
-      'test-different-variation'
-    )
+    const result = await createUserExperiment(userContext, user.id, {
+      experimentId: 'test-experiment',
+      variationId: 4,
+      variationValueStr: 'green',
+    })
     expect(logger.warn).toHaveBeenCalledWith(
-      `Expected to see same variationId ${variationId} for userId ${
+      `Expected to see same variationId 2 for userId ${
         user.id
-      } and experimentId ${experimentId}, instead received variation test-different-variation`
+      } and experimentId test-experiment, instead received variation 4`
     )
     expect(result).toEqual({ success: true })
   })
