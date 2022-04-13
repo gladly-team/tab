@@ -9,6 +9,7 @@ import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
 import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import logUserExperimentGroups from '../logUserExperimentGroups'
+import getUserFeature from '../../experiments/getUserFeature'
 import {
   addTimestampFieldsToItem,
   MockAWSConditionalCheckFailedError,
@@ -20,20 +21,37 @@ import {
   setMockDBResponse,
   clearAllMockDBResponses,
 } from '../../test-utils'
+import Feature from '../../experiments/FeatureModel'
+import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
+import databaseClient from '../../databaseClient'
 
 jest.mock('../../databaseClient')
-
 jest.mock('../../referrals/logReferralData')
 jest.mock('../logEmailVerified')
 jest.mock('../getUserByUsername')
 jest.mock('../../widgets/setUpWidgetsForNewUser')
 jest.mock('../logUserExperimentGroups')
 jest.mock('../../backgroundImages/getRandomBackgroundImage')
+jest.mock('../../experiments/getUserFeature')
+jest.mock('../../search/getSearchEngine')
 
 const defaultUserContext = getMockUserContext()
 
 beforeAll(() => {
   mockDate.on()
+})
+
+beforeEach(() => {
+  getUserFeature.mockResolvedValueOnce(
+    new Feature({
+      featureName: YAHOO_SEARCH_NEW_USERS,
+      variation: 'SearchForACause',
+    })
+  )
+  setMockDBResponse(DatabaseOperation.UPDATE, {
+    // Like original user but with modified email.
+    Attributes: getMockUserInstance(),
+  })
 })
 
 afterAll(() => {
@@ -705,10 +723,20 @@ describe('createUser when user already exists (should be idempotent)', () => {
     userContext.email = 'myemail@example.com'
 
     // Mock the response for updating the email address.
-    setMockDBResponse(DatabaseOperation.UPDATE, {
-      // Like original user but with modified email.
-      Attributes: Object.assign({}, existingUser, { email: userContext.email }),
+    databaseClient.update.mockImplementation((params, callback) => {
+      callback(null, {
+        Attributes: Object.assign({}, existingUser, {
+          email: userContext.email,
+        }),
+      })
     })
+
+    const logEmailVerified = require('../logEmailVerified').default
+    const updatedUser = Object.assign({}, existingUser, {
+      email: userContext.email,
+      emailVerified: true,
+    })
+    logEmailVerified.mockResolvedValue(updatedUser)
 
     const updateMethod = jest.spyOn(UserModel, 'update')
 
@@ -999,5 +1027,37 @@ describe('createUser when user already exists (should be idempotent)', () => {
         causeId
       )
     ).not.toThrow()
+  })
+
+  it('sets the search engine correctly', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+    const userContext = cloneDeep(defaultUserContext)
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    const updateMethod = jest.spyOn(UserModel, 'update')
+
+    databaseClient.update.mockImplementation((params, callback) => {
+      callback(null, {
+        Attributes: getMockUserInstance(),
+      })
+    })
+
+    await createUser(userContext, userInfo.id, userInfo.email, null)
+
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: userInfo.id,
+      searchEngine: 'SearchForACause',
+      updated: moment.utc().toISOString(),
+    })
   })
 })

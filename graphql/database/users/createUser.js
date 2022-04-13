@@ -9,6 +9,8 @@ import logUserExperimentGroups from './logUserExperimentGroups'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
+import getUserFeature from '../experiments/getUserFeature'
+import { YAHOO_SEARCH_NEW_USERS } from '../experiments/experimentConstants'
 
 /**
  * Create a new user and performs other setup actions.
@@ -160,6 +162,21 @@ const createUser = async (
       userId,
       experimentGroups
     )
+  } catch (e) {
+    throw e
+  }
+
+  // Set user's search engine for new user
+  try {
+    const newSearchFeature = await getUserFeature(
+      userContext,
+      returnedUser,
+      YAHOO_SEARCH_NEW_USERS
+    )
+    await UserModel.update(userContext, {
+      id: userId,
+      searchEngine: newSearchFeature.variation,
+    })
   } catch (e) {
     throw e
   }

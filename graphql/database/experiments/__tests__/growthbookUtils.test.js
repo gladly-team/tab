@@ -73,7 +73,7 @@ describe('growthbookUtils tests', () => {
       env: 'test',
       causeId: user.causeId,
       v4BetaEnabled: user.v4BetaEnabled,
-      joined: user.joined,
+      joined: new Date(user.joined).getTime(),
       isTabTeamMember: showInternalOnly(user.email),
       internalExperimentOverrides: {},
     })

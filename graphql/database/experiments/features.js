@@ -43,30 +43,60 @@ const features = {
 
 features[YAHOO_SEARCH_EXISTING_USERS] = {
   defaultValue: false,
-  // Enable when SFAC search engine is enabled.
-  // rules: [
-  //   {
-  //     condition: {
-  //       isTabTeamMember: true,
-  //       env: 'local',
-  //     },
-  //     force: true,
-  //   },
-  // ],
+  rules: [
+    /* Begin internal overrides */
+    {
+      condition: {
+        v4BetaEnabled: true,
+        'internalExperimentOverrides.search-existing-users': {
+          $eq: true,
+          $exists: true,
+        },
+      },
+      force: true,
+    },
+    {
+      condition: {
+        v4BetaEnabled: true,
+        'internalExperimentOverrides.search-existing-users-v2': {
+          $eq: false,
+          $exists: true,
+        },
+      },
+      force: false,
+    },
+    /* End internal overrides */
+    {
+      variations: [false, true],
+      weights: [0.5, 0.5],
+      coverage: 0.3,
+      condition: {
+        joined: {
+          $lt: 1650726528502, // make a later date when we go to production.
+        },
+        v4BetaEnabled: true,
+      },
+    },
+  ],
 }
 
 features[YAHOO_SEARCH_NEW_USERS] = {
   defaultValue: 'Google',
-  // Enable when SFAC search engine is enabled.
-  // rules: [
-  //   {
-  //     condition: {
-  //       isTabTeamMember: true,
-  //       env: 'local',
-  //     },
-  //     force: 'SearchForACause',
-  //   },
-  // ],
+  rules: [
+    // Internal Overrides may not be useful here because we are assigning search engine on user creation.
+    /* End internal overrides */
+    {
+      variations: ['Google', 'SearchForACause'],
+      weights: [0.5, 0.5],
+      coverage: 1.0,
+      condition: {
+        joined: {
+          $gt: 1650726528502, // make a later date when we go to production.
+        },
+        v4BetaEnabled: true,
+      },
+    },
+  ],
 }
 
 export default features
