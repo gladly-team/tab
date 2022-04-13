@@ -7,7 +7,11 @@ const getShouldShowYahooPrompt = async (userContext, user) => {
     user,
     YAHOO_SEARCH_EXISTING_USERS
   )
-  return !user.yahooSwitchSearchPrompt && testFeature.variation === true
+  return (
+    !user.yahooSwitchSearchPrompt &&
+    !user.yahooPaidSearchRewardOptIn &&
+    testFeature.variation === true
+  )
 }
 
 export default getShouldShowYahooPrompt
