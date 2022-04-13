@@ -4,32 +4,28 @@ import {
 } from './experimentConstants'
 
 const features = {
-  'money-raised-exclamation-point': {
+  'money-raised-exclamation-point-v2': {
     defaultValue: false,
     rules: [
       /* Begin internal overrides */
       {
         condition: {
           v4BetaEnabled: true,
-          'internalExperimentOverrides.money-raised-exclamation-point': true,
+          'internalExperimentOverrides.money-raised-exclamation-point-v2': true,
         },
-        // Using variations instead of "force" also ensures other experiment
-        // logic, such as logging the experiment assignment, is working
-        // correctly.
-        variations: [true, false],
-        weights: [1.0, 0.0],
+        force: true,
       },
       {
         condition: {
           v4BetaEnabled: true,
-          'internalExperimentOverrides.money-raised-exclamation-point': false,
+          'internalExperimentOverrides.money-raised-exclamation-point-v2': false,
         },
-        variations: [true, false],
-        weights: [0.0, 1.0],
+        force: false,
       },
       /* End internal overrides */
       {
         variations: [false, true],
+        weights: [0.5, 0.5],
         coverage: 0.4,
         condition: {
           v4BetaEnabled: true,
