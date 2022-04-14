@@ -11,14 +11,20 @@ const features = {
       {
         condition: {
           v4BetaEnabled: true,
-          'internalExperimentOverrides.money-raised-exclamation-point-v2': true,
+          'internalExperimentOverrides.money-raised-exclamation-point-v2': {
+            $eq: true,
+            $exists: true,
+          },
         },
         force: true,
       },
       {
         condition: {
           v4BetaEnabled: true,
-          'internalExperimentOverrides.money-raised-exclamation-point-v2': false,
+          'internalExperimentOverrides.money-raised-exclamation-point-v2': {
+            $eq: false,
+            $exists: true,
+          },
         },
         force: false,
       },
