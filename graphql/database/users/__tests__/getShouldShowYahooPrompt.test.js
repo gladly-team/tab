@@ -23,6 +23,7 @@ describe('shouldShowYahooPrompt tests', () => {
     const seenPromptUser = {
       ...user,
       yahooSwitchSearchPrompt: true,
+      yahooPaidSearchRewardOptIn: false,
     }
 
     const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
@@ -42,6 +43,7 @@ describe('shouldShowYahooPrompt tests', () => {
     const seenPromptUser = {
       ...user,
       yahooSwitchSearchPrompt: true,
+      yahooPaidSearchRewardOptIn: false,
     }
 
     const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
@@ -56,6 +58,7 @@ describe('shouldShowYahooPrompt tests', () => {
       new Feature({
         featureName: YAHOO_SEARCH_EXISTING_USERS,
         variation: true,
+        yahooPaidSearchRewardOptIn: false,
       })
     )
 
@@ -71,10 +74,32 @@ describe('shouldShowYahooPrompt tests', () => {
       new Feature({
         featureName: YAHOO_SEARCH_EXISTING_USERS,
         variation: false,
+        yahooPaidSearchRewardOptIn: false,
       })
     )
 
     const result = await getShouldShowYahooPrompt(userContext, user)
+    expect(result).toEqual(false)
+  })
+
+  it('returns false if users is already opted in for search', async () => {
+    expect.assertions(1)
+    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
+      .default
+    getUserFeature.mockResolvedValueOnce(
+      new Feature({
+        featureName: YAHOO_SEARCH_EXISTING_USERS,
+        variation: true,
+      })
+    )
+
+    const optedInUser = {
+      ...user,
+      yahooSwitchSearchPrompt: false,
+      yahooPaidSearchRewardOptIn: true,
+    }
+
+    const result = await getShouldShowYahooPrompt(userContext, optedInUser)
     expect(result).toEqual(false)
   })
 })
