@@ -2,11 +2,9 @@ import moment from 'moment'
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import {
-  USER_SWITCH_SEARCH_PROMPT_LOG,
-  VALID_SEARCH_ENGINES,
-} from '../constants'
+import { USER_SWITCH_SEARCH_PROMPT_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
+import { VALID_SEARCH_ENGINES } from '../search/searchEngineData'
 
 /*
  * @extends BaseModel

@@ -7,7 +7,6 @@ import {
   USER,
   USER_BACKGROUND_OPTION_DAILY,
   BACKGROUND_IMAGE_LEGACY_CATEGORY,
-  VALID_SEARCH_ENGINES,
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
@@ -16,6 +15,7 @@ import {
   DatabaseItemDoesNotExistException,
   UserDoesNotExistException,
 } from '../../utils/exceptions'
+import { VALID_SEARCH_ENGINES } from '../search/searchEngineData'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -398,7 +398,7 @@ class User extends BaseModel {
         )
         .default(self.fieldDefaults.yahooPaidSearchRewardOptIn),
       yahooSearchSwitchPrompt: types.object({
-        hasSeenPrompt: types
+        hasRespondedToPrompt: types
           .boolean()
           .description(
             'whether or not the user has seen the yahoo search switch prompt'

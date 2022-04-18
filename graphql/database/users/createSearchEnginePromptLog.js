@@ -1,5 +1,6 @@
 import moment from 'moment'
 import UserSwitchSearchPromptLogModel from './UserSwitchSearchPromptLogModel'
+import UserModel from './UserModel'
 /**
  * @param {Object} userContext - The user context.
  * @param {string} userId - The user's Id
@@ -16,6 +17,15 @@ export default async (userContext, userId, searchEnginePrompted, switched) => {
       switched,
       timestamp: moment.utc().toISOString(),
     })
+    if (searchEnginePrompted === 'SearchForACause') {
+      await UserModel.update(userContext, {
+        id: userId,
+        yahooSearchSwitchPrompt: {
+          hasRespondedToPrompt: true,
+          timestamp: moment.utc().toISOString(),
+        },
+      })
+    }
   } catch (e) {
     throw e
   }
