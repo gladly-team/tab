@@ -91,6 +91,14 @@ describe('logSearch', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+    jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce((_, updatedUser) => ({
+        ...mockUser,
+        ...updatedUser,
+        searches: 15, // hardcode $add operation
+      }))
+
     const user = await logSearch(userContext, userId)
     expect(user).toEqual(expectedUser)
   })
