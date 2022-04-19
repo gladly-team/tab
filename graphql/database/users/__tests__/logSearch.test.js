@@ -5,7 +5,7 @@ import UserModel from '../UserModel'
 import UserSearchLogModel from '../UserSearchLogModel'
 import logSearch from '../logSearch'
 import checkSearchRateLimit from '../checkSearchRateLimit'
-import addVc from '../addVc'
+// import addVc from '../addVc'
 import {
   DatabaseOperation,
   addTimestampFieldsToItem,
@@ -91,14 +91,6 @@ describe('logSearch', () => {
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
-    const updateMethod = jest
-      .spyOn(UserModel, 'update')
-      .mockImplementationOnce(async (_, updatedUser) => ({
-        ...mockUser,
-        ...updatedUser,
-        searches: 15, // hardcode $add operation
-      }))
-
     const user = await logSearch(userContext, userId)
     expect(user).toEqual(expectedUser)
   })
