@@ -51,6 +51,58 @@ afterAll(() => {
 })
 
 describe('logSearch', () => {
+  test('it returns the user', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      searches: 14,
+      maxSearchesDay: {
+        maxDay: {
+          date: moment
+            .utc()
+            .subtract(3, 'days')
+            .toISOString(),
+          numSearches: 20,
+        },
+        recentDay: {
+          date: moment
+            .utc()
+            .subtract(5, 'days')
+            .toISOString(),
+          numSearches: 5,
+        },
+      },
+    })
+    const expectedUser = {
+      ...mockUser,
+      lastSearchTimestamp: '2017-06-22T01:13:28.000Z',
+      searches: 15,
+      maxSearchesDay: {
+        ...mockUser.maxSearchesDay,
+        recentDay: {
+          ...mockUser.maxSearchesDay.recentDay,
+          date: '2017-06-22T01:13:28.000Z',
+          numSearches: 1,
+        },
+      },
+    }
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce((_, updatedUser) => ({
+        ...mockUser,
+        ...updatedUser,
+        searches: 15, // hardcode $add operation
+      }))
+
+    const user = await logSearch(userContext, userId)
+    expect(user).toEqual(expectedUser)
+  })
+
   test('it logs the search for analytics', async () => {
     expect.assertions(1)
 
@@ -65,37 +117,6 @@ describe('logSearch', () => {
       mockCheckSearchRateLimitResponse({
         limitReached: false,
         reason: 'NONE',
-      })
-    )
-
-    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId)
-
-    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
-      userContext,
-      addTimestampFieldsToItem({
-        userId,
-        timestamp: moment.utc().toISOString(),
-      })
-    )
-  })
-
-  test('when the user should not receive VC, it still logs the search for analytics', async () => {
-    expect.assertions(1)
-
-    const userId = userContext.id
-    const mockUser = getMockUserInstance({
-      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
-    })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockUser,
-    })
-
-    // Mock that the user should NOT receive a heart.
-    checkSearchRateLimit.mockResolvedValue(
-      mockCheckSearchRateLimitResponse({
-        limitReached: true,
-        reason: 'DAILY_MAX',
       })
     )
 
