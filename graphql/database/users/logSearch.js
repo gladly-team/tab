@@ -1,7 +1,7 @@
 import moment from 'moment'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
-import addVc from './addVc'
+// import addVc from './addVc'
 // import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
 
