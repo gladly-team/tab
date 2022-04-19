@@ -93,7 +93,7 @@ describe('logSearch', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce((_, updatedUser) => ({
+      .mockImplementationOnce(async (_, updatedUser) => ({
         ...mockUser,
         ...updatedUser,
         searches: 15, // hardcode $add operation

@@ -53,7 +53,7 @@ const logSearch = async (userContext, userId, searchData = {}) => {
     // }
 
     // Increment the user's search count.
-    user = await UserModel.update(userContext, {
+    const updateUserPromise = UserModel.update(userContext, {
       id: userId,
       searches: { $add: 1 },
       lastSearchTimestamp: moment.utc().toISOString(),
@@ -66,11 +66,12 @@ const logSearch = async (userContext, userId, searchData = {}) => {
       searchData.source && validSearchSources.indexOf(searchData.source) > -1
         ? searchData.source
         : null
-    await UserSearchLogModel.create(userContext, {
+    const logPromise = UserSearchLogModel.create(userContext, {
       userId,
       timestamp: moment.utc().toISOString(),
       ...(source && { source }),
     })
+    ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {
     throw e
   }
