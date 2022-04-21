@@ -14,6 +14,7 @@ const validateAttributesObject = (userId, attributes) => {
     'v4BetaEnabled',
     'joined',
     'isTabTeamMember',
+    'tabs',
   ]
   requiredProperties.forEach(attribute => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
@@ -33,6 +34,7 @@ export const getConfiguredGrowthbook = ({
   joined,
   email,
   internalExperimentOverrides = {},
+  tabs,
 }) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
@@ -44,6 +46,7 @@ export const getConfiguredGrowthbook = ({
     internalExperimentOverrides,
     env: process.env.GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
+    tabs,
   }
   validateAttributesObject(userId, attributes)
   growthbook.setAttributes(attributes)

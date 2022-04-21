@@ -39,6 +39,19 @@ const features = {
       },
     ],
   },
+  'user-survey-2022-notification': {
+    defaultValue: false,
+    rules: [
+      {
+        condition: {
+          tabs: {
+            $gte: 10,
+          },
+        },
+        force: true,
+      },
+    ],
+  },
 }
 
 features[YAHOO_SEARCH_EXISTING_USERS] = {

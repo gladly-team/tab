@@ -3,7 +3,7 @@ import {
   getConfiguredGrowthbook,
 } from './growthbookUtils'
 
-const getUserFeatures = async (userContext, user, featureName) => {
+const getUserFeature = async (userContext, user, featureName) => {
   const configuredGrowthbook = getConfiguredGrowthbook(user)
   const userFeature = await getAndLogFeatureForUser(
     userContext,
@@ -15,4 +15,4 @@ const getUserFeatures = async (userContext, user, featureName) => {
   return userFeature
 }
 
-export default getUserFeatures
+export default getUserFeature
