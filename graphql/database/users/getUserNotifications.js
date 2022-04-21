@@ -5,6 +5,9 @@
  * @return {Notifications[]} An array of notification data, or an empty
  *   array.
  */
+
+// TODO: remove lint disable
+// eslint-disable-next-line no-unused-vars
 const getUserNotifications = (userContext, user) => {
   // TODO
   return [{ code: 'userSurvey2022' }]

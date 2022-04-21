@@ -3,9 +3,6 @@
 import getUserNotifications from '../getUserNotifications'
 import { getMockUserContext, getMockUserInstance } from '../../test-utils'
 
-jest.mock('../../databaseClient')
-jest.mock('../BackgroundImageModel')
-
 const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
