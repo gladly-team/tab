@@ -43,6 +43,14 @@ const features = {
     defaultValue: false,
     rules: [
       {
+        // Show on dev for our team only.
+        condition: {
+          isTabTeamMember: true,
+          env: 'dev',
+        },
+        force: true,
+      },
+      {
         condition: {
           tabs: {
             $gte: 10,
