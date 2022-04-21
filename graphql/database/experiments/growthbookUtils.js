@@ -4,6 +4,7 @@ import createUserExperiment from './createUserExperiment'
 import { showInternalOnly } from '../../utils/authorization-helpers'
 import features from './features'
 import logger from '../../utils/logger'
+import { GROWTHBOOK_ENV } from '../../config'
 
 const validateAttributesObject = (userId, attributes) => {
   // Could always use joi or similar if needed later.
@@ -44,7 +45,7 @@ export const getConfiguredGrowthbook = ({
     v4BetaEnabled,
     joined,
     internalExperimentOverrides,
-    env: process.env.GROWTHBOOK_ENV,
+    env: GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
     tabs,
   }

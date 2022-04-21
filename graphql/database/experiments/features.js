@@ -43,16 +43,11 @@ const features = {
     defaultValue: false,
     rules: [
       {
-        // Show locally.
+        // Show locally and on dev.
         condition: {
-          env: 'local',
-        },
-        force: true,
-      },
-      {
-        // Show on dev for our team only.
-        condition: {
-          env: 'dev',
+          env: {
+            $in: ['local', 'dev'],
+          },
         },
         force: true,
       },
