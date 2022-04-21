@@ -52,7 +52,6 @@ const features = {
       {
         // Show on dev for our team only.
         condition: {
-          isTabTeamMember: true,
           env: 'dev',
         },
         force: true,
