@@ -6,6 +6,10 @@ import Feature from '../FeatureModel'
 
 jest.mock('../../../utils/logger')
 jest.mock('../createUserExperiment')
+jest.mock('../../../config', () => ({
+  GROWTHBOOK_ENV: 'test',
+  DB_TABLE_NAME_APPENDIX: '',
+}))
 jest.mock('../features', () => {
   const module = {
     // Can spy on getters:
