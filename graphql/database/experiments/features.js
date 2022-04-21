@@ -48,7 +48,8 @@ const features = {
             $gte: 10,
           },
         },
-        force: true,
+        // TODO: set to true when ready
+        force: false,
       },
     ],
   },
