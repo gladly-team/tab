@@ -32,6 +32,8 @@ import {
   setUserClickedNewTabSearchIntroNotif,
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
+  hasUserDismissedSurvey2022,
+  setUserDismissedSurvey2022,
   removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -45,9 +47,6 @@ import {
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
-  facebookPageURL,
-  instagramPageURL,
-  twitterPageURL,
   donateURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
@@ -178,6 +177,7 @@ class Dashboard extends React.Component {
         EXPERIMENT_REFERRAL_NOTIFICATION
       ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
+      userDismissedSurvey2022: hasUserDismissedSurvey2022(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
       hasDismissedYahooDemoInfo:
@@ -409,6 +409,11 @@ class Dashboard extends React.Component {
     const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
+
+    const notifications = (user ? user.notifications : []) || []
+    const showUserSurvey2022 =
+      !this.state.userDismissedSurvey2022 &&
+      !!notifications.find(notif => notif.code === 'userSurvey2022')
 
     return (
       <div
@@ -666,6 +671,32 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     width: 440,
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+              {showUserSurvey2022 ? (
+                <Notification
+                  data-test-id={'user-survey-2022-notif'}
+                  title={`Share Your Feedback`}
+                  message={
+                    <span>
+                      <Typography variant={'body2'} gutterBottom>
+                        We'd love to hear from you! Let us know how we can make
+                        Tab for a Cause even better with this 2-minute survey.
+                      </Typography>
+                    </span>
+                  }
+                  buttonText={'Take the Survey'}
+                  buttonURL="https://docs.google.com/forms/d/1lTUsZ03-9fl69wFLUAjJQ6VrdEWdW34mPLQ26uXjQUg/edit?usp=sharing"
+                  onDismiss={() => {
+                    this.setState({
+                      userDismissedSurvey2022: true,
+                    })
+                    setUserDismissedSurvey2022()
+                  }}
+                  style={{
+                    width: 380,
                     marginTop: 4,
                   }}
                 />

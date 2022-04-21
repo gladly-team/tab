@@ -19,6 +19,9 @@ export default createFragmentContainer(Dashboard, {
         referralNotification
         searchIntro
       }
+      notifications {
+        code
+      }
       joined
       searches
       tabs

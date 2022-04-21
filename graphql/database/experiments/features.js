@@ -43,6 +43,13 @@ const features = {
     defaultValue: false,
     rules: [
       {
+        // Show locally.
+        condition: {
+          env: 'local',
+        },
+        force: true,
+      },
+      {
         // Show on dev for our team only.
         condition: {
           isTabTeamMember: true,
