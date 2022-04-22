@@ -137,6 +137,7 @@ import {
 import getCampaign from '../database/globals/getCampaign'
 import getUserSearchEngine from '../database/users/getUserSearchEngine'
 import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt'
+import getUserNotifications from '../database/users/getUserNotifications'
 
 class App {
   constructor(id) {
@@ -684,12 +685,8 @@ const userType = new GraphQLObjectType({
         )
       ),
       description: 'notifications for the v4 user to see',
-      resolve: () => {
-        if (process.env.SHOW_NOTIF_INTL_CAT_DAY_END_2021 === 'true') {
-          return [{ code: 'intlCatDayEnd2021' }]
-        }
-        return []
-      },
+      resolve: (user, args, context) =>
+        getUserNotifications(context.user, user),
     },
     searchesToday: {
       type: GraphQLInt,

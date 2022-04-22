@@ -39,6 +39,28 @@ const features = {
       },
     ],
   },
+  'user-survey-2022-notification': {
+    defaultValue: false,
+    rules: [
+      {
+        // Show on dev for our team only.
+        condition: {
+          isTabTeamMember: true,
+          env: 'dev',
+        },
+        force: true,
+      },
+      {
+        condition: {
+          tabs: {
+            $gte: 10,
+          },
+        },
+        // TODO: set to true when ready
+        force: false,
+      },
+    ],
+  },
 }
 
 features[YAHOO_SEARCH_EXISTING_USERS] = {
