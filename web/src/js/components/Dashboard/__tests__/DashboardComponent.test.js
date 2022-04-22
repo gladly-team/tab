@@ -43,6 +43,8 @@ import {
   hasUserClickedNewTabSearchIntroNotif,
   setUserClickedNewTabSearchIntroNotif,
   removeCampaignDismissTime,
+  hasUserDismissedSurvey2022,
+  setUserDismissedSurvey2022,
 } from 'js/utils/local-user-data-mgr'
 import {
   showGlobalNotification,
@@ -1944,5 +1946,62 @@ describe('Yahoo search demo info notification', () => {
       STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
       'true'
     )
+  })
+})
+
+describe('Dashboard component: user survey 2022 notification', () => {
+  beforeEach(() => {
+    hasUserDismissedSurvey2022.mockReturnValue(false)
+  })
+
+  it('does not show the user survey notification when the notification data does not include it', () => {
+    expect.assertions(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.notifications = []
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(
+      wrapper.find('[data-test-id="user-survey-2022-notif"]').exists()
+    ).toBe(false)
+  })
+
+  it('shows the user survey notification when the notification data includes it', () => {
+    expect.assertions(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.notifications = [{ code: 'userSurvey2022' }]
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(
+      wrapper.find('[data-test-id="user-survey-2022-notif"]').exists()
+    ).toBe(true)
+  })
+
+  it('does not show the user survey notification when the user has already dismissed it', () => {
+    expect.assertions(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    hasUserDismissedSurvey2022.mockReturnValue(true)
+    modifiedProps.user.notifications = [{ code: 'userSurvey2022' }]
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(
+      wrapper.find('[data-test-id="user-survey-2022-notif"]').exists()
+    ).toBe(false)
+  })
+
+  it('hides the notification after dismissing it and persists to local storage', () => {
+    expect.assertions(2)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.notifications = [{ code: 'userSurvey2022' }]
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    wrapper.find('[data-test-id="user-survey-2022-notif"]').prop('onDismiss')()
+    expect(
+      wrapper.find('[data-test-id="user-survey-2022-notif"]').exists()
+    ).toBe(false)
+    expect(setUserDismissedSurvey2022).toHaveBeenCalled()
   })
 })
