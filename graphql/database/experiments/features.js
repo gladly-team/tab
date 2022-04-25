@@ -45,9 +45,7 @@ const features = {
       {
         // Show locally and on dev.
         condition: {
-          env: {
-            $in: ['local', 'dev'],
-          },
+          env: 'local',
         },
         force: true,
       },
@@ -57,8 +55,7 @@ const features = {
             $gte: 10,
           },
         },
-        // TODO: set to true when ready
-        force: false,
+        force: true,
       },
     ],
   },
