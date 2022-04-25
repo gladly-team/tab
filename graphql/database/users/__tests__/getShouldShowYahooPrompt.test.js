@@ -1,5 +1,8 @@
 /* eslint-env jest */
-import { YAHOO_SEARCH_EXISTING_USERS } from '../../experiments/experimentConstants'
+import {
+  YAHOO_SEARCH_EXISTING_USERS,
+  YAHOO_SEARCH_NEW_USERS,
+} from '../../experiments/experimentConstants'
 import { getMockUserInstance, getMockUserContext } from '../../test-utils'
 import getUserFeature from '../../experiments/getUserFeature'
 import Feature from '../../experiments/FeatureModel'
@@ -14,12 +17,19 @@ describe('shouldShowYahooPrompt tests', () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
-        featureName: YAHOO_SEARCH_EXISTING_USERS,
-        variation: false,
-      })
-    )
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: true,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
     const seenPromptUser = {
       ...user,
       yahooSwitchSearchPrompt: true,
@@ -34,12 +44,19 @@ describe('shouldShowYahooPrompt tests', () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
-        featureName: YAHOO_SEARCH_EXISTING_USERS,
-        variation: true,
-      })
-    )
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: false,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'SearchForACause',
+        })
+      )
     const seenPromptUser = {
       ...user,
       yahooSwitchSearchPrompt: true,
@@ -50,17 +67,45 @@ describe('shouldShowYahooPrompt tests', () => {
     expect(result).toEqual(false)
   })
 
-  it('returns true if users feature is true for test', async () => {
+  it('returns true if users feature is true for existing user test', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
-        featureName: YAHOO_SEARCH_EXISTING_USERS,
-        variation: true,
-        yahooPaidSearchRewardOptIn: false,
-      })
-    )
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: true,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
+
+    const result = await getShouldShowYahooPrompt(userContext, user)
+    expect(result).toEqual(true)
+  })
+
+  it('returns true if users feature is true for new user test', async () => {
+    expect.assertions(1)
+    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
+      .default
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: false,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'SearchForACause',
+        })
+      )
 
     const result = await getShouldShowYahooPrompt(userContext, user)
     expect(result).toEqual(true)
@@ -70,13 +115,19 @@ describe('shouldShowYahooPrompt tests', () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
-        featureName: YAHOO_SEARCH_EXISTING_USERS,
-        variation: false,
-        yahooPaidSearchRewardOptIn: false,
-      })
-    )
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: false,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
 
     const result = await getShouldShowYahooPrompt(userContext, user)
     expect(result).toEqual(false)
