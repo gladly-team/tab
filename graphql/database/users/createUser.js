@@ -173,7 +173,7 @@ const createUser = async (
       returnedUser,
       YAHOO_SEARCH_NEW_USERS
     )
-    await UserModel.update(userContext, {
+    returnedUser = await UserModel.update(userContext, {
       id: userId,
       searchEngine: newSearchFeature.variation,
     })

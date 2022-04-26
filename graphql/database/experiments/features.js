@@ -47,7 +47,9 @@ features[YAHOO_SEARCH_EXISTING_USERS] = {
     /* Begin internal overrides */
     {
       condition: {
-        v4BetaEnabled: true,
+        v4BetaEnabled: {
+          $eq: true,
+        },
         'internalExperimentOverrides.search-existing-users': {
           $eq: true,
           $exists: true,
@@ -57,8 +59,10 @@ features[YAHOO_SEARCH_EXISTING_USERS] = {
     },
     {
       condition: {
-        v4BetaEnabled: true,
-        'internalExperimentOverrides.search-existing-users-v2': {
+        v4BetaEnabled: {
+          $eq: true,
+        },
+        'internalExperimentOverrides.search-existing-users': {
           $eq: false,
           $exists: true,
         },
@@ -74,7 +78,9 @@ features[YAHOO_SEARCH_EXISTING_USERS] = {
         joined: {
           $lt: 1650726528502, // make a later date when we go to production.
         },
-        v4BetaEnabled: true,
+        v4BetaEnabled: {
+          $eq: true,
+        },
       },
     },
   ],
@@ -93,7 +99,9 @@ features[YAHOO_SEARCH_NEW_USERS] = {
         joined: {
           $gt: 1650726528502, // make a later date when we go to production.
         },
-        v4BetaEnabled: true,
+        v4BetaEnabled: {
+          $eq: true,
+        },
       },
     },
   ],

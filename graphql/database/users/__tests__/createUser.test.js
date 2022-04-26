@@ -518,6 +518,7 @@ describe('createUser when user does not exist', () => {
   })
 
   it('calls the database as expected', async () => {
+    clearAllMockDBResponses()
     expect.assertions(2)
 
     // Mock database responses.
@@ -552,6 +553,14 @@ describe('createUser when user does not exist', () => {
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      // Like original user but with modified email.
+      Attributes: {
+        ...getMockUserInstance(),
+        truexId: 'dummy-id',
+      },
+    })
 
     const createdItem = await createUser(
       userContext,
@@ -1030,7 +1039,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
   })
 
   it('sets the search engine correctly', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -1048,16 +1057,26 @@ describe('createUser when user already exists (should be idempotent)', () => {
 
     databaseClient.update.mockImplementation((params, callback) => {
       callback(null, {
-        Attributes: getMockUserInstance(),
+        Attributes: {
+          ...getMockUserInstance(),
+          searchEngine: 'SearchForACause',
+        },
       })
     })
 
-    await createUser(userContext, userInfo.id, userInfo.email, null)
+    const returnedUser = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null
+    )
 
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: userInfo.id,
       searchEngine: 'SearchForACause',
       updated: moment.utc().toISOString(),
     })
+
+    expect(returnedUser.searchEngine).toEqual('SearchForACause')
   })
 })
