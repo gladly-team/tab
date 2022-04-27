@@ -67,6 +67,7 @@ function getExpectedCreateItemFromUserInfo(userInfo) {
   return Object.assign({}, addTimestampFieldsToItem(userInfo), {
     joined: moment.utc().toISOString(),
     truexId: expect.any(String),
+    v4BetaEnabled: false,
   })
 }
 
@@ -576,6 +577,38 @@ describe('createUser when user does not exist', () => {
 
     expect(createdItem).toEqual(userReturnedFromCreate)
   })
+
+  it("sets the user's v4BetaEnabled property", async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const userContext = cloneDeep(defaultUserContext)
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null,
+      {},
+      null,
+      null,
+      true, // v4BetaEnabled
+      false,
+      false
+    )
+    const createdItem = getOrCreateMethod.mock.calls[0][1]
+    expect(createdItem.v4BetaEnabled).toBe(true)
+  })
 })
 
 describe('createUser when user already exists (should be idempotent)', () => {
@@ -895,6 +928,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expectedCreateItem = {
       ...expectedCreateItem,
+      v4BetaEnabled: true,
       currentMissionId: missionId,
       hasSeenSquads: true,
       causeId: 'CA6A5C2uj',
@@ -939,6 +973,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expectedCreateItem = {
       ...expectedCreateItem,
+      v4BetaEnabled: true,
       currentMissionId: undefined,
       hasSeenSquads: false,
       causeId,
@@ -961,6 +996,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
       expectedCreateItem
     )
   })
+
   it('sets the cause ID for a v4 user on seas', async () => {
     expect.assertions(1)
 
@@ -981,6 +1017,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
     let expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expectedCreateItem = {
       ...expectedCreateItem,
+      v4BetaEnabled: true,
       currentMissionId: undefined,
       hasSeenSquads: false,
       causeId,
