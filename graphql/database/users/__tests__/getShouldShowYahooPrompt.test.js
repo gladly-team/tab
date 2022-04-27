@@ -74,7 +74,7 @@ describe('shouldShowYahooPrompt tests', () => {
     expect(result).toEqual(true)
   })
 
-  it('[existing user exp] returns true if the user is in the treatment group of the experiment and is not using the charitable search engine', async () => {
+  it('[existing user exp] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -104,7 +104,7 @@ describe('shouldShowYahooPrompt tests', () => {
     expect(result).toEqual(true)
   })
 
-  it('[new user exp] returns true if the user is in the treatment group of the experiment and is not using the charitable search engine', async () => {
+  it('[new user exp] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -164,7 +164,7 @@ describe('shouldShowYahooPrompt tests', () => {
     expect(result).toEqual(false)
   })
 
-  it('returns true, even if the user is already opted in for search, if not using the charitable search engine', async () => {
+  it('returns false if the user has already opted in for search', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -188,10 +188,10 @@ describe('shouldShowYahooPrompt tests', () => {
       searchEngine: 'Google',
     }
     const result = await getShouldShowYahooPrompt(userContext, optedInUser)
-    expect(result).toEqual(true)
+    expect(result).toEqual(false)
   })
 
-  it('returns false if the user is already using the charitable search engine', async () => {
+  it('still returns true if the user is already using the charitable search engine', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -215,6 +215,6 @@ describe('shouldShowYahooPrompt tests', () => {
       searchEngine: 'SearchForACause',
     }
     const result = await getShouldShowYahooPrompt(userContext, optedInUser)
-    expect(result).toEqual(false)
+    expect(result).toEqual(true)
   })
 })

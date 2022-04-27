@@ -4,8 +4,6 @@ import {
 } from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
 
-const charitableSearchEngineId = 'SearchForACause'
-
 const getShouldShowYahooPrompt = async (userContext, user) => {
   const existingUsersTestFeature = await getUserFeature(
     userContext,
@@ -20,11 +18,9 @@ const getShouldShowYahooPrompt = async (userContext, user) => {
   const alreadyResponded =
     user.yahooSearchSwitchPrompt &&
     user.yahooSearchSwitchPrompt.hasRespondedToPrompt
-  const alreadyUsingSearchEngine =
-    user.searchEngine === charitableSearchEngineId
   return (
     !alreadyResponded &&
-    !alreadyUsingSearchEngine &&
+    !user.yahooPaidSearchRewardOptIn && // already opted in
     (existingUsersTestFeature.variation === true ||
       newUsersTestFeature.variation === 'SearchForACause')
   )
