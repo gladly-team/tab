@@ -4,6 +4,7 @@ import {
   YAHOO_SEARCH_NEW_USERS,
 } from './experimentConstants'
 
+// TODO: update as needed before launch
 const EXPERIMENT_LAUNCH_UNIX_TIME = 1651075307324 // ~4pm UTC 27 April 2022
 
 const features = {
@@ -97,6 +98,10 @@ const features = {
         weights: [0.5, 0.5],
         coverage: 0.3,
         condition: {
+          // TODO: open to all environments to launch
+          env: {
+            $in: ['local', 'dev'],
+          },
           joined: {
             $lt: EXPERIMENT_LAUNCH_UNIX_TIME,
           },
@@ -117,6 +122,10 @@ const features = {
         weights: [0.5, 0.5],
         coverage: 1.0,
         condition: {
+          // TODO: open to all environments to launch
+          env: {
+            $in: ['local', 'dev'],
+          },
           joined: {
             $gt: EXPERIMENT_LAUNCH_UNIX_TIME,
           },
