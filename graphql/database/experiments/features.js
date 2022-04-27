@@ -4,8 +4,14 @@ import {
   YAHOO_SEARCH_NEW_USERS,
 } from './experimentConstants'
 
-// TODO: update as needed before launch
-const EXPERIMENT_LAUNCH_UNIX_TIME = 1651075307324 // ~4pm UTC 27 April 2022
+// Consider a user "existing" if they join before this time.
+const SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME = 1651096800000 // 10pm UTC 27 April 2022
+
+// TODO: update before launch
+// Consider a user "new" if they join after this time. This should be
+// later in the future than when the experiment goes live, because
+// the experiment includes behavior during signup.
+const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651100400000 // 11pm UTC 27 April 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
@@ -103,7 +109,7 @@ const features = {
             $in: ['local', 'dev'],
           },
           joined: {
-            $lt: EXPERIMENT_LAUNCH_UNIX_TIME,
+            $lt: SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME,
           },
           v4BetaEnabled: {
             $eq: true,
@@ -127,7 +133,7 @@ const features = {
             $in: ['local', 'dev'],
           },
           joined: {
-            $gt: EXPERIMENT_LAUNCH_UNIX_TIME,
+            $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
           },
           v4BetaEnabled: {
             $eq: true,
