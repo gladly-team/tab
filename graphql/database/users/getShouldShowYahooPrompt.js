@@ -7,8 +7,11 @@ const getShouldShowYahooPrompt = async (userContext, user) => {
     user,
     YAHOO_SEARCH_EXISTING_USERS
   )
+  const alreadyResponded =
+    user.yahooSearchSwitchPrompt &&
+    user.yahooSearchSwitchPrompt.hasRespondedToPrompt
   return (
-    !user.yahooSwitchSearchPrompt &&
+    !alreadyResponded &&
     !user.yahooPaidSearchRewardOptIn &&
     testFeature.variation === true
   )
