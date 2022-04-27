@@ -4,6 +4,8 @@ import {
   YAHOO_SEARCH_NEW_USERS,
 } from './experimentConstants'
 
+const EXPERIMENT_LAUNCH_UNIX_TIME = 1651075307324 // ~4pm UTC 27 April 2022
+
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
     defaultValue: false,
@@ -75,7 +77,7 @@ const features = {
         coverage: 0.3,
         condition: {
           joined: {
-            $lt: 1650726528502, // make a later date when we go to production.
+            $lt: EXPERIMENT_LAUNCH_UNIX_TIME,
           },
           v4BetaEnabled: {
             $eq: true,
@@ -95,7 +97,7 @@ const features = {
         coverage: 1.0,
         condition: {
           joined: {
-            $gt: 1650726528502, // make a later date when we go to production.
+            $gt: EXPERIMENT_LAUNCH_UNIX_TIME,
           },
           v4BetaEnabled: {
             $eq: true,
