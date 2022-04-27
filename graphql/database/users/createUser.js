@@ -53,6 +53,7 @@ const createUser = async (
       truexId: nanoid(),
       currentMissionId: missionId || undefined,
       causeId: causeId || undefined,
+      v4BetaEnabled,
     },
     !isNil(extensionInstallId)
       ? {
