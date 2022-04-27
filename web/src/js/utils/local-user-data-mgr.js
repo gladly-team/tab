@@ -350,3 +350,10 @@ export const getMissionId = () => {
 export const getCauseId = () => {
   return localStorageMgr.getItem(STORAGE_NEW_USER_CAUSE_ID)
 }
+
+export const setUserDismissedSurvey2022 = () => {
+  localStorageMgr.setItem('tab.user.dismissedUserSurvey2022', 'true')
+}
+export const hasUserDismissedSurvey2022 = () => {
+  return localStorageMgr.getItem('tab.user.dismissedUserSurvey2022') === 'true'
+}

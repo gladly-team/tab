@@ -4,6 +4,7 @@ import createUserExperiment from './createUserExperiment'
 import { showInternalOnly } from '../../utils/authorization-helpers'
 import features from './features'
 import logger from '../../utils/logger'
+import { GROWTHBOOK_ENV } from '../../config'
 
 const validateAttributesObject = (userId, attributes) => {
   // Could always use joi or similar if needed later.
@@ -14,6 +15,7 @@ const validateAttributesObject = (userId, attributes) => {
     'v4BetaEnabled',
     'joined',
     'isTabTeamMember',
+    'tabs',
   ]
   requiredProperties.forEach(attribute => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
@@ -33,6 +35,7 @@ export const getConfiguredGrowthbook = ({
   joined,
   email,
   internalExperimentOverrides = {},
+  tabs,
 }) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
@@ -42,8 +45,9 @@ export const getConfiguredGrowthbook = ({
     v4BetaEnabled,
     joined: joined && new Date(joined).getTime(),
     internalExperimentOverrides,
-    env: process.env.GROWTHBOOK_ENV,
+    env: GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
+    tabs,
   }
   validateAttributesObject(userId, attributes)
   growthbook.setAttributes(attributes)

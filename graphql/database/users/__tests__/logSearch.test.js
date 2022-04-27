@@ -5,7 +5,7 @@ import UserModel from '../UserModel'
 import UserSearchLogModel from '../UserSearchLogModel'
 import logSearch from '../logSearch'
 import checkSearchRateLimit from '../checkSearchRateLimit'
-import addVc from '../addVc'
+// import addVc from '../addVc'
 import {
   DatabaseOperation,
   addTimestampFieldsToItem,
@@ -51,186 +51,56 @@ afterAll(() => {
 })
 
 describe('logSearch', () => {
-  const cases = [
-    getMockUserInstance({
-      // neither search engine yahoo nor opted in
-      lastSearchTimestamp: mockCurrentTime,
-      maxSearchesDay: {
-        maxDay: {
-          date: mockCurrentTime,
-          numSearches: 400,
-        },
-        recentDay: {
-          date: mockCurrentTime,
-          numSearches: 148,
-        },
-      },
-    }),
-    getMockUserInstance({
-      // not opted in
-      lastSearchTimestamp: mockCurrentTime,
-      maxSearchesDay: {
-        maxDay: {
-          date: mockCurrentTime,
-          numSearches: 400,
-        },
-        recentDay: {
-          date: mockCurrentTime,
-          numSearches: 148,
-        },
-      },
-      searchEngine: 'Yahoo',
-    }),
-    getMockUserInstance({
-      // doesn't currently have yahoo as search engine
-      lastSearchTimestamp: mockCurrentTime,
-      maxSearchesDay: {
-        maxDay: {
-          date: mockCurrentTime,
-          numSearches: 400,
-        },
-        recentDay: {
-          date: mockCurrentTime,
-          numSearches: 148,
-        },
-      },
-      yahooPaidSearchRewardOptIn: false,
-    }),
-  ]
-  test.each(cases)(
-    'when the user should not receive VC, it does not increment the VC',
-    async mockUser => {
-      expect.assertions(2)
-
-      const userId = userContext.id
-      setMockDBResponse(DatabaseOperation.GET, {
-        Item: mockUser,
-      })
-
-      // Mock that the user SHOULD receive a heart.
-      checkSearchRateLimit.mockResolvedValue(
-        mockCheckSearchRateLimitResponse({
-          limitReached: false,
-          reason: 'NONE',
-        })
-      )
-
-      const updateMethod = jest
-        .spyOn(UserModel, 'update')
-        .mockImplementationOnce(() => mockUser)
-
-      await logSearch(userContext, userId)
-
-      // VC should increment.
-      expect(addVc).not.toHaveBeenCalled()
-
-      // It should update searches and maxSearchesDay values.
-      expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
-        id: userId,
-        searches: { $add: 1 },
-        lastSearchTimestamp: moment.utc().toISOString(),
-        maxSearchesDay: {
-          maxDay: {
-            date: moment.utc().toISOString(),
-            numSearches: 400,
-          },
-          recentDay: {
-            date: moment.utc().toISOString(),
-            numSearches: 149,
-          },
-        },
-      })
-    }
-  )
-
-  test('when the user should receive VC, it increments the VC', async () => {
-    expect.assertions(2)
-
-    const userId = userContext.id
-    const mockUser = getMockUserInstance({
-      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
-      maxSearchesDay: {
-        maxDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 400,
-        },
-        recentDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 148,
-        },
-      },
-      yahooPaidSearchRewardOptIn: true,
-      searchEngine: 'Yahoo',
-    })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockUser,
-    })
-
-    // Mock that the user SHOULD receive a heart.
-    checkSearchRateLimit.mockResolvedValue(
-      mockCheckSearchRateLimitResponse({
-        limitReached: false,
-        reason: 'NONE',
-      })
-    )
-
-    const updateMethod = jest
-      .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => mockUser)
-
-    await logSearch(userContext, userId)
-
-    // VC should increment.
-    expect(addVc).toHaveBeenCalled()
-
-    // It should update searches and maxSearchesDay values.
-    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
-      id: userId,
-      searches: { $add: 1 },
-      lastSearchTimestamp: moment.utc().toISOString(),
-      maxSearchesDay: {
-        maxDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 400,
-        },
-        recentDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 149,
-        },
-      },
-    })
-  })
-
-  test('when the user has reached a VC limit, it does not increment the VC', async () => {
+  test('it returns the user', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
     const mockUser = getMockUserInstance({
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      searches: 14,
       maxSearchesDay: {
         maxDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 400,
+          date: moment
+            .utc()
+            .subtract(3, 'days')
+            .toISOString(),
+          numSearches: 20,
         },
         recentDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 148,
+          date: moment
+            .utc()
+            .subtract(5, 'days')
+            .toISOString(),
+          numSearches: 5,
         },
       },
     })
+    const expectedUser = {
+      ...mockUser,
+      lastSearchTimestamp: '2017-06-22T01:13:28.000Z',
+      searches: 15,
+      maxSearchesDay: {
+        ...mockUser.maxSearchesDay,
+        recentDay: {
+          ...mockUser.maxSearchesDay.recentDay,
+          date: '2017-06-22T01:13:28.000Z',
+          numSearches: 1,
+        },
+      },
+    }
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+    jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce((_, updatedUser) => ({
+        ...mockUser,
+        ...updatedUser,
+        searches: 15, // hardcode $add operation
+      }))
 
-    // Mock that the user should NOT receive a heart.
-    checkSearchRateLimit.mockResolvedValue(
-      mockCheckSearchRateLimitResponse({
-        limitReached: true,
-        reason: 'ONE_MINUTE_MAX',
-      })
-    )
-    await logSearch(userContext, userId)
-    expect(addVc).not.toHaveBeenCalled()
+    const user = await logSearch(userContext, userId)
+    expect(user).toEqual(expectedUser)
   })
 
   test('it logs the search for analytics', async () => {
@@ -247,37 +117,6 @@ describe('logSearch', () => {
       mockCheckSearchRateLimitResponse({
         limitReached: false,
         reason: 'NONE',
-      })
-    )
-
-    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId)
-
-    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
-      userContext,
-      addTimestampFieldsToItem({
-        userId,
-        timestamp: moment.utc().toISOString(),
-      })
-    )
-  })
-
-  test('when the user should not receive VC, it still logs the search for analytics', async () => {
-    expect.assertions(1)
-
-    const userId = userContext.id
-    const mockUser = getMockUserInstance({
-      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
-    })
-    setMockDBResponse(DatabaseOperation.GET, {
-      Item: mockUser,
-    })
-
-    // Mock that the user should NOT receive a heart.
-    checkSearchRateLimit.mockResolvedValue(
-      mockCheckSearchRateLimitResponse({
-        limitReached: true,
-        reason: 'DAILY_MAX',
       })
     )
 
