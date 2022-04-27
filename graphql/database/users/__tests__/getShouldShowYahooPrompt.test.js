@@ -20,16 +20,17 @@ describe('shouldShowYahooPrompt tests', () => {
         variation: false,
       })
     )
-    const seenPromptUser = {
+    const modifiedUser = {
       ...user,
       yahooSearchSwitchPrompt: {
         hasRespondedToPrompt: true,
         timestamp: '2022-04-27T15:19:27.076Z',
       },
       yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
     }
 
-    const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(false)
   })
 
@@ -43,19 +44,20 @@ describe('shouldShowYahooPrompt tests', () => {
         variation: true,
       })
     )
-    const seenPromptUser = {
+    const modifiedUser = {
       ...user,
       yahooSearchSwitchPrompt: {
         hasRespondedToPrompt: false,
         timestamp: '2022-04-27T15:19:27.076Z',
       },
       yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
     }
-    const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(true)
   })
 
-  it('returns true if the user is in the treatment group of the experiment', async () => {
+  it('returns true if the user is in the treatment group of the experiment and is not using the charitable search engine', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -65,7 +67,16 @@ describe('shouldShowYahooPrompt tests', () => {
         variation: true,
       })
     )
-    const result = await getShouldShowYahooPrompt(userContext, user)
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(true)
   })
 
@@ -79,11 +90,20 @@ describe('shouldShowYahooPrompt tests', () => {
         variation: false,
       })
     )
-    const result = await getShouldShowYahooPrompt(userContext, user)
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(false)
   })
 
-  it('returns false if users is already opted in for search', async () => {
+  it('returns true, even if the user is already opted in for search, if not using the charitable search engine', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -93,13 +113,32 @@ describe('shouldShowYahooPrompt tests', () => {
         variation: true,
       })
     )
-
     const optedInUser = {
       ...user,
       yahooSearchSwitchPrompt: undefined,
       yahooPaidSearchRewardOptIn: true,
+      searchEngine: 'Google',
     }
+    const result = await getShouldShowYahooPrompt(userContext, optedInUser)
+    expect(result).toEqual(true)
+  })
 
+  it('returns false if the user is already using the charitable search engine', async () => {
+    expect.assertions(1)
+    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
+      .default
+    getUserFeature.mockResolvedValueOnce(
+      new Feature({
+        featureName: YAHOO_SEARCH_EXISTING_USERS,
+        variation: true,
+      })
+    )
+    const optedInUser = {
+      ...user,
+      yahooSearchSwitchPrompt: undefined,
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'SearchForACause',
+    }
     const result = await getShouldShowYahooPrompt(userContext, optedInUser)
     expect(result).toEqual(false)
   })
