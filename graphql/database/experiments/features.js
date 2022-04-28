@@ -65,7 +65,7 @@ const features = {
             $gte: 10,
           },
         },
-        force: true,
+        force: false, // TODO: remove feature flag references
       },
     ],
   },
