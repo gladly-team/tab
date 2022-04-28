@@ -5,13 +5,12 @@ import {
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
-const SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME = 1651096800000 // 10pm UTC 27 April 2022
+const SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME = 1651154400000 // 2pm UTC 28 April 2022
 
-// TODO: update before launch
 // Consider a user "new" if they join after this time. This should be
 // later in the future than when the experiment goes live, because
 // the experiment includes behavior during signup.
-const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651100400000 // 11pm UTC 27 April 2022
+const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28 April 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
@@ -104,10 +103,6 @@ const features = {
         weights: [0.5, 0.5],
         coverage: 0.3,
         condition: {
-          // TODO: open to all environments to launch
-          env: {
-            $in: ['local', 'dev'],
-          },
           joined: {
             $lt: SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME,
           },
@@ -128,10 +123,6 @@ const features = {
         weights: [0.5, 0.5],
         coverage: 1.0,
         condition: {
-          // TODO: open to all environments to launch
-          env: {
-            $in: ['local', 'dev'],
-          },
           joined: {
             $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
           },
