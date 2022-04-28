@@ -6,6 +6,7 @@ import { flushAllPromises } from 'js/utils/test-utils'
 import { reloadDashboard } from 'js/navigation/navigation'
 import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
 
+//
 jest.mock('js/utils/v4-beta-opt-in')
 jest.mock('js/mutations/SetV4BetaMutation')
 jest.mock('js/navigation/navigation', () => ({ reloadDashboard: jest.fn() }))
@@ -14,7 +15,7 @@ jest.mock('js/mutations/SetUserCauseMutation')
 
 describe('Switch to V4 function', () => {
   it('opts user into v4 and sets the new cause on click', async () => {
-    expect.assertions(5)
+    expect.assertions(4)
     const switchToV4 = require('js/utils/switchToV4').default
     switchToV4({
       relayEnvironment: {},
