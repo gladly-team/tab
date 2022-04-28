@@ -500,6 +500,7 @@ input CreateSearchEnginePromptLogInput {
 
 type CreateSearchEnginePromptLogPayload {
   success: Boolean!
+  user: User
   clientMutationId: String
 }
 

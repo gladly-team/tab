@@ -1,6 +1,7 @@
 /* eslint-env jest */
 import {
   getMockUserContext,
+  getMockUserInstance,
   getMockUserInfo,
   mockDate,
   DatabaseOperation,
@@ -9,6 +10,13 @@ import {
 import { UnauthorizedQueryException } from '../../../utils/exceptions'
 
 jest.mock('../../databaseClient')
+beforeEach(() => {
+  setMockDBResponse(DatabaseOperation.UPDATE, {
+    // Like original user but with modified email.
+    Attributes: getMockUserInstance(),
+  })
+})
+
 beforeAll(() => {
   mockDate.on()
 })
@@ -56,8 +64,15 @@ describe('createSearchEnginePromptLog tests', () => {
       created: '2017-05-19T13:59:46.000Z',
       updated: '2017-05-19T13:59:46.000Z',
     })
-    expect(result).toEqual({ success: true })
-    expect(userUpdateQuery).not.toHaveBeenCalled()
+    expect(result).toEqual({ success: true, user: getMockUserInstance() })
+    expect(userUpdateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: true,
+        timestamp: '2017-05-19T13:59:46.000Z',
+      },
+      updated: '2017-05-19T13:59:46.000Z',
+    })
   })
 
   it('creates new UserSwitchSearchPromptLogModel and updates User if SearchForACause', async () => {
@@ -87,7 +102,7 @@ describe('createSearchEnginePromptLog tests', () => {
       created: '2017-05-19T13:59:46.000Z',
       updated: '2017-05-19T13:59:46.000Z',
     })
-    expect(result).toEqual({ success: true })
+    expect(result).toEqual({ success: true, user: getMockUserInstance() })
     expect(userUpdateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       yahooSearchSwitchPrompt: {
