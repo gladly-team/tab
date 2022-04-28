@@ -4,7 +4,6 @@ import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
 import { flushAllPromises } from 'js/utils/test-utils'
 import { reloadDashboard } from 'js/navigation/navigation'
-import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
 
 jest.mock('js/utils/v4-beta-opt-in')
@@ -31,12 +30,5 @@ describe('Switch to V4 function', () => {
     )
     expect(optIntoV4Beta).toHaveBeenCalled()
     expect(reloadDashboard).toHaveBeenCalled()
-    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledWith(
-      expect.any(Object),
-      'abc123',
-      expect.any(Function),
-      expect.any(Function),
-      'cats'
-    )
   })
 })
