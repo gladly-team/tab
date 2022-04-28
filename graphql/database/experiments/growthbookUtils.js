@@ -43,7 +43,7 @@ export const getConfiguredGrowthbook = ({
     id: userId,
     causeId,
     v4BetaEnabled,
-    joined,
+    joined: joined && new Date(joined).getTime(),
     internalExperimentOverrides,
     env: GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),

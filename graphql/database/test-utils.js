@@ -179,6 +179,7 @@ export const getMockCauseInstance = attributes => {
           steps: [],
           firstTabIntroDescription: 'firstTabIntroDescription',
         },
+        v4BetaEnabled: false,
       },
       attributes
     )

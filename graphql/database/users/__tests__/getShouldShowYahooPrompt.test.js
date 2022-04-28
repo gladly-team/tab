@@ -13,7 +13,7 @@ const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
 describe('shouldShowYahooPrompt tests', () => {
-  it('returns false if user has seen yahoo prompt but is in experiment', async () => {
+  it('[existing user exp] returns false if the user is in the experiment but has already responded to the prompt', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -30,44 +30,21 @@ describe('shouldShowYahooPrompt tests', () => {
           variation: 'Google',
         })
       )
-    const seenPromptUser = {
+    const modifiedUser = {
       ...user,
-      yahooSwitchSearchPrompt: true,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: true,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
       yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
     }
 
-    const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(false)
   })
 
-  it('returns false if user has seen yahoo prompt', async () => {
-    expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
-    getUserFeature
-      .mockResolvedValueOnce(
-        new Feature({
-          featureName: YAHOO_SEARCH_EXISTING_USERS,
-          variation: false,
-        })
-      )
-      .mockResolvedValueOnce(
-        new Feature({
-          featureName: YAHOO_SEARCH_NEW_USERS,
-          variation: 'SearchForACause',
-        })
-      )
-    const seenPromptUser = {
-      ...user,
-      yahooSwitchSearchPrompt: true,
-      yahooPaidSearchRewardOptIn: false,
-    }
-
-    const result = await getShouldShowYahooPrompt(userContext, seenPromptUser)
-    expect(result).toEqual(false)
-  })
-
-  it('returns true if users feature is true for existing user test', async () => {
+  it('[existing user exp] returns true if user has a yahooSearchSwitchPrompt property but hasRespondedToPrompt is false', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -84,12 +61,50 @@ describe('shouldShowYahooPrompt tests', () => {
           variation: 'Google',
         })
       )
-
-    const result = await getShouldShowYahooPrompt(userContext, user)
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(true)
   })
 
-  it('returns true if users feature is true for new user test', async () => {
+  it('[existing user exp] returns true if the user is in the treatment group of the experiment', async () => {
+    expect.assertions(1)
+    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
+      .default
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: true,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
+    expect(result).toEqual(true)
+  })
+
+  it('[new user exp] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -103,15 +118,23 @@ describe('shouldShowYahooPrompt tests', () => {
       .mockResolvedValueOnce(
         new Feature({
           featureName: YAHOO_SEARCH_NEW_USERS,
-          variation: 'SearchForACause',
+          variation: 'SearchForACause', // in experiment grorup
         })
       )
-
-    const result = await getShouldShowYahooPrompt(userContext, user)
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(true)
   })
 
-  it('returns false if users feature is false for test', async () => {
+  it('returns false if the user is in the control groups of both experiments', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
@@ -128,29 +151,70 @@ describe('shouldShowYahooPrompt tests', () => {
           variation: 'Google',
         })
       )
-
-    const result = await getShouldShowYahooPrompt(userContext, user)
+    const modifiedUser = {
+      ...user,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: false,
+        timestamp: '2022-04-27T15:19:27.076Z',
+      },
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'Google',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, modifiedUser)
     expect(result).toEqual(false)
   })
 
-  it('returns false if users is already opted in for search', async () => {
+  it('returns false if the user has already opted in for search', async () => {
     expect.assertions(1)
     const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
       .default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
-        featureName: YAHOO_SEARCH_EXISTING_USERS,
-        variation: true,
-      })
-    )
-
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: true,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
     const optedInUser = {
       ...user,
-      yahooSwitchSearchPrompt: false,
+      yahooSearchSwitchPrompt: undefined,
       yahooPaidSearchRewardOptIn: true,
+      searchEngine: 'Google',
     }
-
     const result = await getShouldShowYahooPrompt(userContext, optedInUser)
     expect(result).toEqual(false)
+  })
+
+  it('still returns true if the user is already using the charitable search engine', async () => {
+    expect.assertions(1)
+    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
+      .default
+    getUserFeature
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_EXISTING_USERS,
+          variation: true,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      )
+    const optedInUser = {
+      ...user,
+      yahooSearchSwitchPrompt: undefined,
+      yahooPaidSearchRewardOptIn: false,
+      searchEngine: 'SearchForACause',
+    }
+    const result = await getShouldShowYahooPrompt(userContext, optedInUser)
+    expect(result).toEqual(true)
   })
 })
