@@ -23,7 +23,6 @@ import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
-import Link from 'js/components/General/Link'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
@@ -40,6 +39,7 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
+  STORAGE_TREES_CAUSE_ID,
 } from 'js/constants'
 import {
   goTo,
@@ -47,7 +47,6 @@ import {
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
-  donateURL,
 } from 'js/navigation/navigation'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import {
@@ -74,6 +73,7 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
+import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -504,26 +504,27 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Support the people of Ukraine`}
+                  title={`Help plant trees this Arbor Day`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        The people of Ukraine deserve ongoing and comprehensive
-                        support in the wake of war. Join us on Tab for Ukraine
-                        to provide basic needs to vulnerable families, including
-                        food, shelter, clothing, cash grants, and medicine.
+                        Want to use your tabs to plant trees around the world?
+                        Try Tab for Trees! 🌳
                       </Typography>
                       <Typography variant={'body2'}>
-                        To join in, click “Try Tab for Ukraine” on your{' '}
-                        <Link to={donateURL} style={{ color: '#9d4ba3' }}>
-                          donate hearts page
-                        </Link>
-                        .
+                        Tab for Trees is still in beta: some features like
+                        bookmarks are missing, but you can always switch back.
                       </Typography>
                     </>
                   }
-                  // buttonText={'Vote'}
-                  // buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
+                  buttonText={'Try Tab for Trees'}
+                  onClick={() => {
+                    switchToV4({
+                      relayEnvironment: this.props.relay.environment,
+                      userId: user.id,
+                      causeId: STORAGE_TREES_CAUSE_ID,
+                    })
+                  }}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
