@@ -48,26 +48,27 @@ const features = {
       },
     ],
   },
+  // TODO: remove feature flag references
   'user-survey-2022-notification': {
     defaultValue: false,
-    rules: [
-      {
-        // Show on dev for our team only.
-        condition: {
-          isTabTeamMember: true,
-          env: 'dev',
-        },
-        force: true,
-      },
-      {
-        condition: {
-          tabs: {
-            $gte: 10,
-          },
-        },
-        force: true,
-      },
-    ],
+    // rules: [
+    //   {
+    //     // Show on dev for our team only.
+    //     condition: {
+    //       isTabTeamMember: true,
+    //       env: 'dev',
+    //     },
+    //     force: true,
+    //   },
+    //   {
+    //     condition: {
+    //       tabs: {
+    //         $gte: 10,
+    //       },
+    //     },
+    //     force: true,
+    //   },
+    // ],
   },
   [YAHOO_SEARCH_EXISTING_USERS]: {
     defaultValue: false,
