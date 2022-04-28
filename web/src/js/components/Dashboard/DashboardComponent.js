@@ -521,55 +521,6 @@ class Dashboard extends React.Component {
                         .
                       </Typography>
                     </>
-
-                    //                 <Notification
-                    //                   data-test-id={'global-notification'}
-                    //                   useGlobalDismissalTime
-                    //                   title={`Vote for the January Charity Spotlight`}
-                    //                   message={
-                    //                     <>
-                    //                       <Typography variant={'body2'} gutterBottom>
-                    //                         Let us know what nonprofit we should spotlight this
-                    //                         month!
-                    //                       </Typography>
-                    //
-                    //                       <Typography variant={'body2'}>
-                    //                         Have a suggestion for an organization you'd like to see
-                    //                         in the future?{' '}
-                    //                         <Link
-                    //                           to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
-                    //                           target="_blank"
-                    //                           style={{ color: '#9d4ba3' }}
-                    //                         >
-                    //                           Tell us here.
-                    //                         </Link>
-                    //                       </Typography>
-                    //                     </>
-
-                    /***** Social *****/
-                    // <Link
-                    //   to={'https://www.instagram.com/tabforacause/'}
-                    //   target="_blank"
-                    //   style={{ color: '#9d4ba3' }}
-                    // >
-                    //   Instagram
-                    // </Link>
-                    // ,{' '}
-                    // <Link
-                    //   to={'https://www.tiktok.com/@tabforacause'}
-                    //   target="_blank"
-                    //   style={{ color: '#9d4ba3' }}
-                    // >
-                    //   TikTok
-                    // </Link>
-                    // , or{' '}
-                    // <Link
-                    //   to={'https://twitter.com/TabForACause'}
-                    //   target="_blank"
-                    //   style={{ color: '#9d4ba3' }}
-                    // >
-                    //   Twitter
-                    // </Link>{' '}
                   }
                   // buttonText={'Vote'}
                   // buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
@@ -583,6 +534,69 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
+
+              {/*** Charity spotlight voting ***
+              {this.state.showNotification ? (
+                <Notification
+                  data-test-id={'global-notification'}
+                  useGlobalDismissalTime
+                  title={`Vote for the January Charity Spotlight`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        Let us know what nonprofit we should spotlight this
+                        month!
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        Have a suggestion for an organization you'd like to see
+                        in the future?{' '}
+                        <Link
+                          to={'https://forms.gle/Do6qW37VPDL5Wavg9'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Tell us here.
+                        </Link>
+                      </Typography>
+                    </>
+                  }
+                  // <Link
+                  //   to={'https://www.instagram.com/tabforacause/'}
+                  //   target="_blank"
+                  //   style={{ color: '#9d4ba3' }}
+                  // >
+                  //   Instagram
+                  // </Link>
+                  // ,{' '}
+                  // <Link
+                  //   to={'https://www.tiktok.com/@tabforacause'}
+                  //   target="_blank"
+                  //   style={{ color: '#9d4ba3' }}
+                  // >
+                  //   TikTok
+                  // </Link>
+                  // , or{' '}
+                  // <Link
+                  //   to={'https://twitter.com/TabForACause'}
+                  //   target="_blank"
+                  //   style={{ color: '#9d4ba3' }}
+                  // >
+                  //   Twitter
+                  // </Link>{' '}
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
+                  onDismiss={() => {
+                    this.setState({
+                      showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+              */}
               {// @experiment-referral-notification
               isInReferralNotificationExperimentalGroup &&
               !(
