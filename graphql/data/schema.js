@@ -2819,6 +2819,10 @@ const createSearchEnginePromptLogMutation = mutationWithClientMutationId({
     success: {
       type: new GraphQLNonNull(GraphQLBoolean),
     },
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
   },
   mutateAndGetPayload: (
     { userId, searchEnginePrompted, switched },

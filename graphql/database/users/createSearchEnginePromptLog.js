@@ -17,18 +17,17 @@ export default async (userContext, userId, searchEnginePrompted, switched) => {
       switched,
       timestamp: moment.utc().toISOString(),
     })
-    if (searchEnginePrompted === 'SearchForACause') {
-      await UserModel.update(userContext, {
-        id: userId,
-        yahooSearchSwitchPrompt: {
-          hasRespondedToPrompt: true,
-          timestamp: moment.utc().toISOString(),
-        },
-      })
-    }
+
+    // todo: @jedtan Clean up if we use this for different search engines.
+    const updatedUser = await UserModel.update(userContext, {
+      id: userId,
+      yahooSearchSwitchPrompt: {
+        hasRespondedToPrompt: true,
+        timestamp: moment.utc().toISOString(),
+      },
+    })
+    return { success: true, user: updatedUser }
   } catch (e) {
     throw e
   }
-
-  return { success: true }
 }
