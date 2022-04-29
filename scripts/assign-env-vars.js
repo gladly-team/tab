@@ -10,8 +10,6 @@ export const envVars = [
   { name: 'NODE_ENV' },
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
-  { name: 'AWS_ACCESS_KEY_ID' },
-  { name: 'AWS_SECRET_ACCESS_KEY' },
   { name: 'LOG_LEVEL' },
   // Web app
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
