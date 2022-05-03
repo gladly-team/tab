@@ -7,13 +7,13 @@ const data = {
   id: '4mC9rt2rb',
   about:
     '### About Tab for Global Health\n\n**Tab for Global Health** is proud to support [Partners In Health](https://www.pih.org/) and Dr. Paul Farmer’s legacy. With each tab opened, you are helping provide access to health care to those in need and strengthening public health systems all around the world. \n \nPartners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.\n \nThey draw on the resources of the world’s leading medical and academic institutions and on the lived experience of the world’s most impoverished communities. At its root, their mission is both medical and moral. It is based on solidarity, rather than charity alone.\n \nWhen their patients are ill and have no access to care, their team of health professionals, scholars, and activists will do whatever it takes to make them well.\n \nPartners In Health has used a community-based model to provide health care and support for the last 30 years and now serves millions of patients across 12 countries.\n \n**Your tabs are making an impact**. The counter on your new tab page (with the medical bag icon) estimates how many in-home visits from a [community health worker](https://www.pih.org/programs/community-health-workers) your tabs have helped support.  Each counter increment represents raising ~1/50th of the money needed to support an in-home visit. Thank you for making a difference!',
-  name: 'Global Health',
+  name: 'Reproductive Health',
   isAvailableToSelect: false,
-  icon: 'medical-bag',
+  icon: 'person-heart',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
   individualImpactEnabled: false,
-  impactVisits: 131,
+  impactVisits: null,
   landingPagePath: '/reproductive-health/',
   slug: 'reproductive-health',
   onboarding: {
@@ -21,13 +21,13 @@ const data = {
       {
         title: '### Your tabs are doing great things',
         subtitle:
-          'Now, every tab you open helps train and support community healthcare workers to provide at-home visits.\n\nTabbers like you are supporting critical nonprofit work all around the world. Thank you!\n\n',
+          'Now, every tab you open supports protecting and providing reproductive health access.\n\nTabbers like you are supporting critical nonprofit work in places where reproductive health care is under attack. Thank you!\n\n',
         imgName: 'reproductiveHealth/onboarding1.svg',
       },
       {
         title: '### Do more with your squad',
         subtitle:
-          'With your squad, help even more people access safe health care!\n\nYou and your friends can team up to do more good.\n\n',
+          'Support reproductive health care with a squad!\n\nYou and your friends can team up to do more good.\n\n',
         imgName: 'reproductiveHealth/onboarding2.svg',
       },
       {
@@ -44,26 +44,26 @@ const data = {
       '##### Everyone can and _should_ make a difference: invite a friend to join in.\n\n',
     shareImage: 'sharing.svg',
     sentImage: 'sharing.svg',
-    imgCategory: 'global-health',
+    imgCategory: 'reproductive-health', // TODO: deprecate
     email: {
       image: 'https://prod-tab2017-media.gladly.io/img/cause/emailInvite.jpg',
       title:
-        'With Tab for Global Health, supporting healthcare access has never been easier.',
+        'Reproductive health care is under attack. Put your tabs into the fight.',
       about:
-        '<div>Tab for Global Health turns your web browser into a force for good. With each tab opened, ad revenue supports community healthcare training through Partners In Health. This training helps ensure the people in need of care will receive it, long term.</div>\n\n',
+        '<div>Tab for Reproductive Health turns your browser into a force for good. With each tab you open, you can support nonprofits providing reproductive health services and advocating for policy change.</div>\n\n',
       faq:
-        'We’re partnered with Partners In Health to ensure the money raised will directly support their mission of providing high-quality health care globally to those who need it.',
+        'We’re supporting Planned Parenthood and Center for Reproductive Rights, ensuring the money raised will make a difference.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     facebookButtonTitle:
-      'People around the world are struggling to access safe and reliable healthcare, but this is a problem we can all help solve. Now, with Tab for Global Health, every tab I open helps raise money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
+      'Reproductive health care is under attack. Now, every tab I open raises money for nonprofit organizations protecting and providing access to reproductive health care. Check it out - it’s free!',
     twitterButtonTitle:
-      'People around the world are struggling to access quality health care, but this is a problem we can solve. Now, with Tab for Global Health, every tab I open raises money for Partners In Health to train community healthcare workers. Check it out - it’s free!',
-    redditButtonTitle: 'Help provide quality healthcare around the world',
-    tumblrTitle: 'Help provide quality healthcare around the world ',
+      'Reproductive health care is under attack. Now, every tab I open raises money for nonprofit organizations protecting and providing access to reproductive health care. Check it out - it’s free!',
+    redditButtonTitle: 'Protect access to safe reproductive health care',
+    tumblrTitle: 'Protect access to safe reproductive health care',
     tumblrCaption:
-      'Every time I open a new tab with Tab for Global Health I am raising money to train healthcare workers through Partners In Health. Join today for free! ',
+      'Reproductive health care is under attack. Now, every tab I open raises money for nonprofit organizations protecting and providing access to reproductive health care. Check it out - it’s free!',
   },
   // TODO
   squads: {
