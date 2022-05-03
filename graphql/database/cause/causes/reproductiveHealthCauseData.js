@@ -22,19 +22,19 @@ const data = {
         title: '### Your tabs are doing great things',
         subtitle:
           'Now, every tab you open helps train and support community healthcare workers to provide at-home visits.\n\nTabbers like you are supporting critical nonprofit work all around the world. Thank you!\n\n',
-        imgName: 'globalHealth/onboarding1.svg',
+        imgName: 'reproductiveHealth/onboarding1.svg',
       },
       {
         title: '### Do more with your squad',
         subtitle:
           'With your squad, help even more people access safe health care!\n\nYou and your friends can team up to do more good.\n\n',
-        imgName: 'globalHealth/onboarding2.svg',
+        imgName: 'reproductiveHealth/onboarding2.svg',
       },
       {
         title: "### It doesn't cost you a thing",
         subtitle:
           "Ads on the new tab page raise money that we give to nonprofits. Most ads aren't good—but these ones are :)\n\n",
-        imgName: 'globalHealth/onboarding3.svg',
+        imgName: 'reproductiveHealth/onboarding3.svg',
       },
     ],
   },
@@ -42,12 +42,11 @@ const data = {
     title: '### **Get a friend on board**',
     subtitle:
       '##### Everyone can and _should_ make a difference: invite a friend to join in.\n\n',
-    shareImage: 'globalHealth/sharing.svg',
-    sentImage: 'globalHealth/sharing.svg',
+    shareImage: 'sharing.svg',
+    sentImage: 'sharing.svg',
     imgCategory: 'global-health',
     email: {
-      image:
-        'https://prod-tab2017-media.gladly.io/img/cause/globalHealth/emailInvite.jpg',
+      image: 'https://prod-tab2017-media.gladly.io/img/cause/emailInvite.jpg',
       title:
         'With Tab for Global Health, supporting healthcare access has never been easier.',
       about:
