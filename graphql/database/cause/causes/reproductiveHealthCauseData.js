@@ -1,47 +1,21 @@
-// Cause: global health
+// Cause: Reproductive Health
 
 // We have a little templating "engine" that replaces placeholders.
 /* eslint no-template-curly-in-string: 0 */
 
 const data = {
-  id: 'sPFpWRT7q',
+  id: '4mC9rt2rb',
   about:
     '### About Tab for Global Health\n\n**Tab for Global Health** is proud to support [Partners In Health](https://www.pih.org/) and Dr. Paul Farmer’s legacy. With each tab opened, you are helping provide access to health care to those in need and strengthening public health systems all around the world. \n \nPartners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.\n \nThey draw on the resources of the world’s leading medical and academic institutions and on the lived experience of the world’s most impoverished communities. At its root, their mission is both medical and moral. It is based on solidarity, rather than charity alone.\n \nWhen their patients are ill and have no access to care, their team of health professionals, scholars, and activists will do whatever it takes to make them well.\n \nPartners In Health has used a community-based model to provide health care and support for the last 30 years and now serves millions of patients across 12 countries.\n \n**Your tabs are making an impact**. The counter on your new tab page (with the medical bag icon) estimates how many in-home visits from a [community health worker](https://www.pih.org/programs/community-health-workers) your tabs have helped support.  Each counter increment represents raising ~1/50th of the money needed to support an in-home visit. Thank you for making a difference!',
   name: 'Global Health',
-  isAvailableToSelect: true,
+  isAvailableToSelect: false,
   icon: 'medical-bag',
   backgroundImageCategory: 'trees', // TODO: update with new collection
-  charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705',
-  individualImpactEnabled: true,
+  charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
+  individualImpactEnabled: false,
   impactVisits: 131,
-  landingPagePath: '/global-health/',
-  slug: 'global-health',
-  impact: {
-    impactCounterText:
-      '##### **Your positive impact!**\n\nThis counter shows your progress toward helping provide an at-home medical visit. Every tab you open helps. Keep it up!\n\n',
-    claimImpactSubtitle:
-      '##### You did it! Your tabs are on their way to providing an at-home medical visit.',
-    impactIcon: 'medical-bag',
-    // @feature/generalize-referral-reward
-    // Note: this is not used until we generalize referral incentives:
-    // https://github.com/gladly-team/tab/blob/master/graphql/database/users/rewardReferringUser.js#L91
-    referralRewardNotification:
-      '##### Congrats! You recruited a friend to help provide access to health care around the world.\n\n',
-    // Note: this is not used until we generalize referral incentives.
-    // @feature/generalize-referral-reward
-    referralRewardTitle: '#### You just moved global health forward!\n\n',
-    referralRewardSubtitle:
-      "##### Congratulations! You're making a huge impact to support the wellbeing of people around the world. Want to do more? Invite a few more friends!\n\n",
-    impactWalkthroughText:
-      "##### When you do, you’ll help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
-    // @feature/generalize-referral-reward
-    // Note: this is not used until we generalize referral incentives.
-    newlyReferredImpactWalkthroughText:
-      "##### Your friend has started you off with some impact! Open a new tab now to help provide at-home healthcare visits to people in need. We'll track your progress at the top of the page:\n\n",
-    confirmImpactSubtitle:
-      "##### Each time you open a tab, you'll be helping provide at-home healthcare visits through Partners In Health. Ready to get started?\n\n",
-    // walkMeGif: undefined,
-  },
+  landingPagePath: '/reproductive-health/',
+  slug: 'reproductive-health',
   onboarding: {
     steps: [
       {
