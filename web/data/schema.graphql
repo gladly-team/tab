@@ -1552,7 +1552,7 @@ type User implements Node {
   hasSeenSquads: Boolean!
 
   """feature values for this specific user"""
-  features: [Feature]
+  features: [Feature]!
 
   """the User’s search engine"""
   searchEngine: SearchEngine
