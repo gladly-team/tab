@@ -135,7 +135,6 @@ const features = {
       },
     ],
   },
-  // TODO: enable when ready
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: false,
     rules: [
@@ -165,16 +164,16 @@ const features = {
         force: false,
       },
       /* End internal overrides */
-      // {
-      //   variations: [false, true],
-      //   weights: [0.5, 0.5],
-      //   coverage: 1,
-      //   condition: {
-      //     v4BetaEnabled: {
-      //       $eq: true,
-      //     },
-      //   },
-      // },
+      {
+        variations: [false, true],
+        weights: [0.5, 0.5],
+        coverage: 1,
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+        },
+      },
     ],
   },
 }
