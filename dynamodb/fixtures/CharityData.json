@@ -559,5 +559,19 @@
     "updated": "2022-02-24T10:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "ba4c2888-1d89-4c68-a47d-4f15f1445b6a",
+    "name": "Planned Parenthood & Center for Reproductive Rights",
+    "category": "Health",
+    "logo": "--",
+    "image": "--",
+    "website": "--",
+    "impact": "--",
+    "description": "--",
+    "created": "2022-05-03T10:00:00.000Z",
+    "updated": "2022-05-03T10:00:00.000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
