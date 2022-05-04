@@ -741,7 +741,7 @@ const userType = new GraphQLObjectType({
       description: 'whether a v4 user has been introduced to squads in the ui',
     },
     features: {
-      type: new GraphQLList(featureType),
+      type: new GraphQLNonNull(new GraphQLList(featureType)),
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context.user, user),
     },

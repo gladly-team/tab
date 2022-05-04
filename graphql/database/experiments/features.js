@@ -2,6 +2,7 @@ import {
   MONEY_RAISED_EXCLAMATION_POINT_V2,
   YAHOO_SEARCH_EXISTING_USERS,
   YAHOO_SEARCH_NEW_USERS,
+  SUPPORTING_CAUSE_CHIP,
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
@@ -127,6 +128,47 @@ const features = {
           joined: {
             $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
           },
+          v4BetaEnabled: {
+            $eq: true,
+          },
+        },
+      },
+    ],
+  },
+  [SUPPORTING_CAUSE_CHIP]: {
+    defaultValue: false,
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${SUPPORTING_CAUSE_CHIP}`]: {
+            $eq: true,
+            $exists: true,
+          },
+        },
+        force: true,
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${SUPPORTING_CAUSE_CHIP}`]: {
+            $eq: false,
+            $exists: true,
+          },
+        },
+        force: false,
+      },
+      /* End internal overrides */
+      {
+        variations: [false, true],
+        weights: [0.5, 0.5],
+        coverage: 1,
+        condition: {
           v4BetaEnabled: {
             $eq: true,
           },
