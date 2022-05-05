@@ -14,6 +14,7 @@ import blackEquityImage from 'js/assets/blackEquity.png'
 import globalHealthImage from 'js/assets/globalHealth.png'
 import ukraineImage from 'js/assets/ukraine.png'
 import endingHungerImage from 'js/assets/endingHunger.png'
+import reproductiveHealthImage from 'js/assets/reproductiveHealth.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
@@ -22,9 +23,8 @@ import {
   STORAGE_GLOBAL_HEALTH_CAUSE_ID,
   STORAGE_ENDING_HUNGER_CAUSE_ID,
   STORAGE_UKRAINE_CAUSE_ID,
+  STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
 } from 'js/constants'
-
-const SHOW_ENDING_HUNGER = true
 
 const spacingPx = 6
 
@@ -77,11 +77,11 @@ class ProfileDonateHearts extends React.Component {
         <span className={classes.charitiesContainer}>
           <SwitchToV4
             user={user}
-            title="Support Ukraine (Beta)"
-            causeId={STORAGE_UKRAINE_CAUSE_ID}
-            causeName="Tab for Ukraine"
-            causeShortDesc="Open new tabs, raise money to support Ukrainian families."
-            imgSrc={ukraineImage}
+            title="Support Reproductive Health"
+            causeId={STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID}
+            causeName="Tab for Reproductive Health"
+            causeShortDesc="Protect and provide access to reproductive health care."
+            imgSrc={reproductiveHealthImage}
           />
           {app.charities.edges.map(edge => {
             return (
@@ -96,6 +96,14 @@ class ProfileDonateHearts extends React.Component {
               />
             )
           })}
+          <SwitchToV4
+            user={user}
+            title="Support Ukraine (Beta)"
+            causeId={STORAGE_UKRAINE_CAUSE_ID}
+            causeName="Tab for Ukraine"
+            causeShortDesc="Open new tabs, raise money to support Ukrainian families."
+            imgSrc={ukraineImage}
+          />
           <SwitchToV4
             user={user}
             title="Support Global Health (Beta)"
@@ -136,16 +144,14 @@ class ProfileDonateHearts extends React.Component {
             causeShortDesc="Open tabs, remove trash from our seas!"
             imgSrc={seasImage}
           />
-          {SHOW_ENDING_HUNGER && (
-            <SwitchToV4
-              user={user}
-              title="Help End Hunger (Beta)"
-              causeId={STORAGE_ENDING_HUNGER_CAUSE_ID}
-              causeName="Tab for Ending Hunger"
-              causeShortDesc="Help people facing severe hunger."
-              imgSrc={endingHungerImage}
-            />
-          )}
+          <SwitchToV4
+            user={user}
+            title="Help End Hunger (Beta)"
+            causeId={STORAGE_ENDING_HUNGER_CAUSE_ID}
+            causeName="Tab for Ending Hunger"
+            causeShortDesc="Help people facing severe hunger."
+            imgSrc={endingHungerImage}
+          />
         </span>
       </div>
     )

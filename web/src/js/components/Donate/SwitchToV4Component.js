@@ -43,9 +43,9 @@ class SwitchToV4Component extends React.Component {
             }}
           >
             <img
-              alt={`Logo for the charity ${causeName}`}
+              alt={`Logo for${causeName}`}
               style={{
-                cursor: 'pointer',
+                cursor: 'default',
                 maxWidth: '100%',
                 minWidth: '100%',
                 maxHeight: '150px',
