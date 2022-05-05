@@ -82,6 +82,7 @@ export const STORAGE_BLACK_EQUITY_CAUSE_ID = 'q1FFsAhbV'
 export const STORAGE_GLOBAL_HEALTH_CAUSE_ID = 'sPFpWRT7q'
 export const STORAGE_ENDING_HUNGER_CAUSE_ID = '1HCq9sFTp'
 export const STORAGE_UKRAINE_CAUSE_ID = 'JmClR7bmy'
+export const STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID = '4mC9rt2rb'
 export const STORAGE_REFERRAL_DATA_MISSION_ID = 'tab.referralData.missionId'
 // tab.experiments: values related to split-testing features
 // We may assign other values to localStorage with the tab.experiments.*
