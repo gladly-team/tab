@@ -24,8 +24,6 @@ import {
   STORAGE_UKRAINE_CAUSE_ID,
 } from 'js/constants'
 
-const SHOW_ENDING_HUNGER = true
-
 const spacingPx = 6
 
 const styles = theme => ({
@@ -136,16 +134,14 @@ class ProfileDonateHearts extends React.Component {
             causeShortDesc="Open tabs, remove trash from our seas!"
             imgSrc={seasImage}
           />
-          {SHOW_ENDING_HUNGER && (
-            <SwitchToV4
-              user={user}
-              title="Help End Hunger (Beta)"
-              causeId={STORAGE_ENDING_HUNGER_CAUSE_ID}
-              causeName="Tab for Ending Hunger"
-              causeShortDesc="Help people facing severe hunger."
-              imgSrc={endingHungerImage}
-            />
-          )}
+          <SwitchToV4
+            user={user}
+            title="Help End Hunger (Beta)"
+            causeId={STORAGE_ENDING_HUNGER_CAUSE_ID}
+            causeName="Tab for Ending Hunger"
+            causeShortDesc="Help people facing severe hunger."
+            imgSrc={endingHungerImage}
+          />
         </span>
       </div>
     )
