@@ -7,6 +7,7 @@ import {
   UserReachedMaxLevelException,
   UserDoesNotExistException,
   EmptyOperationStackException,
+  FieldDoesNotExistException,
 } from '../exceptions'
 
 describe('custom exceptions', () => {
@@ -38,5 +39,10 @@ describe('custom exceptions', () => {
   test('EmptyOperationStackException has expected code', () => {
     const err = new EmptyOperationStackException()
     expect(err.code).toBe('OPERATION_STACK_IS_EMPTY')
+  })
+
+  test('FieldDoesNotExistException has expected code', () => {
+    const err = new FieldDoesNotExistException()
+    expect(err.code).toBe('FIELD_DOES_NOT_EXIST')
   })
 })
