@@ -78,6 +78,9 @@ export const envVars = [
   { name: 'SELENIUM_HOST', optional: true },
   { name: 'BROWSERSTACK_USER', optional: true },
   { name: 'BROWSERSTACK_KEY', optional: true },
+  // Upstash/Redis
+  { name: 'UPSTASH_HOST' },
+  { name: 'UPSTASH_PASSWORD' },
 ]
 
 // Expect one argument, the stage name.

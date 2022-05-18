@@ -83,6 +83,18 @@ class UserDoesNotExistException extends ExtendableError {
   }
 }
 
+const FIELD_DOES_NOT_EXIST = 'FIELD_DOES_NOT_EXIST'
+class FieldDoesNotExistException extends ExtendableError {
+  constructor() {
+    super('Provided field does not exist on the provided model.')
+    this.code = FIELD_DOES_NOT_EXIST
+  }
+
+  static get code() {
+    return FIELD_DOES_NOT_EXIST
+  }
+}
+
 // For tests.
 class MockDatabaseException extends ExtendableError {}
 
@@ -108,4 +120,5 @@ export {
   UserReachedMaxLevelException,
   UserDoesNotExistException,
   EmptyOperationStackException,
+  FieldDoesNotExistException,
 }
