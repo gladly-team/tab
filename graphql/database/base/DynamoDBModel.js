@@ -1,12 +1,11 @@
 import { has } from 'lodash/object'
-import { isNil } from 'lodash/lang'
 import Model from './Model'
 import dynogels from './dynogels-promisified'
 import dbClient from '../databaseClient'
 import types from '../fieldTypes'
 import {
   DatabaseConditionalCheckFailedException,
-  DatabaseItemDoesNotExistException,
+  NotImplementedException,
   UnauthorizedQueryException,
 } from '../../utils/exceptions'
 
@@ -60,6 +59,15 @@ class DynamoDBModel extends Model {
   }
 
   /**
+   * The name of the database table.
+   * You are required to override this function on the child class.
+   * @return {string} The name of the database table.
+   */
+  static get tableName() {
+    throw new NotImplementedException()
+  }
+
+  /**
    * Any secondary indexes on the model.
    * See:
    *   https://github.com/clarkie/dynogels#global-indexes
@@ -99,26 +107,6 @@ class DynamoDBModel extends Model {
       // Receives: userContext, hashKeyValue, rangeKeyValue, item
       create: () => false,
       indexPermissions: {},
-    }
-  }
-
-  static async get(userContext, hashKey, rangeKey) {
-    const keys = [hashKey]
-    if (rangeKey) {
-      keys.push(rangeKey)
-    }
-    // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
-    if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
-      throw new UnauthorizedQueryException()
-    }
-    try {
-      const data = await this.dynogelsModel.getAsync(...keys)
-      if (isNil(data)) {
-        throw new DatabaseItemDoesNotExistException()
-      }
-      return this.deserialize(data)
-    } catch (e) {
-      throw e
     }
   }
 

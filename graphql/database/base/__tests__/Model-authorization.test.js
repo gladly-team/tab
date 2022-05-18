@@ -7,7 +7,7 @@ jest.mock('../../databaseClient')
 
 const user = getMockUserContext()
 
-describe('BaseModel `isQueryAuthorized` method', () => {
+describe('Model `isQueryAuthorized` method', () => {
   beforeEach(() => {
     // Mock a valid permissions override.
     jest.mock('../../../utils/permissions-overrides', () => ({
@@ -257,7 +257,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   })
 })
 
-describe('BaseModel calls to `isQueryAuthorized`', () => {
+describe('Model calls to `isQueryAuthorized`', () => {
   afterEach(() => {
     jest.resetModules()
   })

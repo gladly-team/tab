@@ -12,7 +12,7 @@ describe('BaseModel required properties', () => {
     delete TestModel.name
     expect(() => {
       TestModel.register()
-    }).toThrow()
+    }).toThrow('Model is missing a required field (schema, hashKey or name)')
   })
 
   it('fails if "hashKey" property is not set', () => {
@@ -20,15 +20,7 @@ describe('BaseModel required properties', () => {
     delete TestModel.hashKey
     expect(() => {
       TestModel.register()
-    }).toThrow()
-  })
-
-  it('fails if "tableName" property is not set', () => {
-    const TestModel = require('../test-utils/ExampleModelV2').default
-    delete TestModel.tableName
-    expect(() => {
-      TestModel.register()
-    }).toThrow()
+    }).toThrow('Model is missing a required field (schema, hashKey or name)')
   })
 
   it('fails if "schema" property is not set', () => {
@@ -36,7 +28,7 @@ describe('BaseModel required properties', () => {
     delete TestModel.schema
     expect(() => {
       TestModel.register()
-    }).toThrow()
+    }).toThrow('Model is missing a required field (schema, hashKey or name)')
   })
 
   it('fails if "schema" property is not set', () => {
@@ -44,13 +36,15 @@ describe('BaseModel required properties', () => {
     delete TestModel.schema
     expect(() => {
       TestModel.register()
-    }).toThrow()
+    }).toThrow('Model is missing a required field (schema, hashKey or name)')
   })
 
   it('succeeds normally', () => {
     const TestModel = require('../test-utils/ExampleModelV2').default
     expect(() => {
       TestModel.register()
-    }).not.toThrow()
+    }).not.toThrow(
+      'Model is missing a required field (schema, hashKey or name)'
+    )
   })
 })

@@ -69,13 +69,18 @@ class Model {
   }
 
   static register() {
-    // Kind of dumb logic for now, just makes sure all expected internal methods are defined.
-    /* eslint-disable no-unused-expressions */
-    this.schema
-    this.hashKey
-    this.tableName
-    this.name
-    /* eslint-enable no-unused-expressions */
+    try {
+      // Kind of dumb logic for now, just makes sure all expected internal methods are defined.
+      /* eslint-disable no-unused-expressions */
+      this.schema
+      this.hashKey
+      this.name
+      /* eslint-enable no-unused-expressions */
+    } catch (e) {
+      throw new Error(
+        'Model is missing a required field (schema, hashKey or name)'
+      )
+    }
   }
 
   /**
@@ -84,15 +89,6 @@ class Model {
    * @return {string} The name of the model.
    */
   static get name() {
-    throw new NotImplementedException()
-  }
-
-  /**
-   * The name of the database table.
-   * You are required to override this function on the child class.
-   * @return {string} The name of the database table.
-   */
-  static get tableName() {
     throw new NotImplementedException()
   }
 
@@ -185,7 +181,7 @@ class Model {
       throw new UnauthorizedQueryException()
     }
     try {
-      const data = await this.getInternal(...keys)
+      const data = await this.getInternal(keys)
       if (isNil(data)) {
         throw new DatabaseItemDoesNotExistException()
       }

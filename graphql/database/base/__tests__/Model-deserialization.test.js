@@ -5,7 +5,7 @@ import { setModelGetterField } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-describe('BaseModel deserialization', () => {
+describe('Model deserialization', () => {
   it('deserializes to the correct instance type', () => {
     const item = {
       attrs: fixturesA[0],

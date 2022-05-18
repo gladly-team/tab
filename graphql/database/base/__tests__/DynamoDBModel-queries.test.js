@@ -54,7 +54,7 @@ afterEach(() => {
   })
 })
 
-describe('BaseModel queries', () => {
+describe('DynamoDBModel queries', () => {
   it('correctly fetches with `getAll` method', async () => {
     setModelPermissions(ExampleDynamoDBModel, {
       getAll: () => true,
