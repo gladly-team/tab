@@ -1,13 +1,14 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { VC_DONATION } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class VCDonation extends BaseModel {
+class VCDonation extends DynamoDBModel {
   static get name() {
     return VC_DONATION
   }

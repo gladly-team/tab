@@ -1,13 +1,13 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { REFERRAL_LINK_CLICK_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class ReferralLinkClickLog extends BaseModel {
+class ReferralLinkClickLog extends DynamoDBModel {
   static get name() {
     return REFERRAL_LINK_CLICK_LOG
   }

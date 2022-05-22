@@ -1,12 +1,12 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_LEVEL } from '../constants'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class UserLevel extends BaseModel {
+class UserLevel extends DynamoDBModel {
   static get name() {
     return USER_LEVEL
   }

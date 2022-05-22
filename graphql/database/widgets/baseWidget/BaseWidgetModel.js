@@ -1,12 +1,12 @@
-import BaseModel from '../../base/BaseModel'
+import DynamoDBModel from '../../base/DynamoDBModel'
 import types from '../../fieldTypes'
 import tableNames from '../../tables'
 import { BASE_WIDGET } from '../../constants'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class BaseWidget extends BaseModel {
+class BaseWidget extends DynamoDBModel {
   static get name() {
     return BASE_WIDGET
   }

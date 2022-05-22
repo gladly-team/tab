@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import {
@@ -20,9 +20,10 @@ import { VALID_SEARCH_ENGINES } from '../search/searchEngineData'
 const mediaRoot = config.MEDIA_ENDPOINT
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class User extends BaseModel {
+class User extends DynamoDBModel {
   static get name() {
     return USER
   }

@@ -1,4 +1,4 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { CHARITY } from '../constants'
@@ -8,9 +8,10 @@ const mediaRoot = config.MEDIA_ENDPOINT
 
 /*
  * Represents a Charity.
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class Charity extends BaseModel {
+class Charity extends DynamoDBModel {
   static get name() {
     return CHARITY
   }

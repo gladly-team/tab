@@ -1,13 +1,13 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { INVITED_USERS } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class InvitedUsers extends BaseModel {
+class InvitedUsers extends DynamoDBModel {
   static get name() {
     return INVITED_USERS
   }

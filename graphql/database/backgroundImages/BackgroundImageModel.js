@@ -1,4 +1,4 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import {
@@ -10,9 +10,9 @@ import config from '../../config'
 const mediaRoot = config.MEDIA_ENDPOINT
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class BackgroundImage extends BaseModel {
+class BackgroundImage extends DynamoDBModel {
   static get name() {
     return BACKGROUND_IMAGE
   }
