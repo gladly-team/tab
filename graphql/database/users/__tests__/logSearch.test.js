@@ -15,7 +15,9 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
+import getUserSearchEngine from '../getUserSearchEngine'
 
+jest.mock('../getUserSearchEngine')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../checkSearchRateLimit')
@@ -37,6 +39,9 @@ const mockCheckSearchRateLimitResponse = overrides =>
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
     mockCurrentTimeOnly: true,
+  })
+  getUserSearchEngine.mockResolvedValue({
+    id: 'Bing',
   })
 })
 
@@ -128,6 +133,7 @@ describe('logSearch', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        searchEngine: 'Bing',
       })
     )
   })
@@ -378,6 +384,7 @@ describe('logSearch', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         source: 'chrome',
+        searchEngine: 'Bing',
       })
     )
   })
@@ -412,6 +419,7 @@ describe('logSearch', () => {
       addTimestampFieldsToItem({
         userId,
         timestamp: moment.utc().toISOString(),
+        searchEngine: 'Bing',
       })
     )
   })

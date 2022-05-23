@@ -4,6 +4,7 @@ import UserSearchLogModel from './UserSearchLogModel'
 // import addVc from './addVc'
 // import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
+import getUserSearchEngine from './getUserSearchEngine'
 
 /**
  * Log a user's search event and change related stats.
@@ -66,10 +67,12 @@ const logSearch = async (userContext, userId, searchData = {}) => {
       searchData.source && validSearchSources.indexOf(searchData.source) > -1
         ? searchData.source
         : null
+    const searchEngine = await getUserSearchEngine(userContext, user)
     const logPromise = UserSearchLogModel.create(userContext, {
       userId,
       timestamp: moment.utc().toISOString(),
       ...(source && { source }),
+      searchEngine: searchEngine.id,
     })
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {
