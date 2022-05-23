@@ -103,7 +103,7 @@ const features = {
       {
         variations: [false, true],
         weights: [0.5, 0.5],
-        coverage: 0.3,
+        coverage: 1.0,
         condition: {
           joined: {
             $lt: SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME,
