@@ -1,11 +1,12 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import { CAUSE } from '../constants'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class Cause extends BaseModel {
+class Cause extends DynamoDBModel {
   static get name() {
     return CAUSE
   }

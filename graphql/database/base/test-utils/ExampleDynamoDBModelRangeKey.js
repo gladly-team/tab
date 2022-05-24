@@ -1,7 +1,7 @@
 import types from '../../fieldTypes'
-import BaseModel from '../BaseModel'
+import DynamoDBModel from '../DynamoDBModel'
 
-class ExampleDynamoDBModelRangeKey extends BaseModel {
+class ExampleDynamoDBModelRangeKey extends DynamoDBModel {
   static get name() {
     return 'ExampleRangeKey'
   }

@@ -1,13 +1,13 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_DATA_CONSENT } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class UserDataConsent extends BaseModel {
+class UserDataConsent extends DynamoDBModel {
   static get name() {
     return USER_DATA_CONSENT
   }

@@ -1,14 +1,15 @@
 import moment from 'moment'
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_EXPERIMENT } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class UserExperimentModel extends BaseModel {
+class UserExperimentModel extends DynamoDBModel {
   static get name() {
     return USER_EXPERIMENT
   }

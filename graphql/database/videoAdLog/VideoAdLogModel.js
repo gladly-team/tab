@@ -1,14 +1,15 @@
 import moment from 'moment'
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { VIDEO_AD_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class VideoAdLog extends BaseModel {
+class VideoAdLog extends DynamoDBModel {
   static get name() {
     return VIDEO_AD_LOG
   }

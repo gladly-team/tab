@@ -1,12 +1,12 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { MISSION, TAB_GOAL_FOR_TRAINING_SESSION } from '../constants'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class Mission extends BaseModel {
+class Mission extends DynamoDBModel {
   static get name() {
     return MISSION
   }

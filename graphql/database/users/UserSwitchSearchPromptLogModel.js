@@ -1,5 +1,5 @@
 import moment from 'moment'
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_SWITCH_SEARCH_PROMPT_LOG } from '../constants'
@@ -7,9 +7,9 @@ import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import { VALID_SEARCH_ENGINES } from '../search/searchEngineData'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
  */
-class UserSwitchSearchExperimentModel extends BaseModel {
+class UserSwitchSearchExperimentModel extends DynamoDBModel {
   static get name() {
     return USER_SWITCH_SEARCH_PROMPT_LOG
   }

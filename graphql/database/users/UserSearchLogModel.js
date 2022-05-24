@@ -1,4 +1,4 @@
-import BaseModel from '../base/BaseModel'
+import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_SEARCH_LOG } from '../constants'
@@ -6,9 +6,10 @@ import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import { VALID_SEARCH_ENGINES } from '../search/searchEngineData'
 
 /*
- * @extends BaseModel
+ * @extends DynamoDBModel
+
  */
-class UserSearchLog extends BaseModel {
+class UserSearchLog extends DynamoDBModel {
   static get name() {
     return USER_SEARCH_LOG
   }
