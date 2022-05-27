@@ -35,6 +35,7 @@ class UserSearchLog extends DynamoDBModel {
         .required(),
       source: types.string(),
       searchEngine: types.string().valid(VALID_SEARCH_ENGINES),
+      causeId: types.string(),
     }
   }
 
