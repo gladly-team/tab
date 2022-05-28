@@ -24,6 +24,9 @@ class Feature extends BaseModel {
       variation: types
         .any()
         .description('the value of the variation for this specific user'),
+      inExperiment: types
+        .boolean()
+        .description('whether or not the user is currently in the experiment'),
     }
   }
 }

@@ -22,7 +22,10 @@ import {
   clearAllMockDBResponses,
 } from '../../test-utils'
 import Feature from '../../experiments/FeatureModel'
-import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
+import {
+  YAHOO_SEARCH_NEW_USERS,
+  YAHOO_SEARCH_NEW_USERS_V2,
+} from '../../experiments/experimentConstants'
 import databaseClient from '../../databaseClient'
 
 jest.mock('../../databaseClient')
@@ -42,12 +45,18 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  getUserFeature.mockResolvedValueOnce(
-    new Feature({
-      featureName: YAHOO_SEARCH_NEW_USERS,
-      variation: 'SearchForACause',
+  getUserFeature.mockImplementation((context, user, featureName) => {
+    if (featureName === YAHOO_SEARCH_NEW_USERS) {
+      return new Feature({
+        featureName: YAHOO_SEARCH_NEW_USERS,
+        variation: 'SearchForACause',
+      })
+    }
+    return new Feature({
+      featureName: YAHOO_SEARCH_NEW_USERS_V2,
+      variation: 'Tooltip',
     })
-  )
+  })
   setMockDBResponse(DatabaseOperation.UPDATE, {
     // Like original user but with modified email.
     Attributes: getMockUserInstance(),
@@ -59,8 +68,9 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.clearAllMocks()
   clearAllMockDBResponses()
+  jest.restoreAllMocks()
+  jest.clearAllMocks()
 })
 
 function getExpectedCreateItemFromUserInfo(userInfo) {
@@ -1092,7 +1102,7 @@ describe('createUser when user already exists (should be idempotent)', () => {
 
     const updateMethod = jest.spyOn(UserModel, 'update')
 
-    databaseClient.update.mockImplementation((params, callback) => {
+    databaseClient.update.mockImplementationOnce((params, callback) => {
       callback(null, {
         Attributes: {
           ...getMockUserInstance(),
@@ -1114,6 +1124,54 @@ describe('createUser when user already exists (should be idempotent)', () => {
       updated: moment.utc().toISOString(),
     })
 
+    expect(returnedUser.searchEngine).toEqual('SearchForACause')
+  })
+
+  it('sets the search engine correctly if user in v2', async () => {
+    expect.assertions(2)
+
+    getUserFeature.mockImplementation((context, user, featureName) => {
+      if (featureName === YAHOO_SEARCH_NEW_USERS) {
+        return new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS,
+          variation: 'Google',
+        })
+      }
+      return new Feature({
+        featureName: YAHOO_SEARCH_NEW_USERS_V2,
+        variation: 'Tooltip',
+        inExperiment: true,
+      })
+    })
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
+    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
+    const userContext = cloneDeep(defaultUserContext)
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    updateMethod.mockResolvedValue({
+      ...getMockUserInstance(),
+      searchEngine: 'SearchForACause',
+    })
+    const returnedUser = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      null
+    )
+
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: userInfo.id,
+      searchEngine: 'SearchForACause',
+    })
     expect(returnedUser.searchEngine).toEqual('SearchForACause')
   })
 })
