@@ -205,12 +205,12 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
     )
   })
 
-  it('only sets the "q" query string value, ignoring other URL params', () => {
+  it('only sets the "q" query string value, ignoring other unused URL params', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
-    event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=foo'
+    event.Records[0].cf.request.querystring = 'hi=there&q=pizza&blah=foo'
     const context = getMockLambdaContext()
     handler(event, context, callback)
     const response = callback.mock.calls[0][1]
@@ -218,6 +218,21 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&p=pizza'
     )
   })
+
+  // TODO
+  // it('sets the "type" string with an empty cause ID, source of search, and referral ID', () => {
+  //   expect.assertions(1)
+  //   const { handler } = require('../search-app-lambda-edge')
+  //   const defaultEvent = getMockCloudFrontEventObject()
+  //   const event = setEventURI(defaultEvent, searchV2Path)
+  //   event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=foo'
+  //   const context = getMockLambdaContext()
+  //   handler(event, context, callback)
+  //   const response = callback.mock.calls[0][1]
+  //   expect(response.headers.location[0].value).toEqual(
+  //     'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&p=pizza'
+  //   )
+  // })
 
   it('passes the expected header values to `searchURLByRegion`', () => {
     expect.assertions(1)

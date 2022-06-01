@@ -5,6 +5,18 @@ import getSearchEngine from '../search/getSearchEngine'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import getWidgets from '../widgets/getWidgets'
 
+// TODO: document & remove eslint-disable
+// eslint-disable-next-line no-unused-vars
+const generateSearchEngine = (searchEngineId, user) => {
+  const engineData = getSearchEngine(searchEngineId)
+  const personalizedSearchEngine = {
+    ...engineData,
+    // TODO: replace user-aware search URL parameter values:
+    //   &src={source}&c={causeId}&r={referrerId}
+  }
+  return personalizedSearchEngine
+}
+
 /**
  * Fetch the user's search engine by the following procedure:
  * 1. If set on the UserModel, return the value
@@ -19,7 +31,7 @@ import getWidgets from '../widgets/getWidgets'
 const getUserSearchEngine = async (userContext, user) => {
   // 1. If set on the UserModel, return the value
   if (user.searchEngine) {
-    return getSearchEngine(user.searchEngine)
+    return generateSearchEngine(user.searchEngine, user)
   }
 
   // 2. If unset, see if a search widget value is set and migrate it, then return that value
@@ -31,7 +43,7 @@ const getUserSearchEngine = async (userContext, user) => {
   if (maybeSearchWidget.length > 0) {
     const searchWidget = maybeSearchWidget[0]
     try {
-      return getSearchEngine(JSON.parse(searchWidget.config).engine)
+      return generateSearchEngine(JSON.parse(searchWidget.config).engine, user)
     } catch (e) {
       // Don't care if SearchEngine does not exist. This will happen if
       // the user has not explicitly set any search engine, or if a
@@ -49,11 +61,11 @@ const getUserSearchEngine = async (userContext, user) => {
     YAHOO_SEARCH_NEW_USERS
   )
   if (feature) {
-    return getSearchEngine(feature.variation)
+    return generateSearchEngine(feature.variation, user)
   }
 
   // 4. If still unset, return the default search engine
-  return getSearchEngine(DEFAULT_SEARCH_ENGINE)
+  return generateSearchEngine(DEFAULT_SEARCH_ENGINE, user)
 }
 
 export default getUserSearchEngine

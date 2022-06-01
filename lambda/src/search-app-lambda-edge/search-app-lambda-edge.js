@@ -30,6 +30,9 @@ exports.handler = (event, context, callback) => {
     const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
     const acceptLanguageHeader = get(headers, 'accept-language[0].value')
     searchBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
+
+    // TODO: construct "type" param value from params: src, c, r
+    //   e.g.: type=src:tab,c:CA6A5C2uj,r:482
   } else {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
