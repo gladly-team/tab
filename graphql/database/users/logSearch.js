@@ -67,12 +67,14 @@ const logSearch = async (userContext, userId, searchData = {}) => {
       searchData.source && validSearchSources.indexOf(searchData.source) > -1
         ? searchData.source
         : null
+    const causeId = user.v4BetaEnabled ? user.causeId : null
     const searchEngine = await getUserSearchEngine(userContext, user)
     const logPromise = UserSearchLogModel.create(userContext, {
       userId,
       timestamp: moment.utc().toISOString(),
       ...(source && { source }),
       searchEngine: searchEngine.id,
+      ...(causeId && { causeId }),
     })
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {

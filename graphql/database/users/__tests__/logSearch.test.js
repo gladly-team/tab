@@ -114,6 +114,8 @@ describe('logSearch', () => {
     const userId = userContext.id
     const mockUser = getMockUserInstance({
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      v4BetaEnabled: false,
+      causeId: 'testCauseId',
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
@@ -134,6 +136,39 @@ describe('logSearch', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         searchEngine: 'Bing',
+      })
+    )
+  })
+
+  test('it logs the search with cause id for analytics', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      v4BetaEnabled: true,
+      causeId: 'testCauseId',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: false,
+        reason: 'NONE',
+      })
+    )
+
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    await logSearch(userContext, userId)
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        searchEngine: 'Bing',
+        causeId: 'testCauseId',
       })
     )
   })
