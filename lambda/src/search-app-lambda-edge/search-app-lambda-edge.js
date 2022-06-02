@@ -29,10 +29,18 @@ exports.handler = (event, context, callback) => {
     const headers = get(request, 'headers', {})
     const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
     const acceptLanguageHeader = get(headers, 'accept-language[0].value')
-    searchBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
+    const yahooBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
 
-    // TODO: construct "type" param value from params: src, c, r
-    //   e.g.: type=src:tab,c:CA6A5C2uj,r:482
+    // Set the "type" parameter, a string used for reporting.
+    // We use unreserved characters for report readability/usability.
+    //   e.g.: type=src_tab.c_CA6A5C2uj.r_482
+    const searchSrc = params.get('src') || 'none'
+    const causeId = params.get('c') || 'none'
+    const referralId = params.get('r') || 'none'
+    const typeParamVal = `src_${searchSrc}.c_${causeId}.r_${referralId}`
+    const url = new URL(yahooBaseURL)
+    url.searchParams.set('type', typeParamVal)
+    searchBaseURL = url.href
   } else {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
