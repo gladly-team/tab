@@ -4,15 +4,41 @@ import getUserFeature from '../experiments/getUserFeature'
 import getSearchEngine from '../search/getSearchEngine'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import getWidgets from '../widgets/getWidgets'
+import ReferralDataModel from '../referrals/ReferralDataModel'
+import logger from '../../utils/logger'
+
+const searchEngineToAddDimensions = ['SearchForACause', 'Yahoo']
 
 // TODO: document & remove eslint-disable
 // eslint-disable-next-line no-unused-vars
-const generateSearchEngine = (searchEngineId, user) => {
+const generateSearchEngine = async (userContext, user, searchEngineId) => {
   const engineData = getSearchEngine(searchEngineId)
+  let { searchUrl } = engineData
+
+  // For SFAC & Yahoo, add dimensions for reporting.
+  try {
+    if (searchEngineToAddDimensions.indexOf(engineData.id) > -1) {
+      const { causeId, v4BetaEnabled, id: userId } = user
+      const { referringChannel } = await ReferralDataModel.get(
+        userContext,
+        userId
+      )
+      const url = new URL(searchUrl)
+      url.searchParams.set('src', 'tab')
+      if (v4BetaEnabled && causeId) {
+        url.searchParams.set('c', causeId)
+      }
+      if (referringChannel) {
+        url.searchParams.set('r', referringChannel)
+      }
+      searchUrl = url.href
+    }
+  } catch (e) {
+    logger.error(e)
+  }
   const personalizedSearchEngine = {
     ...engineData,
-    // TODO: replace user-aware search URL parameter values:
-    //   &src={source}&c={causeId}&r={referrerId}
+    searchUrl,
   }
   return personalizedSearchEngine
 }
@@ -31,7 +57,7 @@ const generateSearchEngine = (searchEngineId, user) => {
 const getUserSearchEngine = async (userContext, user) => {
   // 1. If set on the UserModel, return the value
   if (user.searchEngine) {
-    return generateSearchEngine(user.searchEngine, user)
+    return generateSearchEngine(userContext, user, user.searchEngine)
   }
 
   // 2. If unset, see if a search widget value is set and migrate it, then return that value
@@ -43,7 +69,12 @@ const getUserSearchEngine = async (userContext, user) => {
   if (maybeSearchWidget.length > 0) {
     const searchWidget = maybeSearchWidget[0]
     try {
-      return generateSearchEngine(JSON.parse(searchWidget.config).engine, user)
+      const searchEngine = await generateSearchEngine(
+        userContext,
+        user,
+        JSON.parse(searchWidget.config).engine
+      )
+      return searchEngine
     } catch (e) {
       // Don't care if SearchEngine does not exist. This will happen if
       // the user has not explicitly set any search engine, or if a
@@ -61,11 +92,11 @@ const getUserSearchEngine = async (userContext, user) => {
     YAHOO_SEARCH_NEW_USERS
   )
   if (feature) {
-    return generateSearchEngine(feature.variation, user)
+    return generateSearchEngine(userContext, user, feature.variation)
   }
 
   // 4. If still unset, return the default search engine
-  return generateSearchEngine(DEFAULT_SEARCH_ENGINE, user)
+  return generateSearchEngine(userContext, user, DEFAULT_SEARCH_ENGINE)
 }
 
 export default getUserSearchEngine
