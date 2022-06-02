@@ -154,6 +154,7 @@ describe('growthbookUtils tests', () => {
       new Feature({
         featureName: 'yahoo-search',
         variation: 'variation-A',
+        inExperiment: true,
       })
     )
     expect(createUserExperiment).toHaveBeenCalledWith(userContext, user.id, {
@@ -189,6 +190,7 @@ describe('growthbookUtils tests', () => {
       new Feature({
         featureName: 'test-feature',
         variation: false,
+        inExperiment: false,
       })
     )
     expect(createUserExperiment).not.toHaveBeenCalledWith()

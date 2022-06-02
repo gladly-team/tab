@@ -21,11 +21,13 @@ describe('FeatureModel', () => {
       new Feature({
         featureName: 'feature-name',
         variation: 'variation-id',
+        inExperiment: true,
       })
     )
     expect(item).toEqual({
       featureName: 'feature-name',
       variation: 'variation-id',
+      inExperiment: true,
     })
   })
 })

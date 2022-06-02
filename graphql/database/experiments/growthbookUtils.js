@@ -77,5 +77,8 @@ export const getAndLogFeatureForUser = async (
   return new Feature({
     featureName,
     variation: feature.value,
+    inExperiment:
+      feature.experimentResult !== undefined &&
+      feature.experimentResult.inExperiment,
   })
 }
