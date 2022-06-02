@@ -137,7 +137,7 @@ const features = {
     ],
   },
   [YAHOO_SEARCH_NEW_USERS_V2]: {
-    defaultValue: 'Tooltip',
+    defaultValue: 'Control',
     rules: [
       /* Begin internal overrides */
       {

@@ -184,15 +184,10 @@ const createUser = async (
     )
     let newEngine = newSearchFeature.variation
     if (newSearchFeatureV2.inExperiment) {
-      switch (newSearchFeatureV2.variation) {
-        case 'Tooltip':
-        case 'Notification':
-          newEngine = 'SearchForACause'
-          break
-        case 'Control':
-        default:
-          newEngine = 'Google'
-      }
+      newEngine =
+        newSearchFeatureV2.variation === 'Control'
+          ? 'Google'
+          : 'SearchForACause'
     }
     returnedUser = await UserModel.update(userContext, {
       id: userId,
