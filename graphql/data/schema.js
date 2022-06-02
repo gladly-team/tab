@@ -745,6 +745,10 @@ const userType = new GraphQLObjectType({
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context.user, user),
     },
+
+    // FIXME: need a SearchEnginePersonalizedType.
+    // Currently:
+    // RelayResponseNormalizer: Invalid record. The record contains two instances of the same id.
     searchEngine: {
       type: SearchEngineType,
       description: 'the User’s search engine',
