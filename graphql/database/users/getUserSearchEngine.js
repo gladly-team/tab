@@ -7,22 +7,34 @@ import getWidgets from '../widgets/getWidgets'
 import ReferralDataModel from '../referrals/ReferralDataModel'
 import logger from '../../utils/logger'
 
-const searchEngineToAddDimensions = ['SearchForACause', 'Yahoo']
+const searchEnginesToAddDimensions = ['SearchForACause', 'Yahoo']
 
-// TODO: document & remove eslint-disable
-// eslint-disable-next-line no-unused-vars
+/**
+ * Customize the search engine data to the user, as needed.
+ * @param {object} userContext - The user authorizer object.
+ * @param {string} user - UserModel object.
+ * @param {string} searchEngineId - The ID of the user's search engin
+ * @return {SearchEngine}  A SearchEngineModel instance representing the engine displayed to the user.
+ */
 const generateSearchEngine = async (userContext, user, searchEngineId) => {
   const engineData = getSearchEngine(searchEngineId)
   let { searchUrl } = engineData
 
   // For SFAC & Yahoo, add dimensions for reporting.
   try {
-    if (searchEngineToAddDimensions.indexOf(engineData.id) > -1) {
+    if (searchEnginesToAddDimensions.indexOf(engineData.id) > -1) {
       const { causeId, v4BetaEnabled, id: userId } = user
-      const { referringChannel } = await ReferralDataModel.get(
-        userContext,
-        userId
-      )
+      let referringChannel
+      try {
+        ;({ referringChannel } = await ReferralDataModel.get(
+          userContext,
+          userId
+        ))
+      } catch (e) {
+        if (e.code !== DatabaseItemDoesNotExistException.code) {
+          throw e
+        }
+      }
       const url = new URL(searchUrl)
       url.searchParams.set('src', 'tab')
       if (v4BetaEnabled && causeId) {
@@ -32,6 +44,10 @@ const generateSearchEngine = async (userContext, user, searchEngineId) => {
         url.searchParams.set('r', referringChannel)
       }
       searchUrl = url.href
+
+      // Setting search params will encode the {searchTerms} template.
+      // We want to keep it unencoded for the client.
+      searchUrl = searchUrl.replace('%7BsearchTerms%7D', '{searchTerms}')
     }
   } catch (e) {
     logger.error(e)
@@ -79,7 +95,7 @@ const getUserSearchEngine = async (userContext, user) => {
       // Don't care if SearchEngine does not exist. This will happen if
       // the user has not explicitly set any search engine, or if a
       // previously-seleced search engine is no longer supported.
-      if (!(e instanceof DatabaseItemDoesNotExistException)) {
+      if (e.code !== DatabaseItemDoesNotExistException.code) {
         throw e
       }
     }

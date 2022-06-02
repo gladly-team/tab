@@ -16,6 +16,7 @@ import getSearchEngine from '../../search/getSearchEngine'
 import { DEFAULT_SEARCH_ENGINE, WIDGET_TYPE_SEARCH } from '../../constants'
 import ReferralDataModel from '../../referrals/ReferralDataModel'
 import logger from '../../../utils/logger'
+import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
 
 jest.mock('../../experiments/getUserFeature')
 jest.mock('../../databaseClient')
@@ -139,6 +140,19 @@ describe('getUserSearchEngine', () => {
     expect(result).toEqual(await getSearchEngine('DuckDuckGo'))
   })
 
+  it('SFAC engine: returns the expected search URL', async () => {
+    expect.assertions(1)
+    const searchEngine = 'SearchForACause'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+    }
+    const result = await getUserSearchEngine(userContext, mockUser)
+    expect(result.searchUrl).toEqual(
+      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+    )
+  })
+
   it('SFAC engine: adds a "src" URL parameter', async () => {
     expect.assertions(1)
     const searchEngine = 'SearchForACause'
@@ -226,6 +240,33 @@ describe('getUserSearchEngine', () => {
     expect(logger.error).toHaveBeenCalledWith(new Error('Uh oh!'))
   })
 
+  it('SFAC engine: does not log an error if the ReferralDataModel item does not exist', async () => {
+    expect.assertions(1)
+    jest
+      .spyOn(ReferralDataModel, 'get')
+      .mockRejectedValueOnce(new DatabaseItemDoesNotExistException())
+    const searchEngine = 'SearchForACause'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+    }
+    await getUserSearchEngine(userContext, mockUser)
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('Yahoo engine: returns the expected search URL', async () => {
+    expect.assertions(1)
+    const searchEngine = 'Yahoo'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+    }
+    const result = await getUserSearchEngine(userContext, mockUser)
+    expect(result.searchUrl).toEqual(
+      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+    )
+  })
+
   it('Yahoo engine: adds a "src" URL parameter', async () => {
     expect.assertions(1)
     const searchEngine = 'Yahoo'
@@ -311,6 +352,26 @@ describe('getUserSearchEngine', () => {
     }
     await getUserSearchEngine(userContext, mockUser)
     expect(logger.error).toHaveBeenCalledWith(new Error('Uh oh!'))
+  })
+
+  it('Google: returns the expected search URL', async () => {
+    expect.assertions(1)
+    const searchEngine = 'Google'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+      v4BetaEnabled: true,
+      causeId: 'abc123',
+    }
+    jest.spyOn(ReferralDataModel, 'get').mockResolvedValueOnce({
+      userId: 'abc123',
+      referringUser: null,
+      referringChannel: '998877',
+    })
+    const result = await getUserSearchEngine(userContext, mockUser)
+    expect(result.searchUrl).toEqual(
+      'https://www.google.com/search?q={searchTerms}'
+    )
   })
 
   it('Google engine: does not add "src", "c", or "r" URL parameter values', async () => {

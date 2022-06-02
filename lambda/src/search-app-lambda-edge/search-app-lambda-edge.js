@@ -32,7 +32,8 @@ exports.handler = (event, context, callback) => {
     const yahooBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
 
     // Set the "type" parameter, a string used for reporting.
-    // We use unreserved characters for report readability/usability.
+    // We use unreserved characters for report readability/usability, and
+    // Yahoo does not allow using hyphens.
     //   e.g.: type=src_tab.c_CA6A5C2uj.r_482
     const searchSrc = params.get('src') || 'none'
     const causeId = params.get('c') || 'none'
