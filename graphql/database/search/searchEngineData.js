@@ -3,14 +3,8 @@ export const searchEngineData = [
     name: 'Search for a Cause',
     id: 'SearchForACause',
 
-    // These placeholders should be filled in server-side:
-    //   {source}, {causeId}, and {referrerId}.
     // The {searchTerms} placeholder should be filled in client-side.
-    // TODO: if we have an internal search endpoint that is user-aware,
-    //   we should use it to populate the values required for analytics.
-    //   Then, we don't need to forward them in the search URL here.
-    searchUrl:
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src={source}&c={causeId}&r={referrerId}',
+    searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
     rank: 0,
     isCharitable: true,
     inputPrompt: 'Search for a Cause',
@@ -50,8 +44,7 @@ export const searchEngineData = [
   {
     name: 'Yahoo',
     id: 'Yahoo',
-    searchUrl:
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src={source}&c={causeId}&r={referrerId}',
+    searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
     rank: 5,
     isCharitable: false,
     inputPrompt: 'Search Yahoo',
