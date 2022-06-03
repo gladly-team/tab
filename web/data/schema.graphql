@@ -1048,17 +1048,16 @@ type RestartMissionPayload {
 
 """all important data for a search engine."""
 type SearchEngine implements Node {
-  """The ID of an object"""
-  id: ID!
-
   """Engine's id"""
   engineId: String!
 
   """Name of the Search Engine"""
   name: String!
 
-  """query string to redirect the user to after using the search bar"""
-  searchUrl: String!
+  """
+  Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace
+  """
+  searchUrl: String! @deprecated(reason: "Use \"searchUrlPersonalized\" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)")
 
   """what order to display the search engine in a list"""
   rank: Int!
@@ -1068,6 +1067,9 @@ type SearchEngine implements Node {
 
   """Display string to display in the search bar"""
   inputPrompt: String!
+
+  """The ID of an object"""
+  id: ID!
 }
 
 """A connection to a list of items."""
@@ -1086,6 +1088,41 @@ type SearchEngineEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""
+SearchEngineType extended with fields potentially personalized to the user
+"""
+type SearchEnginePersonalized implements Node {
+  """Engine's id"""
+  engineId: String!
+
+  """Name of the Search Engine"""
+  name: String!
+
+  """
+  Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace
+  """
+  searchUrl: String! @deprecated(reason: "Use \"searchUrlPersonalized\" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)")
+
+  """what order to display the search engine in a list"""
+  rank: Int!
+
+  """Whether or not the user can earn extra impact with this Search Engine"""
+  isCharitable: Boolean!
+
+  """Display string to display in the search bar"""
+  inputPrompt: String!
+
+  """
+  Use this for the user's search behavior. A search destination URL, with a
+  {searchTerms} placeholder for the client to replace. The URL might be
+  personalized based on the user.
+  """
+  searchUrlPersonalized: String!
+
+  """The ID of an object"""
+  id: ID!
 }
 
 """Info about any rate-limiting for VC earned from search queries"""
@@ -1555,7 +1592,7 @@ type User implements Node {
   features: [Feature]!
 
   """the User’s search engine"""
-  searchEngine: SearchEngine
+  searchEngine: SearchEnginePersonalized
 
   """whether to show the yahoo search prompt"""
   showYahooPrompt: Boolean!

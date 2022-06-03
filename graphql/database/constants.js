@@ -25,6 +25,7 @@ export const USER_SWITCH_SEARCH_PROMPT_LOG = 'UserSwitchSearchPromptLog'
 export const USER_SEARCH_SETTINGS_LOG = 'UserSearchSettingsLog'
 export const USER_EXPERIMENT = 'UserExperiment'
 export const SEARCH_ENGINE = 'SearchEngine'
+export const SEARCH_ENGINE_PERSONALIZED = 'SearchEnginePersonalized'
 export const FEATURE = 'Feature'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'

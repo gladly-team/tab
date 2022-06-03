@@ -35,6 +35,7 @@ import {
   VIDEO_AD_LOG,
   USER_EXPERIMENT,
   SEARCH_ENGINE,
+  SEARCH_ENGINE_PERSONALIZED,
   FEATURE,
 } from '../database/constants'
 
@@ -745,12 +746,8 @@ const userType = new GraphQLObjectType({
       description: 'feature values for this specific user',
       resolve: (user, args, context) => getUserFeatures(context.user, user),
     },
-
-    // FIXME: need a SearchEnginePersonalizedType.
-    // Currently:
-    // RelayResponseNormalizer: Invalid record. The record contains two instances of the same id.
     searchEngine: {
-      type: SearchEngineType,
+      type: SearchEnginePersonalizedType,
       description: 'the User’s search engine',
       resolve: (user, args, context) => getUserSearchEngine(context.user, user),
     },
@@ -1000,40 +997,63 @@ const CauseType = new GraphQLObjectType({
   }),
   interfaces: [nodeInterface],
 })
+
+const searchEngineFields = {
+  engineId: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: "Engine's id",
+    resolve: engine => engine.id,
+  },
+  name: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `Name of the Search Engine`,
+  },
+  searchUrl: {
+    deprecationReason:
+      'Use "searchUrlPersonalized" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)',
+
+    type: new GraphQLNonNull(GraphQLString),
+    description:
+      'Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace',
+  },
+  rank: {
+    type: new GraphQLNonNull(GraphQLInt),
+    description: 'what order to display the search engine in a list',
+  },
+  isCharitable: {
+    type: new GraphQLNonNull(GraphQLBoolean),
+    description: `Whether or not the user can earn extra impact with this Search Engine`,
+  },
+  inputPrompt: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `Display string to display in the search bar`,
+  },
+}
 const SearchEngineType = new GraphQLObjectType({
   name: SEARCH_ENGINE,
   description: 'all important data for a search engine.',
   fields: () => ({
+    ...searchEngineFields,
     id: globalIdField(SEARCH_ENGINE),
-    engineId: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: "Engine's id",
-      resolve: engine => engine.id,
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Name of the Search Engine`,
-    },
-    searchUrl: {
-      type: new GraphQLNonNull(GraphQLString),
-      description:
-        'query string to redirect the user to after using the search bar',
-    },
-    rank: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'what order to display the search engine in a list',
-    },
-    isCharitable: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-      description: `Whether or not the user can earn extra impact with this Search Engine`,
-    },
-    inputPrompt: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Display string to display in the search bar`,
-    },
   }),
   interfaces: [nodeInterface],
 })
+const SearchEnginePersonalizedType = new GraphQLObjectType({
+  name: SEARCH_ENGINE_PERSONALIZED,
+  description:
+    'SearchEngineType extended with fields potentially personalized to the user',
+  fields: () => ({
+    ...searchEngineFields,
+    searchUrlPersonalized: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        "Use this for the user's search behavior. A search destination URL, with a {searchTerms} placeholder for the client to replace. The URL might be personalized based on the user.",
+    },
+    id: globalIdField(SEARCH_ENGINE_PERSONALIZED),
+  }),
+  interfaces: [nodeInterface],
+})
+
 const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',
