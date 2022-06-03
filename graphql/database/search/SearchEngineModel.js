@@ -31,10 +31,14 @@ class SearchEngine extends BaseModel {
         .required(),
       searchUrl: types
         .string()
-        .description(
-          `query string to redirect the user to after using the search bar`
-        )
+        .description(`a search destination URL`)
         .required(),
+      // must constructed in business logic
+      searchUrlPersonalized: types
+        .string()
+        .description(
+          `a search destination URL, potentially customized to the user`
+        ),
       rank: types
         .number()
         .description(`what order to display the search engine in a list`),
@@ -53,6 +57,15 @@ class SearchEngine extends BaseModel {
 
   static get fieldDefaults() {
     return {}
+  }
+
+  static get fieldDeserializers() {
+    return {
+      // Default to setting "searchUrlPersonalized" to the same value as
+      // "searchUrl" to ensure it's always defined. Let business logic
+      // overwrite it as needed.
+      searchUrlPersonalized: (_, searchEngineObj) => searchEngineObj.searchUrl,
+    }
   }
 }
 

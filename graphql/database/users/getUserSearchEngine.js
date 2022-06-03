@@ -18,9 +18,12 @@ const searchEnginesToAddDimensions = ['SearchForACause', 'Yahoo']
  */
 const generateSearchEngine = async (userContext, user, searchEngineId) => {
   const engineData = getSearchEngine(searchEngineId)
-  let { searchUrl } = engineData
+  const { searchUrl } = engineData
 
-  // For SFAC & Yahoo, add dimensions for reporting.
+  let searchUrlPersonalized = searchUrl
+
+  // For SFAC & Yahoo, modify the personalized search URL to include
+  // dimensions used in aggregated analytics (e.g., search revenue by cause).
   try {
     if (searchEnginesToAddDimensions.indexOf(engineData.id) > -1) {
       const { causeId, v4BetaEnabled, id: userId } = user
@@ -43,18 +46,20 @@ const generateSearchEngine = async (userContext, user, searchEngineId) => {
       if (referringChannel) {
         url.searchParams.set('r', referringChannel)
       }
-      searchUrl = url.href
 
       // Setting search params will encode the {searchTerms} template.
       // We want to keep it unencoded for the client.
-      searchUrl = searchUrl.replace('%7BsearchTerms%7D', '{searchTerms}')
+      searchUrlPersonalized = url.href.replace(
+        '%7BsearchTerms%7D',
+        '{searchTerms}'
+      )
     }
   } catch (e) {
     logger.error(e)
   }
   const personalizedSearchEngine = {
     ...engineData,
-    searchUrl,
+    searchUrlPersonalized,
   }
   return personalizedSearchEngine
 }
