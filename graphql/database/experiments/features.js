@@ -14,6 +14,11 @@ const SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME = 1651154400000 // 2pm U
 // the experiment includes behavior during signup.
 const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28 April 2022
 
+// Consider a user "new" for V2 if they join after this time. This should be
+// later in the future than when the experiment goes live, because
+// the experiment includes behavior during signup.
+const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28 April 2022
+
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
     defaultValue: false,
@@ -116,6 +121,7 @@ const features = {
       },
     ],
   },
+  // TODO: remove and clean up references
   [YAHOO_SEARCH_NEW_USERS]: {
     defaultValue: 'Google',
     rules: [
@@ -124,7 +130,7 @@ const features = {
       {
         variations: ['Google', 'SearchForACause'],
         weights: [0.5, 0.5],
-        coverage: 1.0,
+        coverage: 0.0,
         condition: {
           joined: {
             $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
@@ -182,12 +188,8 @@ const features = {
         weights: [0.34, 0.33, 0.33],
         coverage: 1.0,
         condition: {
-          isTabTeamMember: {
-            $eq: true,
-          },
           joined: {
-            // todo, update gt time when launching. also end previous experiment
-            $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
+            $gt: SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
           },
           v4BetaEnabled: {
             $eq: true,

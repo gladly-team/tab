@@ -11,9 +11,12 @@ import BaseWidgetModel from '../../widgets/baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../../widgets/userWidget/UserWidgetModel'
 import constructFullWidget from '../../widgets/constructFullWidget'
 import Feature from '../../experiments/FeatureModel'
-import { YAHOO_SEARCH_NEW_USERS } from '../../experiments/experimentConstants'
+import {
+  YAHOO_SEARCH_NEW_USERS,
+  YAHOO_SEARCH_NEW_USERS_V2,
+} from '../../experiments/experimentConstants'
 import getSearchEngine from '../../search/getSearchEngine'
-import { DEFAULT_SEARCH_ENGINE, WIDGET_TYPE_SEARCH } from '../../constants'
+import { WIDGET_TYPE_SEARCH } from '../../constants'
 import ReferralDataModel from '../../referrals/ReferralDataModel'
 import logger from '../../../utils/logger'
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
@@ -46,29 +49,58 @@ beforeEach(() => {
 const user = getMockUserInstance()
 
 describe('getUserSearchEngine', () => {
-  it('defaults user engine to google if no widget, not in test or not set on model', async () => {
+  it('defaults user engine to user feature value v2 if no widget, or not set on model', async () => {
     expect.assertions(1)
     const getUserFeature = require('../../experiments/getUserFeature').default
-    getUserFeature.mockResolvedValue(undefined)
+    getUserFeature.mockImplementation((context, usr, featureName) => {
+      if (featureName === YAHOO_SEARCH_NEW_USERS_V2) {
+        return new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS_V2,
+          variation: 'Tooltip',
+          inExperiment: true,
+        })
+      }
+      return new Feature({
+        featureName: YAHOO_SEARCH_NEW_USERS,
+        variation: 'DuckDuckGo',
+      })
+    })
     getWidgets.mockResolvedValueOnce([])
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual(await getSearchEngine('Google'))
+    const expectedResult = {
+      ...(await getSearchEngine('SearchForACause')),
+      searchUrlPersonalized:
+        'https://tab.gladly.io/search/v2?q={searchTerms}&src=tab',
+    }
+    expect(result).toEqual(expectedResult)
   })
 
   it('defaults user engine to user feature value if no widget, or not set on model', async () => {
     expect.assertions(1)
     const getUserFeature = require('../../experiments/getUserFeature').default
-    getUserFeature.mockResolvedValueOnce(
-      new Feature({
+    getUserFeature.mockImplementation((context, usr, featureName) => {
+      if (featureName === YAHOO_SEARCH_NEW_USERS_V2) {
+        return new Feature({
+          featureName: YAHOO_SEARCH_NEW_USERS_V2,
+          variation: 'Tooltip',
+          inExperiment: true,
+        })
+      }
+      return new Feature({
         featureName: YAHOO_SEARCH_NEW_USERS,
         variation: 'DuckDuckGo',
       })
-    )
+    })
     getWidgets.mockResolvedValueOnce([])
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual(await getSearchEngine('DuckDuckGo'))
+    const expectedResult = {
+      ...(await getSearchEngine('SearchForACause')),
+      searchUrlPersonalized:
+        'https://tab.gladly.io/search/v2?q={searchTerms}&src=tab',
+    }
+    expect(result).toEqual(expectedResult)
   })
 
   it('returns the search engine on the user model', async () => {
@@ -108,7 +140,12 @@ describe('getUserSearchEngine', () => {
     getWidgets.mockResolvedValueOnce(sortedFullWidgets)
 
     const result = await getUserSearchEngine(userContext, user)
-    expect(result).toEqual(await getSearchEngine(DEFAULT_SEARCH_ENGINE))
+    const expectedResult = {
+      ...(await getSearchEngine('SearchForACause')),
+      searchUrlPersonalized:
+        'https://tab.gladly.io/search/v2?q={searchTerms}&src=tab',
+    }
+    expect(result).toEqual(expectedResult)
   })
 
   it('gets the engine from the search widget if search widget', async () => {
