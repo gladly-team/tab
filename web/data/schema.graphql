@@ -1054,11 +1054,6 @@ type SearchEngine implements Node {
   """Name of the Search Engine"""
   name: String!
 
-  """
-  Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace
-  """
-  searchUrl: String! @deprecated(reason: "Use \"searchUrlPersonalized\" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)")
-
   """what order to display the search engine in a list"""
   rank: Int!
 
@@ -1070,6 +1065,12 @@ type SearchEngine implements Node {
 
   """The ID of an object"""
   id: ID!
+
+  """
+  A search destination URL, with a {searchTerms} placeholder for the client to
+  replace. Use `user.searchEngine` if the user is authenticated.
+  """
+  searchUrl: String!
 }
 
 """A connection to a list of items."""
@@ -1099,11 +1100,6 @@ type SearchEnginePersonalized implements Node {
 
   """Name of the Search Engine"""
   name: String!
-
-  """
-  Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace
-  """
-  searchUrl: String! @deprecated(reason: "Use \"searchUrlPersonalized\" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)")
 
   """what order to display the search engine in a list"""
   rank: Int!

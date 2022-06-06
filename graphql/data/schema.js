@@ -998,7 +998,7 @@ const CauseType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
-const searchEngineFields = {
+const searchEngineSharedFields = {
   engineId: {
     type: new GraphQLNonNull(GraphQLString),
     description: "Engine's id",
@@ -1007,14 +1007,6 @@ const searchEngineFields = {
   name: {
     type: new GraphQLNonNull(GraphQLString),
     description: `Name of the Search Engine`,
-  },
-  searchUrl: {
-    deprecationReason:
-      'Use "searchUrlPersonalized" instead, which might customize search URLs toprovide aggregated analytics (e.g., search revenue by cause)',
-
-    type: new GraphQLNonNull(GraphQLString),
-    description:
-      'Deprecated. A search destination URL, with a {searchTerms} placeholder for the client to replace',
   },
   rank: {
     type: new GraphQLNonNull(GraphQLInt),
@@ -1033,8 +1025,13 @@ const SearchEngineType = new GraphQLObjectType({
   name: SEARCH_ENGINE,
   description: 'all important data for a search engine.',
   fields: () => ({
-    ...searchEngineFields,
+    ...searchEngineSharedFields,
     id: globalIdField(SEARCH_ENGINE),
+    searchUrl: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'A search destination URL, with a {searchTerms} placeholder for the client to replace. Use `user.searchEngine` if the user is authenticated.',
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1043,7 +1040,7 @@ const SearchEnginePersonalizedType = new GraphQLObjectType({
   description:
     'SearchEngineType extended with fields potentially personalized to the user',
   fields: () => ({
-    ...searchEngineFields,
+    ...searchEngineSharedFields,
     searchUrlPersonalized: {
       type: new GraphQLNonNull(GraphQLString),
       description:
