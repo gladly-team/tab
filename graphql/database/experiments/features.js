@@ -2,6 +2,7 @@ import {
   MONEY_RAISED_EXCLAMATION_POINT_V2,
   YAHOO_SEARCH_EXISTING_USERS,
   YAHOO_SEARCH_NEW_USERS,
+  YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
 } from './experimentConstants'
 
@@ -126,6 +127,66 @@ const features = {
         coverage: 1.0,
         condition: {
           joined: {
+            $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
+          },
+          v4BetaEnabled: {
+            $eq: true,
+          },
+        },
+      },
+    ],
+  },
+  [YAHOO_SEARCH_NEW_USERS_V2]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${YAHOO_SEARCH_NEW_USERS_V2}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${YAHOO_SEARCH_NEW_USERS_V2}`]: {
+            $eq: 'Tooltip',
+            $exists: true,
+          },
+        },
+        force: 'Tooltip',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${YAHOO_SEARCH_NEW_USERS_V2}`]: {
+            $eq: 'Notification',
+            $exists: true,
+          },
+        },
+        force: 'Notification',
+      },
+      /* End internal overrides */
+      {
+        variations: ['Control', 'Tooltip', 'Notification'],
+        weights: [0.34, 0.33, 0.33],
+        coverage: 1.0,
+        condition: {
+          isTabTeamMember: {
+            $eq: true,
+          },
+          joined: {
+            // todo, update gt time when launching. also end previous experiment
             $gt: SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
           },
           v4BetaEnabled: {
