@@ -4,7 +4,7 @@ export const searchEngineData = [
     id: 'SearchForACause',
 
     // The {searchTerms} placeholder should be filled in client-side.
-    searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
+    searchUrl: 'https://tab.gladly.io/search/v2?q={searchTerms}',
     rank: 0,
     isCharitable: true,
     inputPrompt: 'Search for a Cause',
@@ -44,7 +44,7 @@ export const searchEngineData = [
   {
     name: 'Yahoo',
     id: 'Yahoo',
-    searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
+    searchUrl: 'https://tab.gladly.io/search/v2?q={searchTerms}',
     rank: 5,
     isCharitable: false,
     inputPrompt: 'Search Yahoo',
