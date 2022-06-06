@@ -140,7 +140,7 @@ describe('getUserSearchEngine', () => {
     expect(result).toEqual(await getSearchEngine('DuckDuckGo'))
   })
 
-  it('SFAC engine: returns the expected search URL', async () => {
+  it('SFAC engine: returns the expected *unpersonalized* search URL', async () => {
     expect.assertions(1)
     const searchEngine = 'SearchForACause'
     const mockUser = {
@@ -149,11 +149,11 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrl).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+      'http://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
-  it('SFAC engine: adds a "src" URL parameter', async () => {
+  it('SFAC engine: returns the expected search URL', async () => {
     expect.assertions(1)
     const searchEngine = 'SearchForACause'
     const mockUser = {
@@ -161,11 +161,24 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    expect(result.searchUrlPersonalized).toEqual(
+      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+    )
+  })
+
+  it('SFAC engine (personalized): adds a "src" URL parameter', async () => {
+    expect.assertions(1)
+    const searchEngine = 'SearchForACause'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+    }
+    const result = await getUserSearchEngine(userContext, mockUser)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('src')).toEqual('tab')
   })
 
-  it('SFAC engine: adds a "c" URL parameter when the user is supporting a cause', async () => {
+  it('SFAC engine (personalized): adds a "c" URL parameter when the user is supporting a cause', async () => {
     expect.assertions(1)
     const searchEngine = 'SearchForACause'
     const mockUser = {
@@ -175,11 +188,11 @@ describe('getUserSearchEngine', () => {
       causeId: 'abc123',
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('c')).toEqual('abc123')
   })
 
-  it('SFAC engine: does not add a "c" URL parameter when the user is not using v4', async () => {
+  it('SFAC engine (personalized): does not add a "c" URL parameter when the user is not using v4', async () => {
     expect.assertions(1)
     const searchEngine = 'SearchForACause'
     const mockUser = {
@@ -189,11 +202,11 @@ describe('getUserSearchEngine', () => {
       causeId: 'abc123',
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('c')).toBeNull()
   })
 
-  it('SFAC engine: adds a "r" URL parameter when the user has a referring ID', async () => {
+  it('SFAC engine (personalized): adds a "r" URL parameter when the user has a referring ID', async () => {
     expect.assertions(1)
     jest.spyOn(ReferralDataModel, 'get').mockResolvedValueOnce({
       userId: 'abc123',
@@ -206,11 +219,11 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('r')).toEqual('998877')
   })
 
-  it('SFAC engine: still returns a search URL if adding reporting parameters fails', async () => {
+  it('SFAC engine (personalized): still returns a search URL if adding reporting parameters fails', async () => {
     expect.assertions(1)
     jest
       .spyOn(ReferralDataModel, 'get')
@@ -221,12 +234,12 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    expect(result.searchUrl).toEqual(
+    expect(result.searchUrlPersonalized).toEqual(
       'http://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
-  it('SFAC engine: logs an error if adding reporting parameters fails', async () => {
+  it('SFAC engine (personalized): logs an error if adding reporting parameters fails (', async () => {
     expect.assertions(1)
     jest
       .spyOn(ReferralDataModel, 'get')
@@ -240,7 +253,7 @@ describe('getUserSearchEngine', () => {
     expect(logger.error).toHaveBeenCalledWith(new Error('Uh oh!'))
   })
 
-  it('SFAC engine: does not log an error if the ReferralDataModel item does not exist', async () => {
+  it('SFAC engine (personalized): does not log an error if the ReferralDataModel item does not exist', async () => {
     expect.assertions(1)
     jest
       .spyOn(ReferralDataModel, 'get')
@@ -254,7 +267,7 @@ describe('getUserSearchEngine', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
-  it('Yahoo engine: returns the expected search URL', async () => {
+  it('Yahoo engine: returns the expected search URL (unpersonalized)', async () => {
     expect.assertions(1)
     const searchEngine = 'Yahoo'
     const mockUser = {
@@ -263,11 +276,11 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrl).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+      'http://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
-  it('Yahoo engine: adds a "src" URL parameter', async () => {
+  it('Yahoo engine (personalized): returns the expected search URL', async () => {
     expect.assertions(1)
     const searchEngine = 'Yahoo'
     const mockUser = {
@@ -275,11 +288,24 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    expect(result.searchUrlPersonalized).toEqual(
+      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+    )
+  })
+
+  it('Yahoo engine (personalized): adds a "src" URL parameter', async () => {
+    expect.assertions(1)
+    const searchEngine = 'Yahoo'
+    const mockUser = {
+      ...getMockUserInstance(),
+      searchEngine,
+    }
+    const result = await getUserSearchEngine(userContext, mockUser)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('src')).toEqual('tab')
   })
 
-  it('Yahoo engine: adds a "c" URL parameter when the user is supporting a cause', async () => {
+  it('Yahoo engine (personalized): adds a "c" URL parameter when the user is supporting a cause', async () => {
     expect.assertions(1)
     const searchEngine = 'Yahoo'
     const mockUser = {
@@ -289,11 +315,11 @@ describe('getUserSearchEngine', () => {
       causeId: 'abc123',
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('c')).toEqual('abc123')
   })
 
-  it('Yahoo engine: does not add a "c" URL parameter when the user is not using v4', async () => {
+  it('Yahoo engine (personalized): does not add a "c" URL parameter when the user is not using v4', async () => {
     expect.assertions(1)
     const searchEngine = 'Yahoo'
     const mockUser = {
@@ -303,11 +329,11 @@ describe('getUserSearchEngine', () => {
       causeId: 'abc123',
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('c')).toBeNull()
   })
 
-  it('Yahoo engine: adds a "r" URL parameter when the user has a referring ID', async () => {
+  it('Yahoo engine (personalized): adds a "r" URL parameter when the user has a referring ID', async () => {
     expect.assertions(1)
     jest.spyOn(ReferralDataModel, 'get').mockResolvedValueOnce({
       userId: 'abc123',
@@ -320,11 +346,11 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('r')).toEqual('998877')
   })
 
-  it('Yahoo engine: still returns a search URL if adding reporting parameters fails', async () => {
+  it('Yahoo engine (personalized): still returns a search URL if adding reporting parameters fails', async () => {
     expect.assertions(1)
     jest
       .spyOn(ReferralDataModel, 'get')
@@ -335,12 +361,12 @@ describe('getUserSearchEngine', () => {
       searchEngine,
     }
     const result = await getUserSearchEngine(userContext, mockUser)
-    expect(result.searchUrl).toEqual(
+    expect(result.searchUrlPersonalized).toEqual(
       'http://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
-  it('Yahoo engine: logs an error if adding reporting parameters fails', async () => {
+  it('Yahoo engine (personalized): logs an error if adding reporting parameters fails', async () => {
     expect.assertions(1)
     jest
       .spyOn(ReferralDataModel, 'get')
@@ -374,7 +400,7 @@ describe('getUserSearchEngine', () => {
     )
   })
 
-  it('Google engine: does not add "src", "c", or "r" URL parameter values', async () => {
+  it('Google engine (personalized): does not add "src", "c", or "r" URL parameter values', async () => {
     expect.assertions(3)
     const searchEngine = 'Google'
     const mockUser = {
@@ -389,7 +415,7 @@ describe('getUserSearchEngine', () => {
       referringChannel: '998877',
     })
     const result = await getUserSearchEngine(userContext, mockUser)
-    const url = new URL(result.searchUrl)
+    const url = new URL(result.searchUrlPersonalized)
     expect(url.searchParams.get('src')).toBeNull()
     expect(url.searchParams.get('c')).toBeNull()
     expect(url.searchParams.get('r')).toBeNull()
