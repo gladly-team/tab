@@ -35,13 +35,18 @@ exports.handler = (event, context, callback) => {
     // We use unreserved characters for report readability/usability, and
     // Yahoo does not allow using hyphens.
     //   e.g.: type=src_tab.c_CA6A5C2uj.r_482
-    const searchSrc = params.get('src') || 'none'
-    const causeId = params.get('c') || 'none'
-    const referralId = params.get('r') || 'none'
-    const typeParamVal = `src_${searchSrc}.c_${causeId}.r_${referralId}`
-    const url = new URL(yahooBaseURL)
-    url.searchParams.set('type', typeParamVal)
-    searchBaseURL = url.href
+    try {
+      const searchSrc = params.get('src') || 'none'
+      const causeId = params.get('c') || 'none'
+      const referralId = params.get('r') || 'none'
+      const typeParamVal = `src_${searchSrc}.c_${causeId}.r_${referralId}`
+      const url = new URL(yahooBaseURL)
+      url.searchParams.set('type', typeParamVal)
+      searchBaseURL = url.href
+    } catch (e) {
+      console.error(e)
+      searchBaseURL = yahooBaseURL
+    }
   } else {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
