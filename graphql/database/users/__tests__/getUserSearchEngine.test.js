@@ -149,7 +149,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrl).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}'
+      'https://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
@@ -162,7 +162,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrlPersonalized).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+      'https://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
     )
   })
 
@@ -235,7 +235,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrlPersonalized).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}'
+      'https://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
@@ -276,7 +276,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrl).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}'
+      'https://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
@@ -289,7 +289,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrlPersonalized).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
+      'https://tab.gladly.io/search/v2?q={searchTerms}&src=tab'
     )
   })
 
@@ -362,7 +362,7 @@ describe('getUserSearchEngine', () => {
     }
     const result = await getUserSearchEngine(userContext, mockUser)
     expect(result.searchUrlPersonalized).toEqual(
-      'http://tab.gladly.io/search/v2?q={searchTerms}'
+      'https://tab.gladly.io/search/v2?q={searchTerms}'
     )
   })
 
