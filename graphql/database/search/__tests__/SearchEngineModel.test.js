@@ -42,6 +42,7 @@ describe('SearchEngineModel', () => {
       name: 'Search For A Cause',
       id: 'SearchForACause',
       searchUrl: 'http://tab.gladly.io/search/v2?q=',
+      searchUrlPersonalized: 'http://tab.gladly.io/search/v2?q=',
       rank: 0,
       isCharitable: true,
       inputPrompt: 'Search For a Cause',
