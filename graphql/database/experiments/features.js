@@ -17,7 +17,7 @@ const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28
 // Consider a user "new" for V2 if they join after this time. This should be
 // later in the future than when the experiment goes live, because
 // the experiment includes behavior during signup.
-const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28 April 2022
+const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 20:30pm UTC 21 June 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
