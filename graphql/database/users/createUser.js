@@ -10,10 +10,7 @@ import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
-import {
-  YAHOO_SEARCH_NEW_USERS,
-  YAHOO_SEARCH_NEW_USERS_V2,
-} from '../experiments/experimentConstants'
+import { YAHOO_SEARCH_NEW_USERS_V2 } from '../experiments/experimentConstants'
 
 /**
  * Create a new user and performs other setup actions.
@@ -172,23 +169,13 @@ const createUser = async (
 
   // Set user's search engine for new user
   try {
-    const newSearchFeature = await getUserFeature(
-      userContext,
-      returnedUser,
-      YAHOO_SEARCH_NEW_USERS
-    )
     const newSearchFeatureV2 = await getUserFeature(
       userContext,
       returnedUser,
       YAHOO_SEARCH_NEW_USERS_V2
     )
-    let newEngine = newSearchFeature.variation
-    if (newSearchFeatureV2.inExperiment) {
-      newEngine =
-        newSearchFeatureV2.variation === 'Control'
-          ? 'Google'
-          : 'SearchForACause'
-    }
+    const newEngine =
+      newSearchFeatureV2.variation === 'Control' ? 'Google' : 'SearchForACause'
     returnedUser = await UserModel.update(userContext, {
       id: userId,
       searchEngine: newEngine,

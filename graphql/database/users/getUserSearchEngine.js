@@ -1,5 +1,8 @@
-import { DEFAULT_SEARCH_ENGINE, WIDGET_TYPE_SEARCH } from '../constants'
-import { YAHOO_SEARCH_NEW_USERS } from '../experiments/experimentConstants'
+import { WIDGET_TYPE_SEARCH } from '../constants'
+import {
+  YAHOO_SEARCH_NEW_USERS,
+  YAHOO_SEARCH_NEW_USERS_V2,
+} from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
 import getSearchEngine from '../search/getSearchEngine'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
@@ -112,12 +115,17 @@ const getUserSearchEngine = async (userContext, user) => {
     user,
     YAHOO_SEARCH_NEW_USERS
   )
-  if (feature) {
-    return generateSearchEngine(userContext, user, feature.variation)
+  const featureV2 = await getUserFeature(
+    userContext,
+    user,
+    YAHOO_SEARCH_NEW_USERS_V2
+  )
+  let engine = feature.variation
+  if (featureV2.inExperiment) {
+    engine = featureV2.variation === 'Control' ? 'Google' : 'SearchForACause'
   }
 
-  // 4. If still unset, return the default search engine
-  return generateSearchEngine(userContext, user, DEFAULT_SEARCH_ENGINE)
+  return generateSearchEngine(userContext, user, engine)
 }
 
 export default getUserSearchEngine
