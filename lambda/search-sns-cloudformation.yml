@@ -1,3 +1,5 @@
+# TODO: Deploy to all regions. Then get ARNs of all topics.
+#
 # We want to deploy to all regions to handle requests at the
 # Edge. To do so, we rely on AWS StackSets. For an overview of
 # permissions and other work we did to make this work, see:
