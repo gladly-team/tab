@@ -1,4 +1,3 @@
-# TODO: Deploy to all regions. Then get ARNs of all topics.
 #
 # We want to deploy to all regions to handle requests at the
 # Edge. To do so, we rely on AWS StackSets. For an overview of
@@ -35,13 +34,18 @@
 #     --regions '["us-west-2", "us-west-1"]'
 #
 # Modify accounts and regions as needed. For convenince, these
-# are all regions as of June 2022:
+# are all regions we're using as of June 2022:
 #   ["eu-north-1", "ap-south-1", "eu-west-3", "eu-west-2", "eu-west-1", "ap-northeast-3", "ap-northeast-2", "ap-northeast-1", "sa-east-1", "ca-central-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-east-1", "us-east-2", "us-west-1", "us-west-2"]
+#
+# To get a list of regions we use:
+#   aws ec2 describe-regions
 #
 # To update stack sets, see:
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-update.html
 #
 Resources:
+  # Topic ARNs will be identical but for their region:
+  # arn:aws:sns:us-west-1:167811431063:SearchRequest
   SearchRequestSNSTopic:
     Type: AWS::SNS::Topic
     Properties: 
