@@ -94,3 +94,58 @@ functions:
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
+  # TODO
+  # searchRequestLogger:
+  #   handler: TODO
+  #   events:
+  #     - sns:
+  #         arn: arn:aws:sns:eu-north-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-eu-north-1
+  #     - sns:
+  #         arn: arn:aws:sns:ap-south-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-south-1
+  #     - sns:
+  #         arn: arn:aws:sns:eu-west-3:167811431063:SearchRequest
+  #         topicName: SearchRequest-eu-west-3
+  #     - sns:
+  #         arn: arn:aws:sns:eu-west-2:167811431063:SearchRequest
+  #         topicName: SearchRequest-eu-west-2
+  #     - sns:
+  #         arn: arn:aws:sns:eu-west-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-eu-west-1
+  #     - sns:
+  #         arn: arn:aws:sns:ap-northeast-3:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-northeast-3
+  #     - sns:
+  #         arn: arn:aws:sns:ap-northeast-2:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-northeast-2
+  #     - sns:
+  #         arn: arn:aws:sns:ap-northeast-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-northeast-1
+  #     - sns:
+  #         arn: arn:aws:sns:sa-east-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-sa-east-1
+  #     - sns:
+  #         arn: arn:aws:sns:ca-central-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-ca-central-1
+  #     - sns:
+  #         arn: arn:aws:sns:ap-southeast-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-southeast-1
+  #     - sns:
+  #         arn: arn:aws:sns:ap-southeast-2:167811431063:SearchRequest
+  #         topicName: SearchRequest-ap-southeast-2
+  #     - sns:
+  #         arn: arn:aws:sns:eu-central-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-eu-central-1
+  #     - sns:
+  #         arn: arn:aws:sns:us-east-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-us-east-1
+  #     - sns:
+  #         arn: arn:aws:sns:us-east-2:167811431063:SearchRequest
+  #         topicName: SearchRequest-us-east-2
+  #     - sns:
+  #         arn: arn:aws:sns:us-west-1:167811431063:SearchRequest
+  #         topicName: SearchRequest-us-west-1
+  #     - sns:
+  #         arn: arn:aws:sns:us-west-2:167811431063:SearchRequest
+  #         topicName: SearchRequest-us-west-2
