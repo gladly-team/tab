@@ -45,19 +45,13 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  getUserFeature.mockImplementation((context, user, featureName) => {
-    if (featureName === YAHOO_SEARCH_NEW_USERS) {
-      return new Feature({
-        featureName: YAHOO_SEARCH_NEW_USERS,
-        variation: 'SearchForACause',
-      })
-    }
-    return new Feature({
+  getUserFeature.mockResolvedValue(
+    new Feature({
       featureName: YAHOO_SEARCH_NEW_USERS_V2,
-      variation: 'Control',
+      variation: 'Tooltip',
       inExperiment: false,
     })
-  })
+  )
   setMockDBResponse(DatabaseOperation.UPDATE, {
     // Like original user but with modified email.
     Attributes: getMockUserInstance(),
@@ -1084,48 +1078,6 @@ describe('createUser when user already exists (should be idempotent)', () => {
         causeId
       )
     ).not.toThrow()
-  })
-
-  it('sets the search engine correctly', async () => {
-    expect.assertions(2)
-
-    // Mock database responses.
-    const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(
-      Object.assign({}, userInfo)
-    )
-    setMockDBResponse(DatabaseOperation.CREATE, {
-      Attributes: userReturnedFromCreate,
-    })
-    const userContext = cloneDeep(defaultUserContext)
-    userContext.emailVerified = false
-    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
-
-    const updateMethod = jest.spyOn(UserModel, 'update')
-
-    databaseClient.update.mockImplementationOnce((params, callback) => {
-      callback(null, {
-        Attributes: {
-          ...getMockUserInstance(),
-          searchEngine: 'SearchForACause',
-        },
-      })
-    })
-
-    const returnedUser = await createUser(
-      userContext,
-      userInfo.id,
-      userInfo.email,
-      null
-    )
-
-    expect(updateMethod).toHaveBeenCalledWith(userContext, {
-      id: userInfo.id,
-      searchEngine: 'SearchForACause',
-      updated: moment.utc().toISOString(),
-    })
-
-    expect(returnedUser.searchEngine).toEqual('SearchForACause')
   })
 
   it('sets the search engine correctly if user in v2 in control', async () => {
