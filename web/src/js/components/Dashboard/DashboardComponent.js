@@ -39,7 +39,7 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
-  STORAGE_TREES_CAUSE_ID,
+  STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
 } from 'js/constants'
 import {
   goTo,
@@ -73,6 +73,7 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
+import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
@@ -504,25 +505,33 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Help plant trees this Arbor Day`}
+                  title={`Help us defend and reestablish reproductive rights`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Want to use your tabs to plant trees around the world?
-                        Try Tab for Trees! 🌳
+                        Your tabs can provide and advocate for safe reproductive
+                        health care on{' '}
+                        <Link
+                          to={'https://tab.gladly.io/reproductive-health/'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Tab for Reproductive Health
+                        </Link>
+                        .
                       </Typography>
                       <Typography variant={'body2'}>
-                        Tab for Trees is still in beta: some features like
-                        bookmarks are missing, but you can always switch back.
+                        (Still in beta: some features like bookmarks are
+                        missing, but you can always switch back.)
                       </Typography>
                     </>
                   }
-                  buttonText={'Try Tab for Trees'}
+                  buttonText={'Switch'}
                   onClick={() => {
                     switchToV4({
                       relayEnvironment: this.props.relay.environment,
                       userId: user.id,
-                      causeId: STORAGE_TREES_CAUSE_ID,
+                      causeId: STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
                     })
                   }}
                   onDismiss={() => {
@@ -532,6 +541,7 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     marginTop: 4,
+                    width: 390, // Remove unless needed visually
                   }}
                 />
               ) : null}
