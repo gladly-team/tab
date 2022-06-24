@@ -39,7 +39,7 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
-  STORAGE_TREES_CAUSE_ID,
+  STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
 } from 'js/constants'
 import {
   goTo,
@@ -504,25 +504,25 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Help plant trees this Arbor Day`}
+                  title={`If you're angry about Roe, too...`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Want to use your tabs to plant trees around the world?
-                        Try Tab for Trees! 🌳
+                        Your tabs can provide and advocate for safe reproductive
+                        health care on <b>Tab for Reproductive Health</b>.
                       </Typography>
                       <Typography variant={'body2'}>
-                        Tab for Trees is still in beta: some features like
-                        bookmarks are missing, but you can always switch back.
+                        (Still in beta: some features like bookmarks are
+                        missing, but you can always switch back.)
                       </Typography>
                     </>
                   }
-                  buttonText={'Try Tab for Trees'}
+                  buttonText={'Switch'}
                   onClick={() => {
                     switchToV4({
                       relayEnvironment: this.props.relay.environment,
                       userId: user.id,
-                      causeId: STORAGE_TREES_CAUSE_ID,
+                      causeId: STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
                     })
                   }}
                   onDismiss={() => {
