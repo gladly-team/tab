@@ -21,7 +21,7 @@ describe('UserSearchLogModel', () => {
 
   it('has the correct get permission', () => {
     expect(UserSearchLogModel.permissions.get).toBe(
-      permissionAuthorizers.userIdMatchesHashKey
+      permissionAuthorizers.idMatchesHashKey
     )
   })
 
@@ -35,7 +35,7 @@ describe('UserSearchLogModel', () => {
 
   it('has the correct create permission', () => {
     expect(UserSearchLogModel.permissions.create).toBe(
-      permissionAuthorizers.userIdMatchesHashKey
+      permissionAuthorizers.idMatchesHashKey
     )
   })
 
@@ -45,6 +45,8 @@ describe('UserSearchLogModel', () => {
       timestamp: '2017-07-17T20:45:53Z',
       source: 'test',
       searchEngine: 'non-existent-engine',
+      isAnonymous: false,
+      version: 1,
     })
     expect(() => UserSearchLogModel.validate(model)).toThrow()
   })
