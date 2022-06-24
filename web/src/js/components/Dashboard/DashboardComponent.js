@@ -73,6 +73,7 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
+import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
@@ -504,12 +505,20 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`If you're angry about Roe, too...`}
+                  title={`Help us defend and reestablish reproductive rights`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
                         Your tabs can provide and advocate for safe reproductive
-                        health care on <b>Tab for Reproductive Health</b>.
+                        health care on{' '}
+                        <Link
+                          to={'https://tab.gladly.io/reproductive-health/'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Tab for Reproductive Health
+                        </Link>
+                        .
                       </Typography>
                       <Typography variant={'body2'}>
                         (Still in beta: some features like bookmarks are
@@ -532,6 +541,7 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     marginTop: 4,
+                    width: 390, // Remove unless needed visually
                   }}
                 />
               ) : null}
