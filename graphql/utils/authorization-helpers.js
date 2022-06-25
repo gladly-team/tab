@@ -32,6 +32,8 @@ export const createGraphQLContext = userClaims => ({
 
 // Permission authorizers, used in models
 export const permissionAuthorizers = {}
+permissionAuthorizers.idMatchesHashKey = (user, hashKey) =>
+  user.id === hashKey || user.anonId === hashKey
 permissionAuthorizers.userIdMatchesHashKey = (user, hashKey) =>
   user.id === hashKey
 permissionAuthorizers.userIdMatchesRangeKey = (user, _hashKey, rangeKey) =>

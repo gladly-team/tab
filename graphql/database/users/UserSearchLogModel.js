@@ -36,13 +36,15 @@ class UserSearchLog extends DynamoDBModel {
       source: types.string(),
       searchEngine: types.string().valid(VALID_SEARCH_ENGINES),
       causeId: types.string(),
+      isAnonymous: types.bool(),
+      version: types.number(),
     }
   }
 
   static get permissions() {
     return {
-      create: permissionAuthorizers.userIdMatchesHashKey,
-      get: permissionAuthorizers.userIdMatchesHashKey,
+      create: permissionAuthorizers.idMatchesHashKey,
+      get: permissionAuthorizers.idMatchesHashKey,
     }
   }
 }

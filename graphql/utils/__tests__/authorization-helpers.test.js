@@ -49,6 +49,7 @@ describe('permission authorizer functions', () => {
     email: 'abc@example.com',
     emailVerified: true,
     authTime: 1,
+    anonId: 'anonId',
   }
 
   test('userIdMatchesHashKey works if user ID matches hash key', () => {
@@ -60,6 +61,25 @@ describe('permission authorizer functions', () => {
   test('userIdMatchesHashKey fails if user ID does not match hash key', () => {
     expect(
       permissionAuthorizers.userIdMatchesHashKey(
+        user,
+        '95bbefbf-63d1-4d36-931e-212fbe2bc3d9'
+      )
+    ).toBe(false)
+  })
+
+  test('idMatchesHashKey works if user ID matches hash key', () => {
+    expect(
+      permissionAuthorizers.idMatchesHashKey(user, 'abcdefghijklmno')
+    ).toBe(true)
+  })
+
+  test('idMatchesHashKey works if anonymous user ID matches hash key', () => {
+    expect(permissionAuthorizers.idMatchesHashKey(user, 'anonId')).toBe(true)
+  })
+
+  test('idMatchesHashKey fails if user and anon ID does not match hash key', () => {
+    expect(
+      permissionAuthorizers.idMatchesHashKey(
         user,
         '95bbefbf-63d1-4d36-931e-212fbe2bc3d9'
       )

@@ -75,6 +75,8 @@ const logSearch = async (userContext, userId, searchData = {}) => {
       ...(source && { source }),
       searchEngine: searchEngine.id,
       ...(causeId && { causeId }),
+      isAnonymous: false,
+      version: 1,
     })
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {
