@@ -12,6 +12,7 @@ import {
   clearAllMockDBResponses,
   getMockUserContext,
   getMockUserInstance,
+  getMockAnonUserContext,
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
@@ -104,8 +105,8 @@ describe('logSearch', () => {
         searches: 15, // hardcode $add operation
       }))
 
-    const user = await logSearch(userContext, userId)
-    expect(user).toEqual(expectedUser)
+    const response = await logSearch(userContext, userId)
+    expect(response.user).toEqual(expectedUser)
   })
 
   test('it logs the search for analytics', async () => {
@@ -413,7 +414,7 @@ describe('logSearch', () => {
       Item: mockUser,
     })
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId, {
+    await logSearch(userContext, userId, null, {
       source: 'chrome',
     })
 
@@ -430,7 +431,49 @@ describe('logSearch', () => {
     )
   })
 
-  test('it does not logs the source of the search when it is not one of the valid sources', async () => {
+  test('it overrides causeId and searchEngineId when provided', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 148, // valid: below daily maximum
+        },
+      },
+      causeId: 'testCauseId',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    await logSearch(userContext, userId, null, {
+      source: 'chrome',
+      searchEngineId: 'Ecosia',
+      causeId: 'abcd',
+    })
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        source: 'chrome',
+        searchEngine: 'Ecosia',
+        isAnonymous: false,
+        version: 1,
+        causeId: 'abcd',
+      })
+    )
+  })
+
+  test('it does not log the source of the search when it is not one of the valid sources', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -451,7 +494,7 @@ describe('logSearch', () => {
       Item: mockUser,
     })
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId, {
+    await logSearch(userContext, userId, null, {
       source: 'blahblahblah',
     })
 
@@ -463,6 +506,76 @@ describe('logSearch', () => {
         searchEngine: 'Bing',
         isAnonymous: false,
         version: 1,
+      })
+    )
+  })
+
+  test('throws when both userId and anonUserId are set', async () => {
+    expect.assertions(1)
+
+    await expect(
+      logSearch(userContext, 'dummyUserId', 'dummyAnonId', {
+        source: 'blahblahblah',
+      })
+    ).rejects.toEqual(new Error('userId and anonUserId cannot be set at once.'))
+  })
+
+  test('throws when neither userId nor anonUserId are set', async () => {
+    expect.assertions(1)
+
+    await expect(
+      logSearch(userContext, null, null, {
+        source: 'blahblahblah',
+      })
+    ).rejects.toEqual(
+      new Error('One of userId and anonUserId must be defined.')
+    )
+  })
+
+  test('logs search when anon user id is set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = getMockAnonUserContext()
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, anonUserContext.anonId, {
+      source: 'blahblahblah',
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: anonUserContext.anonId,
+        timestamp: moment.utc().toISOString(),
+        isAnonymous: true,
+        version: 2,
+      })
+    )
+  })
+
+  test('logs search with causeId and searchEngineId when anon user id is set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = getMockAnonUserContext()
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, anonUserContext.anonId, {
+      source: 'blahblahblah',
+      causeId: 'testCauseId',
+      searchEngineId: 'Bing',
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: anonUserContext.anonId,
+        timestamp: moment.utc().toISOString(),
+        isAnonymous: true,
+        version: 2,
+        causeId: 'testCauseId',
+        searchEngine: 'Bing',
       })
     )
   })

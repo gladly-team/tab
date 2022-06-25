@@ -6,13 +6,14 @@ import UserSearchLogModel from './UserSearchLogModel'
 import { getTodaySearchCount } from './user-utils'
 import getUserSearchEngine from './getUserSearchEngine'
 
-/**
- * Log a user's search event and change related stats.
- * @param {object} userContext - The user authorizer object.
- * @param {string} userId - The user id.
- * @return {Promise<User>} A promise that resolves into a User instance.
- */
-const logSearch = async (userContext, userId, searchData = {}) => {
+const getSource = searchData => {
+  const validSearchSources = ['self', 'chrome', 'ff', 'tab']
+  return searchData.source && validSearchSources.indexOf(searchData.source) > -1
+    ? searchData.source
+    : null
+}
+
+const logSearchKnownUser = async (userContext, userId, searchData) => {
   let user
   try {
     user = await UserModel.get(userContext, userId)
@@ -62,18 +63,19 @@ const logSearch = async (userContext, userId, searchData = {}) => {
     })
 
     // Log the search for analytics.
-    const validSearchSources = ['self', 'chrome', 'ff', 'tab']
-    const source =
-      searchData.source && validSearchSources.indexOf(searchData.source) > -1
-        ? searchData.source
-        : null
-    const causeId = user.v4BetaEnabled ? user.causeId : null
-    const searchEngine = await getUserSearchEngine(userContext, user)
+    const source = getSource(searchData)
+    const causeIdOnUser = user.v4BetaEnabled ? user.causeId : null
+    const causeId =
+      searchData && searchData.causeId ? searchData.causeId : causeIdOnUser
+    const searchEngineId =
+      searchData && searchData.searchEngineId
+        ? searchData.searchEngineId
+        : (await getUserSearchEngine(userContext, user)).id
     const logPromise = UserSearchLogModel.create(userContext, {
       userId,
       timestamp: moment.utc().toISOString(),
       ...(source && { source }),
-      searchEngine: searchEngine.id,
+      searchEngine: searchEngineId,
       ...(causeId && { causeId }),
       isAnonymous: false,
       version: 1,
@@ -82,7 +84,55 @@ const logSearch = async (userContext, userId, searchData = {}) => {
   } catch (e) {
     throw e
   }
-  return user
+  return {
+    user,
+    success: true,
+  }
+}
+
+const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
+  try {
+    const source = getSource(searchData)
+    await UserSearchLogModel.create(userContext, {
+      userId: anonUserId,
+      timestamp: moment.utc().toISOString(),
+      ...(source && { source }),
+      ...(searchData.searchEngineId && {
+        searchEngine: searchData.searchEngineId,
+      }),
+      ...(searchData.causeId && { causeId: searchData.causeId }),
+      isAnonymous: true,
+      version: 2, // anon user log search will only come from server-side logging
+    })
+  } catch (e) {
+    throw e
+  }
+  return {
+    success: true,
+  }
+}
+
+/**
+ * Log a user's search event and change related stats.
+ * @param {object} userContext - The user authorizer object.
+ * @param {string} userId - The user id.
+ * @param {string} anonUserId - The anonymous user id.
+ * @return {Promise<User>} A promise that resolves into a User instance.
+ */
+const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
+  if (userId && anonUserId) {
+    throw new Error('userId and anonUserId cannot be set at once.')
+  }
+
+  if (userId) {
+    return logSearchKnownUser(userContext, userId, searchData)
+  }
+
+  if (anonUserId) {
+    return logSearchAnonUser(userContext, anonUserId, searchData)
+  }
+
+  throw new Error('One of userId and anonUserId must be defined.')
 }
 
 export default logSearch
