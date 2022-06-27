@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Tab for a Cause.",
   "private": true,
-  "type": "module",
   "dependencies": {
     "accept-language-parser": "^1.5.0",
     "aws-sdk": "^2.814.0",
