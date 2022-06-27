@@ -55,5 +55,3 @@ Resources:
       DisplayName: "Search request SNS topic"
       TopicName: SearchRequest
       FifoTopic: false
-
-# TODO: set restrictive stack policies

@@ -1,3 +1,5 @@
+// Manage stack policies for all stack instances in the search-edge-request
+// StackSet.
 // Call with Node v13+:
 // AWS_PROFILE=some-admin-profile node scripts/set-search-sns-stack-policy.mjs
 
