@@ -84,6 +84,8 @@ const setStackPolicy = async () => {
   await Promise.all(
     stackInstances.map(instance => {
       AWS.config.update({ region: instance.region })
+
+      // Changing the region requires re-instantiating CloudFormation.
       const cloudformationRegion = new AWS.CloudFormation()
       return cloudformationRegion
         .setStackPolicy({
