@@ -586,7 +586,6 @@ class SearchPage extends React.Component {
                       page: newPageIndex,
                     })
                   }}
-                  searchSource={searchSource}
                   style={{
                     maxWidth: 600,
                     marginBottom: 40,
@@ -624,7 +623,6 @@ class SearchPage extends React.Component {
                   })
                 }}
                 isAdBlockerEnabled={isAdBlockerEnabled}
-                searchSource={searchSource}
                 style={{
                   maxWidth: 600,
                   marginBottom: 40,

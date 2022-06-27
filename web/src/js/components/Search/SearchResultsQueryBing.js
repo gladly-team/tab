@@ -5,8 +5,6 @@ import logger from 'js/utils/logger'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
 import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
-import { getCurrentUser } from 'js/authentication/user'
-import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { makePromiseCancelable } from 'js/utils/utils'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
 
@@ -59,22 +57,10 @@ class SearchResultsQueryBing extends React.Component {
   }
 
   async getSearchResults() {
-    const { page, query, searchSource } = this.props
+    const { page, query } = this.props
     if (!query) {
       return
     }
-
-    // Log the search event.
-    // We're not passing the user as a prop to this component because
-    // we don't want to delay the component mount.
-    getCurrentUser().then(user => {
-      if (user && user.id) {
-        LogSearchMutation({
-          userId: user.id,
-          ...(searchSource && { source: searchSource }),
-        })
-      }
-    })
 
     // Reset state of search results.
     this.setState({
@@ -278,7 +264,6 @@ SearchResultsQueryBing.propTypes = {
   query: PropTypes.string,
   page: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
-  searchSource: PropTypes.string,
 }
 
 SearchResultsQueryBing.defaultProps = {

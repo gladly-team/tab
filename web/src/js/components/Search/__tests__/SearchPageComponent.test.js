@@ -1458,20 +1458,6 @@ describe('Search results from Bing', () => {
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(1)
   })
 
-  it('[bing] passes a "searchSource" value of null to to SearchResultsQueryBing when prerendering with React Snap', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location = {
-      search: '?q=yumtacos&src=chrome',
-    }
-    isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
-  })
-
   it('[bing] passes "1" as the default page number to the SearchResultsQueryBing component when the "page" URL param is not set', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -1494,30 +1480,6 @@ describe('Search results from Bing', () => {
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
   })
 
-  it('[bing] passes the search source to the SearchResultsQueryBing component when the "src" URL param is set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&src=some-source'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-      'some-source'
-    )
-  })
-
-  it('[bing] passes null as the search source to the SearchResultsQueryBing component when the "src" URL param is not set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
-  })
-
   it('[bing] passes the new "page" to the SearchResultsQueryBing component when the URL param changes', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -1535,29 +1497,6 @@ describe('Search results from Bing', () => {
       },
     })
     expect(wrapper.find(SearchResultsQueryBing).prop('page')).toEqual(28)
-  })
-
-  it('[bing] passes the new "src" to the SearchResultsQueryBing component when the URL param changes', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=hello&src=chrome'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-      'chrome'
-    )
-    wrapper.setProps({
-      ...mockProps,
-      location: {
-        ...mockProps.location,
-        search: '?q=hello&src=ff',
-      },
-    })
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-      'ff'
-    )
   })
 
   // This is important for prerendering scripts for search results.
@@ -1661,30 +1600,6 @@ describe('Search results from Yahoo', () => {
       .dive()
       .dive()
     expect(wrapper.find(SearchResults).prop('page')).toBe(1)
-  })
-
-  it('[yahoo] passes the search source to the SearchResults component when the "page" URL param is set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&src=some-source'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResults).prop('searchSource')).toEqual(
-      'some-source'
-    )
-  })
-
-  it('[yahoo] passes null as the search source to the SearchResults component when the "src" URL param is not set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />)
-      .dive()
-      .dive()
-    expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
   })
 
   // This is important for prerendering scripts for search results.

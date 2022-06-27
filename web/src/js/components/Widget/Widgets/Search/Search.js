@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_YAHOO_SEARCH_DEMO, YAHOO_USER_ID } from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
-import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import appTheme, {
   dashboardIconInactiveColor,
@@ -69,13 +68,6 @@ class Search extends React.Component {
     const yahooHasAcknowledged = localStorageMgr.getItem(
       STORAGE_YAHOO_SEARCH_DEMO
     )
-    if (yahooHasAcknowledged === 'true') {
-      const user = await getCurrentUser()
-      LogSearchMutation({
-        userId: user.id,
-        source: 'tab',
-      })
-    }
     if (this.state.isYahooUser && yahooHasAcknowledged === null) {
       this.setState({ showYahooDemoPopover: true })
     } else {

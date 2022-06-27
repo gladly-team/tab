@@ -1,8 +1,6 @@
 import moment from 'moment'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
-// import addVc from './addVc'
-// import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
 import getUserSearchEngine from './getUserSearchEngine'
 
@@ -78,7 +76,7 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
       searchEngine: searchEngineId,
       ...(causeId && { causeId }),
       isAnonymous: false,
-      version: 1,
+      version: 2,
     })
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {

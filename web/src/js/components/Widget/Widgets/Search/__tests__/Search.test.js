@@ -9,10 +9,8 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { YAHOO_USER_ID } from 'js/constants'
 import Button from '@material-ui/core/Button'
-import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { getCurrentUser } from 'js/authentication/user'
 
-jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/utils/localstorage-mgr', () => ({
@@ -290,35 +288,4 @@ describe('Yahoo Search Demo', () => {
     )
   })
 
-  it('If Yahoo user, clicking yes logs a tab on successful search', async () => {
-    expect.assertions(2)
-    const SearchWidget = require('js/components/Widget/Widgets/Search/Search')
-      .default
-    const mockProps = getMockYahooProps()
-    localStorageMgr.getItem
-      .mockReturnValueOnce(null)
-      .mockReturnValueOnce('true')
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <SearchWidget {...mockProps} />
-      </MuiThemeProvider>
-    )
-    const searchInput = wrapper.find(TextField).find('input')
-    searchInput.simulate('click')
-    wrapper.update()
-    wrapper
-      .find(Button)
-      .at(2)
-      .simulate('click')
-    wrapper.update()
-    searchInput.simulate('click')
-    searchInput.instance().value = 'taco'
-    searchInput.simulate('keypress', { key: 'Enter' })
-    await flushAllPromises()
-    expect(windowOpenMock).toHaveBeenCalledWith(
-      'https://search.yahoo.com/search;?q=taco',
-      '_top'
-    )
-    expect(LogSearchMutation).toHaveBeenCalled()
-  })
 })
