@@ -43,6 +43,9 @@
 # To update stack sets, see:
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-update.html
 #
+# Use `./scripts/set-search-sns-stack-policy.mjs` to manage stack policies
+# before and after modifying stacks.
+#
 Resources:
   # Topic ARNs will be identical but for their region:
   # arn:aws:sns:us-west-1:167811431063:SearchRequest
