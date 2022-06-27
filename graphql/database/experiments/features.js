@@ -198,46 +198,9 @@ const features = {
       },
     ],
   },
+  // TODO: remove anytime after mid-August 2022.
   [SUPPORTING_CAUSE_CHIP]: {
-    defaultValue: false,
-    rules: [
-      /* Begin internal overrides */
-      {
-        condition: {
-          v4BetaEnabled: {
-            $eq: true,
-          },
-          [`internalExperimentOverrides.${SUPPORTING_CAUSE_CHIP}`]: {
-            $eq: true,
-            $exists: true,
-          },
-        },
-        force: true,
-      },
-      {
-        condition: {
-          v4BetaEnabled: {
-            $eq: true,
-          },
-          [`internalExperimentOverrides.${SUPPORTING_CAUSE_CHIP}`]: {
-            $eq: false,
-            $exists: true,
-          },
-        },
-        force: false,
-      },
-      /* End internal overrides */
-      {
-        variations: [false, true],
-        weights: [0.5, 0.5],
-        coverage: 1,
-        condition: {
-          v4BetaEnabled: {
-            $eq: true,
-          },
-        },
-      },
-    ],
+    defaultValue: true,
   },
 }
 

@@ -136,6 +136,8 @@ describe('logSearch', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         searchEngine: 'Bing',
+        isAnonymous: false,
+        version: 1,
       })
     )
   })
@@ -169,6 +171,8 @@ describe('logSearch', () => {
         timestamp: moment.utc().toISOString(),
         searchEngine: 'Bing',
         causeId: 'testCauseId',
+        isAnonymous: false,
+        version: 1,
       })
     )
   })
@@ -420,6 +424,8 @@ describe('logSearch', () => {
         timestamp: moment.utc().toISOString(),
         source: 'chrome',
         searchEngine: 'Bing',
+        isAnonymous: false,
+        version: 1,
       })
     )
   })
@@ -455,6 +461,8 @@ describe('logSearch', () => {
         userId,
         timestamp: moment.utc().toISOString(),
         searchEngine: 'Bing',
+        isAnonymous: false,
+        version: 1,
       })
     )
   })
