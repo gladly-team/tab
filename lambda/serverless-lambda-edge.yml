@@ -129,6 +129,8 @@ resources:
         # able to communicate with resources within your VPC.
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        # TODO: Give permission to publish to SNS SearchRequest topic
+        #   in any region. In test/dev stage, set to dev-SearchRequest topic.
         Policies:
           - PolicyName: gladly-${self:custom.stage}-lambda-execution-role
             PolicyDocument:
