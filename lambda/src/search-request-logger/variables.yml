@@ -2,7 +2,8 @@
 # approach is to create separate AWS accounts per environment, which we
 # haven't yet done. Instead, we've created separate SNS topics.
 
-# TODO: we'll want environment-specific API calls, too, when implemented.
+# TODO: use the appropriate graphql endpoint based on the environment,
+#   when we add that API request.
 
 test:
   events:
