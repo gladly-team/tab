@@ -14,7 +14,7 @@ frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
@@ -31,6 +31,9 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaVersion*"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchRequestLoggerLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchRequestLoggerLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchRequestLoggerLogGroup"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
   #   ]}'
   stackPolicy:
@@ -47,6 +50,18 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/FirebaseAuthorizerLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/SearchRequestLoggerLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/SearchRequestLoggerLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/SearchRequestLoggerLogGroup"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
@@ -94,3 +109,6 @@ functions:
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
+  searchRequestLogger:
+    handler: build/search-request-logger/search-request-logger.handler
+    events:  ${file(./src/search-request-logger/variables.yml):${self:provider.stage}.events}

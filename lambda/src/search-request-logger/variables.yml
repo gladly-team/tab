@@ -1,0 +1,169 @@
+# We want separate data flows for different environments. The recommended
+# approach is to create separate AWS accounts per environment, which we
+# haven't yet done. Instead, we've created separate SNS topics.
+
+# TODO: use the appropriate graphql endpoint based on the environment,
+#   when we add that API request.
+
+test:
+  events:
+    - sns:
+        arn: arn:aws:sns:eu-north-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-north-1
+    - sns:
+        arn: arn:aws:sns:ap-south-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-south-1
+    - sns:
+        arn: arn:aws:sns:eu-west-3:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-3
+    - sns:
+        arn: arn:aws:sns:eu-west-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-2
+    - sns:
+        arn: arn:aws:sns:eu-west-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-1
+    - sns:
+        arn: arn:aws:sns:ap-northeast-3:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-3
+    - sns:
+        arn: arn:aws:sns:ap-northeast-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-2
+    - sns:
+        arn: arn:aws:sns:ap-northeast-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-1
+    - sns:
+        arn: arn:aws:sns:sa-east-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-sa-east-1
+    - sns:
+        arn: arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ca-central-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-southeast-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-southeast-2
+    - sns:
+        arn: arn:aws:sns:eu-central-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-central-1
+    - sns:
+        arn: arn:aws:sns:us-east-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-east-1
+    - sns:
+        arn: arn:aws:sns:us-east-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-east-2
+    - sns:
+        arn: arn:aws:sns:us-west-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-west-1
+    - sns:
+        arn: arn:aws:sns:us-west-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-west-2
+
+dev:
+  events:
+    - sns:
+        arn: arn:aws:sns:eu-north-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-north-1
+    - sns:
+        arn: arn:aws:sns:ap-south-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-south-1
+    - sns:
+        arn: arn:aws:sns:eu-west-3:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-3
+    - sns:
+        arn: arn:aws:sns:eu-west-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-2
+    - sns:
+        arn: arn:aws:sns:eu-west-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-west-1
+    - sns:
+        arn: arn:aws:sns:ap-northeast-3:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-3
+    - sns:
+        arn: arn:aws:sns:ap-northeast-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-2
+    - sns:
+        arn: arn:aws:sns:ap-northeast-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-northeast-1
+    - sns:
+        arn: arn:aws:sns:sa-east-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-sa-east-1
+    - sns:
+        arn: arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ca-central-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-southeast-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-ap-southeast-2
+    - sns:
+        arn: arn:aws:sns:eu-central-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-eu-central-1
+    - sns:
+        arn: arn:aws:sns:us-east-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-east-1
+    - sns:
+        arn: arn:aws:sns:us-east-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-east-2
+    - sns:
+        arn: arn:aws:sns:us-west-1:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-west-1
+    - sns:
+        arn: arn:aws:sns:us-west-2:167811431063:dev-SearchRequest
+        topicName: dev-SearchRequest-us-west-2
+
+
+prod:
+  events:
+    - sns:
+        arn: arn:aws:sns:eu-north-1:167811431063:SearchRequest
+        topicName: SearchRequest-eu-north-1
+    - sns:
+        arn: arn:aws:sns:ap-south-1:167811431063:SearchRequest
+        topicName: SearchRequest-ap-south-1
+    - sns:
+        arn: arn:aws:sns:eu-west-3:167811431063:SearchRequest
+        topicName: SearchRequest-eu-west-3
+    - sns:
+        arn: arn:aws:sns:eu-west-2:167811431063:SearchRequest
+        topicName: SearchRequest-eu-west-2
+    - sns:
+        arn: arn:aws:sns:eu-west-1:167811431063:SearchRequest
+        topicName: SearchRequest-eu-west-1
+    - sns:
+        arn: arn:aws:sns:ap-northeast-3:167811431063:SearchRequest
+        topicName: SearchRequest-ap-northeast-3
+    - sns:
+        arn: arn:aws:sns:ap-northeast-2:167811431063:SearchRequest
+        topicName: SearchRequest-ap-northeast-2
+    - sns:
+        arn: arn:aws:sns:ap-northeast-1:167811431063:SearchRequest
+        topicName: SearchRequest-ap-northeast-1
+    - sns:
+        arn: arn:aws:sns:sa-east-1:167811431063:SearchRequest
+        topicName: SearchRequest-sa-east-1
+    - sns:
+        arn: arn:aws:sns:ca-central-1:167811431063:SearchRequest
+        topicName: SearchRequest-ca-central-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-1:167811431063:SearchRequest
+        topicName: SearchRequest-ap-southeast-1
+    - sns:
+        arn: arn:aws:sns:ap-southeast-2:167811431063:SearchRequest
+        topicName: SearchRequest-ap-southeast-2
+    - sns:
+        arn: arn:aws:sns:eu-central-1:167811431063:SearchRequest
+        topicName: SearchRequest-eu-central-1
+    - sns:
+        arn: arn:aws:sns:us-east-1:167811431063:SearchRequest
+        topicName: SearchRequest-us-east-1
+    - sns:
+        arn: arn:aws:sns:us-east-2:167811431063:SearchRequest
+        topicName: SearchRequest-us-east-2
+    - sns:
+        arn: arn:aws:sns:us-west-1:167811431063:SearchRequest
+        topicName: SearchRequest-us-west-1
+    - sns:
+        arn: arn:aws:sns:us-west-2:167811431063:SearchRequest
+        topicName: SearchRequest-us-west-2
