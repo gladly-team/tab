@@ -11,6 +11,6 @@ exports.handler = async event => {
   console.log(message)
 
   return {
-    some: 'stuff',
+    success: true,
   }
 }

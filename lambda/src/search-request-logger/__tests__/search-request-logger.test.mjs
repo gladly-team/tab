@@ -35,4 +35,13 @@ describe('Search request logger', () => {
     // eslint-disable-next-line no-console
     expect(consoleLogSpy).toHaveBeenLastCalledWith('Hello world')
   })
+
+  it('returns the expected value', async () => {
+    expect.assertions(1)
+    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+    const mockEvent = setSNSEventMessage(getMockSNSEventObject(), 'Hello world')
+    const { handler } = require('../search-request-logger.mjs')
+    const response = await handler(mockEvent)
+    expect(response).toEqual({ success: true })
+  })
 })
