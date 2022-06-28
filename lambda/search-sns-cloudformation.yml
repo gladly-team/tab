@@ -53,5 +53,5 @@ Resources:
     Type: AWS::SNS::Topic
     Properties: 
       DisplayName: "Search request SNS topic"
-      TopicName: SearchRequest
+      TopicName: SearchRequest # Change to dev-SearchRequest, as needed
       FifoTopic: false
