@@ -75,10 +75,12 @@ exports.handler = (event, context, callback) => {
     status: '307',
     statusDescription: 'Found',
     headers: {
-      'X-Tab-Debug-Stage': {
-        key: 'X-Tab-Debug-Stage',
-        value: stage,
-      },
+      'X-Tab-Debug-Stage': [
+        {
+          key: 'X-Tab-Debug-Stage',
+          value: stage,
+        },
+      ],
       location: [
         {
           key: 'Location',
