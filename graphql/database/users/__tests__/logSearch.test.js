@@ -18,10 +18,15 @@ import {
 } from '../../test-utils'
 import getUserSearchEngine from '../getUserSearchEngine'
 
+const mockTestNanoId = '12345'
+
 jest.mock('../getUserSearchEngine')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../checkSearchRateLimit')
+jest.mock('nanoid', () => {
+  return { nanoid: () => mockTestNanoId }
+})
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -431,7 +436,7 @@ describe('logSearch', () => {
     )
   })
 
-  test('it overrides causeId and searchEngineId when provided', async () => {
+  test('it overrides causeId, version and searchEngineId when provided', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -457,6 +462,7 @@ describe('logSearch', () => {
       source: 'chrome',
       searchEngineId: 'Ecosia',
       causeId: 'abcd',
+      version: 3,
     })
 
     expect(userSearchLogCreate).toHaveBeenLastCalledWith(
@@ -467,7 +473,7 @@ describe('logSearch', () => {
         source: 'chrome',
         searchEngine: 'Ecosia',
         isAnonymous: false,
-        version: 1,
+        version: 3,
         causeId: 'abcd',
       })
     )
@@ -510,28 +516,6 @@ describe('logSearch', () => {
     )
   })
 
-  test('throws when both userId and anonUserId are set', async () => {
-    expect.assertions(1)
-
-    await expect(
-      logSearch(userContext, 'dummyUserId', 'dummyAnonId', {
-        source: 'blahblahblah',
-      })
-    ).rejects.toEqual(new Error('userId and anonUserId cannot be set at once.'))
-  })
-
-  test('throws when neither userId nor anonUserId are set', async () => {
-    expect.assertions(1)
-
-    await expect(
-      logSearch(userContext, null, null, {
-        source: 'blahblahblah',
-      })
-    ).rejects.toEqual(
-      new Error('One of userId and anonUserId must be defined.')
-    )
-  })
-
   test('logs search when anon user id is set', async () => {
     expect.assertions(2)
 
@@ -548,13 +532,14 @@ describe('logSearch', () => {
       addTimestampFieldsToItem({
         userId: anonUserContext.anonId,
         timestamp: moment.utc().toISOString(),
+        searchEngine: 'SearchForACause',
         isAnonymous: true,
-        version: 2,
+        version: 1,
       })
     )
   })
 
-  test('logs search with causeId and searchEngineId when anon user id is set', async () => {
+  test('logs search with causeId, searchEngineId and version when anon user id is set', async () => {
     expect.assertions(2)
 
     const anonUserContext = getMockAnonUserContext()
@@ -564,6 +549,7 @@ describe('logSearch', () => {
       source: 'blahblahblah',
       causeId: 'testCauseId',
       searchEngineId: 'Bing',
+      version: 3,
     })
 
     expect(userGet).not.toHaveBeenCalled()
@@ -573,9 +559,35 @@ describe('logSearch', () => {
         userId: anonUserContext.anonId,
         timestamp: moment.utc().toISOString(),
         isAnonymous: true,
-        version: 2,
+        version: 3,
         causeId: 'testCauseId',
         searchEngine: 'Bing',
+      })
+    )
+  })
+
+  test('logs search with random generated nanoid when neither user id nor anon id set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, null, {
+      source: 'blahblahblah',
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: mockTestNanoId,
+        timestamp: moment.utc().toISOString(),
+        searchEngine: 'SearchForACause',
+        isAnonymous: true,
+        version: 1,
       })
     )
   })

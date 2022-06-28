@@ -1,8 +1,7 @@
 import moment from 'moment'
+import { nanoid } from 'nanoid'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
-// import addVc from './addVc'
-// import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
 import getUserSearchEngine from './getUserSearchEngine'
 
@@ -11,6 +10,26 @@ const getSource = searchData => {
   return searchData.source && validSearchSources.indexOf(searchData.source) > -1
     ? searchData.source
     : null
+}
+
+const createUserSearchLogModel = async (
+  userContext,
+  userId,
+  causeId,
+  searchEngineId,
+  version,
+  isAnonymous,
+  source
+) => {
+  return UserSearchLogModel.create(userContext, {
+    userId,
+    timestamp: moment.utc().toISOString(),
+    ...(source && { source }),
+    searchEngine: searchEngineId || 'SearchForACause',
+    ...(causeId && { causeId }),
+    isAnonymous,
+    version: version || 1,
+  })
 }
 
 const logSearchKnownUser = async (userContext, userId, searchData) => {
@@ -71,15 +90,15 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
       searchData && searchData.searchEngineId
         ? searchData.searchEngineId
         : (await getUserSearchEngine(userContext, user)).id
-    const logPromise = UserSearchLogModel.create(userContext, {
+    const logPromise = createUserSearchLogModel(
+      userContext,
       userId,
-      timestamp: moment.utc().toISOString(),
-      ...(source && { source }),
-      searchEngine: searchEngineId,
-      ...(causeId && { causeId }),
-      isAnonymous: false,
-      version: 1,
-    })
+      causeId,
+      searchEngineId,
+      searchData.version,
+      false,
+      source
+    )
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {
     throw e
@@ -93,17 +112,15 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
 const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
   try {
     const source = getSource(searchData)
-    await UserSearchLogModel.create(userContext, {
-      userId: anonUserId,
-      timestamp: moment.utc().toISOString(),
-      ...(source && { source }),
-      ...(searchData.searchEngineId && {
-        searchEngine: searchData.searchEngineId,
-      }),
-      ...(searchData.causeId && { causeId: searchData.causeId }),
-      isAnonymous: true,
-      version: 2, // anon user log search will only come from server-side logging
-    })
+    await createUserSearchLogModel(
+      userContext,
+      anonUserId,
+      searchData.causeId,
+      searchData.searchEngineId,
+      searchData.version,
+      true,
+      source
+    )
   } catch (e) {
     throw e
   }
@@ -120,19 +137,18 @@ const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
  * @return {Promise<User>} A promise that resolves into a User instance.
  */
 const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
-  if (userId && anonUserId) {
-    throw new Error('userId and anonUserId cannot be set at once.')
-  }
-
   if (userId) {
     return logSearchKnownUser(userContext, userId, searchData)
   }
 
-  if (anonUserId) {
-    return logSearchAnonUser(userContext, anonUserId, searchData)
+  let anonId = anonUserId
+  const modifiedUserContext = Object.assign({}, userContext)
+  if (!anonUserId) {
+    anonId = nanoid()
+    modifiedUserContext.anonId = anonId
   }
 
-  throw new Error('One of userId and anonUserId must be defined.')
+  return logSearchAnonUser(modifiedUserContext, anonId, searchData)
 }
 
 export default logSearch

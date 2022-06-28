@@ -1991,6 +1991,7 @@ const logSearchMutation = mutationWithClientMutationId({
     source: { type: GraphQLString },
     causeId: { type: GraphQLString },
     searchEngineId: { type: GraphQLString },
+    version: { type: GraphQLInt },
   },
   outputFields: {
     user: {
