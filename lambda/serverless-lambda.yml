@@ -14,7 +14,7 @@ frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:

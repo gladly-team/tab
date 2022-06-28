@@ -1,7 +1,16 @@
 module.exports = api => {
   const isTest = api.env('test')
   return {
-    presets: ['@babel/preset-env'],
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: {
+            node: '14',
+          },
+        },
+      ],
+    ],
     plugins: [
       'babel-plugin-lodash',
       // Do not use transform-inline-environment-variables during
