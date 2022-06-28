@@ -132,6 +132,12 @@ resources:
                 # website endpoints:
                 # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
                 OriginProtocolPolicy: http-only
+              OriginCustomHeaders:
+                # We use custom headers as a workaround for the fact that
+                # Edge functions don't support environment variables. See:
+                # https://stackoverflow.com/a/58101487/1332513
+                - HeaderName: X-Tab-Stage
+                  HeaderValue: ${self:custom.stage}
             # GraphQL service.
             - DomainName: ${self:custom.graphQLProxyDomain}
               OriginPath: ${self:custom.graphQLProxyPath}
@@ -316,6 +322,9 @@ resources:
                 - HEAD
                 - GET
                 - OPTIONS
+              # The origin isn't used for how we use this endpoint now, which
+              # is as a 307 redirect only. However, we do use the
+              # OriginCustomHeaders defined on the origin.
               TargetOriginId: ${self:custom.searchAppName}
               ForwardedValues:
                 # Required to forward search query.

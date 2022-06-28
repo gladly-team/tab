@@ -16,6 +16,15 @@ exports.handler = (event, context, callback) => {
   const params = new URLSearchParams(request.querystring.toLowerCase())
   const searchQueryVal = params.get(SFAC_QUERY_QS_KEY)
 
+  // Get the deploy stage (ex: prod, dev, or test). We set the custom
+  // header value on the CloudFront distribution as a workaround to not
+  // having access to environment variables in Lambda@Edge. See:
+  // https://stackoverflow.com/a/58101487/1332513
+  const stage = get(
+    request,
+    'origin.custom.customHeaders["x-tab-stage"][0].value'
+  )
+
   // Get the redirect destination URL.
   let searchBaseURL
   let searchProviderQueryKey
@@ -44,6 +53,8 @@ exports.handler = (event, context, callback) => {
       url.searchParams.set('type', typeParamVal)
       searchBaseURL = url.href
     } catch (e) {
+      // We may eventually want to log externally.
+      // eslint-disable-next-line no-console
       console.error(e)
       searchBaseURL = yahooBaseURL
     }
@@ -64,6 +75,10 @@ exports.handler = (event, context, callback) => {
     status: '307',
     statusDescription: 'Found',
     headers: {
+      'X-Tab-Debug-Stage': {
+        key: 'X-Tab-Debug-Stage',
+        value: stage,
+      },
       location: [
         {
           key: 'Location',
