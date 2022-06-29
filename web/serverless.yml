@@ -322,9 +322,10 @@ resources:
                 - HEAD
                 - GET
                 - OPTIONS
-              # The origin isn't used for how we use this endpoint now, which
-              # is as a 307 redirect only. However, we do use the
-              # OriginCustomHeaders defined on the origin.
+              # The actual origin server isn't used currently because the
+              # associated Lambda@Edge function always returns a 307 redirect.
+              # However, we do rely on the OriginCustomHeaders defined on the
+              # origin.
               TargetOriginId: ${self:custom.searchAppName}
               ForwardedValues:
                 # Required to forward search query.
