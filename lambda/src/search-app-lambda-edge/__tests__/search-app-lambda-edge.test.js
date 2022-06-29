@@ -1,9 +1,18 @@
 /* eslint-env jest */
 
+import AWS from 'aws-sdk'
 import { clone } from 'lodash/lang'
 import { setWith } from 'lodash/object'
 import { getMockCloudFrontEventObject } from '../../utils/lambda-arg-utils'
 import searchURLByRegion from '../searchURLByRegion'
+
+jest.mock('aws-sdk', () => {
+  const mockSNS = {
+    publish: jest.fn().mockReturnThis(),
+    promise: jest.fn(),
+  }
+  return { SNS: jest.fn(() => mockSNS) }
+})
 
 jest.mock('../searchURLByRegion')
 
@@ -20,6 +29,7 @@ afterEach(() => {
 
 const searchV1Path = '/search/'
 const searchV2Path = '/search/v2'
+const searchV3Path = '/search/v3'
 const setEventURI = (event, uri) => {
   // Like `set` but immutable:
   // https://github.com/lodash/lodash/issues/1696#issuecomment-328335502
@@ -280,7 +290,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(2)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     const response = await handler(event)
     expect(response.status).toEqual('307')
     expect(response.statusDescription).toEqual('Found')
@@ -290,7 +300,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none'
@@ -312,7 +322,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'q=pizza'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -324,7 +334,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'q=pizza+palace'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -336,7 +346,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'q=pizza🍕'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -348,7 +358,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza&blah=foo'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -360,7 +370,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -372,7 +382,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=tab'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -384,7 +394,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'hi=there&c=abc123&q=pizza'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -396,7 +406,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring = 'hi=there&r=2468&q=pizza'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
@@ -408,7 +418,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV2Path)
+    const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     const response = await handler(event)
@@ -423,7 +433,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setHeader(
       setHeader(
-        setEventURI(defaultEvent, searchV2Path),
+        setEventURI(defaultEvent, searchV3Path),
         'cloudfront-viewer-country',
         'MX'
       ),
@@ -433,5 +443,41 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
     await handler(event)
     expect(searchURLByRegion).toHaveBeenCalledWith('MX', 'es')
+  })
+
+  it('publishes to SNS once', async () => {
+    expect.assertions(2)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchV3Path)
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    expect(sns.publish).toHaveBeenCalledTimes(1)
+    expect(sns.publish().promise).toHaveBeenCalledTimes(1)
+  })
+
+  it('publishes to SNS with the expected message', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchV3Path)
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const expectedMessage = JSON.stringify({
+      user: {
+        idToken: null,
+      },
+      data: {
+        src: 'ff',
+        engine: 'SearchForACause',
+        causeId: 'someCauseId',
+      },
+    })
+    const input = sns.publish.mock.calls[0][0]
+    expect(input.Message).toEqual(expectedMessage)
   })
 })
