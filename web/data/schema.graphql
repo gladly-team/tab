@@ -750,6 +750,7 @@ input LogSearchInput {
   source: String
   causeId: String
   searchEngineId: String
+  version: Int
   clientMutationId: String
 }
 

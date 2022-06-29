@@ -4,6 +4,9 @@ import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
 import { getTodaySearchCount } from './user-utils'
 import getUserSearchEngine from './getUserSearchEngine'
+import getSearchEngine from '../search/getSearchEngine'
+import getCause from '../cause/getCause'
+import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
 const getSource = searchData => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab']
@@ -137,6 +140,30 @@ const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
  * @return {Promise<User>} A promise that resolves into a User instance.
  */
 const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
+  // Do some validation on searchData fields (searchEngineId, causeId)
+  if (searchData.searchEngineId) {
+    try {
+      await getSearchEngine(searchData.searchEngineId)
+    } catch (e) {
+      if (e instanceof DatabaseItemDoesNotExistException) {
+        throw new Error('Provided search engine ID does not exist in DB')
+      } else {
+        throw e
+      }
+    }
+  }
+  if (searchData.causeId) {
+    try {
+      await getCause(searchData.causeId)
+    } catch (e) {
+      if (e instanceof DatabaseItemDoesNotExistException) {
+        throw new Error('Provided cause ID does not exist in DB')
+      } else {
+        throw e
+      }
+    }
+  }
+
   if (userId) {
     return logSearchKnownUser(userContext, userId, searchData)
   }

@@ -452,7 +452,7 @@ describe('logSearch', () => {
           numSearches: 148, // valid: below daily maximum
         },
       },
-      causeId: 'testCauseId',
+      causeId: 'CA6A5C2uj',
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
@@ -461,7 +461,7 @@ describe('logSearch', () => {
     await logSearch(userContext, userId, null, {
       source: 'chrome',
       searchEngineId: 'Ecosia',
-      causeId: 'abcd',
+      causeId: 'tdU_PsRIM',
       version: 3,
     })
 
@@ -474,7 +474,7 @@ describe('logSearch', () => {
         searchEngine: 'Ecosia',
         isAnonymous: false,
         version: 3,
-        causeId: 'abcd',
+        causeId: 'tdU_PsRIM',
       })
     )
   })
@@ -547,7 +547,7 @@ describe('logSearch', () => {
     const userGet = jest.spyOn(UserModel, 'get')
     await logSearch(anonUserContext, null, anonUserContext.anonId, {
       source: 'blahblahblah',
-      causeId: 'testCauseId',
+      causeId: 'tdU_PsRIM',
       searchEngineId: 'Bing',
       version: 3,
     })
@@ -560,7 +560,7 @@ describe('logSearch', () => {
         timestamp: moment.utc().toISOString(),
         isAnonymous: true,
         version: 3,
-        causeId: 'testCauseId',
+        causeId: 'tdU_PsRIM',
         searchEngine: 'Bing',
       })
     )
@@ -589,6 +589,42 @@ describe('logSearch', () => {
         isAnonymous: true,
         version: 1,
       })
+    )
+  })
+
+  test('throws if client provided causeId not known', async () => {
+    expect.assertions(1)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+
+    await expect(
+      logSearch(anonUserContext, null, null, {
+        source: 'blahblahblah',
+        causeId: 'blahblah',
+        searchEngineId: 'SearchForACause',
+      })
+    ).rejects.toEqual(new Error('Provided cause ID does not exist in DB'))
+  })
+
+  test('throws if client provided searchEngineId not known', async () => {
+    expect.assertions(1)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+
+    await expect(
+      logSearch(anonUserContext, null, null, {
+        source: 'blahblahblah',
+        causeId: 'tdU_PsRIM',
+        searchEngineId: 'blahblah',
+      })
+    ).rejects.toEqual(
+      new Error('Provided search engine ID does not exist in DB')
     )
   })
 })
