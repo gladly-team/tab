@@ -87,6 +87,10 @@ custom:
   prune:
     automatic: true
     number: 5
+  searchRequestSNSTopicName:
+    test: dev-SearchRequest
+    dev: dev-SearchRequest
+    prod: SearchRequest
 
 # Only include the build.
 # Don't include any dependencies by default. CloudFront-triggered Lambdas
@@ -129,8 +133,6 @@ resources:
         # able to communicate with resources within your VPC.
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        # TODO: Give permission to publish to SNS SearchRequest topic
-        #   in any region. In test/dev stage, set to dev-SearchRequest topic.
         Policies:
           - PolicyName: gladly-${self:custom.stage}-lambda-execution-role
             PolicyDocument:
@@ -160,6 +162,23 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+          # Give permission to publish to the SNS SearchRequest topic in any
+          # region.
+          - PolicyName: gladly-${self:custom.stage}-search-request-log-role
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - sns:Publish
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:sns:*' # allow in any region
+                        - Ref: 'AWS::AccountId'
+                        # SNS topic: SearchRequest or dev-SearchRequest
+                        - ${self:custom.searchRequestSNSTopicName}:${self:custom.stage}
 
 functions:
   # We manually reference the ARN of these Lambda@Edge functions in our
