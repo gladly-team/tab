@@ -157,8 +157,7 @@ env:
   - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
   - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
   - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1227 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  # TODO: update after deploy
-  - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1239 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1242 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
