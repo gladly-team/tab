@@ -35,7 +35,7 @@ const publishToSNS = async ({ stage, messageData }) => {
 exports.handler = async event => {
   const request = get(event, 'Records[0].cf.request')
   const SFAC_QUERY_QS_KEY = 'q'
-  const params = new URLSearchParams(request.querystring.toLowerCase())
+  const params = new URLSearchParams(request.querystring)
   const searchQueryVal = params.get(SFAC_QUERY_QS_KEY)
 
   // Get the deploy stage (ex: prod, dev, or test). We set the custom

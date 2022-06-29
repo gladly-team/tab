@@ -250,7 +250,7 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
-      'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_ff.c_somecauseid.r_2468&p=pizza'
+      'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_ff.c_someCauseId.r_2468&p=pizza'
     )
   })
 
@@ -413,7 +413,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
-      'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_ff.c_somecauseid.r_2468&p=pizza'
+      'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_ff.c_someCauseId.r_2468&p=pizza'
     )
   })
 
