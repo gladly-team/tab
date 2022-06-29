@@ -20,6 +20,7 @@ const MOCK_V2_SEARCH_URL =
   'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001'
 
 beforeEach(() => {
+  process.env.AWS_REGION = 'ca-central-1'
   searchURLByRegion.mockReturnValue(MOCK_V2_SEARCH_URL)
 })
 
@@ -34,6 +35,15 @@ const setEventURI = (event, uri) => {
   // Like `set` but immutable:
   // https://github.com/lodash/lodash/issues/1696#issuecomment-328335502
   return setWith(clone(event), 'Records[0].cf.request.uri', uri, clone)
+}
+
+const setXTabStageHeaderVal = (event, newValue) => {
+  return setWith(
+    clone(event),
+    'Records[0].cf.request.origin.custom.customHeaders["x-tab-stage"][0].value',
+    newValue,
+    clone
+  )
 }
 
 const setHeader = (event, headerName, headerVal) => {
@@ -479,5 +489,62 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     })
     const input = sns.publish.mock.calls[0][0]
     expect(input.Message).toEqual(expectedMessage)
+  })
+
+  it('publishes to SNS with the expected topic ARN on non-prod (no header set)', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+
+    // Don't set the X-Tab-Stage header.
+    const event = setEventURI(defaultEvent, searchV3Path)
+
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const input = sns.publish.mock.calls[0][0]
+    expect(input).toMatchObject({
+      Message: expect.any(String),
+      TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
+    })
+  })
+
+  it('publishes to SNS with the expected topic ARN on non-prod', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setXTabStageHeaderVal(
+      setEventURI(defaultEvent, searchV3Path),
+      'dev'
+    )
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const input = sns.publish.mock.calls[0][0]
+    expect(input).toMatchObject({
+      Message: expect.any(String),
+      TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
+    })
+  })
+
+  it('publishes to SNS with the expected topic ARN on prod', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setXTabStageHeaderVal(
+      setEventURI(defaultEvent, searchV3Path),
+      'prod'
+    )
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const input = sns.publish.mock.calls[0][0]
+    expect(input).toMatchObject({
+      Message: expect.any(String),
+      TopicArn: 'arn:aws:sns:ca-central-1:167811431063:SearchRequest',
+    })
   })
 })
