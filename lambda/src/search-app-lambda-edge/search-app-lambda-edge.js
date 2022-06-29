@@ -3,11 +3,45 @@
 /* eslint prefer-destructuring: 0 */
 
 import { get } from 'lodash/object'
+import { parse } from 'cookie'
 import searchURLByRegion from './searchURLByRegion'
 
 const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
 
 const PRODUCTION_STAGE = 'prod'
+
+const decodeBase64 = string => {
+  return Buffer.from(string, 'base64').toString('utf8')
+}
+
+// Get the user's ID token from their auth cookie, if set. This is dependant
+// on the behavior of `next-firebase-auth`:
+// https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
+// If `next-firebase-auth` supports a function to get user data from
+// cookies, we should use it:
+// https://github.com/gladly-team/next-firebase-auth/issues/223
+const getIdTokenFromCookies = (cookiesStr = '') => {
+  const cookies = parse(cookiesStr)
+  const authCookieName = 'TabAuth.AuthUserTokens'
+  const authCookieVal = cookies[authCookieName] || null
+  console.log('===== DEBUG: authCookieVal', authCookieVal)
+
+  // Auth library `next-firebase-auth` stringifies twice.
+  let idTokenUnverified = null
+  if (authCookieVal) {
+    try {
+      const cookieData = JSON.parse(JSON.parse(decodeBase64(authCookieVal)))
+      idTokenUnverified = cookieData.idToken
+
+      // Expect that cookie values could be manipulated or malformed.
+      // eslint-disable-next-line no-empty
+    } catch (e) {
+      // console.error(e)
+      console.error('===== DEBUG: error', e)
+    }
+  }
+  return idTokenUnverified
+}
 
 const publishToSNS = async ({ stage, messageData }) => {
   // Get the SNS topic ARN. Example:
@@ -73,14 +107,16 @@ exports.handler = async event => {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
     searchBaseURL = 'https://www.google.com/search'
-  } else {
-    // For v2+, use Yahoo for search results.
+  } 
+  const headers = get(request, 'headers', {})
+
+  if (version >= 2) {
+    // For v2, use Yahoo for search results.
     searchProviderQueryKey = 'p'
 
     // Yahoo localization needs access to headers:
     // * Accept-Language
     // * CloudFront-Viewer-Country
-    const headers = get(request, 'headers', {})
     const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
     const acceptLanguageHeader = get(headers, 'accept-language[0].value')
     const yahooBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
@@ -117,10 +153,17 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
+      console.log('===== DEBUG: headers', headers)
+      const cookiesStr = get(headers, 'cookie[0].value', '')
+      console.log('===== DEBUG: cookiesStr', cookiesStr)
+      const idTokenUnverified = getIdTokenFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
-          idToken: null, // TODO: get from cookie
+          // FIXME: This isn't a functional approach, because the ID token
+          //   will often be expired. We need to make our authorizer
+          //   function smarter and move some this cookie logic into it.
+          idToken: idTokenUnverified,
         },
         data: {
           src: searchSrc,
