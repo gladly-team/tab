@@ -2,15 +2,11 @@
 
 import { clone } from 'lodash/lang'
 import { setWith } from 'lodash/object'
-import {
-  getMockCloudFrontEventObject,
-  getMockLambdaContext,
-} from '../../utils/lambda-arg-utils'
+import { getMockCloudFrontEventObject } from '../../utils/lambda-arg-utils'
 import searchURLByRegion from '../searchURLByRegion'
 
 jest.mock('../searchURLByRegion')
 
-const callback = jest.fn()
 const MOCK_V2_SEARCH_URL =
   'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001'
 
@@ -46,82 +42,70 @@ const setHeader = (event, headerName, headerVal) => {
 }
 
 describe('v1: search app Lambda@Edge function on viewer-request', () => {
-  it('redirects with a 307 redirect', () => {
+  it('redirects with a 307 redirect', async () => {
     expect.assertions(2)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.status).toEqual('307')
     expect(response.statusDescription).toEqual('Found')
   })
 
-  it('redirects an empty search to Google without a query string', () => {
+  it('redirects an empty search to Google without a query string', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://www.google.com/search'
     )
   })
 
-  it('sets the query string value if the "q" value is defined', () => {
+  it('sets the query string value if the "q" value is defined', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
     event.Records[0].cf.request.querystring = 'q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://www.google.com/search?q=pizza'
     )
   })
 
-  it('sets the query string value if the "q" value is defined with a space character', () => {
+  it('sets the query string value if the "q" value is defined with a space character', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
     event.Records[0].cf.request.querystring = 'q=pizza+palace'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://www.google.com/search?q=pizza+palace'
     )
   })
 
-  it('sets the query string value if the "q" value is defined with a special character', () => {
+  it('sets the query string value if the "q" value is defined with a special character', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
     event.Records[0].cf.request.querystring = 'q=pizza🍕'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://www.google.com/search?q=pizza%F0%9F%8D%95'
     )
   })
 
-  it('only sets the "q" query string value, ignoring other URL params', () => {
+  it('only sets the "q" query string value, ignoring other URL params', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV1Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://www.google.com/search?q=pizza'
     )
@@ -129,172 +113,148 @@ describe('v1: search app Lambda@Edge function on viewer-request', () => {
 })
 
 describe('v2: search app Lambda@Edge function on viewer-request', () => {
-  it('redirects with a 307 redirect', () => {
+  it('redirects with a 307 redirect', async () => {
     expect.assertions(2)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.status).toEqual('307')
     expect(response.statusDescription).toEqual('Found')
   })
 
-  it('redirects an empty search to Yahoo without a query string', () => {
+  it('redirects an empty search to Yahoo without a query string', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none'
     )
   })
 
-  it('uses the v2 API if the URI has a trailing slash', () => {
+  it('uses the v2 API if the URI has a trailing slash', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, '/search/v2/')
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none'
     )
   })
 
-  it('sets the query string value if the "q" value is defined', () => {
+  it('sets the query string value if the "q" value is defined', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none&p=pizza'
     )
   })
 
-  it('sets the query string value if the "q" value is defined with a space character', () => {
+  it('sets the query string value if the "q" value is defined with a space character', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'q=pizza+palace'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none&p=pizza+palace'
     )
   })
 
-  it('sets the query string value if the "q" value is defined with a special character', () => {
+  it('sets the query string value if the "q" value is defined with a special character', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'q=pizza🍕'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none&p=pizza%F0%9F%8D%95'
     )
   })
 
-  it('only sets the "q" query string value, ignoring other unused URL params', () => {
+  it('only sets the "q" query string value, ignoring other unused URL params', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza&blah=foo'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none&p=pizza'
     )
   })
 
-  it('sets the "type" string with an empty cause ID, source of search, and referral ID', () => {
+  it('sets the "type" string with an empty cause ID, source of search, and referral ID', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_none&p=pizza'
     )
   })
 
-  it('sets the "type" string with a source', () => {
+  it('sets the "type" string with a source', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza&src=tab'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_tab.c_none.r_none&p=pizza'
     )
   })
 
-  it('sets the "type" string with a cause ID', () => {
+  it('sets the "type" string with a cause ID', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'hi=there&c=abc123&q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_abc123.r_none&p=pizza'
     )
   })
 
-  it('sets the "type" string with a referral ID', () => {
+  it('sets the "type" string with a referral ID', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring = 'hi=there&r=2468&q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_none.c_none.r_2468&p=pizza'
     )
   })
 
-  it('sets the "type" string with all fields', () => {
+  it('sets the "type" string with all fields', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
-    const response = callback.mock.calls[0][1]
+    const response = await handler(event)
     expect(response.headers.location[0].value).toEqual(
       'https://search.yahoo.com/yhs/search?hspart=gladly&hsimp=yhs-001&type=src_ff.c_somecauseid.r_2468&p=pizza'
     )
   })
 
-  it('passes the expected header values to `searchURLByRegion`', () => {
+  it('passes the expected header values to `searchURLByRegion`', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
@@ -308,8 +268,7 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
       'es'
     )
     event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
-    const context = getMockLambdaContext()
-    handler(event, context, callback)
+    await handler(event)
     expect(searchURLByRegion).toHaveBeenCalledWith('MX', 'es')
   })
 })
