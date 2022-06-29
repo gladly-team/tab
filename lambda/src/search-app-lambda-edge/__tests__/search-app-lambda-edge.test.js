@@ -291,6 +291,19 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
     await handler(event)
     expect(searchURLByRegion).toHaveBeenCalledWith('MX', 'es')
   })
+
+  it('does not call SNS', async () => {
+    expect.assertions(2)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchV2Path)
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    expect(sns.publish).not.toHaveBeenCalled()
+    expect(sns.publish().promise).not.toHaveBeenCalled()
+  })
 })
 
 // Cloned and modified v2 tests, so we can just delete prior version tests
