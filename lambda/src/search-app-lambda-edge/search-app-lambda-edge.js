@@ -137,12 +137,6 @@ exports.handler = async event => {
     status: '307',
     statusDescription: 'Found',
     headers: {
-      'x-tab-stage-debug': [
-        {
-          key: 'X-Tab-Stage-Debug',
-          value: stage,
-        },
-      ],
       location: [
         {
           key: 'Location',
