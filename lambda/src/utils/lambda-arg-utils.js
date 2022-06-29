@@ -49,6 +49,16 @@ export const getMockCloudFrontEventObject = () => ({
                 value: 'UK',
               },
             ],
+            cookie: [
+              {
+                key: 'SomeCookie',
+                value: 'ThisIsSomeCookieValue',
+              },
+              {
+                key: 'another.cookie',
+                value: 'abcdefghijklmnopqrstuvwxyz!',
+              },
+            ],
           },
           origin: {
             custom: {

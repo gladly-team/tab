@@ -8,6 +8,38 @@ import searchURLByRegion from './searchURLByRegion'
 
 const PRODUCTION_STAGE = 'prod'
 
+const decodeBase64 = string => {
+  return Buffer.from(string, 'base64').toString('utf8')
+}
+
+// Get the user's ID token from their auth cookie, if set. This is dependant
+// on the behavior of `next-firebase-auth`:
+// https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
+// If `next-firebase-auth` supports a function to get user data from
+// cookies, we should use it:
+// https://github.com/gladly-team/next-firebase-auth/issues/223
+const getIdTokenFromCookies = (cookies = []) => {
+  const authCookieName = 'TabAuth.AuthUserTokens'
+  const authCookieObj =
+    cookies.find(cookieObj => cookieObj.key === authCookieName) || {}
+  const authCookieVal = authCookieObj.value || null
+
+  // Auth library `next-firebase-auth` stringifies twice.
+  let idTokenUnverified = null
+  if (authCookieObj) {
+    try {
+      const cookieData = JSON.parse(JSON.parse(decodeBase64(authCookieVal)))
+      idTokenUnverified = cookieData.idToken
+
+      // Expect that cookie values could be manipulated or malformed.
+      // eslint-disable-next-line no-empty
+    } catch (e) {
+      // console.error(e)
+    }
+  }
+  return idTokenUnverified
+}
+
 const publishToSNS = async ({ stage, messageData }) => {
   // Get the SNS topic ARN. Example:
   //   "arn:aws:sns:eu-west-3:167811431063:dev-SearchRequest"
@@ -66,6 +98,8 @@ exports.handler = async event => {
     version = defaultVersion
   }
 
+  const headers = get(request, 'headers', {})
+
   if (version >= 2) {
     // For v2, use Yahoo for search results.
     searchProviderQueryKey = 'p'
@@ -73,7 +107,6 @@ exports.handler = async event => {
     // Yahoo localization needs access to headers:
     // * Accept-Language
     // * CloudFront-Viewer-Country
-    const headers = get(request, 'headers', {})
     const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
     const acceptLanguageHeader = get(headers, 'accept-language[0].value')
     const yahooBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
@@ -114,10 +147,12 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
+      const cookies = get(headers, 'cookie', [])
+      const idTokenUnverified = getIdTokenFromCookies(cookies)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
-          idToken: null, // TODO: get from cookie
+          idToken: idTokenUnverified,
         },
         data: {
           src: searchSrc,

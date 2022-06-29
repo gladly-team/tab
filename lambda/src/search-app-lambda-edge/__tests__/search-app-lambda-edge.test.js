@@ -61,6 +61,15 @@ const setHeader = (event, headerName, headerVal) => {
   )
 }
 
+const setCookieHeader = (event, cookiesArray) => {
+  return setWith(
+    clone(event),
+    `Records[0].cf.request.headers.cookie`,
+    cookiesArray,
+    clone
+  )
+}
+
 describe('v1: search app Lambda@Edge function on viewer-request', () => {
   it('redirects with a 307 redirect', async () => {
     expect.assertions(2)
@@ -481,11 +490,81 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect(sns.publish().promise).toHaveBeenCalledTimes(1)
   })
 
-  it('publishes to SNS with the expected message', async () => {
+  it('publishes to SNS with the expected message (no auth cookie)', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV3Path)
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const expectedMessage = JSON.stringify({
+      user: {
+        idToken: null,
+      },
+      data: {
+        src: 'ff',
+        engine: 'SearchForACause',
+        causeId: 'someCauseId',
+      },
+    })
+    const input = sns.publish.mock.calls[0][0]
+    expect(input.Message).toEqual(expectedMessage)
+  })
+
+  it.only('publishes to SNS with the expected message (valid auth cookie)', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+
+    // Replicate `next-firebase-auth` auth cookie structure.
+    const cookieData = {
+      idToken: 'my-fake-id-token',
+    }
+    const cookieVal = Buffer.from(
+      JSON.stringify(JSON.stringify(cookieData))
+    ).toString('base64')
+
+    const eventWithURI = setEventURI(defaultEvent, searchV3Path)
+    const event = setCookieHeader(eventWithURI, [
+      {
+        key: 'SomeCookie',
+        value: 'ThisIsSomeCookieValue',
+      },
+      {
+        key: 'TabAuth.AuthUserTokens',
+        value: cookieVal,
+      },
+    ])
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new AWS.SNS()
+    const expectedMessage = JSON.stringify({
+      user: {
+        idToken: 'my-fake-id-token',
+      },
+      data: {
+        src: 'ff',
+        engine: 'SearchForACause',
+        causeId: 'someCauseId',
+      },
+    })
+    const input = sns.publish.mock.calls[0][0]
+    expect(input.Message).toEqual(expectedMessage)
+  })
+
+  it('publishes to SNS with the expected message (invalid auth cookie)', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const cookieVal = 'this-should-not-work-or-throw'
+    const event = setHeader(
+      setEventURI(defaultEvent, searchV3Path),
+      'TabAuth.AuthUserTokens',
+      cookieVal
+    )
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
