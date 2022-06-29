@@ -560,11 +560,17 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const cookieVal = 'this-should-not-work-or-throw'
-    const event = setHeader(
-      setEventURI(defaultEvent, searchV3Path),
-      'TabAuth.AuthUserTokens',
-      cookieVal
-    )
+    const eventWithURI = setEventURI(defaultEvent, searchV3Path)
+    const event = setCookieHeader(eventWithURI, [
+      {
+        key: 'SomeCookie',
+        value: 'ThisIsSomeCookieValue',
+      },
+      {
+        key: 'TabAuth.AuthUserTokens',
+        value: cookieVal,
+      },
+    ])
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
