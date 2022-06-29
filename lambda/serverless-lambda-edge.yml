@@ -178,7 +178,7 @@ resources:
                         - 'arn:aws:sns:*' # allow in any region
                         - Ref: 'AWS::AccountId'
                         # SNS topic: SearchRequest or dev-SearchRequest
-                        - ${self:custom.searchRequestSNSTopicName}:${self:custom.stage}
+                        - ${self:custom.searchRequestSNSTopicName.${self:custom.stage}}
 
 functions:
   # We manually reference the ARN of these Lambda@Edge functions in our
