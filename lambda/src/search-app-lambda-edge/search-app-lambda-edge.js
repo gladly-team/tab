@@ -136,9 +136,9 @@ exports.handler = async event => {
     status: '307',
     statusDescription: 'Found',
     headers: {
-      'X-Tab-Debug-Stage': [
+      'x-tab-stage-debug': [
         {
-          key: 'X-Tab-Debug-Stage',
+          key: 'X-Tab-Stage-Debug',
           value: stage,
         },
       ],
