@@ -156,6 +156,9 @@ exports.handler = async event => {
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
+          // FIXME: This isn't a functional approach, because the ID token
+          //   will often be expired. We need to make our authorizer
+          //   function smarter and move some this cookie logic into it.
           idToken: idTokenUnverified,
         },
         data: {
