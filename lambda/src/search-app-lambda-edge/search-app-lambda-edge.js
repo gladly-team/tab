@@ -23,6 +23,7 @@ const getIdTokenFromCookies = (cookiesStr = '') => {
   const cookies = parse(cookiesStr)
   const authCookieName = 'TabAuth.AuthUserTokens'
   const authCookieVal = cookies[authCookieName] || null
+  console.log('===== DEBUG: authCookieVal', authCookieVal)
 
   // Auth library `next-firebase-auth` stringifies twice.
   let idTokenUnverified = null
@@ -35,6 +36,7 @@ const getIdTokenFromCookies = (cookiesStr = '') => {
       // eslint-disable-next-line no-empty
     } catch (e) {
       // console.error(e)
+      console.error('===== DEBUG: error', e)
     }
   }
   return idTokenUnverified
@@ -147,7 +149,9 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
+      console.log('===== DEBUG: headers', headers)
       const cookiesStr = get(headers, 'cookie[0].value', '')
+      console.log('===== DEBUG: cookiesStr', cookiesStr)
       const idTokenUnverified = getIdTokenFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
