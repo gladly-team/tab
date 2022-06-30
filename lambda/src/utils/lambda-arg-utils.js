@@ -51,12 +51,9 @@ export const getMockCloudFrontEventObject = () => ({
             ],
             cookie: [
               {
-                key: 'SomeCookie',
-                value: 'ThisIsSomeCookieValue',
-              },
-              {
-                key: 'another.cookie',
-                value: 'abcdefghijklmnopqrstuvwxyz!',
+                key: 'Cookie',
+                value:
+                  'SomeCookie=ThisIsSomeCookieValue; another.cookie=abcdefghijklmnopqrstuvwxyz!',
               },
             ],
           },

@@ -61,15 +61,6 @@ const setHeader = (event, headerName, headerVal) => {
   )
 }
 
-const setCookieHeader = (event, cookiesArray) => {
-  return setWith(
-    clone(event),
-    `Records[0].cf.request.headers.cookie`,
-    cookiesArray,
-    clone
-  )
-}
-
 describe('v1: search app Lambda@Edge function on viewer-request', () => {
   it('redirects with a 307 redirect', async () => {
     expect.assertions(2)
@@ -494,7 +485,9 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV3Path)
+    const eventWithURI = setEventURI(defaultEvent, searchV3Path)
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; foo=bar` // no auth cookie
+    const event = setHeader(eventWithURI, 'cookie', cookieStr)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
@@ -513,7 +506,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect(input.Message).toEqual(expectedMessage)
   })
 
-  it.only('publishes to SNS with the expected message (valid auth cookie)', async () => {
+  it('publishes to SNS with the expected message (valid auth cookie)', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
@@ -527,16 +520,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     ).toString('base64')
 
     const eventWithURI = setEventURI(defaultEvent, searchV3Path)
-    const event = setCookieHeader(eventWithURI, [
-      {
-        key: 'SomeCookie',
-        value: 'ThisIsSomeCookieValue',
-      },
-      {
-        key: 'TabAuth.AuthUserTokens',
-        value: cookieVal,
-      },
-    ])
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; TabAuth.AuthUserTokens=${cookieVal}`
+    const event = setHeader(eventWithURI, 'cookie', cookieStr)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
@@ -561,16 +546,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const defaultEvent = getMockCloudFrontEventObject()
     const cookieVal = 'this-should-not-work-or-throw'
     const eventWithURI = setEventURI(defaultEvent, searchV3Path)
-    const event = setCookieHeader(eventWithURI, [
-      {
-        key: 'SomeCookie',
-        value: 'ThisIsSomeCookieValue',
-      },
-      {
-        key: 'TabAuth.AuthUserTokens',
-        value: cookieVal,
-      },
-    ])
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; TabAuth.AuthUserTokens=${cookieVal}`
+    const event = setHeader(eventWithURI, 'cookie', cookieStr)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)

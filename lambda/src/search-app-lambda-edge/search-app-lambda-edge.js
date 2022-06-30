@@ -4,6 +4,7 @@
 
 import AWS from 'aws-sdk'
 import { get } from 'lodash/object'
+import { parse } from 'cookie'
 import searchURLByRegion from './searchURLByRegion'
 
 const PRODUCTION_STAGE = 'prod'
@@ -18,15 +19,14 @@ const decodeBase64 = string => {
 // If `next-firebase-auth` supports a function to get user data from
 // cookies, we should use it:
 // https://github.com/gladly-team/next-firebase-auth/issues/223
-const getIdTokenFromCookies = (cookies = []) => {
+const getIdTokenFromCookies = (cookiesStr = '') => {
+  const cookies = parse(cookiesStr)
   const authCookieName = 'TabAuth.AuthUserTokens'
-  const authCookieObj =
-    cookies.find(cookieObj => cookieObj.key === authCookieName) || {}
-  const authCookieVal = authCookieObj.value || null
+  const authCookieVal = cookies[authCookieName] || null
 
   // Auth library `next-firebase-auth` stringifies twice.
   let idTokenUnverified = null
-  if (authCookieObj) {
+  if (authCookieVal) {
     try {
       const cookieData = JSON.parse(JSON.parse(decodeBase64(authCookieVal)))
       idTokenUnverified = cookieData.idToken
@@ -147,8 +147,8 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
-      const cookies = get(headers, 'cookie', [])
-      const idTokenUnverified = getIdTokenFromCookies(cookies)
+      const cookiesStr = get(headers, 'cookie[0].value', '')
+      const idTokenUnverified = getIdTokenFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
