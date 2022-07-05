@@ -97,13 +97,25 @@ export const setModelGetterField = (modelClass, fieldName, val) => {
 
 /**
  * Get a mock user object (as passed from GraphQL context).
- * @return {Object} The mock user.
+ * @return {Object} The mock user context.
  */
 export const getMockUserContext = () => ({
   id: 'abcdefghijklmno',
   email: 'foo@bar.com',
   emailVerified: true,
   authTime: 1533144713,
+})
+
+/**
+ * Get a mock user object (as passed from GraphQL context).
+ * @return {Object} The mock user context.
+ */
+export const getMockAnonUserContext = () => ({
+  id: null,
+  anonId: 'omnlkjihgfedcba',
+  email: null,
+  emailVerified: true,
+  authTime: null,
 })
 
 /**

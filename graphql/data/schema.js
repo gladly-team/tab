@@ -1976,27 +1976,43 @@ const logSearchMutation = mutationWithClientMutationId({
   inputFields: {
     userIdGlobal: {
       type: GraphQLString,
-      description: 'The user Relay global ID. Provide either this or `userId`.',
+      description:
+        'The user Relay global ID. Provide either this or `userId` for an existing user.',
     },
     userId: {
       type: GraphQLString,
       description:
-        'The actual user ID (not the Relay global). Provide either this or `userIdGlobal`.',
+        'The actual user ID (not the Relay global). Provide either this or `userIdGlobal` for an existing user.',
+    },
+    anonUserId: {
+      type: GraphQLString,
+      description: 'The anonymous user ID. Provide this for an anonymous user.',
     },
     source: { type: GraphQLString },
+    causeId: { type: GraphQLString },
+    searchEngineId: { type: GraphQLString },
+    version: { type: GraphQLInt },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: user => user.user,
+    },
+    success: {
+      type: GraphQLBoolean,
     },
   },
   mutateAndGetPayload: (
-    { userId, userIdGlobal, ...additionalData },
+    { userId, userIdGlobal, anonUserId, ...additionalData },
     context
   ) => {
     const userGlobalObj = userIdGlobal ? fromGlobalId(userIdGlobal) : {}
-    return logSearch(context.user, userId || userGlobalObj.id, additionalData)
+    return logSearch(
+      context.user,
+      userId || userGlobalObj.id,
+      anonUserId,
+      additionalData
+    )
   },
 })
 

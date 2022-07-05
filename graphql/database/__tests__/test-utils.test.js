@@ -4,6 +4,7 @@ import UserModel from '../users/UserModel'
 
 import {
   getMockFetchResponse,
+  getMockAnonUserContext,
   getMockUserContext,
   getMockUserInfo,
   getMockUserInstance,
@@ -25,6 +26,16 @@ describe('test-utils', () => {
       email: 'foo@bar.com',
       emailVerified: true,
       authTime: 1533144713,
+    })
+  })
+
+  test('getMockAnonUserContext returns expected object', () => {
+    expect(getMockAnonUserContext()).toEqual({
+      id: null,
+      anonId: 'omnlkjihgfedcba',
+      email: null,
+      emailVerified: true,
+      authTime: null,
     })
   })
 

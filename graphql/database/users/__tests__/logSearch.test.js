@@ -12,15 +12,21 @@ import {
   clearAllMockDBResponses,
   getMockUserContext,
   getMockUserInstance,
+  getMockAnonUserContext,
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
 import getUserSearchEngine from '../getUserSearchEngine'
 
+const mockTestNanoId = '12345'
+
 jest.mock('../getUserSearchEngine')
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 jest.mock('../checkSearchRateLimit')
+jest.mock('nanoid', () => {
+  return { nanoid: () => mockTestNanoId }
+})
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -104,8 +110,8 @@ describe('logSearch', () => {
         searches: 15, // hardcode $add operation
       }))
 
-    const user = await logSearch(userContext, userId)
-    expect(user).toEqual(expectedUser)
+    const response = await logSearch(userContext, userId)
+    expect(response.user).toEqual(expectedUser)
   })
 
   test('it logs the search for analytics', async () => {
@@ -413,7 +419,7 @@ describe('logSearch', () => {
       Item: mockUser,
     })
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId, {
+    await logSearch(userContext, userId, null, {
       source: 'chrome',
     })
 
@@ -430,7 +436,50 @@ describe('logSearch', () => {
     )
   })
 
-  test('it does not logs the source of the search when it is not one of the valid sources', async () => {
+  test('it overrides causeId, version and searchEngineId when provided', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 148, // valid: below daily maximum
+        },
+      },
+      causeId: 'CA6A5C2uj',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    await logSearch(userContext, userId, null, {
+      source: 'chrome',
+      searchEngineId: 'Ecosia',
+      causeId: 'tdU_PsRIM',
+      version: 3,
+    })
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        source: 'chrome',
+        searchEngine: 'Ecosia',
+        isAnonymous: false,
+        version: 3,
+        causeId: 'tdU_PsRIM',
+      })
+    )
+  })
+
+  test('it does not log the source of the search when it is not one of the valid sources', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -451,7 +500,7 @@ describe('logSearch', () => {
       Item: mockUser,
     })
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
-    await logSearch(userContext, userId, {
+    await logSearch(userContext, userId, null, {
       source: 'blahblahblah',
     })
 
@@ -464,6 +513,118 @@ describe('logSearch', () => {
         isAnonymous: false,
         version: 1,
       })
+    )
+  })
+
+  test('logs search when anon user id is set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = getMockAnonUserContext()
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, anonUserContext.anonId, {
+      source: 'blahblahblah',
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: anonUserContext.anonId,
+        timestamp: moment.utc().toISOString(),
+        searchEngine: 'SearchForACause',
+        isAnonymous: true,
+        version: 1,
+      })
+    )
+  })
+
+  test('logs search with causeId, searchEngineId and version when anon user id is set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = getMockAnonUserContext()
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, anonUserContext.anonId, {
+      source: 'blahblahblah',
+      causeId: 'tdU_PsRIM',
+      searchEngineId: 'Bing',
+      version: 3,
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: anonUserContext.anonId,
+        timestamp: moment.utc().toISOString(),
+        isAnonymous: true,
+        version: 3,
+        causeId: 'tdU_PsRIM',
+        searchEngine: 'Bing',
+      })
+    )
+  })
+
+  test('logs search with random generated nanoid when neither user id nor anon id set', async () => {
+    expect.assertions(2)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    const userGet = jest.spyOn(UserModel, 'get')
+    await logSearch(anonUserContext, null, null, {
+      source: 'blahblahblah',
+    })
+
+    expect(userGet).not.toHaveBeenCalled()
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      anonUserContext,
+      addTimestampFieldsToItem({
+        userId: mockTestNanoId,
+        timestamp: moment.utc().toISOString(),
+        searchEngine: 'SearchForACause',
+        isAnonymous: true,
+        version: 1,
+      })
+    )
+  })
+
+  test('throws if client provided causeId not known', async () => {
+    expect.assertions(1)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+
+    await expect(
+      logSearch(anonUserContext, null, null, {
+        source: 'blahblahblah',
+        causeId: 'blahblah',
+        searchEngineId: 'SearchForACause',
+      })
+    ).rejects.toEqual(new Error('Provided cause ID does not exist in DB'))
+  })
+
+  test('throws if client provided searchEngineId not known', async () => {
+    expect.assertions(1)
+
+    const anonUserContext = {
+      ...getMockAnonUserContext(),
+      anonId: mockTestNanoId,
+    }
+
+    await expect(
+      logSearch(anonUserContext, null, null, {
+        source: 'blahblahblah',
+        causeId: 'tdU_PsRIM',
+        searchEngineId: 'blahblah',
+      })
+    ).rejects.toEqual(
+      new Error('Provided search engine ID does not exist in DB')
     )
   })
 })

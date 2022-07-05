@@ -1,18 +1,41 @@
 import moment from 'moment'
+import { nanoid } from 'nanoid'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
-// import addVc from './addVc'
-// import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
 import getUserSearchEngine from './getUserSearchEngine'
+import getSearchEngine from '../search/getSearchEngine'
+import getCause from '../cause/getCause'
+import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
-/**
- * Log a user's search event and change related stats.
- * @param {object} userContext - The user authorizer object.
- * @param {string} userId - The user id.
- * @return {Promise<User>} A promise that resolves into a User instance.
- */
-const logSearch = async (userContext, userId, searchData = {}) => {
+const getSource = searchData => {
+  const validSearchSources = ['self', 'chrome', 'ff', 'tab']
+  return searchData.source && validSearchSources.indexOf(searchData.source) > -1
+    ? searchData.source
+    : null
+}
+
+const createUserSearchLogModel = async (
+  userContext,
+  userId,
+  causeId,
+  searchEngineId,
+  version,
+  isAnonymous,
+  source
+) => {
+  return UserSearchLogModel.create(userContext, {
+    userId,
+    timestamp: moment.utc().toISOString(),
+    ...(source && { source }),
+    searchEngine: searchEngineId || 'SearchForACause',
+    ...(causeId && { causeId }),
+    isAnonymous,
+    version: version || 1,
+  })
+}
+
+const logSearchKnownUser = async (userContext, userId, searchData) => {
   let user
   try {
     user = await UserModel.get(userContext, userId)
@@ -62,27 +85,97 @@ const logSearch = async (userContext, userId, searchData = {}) => {
     })
 
     // Log the search for analytics.
-    const validSearchSources = ['self', 'chrome', 'ff', 'tab']
-    const source =
-      searchData.source && validSearchSources.indexOf(searchData.source) > -1
-        ? searchData.source
-        : null
-    const causeId = user.v4BetaEnabled ? user.causeId : null
-    const searchEngine = await getUserSearchEngine(userContext, user)
-    const logPromise = UserSearchLogModel.create(userContext, {
+    const source = getSource(searchData)
+    const causeIdOnUser = user.v4BetaEnabled ? user.causeId : null
+    const causeId =
+      searchData && searchData.causeId ? searchData.causeId : causeIdOnUser
+    const searchEngineId =
+      searchData && searchData.searchEngineId
+        ? searchData.searchEngineId
+        : (await getUserSearchEngine(userContext, user)).id
+    const logPromise = createUserSearchLogModel(
+      userContext,
       userId,
-      timestamp: moment.utc().toISOString(),
-      ...(source && { source }),
-      searchEngine: searchEngine.id,
-      ...(causeId && { causeId }),
-      isAnonymous: false,
-      version: 1,
-    })
+      causeId,
+      searchEngineId,
+      searchData.version,
+      false,
+      source
+    )
     ;[user] = await Promise.all([updateUserPromise, logPromise])
   } catch (e) {
     throw e
   }
-  return user
+  return {
+    user,
+    success: true,
+  }
+}
+
+const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
+  try {
+    const source = getSource(searchData)
+    await createUserSearchLogModel(
+      userContext,
+      anonUserId,
+      searchData.causeId,
+      searchData.searchEngineId,
+      searchData.version,
+      true,
+      source
+    )
+  } catch (e) {
+    throw e
+  }
+  return {
+    success: true,
+  }
+}
+
+/**
+ * Log a user's search event and change related stats.
+ * @param {object} userContext - The user authorizer object.
+ * @param {string} userId - The user id.
+ * @param {string} anonUserId - The anonymous user id.
+ * @return {Promise<User>} A promise that resolves into a User instance.
+ */
+const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
+  // Do some validation on searchData fields (searchEngineId, causeId)
+  if (searchData.searchEngineId) {
+    try {
+      await getSearchEngine(searchData.searchEngineId)
+    } catch (e) {
+      if (e instanceof DatabaseItemDoesNotExistException) {
+        throw new Error('Provided search engine ID does not exist in DB')
+      } else {
+        throw e
+      }
+    }
+  }
+  if (searchData.causeId) {
+    try {
+      await getCause(searchData.causeId)
+    } catch (e) {
+      if (e instanceof DatabaseItemDoesNotExistException) {
+        throw new Error('Provided cause ID does not exist in DB')
+      } else {
+        throw e
+      }
+    }
+  }
+
+  if (userId) {
+    return logSearchKnownUser(userContext, userId, searchData)
+  }
+
+  let anonId = anonUserId
+  const modifiedUserContext = Object.assign({}, userContext)
+  if (!anonUserId) {
+    anonId = nanoid()
+    modifiedUserContext.anonId = anonId
+  }
+
+  return logSearchAnonUser(modifiedUserContext, anonId, searchData)
 }
 
 export default logSearch
