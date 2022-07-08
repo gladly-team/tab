@@ -51,7 +51,7 @@
     "markdown-to-jsx": "^6.11.0",
     "material-ui": "^0.19.4",
     "mdi-material-ui": "^5.11.0",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "prop-types": "^15.7.2",
     "qs": "^6.7.0",
     "react": "^16.13.1",
