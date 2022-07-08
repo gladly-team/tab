@@ -56,9 +56,11 @@ exports.handler = async event => {
   // Get the function "version" from the endpoint, which we use to QA new
   // functionality in production prior to rolling it out to users.
   const uri = get(event, 'Records[0].cf.request.uri', '')
-  const defaultVersion = 1 // Bump this to "roll out" a new version
+  const defaultVersion = 3 // Bump this to "roll out" a new version
   let version
-  if (uri.startsWith('/search/v2')) {
+  if (uri.startsWith('/search/v1')) {
+    version = 1
+  } else if (uri.startsWith('/search/v2')) {
     version = 2
   } else if (uri.startsWith('/search/v3')) {
     version = 3
@@ -66,8 +68,12 @@ exports.handler = async event => {
     version = defaultVersion
   }
 
-  if (version >= 2) {
-    // For v2, use Yahoo for search results.
+  if (version === 1) {
+    // For v1, use Google for search results.
+    searchProviderQueryKey = 'q'
+    searchBaseURL = 'https://www.google.com/search'
+  } else {
+    // For v2+, use Yahoo for search results.
     searchProviderQueryKey = 'p'
 
     // Yahoo localization needs access to headers:
@@ -98,10 +104,6 @@ exports.handler = async event => {
       console.error(e)
       searchBaseURL = yahooBaseURL
     }
-  } else {
-    // For v1, use Google for search results.
-    searchProviderQueryKey = 'q'
-    searchBaseURL = 'https://www.google.com/search'
   }
 
   // Construct the final search URL with the search query.
