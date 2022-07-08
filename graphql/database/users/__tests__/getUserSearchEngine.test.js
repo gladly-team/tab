@@ -28,6 +28,10 @@ jest.mock('../../cause/getCause')
 jest.mock('../../widgets/getWidgets')
 jest.mock('../../referrals/ReferralDataModel')
 jest.mock('../../../utils/logger')
+jest.mock('../../../config', () => ({
+  SEARCH_ENDPOINT: 'tab.gladly.io/search/',
+  DB_TABLE_NAME_APPENDIX: '',
+}))
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'

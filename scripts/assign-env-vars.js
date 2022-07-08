@@ -52,6 +52,7 @@ export const envVars = [
   { name: 'EST_MONEY_RAISED_PER_TAB' },
   { name: 'LAMBDA_TAB_V4_HOST' },
   { name: 'GROWTHBOOK_ENV' },
+  { name: 'GQL_SEARCH_ENDPOINT' },
   // Endpoints, shared among services
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },

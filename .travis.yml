@@ -65,6 +65,7 @@ env:
   - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   - TEST_GROWTHBOOK_ENV=dev
+  - TEST_GQL_SEARCH_ENDPOINT=test-tab2017.gladly.io/search/
   # Important: changing this requires updating the Lambda@Edge function
   # version associated with the CloudFront /newtab* cache behavior, because
   # Lambda@Edge does not support environment variables and thus the
@@ -138,6 +139,7 @@ env:
   - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   - DEV_GROWTHBOOK_ENV=dev
+  - DEV_GQL_SEARCH_ENDPOINT=dev-tab2017.gladly.io/search/
   # Important: changing this requires updating the Lambda@Edge function
   # version associated with the CloudFront /newtab* cache behavior, because
   # Lambda@Edge does not support environment variables and thus the
@@ -206,6 +208,7 @@ env:
   - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
   - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
   - PROD_GROWTHBOOK_ENV=production
+  - PROD_GQL_SEARCH_ENDPOINT=tab.gladly.io/search/
   # Important: changing this requires updating the Lambda@Edge function
   # version associated with the CloudFront /newtab* cache behavior, because
   # Lambda@Edge does not support environment variables and thus the

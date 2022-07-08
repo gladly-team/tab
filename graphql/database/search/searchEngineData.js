@@ -1,10 +1,13 @@
+import { SEARCH_ENDPOINT } from '../../config'
+
+// The {searchTerms} placeholder should be filled in client-side.
+const searchEndpoint = `https://${SEARCH_ENDPOINT}?q={searchTerms}`
+
 export const searchEngineData = [
   {
     name: 'Search for a Cause',
     id: 'SearchForACause',
-
-    // The {searchTerms} placeholder should be filled in client-side.
-    searchUrl: 'https://tab.gladly.io/search/?q={searchTerms}',
+    searchUrl: searchEndpoint,
     rank: 0,
     isCharitable: true,
     inputPrompt: 'Search for a Cause',
@@ -44,7 +47,7 @@ export const searchEngineData = [
   {
     name: 'Yahoo',
     id: 'Yahoo',
-    searchUrl: 'https://tab.gladly.io/search/?q={searchTerms}',
+    searchUrl: searchEndpoint,
     rank: 5,
     isCharitable: false,
     inputPrompt: 'Search Yahoo',
