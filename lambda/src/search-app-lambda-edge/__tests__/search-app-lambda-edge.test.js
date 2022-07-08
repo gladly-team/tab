@@ -28,7 +28,8 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-const searchV1Path = '/search/'
+const searchPathProduction = '/search/'
+const searchV1Path = '/search/v1'
 const searchV2Path = '/search/v2'
 const searchV3Path = '/search/v3'
 const setEventURI = (event, uri) => {
@@ -60,6 +61,77 @@ const setHeader = (event, headerName, headerVal) => {
     clone
   )
 }
+
+describe('prod behavior: search app Lambda@Edge function on viewer-request', () => {
+  it('redirects with a 307 redirect', async () => {
+    expect.assertions(2)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    const response = await handler(event)
+    expect(response.status).toEqual('307')
+    expect(response.statusDescription).toEqual('Found')
+  })
+
+  it('redirects an empty search to Google without a query string', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    const response = await handler(event)
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search'
+    )
+  })
+
+  it('sets the query string value if the "q" value is defined', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    event.Records[0].cf.request.querystring = 'q=pizza'
+    const response = await handler(event)
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza'
+    )
+  })
+
+  it('sets the query string value if the "q" value is defined with a space character', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    event.Records[0].cf.request.querystring = 'q=pizza+palace'
+    const response = await handler(event)
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza+palace'
+    )
+  })
+
+  it('sets the query string value if the "q" value is defined with a special character', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    event.Records[0].cf.request.querystring = 'q=pizza🍕'
+    const response = await handler(event)
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza%F0%9F%8D%95'
+    )
+  })
+
+  it('only sets the "q" query string value, ignoring other URL params', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, searchPathProduction)
+    event.Records[0].cf.request.querystring = 'hi=there&q=pizza'
+    const response = await handler(event)
+    expect(response.headers.location[0].value).toEqual(
+      'https://www.google.com/search?q=pizza'
+    )
+  })
+})
 
 describe('v1: search app Lambda@Edge function on viewer-request', () => {
   it('redirects with a 307 redirect', async () => {
