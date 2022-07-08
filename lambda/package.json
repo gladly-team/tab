@@ -8,6 +8,7 @@
     "aws-sdk": "^2.814.0",
     "firebase-admin": "^7.3.0",
     "lodash": "^4.17.21",
+    "node-fetch": "^2.6.7",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

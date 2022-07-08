@@ -112,3 +112,5 @@ functions:
   searchRequestLogger:
     handler: build/search-request-logger/search-request-logger.handler
     events:  ${file(./src/search-request-logger/variables.yml):${self:provider.stage}.events}
+    environment:
+      GRAPHQL_ENDPOINT: ${file(./src/search-request-logger/variables.yml):${self:provider.stage}.graphqlEndpoint}
