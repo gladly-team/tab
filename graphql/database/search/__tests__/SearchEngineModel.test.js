@@ -32,7 +32,7 @@ describe('SearchEngineModel', () => {
       new SearchEngine({
         name: 'Search For A Cause',
         id: 'SearchForACause',
-        searchUrl: 'http://tab.gladly.io/search/v2?q=',
+        searchUrl: 'http://tab.gladly.io/search/?q=',
         rank: 0,
         isCharitable: true,
         inputPrompt: 'Search For a Cause',
@@ -41,8 +41,8 @@ describe('SearchEngineModel', () => {
     expect(item).toEqual({
       name: 'Search For A Cause',
       id: 'SearchForACause',
-      searchUrl: 'http://tab.gladly.io/search/v2?q=',
-      searchUrlPersonalized: 'http://tab.gladly.io/search/v2?q=',
+      searchUrl: 'http://tab.gladly.io/search/?q=',
+      searchUrlPersonalized: 'http://tab.gladly.io/search/?q=',
       rank: 0,
       isCharitable: true,
       inputPrompt: 'Search For a Cause',

@@ -1,13 +1,12 @@
 import { SEARCH_ENDPOINT } from '../../config'
 
-const searchEndpoint = `https://${SEARCH_ENDPOINT}v2?q={searchTerms}`
+// The {searchTerms} placeholder should be filled in client-side.
+const searchEndpoint = `https://${SEARCH_ENDPOINT}?q={searchTerms}`
 
 export const searchEngineData = [
   {
     name: 'Search for a Cause',
     id: 'SearchForACause',
-
-    // The {searchTerms} placeholder should be filled in client-side.
     searchUrl: searchEndpoint,
     rank: 0,
     isCharitable: true,
