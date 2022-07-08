@@ -21,7 +21,7 @@
 #
 #   aws cloudformation create-stack-set \
 #     --profile admin-role-here \
-#     --stack-set-name search-edge-request \
+#     --stack-set-name dev-search-edge-request \
 #     --template-body file://search-sns-cloudformation.yml \
 #     --description "SNS topic for search requests at the edge"
 #
@@ -29,7 +29,7 @@
 #
 #   aws cloudformation create-stack-instances \
 #     --profile admin-role-here \
-#     --stack-set-name search-edge-request \
+#     --stack-set-name dev-search-edge-request \
 #     --accounts '["167811431063"]' \
 #     --regions '["us-west-2", "us-west-1"]'
 #
@@ -53,5 +53,6 @@ Resources:
     Type: AWS::SNS::Topic
     Properties: 
       DisplayName: "Search request SNS topic"
-      TopicName: SearchRequest # Change to dev-SearchRequest, as needed
+      # Change to test-SearchRequest or SearchRequest (prod), as needed
+      TopicName: dev-SearchRequest
       FifoTopic: false
