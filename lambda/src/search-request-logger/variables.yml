@@ -6,6 +6,7 @@
 #   when we add that API request.
 
 test:
+  graphqlEndpoint: https://dev-tab2017.gladly.io/graphql/
   events:
     - sns:
         arn: arn:aws:sns:eu-north-1:167811431063:dev-SearchRequest
@@ -60,6 +61,7 @@ test:
         topicName: dev-SearchRequest-us-west-2
 
 dev:
+  graphqlEndpoint: https://dev-tab2017.gladly.io/graphql/
   events:
     - sns:
         arn: arn:aws:sns:eu-north-1:167811431063:dev-SearchRequest
@@ -115,6 +117,7 @@ dev:
 
 
 prod:
+  graphqlEndpoint: https://tab.gladly.io/graphql/
   events:
     - sns:
         arn: arn:aws:sns:eu-north-1:167811431063:SearchRequest

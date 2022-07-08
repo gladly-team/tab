@@ -1,16 +1,44 @@
 import { get } from 'lodash/object'
+import fetch from 'node-fetch'
 
 exports.handler = async event => {
-  const message = get(event, 'Records[0].Sns.Message')
-
-  // TODO: Call the GraphQL service to log search. Use the appropriate
-  //   endpoint for dev vs prod deployments.
-
-  // TODO: remove when finished debugging
-  // eslint-disable-next-line no-console
-  console.log(message)
-
-  return {
-    success: true,
+  const message = JSON.parse(get(event, 'Records[0].Sns.Message'))
+  const graphqlMutationPayload = {
+    query: `mutation LogSearchMutation($input: LogSearchInput!) {
+        logSearch(input: $input) {
+          success
+        }
+      }`,
+    variables: {
+      input: {
+        causeId: message.data.causeId,
+        searchEngineId: message.data.engine,
+        version: 2,
+        source: message.data.src,
+      },
+    },
+    operationName: 'LogSearchMutation',
   }
+
+  const response = await fetch(process.env.GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+
+      // If the user does not have a token, send a placeholder value.
+      // We do this because AWS API Gateway's custom authorizers will
+      // reject any request without a token and we want to provide
+      // unauthenticated access to our API.
+      // "If a specified identify source is missing, null, or empty,
+      // API Gateway returns a 401 Unauthorized response without calling
+      // the authorizer Lambda function.”
+      // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+      Authorization:
+        (message.user && message.user.idToken) || 'unauthenticated',
+    },
+    body: JSON.stringify(graphqlMutationPayload),
+  })
+
+  return response.json()
 }
