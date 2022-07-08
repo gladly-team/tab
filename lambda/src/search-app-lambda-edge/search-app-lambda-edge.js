@@ -56,7 +56,7 @@ exports.handler = async event => {
   // Get the function "version" from the endpoint, which we use to QA new
   // functionality in production prior to rolling it out to users.
   const uri = get(event, 'Records[0].cf.request.uri', '')
-  const defaultVersion = 1 // Bump this to "roll out" a new version
+  const defaultVersion = 3 // Bump this to "roll out" a new version
   let version
   if (uri.startsWith('/search/v1')) {
     version = 1
