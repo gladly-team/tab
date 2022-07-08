@@ -8,6 +8,9 @@
 import AWS from 'aws-sdk'
 import inquirer from 'inquirer'
 
+// Change as needed.
+const STACK_SET_NAME = 'dev-search-edge-request'
+
 const stackPolicies = {
   DENY_ALL:
     '{"Statement":[{"Effect":"Deny","Principal":"*","Action":"Update:*","Resource":"*"}]}',
@@ -55,7 +58,7 @@ const setStackPolicy = async () => {
   try {
     stackInstanceData = await cloudformation
       .listStackInstances({
-        StackSetName: 'search-edge-request',
+        StackSetName: STACK_SET_NAME,
       })
       .promise()
   } catch (e) {

@@ -312,12 +312,9 @@ resources:
               ViewerProtocolPolicy: redirect-to-https
             # Search app
             - PathPattern: 'search*'
-              # Short caching of non-static files for some speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: 60
-              DefaultTTL: 86400
-              # Allow the origin to set long-lived caching on files.
-              MaxTTL: 63115200 # two years
+              MinTTL: 0
+              DefaultTTL: 0
+              MaxTTL: 0
               AllowedMethods:
                 - HEAD
                 - GET
