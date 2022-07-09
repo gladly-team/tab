@@ -1,17 +1,20 @@
 /* eslint-env jest */
 
-import AWS from 'aws-sdk'
 import { clone } from 'lodash/lang'
 import { setWith } from 'lodash/object'
 import { getMockCloudFrontEventObject } from '../../utils/lambda-arg-utils'
 import searchURLByRegion from '../searchURLByRegion'
 
-jest.mock('aws-sdk', () => {
+const { SNSClient } = require('@aws-sdk/client-sns')
+
+jest.mock('@aws-sdk/client-sns', () => {
   const mockSNS = {
-    publish: jest.fn().mockReturnThis(),
-    promise: jest.fn(),
+    send: jest.fn().mockReturnThis(),
   }
-  return { SNS: jest.fn(() => mockSNS) }
+  return {
+    PublishCommand: jest.fn().mockImplementation(params => params),
+    SNSClient: jest.fn(() => mockSNS),
+  }
 })
 
 jest.mock('../searchURLByRegion')
@@ -212,16 +215,15 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
   })
 
   it('publishes to SNS once', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchPathProduction)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    expect(sns.publish).toHaveBeenCalledTimes(1)
-    expect(sns.publish().promise).toHaveBeenCalledTimes(1)
+    const sns = new SNSClient()
+    expect(sns.send).toHaveBeenCalledTimes(1)
   })
 
   it('publishes to SNS with the expected message', async () => {
@@ -232,7 +234,7 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
+    const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
         idToken: null,
@@ -243,7 +245,7 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
         causeId: 'someCauseId',
       },
     })
-    const input = sns.publish.mock.calls[0][0]
+    const input = sns.send.mock.calls[0][0]
     expect(input.Message).toEqual(expectedMessage)
   })
 
@@ -258,8 +260,8 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
@@ -277,8 +279,8 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
@@ -296,8 +298,8 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:SearchRequest',
@@ -537,16 +539,15 @@ describe('v2: search app Lambda@Edge function on viewer-request', () => {
   })
 
   it('does not call SNS', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV2Path)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    expect(sns.publish).not.toHaveBeenCalled()
-    expect(sns.publish().promise).not.toHaveBeenCalled()
+    const sns = new SNSClient()
+    expect(sns.send).not.toHaveBeenCalled()
   })
 })
 
@@ -702,16 +703,15 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
   })
 
   it('publishes to SNS once', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
     const event = setEventURI(defaultEvent, searchV3Path)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    expect(sns.publish).toHaveBeenCalledTimes(1)
-    expect(sns.publish().promise).toHaveBeenCalledTimes(1)
+    const sns = new SNSClient()
+    expect(sns.send).toHaveBeenCalledTimes(1)
   })
 
   it('publishes to SNS with the expected message', async () => {
@@ -722,7 +722,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
+    const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
         idToken: null,
@@ -733,7 +733,7 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
         causeId: 'someCauseId',
       },
     })
-    const input = sns.publish.mock.calls[0][0]
+    const input = sns.send.mock.calls[0][0]
     expect(input.Message).toEqual(expectedMessage)
   })
 
@@ -748,8 +748,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
@@ -767,8 +767,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:dev-SearchRequest',
@@ -786,8 +786,9 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
-    const sns = new AWS.SNS()
-    const input = sns.publish.mock.calls[0][0]
+    const sns = new SNSClient()
+    const input = sns.send.mock.calls[0][0]
+
     expect(input).toMatchObject({
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:SearchRequest',

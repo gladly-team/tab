@@ -2,9 +2,10 @@
 // (but not `/search/api*`).
 /* eslint prefer-destructuring: 0 */
 
-import AWS from 'aws-sdk'
 import { get } from 'lodash/object'
 import searchURLByRegion from './searchURLByRegion'
+
+const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
 
 const PRODUCTION_STAGE = 'prod'
 
@@ -19,12 +20,12 @@ const publishToSNS = async ({ stage, messageData }) => {
 
   // Publish.
   const message = JSON.stringify(messageData)
-  const sns = new AWS.SNS()
+  const sns = new SNSClient()
   const params = {
     Message: message,
     TopicArn: snsTopicARN,
   }
-  await sns.publish(params).promise()
+  await sns.send(new PublishCommand(params))
 }
 
 // Rewrites URIs from /search* to another search provider.
