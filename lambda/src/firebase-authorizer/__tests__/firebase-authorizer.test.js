@@ -8,6 +8,15 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+const getMockEvent = () => {
+  return {
+    headers: {
+      Authorization: 'fake-token-here',
+    },
+    methodArn: 'arn:execute-api:blah:blah',
+  }
+}
+
 // Note on the uid property: "This value is not actually in the JWT token claims itself.
 // It is added as a convenience, and is set as the value of the sub property."
 // https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken#uid
@@ -54,10 +63,7 @@ test('authorization fails when token verification throws an error', done => {
     ),
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    authorizationToken: 'fake-token-here',
-    methodArn: 'arn:execute-api:blah:blah',
-  }
+  const event = getMockEvent()
   const context = {}
   const callback = err => {
     expect(err).toBe('Error: Invalid token')
@@ -74,10 +80,7 @@ test('authorization allows access when a good token is provided (for an authenti
     verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    authorizationToken: 'fake-token-here',
-    methodArn: 'arn:execute-api:blah:blah',
-  }
+  const event = getMockEvent()
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
@@ -112,10 +115,7 @@ test("authorization still allows access when the user's email is not verified (f
     verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    authorizationToken: 'fake-token-here',
-    methodArn: 'arn:execute-api:blah:blah',
-  }
+  const event = getMockEvent()
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
@@ -156,10 +156,7 @@ test('authorization denies access when the user does not have an ID', done => {
     verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    authorizationToken: 'fake-token-here',
-    methodArn: 'arn:execute-api:blah:blah',
-  }
+  const event = getMockEvent()
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
@@ -190,10 +187,7 @@ test('authorization allows access when the user is anonymous (token does not hav
     verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    authorizationToken: 'fake-token-here',
-    methodArn: 'arn:execute-api:blah:blah',
-  }
+  const event = getMockEvent()
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
@@ -225,8 +219,10 @@ test('authorization allows access with no claims when the user has a placeholder
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = {
-    authorizationToken: 'unauthenticated',
-    methodArn: 'arn:execute-api:blah:blah',
+    ...getMockEvent(),
+    headers: {
+      Authorization: 'unauthenticated',
+    },
   }
   const context = {}
   const callback = (err, data) => {
