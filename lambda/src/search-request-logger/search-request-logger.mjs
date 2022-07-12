@@ -20,6 +20,7 @@ exports.handler = async event => {
     operationName: 'LogSearchMutation',
   }
 
+  const messageUser = message.user
   const response = await fetch(process.env.GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -34,8 +35,13 @@ exports.handler = async event => {
       // API Gateway returns a 401 Unauthorized response without calling
       // the authorizer Lambda function.”
       // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
-      Authorization:
-        (message.user && message.user.idToken) || 'unauthenticated',
+      Authorization: (messageUser && messageUser.idToken) || 'unauthenticated',
+      ...(messageUser.authUserTokens && {
+        'X-Tab-Auth-User-Tokens': messageUser.authUserTokens,
+      }),
+      ...(messageUser.authUserTokensSig && {
+        'X-Tab-Auth-User-Tokens-Sig': messageUser.authUserTokensSig,
+      }),
     },
     body: JSON.stringify(graphqlMutationPayload),
   })
