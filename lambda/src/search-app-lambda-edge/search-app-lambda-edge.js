@@ -14,25 +14,12 @@ const decodeBase64 = string => {
   return Buffer.from(string, 'base64').toString('utf8')
 }
 
-// Get the user's ID token from their auth cookie, if set. This is dependant
-// on the behavior of `next-firebase-auth`:
-// https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
-// If `next-firebase-auth` supports a function to get user data from
-// cookies, we should use it:
-// https://github.com/gladly-team/next-firebase-auth/issues/223
-const getIdTokenFromCookies = (cookiesStr = '') => {
-  const cookies = parse(cookiesStr)
-  const authCookieName = 'TabAuth.AuthUserTokens'
-  const authCookieVal = cookies[authCookieName] || null
-  console.log('===== DEBUG: authCookieVal', authCookieVal)
-
-  // Auth library `next-firebase-auth` stringifies twice.
-  let idTokenUnverified = null
-  if (authCookieVal) {
+const getCookieVal = rawString => {
+  if (rawString) {
     try {
-      const cookieData = JSON.parse(JSON.parse(decodeBase64(authCookieVal)))
-      idTokenUnverified = cookieData.idToken
-
+      // Auth library `next-firebase-auth` stringifies twice.
+      const cookieVal = JSON.parse(JSON.parse(decodeBase64(rawString)))
+      return cookieVal
       // Expect that cookie values could be manipulated or malformed.
       // eslint-disable-next-line no-empty
     } catch (e) {
@@ -40,7 +27,30 @@ const getIdTokenFromCookies = (cookiesStr = '') => {
       console.error('===== DEBUG: error', e)
     }
   }
-  return idTokenUnverified
+
+  return null
+}
+
+// Get the user's ID token from their auth cookie, if set. This is dependant
+// on the behavior of `next-firebase-auth`:
+// https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
+// If `next-firebase-auth` supports a function to get user data from
+// cookies, we should use it:
+// https://github.com/gladly-team/next-firebase-auth/issues/223
+const getIdTokensFromCookies = (cookiesStr = '') => {
+  const cookies = parse(cookiesStr)
+  console.log(cookies)
+
+  const authCookieName = 'TabAuth.AuthUserTokens'
+  const authCookieSigName = 'TabAuth.AuthUserTokens.sig'
+
+  const authCookieVal = cookies[authCookieName] || null
+  const authCookieSigVal = cookies[authCookieSigName] || null
+
+  return {
+    authUserTokens: getCookieVal(authCookieVal),
+    authUserTokensSig: getCookieVal(authCookieSigVal),
+  }
 }
 
 const publishToSNS = async ({ stage, messageData }) => {
@@ -107,7 +117,7 @@ exports.handler = async event => {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
     searchBaseURL = 'https://www.google.com/search'
-  } 
+  }
   const headers = get(request, 'headers', {})
 
   if (version >= 2) {
@@ -153,17 +163,15 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
-      console.log('===== DEBUG: headers', headers)
       const cookiesStr = get(headers, 'cookie[0].value', '')
-      console.log('===== DEBUG: cookiesStr', cookiesStr)
-      const idTokenUnverified = getIdTokenFromCookies(cookiesStr)
+      const idTokens = getIdTokensFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
           // FIXME: This isn't a functional approach, because the ID token
           //   will often be expired. We need to make our authorizer
           //   function smarter and move some this cookie logic into it.
-          idToken: idTokenUnverified,
+          ...idTokens,
         },
         data: {
           src: searchSrc,

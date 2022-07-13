@@ -237,7 +237,8 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: null,
+        authUserTokens: null,
+        authUserTokensSig: null,
       },
       data: {
         src: 'ff',
@@ -727,7 +728,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const sns = new AWS.SNS()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: null,
+        authUserTokens: null,
+        authUserTokensSig: null,
       },
       data: {
         src: 'ff',
@@ -745,15 +747,15 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const defaultEvent = getMockCloudFrontEventObject()
 
     // Replicate `next-firebase-auth` auth cookie structure.
-    const cookieData = {
-      idToken: 'my-fake-id-token',
-    }
-    const cookieVal = Buffer.from(
-      JSON.stringify(JSON.stringify(cookieData))
+    const authTokensCookieVal = Buffer.from(
+      JSON.stringify(JSON.stringify('my-fake-id-token'))
+    ).toString('base64')
+    const authTokensCookieSigVal = Buffer.from(
+      JSON.stringify(JSON.stringify('my-fake-id-token-sig'))
     ).toString('base64')
 
     const eventWithURI = setEventURI(defaultEvent, searchV3Path)
-    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; TabAuth.AuthUserTokens=${cookieVal}`
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; TabAuth.AuthUserTokens=${authTokensCookieVal}; TabAuth.AuthUserTokens.sig=${authTokensCookieSigVal}`
     const event = setHeader(eventWithURI, 'cookie', cookieStr)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
@@ -761,7 +763,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const sns = new AWS.SNS()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: 'my-fake-id-token',
+        authUserTokens: 'my-fake-id-token',
+        authUserTokensSig: 'my-fake-id-token-sig',
       },
       data: {
         src: 'ff',
@@ -787,7 +790,8 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: null,
+        authUserTokens: null,
+        authUserTokensSig: null,
       },
       data: {
         src: 'ff',
