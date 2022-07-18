@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
 
-jest.mock('uuid/v4')
+jest.mock('uuid')
 
 afterEach(() => {
   jest.resetModules()
@@ -143,7 +143,7 @@ test("authorization still allows access when the user's email is not verified (f
 })
 
 test('authorization denies access when the user does not have an ID', done => {
-  const uuid = require('uuid/v4')
+  const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
 
   // Token does not have user ID data
@@ -221,7 +221,7 @@ test('authorization allows access when the user is anonymous (token does not hav
 })
 
 test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', done => {
-  const uuid = require('uuid/v4')
+  const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = {
