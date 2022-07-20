@@ -52,7 +52,7 @@ const generatePolicy = (user, allow, resource) => {
 }
 
 function checkUserAuthorization(event, context, callback) {
-  const token = event.authorizationToken
+  const token = event.headers.Authorization
 
   // If the request is unauthenticated, allow access but do not
   // provide any claims.
