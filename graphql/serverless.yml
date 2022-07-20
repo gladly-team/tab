@@ -346,7 +346,7 @@ functions:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
             type: request
-            resultTtlInSeconds: 240 # TODO: edit
+            resultTtlInSeconds: 300
             # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
             identitySource: method.request.header.Authorization
     environment:
