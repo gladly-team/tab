@@ -346,6 +346,9 @@ functions:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
             type: request
+            resultTtlInSeconds: 300
+            # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
+            identitySource: method.request.header.Authorization
     environment:
       IS_GLOBAL_CAMPAIGN_LIVE: false
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
