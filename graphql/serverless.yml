@@ -348,9 +348,7 @@ functions:
             type: request
             resultTtlInSeconds: 240 # TODO: edit
             # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
-            identitySource: method.request.header.Authorization
-            # TODO: test multiple
-            # identitySource: method.request.header.Authorization, method.request.header.X-Tab-Auth-User-Tokens, method.request.header.X-Tab-Auth-User-Tokens-Sig
+            identitySource: method.request.header.Authorization, method.request.header.X-Tab-Auth-User-Tokens, method.request.header.X-Tab-Auth-User-Tokens-Sig
     environment:
       IS_GLOBAL_CAMPAIGN_LIVE: false
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
