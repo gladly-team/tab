@@ -4,6 +4,7 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.121.0",
     "accept-language-parser": "^1.5.0",
     "aws-sdk": "^2.814.0",
     "firebase-admin": "^11.0.0",
