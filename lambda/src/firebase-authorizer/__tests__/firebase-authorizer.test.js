@@ -15,6 +15,7 @@ jest.mock('@aws-sdk/client-kms', () => {
 })
 
 jest.mock('uuid')
+jest.mock('../initNFA')
 
 afterEach(() => {
   jest.resetModules()
