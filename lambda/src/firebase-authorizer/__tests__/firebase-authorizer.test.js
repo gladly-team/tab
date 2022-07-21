@@ -52,7 +52,8 @@ const mockDecodedTokenAnonymousUser = {
   uid: 'qwerty236810',
 }
 
-test('authorization fails when token verification throws an error', done => {
+test('authorization fails when token verification throws an error', async () => {
+  expect.assertions(1)
   // Hide expected error.
   jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
@@ -64,15 +65,12 @@ test('authorization fails when token verification throws an error', done => {
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = getMockEvent()
-  const context = {}
-  const callback = err => {
-    expect(err).toBe('Error: Invalid token')
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  await expect(checkUserAuthorization(event)).rejects.toThrow(
+    'Error: Invalid token'
+  )
 })
 
-test('authorization allows access when a good token is provided (for an authenticated email/password user)', done => {
+test('authorization allows access when a good token is provided (for an authenticated email/password user)', async () => {
   const decodedToken = cloneDeep(mockDecodedToken)
 
   const admin = require('firebase-admin')
@@ -81,33 +79,29 @@ test('authorization allows access when a good token is provided (for an authenti
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = getMockEvent()
-  const context = {}
-  const callback = (_, data) => {
-    expect(data).toEqual({
-      principalId: decodedToken.uid,
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: decodedToken.uid,
-        email: decodedToken.email,
-        email_verified: decodedToken.email_verified,
-        auth_time: decodedToken.auth_time,
-      },
-    })
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: decodedToken.uid,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: decodedToken.uid,
+      email: decodedToken.email,
+      email_verified: decodedToken.email_verified,
+      auth_time: decodedToken.auth_time,
+    },
+  })
 })
 
-test("authorization still allows access when the user's email is not verified (for an authenticated email/password user)", done => {
+test("authorization still allows access when the user's email is not verified (for an authenticated email/password user)", async () => {
   const decodedToken = cloneDeep(mockDecodedToken)
 
   const admin = require('firebase-admin')
@@ -116,33 +110,29 @@ test("authorization still allows access when the user's email is not verified (f
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = getMockEvent()
-  const context = {}
-  const callback = (_, data) => {
-    expect(data).toEqual({
-      principalId: decodedToken.uid,
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: decodedToken.uid,
-        email: decodedToken.email,
-        email_verified: decodedToken.email_verified,
-        auth_time: decodedToken.auth_time,
-      },
-    })
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: decodedToken.uid,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: decodedToken.uid,
+      email: decodedToken.email,
+      email_verified: decodedToken.email_verified,
+      auth_time: decodedToken.auth_time,
+    },
+  })
 })
 
-test('authorization denies access when the user does not have an ID', done => {
+test('authorization denies access when the user does not have an ID', async () => {
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
 
@@ -157,28 +147,24 @@ test('authorization denies access when the user does not have an ID', done => {
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = getMockEvent()
-  const context = {}
-  const callback = (_, data) => {
-    expect(data).toEqual({
-      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Deny',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {},
-    })
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Deny',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {},
+  })
 })
 
-test('authorization allows access when the user is anonymous (token does not have any email properties)', done => {
+test('authorization allows access when the user is anonymous (token does not have any email properties)', async () => {
   // Token does not have email info
   const decodedToken = cloneDeep(mockDecodedTokenAnonymousUser)
 
@@ -188,33 +174,29 @@ test('authorization allows access when the user is anonymous (token does not hav
   }))
   const { checkUserAuthorization } = require('../firebase-authorizer')
   const event = getMockEvent()
-  const context = {}
-  const callback = (_, data) => {
-    expect(data).toEqual({
-      principalId: decodedToken.uid,
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: decodedToken.uid,
-        email: null,
-        email_verified: false,
-        auth_time: decodedToken.auth_time,
-      },
-    })
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: decodedToken.uid,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: decodedToken.uid,
+      email: null,
+      email_verified: false,
+      auth_time: decodedToken.auth_time,
+    },
+  })
 })
 
-test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', done => {
+test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', async () => {
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const { checkUserAuthorization } = require('../firebase-authorizer')
@@ -224,29 +206,24 @@ test('authorization allows access with no claims when the user has a placeholder
       Authorization: 'unauthenticated',
     },
   }
-  const context = {}
-  const callback = (err, data) => {
-    expect(err).toBeNull()
-    expect(data).toEqual({
-      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: null,
-        email: null,
-        email_verified: false,
-        auth_time: 0,
-      },
-    })
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
+  const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: null,
+      email: null,
+      email_verified: false,
+      auth_time: 0,
+    },
+  })
 })
