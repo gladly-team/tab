@@ -2,6 +2,7 @@
 import { cloneDeep } from 'lodash/lang'
 
 jest.mock('uuid')
+jest.mock('../initNFA')
 
 afterEach(() => {
   jest.resetModules()

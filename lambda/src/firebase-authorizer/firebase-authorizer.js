@@ -3,9 +3,26 @@
 import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
 import { v4 as uuid } from 'uuid'
+import initNFA from './initNFA'
 
 const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
+
+// FIXME: we need to always init NFA, so hoist the secrets decryption
+//   up. This conditional is only to avoid an invalid init when the
+//   decrypted private key isn't set.
+if (decryptedFirebasePrivateKey) {
+  initNFA({
+    firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
+    firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
+    firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
+    firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+    firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
+
+    // FIXME: we'll need the cookie value to be decrypted
+    cookieKeys: [process.env.COOKIE_SECRET_20220711],
+  })
+}
 
 /*
  * Generate the AWS policy document to return from the authorizer.
