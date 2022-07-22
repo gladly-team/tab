@@ -1,7 +1,7 @@
 import { get } from 'lodash/object'
 import fetch from 'node-fetch'
 
-const getAuthorizationHeaderFromMessage = (messageUser) {
+const getAuthorizationHeaderFromMessage = messageUser => {
   if (!messageUser) {
     return 'unauthenticated'
   }
@@ -12,11 +12,11 @@ const getAuthorizationHeaderFromMessage = (messageUser) {
 
   if (messageUser.authUserTokens && messageUser.authUserTokensSig) {
     return JSON.stringify({
-      tabAuthUserTokens:  messageUser.authUserTokens,
-      tabAuthUserTokensSig: messageUser.authUserTokensSig
+      tabAuthUserTokens: messageUser.authUserTokens,
+      tabAuthUserTokensSig: messageUser.authUserTokensSig,
     })
   }
-  
+
   return 'unauthenticated'
 }
 

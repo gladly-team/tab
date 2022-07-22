@@ -54,6 +54,7 @@ describe('Search request logger', () => {
       type: 'cors',
       url: 'https://example.com/foo/',
     })
+
     const payload = getMockSNSMessagePayload()
     const mockEvent = setSNSEventMessage(
       getMockSNSEventObject(),
@@ -161,7 +162,7 @@ describe('Search request logger', () => {
     expect(response).toEqual({ success: true })
   })
 
-  it('passes X-Tab-Auth-User-Tokens and X-Tab-Auth-User-Tokens-Sig headers correctly if applicable', async () => {
+  it('passes stringified authUserTokens and authUserTokensSig headers correctly if applicable', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue({
       body: {},
@@ -195,9 +196,66 @@ describe('Search request logger', () => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'unauthenticated',
-        'X-Tab-Auth-User-Tokens': 'test-auth-user-tokens',
-        'X-Tab-Auth-User-Tokens-Sig': 'test-auth-user-tokens-sig',
+        Authorization: JSON.stringify({
+          tabAuthUserTokens: payload.user.authUserTokens,
+          tabAuthUserTokensSig: payload.user.authUserTokensSig,
+        }),
+      },
+      body: JSON.stringify({
+        query: `mutation LogSearchMutation($input: LogSearchInput!) {
+        logSearch(input: $input) {
+          success
+        }
+      }`,
+        variables: {
+          input: {
+            causeId: payload.data.causeId,
+            searchEngineId: payload.data.engine,
+            version: 2,
+            source: payload.data.src,
+          },
+        },
+        operationName: 'LogSearchMutation',
+      }),
+    })
+  })
+
+  it('prefers idToken over authUserTokens and authUserTokensSig headers correctly if applicable', async () => {
+    expect.assertions(1)
+    fetch.mockResolvedValue({
+      body: {},
+      bodyUsed: true,
+      headers: {},
+      json: () => Promise.resolve({ success: true }),
+      ok: true,
+      redirected: false,
+      status: 200,
+      statusText: '',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    })
+    const payload = {
+      ...getMockSNSMessagePayload(),
+      user: {
+        idToken: 'abcdToken',
+        authUserTokens: 'test-auth-user-tokens',
+        authUserTokensSig: 'test-auth-user-tokens-sig',
+      },
+    }
+    const mockEvent = setSNSEventMessage(
+      getMockSNSEventObject(),
+      JSON.stringify(payload)
+    )
+    const { handler } = require('../search-request-logger.mjs')
+    await handler(mockEvent)
+
+    // eslint-disable-next-line no-console
+    expect(fetch).toHaveBeenLastCalledWith(process.env.GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: payload.user.idToken,
       },
       body: JSON.stringify({
         query: `mutation LogSearchMutation($input: LogSearchInput!) {
