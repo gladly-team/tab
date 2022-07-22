@@ -1,7 +1,7 @@
 /* eslint standard/no-callback-literal: 0, no-console: 0 */
 
 import * as admin from 'firebase-admin'
-import AWS from 'aws-sdk'
+import { KMSClient, DecryptCommand } from '@aws-sdk/client-kms'
 import { v4 as uuid } from 'uuid'
 
 const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
@@ -123,20 +123,18 @@ const handler = async event => {
   }
   // Decrypt code should run once and variables stored outside of the function
   // handler so that these are decrypted once per container
-  const kms = new AWS.KMS()
-  kms.decrypt(
-    { CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64') },
-    (err, data) => {
-      if (err) {
-        console.log('Decrypt error:', err)
-        return 'Error decrypting secure environnment variables.'
-      }
-      decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
-      return checkUserAuthorization(event)
-    }
-  )
-
-  return new Error('Error: Unexpected end of function')
+  const kms = new KMSClient()
+  const decryptCommand = new DecryptCommand({
+    CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64'),
+  })
+  try {
+    const data = await kms.send(decryptCommand)
+    decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
+    return checkUserAuthorization(event)
+  } catch (err) {
+    console.log('Decrypt error:', err)
+    throw new Error('Error decrypting secure environnment variables.')
+  }
 }
 
 const serverlessHandler = async event => {
