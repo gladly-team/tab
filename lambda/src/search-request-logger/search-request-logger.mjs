@@ -1,6 +1,25 @@
 import { get } from 'lodash/object'
 import fetch from 'node-fetch'
 
+const getAuthorizationHeaderFromMessage = (messageUser) {
+  if (!messageUser) {
+    return 'unauthenticated'
+  }
+
+  if (messageUser.idToken) {
+    return messageUser.idToken
+  }
+
+  if (messageUser.authUserTokens && messageUser.authUserTokensSig) {
+    return JSON.stringify({
+      tabAuthUserTokens:  messageUser.authUserTokens,
+      tabAuthUserTokensSig: messageUser.authUserTokensSig
+    })
+  }
+  
+  return 'unauthenticated'
+}
+
 exports.handler = async event => {
   const message = JSON.parse(get(event, 'Records[0].Sns.Message'))
   const graphqlMutationPayload = {
@@ -20,7 +39,6 @@ exports.handler = async event => {
     operationName: 'LogSearchMutation',
   }
 
-  const messageUser = message.user
   const response = await fetch(process.env.GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -35,13 +53,7 @@ exports.handler = async event => {
       // API Gateway returns a 401 Unauthorized response without calling
       // the authorizer Lambda function.”
       // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
-      Authorization: (messageUser && messageUser.idToken) || 'unauthenticated',
-      ...(messageUser.authUserTokens && {
-        'X-Tab-Auth-User-Tokens': messageUser.authUserTokens,
-      }),
-      ...(messageUser.authUserTokensSig && {
-        'X-Tab-Auth-User-Tokens-Sig': messageUser.authUserTokensSig,
-      }),
+      Authorization: getAuthorizationHeaderFromMessage(message.user),
     },
     body: JSON.stringify(graphqlMutationPayload),
   })
