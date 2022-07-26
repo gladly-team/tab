@@ -1,6 +1,19 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
 
+process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
+jest.mock('@aws-sdk/client-kms', () => {
+  const mockKMS = {
+    send: jest.fn().mockReturnValue({
+      Plaintext: Uint8Array.from('decrypted-firebase-key'),
+    }),
+  }
+  return {
+    DecryptCommand: jest.fn().mockImplementation(params => params),
+    KMSClient: jest.fn(() => mockKMS),
+  }
+})
+
 jest.mock('uuid')
 
 afterEach(() => {
@@ -207,6 +220,75 @@ test('authorization allows access with no claims when the user has a placeholder
     },
   }
   const result = await checkUserAuthorization(event)
+  expect(result).toEqual({
+    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: null,
+      email: null,
+      email_verified: false,
+      auth_time: 0,
+    },
+  })
+})
+
+test('full handler works, calling checkUserAuthorization when applicable', async () => {
+  expect.assertions(1)
+  const uuid = require('uuid').v4
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+  const { handler } = require('../firebase-authorizer')
+  const event = {
+    ...getMockEvent(),
+    headers: {
+      Authorization: 'unauthenticated',
+    },
+  }
+  const result = await handler(event)
+  expect(result).toEqual({
+    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: 'arn:execute-api:blah:blah',
+        },
+      ],
+    },
+    context: {
+      id: null,
+      email: null,
+      email_verified: false,
+      auth_time: 0,
+    },
+  })
+})
+
+test('full handler works when calling with existing decrypted key', async () => {
+  expect.assertions(1)
+  const uuid = require('uuid').v4
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+  const { handler } = require('../firebase-authorizer')
+  const event = {
+    ...getMockEvent(),
+    headers: {
+      Authorization: 'unauthenticated',
+    },
+  }
+  await handler(event)
+
+  // Second call should succeed with correct value
+  const result = await handler(event)
   expect(result).toEqual({
     principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
     policyDocument: {
