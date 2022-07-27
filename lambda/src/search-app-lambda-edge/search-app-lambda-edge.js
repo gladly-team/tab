@@ -5,51 +5,24 @@
 import { get } from 'lodash/object'
 import { parse } from 'cookie'
 import searchURLByRegion from './searchURLByRegion'
+import { AUTH_COOKIE_NAME, AUTH_SIG_COOKIE_NAME } from '../utils/constants'
 
 const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
 
 const PRODUCTION_STAGE = 'prod'
 
-const decodeBase64 = string => {
-  return Buffer.from(string, 'base64').toString('utf8')
-}
-
-const getCookieVal = rawString => {
-  if (rawString) {
-    try {
-      // Auth library `next-firebase-auth` stringifies twice.
-      const cookieVal = JSON.parse(JSON.parse(decodeBase64(rawString)))
-      return cookieVal
-      // Expect that cookie values could be manipulated or malformed.
-      // eslint-disable-next-line no-empty
-    } catch (e) {
-      // console.error(e)
-      console.error('===== DEBUG: error', e)
-    }
-  }
-
-  return null
-}
-
-// Get the user's ID token from their auth cookie, if set. This is dependant
+// Get the user's authUserTokens from their cookies, if set. This is dependant
 // on the behavior of `next-firebase-auth`:
 // https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
 // If `next-firebase-auth` supports a function to get user data from
 // cookies, we should use it:
 // https://github.com/gladly-team/next-firebase-auth/issues/223
-const getIdTokensFromCookies = (cookiesStr = '') => {
+const getAuthUserTokensFromCookies = (cookiesStr = '') => {
   const cookies = parse(cookiesStr)
-  console.log(cookies)
-
-  const authCookieName = 'TabAuth.AuthUserTokens'
-  const authCookieSigName = 'TabAuth.AuthUserTokens.sig'
-
-  const authCookieVal = cookies[authCookieName] || null
-  const authCookieSigVal = cookies[authCookieSigName] || null
 
   return {
-    authUserTokens: getCookieVal(authCookieVal),
-    authUserTokensSig: getCookieVal(authCookieSigVal),
+    authUserTokens: cookies[AUTH_COOKIE_NAME] || null,
+    authUserTokensSig: cookies[AUTH_SIG_COOKIE_NAME] || null,
   }
 }
 
@@ -164,14 +137,11 @@ exports.handler = async event => {
   if (version >= 3) {
     try {
       const cookiesStr = get(headers, 'cookie[0].value', '')
-      const idTokens = getIdTokensFromCookies(cookiesStr)
+      const authUserTokens = getAuthUserTokensFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
-          // FIXME: This isn't a functional approach, because the ID token
-          //   will often be expired. We need to make our authorizer
-          //   function smarter and move some this cookie logic into it.
-          ...idTokens,
+          ...authUserTokens,
         },
         data: {
           src: searchSrc,
