@@ -7653,10 +7653,10 @@ neo-async@^2.6.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-next-firebase-auth@^1.0.0-canary.10:
-  version "1.0.0-canary.11"
-  resolved "https://registry.yarnpkg.com/next-firebase-auth/-/next-firebase-auth-1.0.0-canary.11.tgz#8875560ca3a427b64100c04df3c7372e9950a1f5"
-  integrity sha512-Xs5Cj+7YbapsqiwoLs1SnzxI04yf+KCnTCakAnPWTZeOZHWMpfVzd2kvP8dI10eKNsGRX7Lu3kR9qJBhASIKDg==
+next-firebase-auth@1.0.0-canary.12:
+  version "1.0.0-canary.12"
+  resolved "https://registry.yarnpkg.com/next-firebase-auth/-/next-firebase-auth-1.0.0-canary.12.tgz#45aec47462dcb60a6722b7968845774b92e6f1ff"
+  integrity sha512-Sn1u03gptaAiW9Hg1UCwy3cAHh7hcgClfBH5LBQ7pCnLE231nxuXCeKGCZsOooAF9LRvBbBkGzhWhDzWIeAgFA==
   dependencies:
     "@babel/runtime" "^7.18.9"
     cookies "^0.8.0"
