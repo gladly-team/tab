@@ -40,55 +40,6 @@ const setSNSEventMessage = (event, message) => {
 }
 
 describe('Search request logger', () => {
-  it('calls graphql endpoint with the correct message', async () => {
-    expect.assertions(1)
-    fetch.mockResolvedValue({
-      body: {},
-      bodyUsed: true,
-      headers: {},
-      json: () => Promise.resolve({ success: true }),
-      ok: true,
-      redirected: false,
-      status: 200,
-      statusText: '',
-      type: 'cors',
-      url: 'https://example.com/foo/',
-    })
-    const payload = getMockSNSMessagePayload()
-    const mockEvent = setSNSEventMessage(
-      getMockSNSEventObject(),
-      JSON.stringify(payload)
-    )
-    const { handler } = require('../search-request-logger.mjs')
-    await handler(mockEvent)
-
-    // eslint-disable-next-line no-console
-    expect(fetch).toHaveBeenLastCalledWith(process.env.GRAPHQL_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: payload.user.idToken,
-      },
-      body: JSON.stringify({
-        query: `mutation LogSearchMutation($input: LogSearchInput!) {
-        logSearch(input: $input) {
-          success
-        }
-      }`,
-        variables: {
-          input: {
-            causeId: payload.data.causeId,
-            searchEngineId: payload.data.engine,
-            version: 2,
-            source: payload.data.src,
-          },
-        },
-        operationName: 'LogSearchMutation',
-      }),
-    })
-  })
-
   it('calls graphql endpoint with unauthenticated Authorization header', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue({
@@ -159,5 +110,63 @@ describe('Search request logger', () => {
     const { handler } = require('../search-request-logger.mjs')
     const response = await handler(mockEvent)
     expect(response).toEqual({ success: true })
+  })
+
+  it('passes stringified authUserTokens and authUserTokensSig headers correctly if applicable', async () => {
+    expect.assertions(1)
+    fetch.mockResolvedValue({
+      body: {},
+      bodyUsed: true,
+      headers: {},
+      json: () => Promise.resolve({ success: true }),
+      ok: true,
+      redirected: false,
+      status: 200,
+      statusText: '',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    })
+    const payload = {
+      ...getMockSNSMessagePayload(),
+      user: {
+        authUserTokens: 'test-auth-user-tokens',
+        authUserTokensSig: 'test-auth-user-tokens-sig',
+      },
+    }
+    const mockEvent = setSNSEventMessage(
+      getMockSNSEventObject(),
+      JSON.stringify(payload)
+    )
+    const { handler } = require('../search-request-logger.mjs')
+    await handler(mockEvent)
+
+    // eslint-disable-next-line no-console
+    expect(fetch).toHaveBeenLastCalledWith(process.env.GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: JSON.stringify({
+          tabAuthUserTokens: payload.user.authUserTokens,
+          tabAuthUserTokensSig: payload.user.authUserTokensSig,
+        }),
+      },
+      body: JSON.stringify({
+        query: `mutation LogSearchMutation($input: LogSearchInput!) {
+        logSearch(input: $input) {
+          success
+        }
+      }`,
+        variables: {
+          input: {
+            causeId: payload.data.causeId,
+            searchEngineId: payload.data.engine,
+            version: 2,
+            source: payload.data.src,
+          },
+        },
+        operationName: 'LogSearchMutation',
+      }),
+    })
   })
 })
