@@ -1,6 +1,17 @@
 import { get } from 'lodash/object'
 import fetch from 'node-fetch'
 
+const getAuthorizationHeaderFromMessage = messageUser => {
+  if (messageUser.authUserTokens && messageUser.authUserTokensSig) {
+    return JSON.stringify({
+      tabAuthUserTokens: messageUser.authUserTokens,
+      tabAuthUserTokensSig: messageUser.authUserTokensSig,
+    })
+  }
+
+  return 'unauthenticated'
+}
+
 exports.handler = async event => {
   const message = JSON.parse(get(event, 'Records[0].Sns.Message'))
   const graphqlMutationPayload = {
@@ -34,8 +45,7 @@ exports.handler = async event => {
       // API Gateway returns a 401 Unauthorized response without calling
       // the authorizer Lambda function.”
       // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
-      Authorization:
-        (message.user && message.user.idToken) || 'unauthenticated',
+      Authorization: getAuthorizationHeaderFromMessage(message.user),
     },
     body: JSON.stringify(graphqlMutationPayload),
   })
