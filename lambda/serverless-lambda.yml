@@ -77,8 +77,6 @@ custom:
 
 plugins:
   # Include only the required node modules.
-  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
-  - serverless-plugin-include-dependencies
   # https://github.com/claygregory/serverless-prune-plugin
   - serverless-prune-plugin
 
