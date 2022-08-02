@@ -138,7 +138,7 @@ const handler = async event => {
 }
 
 const serverlessHandler = async event => {
-  handler(event)
+  return handler(event)
 }
 
 module.exports = {
