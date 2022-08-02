@@ -11,7 +11,7 @@
     "aws-sdk": "^2.814.0",
     "firebase-admin": "^11.0.0",
     "lodash": "^4.17.21",
-    "next-firebase-auth": "1.0.0-canary.12",
+    "next-firebase-auth": "1.0.0-canary.13",
     "node-fetch": "^2.6.7",
     "uuid": "^8.3.2"
   },
