@@ -76,16 +76,19 @@ custom:
     number: 5
 
 plugins:
-  # Include only the required node modules.
   # https://github.com/claygregory/serverless-prune-plugin
   - serverless-prune-plugin
 
 # Only include the build and its node modules.
 package:
-  exclude:
-    - ./**
-  include:
-    - build/**
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/@aws-sdk/**'
+    - 'node_modules/firebase-admin/**'
+    - 'node_modules/lodash/**'
+    - 'node_modules/node-fetch/**'
+    - 'node_modules/uuid/**'
+
 
 functions:
   firebaseAuthorizer:
