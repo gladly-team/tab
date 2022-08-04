@@ -129,7 +129,11 @@ const handler = async event => {
   })
   try {
     const data = await kms.send(decryptCommand)
-    decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
+    // "When you use the HTTP API or the AWS CLI, the value is Base64-encoded.
+    // Otherwise, it is not Base64-encoded."
+    // https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html#API_Decrypt_ResponseElements
+    const privateKeyBase64Decoded = Buffer.from(data.Plaintext, 'base64')
+    decryptedFirebasePrivateKey = privateKeyBase64Decoded.toString('ascii')
     return checkUserAuthorization(event)
   } catch (err) {
     console.log('Decrypt error:', err)
