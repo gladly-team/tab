@@ -2,10 +2,9 @@
 
 import { clone } from 'lodash/lang'
 import { setWith } from 'lodash/object'
+import { SNSClient } from '@aws-sdk/client-sns'
 import { getMockCloudFrontEventObject } from '../../utils/lambda-arg-utils'
 import searchURLByRegion from '../searchURLByRegion'
-
-const { SNSClient } = require('@aws-sdk/client-sns')
 
 jest.mock('@aws-sdk/client-sns', () => {
   const mockSNS = {
