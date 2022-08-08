@@ -42,9 +42,10 @@ const mfaCodeProvider = async serial => {
 }
 
 const setStackPolicy = async () => {
-  const credentials = fromIni({
+  const credentialProvider = fromIni({
     mfaCodeProvider,
   })
+  const credentials = await credentialProvider()
   const cloudformation = new CloudFormationClient({
     credentials,
     region: 'us-west-2',
