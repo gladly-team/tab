@@ -1,5 +1,7 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
+import decryptValue from '../decrypt-utils'
+import initNFA from '../initNFA'
 
 process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
 jest.mock('@aws-sdk/client-kms', () => {
@@ -14,11 +16,15 @@ jest.mock('@aws-sdk/client-kms', () => {
   }
 })
 
+jest.mock('../decrypt-utils')
 jest.mock('uuid')
 jest.mock('../initNFA')
 
+beforeEach(() => {
+  decryptValue.mockResolvedValue('hello')
+})
+
 afterEach(() => {
-  jest.resetModules()
   jest.clearAllMocks()
 })
 
@@ -243,7 +249,7 @@ test('authorization allows access with no claims when the user has a placeholder
 })
 
 test('full handler works, calling checkUserAuthorization when applicable', async () => {
-  expect.assertions(1)
+  expect.assertions(2)
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const { handler } = require('../firebase-authorizer')
@@ -273,10 +279,11 @@ test('full handler works, calling checkUserAuthorization when applicable', async
       auth_time: 0,
     },
   })
+  expect(initNFA).toHaveBeenCalledTimes(1)
 })
 
 test('full handler works when calling with existing decrypted key', async () => {
-  expect.assertions(1)
+  expect.assertions(2)
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const { handler } = require('../firebase-authorizer')
@@ -287,7 +294,6 @@ test('full handler works when calling with existing decrypted key', async () => 
     },
   }
   await handler(event)
-
   // Second call should succeed with correct value
   const result = await handler(event)
   expect(result).toEqual({
@@ -309,4 +315,5 @@ test('full handler works when calling with existing decrypted key', async () => 
       auth_time: 0,
     },
   })
+  expect(initNFA).toHaveBeenCalledTimes(2)
 })

@@ -1,28 +1,12 @@
 /* eslint standard/no-callback-literal: 0, no-console: 0 */
 
 import * as admin from 'firebase-admin'
-import { KMSClient, DecryptCommand } from '@aws-sdk/client-kms'
 import { v4 as uuid } from 'uuid'
 import initNFA from './initNFA'
+import decryptValue from './decrypt-utils'
 
 const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
-
-// FIXME: we need to always init NFA, so hoist the secrets decryption
-//   up. This conditional is only to avoid an invalid init when the
-//   decrypted private key isn't set.
-if (decryptedFirebasePrivateKey) {
-  initNFA({
-    firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
-    firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
-    firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
-    firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
-    firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
-
-    // FIXME: we'll need the cookie value to be decrypted
-    cookieKeys: [process.env.COOKIE_SECRET_20220711],
-  })
-}
 
 /*
  * Generate the AWS policy document to return from the authorizer.
@@ -133,29 +117,26 @@ const checkUserAuthorization = async event => {
   }
 }
 
+const _handler = async event => {
+  initNFA({
+    firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
+    firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
+    firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
+    firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+    firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
+    cookieKeys: [await decryptValue(process.env.COOKIE_SECRET_20220711)],
+  })
+  return checkUserAuthorization(event)
+}
+
 const handler = async event => {
   // Decrypt secure environment variables.
   if (decryptedFirebasePrivateKey) {
-    return checkUserAuthorization(event)
+    return _handler(event)
   }
-  // Decrypt code should run once and variables stored outside of the function
-  // handler so that these are decrypted once per container
-  const kms = new KMSClient()
-  const decryptCommand = new DecryptCommand({
-    CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64'),
-  })
-  try {
-    const data = await kms.send(decryptCommand)
-    // "When you use the HTTP API or the AWS CLI, the value is Base64-encoded.
-    // Otherwise, it is not Base64-encoded."
-    // https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html#API_Decrypt_ResponseElements
-    const privateKeyBase64Decoded = Buffer.from(data.Plaintext, 'base64')
-    decryptedFirebasePrivateKey = privateKeyBase64Decoded.toString('ascii')
-    return checkUserAuthorization(event)
-  } catch (err) {
-    console.log('Decrypt error:', err)
-    throw new Error('Error decrypting secure environnment variables.')
-  }
+
+  decryptedFirebasePrivateKey = await decryptValue(encryptedFirebasePrivateKey)
+  return _handler(event)
 }
 
 const serverlessHandler = async event => {
