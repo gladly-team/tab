@@ -4,17 +4,6 @@ import decryptValue from '../decrypt-utils'
 import initNFA from '../initNFA'
 
 process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
-jest.mock('@aws-sdk/client-kms', () => {
-  const mockKMS = {
-    send: jest.fn().mockReturnValue({
-      Plaintext: Uint8Array.from('decrypted-firebase-key'),
-    }),
-  }
-  return {
-    DecryptCommand: jest.fn().mockImplementation(params => params),
-    KMSClient: jest.fn(() => mockKMS),
-  }
-})
 
 jest.mock('../decrypt-utils')
 jest.mock('uuid')

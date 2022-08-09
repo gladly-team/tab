@@ -17,7 +17,6 @@ const decryptValue = async encryptedKey => {
     const privateKeyBase64Decoded = Buffer.from(data.Plaintext, 'base64')
     return privateKeyBase64Decoded.toString('ascii')
   } catch (err) {
-    console.log('Decrypt error:', err)
     throw new Error('Error decrypting secure environnment variables.')
   }
 }
