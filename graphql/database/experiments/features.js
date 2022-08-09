@@ -143,7 +143,7 @@ const features = {
     ],
   },
   [YAHOO_SEARCH_NEW_USERS_V2]: {
-    defaultValue: 'Control',
+    defaultValue: 'Tooltip',
     rules: [
       /* Begin internal overrides */
       {
@@ -186,7 +186,7 @@ const features = {
       {
         variations: ['Control', 'Tooltip', 'Notification'],
         weights: [0.34, 0.33, 0.33],
-        coverage: 1.0,
+        coverage: 0.0,
         condition: {
           joined: {
             $gt: SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
