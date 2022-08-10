@@ -1,7 +1,5 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
-import decryptValue from '../decrypt-utils'
-import initNFA from '../initNFA'
 
 process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
 
@@ -10,11 +8,8 @@ jest.mock('uuid')
 jest.mock('../initNFA')
 
 beforeEach(() => {
-  decryptValue.mockResolvedValue('hello')
-})
-
-afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 const getMockEvent = () => {
@@ -241,7 +236,10 @@ test('full handler works, calling checkUserAuthorization when applicable', async
   expect.assertions(2)
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+  const decryptValue = require('../decrypt-utils').default
+  decryptValue.mockResolvedValue('hello')
   const { handler } = require('../firebase-authorizer')
+  const initNFA = require('../initNFA').default
   const event = {
     ...getMockEvent(),
     headers: {
@@ -275,7 +273,10 @@ test('full handler works when calling with existing decrypted key', async () => 
   expect.assertions(2)
   const uuid = require('uuid').v4
   uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+  const decryptValue = require('../decrypt-utils').default
+  decryptValue.mockResolvedValue('hello')
   const { handler } = require('../firebase-authorizer')
+  const initNFA = require('../initNFA').default
   const event = {
     ...getMockEvent(),
     headers: {
@@ -304,5 +305,5 @@ test('full handler works when calling with existing decrypted key', async () => 
       auth_time: 0,
     },
   })
-  expect(initNFA).toHaveBeenCalledTimes(2)
+  expect(initNFA).toHaveBeenCalledTimes(1)
 })

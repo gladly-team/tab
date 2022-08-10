@@ -8,6 +8,8 @@ import decryptValue from './decrypt-utils'
 const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
 
+let nfaIsInitialized = false
+
 /*
  * Generate the AWS policy document to return from the authorizer.
  * Return an empty 'context' object if the user is denied access.
@@ -117,26 +119,27 @@ const checkUserAuthorization = async event => {
   }
 }
 
-const _handler = async event => {
-  initNFA({
-    firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
-    firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
-    firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
-    firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
-    firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
-    cookieKeys: [await decryptValue(process.env.COOKIE_SECRET_20220711)],
-  })
-  return checkUserAuthorization(event)
-}
-
 const handler = async event => {
   // Decrypt secure environment variables.
-  if (decryptedFirebasePrivateKey) {
-    return _handler(event)
+  if (!decryptedFirebasePrivateKey) {
+    decryptedFirebasePrivateKey = await decryptValue(
+      encryptedFirebasePrivateKey
+    )
   }
 
-  decryptedFirebasePrivateKey = await decryptValue(encryptedFirebasePrivateKey)
-  return _handler(event)
+  if (!nfaIsInitialized) {
+    initNFA({
+      firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
+      firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
+      firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
+      firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+      firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
+      cookieKeys: [await decryptValue(process.env.COOKIE_SECRET_20220711)],
+    })
+    nfaIsInitialized = true
+  }
+
+  return checkUserAuthorization(event)
 }
 
 const serverlessHandler = async event => {
