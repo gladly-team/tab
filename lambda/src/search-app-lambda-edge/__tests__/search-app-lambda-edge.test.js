@@ -34,6 +34,7 @@ const searchPathProduction = '/search/'
 const searchV1Path = '/search/v1'
 const searchV2Path = '/search/v2'
 const searchV3Path = '/search/v3'
+const uninstallPath = '/search/uninstalled'
 const setEventURI = (event, uri) => {
   // Like `set` but immutable:
   // https://github.com/lodash/lodash/issues/1696#issuecomment-328335502
@@ -792,5 +793,30 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
       Message: expect.any(String),
       TopicArn: 'arn:aws:sns:ca-central-1:167811431063:SearchRequest',
     })
+  })
+})
+
+describe('uninstall url: search app Lambda@Edge function on viewer-request', () => {
+  it('redirects with a 307 redirect', async () => {
+    expect.assertions(3)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, uninstallPath)
+    const response = await handler(event)
+    expect(response.status).toEqual('307')
+    expect(response.statusDescription).toEqual('Found')
+    expect(response.headers.location[0].value).toEqual(
+      'https://forms.gle/A3Xam2op2gFjoQNU6'
+    )
+  })
+
+  it('does not call SNS', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+    const event = setEventURI(defaultEvent, uninstallPath)
+    await handler(event)
+    const sns = new SNSClient()
+    expect(sns.send).not.toHaveBeenCalled()
   })
 })
