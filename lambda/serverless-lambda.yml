@@ -86,6 +86,7 @@ package:
     - 'node_modules/@aws-sdk/**'
     - 'node_modules/firebase-admin/**'
     - 'node_modules/lodash/**'
+    - 'node_modules/next-firebase-auth/**'
     - 'node_modules/node-fetch/**'
     - 'node_modules/uuid/**'
 
