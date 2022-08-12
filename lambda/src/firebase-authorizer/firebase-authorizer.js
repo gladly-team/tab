@@ -84,11 +84,20 @@ const checkUserAuthorization = async event => {
   // values.
   try {
     const { tabAuthUserTokens, tabAuthUserTokensSig } = JSON.parse(token)
+
+    // FIXME: remove after debugging
+    console.log('===== tabAuthUserTokens:', tabAuthUserTokens)
+    console.log('===== tabAuthUserTokensSig:', tabAuthUserTokensSig)
+
     const nfaUser = await getUserFromCookies({
       authCookieValue: tabAuthUserTokens,
       authCookieValueSig: tabAuthUserTokensSig,
       includeToken: true,
     })
+
+    // FIXME: remove after debugging
+    console.log('===== nfaUser:', nfaUser)
+
     const user = {
       uid: nfaUser.id,
       email: nfaUser.email,
@@ -99,6 +108,9 @@ const checkUserAuthorization = async event => {
   } catch (e) {
     // If not, don't throw. This is expected when provided with a Firebase
     // ID token. Continue on to attempt to verify the ID token.
+
+    // FIXME: remove after debugging
+    console.error(e)
   }
 
   // See if the Authorization header is a Firebase ID token.
