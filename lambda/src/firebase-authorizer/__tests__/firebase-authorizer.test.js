@@ -1,8 +1,7 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
 
-process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
-
+jest.mock('firebase-admin')
 jest.mock('../decrypt-utils')
 jest.mock('uuid')
 jest.mock('../initNFA')
@@ -10,6 +9,27 @@ jest.mock('../initNFA')
 beforeEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
+
+  process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-fake-firebase-key'
+  process.env.LAMBDA_FIREBASE_PROJECT_ID = 'fake-firebase-project-id'
+  process.env.LAMBDA_FIREBASE_CLIENT_EMAIL = 'fake-firebase-client-email'
+  process.env.LAMBDA_FIREBASE_DATABASE_URL = 'fake-firebase-database-url'
+  process.env.FIREBASE_PUBLIC_API_KEY = 'fake-firebase-public-api-key'
+  process.env.COOKIE_SECRET_20220711 = 'encrypted-fake-cookie-secret-20220711'
+
+  const decryptValue = require('../decrypt-utils').default
+  decryptValue.mockImplementation(async value => {
+    if (value === 'encrypted-fake-firebase-key') {
+      return 'fake-firebase-key'
+    }
+    if (value === 'encrypted-fake-cookie-secret-20220711') {
+      return 'fake-cookie-secret-20220711'
+    }
+    throw new Error(`Could not decrypt value: ${value}`)
+  })
+
+  const uuid = require('uuid').v4
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
 })
 
 const getMockEvent = () => {
@@ -56,254 +76,256 @@ const mockDecodedTokenAnonymousUser = {
   uid: 'qwerty236810',
 }
 
-test('authorization fails when token verification throws an error', async () => {
-  expect.assertions(1)
-  // Hide expected error.
-  jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+describe('firebase-authorizer', () => {
+  it('fails when token verification throws an error', async () => {
+    expect.assertions(1)
+    // Hide expected errors.
+    jest
+      .spyOn(console, 'error')
+      .mockImplementationOnce(() => {})
+      .mockImplementationOnce(() => {})
 
-  const admin = require('firebase-admin')
-  admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() =>
-      Promise.reject(new Error('Verification failed!'))
-    ),
-  }))
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = getMockEvent()
-  await expect(checkUserAuthorization(event)).rejects.toThrow(
-    'Error: Invalid token'
-  )
-})
-
-test('authorization allows access when a good token is provided (for an authenticated email/password user)', async () => {
-  const decodedToken = cloneDeep(mockDecodedToken)
-
-  const admin = require('firebase-admin')
-  admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
-  }))
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = getMockEvent()
-  const result = await checkUserAuthorization(event)
-  expect(result).toEqual({
-    principalId: decodedToken.uid,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: decodedToken.uid,
-      email: decodedToken.email,
-      email_verified: decodedToken.email_verified,
-      auth_time: decodedToken.auth_time,
-    },
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() =>
+        Promise.reject(new Error('Verification failed!'))
+      ),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    await expect(handler(event)).rejects.toThrow('Error: Invalid token')
   })
-})
 
-test("authorization still allows access when the user's email is not verified (for an authenticated email/password user)", async () => {
-  const decodedToken = cloneDeep(mockDecodedToken)
-
-  const admin = require('firebase-admin')
-  admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
-  }))
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = getMockEvent()
-  const result = await checkUserAuthorization(event)
-  expect(result).toEqual({
-    principalId: decodedToken.uid,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: decodedToken.uid,
-      email: decodedToken.email,
-      email_verified: decodedToken.email_verified,
-      auth_time: decodedToken.auth_time,
-    },
+  it('allows access when a good token is provided (for an authenticated email/password user)', async () => {
+    const decodedToken = cloneDeep(mockDecodedToken)
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    const result = await handler(event)
+    expect(result).toEqual({
+      principalId: decodedToken.uid,
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: 'arn:execute-api:blah:blah',
+          },
+        ],
+      },
+      context: {
+        id: decodedToken.uid,
+        email: decodedToken.email,
+        email_verified: decodedToken.email_verified,
+        auth_time: decodedToken.auth_time,
+      },
+    })
   })
-})
 
-test('authorization denies access when the user does not have an ID', async () => {
-  const uuid = require('uuid').v4
-  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+  it("still allows access when the user's email is not verified (for an authenticated email/password user)", async () => {
+    const decodedToken = cloneDeep(mockDecodedToken)
+    decodedToken.email_verified = false
 
-  // Token does not have user ID data
-  const decodedToken = cloneDeep(mockDecodedToken)
-  delete decodedToken.uid
-  delete decodedToken.sub
-
-  const admin = require('firebase-admin')
-  admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
-  }))
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = getMockEvent()
-  const result = await checkUserAuthorization(event)
-  expect(result).toEqual({
-    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Deny',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {},
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    const result = await handler(event)
+    expect(result).toEqual({
+      principalId: decodedToken.uid,
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: 'arn:execute-api:blah:blah',
+          },
+        ],
+      },
+      context: {
+        id: decodedToken.uid,
+        email: decodedToken.email,
+        email_verified: false,
+        auth_time: decodedToken.auth_time,
+      },
+    })
   })
-})
 
-test('authorization allows access when the user is anonymous (token does not have any email properties)', async () => {
-  // Token does not have email info
-  const decodedToken = cloneDeep(mockDecodedTokenAnonymousUser)
+  it('denies access when the user does not have an ID', async () => {
+    // Token does not have user ID data
+    const decodedToken = cloneDeep(mockDecodedToken)
+    delete decodedToken.uid
+    delete decodedToken.sub
 
-  const admin = require('firebase-admin')
-  admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
-  }))
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = getMockEvent()
-  const result = await checkUserAuthorization(event)
-  expect(result).toEqual({
-    principalId: decodedToken.uid,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: decodedToken.uid,
-      email: null,
-      email_verified: false,
-      auth_time: decodedToken.auth_time,
-    },
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    const result = await handler(event)
+    expect(result).toEqual({
+      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Deny',
+            Resource: 'arn:execute-api:blah:blah',
+          },
+        ],
+      },
+      context: {},
+    })
   })
-})
 
-test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', async () => {
-  const uuid = require('uuid').v4
-  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-  const { checkUserAuthorization } = require('../firebase-authorizer')
-  const event = {
-    ...getMockEvent(),
-    headers: {
-      Authorization: 'unauthenticated',
-    },
-  }
-  const result = await checkUserAuthorization(event)
-  expect(result).toEqual({
-    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: null,
-      email: null,
-      email_verified: false,
-      auth_time: 0,
-    },
-  })
-})
+  it('allows access when the user is anonymous (token does not have any email properties)', async () => {
+    // Token does not have email info
+    const decodedToken = cloneDeep(mockDecodedTokenAnonymousUser)
 
-test('full handler works, calling checkUserAuthorization when applicable', async () => {
-  expect.assertions(2)
-  const uuid = require('uuid').v4
-  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-  const decryptValue = require('../decrypt-utils').default
-  decryptValue.mockResolvedValue('hello')
-  const { handler } = require('../firebase-authorizer')
-  const initNFA = require('../initNFA').default
-  const event = {
-    ...getMockEvent(),
-    headers: {
-      Authorization: 'unauthenticated',
-    },
-  }
-  const result = await handler(event)
-  expect(result).toEqual({
-    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: null,
-      email: null,
-      email_verified: false,
-      auth_time: 0,
-    },
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    const result = await handler(event)
+    expect(result).toEqual({
+      principalId: decodedToken.uid,
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: 'arn:execute-api:blah:blah',
+          },
+        ],
+      },
+      context: {
+        id: decodedToken.uid,
+        email: null,
+        email_verified: false,
+        auth_time: decodedToken.auth_time,
+      },
+    })
   })
-  expect(initNFA).toHaveBeenCalledTimes(1)
-})
 
-test('full handler works when calling with existing decrypted key', async () => {
-  expect.assertions(2)
-  const uuid = require('uuid').v4
-  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-  const decryptValue = require('../decrypt-utils').default
-  decryptValue.mockResolvedValue('hello')
-  const { handler } = require('../firebase-authorizer')
-  const initNFA = require('../initNFA').default
-  const event = {
-    ...getMockEvent(),
-    headers: {
-      Authorization: 'unauthenticated',
-    },
-  }
-  await handler(event)
-  // Second call should succeed with correct value
-  const result = await handler(event)
-  expect(result).toEqual({
-    principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: 'arn:execute-api:blah:blah',
-        },
-      ],
-    },
-    context: {
-      id: null,
-      email: null,
-      email_verified: false,
-      auth_time: 0,
-    },
+  it('allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', async () => {
+    const { handler } = require('../firebase-authorizer')
+    const event = {
+      ...getMockEvent(),
+      headers: {
+        Authorization: 'unauthenticated',
+      },
+    }
+    const result = await handler(event)
+    expect(result).toEqual({
+      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: 'arn:execute-api:blah:blah',
+          },
+        ],
+      },
+      context: {
+        id: null,
+        email: null,
+        email_verified: false,
+        auth_time: 0,
+      },
+    })
   })
-  expect(initNFA).toHaveBeenCalledTimes(1)
+
+  it('does not decrypt values more than once because it keeps decrypted values in memory', async () => {
+    expect.assertions(2)
+    const decodedToken = cloneDeep(mockDecodedToken)
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const decryptValue = require('../decrypt-utils').default
+    const event = getMockEvent()
+    await handler(event)
+    expect(decryptValue).toHaveBeenCalled()
+    decryptValue.mockClear()
+    await handler(event)
+    expect(decryptValue).not.toHaveBeenCalled()
+  })
+
+  it('does not initialize next-firebase-auth more than once', async () => {
+    expect.assertions(2)
+    const decodedToken = cloneDeep(mockDecodedToken)
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const initNFA = require('../initNFA').default
+    const event = {
+      ...getMockEvent(),
+      headers: {
+        Authorization: 'unauthenticated',
+      },
+    }
+    await handler(event)
+    expect(initNFA).toHaveBeenCalled()
+    initNFA.mockClear()
+    await handler(event)
+    expect(initNFA).not.toHaveBeenCalled()
+  })
+
+  it('initializes next-firebase-auth with the expected values', async () => {
+    expect.assertions(1)
+    const decodedToken = cloneDeep(mockDecodedToken)
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const initNFA = require('../initNFA').default
+    const event = getMockEvent()
+    await handler(event)
+    expect(initNFA).toHaveBeenCalledWith({
+      firebaseProjectId: 'fake-firebase-project-id',
+      firebasePrivateKey: 'fake-firebase-key',
+      firebaseClientEmail: 'fake-firebase-client-email',
+      firebaseDatabaseURL: 'fake-firebase-database-url',
+      firebasePublicAPIKey: 'fake-firebase-public-api-key',
+      cookieKeys: ['fake-cookie-secret-20220711'],
+    })
+  })
+
+  it('initializes firebase-admin with the expected values', async () => {
+    expect.assertions(1)
+    const decodedToken = cloneDeep(mockDecodedToken)
+    const admin = require('firebase-admin')
+    admin.auth.mockImplementation(() => ({
+      verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
+    }))
+    const { handler } = require('../firebase-authorizer')
+    const event = getMockEvent()
+    await handler(event)
+    expect(admin.initializeApp).toHaveBeenCalledWith({
+      credential: admin.credential.cert({
+        projectId: 'fake-firebase-project-id',
+        clientEmail: 'fake-firebase-client-email',
+        privateKey: 'fake-firebase-key',
+      }),
+      databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+    })
+  })
 })

@@ -93,26 +93,22 @@ const checkUserAuthorization = async event => {
         databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
       })
     }
+
     // Validate the Firebase token.
-    try {
-      const decodedToken = await admin.auth().verifyIdToken(token)
-      const user = {
-        uid: decodedToken.uid,
-        email: decodedToken.email || null,
-        email_verified: decodedToken.email_verified || false,
-        auth_time: decodedToken.auth_time || 0,
-      }
-
-      // Conditions for authorization. We do not check for a valid
-      // email because we create the user before email validation.
-      const valid = !!user.uid
-
-      // Generate AWS authorization policy
-      return generatePolicy(user, valid, event.methodArn)
-    } catch (e) {
-      console.error(e)
-      throw new Error('Error: Invalid token')
+    const decodedToken = await admin.auth().verifyIdToken(token)
+    const user = {
+      uid: decodedToken.uid,
+      email: decodedToken.email || null,
+      email_verified: decodedToken.email_verified || false,
+      auth_time: decodedToken.auth_time || 0,
     }
+
+    // Conditions for authorization. We do not check for a valid
+    // email because we create the user before email validation.
+    const valid = !!user.uid
+
+    // Generate AWS authorization policy
+    return generatePolicy(user, valid, event.methodArn)
   } catch (e) {
     console.error(e)
     throw new Error('Error: Invalid token')
@@ -142,12 +138,6 @@ const handler = async event => {
   return checkUserAuthorization(event)
 }
 
-const serverlessHandler = async event => {
-  return handler(event)
-}
-
 module.exports = {
   handler,
-  serverlessHandler,
-  checkUserAuthorization,
 }

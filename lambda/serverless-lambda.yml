@@ -93,7 +93,7 @@ package:
 
 functions:
   firebaseAuthorizer:
-    handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
+    handler: build/firebase-authorizer/firebase-authorizer.handler
     environment:
       LAMBDA_FIREBASE_PROJECT_ID: ${env:LAMBDA_FIREBASE_PROJECT_ID}
       LAMBDA_FIREBASE_DATABASE_URL: ${env:LAMBDA_FIREBASE_DATABASE_URL}
