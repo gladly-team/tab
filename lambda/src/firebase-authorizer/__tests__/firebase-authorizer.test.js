@@ -18,7 +18,7 @@ const getMockEvent = () => {
 
 const getMockNFAUser = () => ({
   id: 'abc123xyz987',
-  email: 'meow@hogwarts.com',
+  email: 'headmaster@hogwarts.edu',
   emailVerified: true,
   phoneNumber: undefined,
   displayName: undefined,
@@ -59,7 +59,7 @@ const mockDecodedToken = {
   sub: 'abc123xyz987',
   iat: 1533144713,
   exp: 1533148313,
-  email: 'meow@hogwarts.com',
+  email: 'headmaster@hogwarts.edu',
   email_verified: true,
   firebase: { identities: { email: [] }, sign_in_provider: 'password' },
   // Added by Firebase admin
@@ -337,7 +337,7 @@ describe('firebase-authorizer', () => {
       },
       context: {
         id: 'abc123xyz987',
-        email: 'meow@hogwarts.com',
+        email: 'headmaster@hogwarts.edu',
         email_verified: true,
         auth_time: 0, // We won't have an auth_time from NFA
       },
