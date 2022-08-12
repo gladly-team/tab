@@ -2,6 +2,7 @@
 
 import * as admin from 'firebase-admin'
 import { v4 as uuid } from 'uuid'
+import { getUserFromCookies } from 'next-firebase-auth'
 import initNFA from './initNFA'
 import decryptValue from './decrypt-utils'
 
@@ -77,8 +78,30 @@ const checkUserAuthorization = async event => {
 
     // Generate AWS authorization policy
     return generatePolicy(user, true, event.methodArn)
-    // There is an authorization token, so validate it.
   }
+
+  // See if the Authorization header is a JSON string containing auth cookie
+  // values.
+  try {
+    const { tabAuthUserTokens, tabAuthUserTokensSig } = JSON.parse(token)
+    const nfaUser = await getUserFromCookies({
+      authCookieValue: tabAuthUserTokens,
+      authCookieValueSig: tabAuthUserTokensSig,
+      includeToken: true,
+    })
+    const user = {
+      uid: nfaUser.id,
+      email: nfaUser.email,
+      email_verified: nfaUser.emailVerified,
+      auth_time: 0, // NFA does not provide an auth time
+    }
+    return generatePolicy(user, true, event.methodArn)
+  } catch (e) {
+    // If not, don't throw. This is expected when provided with a Firebase
+    // ID token. Continue on to attempt to verify the ID token.
+  }
+
+  // See if the Authorization header is a Firebase ID token.
   try {
     // Only initialize the app if it hasn't already been initialized.
     // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
