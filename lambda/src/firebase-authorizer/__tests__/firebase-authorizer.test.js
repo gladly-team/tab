@@ -26,6 +26,9 @@ beforeEach(() => {
     }
     throw new Error(`Could not decrypt value: ${value}`)
   })
+
+  const uuid = require('uuid').v4
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
 })
 
 const getMockEvent = () => {
@@ -123,8 +126,9 @@ describe('firebase-authorizer', () => {
     })
   })
 
-  it("authorization still allows access when the user's email is not verified (for an authenticated email/password user)", async () => {
+  it("still allows access when the user's email is not verified (for an authenticated email/password user)", async () => {
     const decodedToken = cloneDeep(mockDecodedToken)
+    decodedToken.email_verified = false
 
     const admin = require('firebase-admin')
     admin.auth.mockImplementation(() => ({
@@ -148,16 +152,13 @@ describe('firebase-authorizer', () => {
       context: {
         id: decodedToken.uid,
         email: decodedToken.email,
-        email_verified: decodedToken.email_verified,
+        email_verified: false,
         auth_time: decodedToken.auth_time,
       },
     })
   })
 
   it('denies access when the user does not have an ID', async () => {
-    const uuid = require('uuid').v4
-    uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-
     // Token does not have user ID data
     const decodedToken = cloneDeep(mockDecodedToken)
     delete decodedToken.uid
@@ -219,8 +220,6 @@ describe('firebase-authorizer', () => {
   })
 
   it('allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', async () => {
-    const uuid = require('uuid').v4
-    uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
     const { handler } = require('../firebase-authorizer')
     const event = {
       ...getMockEvent(),
@@ -250,45 +249,25 @@ describe('firebase-authorizer', () => {
     })
   })
 
-  it('works, calling checkUserAuthorization when applicable', async () => {
+  it('does not decrypt values more than once because it keeps decrypted values in memory', async () => {
     expect.assertions(2)
-    const uuid = require('uuid').v4
-    uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
     const { handler } = require('../firebase-authorizer')
-    const initNFA = require('../initNFA').default
+    const decryptValue = require('../decrypt-utils').default
     const event = {
       ...getMockEvent(),
       headers: {
         Authorization: 'unauthenticated',
       },
     }
-    const result = await handler(event)
-    expect(result).toEqual({
-      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: null,
-        email: null,
-        email_verified: false,
-        auth_time: 0,
-      },
-    })
-    expect(initNFA).toHaveBeenCalledTimes(1)
+    await handler(event)
+    expect(decryptValue).toHaveBeenCalled()
+    decryptValue.mockClear()
+    await handler(event)
+    expect(decryptValue).not.toHaveBeenCalled()
   })
 
-  it('works when called a second time (with an existing decrypted key)', async () => {
+  it('does not initialize next-firebase-auth more than once', async () => {
     expect.assertions(2)
-    const uuid = require('uuid').v4
-    uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
     const { handler } = require('../firebase-authorizer')
     const initNFA = require('../initNFA').default
     const event = {
@@ -298,27 +277,9 @@ describe('firebase-authorizer', () => {
       },
     }
     await handler(event)
-    // Second call should succeed with correct value
-    const result = await handler(event)
-    expect(result).toEqual({
-      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
-      policyDocument: {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'execute-api:Invoke',
-            Effect: 'Allow',
-            Resource: 'arn:execute-api:blah:blah',
-          },
-        ],
-      },
-      context: {
-        id: null,
-        email: null,
-        email_verified: false,
-        auth_time: 0,
-      },
-    })
-    expect(initNFA).toHaveBeenCalledTimes(1)
+    expect(initNFA).toHaveBeenCalled()
+    initNFA.mockClear()
+    await handler(event)
+    expect(initNFA).not.toHaveBeenCalled()
   })
 })
