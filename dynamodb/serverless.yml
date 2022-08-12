@@ -242,6 +242,15 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
+      userEventLogTable:
+        read:
+          minimum: 1
+          maximum: 12
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 12
+          usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
@@ -450,6 +459,15 @@ custom:
           usage: 0.75
         write:
           minimum: 5
+          maximum: 40000
+          usage: 0.60
+      userEventLogTable:
+        read:
+          minimum: 1
+          maximum: 40000
+          usage: 0.75
+        write:
+          minimum: 1
           maximum: 40000
           usage: 0.60
 
@@ -679,6 +697,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userExperimentTable.write.usage}
+    - table: userEventLogTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.usage}
     
 resources:
   Resources:
@@ -1282,6 +1309,28 @@ resources:
           - AttributeName: userId
             AttributeType: S
           - AttributeName: experimentId
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+    
+    userEventLogTable:  
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:  
+        TableName: UserEventLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1

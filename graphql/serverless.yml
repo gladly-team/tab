@@ -284,6 +284,12 @@ provider:
         - "dynamodb:GetItem"
       Resource:
         - "${self:custom.dbTableArnBase}UserExperiment-${self:provider.stage}"
+    # UserEventLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource:
+        - "${self:custom.dbTableArnBase}UserEventLog-${self:provider.stage}"
     # @service/redis - Uncomment this if we re-launch the Redis service.
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html

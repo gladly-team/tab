@@ -1,0 +1,11 @@
+[
+  {
+    "userId": "abcdefghijklmno",
+    "type": "SFAC_EXTENSION_PROMPT",
+    "timestamp": "2017-07-17T20:45:53Z",
+    "eventData": {
+      "browser": "chrome",
+      "switched": true
+    }
+  }
+]
