@@ -1,7 +1,6 @@
 import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
-import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import { VALID_LOG_SCHEMAS, VALID_LOG_TYPES } from './logTypes'
 import { USER_EVENT_LOG } from '../constants'
 
@@ -33,13 +32,15 @@ class UserEventLogModel extends DynamoDBModel {
         .string()
         .isoDate()
         .required(),
-      eventData: types.object().valid(VALID_LOG_SCHEMAS),
+      eventData: types.alternatives().try(...VALID_LOG_SCHEMAS), // todo, @jtan add smarter validation here
     }
   }
 
   static get permissions() {
     return {
-      create: permissionAuthorizers.userIdMatchesHashKey,
+      create: (user, _hashKey, _rangeKey, item) => {
+        return user.id === item.userId
+      },
     }
   }
 }

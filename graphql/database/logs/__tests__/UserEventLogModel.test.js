@@ -27,7 +27,16 @@ describe('UserEventLogModel', () => {
       emailVerified: true,
     }
     expect(
-      UserEventLogModel.permissions.create(userContext, 'abc', '123')
+      UserEventLogModel.permissions.create(userContext, 'abc', '123', {
+        id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+        userId: 'abc',
+        type: 'fake-type',
+        timestamp: '2017-07-17T20:45:53Z',
+        eventData: {
+          browser: 'chrome',
+          switched: true,
+        },
+      })
     ).toBe(true)
   })
 

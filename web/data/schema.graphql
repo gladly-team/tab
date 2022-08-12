@@ -504,6 +504,18 @@ type CreateSearchEnginePromptLogPayload {
   clientMutationId: String
 }
 
+input CreateSfacExtensionPromptResponseInput {
+  userId: String!
+  browser: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type CreateSfacExtensionPromptResponsePayload {
+  user: User
+  clientMutationId: String
+}
+
 input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
@@ -967,6 +979,7 @@ type Mutation {
   setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
   setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
   createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
+  createSfacExtensionPromptResponse(input: CreateSfacExtensionPromptResponseInput!): CreateSfacExtensionPromptResponsePayload
   createUserExperiment(input: CreateUserExperimentInput!): CreateUserExperimentPayload
 }
 

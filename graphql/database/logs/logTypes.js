@@ -1,12 +1,12 @@
 import types from '../fieldTypes'
 
 export const SFAC_EXTENSION_PROMPT = 'SFAC_EXTENSION_PROMPT'
-export const SFAC_EXTENSION_PROMPT_TYPE = types.object({
+export const SFAC_EXTENSION_PROMPT_TYPE = types.object().keys({
   browser: types
     .string()
     .required()
     .description(`The browser the user was on when responding to the prompt`),
-  switched: types
+  accepted: types
     .boolean()
     .required()
     .description(`Whether or not the user accepted or rejected the prompt`),
