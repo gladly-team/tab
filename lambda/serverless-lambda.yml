@@ -98,6 +98,7 @@ functions:
       LAMBDA_FIREBASE_PROJECT_ID: ${env:LAMBDA_FIREBASE_PROJECT_ID}
       LAMBDA_FIREBASE_DATABASE_URL: ${env:LAMBDA_FIREBASE_DATABASE_URL}
       LAMBDA_FIREBASE_CLIENT_EMAIL: ${env:LAMBDA_FIREBASE_CLIENT_EMAIL}
+      FIREBASE_PUBLIC_API_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PUBLIC_API_KEY}
       # Encrypted with AWS KMS for encryption during deploy.
       #   https://docs.aws.amazon.com/lambda/latest/dg/env_variables.html
       #   https://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html
