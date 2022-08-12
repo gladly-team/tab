@@ -106,6 +106,7 @@ const checkUserAuthorization = async event => {
     }
     return generatePolicy(user, true, event.methodArn)
   } catch (e) {
+    // FIXME: ignore only JSON parse errors
     // If not, don't throw. This is expected when provided with a Firebase
     // ID token. Continue on to attempt to verify the ID token.
 
