@@ -142,12 +142,6 @@ const handler = async event => {
   return checkUserAuthorization(event)
 }
 
-const serverlessHandler = async event => {
-  return handler(event)
-}
-
 module.exports = {
   handler,
-  serverlessHandler,
-  checkUserAuthorization,
 }

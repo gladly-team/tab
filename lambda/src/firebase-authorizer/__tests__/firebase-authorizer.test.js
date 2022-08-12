@@ -1,8 +1,6 @@
 /* eslint-env jest */
 import { cloneDeep } from 'lodash/lang'
 
-process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-firebase-key'
-
 jest.mock('../decrypt-utils')
 jest.mock('uuid')
 jest.mock('../initNFA')
@@ -10,6 +8,24 @@ jest.mock('../initNFA')
 beforeEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
+
+  process.env.LAMBDA_FIREBASE_PRIVATE_KEY = 'encrypted-fake-firebase-key'
+  process.env.LAMBDA_FIREBASE_PROJECT_ID = 'fake-firebase-project-id'
+  process.env.LAMBDA_FIREBASE_CLIENT_EMAIL = 'fake-firebase-client-email'
+  process.env.LAMBDA_FIREBASE_DATABASE_URL = 'fake-firebase-database-url'
+  process.env.FIREBASE_PUBLIC_API_KEY = 'fake-firebase-public-api-key'
+  process.env.COOKIE_SECRET_20220711 = 'encrypted-fake-cookie-secret-20220711'
+
+  const decryptValue = require('../decrypt-utils').default
+  decryptValue.mockImplementation(async value => {
+    if (value === 'encrypted-fake-firebase-key') {
+      return 'fake-firebase-key'
+    }
+    if (value === 'encrypted-fake-cookie-secret-20220711') {
+      return 'fake-cookie-secret-20220711'
+    }
+    throw new Error(`Could not decrypt value: ${value}`)
+  })
 })
 
 const getMockEvent = () => {
@@ -59,8 +75,11 @@ const mockDecodedTokenAnonymousUser = {
 describe('firebase-authorizer', () => {
   it('fails when token verification throws an error', async () => {
     expect.assertions(1)
-    // Hide expected error.
-    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+    // Hide expected errors.
+    jest
+      .spyOn(console, 'error')
+      .mockImplementationOnce(() => {})
+      .mockImplementationOnce(() => {})
 
     const admin = require('firebase-admin')
     admin.auth.mockImplementation(() => ({
@@ -68,11 +87,9 @@ describe('firebase-authorizer', () => {
         Promise.reject(new Error('Verification failed!'))
       ),
     }))
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = getMockEvent()
-    await expect(checkUserAuthorization(event)).rejects.toThrow(
-      'Error: Invalid token'
-    )
+    await expect(handler(event)).rejects.toThrow('Error: Invalid token')
   })
 
   it('allows access when a good token is provided (for an authenticated email/password user)', async () => {
@@ -82,9 +99,9 @@ describe('firebase-authorizer', () => {
     admin.auth.mockImplementation(() => ({
       verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
     }))
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = getMockEvent()
-    const result = await checkUserAuthorization(event)
+    const result = await handler(event)
     expect(result).toEqual({
       principalId: decodedToken.uid,
       policyDocument: {
@@ -113,9 +130,9 @@ describe('firebase-authorizer', () => {
     admin.auth.mockImplementation(() => ({
       verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
     }))
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = getMockEvent()
-    const result = await checkUserAuthorization(event)
+    const result = await handler(event)
     expect(result).toEqual({
       principalId: decodedToken.uid,
       policyDocument: {
@@ -150,9 +167,9 @@ describe('firebase-authorizer', () => {
     admin.auth.mockImplementation(() => ({
       verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
     }))
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = getMockEvent()
-    const result = await checkUserAuthorization(event)
+    const result = await handler(event)
     expect(result).toEqual({
       principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
       policyDocument: {
@@ -177,9 +194,9 @@ describe('firebase-authorizer', () => {
     admin.auth.mockImplementation(() => ({
       verifyIdToken: jest.fn(() => Promise.resolve(decodedToken)),
     }))
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = getMockEvent()
-    const result = await checkUserAuthorization(event)
+    const result = await handler(event)
     expect(result).toEqual({
       principalId: decodedToken.uid,
       policyDocument: {
@@ -204,14 +221,14 @@ describe('firebase-authorizer', () => {
   it('allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', async () => {
     const uuid = require('uuid').v4
     uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-    const { checkUserAuthorization } = require('../firebase-authorizer')
+    const { handler } = require('../firebase-authorizer')
     const event = {
       ...getMockEvent(),
       headers: {
         Authorization: 'unauthenticated',
       },
     }
-    const result = await checkUserAuthorization(event)
+    const result = await handler(event)
     expect(result).toEqual({
       principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
       policyDocument: {
@@ -237,8 +254,6 @@ describe('firebase-authorizer', () => {
     expect.assertions(2)
     const uuid = require('uuid').v4
     uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-    const decryptValue = require('../decrypt-utils').default
-    decryptValue.mockResolvedValue('hello')
     const { handler } = require('../firebase-authorizer')
     const initNFA = require('../initNFA').default
     const event = {
@@ -274,8 +289,6 @@ describe('firebase-authorizer', () => {
     expect.assertions(2)
     const uuid = require('uuid').v4
     uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
-    const decryptValue = require('../decrypt-utils').default
-    decryptValue.mockResolvedValue('hello')
     const { handler } = require('../firebase-authorizer')
     const initNFA = require('../initNFA').default
     const event = {
