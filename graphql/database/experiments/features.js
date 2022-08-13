@@ -4,6 +4,7 @@ import {
   YAHOO_SEARCH_NEW_USERS,
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
+  SFAC_EXTENSION_PROMPT,
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
@@ -193,6 +194,47 @@ const features = {
           },
           v4BetaEnabled: {
             $eq: true,
+          },
+        },
+      },
+    ],
+  },
+  [SFAC_EXTENSION_PROMPT]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${SFAC_EXTENSION_PROMPT}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${YAHOO_SEARCH_NEW_USERS_V2}`]: {
+            $eq: 'Notification',
+            $exists: true,
+          },
+        },
+        force: 'Notification',
+      },
+      /* End internal overrides */
+      {
+        variations: ['Control', 'Notification'],
+        weights: [0.5, 0.5],
+        coverage: 0.0,
+        condition: {
+          tabs: {
+            $gt: 3,
           },
         },
       },

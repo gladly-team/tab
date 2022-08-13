@@ -1602,6 +1602,9 @@ type User implements Node {
   """whether to show the yahoo search prompt"""
   showYahooPrompt: Boolean!
 
+  """whether to show the SFAC extension prompt"""
+  showSfacExtensionPrompt: Boolean!
+
   """whether or not the user has opted into searching for extra impact"""
   yahooPaidSearchRewardOptIn: Boolean!
 }

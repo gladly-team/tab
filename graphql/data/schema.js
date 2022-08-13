@@ -138,6 +138,7 @@ import {
 import getCampaign from '../database/globals/getCampaign'
 import getUserSearchEngine from '../database/users/getUserSearchEngine'
 import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt'
+import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfacExtensionPrompt'
 import getUserNotifications from '../database/users/getUserNotifications'
 
 class App {
@@ -756,6 +757,12 @@ const userType = new GraphQLObjectType({
       description: 'whether to show the yahoo search prompt',
       resolve: (user, _, context) =>
         getShouldShowYahooPrompt(context.user, user),
+    },
+    showSfacExtensionPrompt: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether to show the SFAC extension prompt',
+      resolve: (user, _, context) =>
+        getShouldShowSfacExtensionPrompt(context.user, user),
     },
     yahooPaidSearchRewardOptIn: {
       type: new GraphQLNonNull(GraphQLBoolean),
