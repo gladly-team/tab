@@ -411,6 +411,17 @@ class User extends DynamoDBModel {
             'when the user responded to the yahoo search switch prompt'
           ),
       }),
+      sfacPrompt: types.object({
+        hasRespondedToPrompt: types
+          .boolean()
+          .description(
+            'whether or not the user has seen the prompt telling them about SFAC'
+          ),
+        timestamp: types
+          .string()
+          .isoDate()
+          .description('when the user responded to the SFAC prompt'),
+      }),
       internalExperimentOverrides: types
         .object()
         .description(
