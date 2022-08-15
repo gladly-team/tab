@@ -11,6 +11,8 @@ let decryptedFirebasePrivateKey = ''
 
 let nfaIsInitialized = false
 
+const INVALID_TOKEN = 'Error: Invalid token'
+
 /*
  * Generate the AWS policy document to return from the authorizer.
  * Return an empty 'context' object if the user is denied access.
@@ -106,12 +108,13 @@ const checkUserAuthorization = async event => {
     }
     return generatePolicy(user, true, event.methodArn)
   } catch (e) {
-    // FIXME: ignore only JSON parse errors
-    // If not, don't throw. This is expected when provided with a Firebase
-    // ID token. Continue on to attempt to verify the ID token.
-
-    // FIXME: remove after debugging
-    console.error(e)
+    // If this is a syntax error, don't throw. This is expected when provided
+    // with a Firebase ID token, which won't be valid JSON. Continue on to
+    // attempt to verify the ID token.
+    if (e.name !== 'SyntaxError') {
+      console.error(e)
+      throw new Error(INVALID_TOKEN)
+    }
   }
 
   // See if the Authorization header is a Firebase ID token.
@@ -147,7 +150,7 @@ const checkUserAuthorization = async event => {
     return generatePolicy(user, valid, event.methodArn)
   } catch (e) {
     console.error(e)
-    throw new Error('Error: Invalid token')
+    throw new Error(INVALID_TOKEN)
   }
 }
 
