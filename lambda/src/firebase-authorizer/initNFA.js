@@ -13,7 +13,7 @@ const initAuth = ({
   console.log('===== Init NFA. Cookie keys:', cookieKeys)
 
   init({
-    debug: false,
+    debug: true, // FIXME: reset to false after debugging
     firebaseAdminInitConfig: {
       credential: {
         projectId: firebaseProjectId,
