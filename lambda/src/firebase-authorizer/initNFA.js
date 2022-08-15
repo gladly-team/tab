@@ -31,6 +31,10 @@ const initAuth = ({
       secure: true,
       signed: true,
     },
+    onVerifyTokenError: () => {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    },
   })
 }
 

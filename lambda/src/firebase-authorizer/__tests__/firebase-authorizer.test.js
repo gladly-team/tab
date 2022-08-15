@@ -105,8 +105,8 @@ beforeEach(() => {
 
   const { getUserFromCookies } = require('next-firebase-auth')
   getUserFromCookies.mockImplementation(
-    async ({ authCookieValue, authCookieValueSig }) => {
-      if (authCookieValue && authCookieValueSig) {
+    async ({ authCookieValue, authCookieSigValue }) => {
+      if (authCookieValue && authCookieSigValue) {
         return getMockNFAUser()
       }
       return null
@@ -296,8 +296,8 @@ describe('firebase-authorizer', () => {
     // Auth values from cookies will call NFA for verification.
     const { getUserFromCookies } = require('next-firebase-auth')
     getUserFromCookies.mockImplementation(
-      async ({ authCookieValue, authCookieValueSig }) => {
-        if (authCookieValue && authCookieValueSig) {
+      async ({ authCookieValue, authCookieSigValue }) => {
+        if (authCookieValue && authCookieSigValue) {
           return getMockNFAUser()
         }
         return null

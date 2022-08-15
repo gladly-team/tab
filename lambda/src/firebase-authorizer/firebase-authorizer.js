@@ -93,7 +93,7 @@ const checkUserAuthorization = async event => {
 
     const nfaUser = await getUserFromCookies({
       authCookieValue: tabAuthUserTokens,
-      authCookieValueSig: tabAuthUserTokensSig,
+      authCookieSigValue: tabAuthUserTokensSig,
       includeToken: true,
     })
 
