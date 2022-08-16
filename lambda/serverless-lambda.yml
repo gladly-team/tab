@@ -110,7 +110,9 @@ functions:
       # Note on encrypting/decrypting with the AWS CLI:
       #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
       # To encrypt:
-      #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
+      #   * First, make sure the item is base64 encoded. In Node:
+      #     `Buffer.from(myInput, 'utf-8').toString('base64')`
+      #   * Then: `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
       COOKIE_SECRET_20220711: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.COOKIE_SECRET_20220711}
   searchRequestLogger:
