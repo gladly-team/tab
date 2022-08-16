@@ -3,3 +3,4 @@ coverage
 build
 .env.local
 serverless.yml
+**/*.local-only.test.*
