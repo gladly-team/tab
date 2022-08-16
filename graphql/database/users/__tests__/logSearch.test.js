@@ -114,7 +114,7 @@ describe('logSearch', () => {
     expect(response.user).toEqual(expectedUser)
   })
 
-  test('it logs the search for analytics', async () => {
+  test('it logs the search when called with a user ID', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -148,7 +148,7 @@ describe('logSearch', () => {
     )
   })
 
-  test('it logs the search with cause id for analytics', async () => {
+  test('it logs the search with cause ID', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -566,7 +566,7 @@ describe('logSearch', () => {
     )
   })
 
-  test('logs search with random generated nanoid when neither user id nor anon id set', async () => {
+  test('logs search with random generated nanoid when neither user id nor anon id set (and claims are anonymous)', async () => {
     expect.assertions(2)
 
     const anonUserContext = {
@@ -588,6 +588,34 @@ describe('logSearch', () => {
         searchEngine: 'SearchForACause',
         isAnonymous: true,
         version: 1,
+      })
+    )
+  })
+
+  test('logs search using the user ID from *claims* when set and when no user ID is provided', async () => {
+    expect.assertions(1)
+
+    const context = {
+      ...getMockUserContext(),
+      id: 'some-user-id',
+    }
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    getUserSearchEngine.mockResolvedValue({
+      id: 'SearchForACause',
+    })
+    await logSearch(context, null, null, {
+      source: 'tab',
+    })
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      context,
+      addTimestampFieldsToItem({
+        userId: 'some-user-id',
+        timestamp: moment.utc().toISOString(),
+        searchEngine: 'SearchForACause',
+        isAnonymous: false,
+        version: 1,
+        source: 'tab',
       })
     )
   })

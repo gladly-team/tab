@@ -1,4 +1,5 @@
 import { init } from 'next-firebase-auth'
+import './fetch-polyfill'
 
 const initAuth = ({
   firebaseProjectId,
@@ -26,6 +27,14 @@ const initAuth = ({
       keys: cookieKeys,
       secure: true,
       signed: true,
+    },
+    onTokenRefreshError: e => {
+      // eslint-disable-next-line no-console
+      console.error('NFA onTokenRefreshError:', e)
+    },
+    onVerifyTokenError: e => {
+      // eslint-disable-next-line no-console
+      console.error('NFA onVerifyTokenError:', e)
     },
   })
 }

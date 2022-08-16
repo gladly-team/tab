@@ -2,6 +2,7 @@
 
 import * as admin from 'firebase-admin'
 import { v4 as uuid } from 'uuid'
+import { getUserFromCookies } from 'next-firebase-auth'
 import initNFA from './initNFA'
 import decryptValue from './decrypt-utils'
 
@@ -9,6 +10,8 @@ const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
 
 let nfaIsInitialized = false
+
+const INVALID_TOKEN = 'Error: Invalid token'
 
 /*
  * Generate the AWS policy document to return from the authorizer.
@@ -77,8 +80,35 @@ const checkUserAuthorization = async event => {
 
     // Generate AWS authorization policy
     return generatePolicy(user, true, event.methodArn)
-    // There is an authorization token, so validate it.
   }
+
+  // See if the Authorization header is a JSON string containing auth cookie
+  // values.
+  try {
+    const { tabAuthUserTokens, tabAuthUserTokensSig } = JSON.parse(token)
+    const nfaUser = await getUserFromCookies({
+      authCookieValue: tabAuthUserTokens,
+      authCookieSigValue: tabAuthUserTokensSig,
+      includeToken: true,
+    })
+    const user = {
+      uid: nfaUser.id,
+      email: nfaUser.email,
+      email_verified: nfaUser.emailVerified,
+      auth_time: 0, // NFA does not provide an auth time
+    }
+    return generatePolicy(user, true, event.methodArn)
+  } catch (e) {
+    // If this is a syntax error, don't throw. This is expected when provided
+    // with a Firebase ID token, which won't be valid JSON. Continue on to
+    // attempt to verify the ID token.
+    if (e.name !== 'SyntaxError') {
+      console.error(e)
+      throw new Error(INVALID_TOKEN)
+    }
+  }
+
+  // See if the Authorization header is a Firebase ID token.
   try {
     // Only initialize the app if it hasn't already been initialized.
     // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
@@ -111,7 +141,7 @@ const checkUserAuthorization = async event => {
     return generatePolicy(user, valid, event.methodArn)
   } catch (e) {
     console.error(e)
-    throw new Error('Error: Invalid token')
+    throw new Error(INVALID_TOKEN)
   }
 }
 
