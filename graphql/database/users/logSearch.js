@@ -164,8 +164,17 @@ const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
     }
   }
 
-  if (userId) {
-    return logSearchKnownUser(userContext, userId, searchData)
+  // If the user ID is provided, use it. Otherwise, use the user ID from
+  // claims, if available. Rationale: lambda/search-request-logger.mjs calls
+  // this mutation with user authorization but without knowing the user's ID.
+  // This probably isn't ideal in the long term. It would perhaps be better
+  // if calling services were aware of the user ID to be able to provide it
+  // in mutation input; or, maybe we could provide a generalized pattern for
+  // this use case for all mutations. Reconsider this if we need to use this
+  // authorization pattern more often.
+  const userIdFinal = userId || userContext.id || null
+  if (userIdFinal) {
+    return logSearchKnownUser(userContext, userIdFinal, searchData)
   }
 
   let anonId = anonUserId
