@@ -9,12 +9,8 @@ const initAuth = ({
   firebasePublicAPIKey,
   cookieKeys = [],
 }) => {
-  // FIXME: remove after debugging
-  // eslint-disable-next-line no-console
-  console.log('===== Init NFA. Cookie keys:', cookieKeys)
-
   init({
-    debug: true, // FIXME: reset to false after debugging
+    debug: false,
     firebaseAdminInitConfig: {
       credential: {
         projectId: firebaseProjectId,
