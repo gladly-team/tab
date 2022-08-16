@@ -3,12 +3,29 @@
 /* eslint prefer-destructuring: 0 */
 
 import { get } from 'lodash/object'
+import { parse } from 'cookie'
 import searchURLByRegion from './searchURLByRegion'
+import { AUTH_COOKIE_NAME, AUTH_SIG_COOKIE_NAME } from '../utils/constants'
 
 const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
 
 const PRODUCTION_STAGE = 'prod'
 const POST_UNININSTALL_SURVEY_URL = 'https://forms.gle/A3Xam2op2gFjoQNU6'
+
+// Get the user's authUserTokens from their cookies, if set. This is dependant
+// on the behavior of `next-firebase-auth`:
+// https://github.com/gladly-team/next-firebase-auth/blob/63563ad2913c402802bacb204cb9920d9df260ed/src/cookies.js
+// If `next-firebase-auth` supports a function to get user data from
+// cookies, we should use it:
+// https://github.com/gladly-team/next-firebase-auth/issues/223
+const getAuthUserTokensFromCookies = (cookiesStr = '') => {
+  const cookies = parse(cookiesStr)
+
+  return {
+    authUserTokens: cookies[AUTH_COOKIE_NAME] || null,
+    authUserTokensSig: cookies[AUTH_SIG_COOKIE_NAME] || null,
+  }
+}
 
 const publishToSNS = async ({ stage, messageData }) => {
   // Get the SNS topic ARN. Example:
@@ -95,14 +112,16 @@ exports.handler = async event => {
     // For v1, use Google for search results.
     searchProviderQueryKey = 'q'
     searchBaseURL = 'https://www.google.com/search'
-  } else {
-    // For v2+, use Yahoo for search results.
+  }
+  const headers = get(request, 'headers', {})
+
+  if (version >= 2) {
+    // For v2, use Yahoo for search results.
     searchProviderQueryKey = 'p'
 
     // Yahoo localization needs access to headers:
     // * Accept-Language
     // * CloudFront-Viewer-Country
-    const headers = get(request, 'headers', {})
     const countryHeader = get(headers, 'cloudfront-viewer-country[0].value')
     const acceptLanguageHeader = get(headers, 'accept-language[0].value')
     const yahooBaseURL = searchURLByRegion(countryHeader, acceptLanguageHeader)
@@ -139,10 +158,12 @@ exports.handler = async event => {
   // Publish the search request event to SNS.
   if (version >= 3) {
     try {
+      const cookiesStr = get(headers, 'cookie[0].value', '')
+      const authUserTokens = getAuthUserTokensFromCookies(cookiesStr)
       const searchEngine = 'SearchForACause' // TODO: get from URL param later
       const messageData = {
         user: {
-          idToken: null, // TODO: get from cookie
+          ...authUserTokens,
         },
         data: {
           src: searchSrc,

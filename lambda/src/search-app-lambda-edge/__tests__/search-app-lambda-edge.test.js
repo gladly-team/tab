@@ -237,7 +237,8 @@ describe('prod behavior: search app Lambda@Edge function on viewer-request', () 
     const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: null,
+        authUserTokens: null,
+        authUserTokensSig: null,
       },
       data: {
         src: 'ff',
@@ -714,18 +715,52 @@ describe('v3: search app Lambda@Edge function on viewer-request', () => {
     expect(sns.send).toHaveBeenCalledTimes(1)
   })
 
-  it('publishes to SNS with the expected message', async () => {
+  it('publishes to SNS with the expected message (no auth cookie)', async () => {
     expect.assertions(1)
     const { handler } = require('../search-app-lambda-edge')
     const defaultEvent = getMockCloudFrontEventObject()
-    const event = setEventURI(defaultEvent, searchV3Path)
+    const eventWithURI = setEventURI(defaultEvent, searchV3Path)
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; foo=bar` // no auth cookie
+    const event = setHeader(eventWithURI, 'cookie', cookieStr)
     event.Records[0].cf.request.querystring =
       'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
     await handler(event)
     const sns = new SNSClient()
     const expectedMessage = JSON.stringify({
       user: {
-        idToken: null,
+        authUserTokens: null,
+        authUserTokensSig: null,
+      },
+      data: {
+        src: 'ff',
+        engine: 'SearchForACause',
+        causeId: 'someCauseId',
+      },
+    })
+    const input = sns.send.mock.calls[0][0]
+    expect(input.Message).toEqual(expectedMessage)
+  })
+
+  it('publishes to SNS with the expected message (valid auth cookie)', async () => {
+    expect.assertions(1)
+    const { handler } = require('../search-app-lambda-edge')
+    const defaultEvent = getMockCloudFrontEventObject()
+
+    // Replicate `next-firebase-auth` auth cookie structure.
+    const authTokensCookieVal = 'my-fake-id-token'
+    const authTokensCookieSigVal = 'my-fake-id-token-sig'
+
+    const eventWithURI = setEventURI(defaultEvent, searchV3Path)
+    const cookieStr = `SomeCookie=ThisIsSomeCookieValue; TabAuth.AuthUserTokens=${authTokensCookieVal}; TabAuth.AuthUserTokens.sig=${authTokensCookieSigVal}`
+    const event = setHeader(eventWithURI, 'cookie', cookieStr)
+    event.Records[0].cf.request.querystring =
+      'hi=there&r=2468&q=pizza&c=someCauseId&src=ff'
+    await handler(event)
+    const sns = new SNSClient()
+    const expectedMessage = JSON.stringify({
+      user: {
+        authUserTokens: authTokensCookieVal,
+        authUserTokensSig: authTokensCookieSigVal,
       },
       data: {
         src: 'ff',

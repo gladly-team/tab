@@ -101,6 +101,7 @@ package:
     - build/**
     - node_modules/@aws-sdk/**
     - node_modules/accept-language-parser/**
+    - node_modules/cookie/**
     - node_modules/lodash/**
 
 # We are using a custom role (building on the default Serverless role)

@@ -328,7 +328,12 @@ resources:
                 # Required to forward search query.
                 QueryString: true
                 Cookies:
-                  Forward: none
+                  Forward: whitelist
+                  WhitelistedNames:
+                    # TabAuth cookies are used to pass the user's ID token to
+                    # SNS for search event logging.
+                    - TabAuth.AuthUserTokens
+                    - TabAuth.AuthUserTokens.sig
                 Headers:
                   # Required to forward the user to a localized SERP.
                   - Accept-Language
