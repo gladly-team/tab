@@ -5,8 +5,13 @@
 
 /* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
 
-import AWS from 'aws-sdk'
 import inquirer from 'inquirer'
+import {
+  CloudFormationClient,
+  ListStackInstancesCommand,
+  SetStackPolicyCommand,
+} from '@aws-sdk/client-cloudformation'
+import { fromIni } from '@aws-sdk/credential-providers'
 
 // Change as needed.
 const STACK_SET_NAME = 'dev-search-edge-request'
@@ -21,46 +26,36 @@ const stackPolicies = {
 // Edit this to modify the policy you want to use.
 const STACK_POLICY = stackPolicies.DENY_ALL
 
-const setUpCreds = async () => {
-  // Support MFA:
-  // https://github.com/aws/aws-sdk-js/pull/2126#issue-199310808
-  const tokenCodeFn = (serial, cb) => {
-    inquirer
-      .prompt({
-        name: 'token',
-        type: 'input',
-        default: '',
-        message: `MFA token for ${serial}:`,
-      })
-      .then(r => {
-        cb(null, r.token)
-      })
-      .catch(e => {
-        console.log('error:', e)
-        cb(e)
-      })
-  }
-  const creds = new AWS.SharedIniFileCredentials({
-    tokenCodeFn,
-  })
+const mfaCodeProvider = async serial => {
   try {
-    await creds.getPromise()
-    AWS.config.credentials = creds
-    AWS.config.update({ region: 'us-west-2' })
+    const result = await inquirer.prompt({
+      name: 'token',
+      type: 'input',
+      default: '',
+      message: `MFA token for ${serial}:`,
+    })
+    return result.token
   } catch (e) {
-    console.error('MFA credentials error:', e)
+    console.log('error:', e)
+    throw e
   }
 }
 
 const setStackPolicy = async () => {
-  const cloudformation = new AWS.CloudFormation()
+  const credentialProvider = fromIni({
+    mfaCodeProvider,
+  })
+  const credentials = await credentialProvider()
+  const cloudformation = new CloudFormationClient({
+    credentials,
+    region: 'us-west-2',
+  })
+  const listStackInstancesCommand = new ListStackInstancesCommand({
+    StackSetName: STACK_SET_NAME,
+  })
   let stackInstanceData
   try {
-    stackInstanceData = await cloudformation
-      .listStackInstances({
-        StackSetName: STACK_SET_NAME,
-      })
-      .promise()
+    stackInstanceData = await cloudformation.send(listStackInstancesCommand)
   } catch (e) {
     throw e
   }
@@ -86,16 +81,17 @@ const setStackPolicy = async () => {
   // Update stack policies for all stack instances.
   await Promise.all(
     stackInstances.map(instance => {
-      AWS.config.update({ region: instance.region })
-
       // Changing the region requires re-instantiating CloudFormation.
-      const cloudformationRegion = new AWS.CloudFormation()
+      const cloudformationRegion = new CloudFormationClient({
+        credentials,
+        region: instance.region,
+      })
+      const setStackPolicyCommand = new SetStackPolicyCommand({
+        StackName: instance.stackName,
+        StackPolicyBody: STACK_POLICY,
+      })
       return cloudformationRegion
-        .setStackPolicy({
-          StackName: instance.stackName,
-          StackPolicyBody: STACK_POLICY,
-        })
-        .promise()
+        .send(setStackPolicyCommand)
         .then(() => {
           console.log(
             `Successfully updated stack policy for ${instance.region}.`
@@ -112,7 +108,6 @@ const setStackPolicy = async () => {
 }
 
 const main = async () => {
-  await setUpCreds()
   await setStackPolicy()
   console.log('Done!')
 }

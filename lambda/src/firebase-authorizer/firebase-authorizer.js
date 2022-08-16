@@ -1,11 +1,14 @@
 /* eslint standard/no-callback-literal: 0, no-console: 0 */
 
 import * as admin from 'firebase-admin'
-import AWS from 'aws-sdk'
 import { v4 as uuid } from 'uuid'
+import initNFA from './initNFA'
+import decryptValue from './decrypt-utils'
 
 const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
+
+let nfaIsInitialized = false
 
 /*
  * Generate the AWS policy document to return from the authorizer.
@@ -51,7 +54,7 @@ const generatePolicy = (user, allow, resource) => {
   }
 }
 
-function checkUserAuthorization(event, context, callback) {
+const checkUserAuthorization = async event => {
   const token = event.headers.Authorization
 
   // If the request is unauthenticated, allow access but do not
@@ -73,83 +76,68 @@ function checkUserAuthorization(event, context, callback) {
     }
 
     // Generate AWS authorization policy
-    callback(null, generatePolicy(user, true, event.methodArn))
+    return generatePolicy(user, true, event.methodArn)
     // There is an authorization token, so validate it.
-  } else {
-    try {
-      // Only initialize the app if it hasn't already been initialized.
-      // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
-      if (!admin.apps.length) {
-        admin.initializeApp({
-          credential: admin.credential.cert({
-            projectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
-            clientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
-            // https://stackoverflow.com/a/41044630/1332513
-            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
-          }),
-          databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
-        })
-      }
-
-      // Validate the Firebase token.
-      admin
-        .auth()
-        .verifyIdToken(token)
-        .then(decodedToken => {
-          const user = {
-            uid: decodedToken.uid,
-            email: decodedToken.email || null,
-            email_verified: decodedToken.email_verified || false,
-            auth_time: decodedToken.auth_time || 0,
-          }
-
-          // Conditions for authorization. We do not check for a valid
-          // email because we create the user before email validation.
-          const valid = !!user.uid
-
-          // Generate AWS authorization policy
-          callback(null, generatePolicy(user, valid, event.methodArn))
-        })
-        .catch(e => {
-          console.error(e)
-          callback('Error: Invalid token')
-        })
-    } catch (e) {
-      console.error(e)
-      callback('Error: Invalid token')
+  }
+  try {
+    // Only initialize the app if it hasn't already been initialized.
+    // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
+          clientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
+          // https://stackoverflow.com/a/41044630/1332513
+          privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
+        }),
+        databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+      })
     }
+
+    // Validate the Firebase token.
+    const decodedToken = await admin.auth().verifyIdToken(token)
+    const user = {
+      uid: decodedToken.uid,
+      email: decodedToken.email || null,
+      email_verified: decodedToken.email_verified || false,
+      auth_time: decodedToken.auth_time || 0,
+    }
+
+    // Conditions for authorization. We do not check for a valid
+    // email because we create the user before email validation.
+    const valid = !!user.uid
+
+    // Generate AWS authorization policy
+    return generatePolicy(user, valid, event.methodArn)
+  } catch (e) {
+    console.error(e)
+    throw new Error('Error: Invalid token')
   }
 }
 
-const handler = (event, context, callback) => {
+const handler = async event => {
   // Decrypt secure environment variables.
-  if (decryptedFirebasePrivateKey) {
-    checkUserAuthorization(event, context, callback)
-  } else {
-    // Decrypt code should run once and variables stored outside of the function
-    // handler so that these are decrypted once per container
-    const kms = new AWS.KMS()
-    kms.decrypt(
-      { CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64') },
-      (err, data) => {
-        if (err) {
-          console.log('Decrypt error:', err)
-          callback('Error decrypting secure environnment variables.')
-          return
-        }
-        decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
-        checkUserAuthorization(event, context, callback)
-      }
+  if (!decryptedFirebasePrivateKey) {
+    decryptedFirebasePrivateKey = await decryptValue(
+      encryptedFirebasePrivateKey
     )
   }
-}
 
-const serverlessHandler = (event, context, callback) => {
-  handler(event, context, callback)
+  if (!nfaIsInitialized) {
+    initNFA({
+      firebaseProjectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
+      firebasePrivateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
+      firebaseClientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
+      firebaseDatabaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
+      firebasePublicAPIKey: process.env.FIREBASE_PUBLIC_API_KEY,
+      cookieKeys: [await decryptValue(process.env.COOKIE_SECRET_20220711)],
+    })
+    nfaIsInitialized = true
+  }
+
+  return checkUserAuthorization(event)
 }
 
 module.exports = {
   handler,
-  serverlessHandler,
-  checkUserAuthorization,
 }

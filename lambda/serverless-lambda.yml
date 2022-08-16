@@ -76,26 +76,29 @@ custom:
     number: 5
 
 plugins:
-  # Include only the required node modules.
-  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
-  - serverless-plugin-include-dependencies
   # https://github.com/claygregory/serverless-prune-plugin
   - serverless-prune-plugin
 
 # Only include the build and its node modules.
 package:
-  exclude:
-    - ./**
-  include:
-    - build/**
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/@aws-sdk/**'
+    - 'node_modules/firebase-admin/**'
+    - 'node_modules/lodash/**'
+    - 'node_modules/next-firebase-auth/**'
+    - 'node_modules/node-fetch/**'
+    - 'node_modules/uuid/**'
+
 
 functions:
   firebaseAuthorizer:
-    handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
+    handler: build/firebase-authorizer/firebase-authorizer.handler
     environment:
       LAMBDA_FIREBASE_PROJECT_ID: ${env:LAMBDA_FIREBASE_PROJECT_ID}
       LAMBDA_FIREBASE_DATABASE_URL: ${env:LAMBDA_FIREBASE_DATABASE_URL}
       LAMBDA_FIREBASE_CLIENT_EMAIL: ${env:LAMBDA_FIREBASE_CLIENT_EMAIL}
+      FIREBASE_PUBLIC_API_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PUBLIC_API_KEY}
       # Encrypted with AWS KMS for encryption during deploy.
       #   https://docs.aws.amazon.com/lambda/latest/dg/env_variables.html
       #   https://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html
@@ -109,6 +112,7 @@ functions:
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
+      COOKIE_SECRET_20220711: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.COOKIE_SECRET_20220711}
   searchRequestLogger:
     handler: build/search-request-logger/search-request-logger.handler
     events:  ${file(./src/search-request-logger/variables.yml):${self:provider.stage}.events}

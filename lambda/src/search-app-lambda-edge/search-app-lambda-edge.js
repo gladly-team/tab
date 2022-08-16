@@ -10,6 +10,7 @@ import { AUTH_COOKIE_NAME, AUTH_SIG_COOKIE_NAME } from '../utils/constants'
 const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
 
 const PRODUCTION_STAGE = 'prod'
+const POST_UNININSTALL_SURVEY_URL = 'https://forms.gle/A3Xam2op2gFjoQNU6'
 
 // Get the user's authUserTokens from their cookies, if set. This is dependant
 // on the behavior of `next-firebase-auth`:
@@ -45,6 +46,21 @@ const publishToSNS = async ({ stage, messageData }) => {
   await sns.send(new PublishCommand(params))
 }
 
+const constructRedirectResponse = redirectURL => {
+  return {
+    status: '307',
+    statusDescription: 'Found',
+    headers: {
+      location: [
+        {
+          key: 'Location',
+          value: redirectURL,
+        },
+      ],
+    },
+  }
+}
+
 // Rewrites URIs from /search* to another search provider.
 // Examples of Lambda@Edge functions:
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-general-examples
@@ -74,6 +90,12 @@ exports.handler = async event => {
   // Get the function "version" from the endpoint, which we use to QA new
   // functionality in production prior to rolling it out to users.
   const uri = get(event, 'Records[0].cf.request.uri', '')
+
+  // Return early if user has uninstalled
+  if (uri.startsWith('/search/uninstalled')) {
+    return constructRedirectResponse(POST_UNININSTALL_SURVEY_URL)
+  }
+
   const defaultVersion = 3 // Bump this to "roll out" a new version
   let version
   if (uri.startsWith('/search/v1')) {
@@ -157,17 +179,5 @@ exports.handler = async event => {
     }
   }
 
-  const response = {
-    status: '307',
-    statusDescription: 'Found',
-    headers: {
-      location: [
-        {
-          key: 'Location',
-          value: redirectURL,
-        },
-      ],
-    },
-  }
-  return response
+  return constructRedirectResponse(redirectURL)
 }
