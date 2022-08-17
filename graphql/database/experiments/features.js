@@ -4,6 +4,7 @@ import {
   YAHOO_SEARCH_NEW_USERS,
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
+  SFAC_EXTENSION_PROMPT,
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
@@ -18,6 +19,8 @@ const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28
 // later in the future than when the experiment goes live, because
 // the experiment includes behavior during signup.
 const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 20:30pm UTC 21 June 2022
+
+const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1660719600000 // 20:30pm UTC 21 June 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
@@ -193,6 +196,59 @@ const features = {
           },
           v4BetaEnabled: {
             $eq: true,
+          },
+        },
+      },
+    ],
+  },
+  [SFAC_EXTENSION_PROMPT]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+          [`internalExperimentOverrides.${SFAC_EXTENSION_PROMPT}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+          [`internalExperimentOverrides.${SFAC_EXTENSION_PROMPT}`]: {
+            $eq: 'Notification',
+            $exists: true,
+          },
+        },
+        force: 'Notification',
+      },
+      /* End internal overrides */
+      {
+        variations: ['Control', 'Notification'],
+        weights: [0.5, 0.5],
+        coverage: 0.0,
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+          joined: {
+            $gt: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
           },
         },
       },
