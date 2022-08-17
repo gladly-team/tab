@@ -35,7 +35,7 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
     expect(result).toEqual(false)
   })
 
-  it('returns true if the user is in the experiment and has responded', async () => {
+  it('returns true if the user is in the experiment and has not responded', async () => {
     expect.assertions(1)
     const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
       .default

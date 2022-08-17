@@ -20,6 +20,8 @@ const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28
 // the experiment includes behavior during signup.
 const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 20:30pm UTC 21 June 2022
 
+const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1660719600000 // 20:30pm UTC 21 June 2022
+
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
     defaultValue: false,
@@ -208,6 +210,9 @@ const features = {
           v4BetaEnabled: {
             $eq: true,
           },
+          tabs: {
+            $gt: 3,
+          },
           [`internalExperimentOverrides.${SFAC_EXTENSION_PROMPT}`]: {
             $eq: 'Control',
             $exists: true,
@@ -220,7 +225,10 @@ const features = {
           v4BetaEnabled: {
             $eq: true,
           },
-          [`internalExperimentOverrides.${YAHOO_SEARCH_NEW_USERS_V2}`]: {
+          tabs: {
+            $gt: 3,
+          },
+          [`internalExperimentOverrides.${SFAC_EXTENSION_PROMPT}`]: {
             $eq: 'Notification',
             $exists: true,
           },
@@ -233,8 +241,14 @@ const features = {
         weights: [0.5, 0.5],
         coverage: 0.0,
         condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
           tabs: {
             $gt: 3,
+          },
+          joined: {
+            $gt: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
           },
         },
       },
