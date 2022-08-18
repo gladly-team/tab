@@ -494,14 +494,8 @@
   },
   {
     "TableName": "UserEventLog",
-    "KeySchema": [
-      { "AttributeName": "userId", "KeyType": "HASH" },
-      { "AttributeName": "timestamp", "KeyType": "RANGE" }
-    ],
-    "AttributeDefinitions": [
-      { "AttributeName": "userId", "AttributeType": "S" },
-      { "AttributeName": "timestamp", "AttributeType": "S" }
-    ],
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
     "ProvisionedThroughput": {
       "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1

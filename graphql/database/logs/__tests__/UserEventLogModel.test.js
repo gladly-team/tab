@@ -13,7 +13,7 @@ describe('UserEventLogModel', () => {
   })
 
   it('implements the hashKey property', () => {
-    expect(UserEventLogModel.hashKey).toBe('userId')
+    expect(UserEventLogModel.hashKey).toBe('id')
   })
 
   it('implements the tableName property', () => {
@@ -33,6 +33,7 @@ describe('UserEventLogModel', () => {
 
   it('only allows valid event types', () => {
     const model = new UserEventLogModel({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       userId: 'abcdefghijklmno',
       type: 'fake-type',
       timestamp: '2017-07-17T20:45:53Z',
@@ -46,6 +47,7 @@ describe('UserEventLogModel', () => {
 
   it('only allows valid eventData types', () => {
     const model = new UserEventLogModel({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       userId: 'abcdefghijklmno',
       type: SFAC_EXTENSION_PROMPT_TYPE,
       timestamp: '2017-07-17T20:45:53Z',
@@ -58,6 +60,7 @@ describe('UserEventLogModel', () => {
 
   it('allows valid event and eventData type', () => {
     const model = new UserEventLogModel({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       userId: 'abcdefghijklmno',
       type: SFAC_EXTENSION_PROMPT_TYPE,
       timestamp: '2017-07-17T20:45:53Z',

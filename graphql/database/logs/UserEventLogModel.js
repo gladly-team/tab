@@ -14,11 +14,7 @@ class UserEventLogModel extends DynamoDBModel {
   }
 
   static get hashKey() {
-    return 'userId'
-  }
-
-  static get rangeKey() {
-    return 'timestamp'
+    return 'id'
   }
 
   static get tableName() {
@@ -27,6 +23,7 @@ class UserEventLogModel extends DynamoDBModel {
 
   static get schema() {
     return {
+      id: types.uuid(),
       userId: types.string().required(),
       type: types
         .string()
