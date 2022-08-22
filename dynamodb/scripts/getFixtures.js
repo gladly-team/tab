@@ -67,6 +67,10 @@ const allFixtures = [
     tableName: 'UserExperiment',
     jsonFile: 'UserExperiment.json',
   },
+  {
+    tableName: 'UserEventLog',
+    jsonFile: 'UserEventLog.json',
+  },
 ]
 
 const getFixtures = () => {

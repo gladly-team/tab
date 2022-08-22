@@ -27,6 +27,7 @@ export const USER_EXPERIMENT = 'UserExperiment'
 export const SEARCH_ENGINE = 'SearchEngine'
 export const SEARCH_ENGINE_PERSONALIZED = 'SearchEnginePersonalized'
 export const FEATURE = 'Feature'
+export const USER_EVENT_LOG = 'UserEventLog'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
