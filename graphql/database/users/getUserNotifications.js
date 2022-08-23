@@ -1,5 +1,6 @@
 import getUserFeature from '../experiments/getUserFeature'
 import logger from '../../utils/logger'
+import { COLLEGE_AMBASSADOR_2022_NOTIF } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -15,7 +16,7 @@ const getUserNotifications = async (userContext, user) => {
     const showCollegeAmbassadorNotif = await getUserFeature(
       userContext,
       user,
-      'college-ambassador-2022-notif'
+      COLLEGE_AMBASSADOR_2022_NOTIF
     )
     notifications = [
       ...(showCollegeAmbassadorNotif.variation

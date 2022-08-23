@@ -5,6 +5,7 @@ import {
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
   SFAC_EXTENSION_PROMPT,
+  COLLEGE_AMBASSADOR_2022_NOTIF,
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
@@ -236,11 +237,18 @@ const features = {
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: true,
   },
-  'college-ambassador-2022-notif': {
+  [COLLEGE_AMBASSADOR_2022_NOTIF]: {
     defaultValue: false,
     rules: [
+      // Show on local/dev for our team only.
       {
-        // Show on dev for our team only.
+        condition: {
+          isTabTeamMember: true,
+          env: 'local',
+        },
+        force: true,
+      },
+      {
         condition: {
           isTabTeamMember: true,
           env: 'dev',
