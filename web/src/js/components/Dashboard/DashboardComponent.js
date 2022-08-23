@@ -82,6 +82,8 @@ const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
 
+const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
+
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
 // existing tests work without resetting this module, also
@@ -560,7 +562,7 @@ class Dashboard extends React.Component {
                         just to name a few!) when your classmates join Tab for a
                         Cause.{' '}
                         <Link
-                          to={'https://forms.gle/bRir3cKmqZfCgbur9'}
+                          to={AMBASSADOR_APPLICATION_LINK}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
@@ -574,7 +576,7 @@ class Dashboard extends React.Component {
                     </>
                   }
                   buttonText={'Learn More'}
-                  buttonURL={'https://forms.gle/F8Uqg2NFWASjn7Nx5'}
+                  buttonURL={AMBASSADOR_APPLICATION_LINK}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
