@@ -58,28 +58,6 @@ const features = {
       },
     ],
   },
-  // TODO: remove feature flag references
-  'user-survey-2022-notification': {
-    defaultValue: false,
-    // rules: [
-    //   {
-    //     // Show on dev for our team only.
-    //     condition: {
-    //       isTabTeamMember: true,
-    //       env: 'dev',
-    //     },
-    //     force: true,
-    //   },
-    //   {
-    //     condition: {
-    //       tabs: {
-    //         $gte: 10,
-    //       },
-    //     },
-    //     force: true,
-    //   },
-    // ],
-  },
   [YAHOO_SEARCH_EXISTING_USERS]: {
     defaultValue: false,
     rules: [
@@ -257,6 +235,29 @@ const features = {
   // TODO: remove anytime after mid-August 2022.
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: true,
+  },
+  'college-ambassador-2022-notif': {
+    defaultValue: false,
+    rules: [
+      {
+        // Show on dev for our team only.
+        condition: {
+          isTabTeamMember: true,
+          env: 'dev',
+        },
+        force: true,
+      },
+      // TODO: enable
+      // @feature/ambassador-notification
+      // {
+      //   condition: {
+      //     tabs: {
+      //       $gte: 50,
+      //     },
+      //   },
+      //   force: true,
+      // },
+    ],
   },
 }
 

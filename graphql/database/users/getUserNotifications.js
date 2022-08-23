@@ -12,14 +12,14 @@ import logger from '../../utils/logger'
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
   try {
-    const showUserSurvey2022Notif = await getUserFeature(
+    const showCollegeAmbassadorNotif = await getUserFeature(
       userContext,
       user,
-      'user-survey-2022-notification'
+      'college-ambassador-2022-notif'
     )
     notifications = [
-      ...(showUserSurvey2022Notif.variation
-        ? [{ code: 'userSurvey2022' }]
+      ...(showCollegeAmbassadorNotif.variation
+        ? [{ code: 'collegeAmbassador2022' }]
         : []),
     ]
   } catch (e) {
