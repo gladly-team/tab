@@ -5,6 +5,7 @@ import {
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
   SFAC_EXTENSION_PROMPT,
+  COLLEGE_AMBASSADOR_2022_NOTIF,
 } from './experimentConstants'
 
 // Consider a user "existing" if they join before this time.
@@ -57,28 +58,6 @@ const features = {
         },
       },
     ],
-  },
-  // TODO: remove feature flag references
-  'user-survey-2022-notification': {
-    defaultValue: false,
-    // rules: [
-    //   {
-    //     // Show on dev for our team only.
-    //     condition: {
-    //       isTabTeamMember: true,
-    //       env: 'dev',
-    //     },
-    //     force: true,
-    //   },
-    //   {
-    //     condition: {
-    //       tabs: {
-    //         $gte: 10,
-    //       },
-    //     },
-    //     force: true,
-    //   },
-    // ],
   },
   [YAHOO_SEARCH_EXISTING_USERS]: {
     defaultValue: false,
@@ -257,6 +236,36 @@ const features = {
   // TODO: remove anytime after mid-August 2022.
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: true,
+  },
+  [COLLEGE_AMBASSADOR_2022_NOTIF]: {
+    defaultValue: false,
+    rules: [
+      // Show on local/dev for our team only.
+      {
+        condition: {
+          isTabTeamMember: true,
+          env: 'local',
+        },
+        force: true,
+      },
+      {
+        condition: {
+          isTabTeamMember: true,
+          env: 'dev',
+        },
+        force: true,
+      },
+      // TODO: enable
+      // @feature/ambassador-notification
+      // {
+      //   condition: {
+      //     tabs: {
+      //       $gte: 50,
+      //     },
+      //   },
+      //   force: true,
+      // },
+    ],
   },
 }
 
