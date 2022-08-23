@@ -39,7 +39,6 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
-  STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
 } from 'js/constants'
 import {
   goTo,
@@ -74,7 +73,7 @@ import {
   YAHOO_USER_ID,
 } from 'js/constants'
 import Link from 'js/components/General/Link'
-import switchToV4 from 'js/utils/switchToV4'
+// import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -82,6 +81,8 @@ const NewUserTour = lazy(() =>
 const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
+
+const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -501,6 +502,7 @@ class Dashboard extends React.Component {
                   </div>
                 </Paper>
               ) : null}
+              {/*** For a new v4 vertical ***
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
@@ -545,7 +547,46 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
-
+              */}
+              {/*** General notification ***/}
+              {this.state.showNotification ? (
+                <Notification
+                  data-test-id={'global-notification'}
+                  useGlobalDismissalTime
+                  title={`⚠️ Calling All College Students ⚠️`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        Become a Tab for a Cause ambassador to earn cash and
+                        awesome merchandise (Patagonia, Built, Let’s Go Eco -
+                        just to name a few!) when your classmates join Tab for a
+                        Cause.{' '}
+                        <Link
+                          to={AMBASSADOR_APPLICATION_LINK}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Click here to apply
+                        </Link>{' '}
+                        and for more information.{' '}
+                        <span style={{ fontWeight: 'bold' }}>
+                          Applications close September 12.
+                        </span>
+                      </Typography>
+                    </>
+                  }
+                  buttonText={'Learn More'}
+                  buttonURL={AMBASSADOR_APPLICATION_LINK}
+                  onDismiss={() => {
+                    this.setState({
+                      showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
               {/*** Charity spotlight voting ***
               {this.state.showNotification ? (
                 <Notification
