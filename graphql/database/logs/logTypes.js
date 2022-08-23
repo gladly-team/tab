@@ -1,9 +1,11 @@
 import types from '../fieldTypes'
+import { VALID_SFAC_EXTENSION_BROWSERS } from '../constants'
 
 export const SFAC_EXTENSION_PROMPT = 'SFAC_EXTENSION_PROMPT'
 export const SFAC_EXTENSION_PROMPT_TYPE = types.object().keys({
   browser: types
     .string()
+    .valid(VALID_SFAC_EXTENSION_BROWSERS)
     .required()
     .description(`The browser the user was on when responding to the prompt`),
   accepted: types

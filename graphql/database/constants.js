@@ -52,3 +52,14 @@ export const DEFAULT_SEARCH_ENGINE = 'Google'
 
 // For getUserSearchEngine
 export const WIDGET_TYPE_SEARCH = 'search'
+
+export const CHROME_BROWSER = 'chrome'
+export const FIREFOX_BROWSER = 'firefox'
+export const EDGE_BROWSER = 'edge'
+
+// Valid browsers for SFAC Extension
+export const VALID_SFAC_EXTENSION_BROWSERS = [
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  EDGE_BROWSER,
+]

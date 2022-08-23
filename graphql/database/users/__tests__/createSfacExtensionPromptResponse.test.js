@@ -30,7 +30,7 @@ afterAll(() => {
 const userContext = getMockUserContext()
 const user = getMockUserInfo()
 describe('createSfacExtensionPromptResponse tests', () => {
-  it.only('updates User model and creates UserEventLogModel', async () => {
+  it('updates User model and creates UserEventLogModel', async () => {
     const uuidVal = 'ab5082cc-151a-4a9a-9289-06906670fd42'
     uuid.mockReturnValueOnce(uuidVal)
     expect.assertions(3)
@@ -43,7 +43,7 @@ describe('createSfacExtensionPromptResponse tests', () => {
     const result = await createSfacExtensionPromptResponse(
       userContext,
       user.id,
-      'Chrome',
+      'chrome',
       true
     )
     expect(result).toEqual(getMockUserInstance())
@@ -53,7 +53,7 @@ describe('createSfacExtensionPromptResponse tests', () => {
       type: SFAC_EXTENSION_PROMPT,
       eventData: {
         accepted: true,
-        browser: 'Chrome',
+        browser: 'chrome',
       },
       timestamp: '2017-05-19T13:59:46.000Z',
       created: '2017-05-19T13:59:46.000Z',
@@ -69,15 +69,28 @@ describe('createSfacExtensionPromptResponse tests', () => {
     })
   })
 
+  it('does not allow invalid browser', async () => {
+    const uuidVal = 'ab5082cc-151a-4a9a-9289-06906670fd42'
+    uuid.mockReturnValueOnce(uuidVal)
+    expect.assertions(1)
+    const createSfacExtensionPromptResponse = require('../createSfacExtensionPromptResponse')
+      .default
+    await expect(
+      createSfacExtensionPromptResponse(
+        userContext,
+        user.id,
+        'fake-browser',
+        true
+      )
+    ).rejects.toThrow()
+  })
+
   it('throws if user id does not match user context', async () => {
     expect.assertions(1)
     const createSfacExtensionPromptResponse = require('../createSfacExtensionPromptResponse')
       .default
-    await createSfacExtensionPromptResponse(
-      userContext,
-      user.id,
-      'Chrome',
-      true
+    await expect(
+      createSfacExtensionPromptResponse(userContext, 'wrong-id', 'chrome', true)
     ).rejects.toThrow(new UnauthorizedQueryException())
   })
 })
