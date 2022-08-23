@@ -557,7 +557,7 @@ class Dashboard extends React.Component {
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Become a Tab for a Cause ambassador and earn cash and
+                        Become a Tab for a Cause ambassador to earn cash and
                         awesome merchandise (Patagonia, Built, Let’s Go Eco -
                         just to name a few!) when your classmates join Tab for a
                         Cause.{' '}
