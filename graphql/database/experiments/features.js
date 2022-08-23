@@ -255,16 +255,14 @@ const features = {
         },
         force: true,
       },
-      // TODO: enable
-      // @feature/ambassador-notification
-      // {
-      //   condition: {
-      //     tabs: {
-      //       $gte: 50,
-      //     },
-      //   },
-      //   force: true,
-      // },
+      {
+        condition: {
+          tabs: {
+            $gte: 50,
+          },
+        },
+        force: true,
+      },
     ],
   },
 }
