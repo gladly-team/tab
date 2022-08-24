@@ -89,6 +89,7 @@ import setHasSeenSquads from '../database/users/setHasSeenSquads'
 import setYahooSearchOptIn from '../database/users/setYahooSearchOptIn'
 import setUserSearchEngine from '../database/users/setUserSearchEngine'
 import createSearchEnginePromptLog from '../database/users/createSearchEnginePromptLog'
+import createSfacExtensionPromptResponse from '../database/users/createSfacExtensionPromptResponse'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -2882,6 +2883,30 @@ const createSearchEnginePromptLogMutation = mutationWithClientMutationId({
   },
 })
 
+const createSfacExtensionPromptResponseMutation = mutationWithClientMutationId({
+  name: 'CreateSfacExtensionPromptResponse',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    browser: { type: new GraphQLNonNull(GraphQLString) },
+    accepted: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, browser, accepted }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return createSfacExtensionPromptResponse(
+      context.user,
+      userGlobalObj.id,
+      browser,
+      accepted
+    )
+  },
+})
+
 const createUserExperimentMutation = mutationWithClientMutationId({
   name: 'CreateUserExperiment',
   inputFields: {
@@ -2999,6 +3024,7 @@ const mutationType = new GraphQLObjectType({
     setYahooSearchOptIn: setYahooSearchOptInMutation,
     setUserSearchEngine: setUserSearchEngineMutation,
     createSearchEnginePromptLog: createSearchEnginePromptLogMutation,
+    createSfacExtensionPromptResponse: createSfacExtensionPromptResponseMutation,
 
     createUserExperiment: createUserExperimentMutation,
   }),
