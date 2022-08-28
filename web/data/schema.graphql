@@ -1618,7 +1618,10 @@ type User implements Node {
   """whether to show the SFAC extension prompt"""
   showSfacExtensionPrompt: Boolean!
 
-  """whether or not the user has opted into searching for extra impact"""
+  """what mode in which to show SFAC searches UI"""
+  sfacActivityState: String!
+
+  """status """
   yahooPaidSearchRewardOptIn: Boolean!
 }
 

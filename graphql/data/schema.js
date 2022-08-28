@@ -141,6 +141,7 @@ import getUserSearchEngine from '../database/users/getUserSearchEngine'
 import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt'
 import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfacExtensionPrompt'
 import getUserNotifications from '../database/users/getUserNotifications'
+import getSfacActivityState from '../database/users/getSfacActivityState'
 
 class App {
   constructor(id) {
@@ -765,10 +766,16 @@ const userType = new GraphQLObjectType({
       resolve: (user, _, context) =>
         getShouldShowSfacExtensionPrompt(context.user, user),
     },
+    sfacActivityState: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'what mode in which to show SFAC searches UI',
+      resolve: (user, _, context) => getSfacActivityState(context.user, user),
+    },
     yahooPaidSearchRewardOptIn: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      description:
-        'whether or not the user has opted into searching for extra impact',
+      description: 'status ',
+      resolve: (user, _, context) =>
+        getShouldShowSfacExtensionPrompt(context.user, user),
     },
   }),
   interfaces: [nodeInterface],
