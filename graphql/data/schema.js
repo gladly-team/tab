@@ -767,15 +767,23 @@ const userType = new GraphQLObjectType({
         getShouldShowSfacExtensionPrompt(context.user, user),
     },
     sfacActivityState: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'what mode in which to show SFAC searches UI',
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'sfacActivityState',
+          description: 'what mode in which to show SFAC searches UI',
+          values: {
+            new: { value: 'new' },
+            active: { value: 'active' },
+            inactive: { value: 'inactive' },
+          },
+        })
+      ),
       resolve: (user, _, context) => getSfacActivityState(context.user, user),
     },
     yahooPaidSearchRewardOptIn: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      description: 'status ',
-      resolve: (user, _, context) =>
-        getShouldShowSfacExtensionPrompt(context.user, user),
+      description:
+        'whether or not the user has opted into searching for extra impact',
     },
   }),
   interfaces: [nodeInterface],
