@@ -237,6 +237,7 @@ const features = {
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: true,
   },
+  // TODO: remove and clean up references
   [COLLEGE_AMBASSADOR_2022_NOTIF]: {
     defaultValue: false,
     rules: [
@@ -246,14 +247,14 @@ const features = {
           isTabTeamMember: true,
           env: 'local',
         },
-        force: true,
+        force: false,
       },
       {
         condition: {
           isTabTeamMember: true,
           env: 'dev',
         },
-        force: true,
+        force: false,
       },
       {
         condition: {
@@ -261,7 +262,7 @@ const features = {
             $gte: 50,
           },
         },
-        force: true,
+        force: false,
       },
     ],
   },
