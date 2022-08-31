@@ -1317,6 +1317,13 @@ type SetYahooSearchOptInPayload {
   clientMutationId: String
 }
 
+"""what mode in which to show SFAC searches UI"""
+enum sfacActivityState {
+  new
+  active
+  inactive
+}
+
 """cause specific UI content around sharing"""
 type SharingUICopy {
   """markdown for modal title"""
@@ -1617,6 +1624,7 @@ type User implements Node {
 
   """whether to show the SFAC extension prompt"""
   showSfacExtensionPrompt: Boolean!
+  sfacActivityState: sfacActivityState!
 
   """whether or not the user has opted into searching for extra impact"""
   yahooPaidSearchRewardOptIn: Boolean!
