@@ -220,7 +220,7 @@ const features = {
       {
         variations: ['Control', 'Notification'],
         weights: [0.5, 0.5],
-        coverage: 100.0,
+        coverage: 1.0,
         condition: {
           v4BetaEnabled: {
             $eq: true,
