@@ -23,7 +23,7 @@ const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 20:30pm
 
 // Cutoff time for search extension experiment. Users are considered
 // new if they join after this time.
-const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 1600 UTC 6 September 2022
+const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC 6 September 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
