@@ -1,21 +1,17 @@
-import DynamoDBModel from '../base/DynamoDBModel'
+import Model from '../base/Model'
 import types from '../fieldTypes'
 import { IMPACT_METRIC } from '../constants'
 
 /*
- * @extends DynamoDBModel
+ * @extends Model
  */
-class ImpactMetric extends DynamoDBModel {
+class ImpactMetric extends Model {
   static get name() {
     return IMPACT_METRIC
   }
 
   static get hashKey() {
     return 'id'
-  }
-
-  static get tableName() {
-    return 'UNUSED_ImpactMetrics'
   }
 
   static get schema() {
@@ -37,13 +33,23 @@ class ImpactMetric extends DynamoDBModel {
           `the dollar amount required to achieve an instance of this ImpactMetric`
         ),
       description: types
-        .number()
+        .string()
         .required()
-        .description(`Description of the ImpactMetric`),
-      name: types
-        .number()
+        .description(
+          `Long-form description of the ImpactMetric. Is usually a few sentences/paragraph about the imapct metric.`
+        ),
+      metricTitle: types
+        .string()
         .required()
-        .description(`Name of the impact metric`),
+        .description(
+          `Metric title. Should be placeable in a sentence. Example: '1 home visit'`
+        ),
+      impactTitle: types
+        .string()
+        .required()
+        .description(
+          `Impact action title. Should be a longer title with a verb as well as a noun. Example: 'Provide 1 visit from a community health worker'`
+        ),
       active: types
         .boolean()
         .default(self.fieldDefaults.active)

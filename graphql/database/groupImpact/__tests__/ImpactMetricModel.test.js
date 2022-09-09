@@ -22,10 +22,6 @@ describe('ImpactMetricModel', () => {
     expect(ImpactMetric.hashKey).toBeDefined()
   })
 
-  it('implements the tableName property', () => {
-    expect(ImpactMetric.tableName).toBe('UNUSED_ImpactMetrics')
-  })
-
   it('constructs as expected with default values', () => {
     const item = Object.assign(
       {},
@@ -33,16 +29,20 @@ describe('ImpactMetricModel', () => {
         id: '123456789',
         charityId: 'abcdefghijklmnop',
         dollarAmount: 1000,
-        description: 'testItem',
-        name: 'testImpactMetric',
+        description:
+          'This provides access to care for people who might not otherwise have it.',
+        metricTitle: '1 home visit',
+        impactTitle: 'Provide 1 visit from a community health worker',
       })
     )
     expect(item).toEqual({
       id: '123456789',
       charityId: 'abcdefghijklmnop',
       dollarAmount: 1000,
-      description: 'testItem',
-      name: 'testImpactMetric',
+      description:
+        'This provides access to care for people who might not otherwise have it.',
+      metricTitle: '1 home visit',
+      impactTitle: 'Provide 1 visit from a community health worker',
       active: true,
     })
   })
