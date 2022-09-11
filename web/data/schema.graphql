@@ -1624,6 +1624,9 @@ type User implements Node {
 
   """whether to show the SFAC extension prompt"""
   showSfacExtensionPrompt: Boolean!
+
+  """whether to show the SFAC icon (and activity ui element)"""
+  showSfacIcon: Boolean!
   sfacActivityState: sfacActivityState!
 
   """whether or not the user has opted into searching for extra impact"""
