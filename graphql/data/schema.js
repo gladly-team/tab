@@ -142,6 +142,7 @@ import getShouldShowYahooPrompt from '../database/users/getShouldShowYahooPrompt
 import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfacExtensionPrompt'
 import getUserNotifications from '../database/users/getUserNotifications'
 import getSfacActivityState from '../database/users/getSfacActivityState'
+import getShouldShowSfacIcon from '../database/users/getShouldShowSfacIcon'
 
 class App {
   constructor(id) {
@@ -765,6 +766,11 @@ const userType = new GraphQLObjectType({
       description: 'whether to show the SFAC extension prompt',
       resolve: (user, _, context) =>
         getShouldShowSfacExtensionPrompt(context.user, user),
+    },
+    showSfacIcon: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'whether to show the SFAC icon (and activity ui element)',
+      resolve: (user, _, context) => getShouldShowSfacIcon(context.user, user),
     },
     sfacActivityState: {
       type: new GraphQLNonNull(
