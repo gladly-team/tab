@@ -11,7 +11,7 @@ const user = getMockUserInstance()
 
 describe('getShouldShowSfacIcon tests', () => {
   it('returns false if the user is in the experiment but it is not dev', async () => {
-    process.env.NEXT_PUBLIC_GROWTHBOOK_ENV = 'production'
+    process.env.GROWTHBOOK_ENV = 'production'
     expect.assertions(1)
     const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     getUserFeature.mockResolvedValueOnce(
@@ -26,7 +26,7 @@ describe('getShouldShowSfacIcon tests', () => {
   })
 
   it('returns false if the user is in not the experiment but it is dev', async () => {
-    process.env.NEXT_PUBLIC_GROWTHBOOK_ENV = 'dev'
+    process.env.GROWTHBOOK_ENV = 'dev'
     expect.assertions(1)
     const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     getUserFeature.mockResolvedValueOnce(
@@ -41,7 +41,7 @@ describe('getShouldShowSfacIcon tests', () => {
   })
 
   it('returns true if the user is in the experiment and env is dev', async () => {
-    process.env.NEXT_PUBLIC_GROWTHBOOK_ENV = 'dev'
+    process.env.GROWTHBOOK_ENV = 'dev'
     expect.assertions(1)
     const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     getUserFeature.mockResolvedValueOnce(

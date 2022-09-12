@@ -8,7 +8,7 @@ const getShouldShowSfacIcon = async (userContext, user) => {
     SFAC_EXTENSION_PROMPT
   )
   return (
-    process.env.NEXT_PUBLIC_GROWTHBOOK_ENV === 'dev' &&
+    process.env.GROWTHBOOK_ENV === 'dev' &&
     showSfacExtensionFeature.variation === 'Notification'
   )
 }
