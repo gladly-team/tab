@@ -9,8 +9,8 @@ const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
 beforeEach(() => {
-  jest.resetModules()
-})
+  jest.resetModules();
+});
 
 describe('getShouldShowSfacIcon tests', () => {
   it('returns false if the user is in the experiment but it is not dev', async () => {
@@ -19,7 +19,7 @@ describe('getShouldShowSfacIcon tests', () => {
       DB_TABLE_NAME_APPENDIX: '',
     }))
     expect.assertions(1)
-    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
+
     const getUserFeature = require('../../experiments/getUserFeature').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
@@ -28,6 +28,7 @@ describe('getShouldShowSfacIcon tests', () => {
       })
     )
 
+    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     const result = await getShouldShowSfacIcon(userContext, user)
     expect(result).toEqual(false)
   })
@@ -38,7 +39,7 @@ describe('getShouldShowSfacIcon tests', () => {
       DB_TABLE_NAME_APPENDIX: '',
     }))
     expect.assertions(1)
-    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
+
     const getUserFeature = require('../../experiments/getUserFeature').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
@@ -47,6 +48,7 @@ describe('getShouldShowSfacIcon tests', () => {
       })
     )
 
+    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     const result = await getShouldShowSfacIcon(userContext, user)
     expect(result).toEqual(false)
   })
@@ -57,7 +59,7 @@ describe('getShouldShowSfacIcon tests', () => {
       DB_TABLE_NAME_APPENDIX: '',
     }))
     expect.assertions(1)
-    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
+
     const getUserFeature = require('../../experiments/getUserFeature').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
@@ -65,6 +67,8 @@ describe('getShouldShowSfacIcon tests', () => {
         variation: 'Notification',
       })
     )
+    
+    const getShouldShowSfacIcon = require('../getShouldShowSfacIcon').default
     const result = await getShouldShowSfacIcon(userContext, user)
     expect(result).toEqual(true)
   })
