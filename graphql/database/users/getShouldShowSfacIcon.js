@@ -1,5 +1,6 @@
 import { SFAC_EXTENSION_PROMPT } from '../experiments/experimentConstants'
 import getUserFeature from '../experiments/getUserFeature'
+import { GROWTHBOOK_ENV } from '../../config'
 
 const getShouldShowSfacIcon = async (userContext, user) => {
   const showSfacExtensionFeature = await getUserFeature(
@@ -8,7 +9,7 @@ const getShouldShowSfacIcon = async (userContext, user) => {
     SFAC_EXTENSION_PROMPT
   )
   return (
-    process.env.NEXT_PUBLIC_GROWTHBOOK_ENV === 'dev' &&
+    GROWTHBOOK_ENV === 'dev' &&
     showSfacExtensionFeature.variation === 'Notification'
   )
 }
