@@ -9,8 +9,8 @@ const userContext = getMockUserContext()
 const user = getMockUserInstance()
 
 beforeEach(() => {
-  jest.resetModules();
-});
+  jest.resetModules()
+})
 
 describe('getShouldShowSfacIcon tests', () => {
   it('returns false if the user is in the experiment but it is not dev', async () => {
