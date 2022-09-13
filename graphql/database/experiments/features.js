@@ -4,6 +4,7 @@ import {
   YAHOO_SEARCH_NEW_USERS,
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
+  SFAC_EXISTING_USER_ACTIVITY_ICON,
   SFAC_EXTENSION_PROMPT,
   COLLEGE_AMBASSADOR_2022_NOTIF,
 } from './experimentConstants'
@@ -177,6 +178,51 @@ const features = {
           },
           v4BetaEnabled: {
             $eq: true,
+          },
+        },
+      },
+    ],
+  },
+  [SFAC_EXISTING_USER_ACTIVITY_ICON]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${SFAC_EXISTING_USER_ACTIVITY_ICON}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          [`internalExperimentOverrides.${SFAC_EXISTING_USER_ACTIVITY_ICON}`]: {
+            $eq: 'Icon',
+            $exists: true,
+          },
+        },
+        force: 'Icon',
+      },
+      /* End internal overrides */
+      {
+        variations: ['Control', 'Icon'],
+        weights: [0.5, 0.5],
+        coverage: 0.5,
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          joined: {
+            // Users who joined after this in the experiment for new users.
+            $lte: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
           },
         },
       },
