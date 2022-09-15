@@ -10,14 +10,6 @@ class ExampleRedisModel extends RedisModel {
     return 'id'
   }
 
-  static get rangeKey() {
-    return 'range'
-  }
-
-  static get tableName() {
-    return 'ExamplesTable'
-  }
-
   static get schema() {
     const self = this
     return {
