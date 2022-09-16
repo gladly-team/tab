@@ -171,17 +171,22 @@ class Model {
     throw new NotImplementedException()
   }
 
-  static async get(userContext, hashKey, rangeKey) {
-    const keys = [hashKey]
-    if (rangeKey) {
-      keys.push(rangeKey)
+  static async get(userContext, key) {
+    let hashKey
+    let rangeKey
+    // Required for RedisModel
+    if (Array.isArray(key)) {
+      ;[hashKey, rangeKey] = key
+    } else {
+      hashKey = key
+      rangeKey = null
     }
     // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       throw new UnauthorizedQueryException()
     }
     try {
-      const data = await this.getInternal(keys)
+      const data = await this.getInternal(key)
       if (isNil(data)) {
         throw new DatabaseItemDoesNotExistException()
       }
