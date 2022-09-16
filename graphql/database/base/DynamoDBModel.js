@@ -110,6 +110,14 @@ class DynamoDBModel extends Model {
     }
   }
 
+  static async get(userContext, hashKey, rangeKey) {
+    const keys = [hashKey]
+    if (rangeKey) {
+      keys.push(rangeKey)
+    }
+    return super.get(userContext, keys)
+  }
+
   static async getInternal(keys) {
     return this.dynogelsModel.getAsync(...keys)
   }
