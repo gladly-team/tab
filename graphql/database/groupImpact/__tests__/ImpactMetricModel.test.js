@@ -28,7 +28,6 @@ describe('ImpactMetricModel', () => {
       new ImpactMetric({
         id: '123456789',
         charityId: 'abcdefghijklmnop',
-        causeId: 'abcde',
         dollarAmount: 1000,
         description:
           'This provides access to care for people who might not otherwise have it.',
@@ -39,7 +38,6 @@ describe('ImpactMetricModel', () => {
     expect(item).toEqual({
       id: '123456789',
       charityId: 'abcdefghijklmnop',
-      causeId: 'abcde',
       dollarAmount: 1000,
       description:
         'This provides access to care for people who might not otherwise have it.',
