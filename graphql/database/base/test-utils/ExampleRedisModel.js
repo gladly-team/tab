@@ -15,6 +15,7 @@ class ExampleRedisModel extends RedisModel {
     return {
       id: types.uuid(),
       range: types.string(),
+      count: types.number(),
       name: types.string().default(self.fieldDefaults.name),
       thing: types.string().forbidden(),
     }
@@ -42,18 +43,21 @@ export const fixturesA = [
   {
     id: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
     name: 'Thing A',
+    count: 1,
     created: '2017-08-01T01:30:51.644Z',
     updated: '2017-08-09T17:20:41.293Z',
   },
   {
     id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
     name: 'Thing B',
+    count: 2,
     created: '2017-08-02T01:30:51.644Z',
     updated: '2017-08-07T17:20:41.293Z',
   },
   {
     id: 'cb5082cc-151a-4a9a-9289-06906670fd4e',
     name: 'Thing C',
+    count: 3,
     created: '2017-08-03T01:30:51.644Z',
     updated: '2017-08-05T17:20:41.293Z',
   },

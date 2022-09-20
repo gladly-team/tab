@@ -399,6 +399,106 @@ describe('RedisModel queries', () => {
     ).rejects.toEqual(new DatabaseItemDoesNotExistException())
   })
 
+  it('fails with unauthorized `updateIntegerFieldBy`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      update: () => false,
+    })
+    return expect(
+      ExampleRedisModel.updateIntegerFieldBy(user, 'name', 'abc')
+    ).rejects.toEqual(new UnauthorizedQueryException())
+  })
+
+  it('fails with non-numeric increment for `updateIntegerFieldBy`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      update: () => true,
+    })
+    return expect(
+      ExampleRedisModel.updateIntegerFieldBy(user, 'name', 'abc', 'fgh')
+    ).rejects.toEqual(new Error('Increment amount should be an integer'))
+  })
+
+  it('fails with non-numeric field for `updateIntegerFieldBy`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      update: () => true,
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+
+    return expect(
+      ExampleRedisModel.updateIntegerFieldBy(user, createdItem.id, 'name', 5)
+    ).rejects.toEqual(new Error('Field to update should be an integer'))
+  })
+
+  it('updateIntegerFieldBy correctly updates field', async () => {
+    expect.assertions(2)
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      update: () => true,
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+
+    const field = await ExampleRedisModel.updateIntegerFieldBy(
+      user,
+      createdItem.id,
+      'count',
+      5
+    )
+    expect(field).toEqual(6)
+
+    const model = await ExampleRedisModel.get(user, createdItem.id)
+    expect(model).toEqual({
+      ...createdItem,
+      count: 6,
+    })
+  })
+
+  it('updateField throws if field does not exist', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      update: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+    return expect(
+      ExampleRedisModel.updateField(user, createdItem.id, 'dummy', 'dummy')
+    ).rejects.toEqual(new FieldDoesNotExistException())
+  })
+
+  it('updateField throws if record does not exist', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      update: () => true,
+    })
+
+    return expect(
+      ExampleRedisModel.updateField(user, 'dummy', 'name')
+    ).rejects.toEqual(new DatabaseItemDoesNotExistException())
+  })
+
   it('fails with unauthorized `getField`', async () => {
     expect.assertions(1)
     setModelPermissions(ExampleRedisModel, {
