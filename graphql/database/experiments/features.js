@@ -214,8 +214,12 @@ const features = {
       /* End internal overrides */
       {
         variations: ['Control', 'Icon'],
-        weights: [0.5, 0.5],
-        coverage: 0.5,
+        // Experiment ended Sept 20, 2022. We want want to enable the "Icon"
+        // treatment group for all *existing* users but leave new users in
+        // the control group here so the SFAC experience for new users is
+        // dictated by the ongoing "sfac-extension-prompt" experiment.
+        // weights: [0.5, 0.5],
+        // coverage: 0.5,
         condition: {
           v4BetaEnabled: {
             $eq: true,
@@ -225,6 +229,7 @@ const features = {
             $lte: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
           },
         },
+        force: 'Icon',
       },
     ],
   },
