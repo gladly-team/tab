@@ -22,6 +22,10 @@ class ImpactMetric extends Model {
         .length(9)
         .required()
         .description(`ID for the ImpactMetric entity. Nanoid.`),
+      causeId: types
+        .string()
+        .required()
+        .description(`The causeId that this ImpactMetric corresponds to`),
       charityId: types
         .string()
         .required()
