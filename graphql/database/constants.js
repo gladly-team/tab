@@ -64,3 +64,9 @@ export const VALID_SFAC_EXTENSION_BROWSERS = [
   FIREFOX_BROWSER,
   EDGE_BROWSER,
 ]
+
+export const CAUSE_IMPACT_TYPES = {
+  none: 'none',
+  individual: 'individual',
+  group: 'group',
+}

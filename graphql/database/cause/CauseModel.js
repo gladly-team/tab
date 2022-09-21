@@ -1,6 +1,6 @@
 import DynamoDBModel from '../base/DynamoDBModel'
 import types from '../fieldTypes'
-import { CAUSE } from '../constants'
+import { CAUSE, CAUSE_IMPACT_TYPES } from '../constants'
 
 /*
  * @extends DynamoDBModel
@@ -155,12 +155,19 @@ class Cause extends DynamoDBModel {
         .required(),
       individualImpactEnabled: types
         .boolean()
+        .optional()
+        .description(
+          `[Deprecated: use impactType instead] whether or not there is an individual impact metric for this cause`
+        ),
+      impactType: types
+        .string()
+        .valid(Object.values(CAUSE_IMPACT_TYPES))
         .required()
         .description(
-          `whether or not there is an individual impact metric for this cause`
+          `The type of charitable impact that's enabled for this cause`
         ),
-      impactVisits: types.alternatives().when('individualImpactEnabled', {
-        is: true,
+      impactVisits: types.alternatives().when('impactType', {
+        is: CAUSE_IMPACT_TYPES.individual,
         then: types
           .number()
           .integer()
@@ -191,8 +198,8 @@ class Cause extends DynamoDBModel {
         .description(
           `A short, unique, URL-safe description of the cause, such as "cats" or "teamseas"`
         ),
-      impact: types.alternatives().when('individualImpactEnabled', {
-        is: true,
+      impact: types.alternatives().when('impactType', {
+        is: CAUSE_IMPACT_TYPES.individual,
         then: types.object(impactFields),
         otherwise: types.object(mapFieldsToRequired(impactFields)),
       }),
@@ -289,8 +296,8 @@ class Cause extends DynamoDBModel {
           .required()
           .description(`copy for twitter button`),
       }),
-      squads: types.alternatives().when('individualImpactEnabled', {
-        is: true,
+      squads: types.alternatives().when('impactType', {
+        is: CAUSE_IMPACT_TYPES.individual,
         then: types.object(squadsFields),
         otherwise: types.object(mapFieldsToRequired(squadsFields)),
       }),

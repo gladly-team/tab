@@ -37,6 +37,7 @@ import {
   SEARCH_ENGINE,
   SEARCH_ENGINE_PERSONALIZED,
   FEATURE,
+  CAUSE_IMPACT_TYPES,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -997,6 +998,22 @@ const CauseType = new GraphQLObjectType({
     },
     individualImpactEnabled: {
       type: new GraphQLNonNull(GraphQLBoolean),
+      description: `Whether or not the current cause supports individual impact`,
+      deprecationReason: 'Replaced by "impactType" field.',
+    },
+    impactType: {
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'causeImpactType',
+          description:
+            "The type of charitable impact that's enabled for this cause",
+          values: {
+            none: { value: CAUSE_IMPACT_TYPES.none },
+            individual: { value: CAUSE_IMPACT_TYPES.individual },
+            group: { value: CAUSE_IMPACT_TYPES.group },
+          },
+        })
+      ),
       description: `Whether or not the current cause supports individual impact`,
     },
     impactVisits: {

@@ -29,7 +29,7 @@ describe('causes', () => {
       id: expect.any(String),
       charityId: expect.any(String),
       landingPagePath: expect.any(String),
-      individualImpactEnabled: expect.any(Boolean),
+      impactType: expect.any(String),
       // ... other fields here
     }
     expect(causes[0]).toMatchObject(expect.objectContaining(causeSubset))
@@ -43,12 +43,12 @@ describe('causes', () => {
       const brokenData = {
         ...realData,
         id: 123,
-        individualImpactEnabled: null,
+        impactType: null,
       }
       return brokenData
     })
     expect(() => require('../causes').default).toThrow(
-      'child "id" fails because ["id" must be a string]. child "individualImpactEnabled" fails because ["individualImpactEnabled" is required]'
+      'child "id" fails because ["id" must be a string]. child "impactType" fails because ["impactType" is required]'
     )
   })
 })
