@@ -3,7 +3,6 @@ import moment from 'moment'
 
 import GroupImpactMetric from '../GroupImpactMetricModel'
 import { mockDate } from '../../test-utils'
-import { GROUP_IMPACT_METRIC } from '../../constants'
 
 beforeAll(() => {
   mockDate.on()
@@ -20,10 +19,6 @@ describe('GroupImpactMetricModel', () => {
 
   it('implements the hashKey property', () => {
     expect(GroupImpactMetric.hashKey).toBeDefined()
-  })
-
-  it('implements the tableName property', () => {
-    expect(GroupImpactMetric.tableName).toBe(GROUP_IMPACT_METRIC)
   })
 
   it('constructs as expected with default values', () => {

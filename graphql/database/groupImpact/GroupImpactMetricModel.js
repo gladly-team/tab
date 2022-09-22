@@ -16,10 +16,6 @@ class GroupImpactMetric extends RedisModel {
     return 'id'
   }
 
-  static get tableName() {
-    return GROUP_IMPACT_METRIC
-  }
-
   static get schema() {
     const self = this
     return {
