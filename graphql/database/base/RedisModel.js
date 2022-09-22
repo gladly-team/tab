@@ -46,7 +46,7 @@ class RedisModel extends Model {
     const redisKey = this.getRedisKey(item[this.hashKey])
     const existingEntry = await client.hgetall(redisKey)
     if (Object.keys(existingEntry).length === 0) {
-      throw new DatabaseConditionalCheckFailedException()
+      throw new DatabaseItemDoesNotExistException()
     }
 
     Object.entries(item).forEach(([key, value]) => {
@@ -97,6 +97,10 @@ class RedisModel extends Model {
     const redisKey = this.getRedisKey(id)
     const result = await client.hget(redisKey, field)
 
+    if (result === null) {
+      throw new DatabaseItemDoesNotExistException()
+    }
+
     if (
       types
         .number()
@@ -104,10 +108,6 @@ class RedisModel extends Model {
         .validate(result).error
     ) {
       throw new Error('Field to update should be an integer')
-    }
-
-    if (result === null) {
-      throw new DatabaseItemDoesNotExistException()
     }
 
     await client.hincrby(redisKey, field, increment)

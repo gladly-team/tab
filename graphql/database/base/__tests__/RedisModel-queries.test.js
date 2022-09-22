@@ -208,6 +208,20 @@ describe('RedisModel queries', () => {
     expect(updatedItem).toEqual(expectedReturn)
   })
 
+  it('correctly updates item', async () => {
+    setModelPermissions(ExampleRedisModel, {
+      update: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // Verify returned object.
+    return expect(ExampleRedisModel.update(user, item)).rejects.toEqual(
+      new DatabaseItemDoesNotExistException()
+    )
+  })
+
   it('fails with unauthorized `update`', async () => {
     expect.assertions(1)
     setModelPermissions(ExampleRedisModel, {
@@ -469,22 +483,32 @@ describe('RedisModel queries', () => {
     })
   })
 
-  it('updateField throws if field does not exist', async () => {
+  it('updateIntegerFieldBy throws if field does not exist', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      update: () => true,
+    })
+
+    return expect(
+      ExampleRedisModel.updateIntegerFieldBy(
+        user,
+        'irrelevant-id',
+        'non-existent-field',
+        5
+      )
+    ).rejects.toEqual(new FieldDoesNotExistException())
+  })
+
+  it('updateIntegerFieldBy throws if field does not exist', async () => {
     expect.assertions(1)
     setModelPermissions(ExampleRedisModel, {
       create: () => true,
       update: () => true,
     })
 
-    // Set mock response from DB client.
-    const item = Object.assign({}, fixturesA[0])
-
-    // 'created' and 'updated' field should be automatically added.
-    const itemToCreate = removeCreatedAndUpdatedFields(item)
-    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
     return expect(
-      ExampleRedisModel.updateField(user, createdItem.id, 'dummy', 'dummy')
-    ).rejects.toEqual(new FieldDoesNotExistException())
+      ExampleRedisModel.updateIntegerFieldBy(user, 'irrelevant-id', 'count', 5)
+    ).rejects.toEqual(new DatabaseItemDoesNotExistException())
   })
 
   it('updateField throws if record does not exist', async () => {
