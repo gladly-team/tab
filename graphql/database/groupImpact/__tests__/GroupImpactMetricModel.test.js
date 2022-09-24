@@ -3,6 +3,7 @@ import moment from 'moment'
 
 import GroupImpactMetric from '../GroupImpactMetricModel'
 import { mockDate } from '../../test-utils'
+import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 
 beforeAll(() => {
   mockDate.on()
@@ -40,5 +41,11 @@ describe('GroupImpactMetricModel', () => {
       dollarGoal: 10000,
       dateStarted: moment.utc().toISOString(),
     })
+  })
+
+  it('has the correct get permission', () => {
+    expect(GroupImpactMetric.permissions.get).toEqual(
+      permissionAuthorizers.allowAll
+    )
   })
 })

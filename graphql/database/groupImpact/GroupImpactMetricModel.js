@@ -3,6 +3,7 @@ import moment from 'moment'
 import RedisModel from '../base/RedisModel'
 import types from '../fieldTypes'
 import { GROUP_IMPACT_METRIC } from '../constants'
+import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * @extends RedisModel
@@ -59,6 +60,12 @@ class GroupImpactMetric extends RedisModel {
   static get fieldDefaults() {
     return {
       dateStarted: moment.utc().toISOString(),
+    }
+  }
+
+  static get permissions() {
+    return {
+      get: permissionAuthorizers.allowAll,
     }
   }
 }

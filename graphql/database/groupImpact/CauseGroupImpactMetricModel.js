@@ -1,6 +1,7 @@
 import RedisModel from '../base/RedisModel'
 import types from '../fieldTypes'
 import { CAUSE_GROUP_IMPACT_METRIC } from '../constants'
+import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * @extends RedisModel
@@ -25,6 +26,12 @@ class CauseGroupImpactMetric extends RedisModel {
         .length(9)
         .required()
         .description(`The current instance of Group Impact`),
+    }
+  }
+
+  static get permissions() {
+    return {
+      get: permissionAuthorizers.allowAll,
     }
   }
 }
