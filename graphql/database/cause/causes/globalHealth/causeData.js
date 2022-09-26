@@ -12,6 +12,7 @@ const data = {
   icon: 'medical-bag',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705',
+  individualImpactEnabled: true, // Deprecated. Use "impactType".
   impactType: 'individual',
   impactVisits: 131,
   landingPagePath: '/global-health/',
