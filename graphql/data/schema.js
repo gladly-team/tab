@@ -38,6 +38,8 @@ import {
   SEARCH_ENGINE_PERSONALIZED,
   FEATURE,
   CAUSE_IMPACT_TYPES,
+  IMPACT_METRIC,
+  GROUP_IMPACT_METRIC,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -144,6 +146,7 @@ import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfa
 import getUserNotifications from '../database/users/getUserNotifications'
 import getSfacActivityState from '../database/users/getSfacActivityState'
 import getShouldShowSfacIcon from '../database/users/getShouldShowSfacIcon'
+import { getImpactMetricById } from '../database/groupImpact/impactMetricRepository'
 
 class App {
   constructor(id) {
@@ -966,6 +969,87 @@ const CauseOnboardingCopyType = new GraphQLObjectType({
     },
   }),
 })
+
+const impactMetricType = new GraphQLObjectType({
+  name: 'ImpactMetric',
+  description: 'An instance of GroupImpact',
+  fields: () => ({
+    id: {
+      type: globalIdField(IMPACT_METRIC),
+      description: 'ID of the ImpactMetric',
+    },
+    charityId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Charity ID that this impact metric belongs to',
+    },
+    dollarAmount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'Dollar amount required to achieve an instance of this ImpactMetric',
+    },
+    description: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Markdown description of this ImpactMetric',
+    },
+    metricTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'Metric title. Should be placeable in a sentence. Example: "1 home visit"',
+    },
+    impactTitle: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'Impact action title. Should be a longer title with a verb as well as a noun. Example: "Provide 1 visit from a community health worker"',
+    },
+    active: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'Whether or not this GroupImpactMetric is still active',
+    },
+  }),
+})
+
+// todo: @jedtan remove when we implement resolvers.
+// eslint-disable-next-line no-unused-vars
+const groupImpactMetric = new GraphQLObjectType({
+  name: 'GroupImpactMetric',
+  description: 'A specific instance of GroupImpactMetric',
+  fields: () => ({
+    id: {
+      type: globalIdField(GROUP_IMPACT_METRIC),
+      description: 'The ID of the GroupImpactMetric',
+    },
+    causeId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'The cause ID this GroupImpactMetric belongs to',
+    },
+    impactMetric: {
+      type: impactMetricType,
+      description: 'Information about the ImpactMetric',
+      resolve: instance => getImpactMetricById(instance.impactMetricId),
+    },
+    dollarProgress: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far',
+    },
+    dollarGoal: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far',
+    },
+    dateStarted: {
+      type: GraphQLString,
+      description:
+        'ISO datetime string of when this GroupImpactMetric was started',
+    },
+    dateCompleted: {
+      type: GraphQLString,
+      description:
+        'ISO datetime string of when this GroupImpactMetric was ended',
+    },
+  }),
+})
+
 const CauseType = new GraphQLObjectType({
   name: CAUSE,
   description: 'all cause specific data and ui content',
