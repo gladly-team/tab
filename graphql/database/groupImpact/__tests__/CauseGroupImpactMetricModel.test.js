@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import CauseGroupImpactMetric from '../CauseGroupImpactMetricModel'
+import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 
 describe('CauseGroupImpactMetricModel', () => {
   it('implements the name property', () => {
@@ -22,5 +23,11 @@ describe('CauseGroupImpactMetricModel', () => {
       causeId: 'CA6A5C2uj',
       groupImpactMetricId: 'test',
     })
+  })
+
+  it('has the correct get permission', () => {
+    expect(CauseGroupImpactMetric.permissions.get).toEqual(
+      permissionAuthorizers.allowAll
+    )
   })
 })
