@@ -12,7 +12,8 @@ const data = {
   icon: 'pine-tree',
   backgroundImageCategory: 'trees',
   charityId: '17099402-4e53-4b42-ad0b-6b89492b61cb',
-  individualImpactEnabled: true,
+  individualImpactEnabled: true, // Deprecated. Use "impactType".
+  impactType: 'individual',
   impactVisits: 196,
   landingPagePath: '/trees/',
   slug: 'trees',

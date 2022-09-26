@@ -12,7 +12,8 @@ const data = {
   icon: 'food-apple',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'ea019270-1cda-411f-b41e-90406fbe15ee',
-  individualImpactEnabled: true,
+  individualImpactEnabled: true, // Deprecated. Use "impactType".
+  impactType: 'individual',
   impactVisits: 366,
   landingPagePath: '/ending-hunger/',
   slug: 'ending-hunger',

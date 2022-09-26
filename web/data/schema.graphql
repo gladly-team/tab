@@ -299,7 +299,10 @@ type Cause implements Node {
   landingPagePath: String!
 
   """Whether or not the current cause supports individual impact"""
-  individualImpactEnabled: Boolean!
+  individualImpactEnabled: Boolean! @deprecated(reason: "Replaced by \"impactType\" field.")
+
+  """Whether or not the current cause supports individual impact"""
+  impactType: causeImpactType!
 
   """
   number of visits required for each impact unit (e.g. 14 for cat charity)
@@ -335,6 +338,13 @@ type CauseEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""The type of charitable impact that's enabled for this cause"""
+enum causeImpactType {
+  none
+  individual
+  group
 }
 
 """Fields on which to filter the list of causes."""

@@ -14,7 +14,7 @@ const getMockCauseObject = () => ({
   icon: 'paw',
   backgroundImageCategory: 'cats',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
-  individualImpactEnabled: true,
+  impactType: 'individual',
   impactVisits: 14,
   landingPagePath: '/cats/',
   slug: 'cats',
@@ -125,7 +125,7 @@ describe('CauseModel', () => {
         about: '### Something something',
         charityId: 'abcdefghijklmnop',
         landingPagePath: '/test',
-        individualImpactEnabled: true,
+        impactType: 'individual',
         impactVisits: 10,
         impact: {
           impactCounterText: 'impactCounterText',
@@ -164,7 +164,7 @@ describe('CauseModel', () => {
       about: '### Something something',
       charityId: 'abcdefghijklmnop',
       landingPagePath: '/test',
-      individualImpactEnabled: true,
+      impactType: 'individual',
       impactVisits: 10,
       isAvailableToSelect: false,
       impact: {
@@ -200,13 +200,13 @@ describe('CauseModel', () => {
     })
   })
 
-  it('causeModel works when there is no individualImpactEnabled', () => {
+  it('causeModel works when impactType is "none"', () => {
     const mockCause = getMockCauseObject()
     const item = Object.assign(
       {},
       new Cause({
         ...mockCause,
-        individualImpactEnabled: false,
+        impactType: 'none',
       })
     )
 

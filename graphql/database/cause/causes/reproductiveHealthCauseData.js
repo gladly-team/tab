@@ -12,7 +12,8 @@ const data = {
   icon: 'person-heart',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
-  individualImpactEnabled: false,
+  individualImpactEnabled: false, // Deprecated. Use "impactType".
+  impactType: 'none',
   impactVisits: null,
   landingPagePath: '/reproductive-health/',
   slug: 'reproductive-health',
