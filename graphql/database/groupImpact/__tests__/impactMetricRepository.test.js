@@ -1,5 +1,9 @@
 /* eslint-env jest */
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
+import getCause from '../../cause/getCause'
+import {
+  getMockCauseInstance,
+} from '../../test-utils'
 
 const mockImpactMetrics = [
   {
@@ -40,6 +44,13 @@ const mockImpactMetrics = [
   },
 ]
 
+const MOCK_CAUSE_1 = {
+  id: 'abc123',
+  charityId: 'charity2',
+  landingPagePath: '/foo',
+}
+
+jest.mock('../../cause/getCause')
 jest.mock('../impactMetrics', () => {
   const module = {
     // Can spy on getters:
@@ -54,7 +65,7 @@ jest.mock('../impactMetrics', () => {
 
 describe('impactMetricRepository', () => {
   it('getImpactMetricById throws if impactMetric doesnt exist', () => {
-    const { getImpactMetricById } = require('../impactMetricRepository')
+    const { getImpactMetricById, getImpactMetricsByCauseId } = require('../impactMetricRepository')
     expect(() => getImpactMetricById('non-existent-id')).toThrow(
       new DatabaseItemDoesNotExistException()
     )
@@ -73,6 +84,27 @@ describe('impactMetricRepository', () => {
   it('getImpactMetricsByCharityId fetches appropriate impact metrics', () => {
     const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
     expect(getImpactMetricsByCharityId('charity2')).toEqual([
+      mockImpactMetrics[0],
+      mockImpactMetrics[2],
+    ])
+  })
+
+  it('getImpactMetricsByCauseId throws if cause does not exist', async () => {
+    expect.assertions(1)
+    const { getImpactMetricsByCauseId } = require('../impactMetricRepository')
+    const error = new Error("test error")
+    getCause.mockRejectedValue(error)
+    await expect(getImpactMetricsByCauseId('whatever')).rejects.toEqual(error)
+  })
+
+  it('getImpactMetricsByCauseId returns appropriate charityIds if cause does not exist', async () => {
+    expect.assertions(1)
+    const { getImpactMetricsByCauseId } = require('../impactMetricRepository')
+    getCause.mockResolvedValue({
+      ...getMockCauseInstance(),
+      charityId: 'charity2'
+    })
+    expect(await getImpactMetricsByCauseId('whatever')).toEqual([
       mockImpactMetrics[0],
       mockImpactMetrics[2],
     ])
