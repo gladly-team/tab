@@ -978,9 +978,11 @@ const impactMetricType = new GraphQLObjectType({
       type: globalIdField(IMPACT_METRIC),
       description: 'ID of the ImpactMetric',
     },
-    charityId: {
-      type: new GraphQLNonNull(GraphQLString),
+    charity: {
+      type: charityType,
       description: 'Charity ID that this impact metric belongs to',
+      resolve: (gim, _args, context) =>
+        CharityModel.get(context.user, gim.charityId),
     },
     dollarAmount: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -1010,7 +1012,7 @@ const impactMetricType = new GraphQLObjectType({
 
 // todo: @jedtan remove when we implement resolvers.
 // eslint-disable-next-line no-unused-vars
-const groupImpactMetric = new GraphQLObjectType({
+const groupImpactMetricType = new GraphQLObjectType({
   name: 'GroupImpactMetric',
   description: 'A specific instance of GroupImpactMetric',
   fields: () => ({
@@ -1018,14 +1020,17 @@ const groupImpactMetric = new GraphQLObjectType({
       type: globalIdField(GROUP_IMPACT_METRIC),
       description: 'The ID of the GroupImpactMetric',
     },
-    causeId: {
-      type: new GraphQLNonNull(GraphQLString),
+    cause: {
+      type: CauseType,
       description: 'The cause ID this GroupImpactMetric belongs to',
+      resolve: (groupImpactMetric, _args, context) =>
+        getCause(context.user, groupImpactMetric.causeId),
     },
     impactMetric: {
       type: impactMetricType,
       description: 'Information about the ImpactMetric',
-      resolve: instance => getImpactMetricById(instance.impactMetricId),
+      resolve: groupImpactMetric =>
+        getImpactMetricById(groupImpactMetric.impactMetricId),
     },
     dollarProgress: {
       type: new GraphQLNonNull(GraphQLInt),
