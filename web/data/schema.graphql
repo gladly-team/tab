@@ -320,6 +320,9 @@ type Cause implements Node {
 
   """the onboarding object on cause model"""
   onboarding: OnboardingUICopy!
+
+  """the group impact metric currently associated with this cause"""
+  groupImpactMetric: GroupImpactMetric
 }
 
 """A connection to a list of items."""
@@ -437,6 +440,9 @@ type Charity implements Node {
 
   """The number of VC the charity has received in a given time period."""
   vcReceived(startTime: String, endTime: String): Int
+
+  """Impact Metrics that belong to this Charity"""
+  impactMetrics: [ImpactMetric]
 }
 
 """A connection to a list of items."""
@@ -728,6 +734,63 @@ type Feature {
 
   """the value of the variation for this specific user"""
   variation: String!
+}
+
+"""A specific instance of GroupImpactMetric"""
+type GroupImpactMetric implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The cause ID this GroupImpactMetric belongs to"""
+  cause: Cause
+
+  """Information about the ImpactMetric"""
+  impactMetric: ImpactMetric
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far
+  """
+  dollarProgress: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far
+  """
+  dollarGoal: Int!
+
+  """ISO datetime string of when this GroupImpactMetric was started"""
+  dateStarted: String
+
+  """ISO datetime string of when this GroupImpactMetric was ended"""
+  dateCompleted: String
+}
+
+"""An instance of ImpactMetric"""
+type ImpactMetric implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Charity ID that this impact metric belongs to"""
+  charity: Charity
+
+  """Dollar amount required to achieve an instance of this ImpactMetric"""
+  dollarAmount: Int!
+
+  """Markdown description of this ImpactMetric"""
+  description: String!
+
+  """
+  Metric title. Should be placeable in a sentence. Example: "1 home visit"
+  """
+  metricTitle: String!
+
+  """
+  Impact action title. Should be a longer title with a verb as well as a noun.
+  Example: "Provide 1 visit from a community health worker"
+  """
+  impactTitle: String!
+
+  """Whether or not this GroupImpactMetric is still active"""
+  active: Boolean!
 }
 
 """inviting user"""
