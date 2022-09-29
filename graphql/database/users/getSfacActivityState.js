@@ -1,10 +1,5 @@
 import moment from 'moment'
-
-const SFAC_ACTIVITY_STATES = {
-  NEW: 'new',
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
-}
+import { SFAC_ACTIVITY_STATES } from '../constants'
 
 const getSfacActivityState = async (_userContext, user) => {
   if (user.searches === 0) {

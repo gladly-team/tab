@@ -72,3 +72,9 @@ export const CAUSE_IMPACT_TYPES = {
   individual: 'individual',
   group: 'group',
 }
+
+export const SFAC_ACTIVITY_STATES = {
+  NEW: 'new',
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+}
