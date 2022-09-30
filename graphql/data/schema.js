@@ -128,6 +128,7 @@ import SearchEngineModel from '../database/search/SearchEngineModel'
 import getUserFeatures from '../database/experiments/getUserFeatures'
 import getGroupImpactMetricForCause from '../database/groupImpact/getGroupImpactMetricForCause'
 import GroupImpactMetricModel from '../database/groupImpact/GroupImpactMetricModel'
+import ImpactMetricModel from '../database/groupImpact/ImpactMetricModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -152,7 +153,6 @@ import {
   getImpactMetricById,
   getImpactMetricsByCharityId,
 } from '../database/groupImpact/impactMetricRepository'
-import GroupImpactMetric from '../database/groupImpact/GroupImpactMetricModel'
 
 class App {
   constructor(id) {
