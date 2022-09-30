@@ -7,24 +7,11 @@ import {
   SFAC_EXISTING_USER_ACTIVITY_ICON,
   SFAC_EXTENSION_PROMPT,
   COLLEGE_AMBASSADOR_2022_NOTIF,
+  SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME,
+  SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
+  SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
+  SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
 } from './experimentConstants'
-
-// Consider a user "existing" if they join before this time.
-const SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME = 1651154400000 // 2pm UTC 28 April 2022
-
-// Consider a user "new" if they join after this time. This should be
-// later in the future than when the experiment goes live, because
-// the experiment includes behavior during signup.
-const SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME = 1651165200000 // 5pm UTC 28 April 2022
-
-// Consider a user "new" for V2 if they join after this time. This should be
-// later in the future than when the experiment goes live, because
-// the experiment includes behavior during signup.
-const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 20:30pm UTC 21 June 2022
-
-// Cutoff time for search extension experiment. Users are considered
-// new if they join after this time.
-const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC 6 September 2022
 
 const features = {
   [MONEY_RAISED_EXCLAMATION_POINT_V2]: {
