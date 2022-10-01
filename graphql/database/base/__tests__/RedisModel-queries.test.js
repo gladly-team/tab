@@ -16,8 +16,6 @@ import {
   UnauthorizedQueryException,
 } from '../../../utils/exceptions'
 
-jest.mock('ioredis', () => jest.requireActual('ioredis-mock'))
-
 const user = getMockUserContext()
 
 function removeCreatedAndUpdatedFields(item) {
