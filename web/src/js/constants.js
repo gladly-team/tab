@@ -122,6 +122,9 @@ export const SEARCH_APP = 'search'
 
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
+export const EDGE_BROWSER = 'edge'
+export const SAFARI_BROWSER = 'safari'
+export const OPERA_BROWSER = 'opera'
 export const UNSUPPORTED_BROWSER = 'other'
 
 export const SEARCH_PROVIDER_BING = 'bing'
