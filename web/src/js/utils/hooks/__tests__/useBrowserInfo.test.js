@@ -56,7 +56,7 @@ describe('useBrowserInfo', () => {
   it('modifies the browser info if it is different on mount vs server-side with user agent', () => {
     const mockUserAgent =
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'
-    detect.mockImplementation((userAgent) => {
+    detect.mockImplementation(userAgent => {
       if (userAgent) {
         return {
           name: 'firefox',

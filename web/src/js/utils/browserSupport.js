@@ -48,7 +48,7 @@ import {
  * @return {String} One of: "chrome", "edge", "firefox", "opera", "safari",
  *   or "other".
  */
-export const simplifyBrowserName = (browserName) => {
+export const simplifyBrowserName = browserName => {
   switch (browserName) {
     case 'chrome':
     case 'chromium-webview':
@@ -81,7 +81,7 @@ export const simplifyBrowserName = (browserName) => {
  *   of the return values from `simplifyBrowserName`.
  * @return {Boolean} Whether the browser supports a search extension
  */
-export const isSearchExtensionSupported = (browserNameSimplified) => {
+export const isSearchExtensionSupported = browserNameSimplified => {
   const sfacSupportedBrowsers = [CHROME_BROWSER, FIREFOX_BROWSER]
   return sfacSupportedBrowsers.indexOf(browserNameSimplified) > -1
 }

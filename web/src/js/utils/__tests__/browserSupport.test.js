@@ -2,8 +2,6 @@
 
 import {
   isSearchExtensionSupported,
-  isSearchActivityComponentSupported,
-  isTabExtensionSupported,
   simplifyBrowserName,
 } from '../browserSupport'
 import {
