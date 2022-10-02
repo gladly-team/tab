@@ -204,6 +204,7 @@ export const searchFirefoxExtensionPage =
   'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
 export const searchChromeExtensionPage =
   'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
+export const getSearchExtensionPage = 'https://tab.gladly.io/get-search/'
 
 // TODO: stop using these and replace the existing uses.
 //   They only cause additional complication during testing.
