@@ -42,6 +42,7 @@
     "@truex/js-ad-client": "^0.0.13",
     "blockadblock": "^3.2.1",
     "browser-detect": "^0.2.28",
+    "clsx": "^1.2.1",
     "detect-browser": "^5.3.0",
     "firebase": "^8.3.3",
     "fireworks-canvas": "^2.5.0",
