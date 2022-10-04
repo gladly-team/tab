@@ -144,7 +144,7 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
     expect(result).toEqual(false)
   })
 
-  it('returns false if user joined too recently', async () => {
+  it('returns false if user joined too recently and is v4Enabled', async () => {
     expect.assertions(1)
     const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
       .default
@@ -161,6 +161,7 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
         hasRespondedToPrompt: false,
       },
       tabs: 5,
+      v4BetaEnabled: true,
       joined: '2022-09-29T18:37:04.604Z',
     }
 
@@ -169,6 +170,34 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
       modifiedUser
     )
     expect(result).toEqual(false)
+  })
+
+  it('returns true if user joined too recently and is not v4Enabled', async () => {
+    expect.assertions(1)
+    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
+      .default
+    getUserFeature.mockResolvedValueOnce(
+      new Feature({
+        featureName: SFAC_EXTENSION_PROMPT,
+        variation: 'Control',
+      })
+    )
+    getSfacActivityState.mockResolvedValueOnce(SFAC_ACTIVITY_STATES.INACTIVE)
+    const modifiedUser = {
+      ...user,
+      sfacPrompt: {
+        hasRespondedToPrompt: false,
+      },
+      tabs: 5,
+      v4BetaEnabled: false,
+      joined: '2022-09-29T18:37:04.604Z',
+    }
+
+    const result = await getShouldShowSfacExtensionPrompt(
+      userContext,
+      modifiedUser
+    )
+    expect(result).toEqual(true)
   })
 
   it('returns true if all old user criteria fit', async () => {
