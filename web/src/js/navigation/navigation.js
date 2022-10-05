@@ -180,6 +180,9 @@ export const millionRaisedChildrenImpactURL = absoluteUrl('/million/children/')
 export const millionRaisedEducateImpactURL = absoluteUrl('/million/educate/')
 export const millionRaisedMatchURL = absoluteUrl('/million/match/')
 
+// $1.5M raised
+export const millionAndAHalfRaisedURL = absoluteUrl('/million-and-a-half/')
+
 // External links
 
 // Surveys

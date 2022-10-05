@@ -1,3 +1,4 @@
+// TODO: use API user.notifications
 // Turn on a global notification. Set this to `true` to show
 // the message in NotificationComponent to all users.
 export const showGlobalNotification = () => false
