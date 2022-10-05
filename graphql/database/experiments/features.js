@@ -1,12 +1,12 @@
 import {
   MONEY_RAISED_EXCLAMATION_POINT_V2,
+  NOTIF_ONE_AND_HALF_MILLION,
   YAHOO_SEARCH_EXISTING_USERS,
   YAHOO_SEARCH_NEW_USERS,
   YAHOO_SEARCH_NEW_USERS_V2,
   SUPPORTING_CAUSE_CHIP,
   SFAC_EXISTING_USER_ACTIVITY_ICON,
   SFAC_EXTENSION_PROMPT,
-  COLLEGE_AMBASSADOR_2022_NOTIF,
   SEARCH_EXPERIMENT_EXISTING_USERS_CUTOFF_UNIX_TIME,
   SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
@@ -277,8 +277,7 @@ const features = {
   [SUPPORTING_CAUSE_CHIP]: {
     defaultValue: true,
   },
-  // TODO: remove and clean up references
-  [COLLEGE_AMBASSADOR_2022_NOTIF]: {
+  [NOTIF_ONE_AND_HALF_MILLION]: {
     defaultValue: false,
     rules: [
       // Show on local/dev for our team only.
@@ -287,22 +286,22 @@ const features = {
           isTabTeamMember: true,
           env: 'local',
         },
-        force: false,
+        force: true,
       },
       {
         condition: {
           isTabTeamMember: true,
           env: 'dev',
         },
-        force: false,
+        force: true,
       },
       {
         condition: {
           tabs: {
-            $gte: 50,
+            $gte: 10,
           },
         },
-        force: false,
+        force: false, // TODO: launch when ready
       },
     ],
   },

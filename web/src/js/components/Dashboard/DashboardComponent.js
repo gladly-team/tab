@@ -44,6 +44,7 @@ import {
   goTo,
   inviteFriendsURL,
   loginURL,
+  millionAndAHalfRaisedURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
@@ -72,7 +73,7 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
-import Link from 'js/components/General/Link'
+// import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
@@ -81,8 +82,6 @@ const NewUserTour = lazy(() =>
 const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
-
-const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
 // Load ads immediately when we parse this file rather than
 // waiting for component mount. As a quick hack to make the
@@ -553,30 +552,21 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`⚠️ Calling All College Students ⚠️`}
+                  title={`$1.5M raised!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Become a Tab for a Cause ambassador to earn cash and
-                        awesome merchandise (Patagonia, Built, Let’s Go Eco -
-                        just to name a few!) when your classmates join Tab for a
-                        Cause.{' '}
-                        <Link
-                          to={AMBASSADOR_APPLICATION_LINK}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Click here to apply
-                        </Link>{' '}
-                        and for more information.{' '}
-                        <span style={{ fontWeight: 'bold' }}>
-                          Applications close September 12.
-                        </span>
+                        Tabbers have now raised over $1,500,000 for charity!
+                        It's amazing what a dedicated community and a few
+                        (million) browser tabs can do :)
+                      </Typography>
+                      <Typography variant={'body2'} gutterBottom>
+                        See what we've accomplished together:
                       </Typography>
                     </>
                   }
-                  buttonText={'Learn More'}
-                  buttonURL={AMBASSADOR_APPLICATION_LINK}
+                  buttonText={'Check it out'}
+                  buttonURL={millionAndAHalfRaisedURL}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
