@@ -1,6 +1,6 @@
 import getUserFeature from '../experiments/getUserFeature'
 import logger from '../../utils/logger'
-import { COLLEGE_AMBASSADOR_2022_NOTIF } from '../experiments/experimentConstants'
+import { NOTIF_ONE_AND_HALF_MILLION } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -13,16 +13,13 @@ import { COLLEGE_AMBASSADOR_2022_NOTIF } from '../experiments/experimentConstant
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
   try {
-    const showCollegeAmbassadorNotif = await getUserFeature(
+    const NOTIF_CODE = '1.5Mraised' // edit per custom notification
+    const showNotif = await getUserFeature(
       userContext,
       user,
-      COLLEGE_AMBASSADOR_2022_NOTIF
+      NOTIF_ONE_AND_HALF_MILLION
     )
-    notifications = [
-      ...(showCollegeAmbassadorNotif.variation
-        ? [{ code: 'collegeAmbassador2022' }]
-        : []),
-    ]
+    notifications = [...(showNotif.variation ? [{ code: NOTIF_CODE }] : [])]
   } catch (e) {
     logger.error(e)
   }
