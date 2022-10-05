@@ -25,13 +25,13 @@ describe('getUserNotifications', () => {
     expect(notifications).toEqual([])
   })
 
-  it('no longer returns the user survey notification, even when the feature is enabled', async () => {
+  it('returns the $1.5M raised notification when enabled', async () => {
     expect.assertions(1)
     getUserFeature.mockImplementation((_userContext, _user, featureName) => {
-      if (featureName === 'user-survey-2022-notification') {
+      if (featureName === 'one-and-half-mil-raised-notif') {
         return {
-          featureName: 'user-survey-2022-notification',
-          inExperiment: true,
+          featureName: 'one-and-half-mil-raised-notif',
+          inExperiment: false,
           variation: true,
         }
       }
@@ -41,35 +41,16 @@ describe('getUserNotifications', () => {
       }
     })
     const notifications = await getUserNotifications(userContext, user)
-    expect(notifications).toEqual([])
+    expect(notifications).toEqual([{ code: '1.5Mraised' }])
   })
 
-  it('returns the college ambassador notification when enabled', async () => {
+  it('does not return the $1.5M raised notification when not enabled', async () => {
     expect.assertions(1)
     getUserFeature.mockImplementation((_userContext, _user, featureName) => {
-      if (featureName === 'college-ambassador-2022-notif') {
+      if (featureName === 'one-and-half-mil-raised-notif') {
         return {
-          featureName: 'college-ambassador-2022-notif',
-          inExperiment: true,
-          variation: true,
-        }
-      }
-      return {
-        featureName,
-        inExperiment: false,
-      }
-    })
-    const notifications = await getUserNotifications(userContext, user)
-    expect(notifications).toEqual([{ code: 'collegeAmbassador2022' }])
-  })
-
-  it('does not return the college ambassador notification when not enabled', async () => {
-    expect.assertions(1)
-    getUserFeature.mockImplementation((_userContext, _user, featureName) => {
-      if (featureName === 'college-ambassador-2022-notif') {
-        return {
-          featureName: 'college-ambassador-2022-notif',
-          inExperiment: true,
+          featureName: 'one-and-half-mil-raised-notif',
+          inExperiment: false,
           variation: false,
         }
       }
