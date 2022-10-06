@@ -99,8 +99,9 @@ const SfacExtensionSellNotification = ({
               Make a bigger impact
             </Typography>
             <Typography className={classes.subtitle} variant="body1">
-              Turn your searches into money for causes with Search for a Cause.
-              Like tabbing, it’s free and easy!
+              We've just launched Search for a Cause, where you can turn your
+              searches into money for nonprofits—up to 4x more than tabs alone!
+              Like tabbing, it's free and easy. Will you try it out?
             </Typography>
           </span>
         }
