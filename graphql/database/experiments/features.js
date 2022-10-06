@@ -301,7 +301,7 @@ const features = {
             $gte: 10,
           },
         },
-        force: false, // TODO: launch when ready
+        force: true,
       },
     ],
   },
