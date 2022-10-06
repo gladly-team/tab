@@ -8,6 +8,7 @@ import getUserFeature from '../experiments/getUserFeature'
 import getSfacActivityState from './getSfacActivityState'
 
 const getShouldShowSfacExtensionPrompt = async (userContext, user) => {
+  // TODO: unify this logic with the below. This experiment has ended.
   const showSfacExtensionFeature = await getUserFeature(
     userContext,
     user,
