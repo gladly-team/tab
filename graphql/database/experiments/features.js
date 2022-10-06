@@ -220,6 +220,8 @@ const features = {
       },
     ],
   },
+  // TODO: move filter logic into app code and clean up.
+  // Ended experiment on Oct 6, 2022.
   [SFAC_EXTENSION_PROMPT]: {
     defaultValue: 'Control',
     rules: [
@@ -256,9 +258,9 @@ const features = {
       },
       /* End internal overrides */
       {
-        variations: ['Control', 'Notification'],
-        weights: [0.5, 0.5],
-        coverage: 1.0,
+        // variations: ['Control', 'Notification'],
+        // weights: [0.5, 0.5],
+        // coverage: 1.0,
         condition: {
           v4BetaEnabled: {
             $eq: true,
@@ -270,6 +272,7 @@ const features = {
             $gt: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
           },
         },
+        force: 'Notification',
       },
     ],
   },
