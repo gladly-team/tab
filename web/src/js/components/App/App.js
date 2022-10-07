@@ -15,9 +15,6 @@ import tabFavicon from 'js/assets/logos/favicon.ico'
 import { TAB_APP } from 'js/constants'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import initializeCMP from 'js/utils/initializeCMP'
-import '@fontsource/poppins/300.css'
-import '@fontsource/poppins/400.css'
-import '@fontsource/poppins/500.css'
 
 // Delaying the CMP initialization avoids delaying any CMP
 // responses needed for our ad partner bid requests.

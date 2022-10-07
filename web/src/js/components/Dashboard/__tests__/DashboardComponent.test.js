@@ -62,7 +62,6 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
-import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 
 jest.mock('uuid/v4', () =>
   jest.fn(() => '101b73c7-468c-4d29-b224-0c07f621bc52')
@@ -164,7 +163,6 @@ const mockProps = {
     searches: 0,
     tabs: 12,
     experimentActions: {},
-    showSfacExtensionPrompt: false,
   },
   app: {
     campaign: {
@@ -1408,16 +1406,6 @@ describe('Dashboard component: search intro message', () => {
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-notif"]')
     expect(elem.prop('useGlobalDismissalTime')).toBe(false)
-  })
-
-  it('renders an SfacExtensionSellNotification component with the correct props', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const modifiedProps = cloneDeep(mockProps)
-    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-    const elem = wrapper.find(SfacExtensionSellNotification)
-    expect(elem.prop('showSfacExtensionPrompt')).toBe(false)
-    expect(elem.prop('userId')).toBe(mockProps.user.id)
   })
 })
 

@@ -25,7 +25,6 @@ export default createFragmentContainer(Dashboard, {
       joined
       searches
       tabs
-      showSfacExtensionPrompt
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
