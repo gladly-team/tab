@@ -549,7 +549,7 @@ class Dashboard extends React.Component {
               ) : null}
               */}
               {/*** General notification ***/}
-              {this.state.showNotification ? (
+              {false ? ( //this.state.showNotification @todo: adjust this logic
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
