@@ -41,7 +41,8 @@ const styles = theme => ({
     justifyContent: 'flex-end',
   },
   wrapper: {
-    maxWidth: 400,
+    maxWidth: '400px',
+    marginTop: '4px',
   },
   notification: {
     padding: 12,

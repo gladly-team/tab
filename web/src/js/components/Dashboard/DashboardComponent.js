@@ -447,6 +447,7 @@ class Dashboard extends React.Component {
                 right: 10,
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'flex-end',
               }}
             >
               <UserMenu
