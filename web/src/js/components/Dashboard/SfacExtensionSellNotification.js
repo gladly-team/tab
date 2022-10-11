@@ -31,14 +31,24 @@ const styles = theme => ({
     fontWeight: '700',
     fontSize: '24px',
     fontFamily: 'Poppins',
+    paddingBottom: 8,
   },
   text: {
-    paddingBottom: 20,
     maxWidth: 350,
   },
   buttonsWrapper: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  wrapper: {
+    maxWidth: '400px',
+    marginTop: '4px',
+  },
+  notification: {
+    padding: 12,
+  },
+  subtitle: {
+    paddingBottom: 16,
   },
 })
 
@@ -56,7 +66,7 @@ const SfacExtensionSellNotification = ({
       setOpen(showSfacExtensionPrompt)
     }
     setBrowser(browserName)
-  }, [searchExtensionSupported, showSfacExtensionPrompt])
+  }, [searchExtensionSupported, showSfacExtensionPrompt, browserName])
 
   const onYesClick = useCallback(async () => {
     // Log the search event but time-cap how long we wait to avoid a bad UX
@@ -82,15 +92,17 @@ const SfacExtensionSellNotification = ({
   return (
     <div className={classes.wrapper}>
       <Notification
+        className={classes.notification}
         open={open}
         text={
           <span className={classes.text}>
             <Typography className={classes.title}>
               Make a bigger impact
             </Typography>
-            <Typography variant="body1">
-              Turn your searches into money for causes with Search for a Cause.
-              Like tabbing, it’s free and easy!
+            <Typography className={classes.subtitle} variant="body1">
+              We've just launched Search for a Cause, where you can turn your
+              searches into money for nonprofits—up to 4x more than tabs alone!
+              Like tabbing, it's free and easy. Will you try it out?
             </Typography>
           </span>
         }

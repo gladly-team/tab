@@ -73,6 +73,7 @@ import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
 } from 'js/constants'
+import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 // import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
@@ -446,6 +447,7 @@ class Dashboard extends React.Component {
                 right: 10,
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'flex-end',
               }}
             >
               <UserMenu
@@ -757,6 +759,10 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
+              <SfacExtensionSellNotification
+                userId={user.id}
+                showSfacExtensionPrompt={user.showSfacExtensionPrompt}
+              />
             </div>
           </FadeInDashboardAnimation>
         ) : null}
