@@ -289,14 +289,14 @@ const features = {
           isTabTeamMember: true,
           env: 'local',
         },
-        force: true,
+        force: false,
       },
       {
         condition: {
           isTabTeamMember: true,
           env: 'dev',
         },
-        force: true,
+        force: false,
       },
       {
         condition: {
@@ -304,7 +304,7 @@ const features = {
             $gte: 10,
           },
         },
-        force: true,
+        force: false,
       },
     ],
   },
