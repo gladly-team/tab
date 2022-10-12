@@ -8,15 +8,21 @@ import {
 } from '../../utils/exceptions'
 import types from '../fieldTypes'
 
-const client = new Redis(process.env.UPSTASH_HOST)
-
 class RedisModel extends Model {
+  static getClient() {
+    return new Redis(
+      `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`
+    )
+  }
+
   static async getInternal(key) {
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(key)
-    const item = await client.hgetall(redisKey)
+    const item = await redisClient.hgetall(redisKey)
     if (Object.keys(item).length === 0) {
       throw new DatabaseItemDoesNotExistException()
     }
+    await redisClient.quit()
     return this.postProcessObject(item)
   }
 
@@ -26,9 +32,10 @@ class RedisModel extends Model {
   }
 
   static async createInternal(item, overwrite = false) {
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(item.id)
     if (!overwrite) {
-      const existingEntry = await client.hgetall(redisKey)
+      const existingEntry = await redisClient.hgetall(redisKey)
       if (Object.keys(existingEntry).length !== 0) {
         throw new DatabaseConditionalCheckFailedException()
       }
@@ -36,24 +43,30 @@ class RedisModel extends Model {
 
     await Promise.all(
       Object.entries(item).map(([key, value]) =>
-        client.hset(redisKey, key, value)
+        redisClient.hset(redisKey, key, value)
       )
     )
-    return this.postProcessObject(client.hgetall(redisKey))
+
+    const object = redisClient.hgetall(redisKey)
+    redisClient.quit()
+    return this.postProcessObject(object)
   }
 
   static async updateInternal(item) {
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(item[this.hashKey])
-    const existingEntry = await client.hgetall(redisKey)
+    const existingEntry = await redisClient.hgetall(redisKey)
     if (Object.keys(existingEntry).length === 0) {
       throw new DatabaseItemDoesNotExistException()
     }
 
     Object.entries(item).forEach(([key, value]) => {
-      client.hset(redisKey, key, value)
+      redisClient.hset(redisKey, key, value)
     })
 
-    return this.postProcessObject(client.hgetall(redisKey))
+    const object = redisClient.hgetall(redisKey)
+    redisClient.quit()
+    return this.postProcessObject(object)
   }
 
   static async updateField(userContext, id, field, value) {
@@ -66,13 +79,15 @@ class RedisModel extends Model {
     }
 
     const redisKey = this.getRedisKey(id)
-    const result = await client.hget(redisKey, field)
+    const redisClient = this.getClient()
+    const result = await redisClient.hget(redisKey, field)
 
     if (result === null) {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await client.hset(redisKey, field, value)
+    await redisClient.hset(redisKey, field, value)
+    await redisClient.quit()
     return this.validateAndConvertField(field, value)
   }
 
@@ -95,7 +110,8 @@ class RedisModel extends Model {
     }
 
     const redisKey = this.getRedisKey(id)
-    const result = await client.hget(redisKey, field)
+    const redisClient = this.getClient()
+    const result = await redisClient.hget(redisKey, field)
 
     if (result === null) {
       throw new DatabaseItemDoesNotExistException()
@@ -110,14 +126,14 @@ class RedisModel extends Model {
       throw new Error('Field to update should be an integer')
     }
 
-    await client.hincrby(redisKey, field, increment)
-    return this.validateAndConvertField(
-      field,
-      await client.hget(redisKey, field)
-    )
+    await redisClient.hincrby(redisKey, field, increment)
+    const resultingValue = await redisClient.hget(redisKey, field)
+    await redisClient.quit()
+    return this.validateAndConvertField(field, resultingValue)
   }
 
   static async getField(userContext, id, field) {
+    const redisClient = this.getClient()
     if (!this.isQueryAuthorized(userContext, 'get', id)) {
       throw new UnauthorizedQueryException()
     }
@@ -127,11 +143,12 @@ class RedisModel extends Model {
     }
 
     const redisKey = this.getRedisKey(id)
-    const result = await client.hget(redisKey, field)
+    const result = await redisClient.hget(redisKey, field)
     if (result === null) {
       throw new DatabaseItemDoesNotExistException()
     }
 
+    redisClient.quit()
     return this.validateAndConvertField(field, result)
   }
 

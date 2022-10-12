@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import Redis from 'ioredis'
+import RedisModel from '../RedisModel'
 import ExampleRedisModel, { fixturesA } from '../test-utils/ExampleRedisModel'
 import {
   addTimestampFieldsToItem,
@@ -35,7 +35,8 @@ afterAll(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
-  const client = new Redis(process.env.UPSTASH_HOST)
+  jest.resetModules()
+  const client = RedisModel.getClient()
   client.flushall()
 
   setModelPermissions(ExampleRedisModel, {
