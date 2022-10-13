@@ -79,6 +79,9 @@ class App extends React.Component {
                 margin: 0,
                 padding: 0,
                 border: 'none',
+
+                // Matches extension new tab page background color.
+                backgroundColor: '#121212',
               }}
             >
               <Suspense fallback={<FullPageLoader app={app} delay={350} />}>
