@@ -126,6 +126,9 @@ import UserExperimentModel from '../database/experiments/UserExperimentModel'
 import getSearchEngine from '../database/search/getSearchEngine'
 import SearchEngineModel from '../database/search/SearchEngineModel'
 import getUserFeatures from '../database/experiments/getUserFeatures'
+import getGroupImpactMetricForCause from '../database/groupImpact/getGroupImpactMetricForCause'
+import GroupImpactMetricModel from '../database/groupImpact/GroupImpactMetricModel'
+import ImpactMetricModel from '../database/groupImpact/ImpactMetricModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -146,7 +149,10 @@ import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfa
 import getUserNotifications from '../database/users/getUserNotifications'
 import getSfacActivityState from '../database/users/getSfacActivityState'
 import getShouldShowSfacIcon from '../database/users/getShouldShowSfacIcon'
-import { getImpactMetricById } from '../database/groupImpact/impactMetricRepository'
+import {
+  getImpactMetricById,
+  getImpactMetricsByCharityId,
+} from '../database/groupImpact/impactMetricRepository'
 
 class App {
   constructor(id) {
@@ -207,6 +213,12 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === SEARCH_ENGINE) {
       return getSearchEngine(id)
     }
+    if (type === GROUP_IMPACT_METRIC) {
+      return GroupImpactMetricModel.get(context.user, id)
+    }
+    if (type === IMPACT_METRIC) {
+      return getImpactMetricById(id)
+    }
     return null
   },
   obj => {
@@ -245,6 +257,12 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (obj instanceof SearchEngineModel) {
       return SearchEngineType
+    }
+    if (obj instanceof GroupImpactMetricModel) {
+      return groupImpactMetricType
+    }
+    if (obj instanceof ImpactMetricModel) {
+      return impactMetricType
     }
     return null
   }
@@ -971,13 +989,10 @@ const CauseOnboardingCopyType = new GraphQLObjectType({
 })
 
 const impactMetricType = new GraphQLObjectType({
-  name: 'ImpactMetric',
-  description: 'An instance of GroupImpact',
+  name: IMPACT_METRIC,
+  description: 'An instance of ImpactMetric',
   fields: () => ({
-    id: {
-      type: globalIdField(IMPACT_METRIC),
-      description: 'ID of the ImpactMetric',
-    },
+    id: globalIdField(IMPACT_METRIC),
     charity: {
       type: charityType,
       description: 'Charity ID that this impact metric belongs to',
@@ -1008,18 +1023,14 @@ const impactMetricType = new GraphQLObjectType({
       description: 'Whether or not this GroupImpactMetric is still active',
     },
   }),
+  interfaces: [nodeInterface],
 })
 
-// todo: @jedtan remove when we implement resolvers.
-// eslint-disable-next-line no-unused-vars
 const groupImpactMetricType = new GraphQLObjectType({
-  name: 'GroupImpactMetric',
+  name: GROUP_IMPACT_METRIC,
   description: 'A specific instance of GroupImpactMetric',
   fields: () => ({
-    id: {
-      type: globalIdField(GROUP_IMPACT_METRIC),
-      description: 'The ID of the GroupImpactMetric',
-    },
+    id: globalIdField(GROUP_IMPACT_METRIC),
     cause: {
       type: CauseType,
       description: 'The cause ID this GroupImpactMetric belongs to',
@@ -1053,6 +1064,7 @@ const groupImpactMetricType = new GraphQLObjectType({
         'ISO datetime string of when this GroupImpactMetric was ended',
     },
   }),
+  interfaces: [nodeInterface],
 })
 
 const CauseType = new GraphQLObjectType({
@@ -1128,6 +1140,13 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(CauseOnboardingCopyType),
       resolve: cause => cause.onboarding,
       description: 'the onboarding object on cause model',
+    },
+    groupImpactMetric: {
+      type: groupImpactMetricType,
+      description:
+        'the group impact metric currently associated with this cause',
+      resolve: (cause, _args, context) =>
+        getGroupImpactMetricForCause(context.user, cause.id),
     },
   }),
   interfaces: [nodeInterface],
@@ -1312,6 +1331,12 @@ const charityType = new GraphQLObjectType({
           args.startTime,
           args.endTime
         ),
+    },
+    impactMetrics: {
+      type: GraphQLList(impactMetricType),
+      description: 'Impact Metrics that belong to this Charity',
+      resolve: (charity, _args, context) =>
+        getImpactMetricsByCharityId(context.user, charity.id),
     },
   }),
   interfaces: [nodeInterface],
@@ -1929,6 +1954,7 @@ const { connectionType: MissionsConnection } = connectionDefinitions({
   name: MISSION,
   nodeType: MissionType,
 })
+
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,
   // Note: this could reasonably just be a userType instead, but creating a
