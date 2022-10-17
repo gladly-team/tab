@@ -200,6 +200,7 @@ describe('CauseModel', () => {
     })
   })
 
+  // todo: @jtan fix test
   it('causeModel works when impactType is "none"', () => {
     const mockCause = getMockCauseObject()
     const item = Object.assign(
@@ -217,6 +218,28 @@ describe('CauseModel', () => {
     delete item.squads
     delete item.impact
     delete item.impactVisits
+
+    const validationAfterDelete = causeSchema.validate(item, {
+      abortEarly: false,
+    })
+    expect(validationAfterDelete.error).toBeNull()
+  })
+
+  it('causeModel excepts provided fields', () => {
+    const mockCause = getMockCauseObject()
+    const item = Object.assign(
+      {},
+      new Cause({
+        ...mockCause,
+        impactType: 'group',
+      })
+    )
+
+    const causeSchema = Joi.object(Cause.schema)
+    const validation = causeSchema.validate(item, { abortEarly: false })
+    expect(validation.error).toBeNull()
+
+    delete item.impact.walkMeGif
 
     const validationAfterDelete = causeSchema.validate(item, {
       abortEarly: false,

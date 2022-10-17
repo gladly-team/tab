@@ -26,8 +26,9 @@ class Cause extends DynamoDBModel {
     const mapFieldsToRequired = (fields, except = {}) => {
       const copy = Object.assign({}, fields)
       Object.keys(copy).forEach(key => {
-        if (!(key in except))
-        copy[key] = copy[key].required()
+        if (!(key in except)) {
+          copy[key] = copy[key].required()
+        }
       })
       return copy
     }
@@ -202,9 +203,9 @@ class Cause extends DynamoDBModel {
       impact: types.alternatives().when('impactType', {
         is: CAUSE_IMPACT_TYPES.individual,
         then: types.object(impactFields),
-        otherwise: types.object(mapFieldsToRequired(impactFields, {
-          walkMeGif: false
-        })),
+        otherwise: types.object(
+          mapFieldsToRequired(impactFields, { walkMeGif: false })
+        ),
       }),
       onboarding: types.object({
         steps: types

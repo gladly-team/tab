@@ -1,5 +1,7 @@
 /* eslint-env jest */
+import dataGlobalHealth from '../causes/globalHealth/causeData'
 
+jest.mock('../../../utils/feature-flags')
 jest.mock('../causes/teamseas/causeData', () => {
   const module = {
     // Can spy on getters:
@@ -50,5 +52,19 @@ describe('causes', () => {
     expect(() => require('../causes').default).toThrow(
       'child "id" fails because ["id" must be a string]. child "impactType" fails because ["impactType" is required]'
     )
+  })
+
+  // Todo, genericize if we have more custom per-cause logic
+  it('overrides the impactType for the global health cause', () => {
+    const {
+      isGlobalHealthGroupImpactEnabled,
+    } = require('../../../utils/feature-flags')
+    isGlobalHealthGroupImpactEnabled.mockReturnValue(true)
+    const causes = require('../causes').default
+    const globalHealthCause = causes.find(
+      cause => cause.id === dataGlobalHealth.id
+    )
+    expect(isGlobalHealthGroupImpactEnabled).toHaveBeenCalled()
+    expect(globalHealthCause.impactType).toEqual('group')
   })
 })
