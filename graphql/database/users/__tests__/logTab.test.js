@@ -15,6 +15,7 @@ import {
   getMockUserInstance,
   mockDate,
   setMockDBResponse,
+  getMockCauseInstance,
 } from '../../test-utils'
 // We use an export from the mock file.
 // eslint-disable-next-line import/named
@@ -22,6 +23,9 @@ import getCampaign, { mockCampaign } from '../../globals/getCampaign'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 import getCurrentUserMission from '../../missions/getCurrentUserMission'
 import completeMission from '../../missions/completeMission'
+import getCauseByUser from '../../cause/getCauseByUser'
+import updateGroupImpactMetric from '../../groupImpact/updateGroupImpactMetric'
+import { CAUSE_IMPACT_TYPES } from '../../constants'
 
 jest.mock('lodash/number')
 jest.mock('../../databaseClient')
@@ -30,9 +34,12 @@ jest.mock('../../globals/getCampaign')
 jest.mock('../../globals/globals')
 jest.mock('../../missions/getCurrentUserMission')
 jest.mock('../../missions/completeMission')
+jest.mock('../../cause/getCauseByUser')
+jest.mock('../../groupImpact/updateGroupImpactMetric')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
+const mockCause = getMockCauseInstance()
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -1226,5 +1233,67 @@ describe('campaign: estimating money raised', () => {
     })
 
     await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
+  })
+
+  describe('correctly updates group impact if applicable', () => {
+    it('does nothing if user is not part of a cause', async () => {
+      expect.assertions(2)
+      const userId = userContext.id
+
+      // Mock fetching the user.
+      const mockUser = getMockUserInstance()
+      setMockDBResponse(DatabaseOperation.GET, {
+        Item: mockUser,
+      })
+      jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+      await logTab(userContext, userId)
+      expect(getCauseByUser).not.toHaveBeenCalled()
+      expect(updateGroupImpactMetric).not.toHaveBeenCalled()
+    })
+
+    it('does nothing if the cause is not group impact', async () => {
+      expect.assertions(2)
+      const userId = userContext.id
+
+      // Mock fetching the user.
+      const mockUser = getMockUserInstance({
+        v4BetaEnabled: true,
+      })
+      setMockDBResponse(DatabaseOperation.GET, {
+        Item: mockUser,
+      })
+      jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+      getCauseByUser.mockResolvedValue(mockCause)
+      await logTab(userContext, userId)
+      expect(getCauseByUser).toHaveBeenCalled()
+      expect(updateGroupImpactMetric).not.toHaveBeenCalled()
+    })
+
+    it('calls updateGroupImpactMetric if group cause', async () => {
+      expect.assertions(1)
+      const userId = userContext.id
+
+      // Mock fetching the user.
+      const mockUser = getMockUserInstance({
+        v4BetaEnabled: true,
+      })
+      setMockDBResponse(DatabaseOperation.GET, {
+        Item: mockUser,
+      })
+      const groupCause = {
+        ...mockCause,
+        impactType: CAUSE_IMPACT_TYPES.group,
+      }
+      jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
+
+      getCauseByUser.mockResolvedValue(groupCause)
+      await logTab(userContext, userId)
+      expect(updateGroupImpactMetric).toHaveBeenCalledWith(
+        userContext,
+        groupCause.id
+      )
+    })
   })
 })

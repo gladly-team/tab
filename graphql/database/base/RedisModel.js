@@ -33,7 +33,7 @@ class RedisModel extends Model {
 
   static async createInternal(item, overwrite = false) {
     const redisClient = this.getClient()
-    const redisKey = this.getRedisKey(item.id)
+    const redisKey = this.getRedisKey(item[this.hashKey])
     if (!overwrite) {
       const existingEntry = await redisClient.hgetall(redisKey)
       if (Object.keys(existingEntry).length !== 0) {
