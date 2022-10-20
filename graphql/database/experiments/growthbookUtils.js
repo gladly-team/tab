@@ -54,6 +54,37 @@ export const getConfiguredGrowthbook = ({
   return growthbook
 }
 
+export const getConfiguredGrowthbookWithoutUser = ({
+  causeId,
+  v4BetaEnabled,
+}) => {
+  const growthbook = new GrowthBook()
+  growthbook.setFeatures(features)
+  const attributes = {
+    causeId,
+    v4BetaEnabled,
+    env: GROWTHBOOK_ENV,
+  }
+  // Note that we don't verify attributes here because we don't necessarily
+  // need all attributes when evaluating a feature.
+  growthbook.setAttributes(attributes)
+  return growthbook
+}
+
+export const getFeatureWithoutUserFromGrowthbook = async (
+  growthbook,
+  featureName
+) => {
+  const feature = growthbook.feature(featureName)
+  return new Feature({
+    featureName,
+    variation: feature.value,
+    inExperiment:
+      feature.experimentResult !== undefined &&
+      feature.experimentResult.inExperiment,
+  })
+}
+
 export const getAndLogFeatureForUser = async (
   userContext,
   userId,

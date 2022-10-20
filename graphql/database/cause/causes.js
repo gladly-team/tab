@@ -8,8 +8,9 @@ import dataGlobalHealth from './causes/globalHealth/causeData'
 import dataEndingHunger from './causes/endingHunger/causeData'
 import dataUkraine from './causes/ukraine/causeData'
 import dataReproductiveHealth from './causes/reproductiveHealthCauseData'
-import { isGlobalHealthGroupImpactEnabled } from '../../utils/feature-flags'
 import { CAUSE_IMPACT_TYPES } from '../constants'
+import getFeatureWithoutUser from '../experiments/getFeatureWithoutUser'
+import { GLOBAL_HEALTH_GROUP_IMPACT } from '../experiments/experimentConstants'
 
 const causes = [
   new CauseModel(dataCats),
@@ -26,7 +27,9 @@ const causes = [
 // Use this method to dynamically overwrite specific fields in Cause Models.
 const overrideCauseModel = (cause, index) => {
   if (cause.id === dataGlobalHealth.id) {
-    causes[index].impactType = isGlobalHealthGroupImpactEnabled()
+    causes[index].impactType = (await getFeatureWithoutUser({
+      causeId: cause.id
+    }, GLOBAL_HEALTH_GROUP_IMPACT)).variation === true
       ? CAUSE_IMPACT_TYPES.group
       : CAUSE_IMPACT_TYPES.none
   }

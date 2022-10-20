@@ -11,6 +11,7 @@ import {
   SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
+  GLOBAL_HEALTH_GROUP_IMPACT,
 } from './experimentConstants'
 
 const features = {
@@ -305,6 +306,24 @@ const features = {
           },
         },
         force: false,
+      },
+    ],
+  },
+  [GLOBAL_HEALTH_GROUP_IMPACT]: {
+    defaultValue: false,
+    rules: [
+      // Show on local/dev.
+      {
+        condition: {
+          env: 'dev',
+        },
+        force: true,
+      },
+      {
+        condition: {
+          env: 'local',
+        },
+        force: true,
       },
     ],
   },

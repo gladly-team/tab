@@ -7,6 +7,7 @@ export const SUPPORTING_CAUSE_CHIP = 'supporting-cause-chip'
 export const YAHOO_SEARCH_NEW_USERS = 'yahoo-search-new-users'
 export const YAHOO_SEARCH_NEW_USERS_V2 = 'yahoo-search-new-users-v2'
 export const YAHOO_SEARCH_EXISTING_USERS = 'yahoo-search-existing-users'
+export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'
