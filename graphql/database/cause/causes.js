@@ -8,6 +8,8 @@ import dataGlobalHealth from './causes/globalHealth/causeData'
 import dataEndingHunger from './causes/endingHunger/causeData'
 import dataUkraine from './causes/ukraine/causeData'
 import dataReproductiveHealth from './causes/reproductiveHealthCauseData'
+import { isGlobalHealthGroupImpactEnabled } from '../../utils/feature-flags'
+import { CAUSE_IMPACT_TYPES } from '../constants'
 
 const causes = [
   new CauseModel(dataCats),
@@ -20,13 +22,24 @@ const causes = [
   new CauseModel(dataReproductiveHealth),
 ]
 
+// TODO: Find a more efficient way to overwrite custom fields
+// Use this method to dynamically overwrite specific fields in Cause Models.
+const overrideCauseModel = (cause, index) => {
+  if (cause.id === dataGlobalHealth.id) {
+    causes[index].impactType = isGlobalHealthGroupImpactEnabled()
+      ? CAUSE_IMPACT_TYPES.group
+      : CAUSE_IMPACT_TYPES.none
+  }
+}
+
 // TODO: remove after populating data
 // console.log('causes:', causes)
 
 // Validate data.
 // TODO: this should eventually live in a better ORM.
 const causeSchema = Joi.object(CauseModel.schema)
-causes.forEach(data => {
+causes.forEach((data, index) => {
+  overrideCauseModel(data, index)
   // With abortEarly=false, collect all errors before exiting.
   // https://github.com/sideway/joi/blob/master/API.md#anyvalidatevalue-options
   const validation = causeSchema.validate(data, { abortEarly: false })
