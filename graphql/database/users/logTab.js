@@ -16,6 +16,9 @@ import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 import getCurrentUserMission from '../missions/getCurrentUserMission'
 import completeMission from '../missions/completeMission'
 import logger from '../../utils/logger'
+import getCauseByUser from '../cause/getCauseByUser'
+import { CAUSE_IMPACT_TYPES } from '../constants'
+import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -205,6 +208,12 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     }
   }
 
+  if (user.v4BetaEnabled) {
+    const cause = await getCauseByUser(userContext, userId)
+    if (cause && cause.impactType === CAUSE_IMPACT_TYPES.group) {
+      updateGroupImpactMetric(userContext, cause.id)
+    }
+  }
   return user
 }
 
