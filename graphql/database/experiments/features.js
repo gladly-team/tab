@@ -11,6 +11,8 @@ import {
   SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
+  V4_SHOW_THIRD_AD,
+  V4_SHOW_THIRD_AD_CUTOFF_TIME,
 } from './experimentConstants'
 
 const features = {
@@ -305,6 +307,27 @@ const features = {
           },
         },
         force: false,
+      },
+    ],
+  },
+  [V4_SHOW_THIRD_AD]: {
+    defaultValue: false,
+    rules: [
+      // Show on local/dev for our team only.
+      {
+        // variations: [false, true],
+        // weights: [0.1, 0.9],
+        // coverage: 1.0,
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          joined: {
+            $lt: V4_SHOW_THIRD_AD_CUTOFF_TIME,
+          },
+          isTabTeamMember: true,
+        },
+        force: true,
       },
     ],
   },
