@@ -12,7 +12,6 @@ import {
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
   V4_SHOW_THIRD_AD,
-  V4_SHOW_THIRD_AD_CUTOFF_TIME,
 } from './experimentConstants'
 
 const features = {
@@ -313,7 +312,6 @@ const features = {
   [V4_SHOW_THIRD_AD]: {
     defaultValue: false,
     rules: [
-      // Show on local/dev for our team only.
       {
         // variations: [false, true],
         // weights: [0.1, 0.9],
@@ -323,7 +321,18 @@ const features = {
             $eq: true,
           },
           joined: {
-            $lt: V4_SHOW_THIRD_AD_CUTOFF_TIME,
+            $lt: {
+              $convert: {
+                input: {
+                  $dateSubtract: {
+                    startDate: $currentDate,
+                    unit: "week",
+                    amount: 3
+                  }
+                },
+                to: "decimal",
+              }
+            },
           },
           isTabTeamMember: true,
         },
