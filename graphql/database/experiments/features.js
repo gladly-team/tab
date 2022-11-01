@@ -12,6 +12,7 @@ import {
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
   V4_SHOW_THIRD_AD,
+  V4_SHOW_THIRD_LOOKBACK_TIME,
 } from './experimentConstants'
 
 const features = {
@@ -320,19 +321,8 @@ const features = {
           v4BetaEnabled: {
             $eq: true,
           },
-          joined: {
-            $lt: {
-              $convert: {
-                input: {
-                  $dateSubtract: {
-                    startDate: $currentDate,
-                    unit: "week",
-                    amount: 3
-                  }
-                },
-                to: "decimal",
-              }
-            },
+          timeSinceJoined: {
+            $gt: V4_SHOW_THIRD_LOOKBACK_TIME,
           },
           isTabTeamMember: true,
         },
