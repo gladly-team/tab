@@ -1,4 +1,5 @@
 import { GrowthBook } from '@growthbook/growthbook'
+import moment from 'moment'
 import Feature from './FeatureModel'
 import createUserExperiment from './createUserExperiment'
 import { showInternalOnly } from '../../utils/authorization-helpers'
@@ -39,15 +40,17 @@ export const getConfiguredGrowthbook = ({
 }) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
+  const joinedTime = joined && new Date(joined).getTime()
   const attributes = {
     id: userId,
     causeId,
     v4BetaEnabled,
-    joined: joined && new Date(joined).getTime(),
+    joined: joinedTime,
     internalExperimentOverrides,
     env: GROWTHBOOK_ENV,
     isTabTeamMember: showInternalOnly(email),
     tabs,
+    timeSinceJoined: joinedTime && moment.utc().valueOf() - joinedTime,
   }
   validateAttributesObject(userId, attributes)
   growthbook.setAttributes(attributes)

@@ -1,5 +1,10 @@
 /* eslint-env jest */
-import { getMockUserContext, getMockUserInstance } from '../../test-utils'
+import moment from 'moment'
+import {
+  getMockUserContext,
+  getMockUserInstance,
+  mockDate,
+} from '../../test-utils'
 import { showInternalOnly } from '../../../utils/authorization-helpers'
 import features from '../features'
 import Feature from '../FeatureModel'
@@ -25,11 +30,13 @@ jest.mock('@growthbook/growthbook')
 
 beforeEach(() => {
   process.env.GROWTHBOOK_ENV = 'test'
+  mockDate.on()
 })
 
 afterEach(() => {
   jest.resetModules()
   jest.clearAllMocks()
+  mockDate.off()
 })
 
 const userContext = getMockUserContext()
@@ -70,6 +77,7 @@ describe('growthbookUtils tests', () => {
       setAttributes: jest.fn(),
     }
     GrowthBook.mockImplementation(() => mockGrowthbook)
+    const expectedJoinedTime = new Date(user.joined).getTime()
 
     await getConfiguredGrowthbook(user)
     expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
@@ -77,10 +85,11 @@ describe('growthbookUtils tests', () => {
       env: 'test',
       causeId: user.causeId,
       v4BetaEnabled: user.v4BetaEnabled,
-      joined: new Date(user.joined).getTime(),
+      joined: expectedJoinedTime,
       isTabTeamMember: showInternalOnly(user.email),
       internalExperimentOverrides: {},
       tabs: 0,
+      timeSinceJoined: moment.utc().valueOf() - expectedJoinedTime,
     })
   })
 
