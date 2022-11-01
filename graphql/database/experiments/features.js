@@ -314,9 +314,9 @@ const features = {
     defaultValue: false,
     rules: [
       {
-        // variations: [false, true],
-        // weights: [0.1, 0.9],
-        // coverage: 1.0,
+        variations: [false, true],
+        weights: [0.1, 0.9],
+        coverage: 1.0,
         condition: {
           v4BetaEnabled: {
             $eq: true,
@@ -324,9 +324,7 @@ const features = {
           timeSinceJoined: {
             $gt: V4_SHOW_THIRD_LOOKBACK_TIME,
           },
-          isTabTeamMember: true,
         },
-        force: true,
       },
     ],
   },
