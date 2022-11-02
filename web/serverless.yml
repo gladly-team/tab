@@ -407,6 +407,12 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
+              # TODO
+              # LambdaFunctionAssociations:
+              #   # Manually set the 404 error code when the origin returns
+              #   # the 404 document.
+              #   - EventType: origin-response
+              #     LambdaFunctionARN: ${self:custom.homepage404LambdaEdgeFunctionARN}
           DefaultCacheBehavior:
             AllowedMethods:
               - HEAD
