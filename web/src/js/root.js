@@ -25,13 +25,16 @@ import logger from 'js/utils/logger'
 // See this pull request for details:
 // https://github.com/gladly-team/tab/pull/466
 var TheApp
-var appPath
+var appPathRoot
+var appPathWildcard
 if (process.env.REACT_APP_WHICH_APP === 'newtab') {
   TheApp = require('js/components/App/App').default
-  appPath = '/newtab/'
+  appPathRoot = '/newtab/'
+  appPathWildcard = '/newtab*'
 } else if (process.env.REACT_APP_WHICH_APP === 'search') {
   TheApp = require('js/components/Search/SearchApp').default
-  appPath = '/search/'
+  appPathRoot = '/search/'
+  appPathWildcard = '/search*'
 } else {
   throw new Error(
     `Env var "REACT_APP_WHICH_APP" should be set to "newtab" or "search". Received: "${
@@ -124,8 +127,8 @@ class Root extends React.Component {
           />
           <Router history={browserHistory}>
             <Switch>
-              <Redirect exact from="/" to={appPath} />
-              <Route path={appPath} component={TheApp} />
+              <Redirect exact from="/" to={appPathRoot} />
+              <Route path={appPathWildcard} component={TheApp} />
             </Switch>
           </Router>
         </BaseContainer>
