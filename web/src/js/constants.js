@@ -142,6 +142,13 @@ export const SEARCH_INTRO_QUERY_ENGLISH =
 export const STORAGE_YAHOO_SEARCH_DEMO = 'tab.yahoo.searchdemo'
 export const STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF = 'tab.yahoo.searchdemoInfo'
 
+export const STORAGE_LOGGED_OUT_TABS = 'tab.user.loggedOutTabsCount'
+export const LOGGED_OUT_MESSAGE_TYPE = {
+  NONE: 'none',
+  OLD: 'old',
+  NEW: 'new',
+}
+
 // local testing -- default user
 
 // export const YAHOO_USER_ID = 'VXNlcjphYmNkZWZnaGlqa2xtbm8='
