@@ -178,7 +178,7 @@ resources:
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html#HTTPStatusCodes-custom-error-pages
           CustomErrorResponses:
             - ErrorCode: 404
-              ResponseCode: 200
+              ResponseCode: 404
               ResponsePagePath: /404.html
               # We always return our HTML page for 404 errors, and most
               # pageviews are 404 errors because of the single-page app.
