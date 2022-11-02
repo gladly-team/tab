@@ -23,7 +23,7 @@ describe('root.js: REACT_APP_WHICH_APP env var', () => {
         .find(Route)
         .first()
         .prop('path')
-    ).toEqual('/newtab/')
+    ).toEqual('/newtab*')
   })
 
   it('uses the expected component when app = "newtab"', () => {
@@ -50,7 +50,7 @@ describe('root.js: REACT_APP_WHICH_APP env var', () => {
         .find(Route)
         .first()
         .prop('path')
-    ).toEqual('/search/')
+    ).toEqual('/search*')
   })
 
   it('uses the expected component when app = "search"', () => {
