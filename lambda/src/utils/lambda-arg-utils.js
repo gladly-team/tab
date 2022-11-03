@@ -11,7 +11,7 @@ export const getMockLambdaContext = () => ({
   callbackWaitsForEmptyEventLoop: false,
 })
 
-// CloudFront event object:
+// CloudFront event request object:
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html#example-viewer-request
 export const getMockCloudFrontEventObject = () => ({
   Records: [
@@ -70,6 +70,81 @@ export const getMockCloudFrontEventObject = () => ({
             },
           },
           querystring: '',
+        },
+      },
+    },
+  ],
+})
+
+export const getMockCloudFrontResponseEventObject = () => ({
+  Records: [
+    {
+      cf: {
+        config: {
+          distributionId: 'EDFDVBD6EXAMPLE',
+        },
+        request: {
+          clientIp: '1234:9876',
+          method: 'GET',
+          uri: '/some/url/',
+          headers: {
+            host: [
+              {
+                key: 'Host',
+                value: 'd111111abcdef8.cloudfront.net',
+              },
+            ],
+            'user-agent': [
+              {
+                key: 'User-Agent',
+                value: 'curl/7.51.0',
+              },
+            ],
+            'accept-language': [
+              {
+                key: 'Accept-Language',
+                value: 'en-GB',
+              },
+            ],
+            'cloudfront-viewer-country': [
+              {
+                key: 'CloudFront-Viewer-Country',
+                value: 'UK',
+              },
+            ],
+            cookie: [
+              {
+                key: 'Cookie',
+                value:
+                  'SomeCookie=ThisIsSomeCookieValue; another.cookie=abcdefghijklmnopqrstuvwxyz!',
+              },
+            ],
+          },
+          origin: {
+            custom: {
+              customHeaders: {},
+              domainName: 'example.com',
+              keepaliveTimeout: 5,
+              path: '',
+              port: 443,
+              protocol: 'https',
+              readTimeout: 30,
+              sslProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2'],
+            },
+          },
+          querystring: '',
+        },
+        response: {
+          headers: {
+            'access-control-allow-credentials': [
+              {
+                key: 'Access-Control-Allow-Credentials',
+                value: 'true',
+              },
+            ],
+          },
+          status: '200',
+          statusDescription: 'OK',
         },
       },
     },
