@@ -7,7 +7,11 @@ import localStorageMgr, { __mockClear } from 'js/utils/localstorage-mgr'
 import {
   STORAGE_REFERRAL_DATA_MISSION_ID,
   STORAGE_NEW_USER_CAUSE_ID,
+  STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+  STORAGE_LOGGED_OUT_TABS,
+  LOGGED_OUT_MESSAGE_TYPE,
 } from 'js/constants'
+import localstorageMgr from '../__mocks__/localstorage-mgr'
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('uuid/v4')
 
@@ -524,5 +528,58 @@ describe('local user data manager', () => {
     expect(getCauseId()).toBe('mock-cause')
     localStorageMgr.removeItem(STORAGE_NEW_USER_CAUSE_ID)
     expect(getCauseId()).toBe(undefined)
+  })
+
+  it('returns no logged out message if not enough tabs', () => {
+    const now = moment('2018-04-12T12:50:42.000')
+    localStorageMgr.setItem(
+      STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+      now.utc().toISOString()
+    )
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 3)
+    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
+    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.NONE)
+  })
+
+  it('returns old logged out message if no install date and enough views', () => {
+    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.OLD)
+  })
+
+  it('returns old user logged out message if install date not recent', () => {
+    const now = moment('2018-03-12T12:50:42.000')
+    localStorageMgr.setItem(
+      STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+      now.utc().toISOString()
+    )
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
+    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.OLD)
+  })
+
+  it('returns new user logged out message if install date recent', () => {
+    const now = moment('2018-04-12T12:50:42.000')
+    localStorageMgr.setItem(
+      STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+      now.utc().toISOString()
+    )
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
+    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.NEW)
+  })
+
+  it('clearLoggedOutTabs sets value to 0', () => {
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    const { clearLoggedOutTabs } = require('js/utils/local-user-data-mgr')
+    clearLoggedOutTabs()
+    expect(localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)).toBe('0')
+  })
+
+  it('incrementLoggedOutTabs increments logged out tabs', () => {
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    const { incrementLoggedOutTabs } = require('js/utils/local-user-data-mgr')
+    incrementLoggedOutTabs()
+    expect(localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)).toBe('8')
   })
 })
