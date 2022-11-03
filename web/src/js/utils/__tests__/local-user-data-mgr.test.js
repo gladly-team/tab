@@ -530,23 +530,24 @@ describe('local user data manager', () => {
     expect(getCauseId()).toBe(undefined)
   })
 
-  it('returns no logged out message if no install date', () => {
-    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
-    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.NONE)
-  })
-
   it('returns no logged out message if not enough tabs', () => {
     const now = moment('2018-04-12T12:50:42.000')
     localStorageMgr.setItem(
       STORAGE_APPROX_EXTENSION_INSTALL_TIME,
       now.utc().toISOString()
     )
-    localstorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 3)
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 3)
     const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
     expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.NONE)
   })
 
-  it('returns old user logged out message if not enough tabs', () => {
+  it('returns old logged out message if no install date and enough views', () => {
+    const { getLoggedOutMessage } = require('js/utils/local-user-data-mgr')
+    localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 7)
+    expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.OLD)
+  })
+
+  it('returns old user logged out message if install date not recent', () => {
     const now = moment('2018-03-12T12:50:42.000')
     localStorageMgr.setItem(
       STORAGE_APPROX_EXTENSION_INSTALL_TIME,
@@ -557,7 +558,7 @@ describe('local user data manager', () => {
     expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.OLD)
   })
 
-  it('returns old user logged out message if not enough tabs', () => {
+  it('returns old user logged out message if install date recent', () => {
     const now = moment('2018-04-12T12:50:42.000')
     localStorageMgr.setItem(
       STORAGE_APPROX_EXTENSION_INSTALL_TIME,

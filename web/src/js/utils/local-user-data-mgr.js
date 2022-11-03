@@ -363,18 +363,14 @@ export const hasUserDismissedSurvey2022 = () => {
 export const getLoggedOutMessage = () => {
   const installTime = getBrowserExtensionInstallTime()
 
-  if (!installTime) {
-    return LOGGED_OUT_MESSAGE_TYPE.NONE
-  }
-
   var loggedOutTabs = localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)
   if ((loggedOutTabs ? parseInt(loggedOutTabs, 10) : 0) < 5) {
     return LOGGED_OUT_MESSAGE_TYPE.NONE
   }
 
-  return moment().diff(installTime, 'days') >= 5
-    ? LOGGED_OUT_MESSAGE_TYPE.OLD
-    : LOGGED_OUT_MESSAGE_TYPE.NEW
+  return installTime && moment().diff(installTime, 'days') < 5
+    ? LOGGED_OUT_MESSAGE_TYPE.NEW
+    : LOGGED_OUT_MESSAGE_TYPE.OLD
 }
 export const incrementLoggedOutTabs = () => {
   const currentLoggedOutTabs = localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)
