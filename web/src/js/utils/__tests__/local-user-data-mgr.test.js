@@ -558,7 +558,7 @@ describe('local user data manager', () => {
     expect(getLoggedOutMessage()).toBe(LOGGED_OUT_MESSAGE_TYPE.OLD)
   })
 
-  it('returns old user logged out message if install date recent', () => {
+  it('returns new user logged out message if install date recent', () => {
     const now = moment('2018-04-12T12:50:42.000')
     localStorageMgr.setItem(
       STORAGE_APPROX_EXTENSION_INSTALL_TIME,
