@@ -5,6 +5,7 @@ import { get } from 'lodash/object'
 import Paper from '@material-ui/core/Paper'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import ErrorOutline from 'material-ui/svg-icons/alert/error-outline'
 import { isEqual } from 'lodash/lang'
 import { Route, Switch } from 'react-router-dom'
 import FirebaseAuthenticationUI from 'js/components/Authentication/FirebaseAuthenticationUI'
@@ -39,10 +40,16 @@ import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGrou
 import logger from 'js/utils/logger'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
-import { SEARCH_APP, TAB_APP } from 'js/constants'
+import { SEARCH_APP, TAB_APP, LOGGED_OUT_MESSAGE_TYPE } from 'js/constants'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import { isTabV4BetaUser } from 'js/utils/local-user-data-mgr'
+import {
+  getLoggedOutMessage,
+  incrementLoggedOutTabs,
+  isTabV4BetaUser,
+  clearLoggedOutTabs,
+} from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
+
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
 //     to the app if they are; otherwise: ->
@@ -65,8 +72,22 @@ import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loggedOutMessage: LOGGED_OUT_MESSAGE_TYPE.NONE,
+    }
+  }
+
   async componentDidMount() {
     await this.navigateToAuthStep()
+    const loggedOutMessage = getLoggedOutMessage()
+    if (loggedOutMessage === LOGGED_OUT_MESSAGE_TYPE.NONE) {
+      incrementLoggedOutTabs()
+    }
+    this.setState({
+      loggedOutMessage,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -184,6 +205,8 @@ class Authentication extends React.Component {
    *   whether or not the email was sent successfully.
    */
   onSignInSuccess(currentUser) {
+    clearLoggedOutTabs()
+
     // Check that the user has an email address.
     // An email address may be missing if the user signs in
     // with a social provider that does not share their
@@ -347,6 +370,39 @@ class Authentication extends React.Component {
                 >
                   <span>Your account has been deleted.</span>
                 </Typography>
+              ) : null}
+              {this.state.loggedOutMessage !== LOGGED_OUT_MESSAGE_TYPE.NONE ? (
+                <div
+                  data-test-id={'logged-out-message'}
+                  style={{
+                    backgroundColor: 'rgb(255, 244, 229)',
+                    padding: '6px 16px',
+                    marginBottom: '6px',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'rgb(102, 60, 0)',
+                    }}
+                  >
+                    <ErrorOutline
+                      style={{
+                        paddingRight: '6px',
+                        color: 'rgb(102, 60, 0)',
+                      }}
+                    />
+                    <span>
+                      {this.state.loggedOutMessage ===
+                      LOGGED_OUT_MESSAGE_TYPE.OLD
+                        ? 'Heads up: you’ll need to sign in to keep raising money for great causes!'
+                        : 'You’re almost there! Sign in to start raising money for great causes.'}
+                    </span>
+                  </Typography>
+                </div>
               ) : null}
               <Switch>
                 <Route
