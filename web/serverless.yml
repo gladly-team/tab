@@ -28,6 +28,7 @@ custom:
   newTabAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-newtabAppLambdaEdge:${env:DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION}
   searchAppS3Bucket: ${env:DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME}
   searchAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-searchAppLambdaEdge:${env:DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION}
+  homepage404LambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-homepage404LambdaEdge:${env:DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION}
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
@@ -407,12 +408,11 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-              # TODO
-              # LambdaFunctionAssociations:
-              #   # Manually set the 404 error code when the origin returns
-              #   # the 404 document.
-              #   - EventType: origin-response
-              #     LambdaFunctionARN: ${self:custom.homepage404LambdaEdgeFunctionARN}
+              LambdaFunctionAssociations:
+                # Manually set the 404 error code when the origin returns
+                # the 404 document.
+                - EventType: origin-response
+                  LambdaFunctionARN: ${self:custom.homepage404LambdaEdgeFunctionARN}
           DefaultCacheBehavior:
             AllowedMethods:
               - HEAD

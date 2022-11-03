@@ -85,6 +85,7 @@ env:
   - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
   - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1451 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1472 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - TEST_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
   - TEST_DEPLOYMENT_LANDING_PAGE_DOMAIN=test-tab-website.s3-website-us-west-2.amazonaws.com
@@ -161,6 +162,7 @@ env:
   - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
   - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1227 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1279 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - DEV_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   - DEV_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
@@ -234,6 +236,7 @@ env:
   - PROD_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
   - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=562 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - PROD_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=582 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+  - TEST_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
   - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
   - PROD_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
   - PROD_DEPLOYMENT_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
