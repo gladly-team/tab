@@ -13,6 +13,7 @@ import {
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
   V4_SHOW_THIRD_AD,
   V4_SHOW_THIRD_LOOKBACK_TIME,
+  SEARCHBAR_SFAC_EXTENSION_PROMPT,
 } from './experimentConstants'
 
 const features = {
@@ -326,6 +327,59 @@ const features = {
           },
         },
       },
+    ],
+  },
+  [SEARCHBAR_SFAC_EXTENSION_PROMPT]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+          [`internalExperimentOverrides.${SEARCHBAR_SFAC_EXTENSION_PROMPT}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+          [`internalExperimentOverrides.${SEARCHBAR_SFAC_EXTENSION_PROMPT}`]: {
+            $eq: 'Notification',
+            $exists: true,
+          },
+        },
+        force: 'Notification',
+      },
+      /* End internal overrides */
+      // {
+      //   variations: ['Control', 'Notification'],
+      //   weights: [0.1, 0.9],
+      //   coverage: 1.0,
+      //   condition: {
+      //     v4BetaEnabled: {
+      //       $eq: true,
+      //     },
+      //     tabs: {
+      //       $gt: 3,
+      //     },
+      //     joined: {
+      //       $gt: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
+      //     },
+      //   },
+      // },
     ],
   },
 }
