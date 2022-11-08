@@ -8,6 +8,7 @@ export const YAHOO_SEARCH_NEW_USERS = 'yahoo-search-new-users'
 export const YAHOO_SEARCH_NEW_USERS_V2 = 'yahoo-search-new-users-v2'
 export const YAHOO_SEARCH_EXISTING_USERS = 'yahoo-search-existing-users'
 export const V4_SHOW_THIRD_AD = 'v4-show-third-ad'
+export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'
