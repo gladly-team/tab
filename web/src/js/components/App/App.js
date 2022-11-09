@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -18,6 +18,7 @@ import initializeCMP from 'js/utils/initializeCMP'
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
+import NotFoundPage from 'js/components/App/NotFoundPage'
 
 // Delaying the CMP initialization avoids delaying any CMP
 // responses needed for our ad partner bid requests.
@@ -117,7 +118,7 @@ class App extends React.Component {
                       component={InternalDemosView}
                     />
                   ) : null}
-                  <Redirect from="*" to="/newtab/" />
+                  <Route path="*" component={NotFoundPage} />
                 </Switch>
               </Suspense>
             </div>

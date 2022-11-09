@@ -33,6 +33,9 @@ provider:
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/Homepage404LambdaEdgeLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/Homepage404LambdaEdgeLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/Homepage404LambdaEdgeLogGroup"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/gladlyLambdaEdgeRole"}
   #   ]}'
   # We could also set a temporary policy, but it's unclear how we'd
@@ -66,6 +69,18 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/Homepage404LambdaEdgeLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/Homepage404LambdaEdgeLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/Homepage404LambdaEdgeLogGroup"
     - Effect: Allow
       Principal: "*"
       Action: "Update:Modify"
@@ -197,3 +212,5 @@ functions:
     handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
     memorySize: 128 # 128 is max allowed for CloudFront-triggered Lambda
     timeout: 3 # 5s is max allowed for CloudFront-triggered Lambda
+  homepage404LambdaEdge:
+    handler: build/homepage-404-lambda-edge/homepage-404-lambda-edge.handler
