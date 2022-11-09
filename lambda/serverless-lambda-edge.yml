@@ -213,4 +213,4 @@ functions:
     memorySize: 128 # 128 is max allowed for CloudFront-triggered Lambda
     timeout: 3 # 5s is max allowed for CloudFront-triggered Lambda
   homepage404LambdaEdge:
-    handler: build/newtab-app-lambda-edge/homepage-404-lambda-edge.handler
+    handler: build/homepage-404-lambda-edge/homepage-404-lambda-edge.handler
