@@ -16,6 +16,8 @@ import {
   STORAGE_NEW_USER_IS_TAB_V4_BETA,
   STORAGE_REFERRAL_DATA_MISSION_ID,
   STORAGE_NEW_USER_CAUSE_ID,
+  STORAGE_LOGGED_OUT_TABS,
+  LOGGED_OUT_MESSAGE_TYPE,
 } from 'js/constants'
 
 /**
@@ -356,4 +358,27 @@ export const setUserDismissedSurvey2022 = () => {
 }
 export const hasUserDismissedSurvey2022 = () => {
   return localStorageMgr.getItem('tab.user.dismissedUserSurvey2022') === 'true'
+}
+
+export const getLoggedOutMessage = () => {
+  const installTime = getBrowserExtensionInstallTime()
+
+  var loggedOutTabs = localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)
+  if ((loggedOutTabs ? parseInt(loggedOutTabs, 10) : 0) < 5) {
+    return LOGGED_OUT_MESSAGE_TYPE.NONE
+  }
+
+  return installTime && moment().diff(installTime, 'days') < 5
+    ? LOGGED_OUT_MESSAGE_TYPE.NEW
+    : LOGGED_OUT_MESSAGE_TYPE.OLD
+}
+export const incrementLoggedOutTabs = () => {
+  const currentLoggedOutTabs = localStorageMgr.getItem(STORAGE_LOGGED_OUT_TABS)
+  localStorageMgr.setItem(
+    STORAGE_LOGGED_OUT_TABS,
+    (currentLoggedOutTabs ? parseInt(currentLoggedOutTabs, 0) : 0) + 1
+  )
+}
+export const clearLoggedOutTabs = () => {
+  localStorageMgr.setItem(STORAGE_LOGGED_OUT_TABS, 0)
 }

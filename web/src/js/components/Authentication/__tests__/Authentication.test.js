@@ -3,9 +3,11 @@
 import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
-import { shallow } from 'enzyme'
+import PropTypes from 'prop-types'
+import { mount, shallow } from 'enzyme'
 import { Route, Switch } from 'react-router-dom'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import {
   createNewUser,
   redirectToAuthIfNeeded,
@@ -19,16 +21,22 @@ import {
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import { sendVerificationEmail } from 'js/authentication/user'
-import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
 import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
 import optIntoV4Beta from 'js/utils/v4-beta-opt-in'
-import { isTabV4BetaUser, getCauseId } from 'js/utils/local-user-data-mgr'
-import { STORAGE_CATS_CAUSE_ID, STORAGE_SEAS_CAUSE_ID } from 'js/constants'
+import {
+  isTabV4BetaUser,
+  getBrowserExtensionInstallId,
+  getLoggedOutMessage,
+  clearLoggedOutTabs,
+  incrementLoggedOutTabs,
+} from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import { flushAllPromises } from 'js/utils/test-utils'
+import { LOGGED_OUT_MESSAGE_TYPE } from 'js/constants'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -1226,5 +1234,99 @@ describe('Authentication.js tests', function() {
     expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
       createMuiTheme(searchTheme)
     )
+  })
+
+  it('increments logged out tabs and does not display a message if not enough tabs', async () => {
+    expect.assertions(2)
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    getLoggedOutMessage.mockReturnValue(LOGGED_OUT_MESSAGE_TYPE.NONE)
+    const mockProps = MockProps()
+    const wrapper = mount(<Authentication {...mockProps} />)
+    await flushAllPromises()
+    wrapper.update()
+
+    expect(wrapper.find('[data-test-id="logged-out-message"]')).toHaveLength(0)
+    expect(incrementLoggedOutTabs).toHaveBeenCalled()
+  })
+
+  it('displays old logged out message if getLoggedOutMessage returns OLD message type', async () => {
+    expect.assertions(2)
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    getLoggedOutMessage.mockReturnValue(LOGGED_OUT_MESSAGE_TYPE.OLD)
+    const mockProps = MockProps()
+    const wrapper = mount(<Authentication {...mockProps} />, {
+      context: { muiTheme: getMuiTheme() },
+      childContextTypes: { muiTheme: PropTypes.object },
+    })
+    await flushAllPromises()
+    wrapper.update()
+
+    const text = wrapper.find('[data-test-id="logged-out-message"]')
+    expect(
+      text
+        .at(0)
+        .find(Typography)
+        .first()
+        .text()
+    ).toEqual(
+      'Heads up: you’ll need to sign in to keep raising money for great causes!'
+    )
+    expect(incrementLoggedOutTabs).not.toHaveBeenCalled()
+  })
+
+  it('displays new logged out message if getLoggedOutMessage returns NEW message type', async () => {
+    expect.assertions(2)
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    getLoggedOutMessage.mockReturnValue(LOGGED_OUT_MESSAGE_TYPE.NEW)
+    const mockProps = MockProps()
+    const wrapper = mount(<Authentication {...mockProps} />, {
+      context: { muiTheme: getMuiTheme() },
+      childContextTypes: { muiTheme: PropTypes.object },
+    })
+    await flushAllPromises()
+    wrapper.update()
+
+    const text = wrapper.find('[data-test-id="logged-out-message"]')
+    expect(
+      text
+        .at(0)
+        .find(Typography)
+        .first()
+        .text()
+    ).toEqual(
+      'You’re almost there! Sign in to start raising money for great causes.'
+    )
+    expect(incrementLoggedOutTabs).not.toHaveBeenCalled()
+  })
+
+  it('after sign-in, clears loggedOutTabs', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: null, // note the missing email
+      emailVerified: false,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    component.onSignInSuccess(mockFirebaseUserInstance)
+    expect(clearLoggedOutTabs).toHaveBeenCalled()
   })
 })
