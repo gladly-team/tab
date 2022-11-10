@@ -364,22 +364,19 @@ const features = {
         force: 'Notification',
       },
       /* End internal overrides */
-      // {
-      //   variations: ['Control', 'Notification'],
-      //   weights: [0.1, 0.9],
-      //   coverage: 1.0,
-      //   condition: {
-      //     v4BetaEnabled: {
-      //       $eq: true,
-      //     },
-      //     tabs: {
-      //       $gt: 3,
-      //     },
-      //     joined: {
-      //       $gt: SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
-      //     },
-      //   },
-      // },
+      {
+        variations: ['Control', 'Notification'],
+        weights: [0.1, 0.9],
+        coverage: 1.0,
+        condition: {
+          v4BetaEnabled: {
+            $eq: true,
+          },
+          tabs: {
+            $gt: 3,
+          },
+        },
+      },
     ],
   },
 }
