@@ -595,7 +595,6 @@ describe('Dashboard component: ads logic', () => {
         },
       ],
       publisher: {
-        domain: 'example.com',
         pageUrl: 'https://example.com/my-new-tab/',
       },
       logLevel: expect.any(String),
@@ -605,15 +604,13 @@ describe('Dashboard component: ads logic', () => {
     })
   })
 
-  it('passes the expected hostname and page URL to the tab-ads config', () => {
+  it('passes the expected page URL to the tab-ads config', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
-    getHostname.mockReturnValue('foo.com')
     getCurrentURL.mockReturnValue('https://foo.com/hi/')
     shallow(<DashboardComponent {...mockProps} />)
 
     expect(fetchAds.mock.calls[0][0].publisher).toEqual({
-      domain: 'foo.com',
       pageUrl: 'https://foo.com/hi/',
     })
   })
