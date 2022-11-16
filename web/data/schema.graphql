@@ -772,11 +772,18 @@ type ImpactMetric implements Node {
   """Charity ID that this impact metric belongs to"""
   charity: Charity
 
-  """Dollar amount required to achieve an instance of this ImpactMetric"""
+  """
+  Dollar amount (in micro USDs) required to achieve an instance of this ImpactMetric
+  """
   dollarAmount: Int!
 
   """Markdown description of this ImpactMetric"""
   description: String!
+
+  """
+  Markdown. A shorter version of the description that answers "why this impact matters".
+  """
+  whyValuableDescription: String!
 
   """
   Metric title. Should be placeable in a sentence. Example: "1 home visit"

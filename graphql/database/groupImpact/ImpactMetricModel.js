@@ -28,15 +28,22 @@ class ImpactMetric extends Model {
         .description(`the charity id that maps to the charity table`),
       dollarAmount: types
         .number()
+        .integer()
         .required()
         .description(
-          `the dollar amount required to achieve an instance of this ImpactMetric`
+          `the dollar amount (in micro USDs) required to achieve an instance of this ImpactMetric`
         ),
       description: types
         .string()
         .required()
         .description(
-          `Long-form description of the ImpactMetric. Is usually a few sentences/paragraph about the imapct metric.`
+          `Markdown. Long-form description of the ImpactMetric. Is usually a few sentences/paragraph about the impact metric.`
+        ),
+      whyValuableDescription: types
+        .string()
+        .required()
+        .description(
+          `Markdown. A shorter version of the description that answers "why this impact matters".'`
         ),
       metricTitle: types
         .string()
