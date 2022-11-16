@@ -13,7 +13,7 @@
 # To destroy the service:
 #   1. In graphql/serverless.yml, comment out the REDIS_SERVICE_ENDPOINT stack reference
 #      and the Redis-related IAM role statements.
-#   2. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run remove`, setting the stage as appropriate.
+#   2. Run: `AWS_ACCOUNT_ID=*** SLS_STAGE=dev yarn run remove --aws-profile [profile]`, setting the stage as appropriate.
 service: tab-redis
 
 # Based on:
@@ -23,7 +23,7 @@ provider:
   name: aws
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   
   # Need the permissions in AWSLambdaVPCAccessExecutionRole so the
   # function can manage network connections to a VPC.
