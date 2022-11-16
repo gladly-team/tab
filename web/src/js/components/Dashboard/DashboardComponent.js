@@ -48,7 +48,7 @@ import {
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
-import { getHostname, getCurrentURL } from 'js/navigation/utils'
+import { getCurrentURL } from 'js/navigation/utils'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
@@ -115,7 +115,6 @@ const loadAds = () => {
         timeout: 500,
       },
       publisher: {
-        domain: getHostname(),
         pageUrl: getCurrentURL(),
       },
       logLevel: 'error',
