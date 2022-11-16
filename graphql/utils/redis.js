@@ -3,6 +3,10 @@ import fetch from 'node-fetch'
 import aws4 from 'aws4'
 import logger from './logger'
 
+// Note: we likely don't want/need to use this Redis implementation any
+// longer. Rather than manage the service ourselves, let's rely on an
+// external Redis service provider such as Upstash.
+
 // @service/redis
 // Note: for now, we manually deploy the Redis service whenever
 // we need it and then destroy it when it's unused to reduce costs.
