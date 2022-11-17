@@ -8,7 +8,7 @@ module.exports = {
     '!**/__tests__/**',
   ],
   coverageDirectory: './coverage/',
-  testPathIgnorePatterns: ['/node_modules/', '/build/', '/.yalc/', '/.git/'],
+  testPathIgnorePatterns: ['/node_modules/', '/integration-tests/', '/build/'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
   },
