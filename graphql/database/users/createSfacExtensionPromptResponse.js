@@ -1,5 +1,5 @@
 import moment from 'moment'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import UserEventLogModel from '../logs/UserEventLogModel'
 import UserModel from './UserModel'
 import { SFAC_EXTENSION_PROMPT } from '../logs/logTypes'

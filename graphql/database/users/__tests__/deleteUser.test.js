@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import moment from 'moment'
 
 import UserModel from '../UserModel'
@@ -18,7 +18,7 @@ import getWidgets from '../../widgets/getWidgets'
 
 jest.mock('../../databaseClient')
 jest.mock('../../widgets/getWidgets')
-jest.mock('uuid/v4')
+jest.mock('uuid')
 
 beforeAll(() => {
   mockDate.on(null, { mockCurrentTimeOnly: true })

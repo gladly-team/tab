@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import {
   getMockUserContext,
   getMockUserInstance,
@@ -12,7 +12,7 @@ import { UnauthorizedQueryException } from '../../../utils/exceptions'
 import { SFAC_EXTENSION_PROMPT } from '../../logs/logTypes'
 
 jest.mock('../../databaseClient')
-jest.mock('uuid/v4')
+jest.mock('uuid')
 beforeEach(() => {
   setMockDBResponse(DatabaseOperation.UPDATE, {
     // Like original user but with modified email.

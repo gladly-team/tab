@@ -5,11 +5,11 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "@growthbook/growthbook": "^0.17.0",
+    "@growthbook/growthbook": "^0.20.0",
     "@hapi/joi": "^17.1.1",
     "@sendgrid/mail": "^7.4.4",
-    "@sentry/node": "^5.14.2",
-    "aws-sdk": "^2.814.0",
+    "@sentry/node": "^7.20.0",
+    "aws-sdk": "^2.1257.0",
     "aws4": "^1.8.0",
     "babel-watch": "^7.5.0",
     "bluebird": "^3.5.4",
@@ -17,8 +17,8 @@
     "cors": "^2.8.5",
     "dotenv-extended": "^2.4.0",
     "dynogels": "^9.0.0",
-    "graphql": "^14.3.0",
-    "graphql-relay": "^0.6.0",
+    "graphql": "^16.6.0",
+    "graphql-relay": "^0.10.0",
     "ioredis": "^5.0.5",
     "ioredis-mock": "^8.2.2",
     "joi": "^14.3.1",
@@ -27,7 +27,7 @@
     "moment": "^2.29.4",
     "nanoid": "^3.1.31",
     "node-fetch": "^2.6.7",
-    "uuid": "3.3.2",
+    "uuid": "9.0.0",
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {
@@ -64,13 +64,6 @@
     "serverless": "^3.24.1",
     "serverless-plugin-include-dependencies": "^5.0.0",
     "serverless-prune-plugin": "^2.0.1"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules",
-      "/build/"
-    ],
-    "testEnvironment": "node"
   },
   "scripts": {
     "start": "babel-watch ./server.js",

@@ -1,0 +1,15 @@
+module.exports = {
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/build/**',
+    '!**/__mocks__/**',
+    '!**/__tests__/**',
+  ],
+  coverageDirectory: './coverage/',
+  testPathIgnorePatterns: ['/node_modules/', '/build/', '/.yalc/', '/.git/'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
+  },
+}
