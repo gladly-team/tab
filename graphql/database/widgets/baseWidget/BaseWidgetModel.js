@@ -24,10 +24,7 @@ class BaseWidget extends DynamoDBModel {
     return {
       id: types.uuid(),
       name: types.string(),
-      position: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.position),
+      position: types.number().integer().default(self.fieldDefaults.position),
       type: types.string(),
       settings: types.object().default(self.fieldDefaults.settings),
     }

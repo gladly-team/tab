@@ -36,7 +36,7 @@ const createInvitedUsers = async (
     // get users current mission
     const override = getPermissionsOverride(MISSIONS_OVERRIDE)
     // sanitize strings
-    const sanitizedEmails = uniq(invitedEmails.map(email => sanitize(email)))
+    const sanitizedEmails = uniq(invitedEmails.map((email) => sanitize(email)))
     const sanitizedMessage = inviterMessage
       ? sanitize(inviterMessage)
       : undefined
@@ -59,7 +59,7 @@ const createInvitedUsers = async (
     const user = await UserModel.get(userContext, inviterId)
     const cause = await getCause(user.causeId)
     const verifiedAndSentInvites = await Promise.all(
-      sanitizedEmails.map(inviteEmail =>
+      sanitizedEmails.map((inviteEmail) =>
         verifyAndSendInvite({
           userContext,
           inviterId,
@@ -102,12 +102,12 @@ const createInvitedUsers = async (
       ],
       pendingSquadMembersEmailInvite: [
         ...currentMission.pendingSquadMembersEmailInvite,
-        ...sortedResults.successfulEmailAddresses.map(item => item.email),
+        ...sortedResults.successfulEmailAddresses.map((item) => item.email),
       ],
       rejectedSquadMembers: [
         ...currentMission.rejectedSquadMembers,
         ...sortedResults.existingUserRejected,
-        ...sortedResults.failedEmailAddresses.map(item => item.email),
+        ...sortedResults.failedEmailAddresses.map((item) => item.email),
       ],
     })
     const newlyCreatedMission = await getCurrentUserMission({

@@ -12,8 +12,8 @@ import UserWidgetModel from './UserWidgetModel'
 const getUserWidgetsByEnabledState = (userContext, userId, enabled) =>
   UserWidgetModel.query(userContext, userId)
     .execute()
-    .then(widgets => {
-      const result = filter(widgets, w => w.enabled === enabled)
+    .then((widgets) => {
+      const result = filter(widgets, (w) => w.enabled === enabled)
       return result
     })
 

@@ -83,10 +83,7 @@ const checkSearchRateLimit = async (userContext, userId) => {
 
   const now = moment.utc()
   const time = {
-    start: now
-      .clone()
-      .subtract(10, 'minutes')
-      .toISOString(),
+    start: now.clone().subtract(10, 'minutes').toISOString(),
     end: now.clone().toISOString(),
   }
 

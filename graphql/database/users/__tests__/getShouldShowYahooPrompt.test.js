@@ -16,8 +16,8 @@ const user = getMockUserInstance()
 describe('shouldShowYahooPrompt tests', () => {
   it('[existing user exp] returns false if the user is in the experiment but has already responded to the prompt', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -54,8 +54,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[existing user exp] returns true if user has a yahooSearchSwitchPrompt property but hasRespondedToPrompt is false', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -91,8 +91,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[existing user exp] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -128,8 +128,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[new user exp] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -165,8 +165,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[new user exp v2] returns false if the user is not the treatment group of the experiment', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -202,8 +202,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[new user exp v2] returns true if the user is in the treatment group of the experiment', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -239,8 +239,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('[new experiment v2] returns false if the user is in the control groups of all experiments', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -276,8 +276,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('returns false if the user is in the control groups of both experiments', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -313,8 +313,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('returns false if the user has already opted in for search', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({
@@ -347,8 +347,8 @@ describe('shouldShowYahooPrompt tests', () => {
 
   it('still returns true if the user is already using the charitable search engine', async () => {
     expect.assertions(1)
-    const getShouldShowYahooPrompt = require('../getShouldShowYahooPrompt')
-      .default
+    const getShouldShowYahooPrompt =
+      require('../getShouldShowYahooPrompt').default
     getUserFeature
       .mockResolvedValueOnce(
         new Feature({

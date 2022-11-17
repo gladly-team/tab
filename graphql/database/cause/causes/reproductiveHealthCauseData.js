@@ -52,8 +52,7 @@ const data = {
         'Reproductive health care is under attack. Put your tabs into the fight.',
       about:
         '<div>Tab for Reproductive Health turns your browser into a force for good. With each tab you open, you can support nonprofits providing reproductive health services and advocating for policy change.</div>\n\n',
-      faq:
-        'We’re supporting Planned Parenthood and Center for Reproductive Rights, ensuring the money raised will make a difference.',
+      faq: 'We’re supporting Planned Parenthood and Center for Reproductive Rights, ensuring the money raised will make a difference.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',

@@ -14,7 +14,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 // To throttle large batches of data.
 const SLEEP_MS_BETWEEN_QUERY_BATCHES = 100
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 const loadItemsIntoTable = async (items, tableName) => {
@@ -30,7 +30,7 @@ const loadItemsIntoTable = async (items, tableName) => {
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToLoad.map(item => ({
+      [tableName]: itemsToLoad.map((item) => ({
         PutRequest: {
           Item: item,
         },
@@ -43,7 +43,7 @@ const loadItemsIntoTable = async (items, tableName) => {
     .then(() => {
       logger.debug(`BatchWrite succeeded: ${JSON.stringify(items)}`)
     })
-    .catch(err => {
+    .catch((err) => {
       logger.error(`Unable to batch write items. Error: ${err}`)
     })
 }
@@ -70,7 +70,7 @@ const deleteItemsFromTable = async (
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToDelete.map(item => {
+      [tableName]: itemsToDelete.map((item) => {
         // Construct the key values.
         const keyValues = {
           [hashKeyName]: item[hashKeyName],
@@ -92,7 +92,7 @@ const deleteItemsFromTable = async (
     .then(() => {
       logger.debug(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
     })
-    .catch(err => {
+    .catch((err) => {
       logger.error(`Unable to batch delete items. Error: ${err}`)
     })
 }
@@ -112,7 +112,7 @@ const getItemsFromJsonFile = (filePath, strReplacements = []) => {
   // If needed, replace any strings in the fixtures before loading
   // them (e.g. replace a hardcoded user ID with a real user ID).
   let fileStrFinal = fileStr
-  strReplacements.forEach(item => {
+  strReplacements.forEach((item) => {
     if (item.before && item.after) {
       fileStrFinal = fileStr.replace(item.before, item.after)
     }

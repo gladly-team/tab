@@ -88,7 +88,7 @@ const getUserSearchEngine = async (userContext, user) => {
   // Query Search Widgets and Find
   const widgets = await getWidgets(userContext, user.id, false)
   const maybeSearchWidget = widgets.filter(
-    widget => widget.type === WIDGET_TYPE_SEARCH
+    (widget) => widget.type === WIDGET_TYPE_SEARCH
   )
   if (maybeSearchWidget.length > 0) {
     const searchWidget = maybeSearchWidget[0]

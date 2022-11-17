@@ -21,7 +21,7 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 })
 
-export const handler = event => {
+export const handler = (event) => {
   let body
   try {
     body = JSON.parse(event.body)
@@ -36,7 +36,7 @@ export const handler = event => {
   // Add context to any logs (e.g. the user and request data).
   return loggerContextWrapper(context.user, event, () =>
     graphql(Schema, body.query, null, context, body.variables)
-      .then(data => {
+      .then((data) => {
         // Check if the GraphQL response contains any errors, and
         // if it does, handle them.
         // See how express-graphql handles this:
@@ -46,12 +46,12 @@ export const handler = event => {
         if (data && data.errors) {
           // TODO: fix rule violation
           // eslint-disable-next-line no-param-reassign
-          data.errors = data.errors.map(err => handleError(err))
+          data.errors = data.errors.map((err) => handleError(err))
           return createResponse(500, data)
         }
         return createResponse(200, data)
       })
-      .catch(err => {
+      .catch((err) => {
         handleError(err)
         return createResponse(500, 'Internal Error')
       })
@@ -59,5 +59,5 @@ export const handler = event => {
 }
 
 export const serverlessHandler = (event, context, callback) => {
-  handler(event).then(response => callback(null, response))
+  handler(event).then((response) => callback(null, response))
 }

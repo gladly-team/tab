@@ -61,7 +61,7 @@ describe('BaseModel deserialization', () => {
 
   it('passes a field default to the custom serializer if the field does not exist', () => {
     setModelGetterField(ExampleModel, 'fieldDeserializers', {
-      name: val => `My name is ${val}`,
+      name: (val) => `My name is ${val}`,
     })
     const item = {
       attrs: {

@@ -35,9 +35,7 @@ const getCharityVcReceived = async (
     // how the data's bucketed in the table. Round the startTime down to the
     // beginning of this hour; round the endTime to 1ms before the end of the
     // hour (exclusive of the beginning of the hour).
-    const startTimeRoundedISO = moment(startTime)
-      .startOf('hour')
-      .toISOString()
+    const startTimeRoundedISO = moment(startTime).startOf('hour').toISOString()
     const endTimeRoundedISO = moment(endTime)
       .subtract(1, 'millisecond')
       .endOf('hour')

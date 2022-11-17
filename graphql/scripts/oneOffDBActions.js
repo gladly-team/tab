@@ -25,14 +25,15 @@ const fixIncorrectReferrerDec2019 = async () => {
   console.log('Fixing incorrect referrer data logs from December 2019.')
 
   // eslint-disable-next-line import/no-unresolved
-  const affectedIds = require('./DBActionHelpers').fixIncorrectReferrerDec2019AllIds()
+  const affectedIds =
+    require('./DBActionHelpers').fixIncorrectReferrerDec2019AllIds()
   const logs = await ReferralDataModel.getBatch(adminAccess, affectedIds)
   console.log(`Number of logs: ${logs.length}`)
 
   // Update the referring channel.
   try {
     await Promise.all(
-      logs.map(async item => {
+      logs.map(async (item) => {
         const updatedItem = {
           ...item,
           referringChannel: '305',

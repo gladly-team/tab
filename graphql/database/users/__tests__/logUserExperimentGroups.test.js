@@ -39,8 +39,8 @@ describe('logUserExperimentGroups', () => {
       searchIntro: 0,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -64,8 +64,8 @@ describe('logUserExperimentGroups', () => {
       referralNotification: 2,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -87,8 +87,8 @@ describe('logUserExperimentGroups', () => {
 
     const mockExperimentGroups = {}
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -105,8 +105,8 @@ describe('logUserExperimentGroups', () => {
 
     const mockExperimentGroups = null
     getValidatedExperimentGroups.mockReturnValueOnce({}) // Will return an empty object
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -130,8 +130,8 @@ describe('logUserExperimentGroups', () => {
       searchIntro: 1,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     const returnedUser = await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -151,8 +151,8 @@ describe('logUserExperimentGroups', () => {
 
     const mockExperimentGroups = {}
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     const returnedUser = await logUserExperimentGroups(
       userContext,
       userContext.id,
@@ -175,8 +175,8 @@ describe('logUserExperimentGroups', () => {
       testGroupSearchIntro: null,
     })
 
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
+    const logUserExperimentGroups =
+      require('../logUserExperimentGroups').default
     await logUserExperimentGroups(
       userContext,
       userContext.id,

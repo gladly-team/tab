@@ -10,8 +10,8 @@ describe('Model calls to `isQueryAuthorized`', () => {
 
   it('passes correct params to `get` authorization check', async () => {
     // Set a mock `isQueryAuthorized` method
-    const TestModelRangeKey = require('../test-utils/ExampleDynamoDBModelRangeKey')
-      .default
+    const TestModelRangeKey =
+      require('../test-utils/ExampleDynamoDBModelRangeKey').default
     const authorizationCheck = jest.fn(() => false)
     TestModelRangeKey.isQueryAuthorized = authorizationCheck
 
@@ -28,8 +28,8 @@ describe('Model calls to `isQueryAuthorized`', () => {
 
   it('passes correct params to `getBatch` authorization check with range key', async () => {
     // Set a mock `isQueryAuthorized` method
-    const TestModelRangeKey = require('../test-utils/ExampleDynamoDBModelRangeKey')
-      .default
+    const TestModelRangeKey =
+      require('../test-utils/ExampleDynamoDBModelRangeKey').default
     const authorizationCheck = jest.fn(() => false)
     TestModelRangeKey.isQueryAuthorized = authorizationCheck
 

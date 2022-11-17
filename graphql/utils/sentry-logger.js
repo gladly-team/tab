@@ -9,7 +9,7 @@ import config from '../config'
  * @param {function} func - The function to wrap.
  */
 export const sentryContextWrapper = async (userContext, lambdaEvent, func) => {
-  Sentry.configureScope(scope => {
+  Sentry.configureScope((scope) => {
     // Add the user to the log.
     // https://docs.sentry.io/development/sdk-dev/unified-api/#scope
     scope.setUser({
@@ -20,7 +20,7 @@ export const sentryContextWrapper = async (userContext, lambdaEvent, func) => {
     // Add request info to the log.
     // https://docs.sentry.io/platforms/node/#eventprocessors
     // https://docs.sentry.io/development/sdk-dev/event-payloads/request/
-    scope.addEventProcessor(event => {
+    scope.addEventProcessor((event) => {
       const modifiedEvent = {
         ...event,
         request: {
@@ -62,9 +62,7 @@ const getSentryDSN = () => {
       return null
     }
   }
-  return `https://${config.SENTRY_PUBLIC_KEY}:${
-    config.SENTRY_PRIVATE_KEY
-  }@sentry.io/${config.SENTRY_PROJECT_ID}`
+  return `https://${config.SENTRY_PUBLIC_KEY}:${config.SENTRY_PRIVATE_KEY}@sentry.io/${config.SENTRY_PROJECT_ID}`
 }
 
 // Configure the Sentry logger instance.

@@ -29,10 +29,7 @@ class UserSearchLog extends DynamoDBModel {
   static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      timestamp: types.string().isoDate().required(),
       source: types.string(),
       searchEngine: types.string().valid(VALID_SEARCH_ENGINES),
       causeId: types.string(),

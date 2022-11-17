@@ -4,7 +4,7 @@ import { getImpactMetricById } from './impactMetricRepository'
 /**
  * Fetch the ImpactMetric to use when instantiating a new instance of GroupImpactMetric.
  */
-const getNextImpactMetricForCause = causeId => {
+const getNextImpactMetricForCause = (causeId) => {
   // todo: @kmjennison figure out the first impact metric to use
   if (causeId === dataGlobalHealth.id) {
     return getImpactMetricById('nQUobFEFe')

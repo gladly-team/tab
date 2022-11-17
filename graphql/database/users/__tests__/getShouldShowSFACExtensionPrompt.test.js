@@ -19,8 +19,8 @@ const user = {
 describe('shouldShowSfacExtensionPrompt tests', () => {
   it('returns false if the user is in the experiment but has already responded to the prompt', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -44,8 +44,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns true if the user is in the experiment and has not responded', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -68,8 +68,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns false if the user is not in the experiment', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -92,8 +92,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns false if user is in wrong activity state', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -119,8 +119,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns false if user if not enough tabs', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -146,8 +146,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns false if user joined too recently and is v4Enabled', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -174,8 +174,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns true if user joined too recently and is not v4Enabled', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,
@@ -202,8 +202,8 @@ describe('shouldShowSfacExtensionPrompt tests', () => {
 
   it('returns true if all old user criteria fit', async () => {
     expect.assertions(1)
-    const getShouldShowSfacExtensionPrompt = require('../getShouldShowSfacExtensionPrompt')
-      .default
+    const getShouldShowSfacExtensionPrompt =
+      require('../getShouldShowSfacExtensionPrompt').default
     getUserFeature.mockResolvedValueOnce(
       new Feature({
         featureName: SFAC_EXTENSION_PROMPT,

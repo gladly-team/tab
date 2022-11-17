@@ -35,7 +35,7 @@ const squadInviteResponse = async (
     acceptedSquadMembers.push(userId)
     const { pendingSquadMembersExisting } = missionModel
     const newPendingSquadMembersExisting = pendingSquadMembersExisting.filter(
-      pendingUser => pendingUser !== userId
+      (pendingUser) => pendingUser !== userId
     )
     const missionModelUpdate = {
       id: missionId,
@@ -65,7 +65,7 @@ const squadInviteResponse = async (
     rejectedSquadMembers.push(userId)
     const { pendingSquadMembersExisting } = missionModel
     const newPendingSquadMembersExisting = pendingSquadMembersExisting.filter(
-      pendingUser => pendingUser !== userId
+      (pendingUser) => pendingUser !== userId
     )
     await Promise.all([
       MissionModel.update(override, {

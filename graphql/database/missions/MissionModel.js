@@ -31,10 +31,7 @@ class Mission extends DynamoDBModel {
         .string()
         .required()
         .description(`user entered squad type`),
-      created: types
-        .string()
-        .isoDate()
-        .required(),
+      created: types.string().isoDate().required(),
       started: types
         .string()
         .isoDate()

@@ -24,14 +24,8 @@ class UserEventLogModel extends DynamoDBModel {
     return {
       id: types.uuid(),
       userId: types.string().required(),
-      type: types
-        .string()
-        .valid(VALID_LOG_TYPES)
-        .required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      type: types.string().valid(VALID_LOG_TYPES).required(),
+      timestamp: types.string().isoDate().required(),
       eventData: types.alternatives().try(...VALID_LOG_SCHEMAS), // todo, @jtan add smarter validation here
     }
   }

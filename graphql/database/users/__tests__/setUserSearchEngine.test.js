@@ -33,8 +33,8 @@ beforeEach(() => {
 describe('setUserSearchEngine', () => {
   it('sets searchEngine and creates a UserSearchSettingsLog for user with no previous search engine', async () => {
     const UserModel = require('../UserModel').default
-    const UserSearchSettingsLogModel = require('../UserSearchSettingsLogModel')
-      .default
+    const UserSearchSettingsLogModel =
+      require('../UserSearchSettingsLogModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
     const logCreateQuery = jest.spyOn(UserSearchSettingsLogModel, 'create')
     const setUserSearchEngine = require('../setUserSearchEngine').default
@@ -77,8 +77,8 @@ describe('setUserSearchEngine', () => {
 
   it('sets searchEngine and creates a UserSearchSettingsLog for user with a previous search engine', async () => {
     const UserModel = require('../UserModel').default
-    const UserSearchSettingsLogModel = require('../UserSearchSettingsLogModel')
-      .default
+    const UserSearchSettingsLogModel =
+      require('../UserSearchSettingsLogModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
     const logCreateQuery = jest.spyOn(UserSearchSettingsLogModel, 'create')
     const setUserSearchEngine = require('../setUserSearchEngine').default
@@ -123,8 +123,8 @@ describe('setUserSearchEngine', () => {
 
   it('doesnt create a log if new engine is same as previous search engine', async () => {
     const UserModel = require('../UserModel').default
-    const UserSearchSettingsLogModel = require('../UserSearchSettingsLogModel')
-      .default
+    const UserSearchSettingsLogModel =
+      require('../UserSearchSettingsLogModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
     const logCreateQuery = jest.spyOn(UserSearchSettingsLogModel, 'create')
     const setUserSearchEngine = require('../setUserSearchEngine').default

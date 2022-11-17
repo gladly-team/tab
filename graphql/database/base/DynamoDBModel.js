@@ -127,10 +127,7 @@ class DynamoDBModel extends Model {
   }
 
   static async getAllInternal() {
-    const items = await this.dynogelsModel
-      .scan()
-      .loadAll()
-      .execAsync()
+    const items = await this.dynogelsModel.scan().loadAll().execAsync()
     return items.Items
   }
 

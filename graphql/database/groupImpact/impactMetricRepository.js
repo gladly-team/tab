@@ -2,7 +2,7 @@ import { find, filter } from 'lodash/collection'
 import impactMetrics from './impactMetrics'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
-export const getImpactMetricById = id => {
+export const getImpactMetricById = (id) => {
   const impactMetric = find(impactMetrics, { id })
 
   if (!impactMetric) {
@@ -12,6 +12,6 @@ export const getImpactMetricById = id => {
   return impactMetric
 }
 
-export const getImpactMetricsByCharityId = charityId => {
+export const getImpactMetricsByCharityId = (charityId) => {
   return filter(impactMetrics, { charityId })
 }

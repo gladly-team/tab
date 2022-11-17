@@ -4,7 +4,7 @@ const query = require('dynogels/lib/query').prototype
 
 // Mock each method, returning `this` so it is chainable.
 const mockQuery = {}
-Object.keys(query).forEach(method => {
+Object.keys(query).forEach((method) => {
   mockQuery[method] = jest.fn(() => mockQuery)
 })
 

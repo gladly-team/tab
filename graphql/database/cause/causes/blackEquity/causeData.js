@@ -56,8 +56,7 @@ const data = {
         'We all have a part to play in promoting racial equity. That’s why {{name}} thinks you should join them on Tab for Black Equity',
       about: emailAbout,
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
-      faq:
-        'We’re supporting The Bail Project and Thurgood Marshall College Fund to ensure the money raised will directly support their goals to make a positive impact on the communities they serve.',
+      faq: 'We’re supporting The Bail Project and Thurgood Marshall College Fund to ensure the money raised will directly support their goals to make a positive impact on the communities they serve.',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     subtitle: socialSubtitle,

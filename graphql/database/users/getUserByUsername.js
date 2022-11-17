@@ -24,7 +24,7 @@ const getUserByUsername = async (userContext, username) =>
   UserModel.query(getReferrerOverride, username)
     .usingIndex('UsersByUsername')
     .execute()
-    .then(result => {
+    .then((result) => {
       if (result.length > 0) {
         return result[0]
       }

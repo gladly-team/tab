@@ -28,10 +28,10 @@ export default {
     return { item: result }
   }),
   update: jest.fn(),
-  mockGetOrCreate: impactItem => {
+  mockGetOrCreate: (impactItem) => {
     getStack.push(impactItem)
   },
-  mockError: error => {
+  mockError: (error) => {
     errorStack.push(error)
   },
   clearAllMockItems: () => {

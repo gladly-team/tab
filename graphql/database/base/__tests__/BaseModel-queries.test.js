@@ -72,7 +72,7 @@ describe('BaseModel queries', () => {
     const response = await ExampleModel.getAll(user)
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response.length).toBe(fixturesA.length)
-    Object.values(response).forEach(index => {
+    Object.values(response).forEach((index) => {
       expect(response[index]).toEqual(fixturesA[index])
     })
   })

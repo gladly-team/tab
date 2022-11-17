@@ -18,12 +18,10 @@ const validateAttributesObject = (userId, attributes) => {
     'isTabTeamMember',
     'tabs',
   ]
-  requiredProperties.forEach(attribute => {
+  requiredProperties.forEach((attribute) => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
       logger.warn(
-        `Growthbook attribute "${attribute}" for userId ${userId} is ${
-          attributes[attribute]
-        }`
+        `Growthbook attribute "${attribute}" for userId ${userId} is ${attributes[attribute]}`
       )
     }
   })

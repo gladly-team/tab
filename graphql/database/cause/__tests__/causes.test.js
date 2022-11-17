@@ -40,8 +40,9 @@ describe('causes', () => {
   it('throws if provided data fails CauseModel schema validation', () => {
     const dataModule = require('../causes/teamseas/causeData')
     jest.spyOn(dataModule, 'default', 'get').mockImplementation(() => {
-      const realData = jest.requireActual('../causes/teamseas/causeData')
-        .default
+      const realData = jest.requireActual(
+        '../causes/teamseas/causeData'
+      ).default
       const brokenData = {
         ...realData,
         id: 123,
@@ -62,7 +63,7 @@ describe('causes', () => {
     isGlobalHealthGroupImpactEnabled.mockReturnValue(true)
     const causes = require('../causes').default
     const globalHealthCause = causes.find(
-      cause => cause.id === dataGlobalHealth.id
+      (cause) => cause.id === dataGlobalHealth.id
     )
     expect(isGlobalHealthGroupImpactEnabled).toHaveBeenCalled()
     expect(globalHealthCause.impactType).toEqual('group')

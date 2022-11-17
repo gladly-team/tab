@@ -31,7 +31,7 @@ jest.mock('nanoid', () => {
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
-const mockCheckSearchRateLimitResponse = overrides =>
+const mockCheckSearchRateLimitResponse = (overrides) =>
   Object.assign(
     {},
     {
@@ -71,17 +71,11 @@ describe('logSearch', () => {
       searches: 14,
       maxSearchesDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numSearches: 20,
         },
         recentDay: {
-          date: moment
-            .utc()
-            .subtract(5, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(5, 'days').toISOString(),
           numSearches: 5,
         },
       },
@@ -191,17 +185,11 @@ describe('logSearch', () => {
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
       maxSearchesDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numSearches: 20,
         },
         recentDay: {
-          date: moment
-            .utc()
-            .subtract(5, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(5, 'days').toISOString(),
           numSearches: 5,
         },
       },
@@ -219,10 +207,7 @@ describe('logSearch', () => {
     const maxSearchesDayVal = updateMethod.mock.calls[0][1].maxSearchesDay
     expect(maxSearchesDayVal).toEqual({
       maxDay: {
-        date: moment
-          .utc()
-          .subtract(3, 'days')
-          .toISOString(),
+        date: moment.utc().subtract(3, 'days').toISOString(),
         numSearches: 20, // stayed the same
       },
       recentDay: {
@@ -240,10 +225,7 @@ describe('logSearch', () => {
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
       maxSearchesDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numSearches: 20,
         },
         recentDay: {
@@ -265,10 +247,7 @@ describe('logSearch', () => {
     const maxSearchesDayVal = updateMethod.mock.calls[0][1].maxSearchesDay
     expect(maxSearchesDayVal).toEqual({
       maxDay: {
-        date: moment
-          .utc()
-          .subtract(3, 'days')
-          .toISOString(),
+        date: moment.utc().subtract(3, 'days').toISOString(),
         numSearches: 20, // stayed the same
       },
       recentDay: {
@@ -286,10 +265,7 @@ describe('logSearch', () => {
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
       maxSearchesDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numSearches: 44,
         },
         recentDay: {

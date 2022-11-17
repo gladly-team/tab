@@ -9,7 +9,7 @@ const content = `module.exports = ${JSON.stringify(config)};`
 
 function writeFile(filePath, contents, cb) {
   // Create the directory if it does not exist.
-  mkdirp(path.dirname(filePath), err => {
+  mkdirp(path.dirname(filePath), (err) => {
     if (err) {
       cb(err)
       return
@@ -18,7 +18,7 @@ function writeFile(filePath, contents, cb) {
   })
 }
 
-writeFile(configPath, content, err => {
+writeFile(configPath, content, (err) => {
   if (err) {
     console.log(err)
     process.exit(1)

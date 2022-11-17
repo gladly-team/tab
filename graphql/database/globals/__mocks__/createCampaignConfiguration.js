@@ -6,4 +6,4 @@ const actualCreateCampConf = require.requireActual(
 
 // Use the real createCampaignConfiguration, but allow us to
 // mock it or inspect the input.
-export default jest.fn(input => actualCreateCampConf(input))
+export default jest.fn((input) => actualCreateCampConf(input))

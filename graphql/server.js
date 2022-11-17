@@ -42,7 +42,7 @@ function startGraphQLServer(callback) {
   // https://github.com/graphql/express-graphql#options
   graphQLApp.use(
     '/',
-    graphQLHTTP(req => {
+    graphQLHTTP((req) => {
       // Wrap our handler in a logger to match the logger setup
       // we user in our production handler.
       const event = generateLambdaEventObjFromRequest(req)
@@ -96,7 +96,7 @@ const watcher = chokidar.watch([
   './database/*/*.js',
 ])
 
-watcher.on('change', path => {
+watcher.on('change', (path) => {
   console.info(`\`${path}\` changed. Restarting.`)
   startServer(() => console.info('GraphQL server schema updated.'))
 })

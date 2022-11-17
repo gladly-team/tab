@@ -27,10 +27,7 @@ class UserRevenue extends DynamoDBModel {
   static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      timestamp: types.string().isoDate().required(),
       revenue: types.number().required(),
       dfpAdvertiserId: types.string(),
       adUnitCode: types.string(),

@@ -12,7 +12,9 @@ import UserModel from './UserModel'
  */
 export default async (userContext, { truexId, id }) =>
   truexId ||
-  (await UserModel.update(userContext, {
-    id,
-    truexId: nanoid(),
-  })).truexId
+  (
+    await UserModel.update(userContext, {
+      id,
+      truexId: nanoid(),
+    })
+  ).truexId

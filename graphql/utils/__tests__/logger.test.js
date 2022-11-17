@@ -16,7 +16,7 @@ describe('logger', () => {
   it('contains expected methods', () => {
     const loggerMethods = ['log', 'debug', 'info', 'warn', 'error', 'fatal']
     const logger = require('../logger').default
-    loggerMethods.forEach(method => {
+    loggerMethods.forEach((method) => {
       expect(logger[method]).not.toBeUndefined()
     })
   })

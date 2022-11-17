@@ -28,17 +28,11 @@ export const verifyAndSendInvite = async ({
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)
   sgMail.setApiKey(SENDGRID_API_KEY)
   const [existingUserDocs, hasUserBeenInvitedRecently] = await Promise.all([
-    UserModel.query(override, inviteEmail)
-      .usingIndex('UsersByEmail')
-      .execute(),
+    UserModel.query(override, inviteEmail).usingIndex('UsersByEmail').execute(),
     InvitedUsersModel.query(override, inviteEmail)
       .usingIndex('InvitesByInvitedEmail')
       .where('created')
-      .gte(
-        moment()
-          .subtract(30, 'days')
-          .toISOString()
-      )
+      .gte(moment().subtract(30, 'days').toISOString())
       .execute(),
   ])
   const existingUser = existingUserDocs[0]
@@ -114,7 +108,7 @@ export const verifyAndSendInvite = async ({
     }
   }
 }
-export const sanitize = string => xssFilters.inHTMLData(string)
+export const sanitize = (string) => xssFilters.inHTMLData(string)
 
 export const getUserInvites = async (userContext, inviterId) => {
   const override = getPermissionsOverride(ADMIN_MANAGEMENT)

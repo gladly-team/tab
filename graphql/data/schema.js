@@ -221,7 +221,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     return null
   },
-  obj => {
+  (obj) => {
     if (obj instanceof App) {
       // eslint-disable-next-line no-use-before-define
       return appType
@@ -533,7 +533,7 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description:
         "The users's Firebase ID (not Relay global ID, unlike the `id` field",
-      resolve: user => user.id,
+      resolve: (user) => user.id,
     },
     backgroundImage: {
       type: backgroundImageType,
@@ -580,7 +580,7 @@ const userType = new GraphQLObjectType({
       description:
         'Whether or not the user was created during this request;' /
         'helpful for a "get or create" mutation',
-      resolve: user =>
+      resolve: (user) =>
         // The user will only have the 'justCreated' field when it's a
         // brand new user item
         !!user.justCreated,
@@ -604,7 +604,7 @@ const userType = new GraphQLObjectType({
     maxTabsDay: {
       type: maxTabsDayType,
       description: "Info about the user's day of most opened tabs",
-      resolve: user => user.maxTabsDay.maxDay,
+      resolve: (user) => user.maxTabsDay.maxDay,
     },
     level: {
       type: GraphQLInt,
@@ -665,7 +665,7 @@ const userType = new GraphQLObjectType({
     currentMission: {
       type: MissionType,
       description: 'the current active mission for a user',
-      resolve: user => getCurrentUserMission(user),
+      resolve: (user) => getCurrentUserMission(user),
     },
     pastMissions: {
       type: MissionsConnection,
@@ -728,12 +728,12 @@ const userType = new GraphQLObjectType({
     maxSearchesDay: {
       type: maxSearchesDayType,
       description: "Info about the user's day of most searches",
-      resolve: user => user.maxSearchesDay.maxDay,
+      resolve: (user) => user.maxSearchesDay.maxDay,
     },
     experimentActions: {
       type: ExperimentActionsOutputType,
       description: 'Actions the user has taken during experiments',
-      resolve: user => constructExperimentActionsType(user),
+      resolve: (user) => constructExperimentActionsType(user),
     },
     pendingMissionInvites: {
       type: new GraphQLNonNull(
@@ -977,11 +977,11 @@ const CauseOnboardingCopyType = new GraphQLObjectType({
         )
       ),
       description: 'the steps array in onboarding',
-      resolve: onboarding => onboarding.steps,
+      resolve: (onboarding) => onboarding.steps,
     },
     firstTabIntroDescription: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: onboarding => onboarding.firstTabIntroDescription,
+      resolve: (onboarding) => onboarding.firstTabIntroDescription,
       description:
         'markdown string shown when prompting the user to open their first tab, currently info about cat treats',
     },
@@ -1040,7 +1040,7 @@ const groupImpactMetricType = new GraphQLObjectType({
     impactMetric: {
       type: impactMetricType,
       description: 'Information about the ImpactMetric',
-      resolve: groupImpactMetric =>
+      resolve: (groupImpactMetric) =>
         getImpactMetricById(groupImpactMetric.impactMetricId),
     },
     dollarProgress: {
@@ -1087,7 +1087,7 @@ const CauseType = new GraphQLObjectType({
     causeId: {
       type: new GraphQLNonNull(GraphQLString),
       description: "Cause's id",
-      resolve: cause => cause.id,
+      resolve: (cause) => cause.id,
     },
     icon: {
       type: new GraphQLNonNull(GraphQLString),
@@ -1124,21 +1124,21 @@ const CauseType = new GraphQLObjectType({
     impact: {
       type: CauseImpactCopy,
       description: 'the impact object on cause model',
-      resolve: cause => cause.impact,
+      resolve: (cause) => cause.impact,
     },
     theme: {
       type: new GraphQLNonNull(CauseThemeType),
       description: 'the theme object on cause model',
-      resolve: cause => cause.theme,
+      resolve: (cause) => cause.theme,
     },
     sharing: {
       type: new GraphQLNonNull(CauseSharingCopyType),
       description: 'the sharing object on cause model',
-      resolve: cause => cause.sharing,
+      resolve: (cause) => cause.sharing,
     },
     onboarding: {
       type: new GraphQLNonNull(CauseOnboardingCopyType),
-      resolve: cause => cause.onboarding,
+      resolve: (cause) => cause.onboarding,
       description: 'the onboarding object on cause model',
     },
     groupImpactMetric: {
@@ -1156,7 +1156,7 @@ const searchEngineSharedFields = {
   engineId: {
     type: new GraphQLNonNull(GraphQLString),
     description: "Engine's id",
-    resolve: engine => engine.id,
+    resolve: (engine) => engine.id,
   },
   name: {
     type: new GraphQLNonNull(GraphQLString),
@@ -1219,7 +1219,7 @@ const userRecruitType = new GraphQLObjectType({
     // https://github.com/graphql/graphql-relay-js/blob/4fdadd3bbf3d5aaf66f1799be3e4eb010c115a4a/src/node/node.js#L138
     id: globalIdField(
       USER_RECRUITS,
-      recruit => `${recruit.referringUser}::${recruit.recruitedAt}`
+      (recruit) => `${recruit.referringUser}::${recruit.recruitedAt}`
     ),
     recruitedAt: {
       type: GraphQLString,
@@ -1347,7 +1347,7 @@ const userImpactType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField(
       USER_IMPACT,
-      userImpact => `${userImpact.userId}::${userImpact.charityId}`
+      (userImpact) => `${userImpact.userId}::${userImpact.charityId}`
     ),
     userId: { type: new GraphQLNonNull(GraphQLString) },
     charityId: { type: new GraphQLNonNull(GraphQLString) },
@@ -1383,7 +1383,8 @@ const invitedUsersType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField(
       INVITED_USERS,
-      invitedUsers => `${invitedUsers.inviterId}::${invitedUsers.invitedEmail}`
+      (invitedUsers) =>
+        `${invitedUsers.inviterId}::${invitedUsers.invitedEmail}`
     ),
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
     invitedEmail: { type: new GraphQLNonNull(GraphQLString) },
@@ -1800,23 +1801,23 @@ const SquadMemberInfo = new GraphQLObjectType({
     longestTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the longest tab streak in days so far',
-      resolve: squadMember => getLongestTabStreak(squadMember),
+      resolve: (squadMember) => getLongestTabStreak(squadMember),
     },
     currentTabStreak: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tab streak in days so far',
-      resolve: squadMember => getCurrentTabStreak(squadMember),
+      resolve: (squadMember) => getCurrentTabStreak(squadMember),
     },
 
     missionMaxTabsDay: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the most tabs in a single day',
-      resolve: squadMember => getMaxTabsDay(squadMember),
+      resolve: (squadMember) => getMaxTabsDay(squadMember),
     },
     missionCurrentTabsDay: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'the current tabs today',
-      resolve: squadMember => getMissionCurrentTabsDay(squadMember),
+      resolve: (squadMember) => getMissionCurrentTabsDay(squadMember),
     },
     tabs: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -1966,20 +1967,20 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
     totalRecruits: {
       type: GraphQLInt,
       description: 'The count of users recruited (signed up)',
-      resolve: connection => getTotalRecruitsCount(connection.edges),
+      resolve: (connection) => getTotalRecruitsCount(connection.edges),
     },
     recruitsActiveForAtLeastOneDay: {
       type: GraphQLInt,
       description:
         'The count of users recruited who remained active for one day or more',
-      resolve: connection =>
+      resolve: (connection) =>
         getRecruitsActiveForAtLeastOneDay(connection.edges),
     },
     recruitsWithAtLeastOneTab: {
       type: GraphQLInt,
       description:
         'The count of users recruited who have opened one tab or more',
-      resolve: connection => getRecruitsWithAtLeastOneTab(connection.edges),
+      resolve: (connection) => getRecruitsWithAtLeastOneTab(connection.edges),
     },
   },
 })
@@ -1997,7 +1998,7 @@ const logTabMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, tabId, isV4 }, context) => {
@@ -2022,7 +2023,7 @@ const updateImpactMutation = mutationWithClientMutationId({
   outputFields: {
     userImpact: {
       type: userImpactType,
-      resolve: userImpact => userImpact,
+      resolve: (userImpact) => userImpact,
     },
   },
   mutateAndGetPayload: (input, context) => {
@@ -2157,7 +2158,7 @@ const logSearchMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user.user,
+      resolve: (user) => user.user,
     },
     success: {
       type: GraphQLBoolean,
@@ -2304,11 +2305,11 @@ const donateVcMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: data => data.user,
+      resolve: (data) => data.user,
     },
     errors: {
       type: new GraphQLList(customErrorType),
-      resolve: data => data.errors,
+      resolve: (data) => data.errors,
     },
   },
   mutateAndGetPayload: ({ userId, charityId, vc }, context) => {
@@ -2330,7 +2331,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, imageId }, context) => {
@@ -2356,7 +2357,7 @@ const setUserBkgColorMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, color }, context) => {
@@ -2377,7 +2378,7 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, image }, context) => {
@@ -2403,7 +2404,7 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId }, context) => {
@@ -2424,7 +2425,7 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId }, context) => {
@@ -2450,7 +2451,7 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => userWidget,
+      resolve: (userWidget) => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, data }, context) => {
@@ -2478,7 +2479,7 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => userWidget,
+      resolve: (userWidget) => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, visible }, context) => {
@@ -2506,7 +2507,7 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => userWidget,
+      resolve: (userWidget) => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, enabled }, context) => {
@@ -2534,7 +2535,7 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => userWidget,
+      resolve: (userWidget) => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, config }, context) => {
@@ -2578,7 +2579,7 @@ const createNewUserMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: (
@@ -2621,7 +2622,7 @@ const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, experimentGroups }, context) => {
@@ -2646,7 +2647,7 @@ const logUserExperimentActionsMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, experimentActions }, context) => {
@@ -2668,11 +2669,11 @@ const setUsernameMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: data => data.user,
+      resolve: (data) => data.user,
     },
     errors: {
       type: new GraphQLList(customErrorType),
-      resolve: data => data.errors,
+      resolve: (data) => data.errors,
     },
   },
   mutateAndGetPayload: ({ userId, username }, context) => {
@@ -2689,11 +2690,11 @@ const setEmailMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: data => data.user,
+      resolve: (data) => data.user,
     },
     errors: {
       type: new GraphQLList(customErrorType),
-      resolve: data => data.errors,
+      resolve: (data) => data.errors,
     },
   },
   mutateAndGetPayload: ({ userId }, context) => {
@@ -2773,7 +2774,7 @@ const setV4BetaMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, enabled }, context) => {
@@ -2791,7 +2792,7 @@ const setHasViewedIntroFlowMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, enabled }, context) => {
@@ -2873,7 +2874,7 @@ const setHasSeenSquadsMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId }, context) => {
@@ -2920,7 +2921,7 @@ const createVideoAdLogMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    VideoAdLog: { type: videoAdLogType, resolve: log => log },
+    VideoAdLog: { type: videoAdLogType, resolve: (log) => log },
   },
   mutateAndGetPayload: async ({ userId }, context) =>
     createVideoAdLog(context.user, fromGlobalId(userId).id),
@@ -2941,7 +2942,7 @@ const logVideoAdCompleteMutation = mutationWithClientMutationId({
     },
     user: {
       type: new GraphQLNonNull(userType),
-      resolve: data => data.user,
+      resolve: (data) => data.user,
     },
   },
   mutateAndGetPayload: async (input, context) =>
@@ -2961,7 +2962,7 @@ const setUserCauseMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, causeId }, context) => {
@@ -2979,7 +2980,7 @@ const setYahooSearchOptInMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, optIn }, context) => {
@@ -2997,7 +2998,7 @@ const setUserSearchEngineMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, searchEngine }, context) => {
@@ -3019,7 +3020,7 @@ const createSearchEnginePromptLogMutation = mutationWithClientMutationId({
     },
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: (
@@ -3046,7 +3047,7 @@ const createSfacExtensionPromptResponseMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user,
+      resolve: (user) => user,
     },
   },
   mutateAndGetPayload: ({ userId, browser, accepted }, context) => {
@@ -3114,10 +3115,12 @@ const queryType = new GraphQLObjectType({
       },
       resolve: async (_, args, context) => {
         const { userId, charityId } = args
-        return (await UserImpactModel.getOrCreate(context.user, {
-          userId,
-          charityId,
-        })).item
+        return (
+          await UserImpactModel.getOrCreate(context.user, {
+            userId,
+            charityId,
+          })
+        ).item
       },
     },
   }),
@@ -3177,7 +3180,8 @@ const mutationType = new GraphQLObjectType({
     setYahooSearchOptIn: setYahooSearchOptInMutation,
     setUserSearchEngine: setUserSearchEngineMutation,
     createSearchEnginePromptLog: createSearchEnginePromptLogMutation,
-    createSfacExtensionPromptResponse: createSfacExtensionPromptResponseMutation,
+    createSfacExtensionPromptResponse:
+      createSfacExtensionPromptResponseMutation,
 
     createUserExperiment: createUserExperimentMutation,
   }),

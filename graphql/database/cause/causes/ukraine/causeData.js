@@ -79,8 +79,7 @@ const data = {
         'We all can and should support the people of Ukraine. Turn your internet browsing into ongoing support.',
       about:
         '<div>Tab for Ukraine turns your web browser into a force for good. With each tab opened, ad revenue supports Save the Children, which has been working to provide lifesaving interventions in Ukraine since 2014.</div>\n\n',
-      faq:
-        'Save the Children ensures the money raised will directly support Ukrainian families affected by the war.',
+      faq: 'Save the Children ensures the money raised will directly support Ukrainian families affected by the war.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',

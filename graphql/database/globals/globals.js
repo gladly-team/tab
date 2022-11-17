@@ -49,9 +49,7 @@ export const getEstimatedMoneyRaisedPerTab = () => {
   if (Number.isNaN(moneyRaised)) {
     moneyRaised = 0.0
     logger.error(
-      `Could not parse float from money raised env var value ${
-        process.env.EST_MONEY_RAISED_PER_TAB
-      }`
+      `Could not parse float from money raised env var value ${process.env.EST_MONEY_RAISED_PER_TAB}`
     )
   }
   return moneyRaised

@@ -1316,7 +1316,7 @@ describe('[onEnd] validation: showProgressBar and goal', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            transformNumberSourceValue: num => num * 3,
+            transformNumberSourceValue: (num) => num * 3,
           },
         },
       })
@@ -2172,7 +2172,7 @@ describe('goal data (goal.getCurrentNumber)', () => {
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'hearts',
-        transformNumberSourceValue: num => num * 2,
+        transformNumberSourceValue: (num) => num * 2,
       },
     })
     const mockUserContext = getMockUserContext()
@@ -2198,7 +2198,7 @@ describe('goal data (goal.getCurrentNumber)', () => {
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'moneyRaised',
-        transformNumberSourceValue: num => Math.round(num),
+        transformNumberSourceValue: (num) => Math.round(num),
       },
     })
     const mockUserContext = getMockUserContext()

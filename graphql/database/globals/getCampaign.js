@@ -122,7 +122,7 @@ const createCampaignData = async (userContext, campaignConfig) => {
  * @return {Promise<Object>} campaignData - see createCampaignConfiguration for
  *   structure.
  */
-const getCampaign = async userContext => {
+const getCampaign = async (userContext) => {
   return createCampaignData(userContext, getCurrentCampaignConfig())
 }
 

@@ -80,7 +80,7 @@ function mockAuthorizer(authorizationToken) {
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
-export const generateLambdaEventObjFromRequest = req => {
+export const generateLambdaEventObjFromRequest = (req) => {
   // Get the user claims from their token.
   // Important: this is insecure and for local development only.
   const authorizerProperties = mockAuthorizer(req.header('Authorization'))
@@ -127,7 +127,7 @@ export const generateLambdaEventObjFromRequest = req => {
 
 // An analogue to the AWS Lamda handler (../handler.handler)
 // but used with graphQLHTTP.
-export const getGraphQLContextFromRequest = req => {
+export const getGraphQLContextFromRequest = (req) => {
   const event = generateLambdaEventObjFromRequest(req)
   const claims = getUserClaimsFromLambdaEvent(event)
   return createGraphQLContext(claims)

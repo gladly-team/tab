@@ -28,10 +28,7 @@ class userTabsLog extends DynamoDBModel {
   static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      timestamp: types.string().isoDate().required(),
       tabId: types.string().uuid(),
       isV4: types.boolean(),
       causeId: types.string(),

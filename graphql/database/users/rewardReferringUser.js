@@ -96,16 +96,14 @@ const rewardReferringUser = async (userContext, userId) => {
     } = userImpactRecordReferringUser
 
     // get Referred User Impact
-    const userImpactRecordReferredUser = (await UserImpactModel.getOrCreate(
-      override,
-      {
+    const userImpactRecordReferredUser = (
+      await UserImpactModel.getOrCreate(override, {
         userId,
         charityId: CATS_CHARITY_ID,
-      }
-    )).item
-    const {
-      pendingUserReferralImpact: pendingUserReferralImpactReferredUser,
-    } = userImpactRecordReferredUser
+      })
+    ).item
+    const { pendingUserReferralImpact: pendingUserReferralImpactReferredUser } =
+      userImpactRecordReferredUser
 
     // reward both Reffering and Referred users
     await Promise.all([

@@ -36,8 +36,9 @@ describe('searchEngines', () => {
 
   it('throws if provided data fails SearchEngineModel schema validation', () => {
     jest.mock('../searchEngineData', () => {
-      const realData = jest.requireActual('../searchEngineData')
-        .searchEngineData
+      const realData = jest.requireActual(
+        '../searchEngineData'
+      ).searchEngineData
       delete realData[0].name
       const module = {
         searchEngineData: realData,

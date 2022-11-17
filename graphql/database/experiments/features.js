@@ -24,20 +24,22 @@ const features = {
       {
         condition: {
           v4BetaEnabled: true,
-          [`internalExperimentOverrides.${MONEY_RAISED_EXCLAMATION_POINT_V2}`]: {
-            $eq: true,
-            $exists: true,
-          },
+          [`internalExperimentOverrides.${MONEY_RAISED_EXCLAMATION_POINT_V2}`]:
+            {
+              $eq: true,
+              $exists: true,
+            },
         },
         force: true,
       },
       {
         condition: {
           v4BetaEnabled: true,
-          [`internalExperimentOverrides.${MONEY_RAISED_EXCLAMATION_POINT_V2}`]: {
-            $eq: false,
-            $exists: true,
-          },
+          [`internalExperimentOverrides.${MONEY_RAISED_EXCLAMATION_POINT_V2}`]:
+            {
+              $eq: false,
+              $exists: true,
+            },
         },
         force: false,
       },

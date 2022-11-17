@@ -6,7 +6,7 @@ const impactMetricSchema = Joi.object(ImpactMetricModel.schema)
 
 // Validate data.
 // TODO: this should eventually live in a better ORM.
-impactMetricData.forEach(data => {
+impactMetricData.forEach((data) => {
   // With abortEarly=false, collect all errors before exiting.
   // https://github.com/sideway/joi/blob/master/API.md#anyvalidatevalue-options
   const validation = impactMetricSchema.validate(data, { abortEarly: false })

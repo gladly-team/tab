@@ -28,7 +28,7 @@ const deleteUser = async (userContext, userId) => {
     const widgets = await getWidgets(userContext, userId)
 
     await Promise.all(
-      widgets.map(async widget => {
+      widgets.map(async (widget) => {
         await UserWidgetModel.update(userContext, {
           userId,
           widgetId: widget.widgetId,

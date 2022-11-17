@@ -60,10 +60,7 @@ class User extends DynamoDBModel {
         .description(
           `The unique user ID from our authentication service (Firebase)`
         ),
-      email: types
-        .string()
-        .email()
-        .allow(null)
+      email: types.string().email().allow(null)
         .description(`The email used to authenticate. If "emailVerified" is not true, this
           'value is unreliable. In addition, values are unreliable before we started  using
           'the auth token to get the email (prior to 2018 September 15). Our authentication
@@ -84,10 +81,7 @@ class User extends DynamoDBModel {
         .description(
           `The unique user truex Id passed to truex integration when we show video ads`
         ),
-      joined: types
-        .string()
-        .isoDate()
-        .required()
+      joined: types.string().isoDate().required()
         .description(`The datetime the user first started using the app. This may differ
           from "created", which is literally when the database item was created.`),
       justCreated: types.boolean().forbidden() // only set in app code
@@ -98,10 +92,7 @@ class User extends DynamoDBModel {
         .integer()
         .default(self.fieldDefaults.vcCurrent)
         .description(`The number of Hearts the user possesses.`),
-      vcAllTime: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.vcAllTime)
+      vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime)
         .description(`The number of Hearts the user has earned all time, including both
           Hearts from opening tabs and from recruiting friends.`),
       level: types
@@ -111,10 +102,7 @@ class User extends DynamoDBModel {
         .description(
           `The current level the user is on, relying on the UserLevel model.`
         ),
-      tabs: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.tabs)
+      tabs: types.number().integer().default(self.fieldDefaults.tabs)
         .description(`The total number of tabs the user has opened since joining. There
           may be a delay in logging the tab on the client side, so it will likely slightly
           undercount.`),
@@ -139,10 +127,7 @@ class User extends DynamoDBModel {
         .description(
           `A flag indicating whether or not this User has been deleted.`
         ),
-      validTabs: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.tabs)
+      validTabs: types.number().integer().default(self.fieldDefaults.tabs)
         .description(`The total number of tabs the user has opened since joining, filtering
           tabs that we consider "fraudulent", such as tabs opened in quick succession and
           too many tabs in a day.`),
@@ -284,22 +269,13 @@ class User extends DynamoDBModel {
         .isoDate()
         .description(`The datetime of the last time the user searched.`),
       // Group assignments for experiments / split-tests
-      testGroupAnonSignIn: types
-        .number()
-        .integer()
-        .allow(null)
+      testGroupAnonSignIn: types.number().integer().allow(null)
         .description(`Which group the user is in for the "anonymous user sign-in"
           split-test. This value is assigned on the client so is not trustworthy.`),
-      testGroupVariousAdSizes: types
-        .number()
-        .integer()
-        .allow(null)
+      testGroupVariousAdSizes: types.number().integer().allow(null)
         .description(`Which group the user is in for the "various ad sizes"
           split-test. This value is assigned on the client so is not trustworthy.`),
-      testGroupThirdAd: types
-        .number()
-        .integer()
-        .allow(null)
+      testGroupThirdAd: types.number().integer().allow(null)
         .description(`Which group the user is in for the "three ads" split-test. 
           This value is assigned on the client so is not trustworthy.`),
       testGroupThirdAdJoinTime: types
@@ -308,22 +284,13 @@ class User extends DynamoDBModel {
         .description(
           `The datetime of when the user was assigned their experiment group.`
         ),
-      testOneAdForNewUsers: types
-        .number()
-        .integer()
-        .allow(null)
+      testOneAdForNewUsers: types.number().integer().allow(null)
         .description(`Which group the user is in for the "one ad for new users"
           split-test. This value is assigned on the client so is not trustworthy.`),
-      testAdExplanation: types
-        .number()
-        .integer()
-        .allow(null)
+      testAdExplanation: types.number().integer().allow(null)
         .description(`Which group the user is in for the "ad explanation" split-test.
           This value is assigned on the client so is not trustworthy.`),
-      testGroupSearchIntro: types
-        .number()
-        .integer()
-        .allow(null)
+      testGroupSearchIntro: types.number().integer().allow(null)
         .description(`Which group the user is in for the "search intro" split-test.
           This value is assigned on the client so is not trustworthy.`),
       testGroupSearchIntroJoinedTime: types.string().isoDate()
@@ -341,10 +308,7 @@ class User extends DynamoDBModel {
       testSearchIntroActionTime: types.string().isoDate()
         .description(`The time the user made the action (testSearchIntroAction)
           for the "search intro" split-test.`),
-      testGroupReferralNotification: types
-        .number()
-        .integer()
-        .allow(null)
+      testGroupReferralNotification: types.number().integer().allow(null)
         .description(`Which group the user is in for the "referral notification" split-test.
           This value is assigned on the client so is not trustworthy.`),
       testGroupReferralNotificationJoinedTime: types.string().isoDate()
@@ -489,12 +453,10 @@ class User extends DynamoDBModel {
       searchesToday: (tabsToday, userObj) =>
         // Calculate searchesToday based on the maxSearchesDay value
         getTodaySearchCount(userObj),
-      backgroundImage: backgroundImage =>
+      backgroundImage: (backgroundImage) =>
         Object.assign({}, backgroundImage, {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
-          thumbnailURL: `${mediaRoot}/img/background-thumbnails/${
-            backgroundImage.thumbnail
-          }`,
+          thumbnailURL: `${mediaRoot}/img/background-thumbnails/${backgroundImage.thumbnail}`,
         }),
     }
   }

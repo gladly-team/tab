@@ -8,7 +8,7 @@ import { UserDoesNotExistException } from './exceptions'
  * @param {function} func - The function to wrap.
  * @return {null}
  */
-export const logExceptionsWrapper = func =>
+export const logExceptionsWrapper = (func) =>
   function wrapperFunc(...args) {
     try {
       return func.apply(this, args)
@@ -24,7 +24,7 @@ export const logExceptionsWrapper = func =>
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client.
  */
-export const formatError = graphQLError => ({
+export const formatError = (graphQLError) => ({
   message: graphQLError.message,
   locations: graphQLError.locations,
   path: graphQLError.path,
@@ -37,7 +37,7 @@ export const formatError = graphQLError => ({
  * @param {object} graphQLError - The GraphQL error.
  * @return {Boolean} Whether we should log the error.
  */
-const shouldLogError = graphQLError => {
+const shouldLogError = (graphQLError) => {
   const errorCodesToSkipLogging = [
     UserDoesNotExistException.code, // can happen during sign up
   ]
@@ -52,7 +52,7 @@ const shouldLogError = graphQLError => {
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client (optionally formatted).
  */
-export const handleError = graphQLError => {
+export const handleError = (graphQLError) => {
   if (shouldLogError(graphQLError)) {
     logger.error(graphQLError)
   }

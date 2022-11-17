@@ -11,10 +11,12 @@ import getCause from '../cause/getCause'
 const getUserImpactAndCause = async (userContext, userId) => {
   const user = await UserModel.get(userContext, userId)
   const cause = await getCause(user.causeId)
-  const userImpact = (await UserImpactModel.getOrCreate(userContext, {
-    userId,
-    charityId: cause.charityId,
-  })).item
+  const userImpact = (
+    await UserImpactModel.getOrCreate(userContext, {
+      userId,
+      charityId: cause.charityId,
+    })
+  ).item
   return {
     cause,
     userImpact,

@@ -92,7 +92,7 @@ const isValidExperimentGroup = (experimentName, groupVal) => {
  *   the shape of the ExperimentGroupsType object in our GraphQL
  *   schema.
  */
-const getValidatedExperimentGroups = clientExperimentGroups =>
+const getValidatedExperimentGroups = (clientExperimentGroups) =>
   getAllExperiments().reduce((map, experimentName) => {
     const clientGroupVal = get(clientExperimentGroups, experimentName)
     const validatedGroupVal = isValidExperimentGroup(

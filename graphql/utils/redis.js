@@ -25,7 +25,7 @@ const redisAccessEndpoint = `${process.env.REDIS_SERVICE_ENDPOINT}/redis`
  * @param {String} data.operation - The Redis operation. One of: GET, INCR
  * @return {Object|String|Number} The Redis return value.
  */
-const callRedis = async data => {
+const callRedis = async (data) => {
   let responseData = null
   try {
     // Add AWS IAM authorization.

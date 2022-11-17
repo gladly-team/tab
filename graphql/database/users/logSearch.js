@@ -8,7 +8,7 @@ import getSearchEngine from '../search/getSearchEngine'
 import getCause from '../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 
-const getSource = searchData => {
+const getSource = (searchData) => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab', 'edge', 'safari']
   return searchData.source && validSearchSources.indexOf(searchData.source) > -1
     ? searchData.source

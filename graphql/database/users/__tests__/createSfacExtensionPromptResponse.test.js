@@ -34,8 +34,8 @@ describe('createSfacExtensionPromptResponse tests', () => {
     const uuidVal = 'ab5082cc-151a-4a9a-9289-06906670fd42'
     uuid.mockReturnValueOnce(uuidVal)
     expect.assertions(3)
-    const createSfacExtensionPromptResponse = require('../createSfacExtensionPromptResponse')
-      .default
+    const createSfacExtensionPromptResponse =
+      require('../createSfacExtensionPromptResponse').default
     const UserEventLogModel = require('../../logs/UserEventLogModel').default
     const UserModel = require('../UserModel').default
     const createQuery = jest.spyOn(UserEventLogModel, 'create')
@@ -73,8 +73,8 @@ describe('createSfacExtensionPromptResponse tests', () => {
     const uuidVal = 'ab5082cc-151a-4a9a-9289-06906670fd42'
     uuid.mockReturnValueOnce(uuidVal)
     expect.assertions(1)
-    const createSfacExtensionPromptResponse = require('../createSfacExtensionPromptResponse')
-      .default
+    const createSfacExtensionPromptResponse =
+      require('../createSfacExtensionPromptResponse').default
     await expect(
       createSfacExtensionPromptResponse(
         userContext,
@@ -87,8 +87,8 @@ describe('createSfacExtensionPromptResponse tests', () => {
 
   it('throws if user id does not match user context', async () => {
     expect.assertions(1)
-    const createSfacExtensionPromptResponse = require('../createSfacExtensionPromptResponse')
-      .default
+    const createSfacExtensionPromptResponse =
+      require('../createSfacExtensionPromptResponse').default
     await expect(
       createSfacExtensionPromptResponse(userContext, 'wrong-id', 'chrome', true)
     ).rejects.toThrow(new UnauthorizedQueryException())

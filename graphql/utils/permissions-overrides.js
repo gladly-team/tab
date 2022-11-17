@@ -47,8 +47,8 @@ const validOverrides = {
  * @return {string|boolean} An override string, or false
  *   if `overrideName` is not a valid override.
  */
-export const getPermissionsOverride = overrideName =>
+export const getPermissionsOverride = (overrideName) =>
   get(validOverrides, overrideName, false)
 
-export const isValidPermissionsOverride = override =>
+export const isValidPermissionsOverride = (override) =>
   values(validOverrides).indexOf(override) !== -1

@@ -7,7 +7,7 @@ import getCause from '../../cause/getCause'
 jest.mock('../../cause/getCause')
 jest.mock('../utils', () => ({
   verifyAndSendInvite: jest.fn(),
-  sanitize: string => string,
+  sanitize: (string) => string,
   getUserInvites: jest.fn(),
 }))
 jest.mock('../../databaseClient')

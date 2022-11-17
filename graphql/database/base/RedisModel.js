@@ -27,7 +27,7 @@ class RedisModel extends Model {
   }
 
   static async getBatchInternal(keys) {
-    const items = keys.map(key => this.getInternal(key))
+    const items = keys.map((key) => this.getInternal(key))
     return Promise.all(items)
   }
 
@@ -96,12 +96,7 @@ class RedisModel extends Model {
       throw new UnauthorizedQueryException()
     }
 
-    if (
-      types
-        .number()
-        .integer()
-        .validate(increment).error
-    ) {
+    if (types.number().integer().validate(increment).error) {
       throw new Error('Increment amount should be an integer')
     }
 
@@ -117,12 +112,7 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    if (
-      types
-        .number()
-        .integer()
-        .validate(result).error
-    ) {
+    if (types.number().integer().validate(result).error) {
       throw new Error('Field to update should be an integer')
     }
 
@@ -164,7 +154,7 @@ class RedisModel extends Model {
   // objects are cast to their correct types.
   static validateAndConvertObject(rawObject) {
     const objectToReturn = Object.assign({}, rawObject)
-    Object.keys(objectToReturn).forEach(field => {
+    Object.keys(objectToReturn).forEach((field) => {
       objectToReturn[field] = this.validateAndConvertField(
         field,
         objectToReturn[field]

@@ -60,10 +60,7 @@ class VideoAdLog extends DynamoDBModel {
         .boolean()
         .default(self.fieldDefaults.completed)
         .description('user completed ad engagement and is credited'),
-      id: types
-        .uuid()
-        .required()
-        .description(`The unique item id`),
+      id: types.uuid().required().description(`The unique item id`),
       truexEngagementId: types
         .string()
         .default(self.fieldDefaults.truexEngagementId)

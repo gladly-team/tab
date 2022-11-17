@@ -6,14 +6,10 @@ import moment from 'moment'
  * @param {object} user - The user object from our DB
  * @return {number} The number of tabs opened today.
  */
-export const getTodayTabCount = user => {
+export const getTodayTabCount = (user) => {
   const isFirstTabToday =
-    moment(user.maxTabsDay.recentDay.date)
-      .utc()
-      .format('LL') !==
-    moment()
-      .utc()
-      .format('LL')
+    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
+    moment().utc().format('LL')
   const todayTabCount = isFirstTabToday ? 0 : user.maxTabsDay.recentDay.numTabs
   return todayTabCount
 }
@@ -23,14 +19,10 @@ export const getTodayTabCount = user => {
  * @param {object} user - The user object from our DB
  * @return {number} The number of searches made today.
  */
-export const getTodaySearchCount = user => {
+export const getTodaySearchCount = (user) => {
   const isFirstSearchToday =
-    moment(user.maxSearchesDay.recentDay.date)
-      .utc()
-      .format('LL') !==
-    moment()
-      .utc()
-      .format('LL')
+    moment(user.maxSearchesDay.recentDay.date).utc().format('LL') !==
+    moment().utc().format('LL')
   return isFirstSearchToday ? 0 : user.maxSearchesDay.recentDay.numSearches
 }
 
@@ -81,13 +73,9 @@ export const calculateMaxTabs = (
  */
 export const calculateTabStreak = (maxDayObject, tabStreakObject) => {
   const recentDay = moment(maxDayObject.recentDay.date)
-  const isYesterday = moment()
-    .subtract(1, 'days')
-    .isSame(recentDay, 'd')
+  const isYesterday = moment().subtract(1, 'days').isSame(recentDay, 'd')
   const isPreviousDay = recentDay.isBefore(
-    moment()
-      .subtract(1, 'days')
-      .startOf('day')
+    moment().subtract(1, 'days').startOf('day')
   )
   // if this is invoked, then tabstreak should atleast be 1
   let newCurrentTabStreak = tabStreakObject.currentTabStreak || 1

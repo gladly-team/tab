@@ -85,8 +85,7 @@ const data = {
         "Life is better with friends... and a clean planet!  That's why {{name}} thinks you should join them on Tab for #TeamSeas.",
       about: emailAbout,
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
-      faq:
-        'We’ve partnered with #TeamSeas to ensure the money raised will support their goal of raising $30 million to remove 30 million pounds of trash to protect and clean up our planet’s oceans, rivers, and lakes.',
+      faq: 'We’ve partnered with #TeamSeas to ensure the money raised will support their goal of raising $30 million to remove 30 million pounds of trash to protect and clean up our planet’s oceans, rivers, and lakes.',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     // @feature/generalize-referral-reward

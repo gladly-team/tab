@@ -86,27 +86,27 @@ const log = (msg, logLevel) => {
 
 const logger = {}
 
-logger.log = msg => {
+logger.log = (msg) => {
   log(msg, logLevels.LOG)
 }
 
-logger.debug = msg => {
+logger.debug = (msg) => {
   log(msg, logLevels.DEBUG)
 }
 
-logger.info = msg => {
+logger.info = (msg) => {
   log(msg, logLevels.INFO)
 }
 
-logger.warn = msg => {
+logger.warn = (msg) => {
   log(msg, logLevels.WARN)
 }
 
-logger.error = msg => {
+logger.error = (msg) => {
   log(msg, logLevels.ERROR)
 }
 
-logger.fatal = msg => {
+logger.fatal = (msg) => {
   log(msg, logLevels.FATAL)
 }
 

@@ -28,7 +28,7 @@ afterEach(() => {
 
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 
-const getMockMission = pendingUserId => {
+const getMockMission = (pendingUserId) => {
   return {
     id: '123456789',
     squadName: 'TestSquad',
