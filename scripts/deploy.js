@@ -27,4 +27,4 @@ const deploy = spawn('yarn', ['run', 'ci:deployservices'], {
 })
 
 // Exit this process with the child process code.
-deploy.on('exit', code => process.exit(code))
+deploy.on('exit', (code) => process.exit(code))

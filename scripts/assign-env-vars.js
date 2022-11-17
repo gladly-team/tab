@@ -90,7 +90,7 @@ const assignEnvVars = (stageName, allEnvVarsRequired = true) => {
   // value to the environment value name.
   const stageNameUppercase = stageName ? stageName.toUpperCase() : ''
   const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : ''
-  envVars.forEach(envVar => {
+  envVars.forEach((envVar) => {
     const envVarName = envVar.name
 
     // Delete the existing env var so that any undefined,
