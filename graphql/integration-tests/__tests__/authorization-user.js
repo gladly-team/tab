@@ -1,11 +1,8 @@
 /* eslint-env jest */
-/* global jasmine */
 
 import { loadFixtures, deleteFixtures } from '../utils/fixture-utils'
 import { deleteUser, getNewAuthedUser } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
 let username = null
 let userId = null
