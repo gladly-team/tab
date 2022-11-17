@@ -1,4 +1,4 @@
-/* eslint no-console: 0 */
+/* eslint no-console: 0, import/no-unresolved: 0, import/extensions: 0 */
 import ReferralDataModel from '../database/referrals/ReferralDataModel'
 import {
   getPermissionsOverride,
