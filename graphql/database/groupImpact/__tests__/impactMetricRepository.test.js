@@ -5,7 +5,7 @@ const mockImpactMetrics = [
   {
     id: 'nQUobFEFe',
     charityId: 'charity2',
-    dollarAmount: 1000,
+    dollarAmount: 25e6,
     description: 'This is a test impact metric.',
     metricTitle: '1 impact',
     impactTitle: 'Provide 1 impact',
@@ -14,7 +14,7 @@ const mockImpactMetrics = [
   {
     id: 'Tv3oKS10j',
     charityId: 'charity1',
-    dollarAmount: 1000,
+    dollarAmount: 25e6,
     description: 'This is a test impact metric.',
     metricTitle: '2 impact',
     impactTitle: 'Provide 2 impact',
@@ -23,7 +23,7 @@ const mockImpactMetrics = [
   {
     id: 'nyXGkP6vB',
     charityId: 'charity2',
-    dollarAmount: 1000,
+    dollarAmount: 25e6,
     description: 'This is a test impact metric.',
     metricTitle: '3 impact',
     impactTitle: 'Provide 3 impact',
@@ -32,7 +32,7 @@ const mockImpactMetrics = [
   {
     id: 'n2CoeDNMU',
     charityId: 'charity3',
-    dollarAmount: 1000,
+    dollarAmount: 25e6,
     description: 'This is a test impact metric.',
     metricTitle: '4 impact',
     impactTitle: 'Provide 4 impact',

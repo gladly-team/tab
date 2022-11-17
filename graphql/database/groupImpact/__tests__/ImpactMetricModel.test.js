@@ -28,22 +28,24 @@ describe('ImpactMetricModel', () => {
       new ImpactMetric({
         id: '123456789',
         charityId: 'abcdefghijklmnop',
-        dollarAmount: 1000,
+        dollarAmount: 25e6,
         description:
           'This provides access to care for people who might not otherwise have it.',
         metricTitle: '1 home visit',
         impactTitle: 'Provide 1 visit from a community health worker',
+        whyValuableDescription: 'It makes a difference.',
       })
     )
     expect(item).toEqual({
       id: '123456789',
       charityId: 'abcdefghijklmnop',
-      dollarAmount: 1000,
+      dollarAmount: 25e6,
       description:
         'This provides access to care for people who might not otherwise have it.',
       metricTitle: '1 home visit',
       impactTitle: 'Provide 1 visit from a community health worker',
       active: true,
+      whyValuableDescription: 'It makes a difference.',
     })
   })
 })

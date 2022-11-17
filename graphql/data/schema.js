@@ -1002,11 +1002,16 @@ const impactMetricType = new GraphQLObjectType({
     dollarAmount: {
       type: new GraphQLNonNull(GraphQLInt),
       description:
-        'Dollar amount required to achieve an instance of this ImpactMetric',
+        'Dollar amount (in micro USDs) required to achieve an instance of this ImpactMetric',
     },
     description: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'Markdown description of this ImpactMetric',
+    },
+    whyValuableDescription: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'Markdown. A shorter version of the description that answers "why this impact matters".',
     },
     metricTitle: {
       type: new GraphQLNonNull(GraphQLString),
