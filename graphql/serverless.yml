@@ -316,9 +316,7 @@ plugins:
 
 # Only include the build and its node modules.
 package:
-  exclude:
-    - ./**
-  include:
+  patterns:
     - build/**
 
 functions:
