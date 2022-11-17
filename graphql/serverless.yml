@@ -1,6 +1,6 @@
 
 service: graphql # Important: this must be unique in AWS Cloudformation!
-frameworkVersion: ">=1.14.0 <2.0.0"
+frameworkVersion: ">=3.24.1 <4.0.0"
 
 custom:
   stageDefault: dev
