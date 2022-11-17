@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-import-module-exports
 import { get } from 'lodash/object'
 
 // Experiments with valid experiment group values.

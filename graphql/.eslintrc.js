@@ -6,6 +6,11 @@ module.exports = {
     'prettier/prettier': 'error',
     'global-require': 0,
     'no-underscore-dangle': 0,
+    // TODO: reenable these rules after cleaning code:
+    'prefer-object-spread': 0,
+    'arrow-body-style': 0,
+    'no-useless-catch': 0,
+    'import/no-useless-path-segments': 0,
   },
   parserOptions: {
     ecmaVersion: 2021,

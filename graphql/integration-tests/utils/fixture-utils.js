@@ -14,6 +14,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 // To throttle large batches of data.
 const SLEEP_MS_BETWEEN_QUERY_BATCHES = 100
 function sleep(ms) {
+  // eslint-disable-next-line no-promise-executor-return
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 

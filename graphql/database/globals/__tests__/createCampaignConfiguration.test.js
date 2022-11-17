@@ -1724,6 +1724,7 @@ describe('addMoneyRaised', () => {
       campaignId: 'myFunCampaign',
       countMoneyRaised: true,
     })
+    // eslint-disable-next-line no-loss-of-precision
     const moneyToAdd = 0.0231798231798231798 // super long
     await campaignConfig.addMoneyRaised(moneyToAdd)
     expect(callRedis.mock.calls[0][0].amountToAdd).toEqual(23179823)

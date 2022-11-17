@@ -38,6 +38,7 @@
     "@babel/preset-env": "^7.15.8",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^29.3.1",
+    "babel-plugin-content-transformer": "^0.2.0",
     "body-parser": "^1.19.0",
     "chokidar": "^3.0.0",
     "codecov": "^3.7.1",
