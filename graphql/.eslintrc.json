@@ -1,4 +1,5 @@
 {
+  "root": true,
   "extends": ["airbnb", "prettier"],
   "plugins": ["prettier"],
   "rules": {
@@ -7,10 +8,15 @@
     "no-underscore-dangle": 0
   },
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2021,
     "sourceType": "module"
   },
   "env": {
     "es6": true
+  },
+  "settings": {
+    "react": {
+      "version": "18"
+    }
   }
 }
