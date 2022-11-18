@@ -72,7 +72,7 @@
     "build:copy-cpm-codes": "cp ./database/userRevenue/amazon-cpm-codes.json ./build/database/userRevenue/amazon-cpm-codes.json",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "npm-run-all -s build sls:deploy",
-    "sls:deploy": "serverless deploy -v",
+    "sls:deploy": "serverless deploy --verbose",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "npm-run-all -s lint test:run test:codecov",
     "test:run": "jest --config=./jest.config.js --coverage",
