@@ -698,7 +698,7 @@ const userType = new GraphQLObjectType({
     },
     notifications: {
       type: new GraphQLNonNull(
-        GraphQLList(
+        new GraphQLList(
           new GraphQLObjectType({
             name: 'notifications',
             description: 'user notifications to show on v4',
@@ -737,7 +737,7 @@ const userType = new GraphQLObjectType({
     },
     pendingMissionInvites: {
       type: new GraphQLNonNull(
-        GraphQLList(
+        new GraphQLList(
           new GraphQLObjectType({
             name: 'PendingMissionInvite',
             description: 'pending mission invites for user',
@@ -955,7 +955,7 @@ const CauseOnboardingCopyType = new GraphQLObjectType({
   fields: () => ({
     steps: {
       type: new GraphQLNonNull(
-        GraphQLList(
+        new GraphQLList(
           new GraphQLObjectType({
             name: 'onboardingUIStep',
             description: 'ui content for each onboarding step',
@@ -1333,7 +1333,7 @@ const charityType = new GraphQLObjectType({
         ),
     },
     impactMetrics: {
-      type: GraphQLList(impactMetricType),
+      type: new GraphQLList(impactMetricType),
       description: 'Impact Metrics that belong to this Charity',
       resolve: (charity, _args, context) =>
         getImpactMetricsByCharityId(context.user, charity.id),
@@ -1562,7 +1562,7 @@ const campaignSocialSharingType = new GraphQLObjectType({
             description: 'The text to share to Twitter',
           },
           related: {
-            type: new GraphQLNonNull(GraphQLList(GraphQLString)),
+            type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
             description: 'A list of Twitter handles that relate to the post',
           },
         }),
@@ -2044,7 +2044,7 @@ const createInvitedUsersMutation = mutationWithClientMutationId({
   name: 'CreateInvitedUsers',
   inputFields: {
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
-    invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    invitedEmails: { type: new GraphQLNonNull(new GraphQLList(GraphQLString)) },
     inviterName: { type: GraphQLString },
     inviterMessage: { type: GraphQLString },
   },
@@ -2088,7 +2088,7 @@ const createSquadInvitesMutation = mutationWithClientMutationId({
   name: 'CreateSquadInvites',
   inputFields: {
     inviterId: { type: new GraphQLNonNull(GraphQLString) },
-    invitedEmails: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    invitedEmails: { type: new GraphQLNonNull(new GraphQLList(GraphQLString)) },
     inviterName: { type: new GraphQLNonNull(GraphQLString) },
     inviterMessage: { type: GraphQLString },
   },
