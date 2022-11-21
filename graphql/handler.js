@@ -35,7 +35,12 @@ export const handler = (event) => {
 
   // Add context to any logs (e.g. the user and request data).
   return loggerContextWrapper(context.user, event, () =>
-    graphql(Schema, body.query, null, context, body.variables)
+    graphql({
+      schema: Schema,
+      source: body.query,
+      contextValue: context,
+      variableValues: body.variables,
+    })
       .then((data) => {
         // Check if the GraphQL response contains any errors, and
         // if it does, handle them.
