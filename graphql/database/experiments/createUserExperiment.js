@@ -31,9 +31,7 @@ const createUserExperiment = async (
       userExperimentRecord.item.variationId !== variationId
     ) {
       logger.warn(
-        `Expected to see same variationId ${
-          userExperimentRecord.item.variationId
-        } for userId ${userId} and experimentId ${experimentId}, instead received variation ${variationId}`
+        `Expected to see same variationId ${userExperimentRecord.item.variationId} for userId ${userId} and experimentId ${experimentId}, instead received variation ${variationId}`
       )
     }
   } catch (e) {

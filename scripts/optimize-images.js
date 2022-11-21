@@ -40,7 +40,7 @@ const formatImg = async (imgFilePath, newFileName) => {
 }
 
 // Takes a file, saves a new image, returns a fixture.
-const processImage = async fileName => {
+const processImage = async (fileName) => {
   const id = uuid()
   const newFileName = `${id}.jpg`
   await formatImg(path.join(dir, fileName), newFileName)
@@ -60,7 +60,7 @@ const processImages = async () => {
 
   const files = await fs.promises.readdir(dir)
   const fixtures = await Promise.all(
-    files.map(fileName => processImage(fileName))
+    files.map((fileName) => processImage(fileName))
   )
 
   // Save the fixtures to file.

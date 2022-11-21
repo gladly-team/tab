@@ -25,7 +25,7 @@ class Cause extends DynamoDBModel {
 
     const mapFieldsToRequired = (fields, except = {}) => {
       const copy = Object.assign({}, fields)
-      Object.keys(copy).forEach(key => {
+      Object.keys(copy).forEach((key) => {
         if (!(key in except)) {
           copy[key] = copy[key].required()
         }
@@ -124,10 +124,7 @@ class Cause extends DynamoDBModel {
 
     return {
       // TODO: additional restrictions, e.g. for nanoid
-      id: types
-        .string()
-        .required()
-        .description(`The ID for the cause.`),
+      id: types.string().required().description(`The ID for the cause.`),
 
       // Fields here are alphabetized (non-objects first).
 
@@ -151,10 +148,7 @@ class Cause extends DynamoDBModel {
         .boolean()
         .description('if a user can select this cause')
         .default(self.fieldDefaults.isAvailableToSelect),
-      icon: types
-        .string()
-        .description(`string: name of the icon`)
-        .required(),
+      icon: types.string().description(`string: name of the icon`).required(),
       individualImpactEnabled: types
         .boolean()
         .optional()
@@ -256,10 +250,7 @@ class Cause extends DynamoDBModel {
             .string()
             .required()
             .description(`url of landing image in email`),
-          title: types
-            .string()
-            .required()
-            .description(`title of email invite`),
+          title: types.string().required().description(`title of email invite`),
           about: types
             .string()
             .required()

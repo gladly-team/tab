@@ -21,7 +21,7 @@ export default async ({ id: userId }) => {
     .eq(true)
     .execute()
   const missionDatabaseDocumentsByMission = await Promise.all(
-    pastUserMissions.map(pastMission => {
+    pastUserMissions.map((pastMission) => {
       return Promise.all([
         UserMissionModel.query(override, pastMission.missionId).execute(),
         MissionModel.get(override, pastMission.missionId),

@@ -72,10 +72,10 @@ export const getRecruits = async (
     // Batch-get recruited users.
     const recruits = await UserModel.getBatch(
       getRecruitsOverride,
-      referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
+      referralLogs.map((recruit) => recruit.userId) // array of recruits' user IDs
     )
 
-    referralLogs.forEach(referralLog => {
+    referralLogs.forEach((referralLog) => {
       const recruitedUser = find(recruits, { id: referralLog.userId })
 
       if (recruitedUser) {
@@ -109,7 +109,7 @@ export const getRecruits = async (
  *   has opened one or more tabs.
  * @return {integer} The total number of recruits in the returned set.
  */
-export const getTotalRecruitsCount = recruitsEdges => {
+export const getTotalRecruitsCount = (recruitsEdges) => {
   if (!recruitsEdges) {
     return 0
   }
@@ -132,11 +132,11 @@ export const getTotalRecruitsCount = recruitsEdges => {
  * @return {integer} The number of recruits in the returned set who
  *   were active for at least one day.
  */
-export const getRecruitsActiveForAtLeastOneDay = recruitsEdges => {
+export const getRecruitsActiveForAtLeastOneDay = (recruitsEdges) => {
   if (!recruitsEdges) {
     return 0
   }
-  return filter(recruitsEdges, recruitEdge => {
+  return filter(recruitsEdges, (recruitEdge) => {
     if (!recruitEdge.node.lastActive) {
       return false
     }
@@ -166,12 +166,14 @@ export const getRecruitsActiveForAtLeastOneDay = recruitsEdges => {
  * @return {integer} The number of recruits in the returned set who
  *   have opened one or more tabs.
  */
-export const getRecruitsWithAtLeastOneTab = recruitsEdges => {
+export const getRecruitsWithAtLeastOneTab = (recruitsEdges) => {
   if (!recruitsEdges) {
     return 0
   }
-  return filter(recruitsEdges, recruitEdge => recruitEdge.node.hasOpenedOneTab)
-    .length
+  return filter(
+    recruitsEdges,
+    (recruitEdge) => recruitEdge.node.hasOpenedOneTab
+  ).length
 }
 
 export default getRecruits

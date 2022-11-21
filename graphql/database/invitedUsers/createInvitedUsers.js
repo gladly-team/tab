@@ -21,7 +21,7 @@ const createInvitedUsers = async (
 ) => {
   try {
     // sanitize strings
-    const sanitizedEmails = uniq(invitedEmails.map(email => sanitize(email)))
+    const sanitizedEmails = uniq(invitedEmails.map((email) => sanitize(email)))
     const sanitizedMessage = inviterMessage
       ? sanitize(inviterMessage)
       : undefined
@@ -40,7 +40,7 @@ const createInvitedUsers = async (
     const user = await UserModel.get(userContext, inviterId)
     const cause = await getCause(user.causeId)
     const verifiedAndSentEmails = await Promise.all(
-      sanitizedEmails.map(inviteEmail =>
+      sanitizedEmails.map((inviteEmail) =>
         verifyAndSendInvite({
           userContext,
           inviterId,

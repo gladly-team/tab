@@ -41,7 +41,7 @@ const logEmailVerified = async (userContext, userId) => {
         .usingIndex('InvitesByInvitedEmail')
         .execute()
       await Promise.all(
-        originalInvitedUsers.map(invitedUserEntry =>
+        originalInvitedUsers.map((invitedUserEntry) =>
           InvitedUsersModel.update(override, {
             ...invitedUserEntry,
             invitedId: userId,
@@ -62,9 +62,10 @@ const logEmailVerified = async (userContext, userId) => {
             acceptedSquadMembers.push(userId)
           }
           const { pendingSquadMembersEmailInvite } = missionModel
-          const newPendingSquadMembersEmailInvite = pendingSquadMembersEmailInvite.filter(
-            pendingUser => pendingUser !== userContext.email
-          )
+          const newPendingSquadMembersEmailInvite =
+            pendingSquadMembersEmailInvite.filter(
+              (pendingUser) => pendingUser !== userContext.email
+            )
           const missionModelUpdate = {
             id: currentMissionId,
             acceptedSquadMembers,

@@ -79,8 +79,7 @@ const data = {
         'With Tab for Global Health, supporting healthcare access has never been easier.',
       about:
         '<div>Tab for Global Health turns your web browser into a force for good. With each tab opened, ad revenue supports community healthcare training through Partners In Health. This training helps ensure the people in need of care will receive it, long term.</div>\n\n',
-      faq:
-        'We’re partnered with Partners In Health to ensure the money raised will directly support their mission of providing high-quality health care globally to those who need it.',
+      faq: 'We’re partnered with Partners In Health to ensure the money raised will directly support their mission of providing high-quality health care globally to those who need it.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',

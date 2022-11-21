@@ -7,6 +7,7 @@ import path from 'path'
 import {
   deleteFixturesFromTable,
   loadFixturesIntoTable,
+  // eslint-disable-next-line import/no-relative-packages
 } from '../graphql/integration-tests/utils/fixture-utils'
 
 const args = process.argv.slice(2)
@@ -28,7 +29,7 @@ switch (command) {
       .then(() => {
         console.log('Finished loading fixtures.')
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
       })
     break
@@ -55,7 +56,7 @@ switch (command) {
       .then(() => {
         console.log('Finished deleting fixtures.')
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
       })
     break

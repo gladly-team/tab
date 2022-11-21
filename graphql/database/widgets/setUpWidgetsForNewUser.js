@@ -39,7 +39,7 @@ const widgetConfigurations = [
  */
 export default async (userContext, userId) =>
   Promise.all(
-    widgetConfigurations.map(async widgetConfig => {
+    widgetConfigurations.map(async (widgetConfig) => {
       try {
         await UserWidgetModel.create(userContext, {
           userId,
@@ -52,6 +52,6 @@ export default async (userContext, userId) =>
     })
   )
     .then(() => true)
-    .catch(err => {
+    .catch((err) => {
       throw err
     })

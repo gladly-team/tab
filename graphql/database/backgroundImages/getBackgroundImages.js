@@ -17,7 +17,7 @@ export default async (
     // Can remove this if we migrate that field to all items.
     images = await BackgroundImageModel.getAll(userContext)
     images = images.filter(
-      image =>
+      (image) =>
         !image.category || image.category === BACKGROUND_IMAGE_LEGACY_CATEGORY
     )
   } else {

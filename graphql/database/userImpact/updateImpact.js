@@ -8,7 +8,7 @@ import getUserImpactAndCause from './getUserImpactAndCause'
  * @param {object} updates - options to update impact record, include logImpact, claimPendingUserReferralImpact, confirmImpact
  * @return {Promise<User>}  A promise that resolves into a UserImpact instance.
  */
-const shouldShowImpactNotification = userImpactMetric => {
+const shouldShowImpactNotification = (userImpactMetric) => {
   const impactCountsToShow = [1, 3, 6, 10, 15]
   return !(
     impactCountsToShow.includes(userImpactMetric) ||

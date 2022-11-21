@@ -21,14 +21,8 @@ class SearchEngine extends BaseModel {
 
   static get schema() {
     return {
-      id: types
-        .string()
-        .description(`ID of the Search Engine`)
-        .required(),
-      name: types
-        .string()
-        .description(`Name of the Search Engine`)
-        .required(),
+      id: types.string().description(`ID of the Search Engine`).required(),
+      name: types.string().description(`Name of the Search Engine`).required(),
       searchUrl: types
         .string()
         .description(`a search destination URL`)

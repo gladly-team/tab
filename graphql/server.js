@@ -3,7 +3,7 @@ import chokidar from 'chokidar'
 import cors from 'cors'
 import express from 'express'
 import bodyParser from 'body-parser'
-import graphQLHTTP from 'express-graphql'
+import { graphqlHTTP } from 'express-graphql'
 import { clean } from 'require-clean'
 import { exec } from 'child_process'
 import {
@@ -42,7 +42,10 @@ function startGraphQLServer(callback) {
   // https://github.com/graphql/express-graphql#options
   graphQLApp.use(
     '/',
-    graphQLHTTP(req => {
+    // This is deprecated (11/2022), but probably not an issue
+    // for us to keep using it in local development for now:
+    // https://github.com/graphql/express-graphql
+    graphqlHTTP((req) => {
       // Wrap our handler in a logger to match the logger setup
       // we user in our production handler.
       const event = generateLambdaEventObjFromRequest(req)
@@ -96,7 +99,7 @@ const watcher = chokidar.watch([
   './database/*/*.js',
 ])
 
-watcher.on('change', path => {
+watcher.on('change', (path) => {
   console.info(`\`${path}\` changed. Restarting.`)
   startServer(() => console.info('GraphQL server schema updated.'))
 })

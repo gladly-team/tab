@@ -21,7 +21,7 @@ const MAX_SEARCHES_ONE_MINUTE = 5
 const MAX_SEARCHES_FIVE_MINUTES = 12
 const MAX_SEARCHES_ONE_DAY = 40
 
-const createMockSearchLogItem = item =>
+const createMockSearchLogItem = (item) =>
   Object.assign(
     {},
     {

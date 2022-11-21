@@ -32,4 +32,4 @@ const tables = {
   userEventLog: 'UserEventLog',
 }
 
-export default mapValues(tables, name => `${name}${tableNameAppendix}`)
+export default mapValues(tables, (name) => `${name}${tableNameAppendix}`)

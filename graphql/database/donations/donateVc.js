@@ -76,10 +76,7 @@ export default async (userContext, userId, charityId, vc) => {
       await VCDonationByCharityModel.update(addVCDonatedByCharityOverride, {
         charityId,
         // The datetime of the start of this hour.
-        timestamp: moment
-          .utc()
-          .startOf('hour')
-          .toISOString(),
+        timestamp: moment.utc().startOf('hour').toISOString(),
         vcDonated: { $add: vc },
       })
     } catch (e) {
@@ -89,10 +86,7 @@ export default async (userContext, userId, charityId, vc) => {
           await VCDonationByCharityModel.create(addVCDonatedByCharityOverride, {
             charityId,
             // The datetime of the start of this hour.
-            timestamp: moment
-              .utc()
-              .startOf('hour')
-              .toISOString(),
+            timestamp: moment.utc().startOf('hour').toISOString(),
             vcDonated: vc,
           })
         } catch (err) {

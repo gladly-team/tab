@@ -7,7 +7,7 @@ import {
 const getUserFeatures = async (userContext, user) => {
   const configuredGrowthbook = getConfiguredGrowthbook(user)
   const userFeatures = await Promise.all(
-    Object.keys(features).map(featureName =>
+    Object.keys(features).map((featureName) =>
       getAndLogFeatureForUser(
         userContext,
         user.id,

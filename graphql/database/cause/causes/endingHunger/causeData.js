@@ -79,8 +79,7 @@ const data = {
         'With Tab for Ending Hunger, treating & preventing malnutrition can be part of our daily lives.',
       about:
         '<div>Tab for Ending Hunger turns your web browser into a force for good. With each tab opened, ad revenue supports communities in need of life-saving nutrition. These resources help ensure people facing hunger can be treated and prevent health issues, long-term.</div>\n\n',
-      faq:
-        'We’re partnered with Action Against Hunger to save lives by eliminating hunger through the prevention, detection and treatment of malnutrition.',
+      faq: 'We’re partnered with Action Against Hunger to save lives by eliminating hunger through the prevention, detection and treatment of malnutrition.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',

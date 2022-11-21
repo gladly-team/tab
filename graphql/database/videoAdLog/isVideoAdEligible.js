@@ -7,14 +7,14 @@ import VideoAdLogModel from './VideoAdLogModel'
  */
 
 export default async (userContext, { id: userId }) =>
-  (await VideoAdLogModel.query(userContext, userId)
-    .where('timestamp')
-    .between(
-      moment()
-        .subtract(1, 'day')
-        .toISOString(),
-      moment().toISOString()
-    )
-    .filter('completed')
-    .equals(true)
-    .execute()).length < 3
+  (
+    await VideoAdLogModel.query(userContext, userId)
+      .where('timestamp')
+      .between(
+        moment().subtract(1, 'day').toISOString(),
+        moment().toISOString()
+      )
+      .filter('completed')
+      .equals(true)
+      .execute()
+  ).length < 3

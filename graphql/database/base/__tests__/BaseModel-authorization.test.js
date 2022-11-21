@@ -12,7 +12,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     // Mock a valid permissions override.
     jest.mock('../../../utils/permissions-overrides', () => ({
       isValidPermissionsOverride: jest.fn(
-        override => override === 'working-override'
+        (override) => override === 'working-override'
       ),
     }))
     jest.resetModules()
@@ -23,7 +23,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('does not authorize if permissions are not set', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     delete TestModel.permissions
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         user,
         operation,
@@ -37,7 +37,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('does not authorize if operation properties are not set', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     setModelPermissions(TestModel, {})
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         user,
         operation,
@@ -58,7 +58,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
       {}
     )
     setModelPermissions(TestModel, newPermissions)
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         user,
         operation,
@@ -79,7 +79,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
       {}
     )
     setModelPermissions(TestModel, newPermissions)
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         user,
         operation,
@@ -106,8 +106,8 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     expect(isUpdateAuthorized).toBe(true)
 
     // All other operations should not be authorized.
-    const otherOperations = filter(validOperations, item => item !== 'update')
-    otherOperations.forEach(operation => {
+    const otherOperations = filter(validOperations, (item) => item !== 'update')
+    otherOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         user,
         operation,
@@ -132,7 +132,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         null,
         operation,
@@ -157,7 +157,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         'bad-user-value',
         operation,
@@ -181,7 +181,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     )
     setModelPermissions(TestModel, newPermissions)
 
-    validOperations.forEach(operation => {
+    validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(
         'working-override',
         operation,
@@ -274,8 +274,8 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
 
   it('passes correct params to `get` authorization check', async () => {
     // Set a mock `isQueryAuthorized` method
-    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey')
-      .default
+    const TestModelRangeKey =
+      require('../test-utils/ExampleModelRangeKey').default
     const authorizationCheck = jest.fn(() => false)
     TestModelRangeKey.isQueryAuthorized = authorizationCheck
 
@@ -317,8 +317,8 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
 
   it('passes correct params to `getBatch` authorization check with range key', async () => {
     // Set a mock `isQueryAuthorized` method
-    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey')
-      .default
+    const TestModelRangeKey =
+      require('../test-utils/ExampleModelRangeKey').default
     const authorizationCheck = jest.fn(() => false)
     TestModelRangeKey.isQueryAuthorized = authorizationCheck
 
@@ -389,8 +389,8 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
 
   it('passes correct params to `update` authorization check', async () => {
     // Set a mock `isQueryAuthorized` method
-    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey')
-      .default
+    const TestModelRangeKey =
+      require('../test-utils/ExampleModelRangeKey').default
     const authorizationCheck = jest.fn(() => false)
     TestModelRangeKey.isQueryAuthorized = authorizationCheck
 

@@ -80,8 +80,7 @@ const data = {
         'We all have a part to play in protecting our planet from the harmful effects of climate change. That’s why {{name}} thinks you should join them on Tab for Trees.',
       about:
         '<div>Tab for Trees turns your web browser into a force for good. With each tab opened, ad revenue supports The Eden Reforestation Projects in fighting climate change through reforestation initiatives.</div>\n\n',
-      faq:
-        'We’re partnered with Eden Reforestation Projects to ensure the money raised will directly support their goals of creating jobs, protecting ecosystems, and helping mitigate climate change.',
+      faq: 'We’re partnered with Eden Reforestation Projects to ensure the money raised will directly support their goals of creating jobs, protecting ecosystems, and helping mitigate climate change.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',

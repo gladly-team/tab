@@ -71,26 +71,18 @@ const configFields = Joi.object({
 })
 
 const campaignConfigInputSchema = Joi.object({
-  campaignId: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
+  campaignId: Joi.string().alphanum().min(3).max(30).required(),
   // The "charityId" value is required when there is a hearts donation
   // button.
   charityId: Joi.any()
     .when('showHeartsDonationButton', {
       is: Joi.valid(true).required(),
-      then: Joi.string()
-        .guid()
-        .required(),
+      then: Joi.string().guid().required(),
       otherwise: Joi.string(),
     })
     .when('onEnd.showHeartsDonationButton', {
       is: Joi.valid(true).required(),
-      then: Joi.string()
-        .guid()
-        .required(),
+      then: Joi.string().guid().required(),
       otherwise: Joi.string(),
     }),
   content: configFields.extract('content').required(),
@@ -181,22 +173,18 @@ const campaignConfigInputSchema = Joi.object({
     }),
   theme: configFields.extract('theme').optional(),
   time: Joi.object({
-    start: Joi.date()
-      .iso()
-      .required(),
-    end: Joi.date()
-      .iso()
-      .required(),
+    start: Joi.date().iso().required(),
+    end: Joi.date().iso().required(),
   }).required(),
 })
   .and('endTriggers', 'onEnd')
   .prefs({ convert: true }) // cast values if possible
 
-const WrongCampaignConfigError = message => {
+const WrongCampaignConfigError = (message) => {
   return new Error(`Campaign config validation error: ${message}`)
 }
 
-const createCampaignConfiguration = input => {
+const createCampaignConfiguration = (input) => {
   try {
     Joi.assert(input, campaignConfigInputSchema)
   } catch (e) {
@@ -226,7 +214,7 @@ const createCampaignConfiguration = input => {
   const redisKeyMoneyRaised = `campaign:${campaignId}:moneyRaised`
   const redisKeyTabsOpened = `campaign:${campaignId}:tabsOpened`
 
-  const getVCDonated = async userContext => {
+  const getVCDonated = async (userContext) => {
     try {
       const vcDonated = await getCharityVcReceived(
         userContext,
@@ -338,7 +326,7 @@ const createCampaignConfiguration = input => {
 
     configuredGoal = {
       targetNumber,
-      getCurrentNumber: async userContext => {
+      getCurrentNumber: async (userContext) => {
         let currentNumber = 0
         switch (numberSource) {
           case HEARTS: {
@@ -384,7 +372,7 @@ const createCampaignConfiguration = input => {
     process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
 
   return {
-    addMoneyRaised: async USDMoneyRaisedToAdd => {
+    addMoneyRaised: async (USDMoneyRaisedToAdd) => {
       // If not counting money raised or the campaign is not active, ignore this.
       if (!(countMoneyRaised && isCampaignLive())) {
         return
@@ -405,7 +393,7 @@ const createCampaignConfiguration = input => {
       }
     },
     campaignId,
-    getCharityData: async userContext => {
+    getCharityData: async (userContext) => {
       if (!charityId) {
         return null
       }

@@ -39,14 +39,14 @@ const mockReturn = {
 describe('createSearchEnginePromptLog tests', () => {
   it('creates new UserSwitchSearchPromptLogModel', async () => {
     expect.assertions(3)
-    const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
-      .default
+    const createSearchEnginePromptLog =
+      require('../createSearchEnginePromptLog').default
     // Mock creation query
     setMockDBResponse(DatabaseOperation.CREATE, {
       Attributes: mockReturn,
     })
-    const UserSwitchSearchPromptLogModel = require('../UserSwitchSearchPromptLogModel')
-      .default
+    const UserSwitchSearchPromptLogModel =
+      require('../UserSwitchSearchPromptLogModel').default
     const UserModel = require('../../users/UserModel').default
     const createQuery = jest.spyOn(UserSwitchSearchPromptLogModel, 'create')
     const userUpdateQuery = jest.spyOn(UserModel, 'update')
@@ -77,14 +77,14 @@ describe('createSearchEnginePromptLog tests', () => {
 
   it('creates new UserSwitchSearchPromptLogModel and updates User if SearchForACause', async () => {
     expect.assertions(3)
-    const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
-      .default
+    const createSearchEnginePromptLog =
+      require('../createSearchEnginePromptLog').default
     // Mock creation query
     setMockDBResponse(DatabaseOperation.CREATE, {
       Attributes: mockReturn,
     })
-    const UserSwitchSearchPromptLogModel = require('../UserSwitchSearchPromptLogModel')
-      .default
+    const UserSwitchSearchPromptLogModel =
+      require('../UserSwitchSearchPromptLogModel').default
     const UserModel = require('../../users/UserModel').default
     const createQuery = jest.spyOn(UserSwitchSearchPromptLogModel, 'create')
     const userUpdateQuery = jest.spyOn(UserModel, 'update')
@@ -115,8 +115,8 @@ describe('createSearchEnginePromptLog tests', () => {
 
   it('throws if invalid search engine for new UserSwitchSearchPromptLogModel', async () => {
     expect.assertions(1)
-    const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
-      .default
+    const createSearchEnginePromptLog =
+      require('../createSearchEnginePromptLog').default
     await expect(
       createSearchEnginePromptLog(
         userContext,
@@ -129,8 +129,8 @@ describe('createSearchEnginePromptLog tests', () => {
 
   it('throws if user id does not match user context', async () => {
     expect.assertions(1)
-    const createSearchEnginePromptLog = require('../createSearchEnginePromptLog')
-      .default
+    const createSearchEnginePromptLog =
+      require('../createSearchEnginePromptLog').default
     await expect(
       createSearchEnginePromptLog(userContext, 'wrongid')
     ).rejects.toThrow(new UnauthorizedQueryException())

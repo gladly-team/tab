@@ -64,7 +64,7 @@ export const setMockDBResponse = (
  * @return {undefined}
  */
 export const clearAllMockDBResponses = () => {
-  availableOperations.forEach(operation => {
+  availableOperations.forEach((operation) => {
     databaseClient[operation].mockReset()
   })
 }
@@ -148,7 +148,7 @@ export const getMockUserImpact = () => ({
 export const mockDate = {}
 mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
-export const getMockCauseInstance = attributes => {
+export const getMockCauseInstance = (attributes) => {
   return new CauseModel(
     Object.assign(
       {},
@@ -202,7 +202,7 @@ export const getMockCauseInstance = attributes => {
  * @param {Object} attributes - Attributes to override when getting the mock user.
  * @return {Object} The mock user.
  */
-export const getMockUserInstance = attributes => {
+export const getMockUserInstance = (attributes) => {
   const defaultUserInfo = getMockUserInfo()
   const now = mockDate.defaultDateISO
   return new UserModel(
@@ -255,7 +255,7 @@ mockDate.off = () => {
  * @param {Object} item - A database item.
  * @return {Object} The item with 'created' and 'updated' fields.
  */
-export const addTimestampFieldsToItem = item => {
+export const addTimestampFieldsToItem = (item) => {
   const now = moment.utc().toISOString()
   return Object.assign({}, item, {
     created: now,

@@ -39,7 +39,8 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 // To throttle large batches of data.
 const SLEEP_MS_BETWEEN_QUERY_BATCHES = 100
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  // eslint-disable-next-line no-promise-executor-return
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 const loadItemsIntoTable = async (items, tableName) => {
@@ -55,7 +56,7 @@ const loadItemsIntoTable = async (items, tableName) => {
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToLoad.map(item => ({
+      [tableName]: itemsToLoad.map((item) => ({
         PutRequest: {
           Item: item,
         },

@@ -5,7 +5,7 @@ const amazonCPMCodes = require('./amazon-cpm-codes.json')
  * @param {string} amazonCPMCode - The Amazon CPM code
  * @return {number} The $USD value of the CPM
  */
-const decodeAmazonCPM = amazonCPMCode => {
+const decodeAmazonCPM = (amazonCPMCode) => {
   const cpmStr = amazonCPMCodes[amazonCPMCode]
   // If no valid CPM value, return 0.0
   if (!cpmStr) {

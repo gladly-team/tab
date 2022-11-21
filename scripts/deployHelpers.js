@@ -24,7 +24,7 @@ export const checkDeployValidity = (stageName, envCI) => {
  * @param {string} stageName - The name of the deployment stage
  * @return {string} Returns the corresponding stage name string.
  */
-export const getServerlessStageName = stageName => {
+export const getServerlessStageName = (stageName) => {
   const acceptableSlsStages = ['dev', 'test', 'staging', 'prod']
   const slsStageName = stageName.toLowerCase()
   if (acceptableSlsStages.indexOf(slsStageName) === -1) {

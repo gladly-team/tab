@@ -12,18 +12,20 @@ const COMPLETED = 'completed'
 const STARTED = 'started'
 const override = getPermissionsOverride(MISSIONS_OVERRIDE)
 
-const buildUserIdUsernameMap = async userMissionDocuments =>
-  (await UserModel.getBatch(
-    override,
-    userMissionDocuments.map(user => user.userId),
-    { ProjectionExpression: 'id, username' }
-  )).reduce((acum, item) => {
+const buildUserIdUsernameMap = async (userMissionDocuments) =>
+  (
+    await UserModel.getBatch(
+      override,
+      userMissionDocuments.map((user) => user.userId),
+      { ProjectionExpression: 'id, username' }
+    )
+  ).reduce((acum, item) => {
     // eslint-disable-next-line no-param-reassign
     acum[item.id] = item.username
     return acum
   }, {})
 
-const buildSquadMemberDataFromMissionDoc = missionDoc => {
+const buildSquadMemberDataFromMissionDoc = (missionDoc) => {
   const {
     acceptedSquadMembers,
     pendingSquadMembersExisting,
@@ -31,25 +33,25 @@ const buildSquadMemberDataFromMissionDoc = missionDoc => {
     pendingSquadMembersEmailInvite,
   } = missionDoc
   const squadMemberDataFromMissionDocAsDictionary = {}
-  acceptedSquadMembers.forEach(acceptedUserId => {
+  acceptedSquadMembers.forEach((acceptedUserId) => {
     squadMemberDataFromMissionDocAsDictionary[acceptedUserId] = {
       userId: acceptedUserId,
       status: ACCEPTED,
     }
   })
-  pendingSquadMembersExisting.forEach(pendingUserId => {
+  pendingSquadMembersExisting.forEach((pendingUserId) => {
     squadMemberDataFromMissionDocAsDictionary[pendingUserId] = {
       status: PENDING,
       userId: pendingUserId,
     }
   })
-  rejectedSquadMembers.forEach(rejectedUserId => {
+  rejectedSquadMembers.forEach((rejectedUserId) => {
     squadMemberDataFromMissionDocAsDictionary[rejectedUserId] = {
       status: REJECTED,
       userId: rejectedUserId,
     }
   })
-  pendingSquadMembersEmailInvite.forEach(email => {
+  pendingSquadMembersEmailInvite.forEach((email) => {
     squadMemberDataFromMissionDocAsDictionary[email] = {
       status: PENDING,
       invitedEmail: email,
@@ -96,7 +98,7 @@ const buildTopLevelFieldsFromMissionDocument = (
   } else {
     status = PENDING
   }
-  const pivotedEndOfMissionAwards = endOfMissionAwards.map(award => ({
+  const pivotedEndOfMissionAwards = endOfMissionAwards.map((award) => ({
     ...award,
     user: userIdUsernameMap[award.user],
   }))
@@ -134,8 +136,8 @@ const buildSquadMembersDetailedStats = async (
   const emailInviteSquadMembers = Object.values(
     squadMemberDataFromMissionDocAsMap
   )
-    .filter(user => user.invitedEmail !== undefined)
-    .map(emailInviteUser => ({
+    .filter((user) => user.invitedEmail !== undefined)
+    .map((emailInviteUser) => ({
       invitedEmail: emailInviteUser.invitedEmail,
       status: 'pending',
       longestTabStreak: 0,
@@ -147,9 +149,9 @@ const buildSquadMembersDetailedStats = async (
     squadMemberDataFromMissionDocAsMap
   )
     .filter(
-      user => user.invitedEmail === undefined && user.status !== 'accepted'
+      (user) => user.invitedEmail === undefined && user.status !== 'accepted'
     )
-    .map(existingUser => ({
+    .map((existingUser) => ({
       username: userIdUsernameMap[existingUser.userId],
       status: existingUser.status,
       longestTabStreak: 0,
@@ -171,19 +173,16 @@ const buildMissionReturnType = async (
 ) => {
   const userIdUsernameMap = await buildUserIdUsernameMap([
     ...userMissionDocuments,
-    ...missionDocument.pendingSquadMembersExisting.map(id => ({ userId: id })),
+    ...missionDocument.pendingSquadMembersExisting.map((id) => ({
+      userId: id,
+    })),
   ])
-  const topLevelFieldsFromMissionDocument = buildTopLevelFieldsFromMissionDocument(
-    missionDocument,
-    userIdUsernameMap
-  )
-  const topLevelFieldsFromUserMissionDocuments = buildTopLevelFieldsFromUserMissionDocs(
-    userMissionDocuments,
-    userId
-  )
-  const squadMemberDataFromMissionDocAsDictionary = buildSquadMemberDataFromMissionDoc(
-    missionDocument
-  )
+  const topLevelFieldsFromMissionDocument =
+    buildTopLevelFieldsFromMissionDocument(missionDocument, userIdUsernameMap)
+  const topLevelFieldsFromUserMissionDocuments =
+    buildTopLevelFieldsFromUserMissionDocs(userMissionDocuments, userId)
+  const squadMemberDataFromMissionDocAsDictionary =
+    buildSquadMemberDataFromMissionDoc(missionDocument)
   const squadMembers = await buildSquadMembersDetailedStats(
     squadMemberDataFromMissionDocAsDictionary,
     userMissionDocuments,
@@ -197,11 +196,11 @@ const buildMissionReturnType = async (
 }
 export default buildMissionReturnType
 
-export const getLongestTabStreak = squadMember =>
+export const getLongestTabStreak = (squadMember) =>
   get(squadMember, 'tabStreak.longestTabStreak', 0)
-export const getCurrentTabStreak = squadMember =>
+export const getCurrentTabStreak = (squadMember) =>
   get(squadMember, 'tabStreak.currentTabStreak', 0)
-export const getMaxTabsDay = squadMember =>
+export const getMaxTabsDay = (squadMember) =>
   get(squadMember, 'missionMaxTabsDay.maxDay.numTabs', 0)
-export const getMissionCurrentTabsDay = squadMember =>
+export const getMissionCurrentTabsDay = (squadMember) =>
   get(squadMember, 'missionMaxTabsDay.recentDay.numTabs', 0)

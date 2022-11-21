@@ -29,15 +29,9 @@ class VCDonation extends DynamoDBModel {
     const self = this
     return {
       userId: types.string().required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      timestamp: types.string().isoDate().required(),
       charityId: types.uuid(),
-      vcDonated: types
-        .number()
-        .integer()
-        .default(self.fieldDefaults.vcDonated),
+      vcDonated: types.number().integer().default(self.fieldDefaults.vcDonated),
     }
   }
 

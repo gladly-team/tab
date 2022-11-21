@@ -30,7 +30,7 @@ const AdRevenue = (revenue, adSize) => ({
  *   should resolve into a float.
  * @return {Object} An AdRevenue object
  */
-const decodeRevenueObj = revenueObj => {
+const decodeRevenueObj = (revenueObj) => {
   if (!revenueObj) {
     return AdRevenue()
   }
@@ -41,9 +41,7 @@ const decodeRevenueObj = revenueObj => {
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
       if (isNil(decodedCPM)) {
         throw new Error(
-          `Amazon revenue code "${
-            revenueObj.encodedValue
-          }" resolved to a nil value`
+          `Amazon revenue code "${revenueObj.encodedValue}" resolved to a nil value`
         )
       }
       revenueVal = decodedCPM / 1000
@@ -90,11 +88,9 @@ const aggregateRevenues = (revenueObjs, aggregationOperation) => {
  * @return {String} An ISO datetime with the milliseconds up to
  *   150ms greater than the provided ISODatetime.
  */
-const addMillisecondsToISODatetime = ISODatetime => {
+const addMillisecondsToISODatetime = (ISODatetime) => {
   const msToAdd = random(1, 150)
-  return moment(ISODatetime)
-    .add(msToAdd, 'milliseconds')
-    .toISOString()
+  return moment(ISODatetime).add(msToAdd, 'milliseconds').toISOString()
 }
 
 /**

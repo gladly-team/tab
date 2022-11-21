@@ -1316,7 +1316,7 @@ describe('[onEnd] validation: showProgressBar and goal', () => {
         onEnd: {
           ...mockCampaignInput.onEnd,
           goal: {
-            transformNumberSourceValue: num => num * 3,
+            transformNumberSourceValue: (num) => num * 3,
           },
         },
       })
@@ -1724,6 +1724,7 @@ describe('addMoneyRaised', () => {
       campaignId: 'myFunCampaign',
       countMoneyRaised: true,
     })
+    // eslint-disable-next-line no-loss-of-precision
     const moneyToAdd = 0.0231798231798231798 // super long
     await campaignConfig.addMoneyRaised(moneyToAdd)
     expect(callRedis.mock.calls[0][0].amountToAdd).toEqual(23179823)
@@ -2172,7 +2173,7 @@ describe('goal data (goal.getCurrentNumber)', () => {
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'hearts',
-        transformNumberSourceValue: num => num * 2,
+        transformNumberSourceValue: (num) => num * 2,
       },
     })
     const mockUserContext = getMockUserContext()
@@ -2198,7 +2199,7 @@ describe('goal data (goal.getCurrentNumber)', () => {
       goal: {
         ...mockCampaignInput.goal,
         numberSource: 'moneyRaised',
-        transformNumberSourceValue: num => Math.round(num),
+        transformNumberSourceValue: (num) => Math.round(num),
       },
     })
     const mockUserContext = getMockUserContext()

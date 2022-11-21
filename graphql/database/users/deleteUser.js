@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import moment from 'moment'
 import UserModel from './UserModel'
 import UserWidgetModel from '../widgets/userWidget/UserWidgetModel'
@@ -28,7 +28,7 @@ const deleteUser = async (userContext, userId) => {
     const widgets = await getWidgets(userContext, userId)
 
     await Promise.all(
-      widgets.map(async widget => {
+      widgets.map(async (widget) => {
         await UserWidgetModel.update(userContext, {
           userId,
           widgetId: widget.widgetId,

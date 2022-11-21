@@ -54,4 +54,4 @@ export const searchEngineData = [
   },
 ]
 
-export const VALID_SEARCH_ENGINES = searchEngineData.map(data => data.id)
+export const VALID_SEARCH_ENGINES = searchEngineData.map((data) => data.id)

@@ -29,7 +29,7 @@ const getWidgets = async (userContext, userId, enabled = false) => {
 
     // Get base widgets.
     const keys = []
-    userWidgets.forEach(userWidget => {
+    userWidgets.forEach((userWidget) => {
       keys.push({
         id: userWidget.widgetId,
       })
@@ -41,16 +41,16 @@ const getWidgets = async (userContext, userId, enabled = false) => {
 
     // Merge user widgets with base widgets.
     const mergedWidgets = []
-    userWidgets.forEach(userWidget => {
+    userWidgets.forEach((userWidget) => {
       const baseWidget = find(
         baseWidgets,
-        bWidget => bWidget.id === userWidget.widgetId
+        (bWidget) => bWidget.id === userWidget.widgetId
       )
       mergedWidgets.push(constructFullWidget(userWidget, baseWidget))
     })
 
     // Sort widgets.
-    const sortedWidgets = sortBy(mergedWidgets, obj => obj.position)
+    const sortedWidgets = sortBy(mergedWidgets, (obj) => obj.position)
     return sortedWidgets
   } catch (e) {
     throw e

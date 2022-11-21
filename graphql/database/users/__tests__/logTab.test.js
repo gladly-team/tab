@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import UserModel from '../UserModel'
 import UserTabsLogModel from '../UserTabsLogModel'
 import UserMissionModel from '../../missions/UserMissionModel'
@@ -442,17 +442,11 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numTabs: 20,
         },
         recentDay: {
-          date: moment
-            .utc()
-            .subtract(5, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(5, 'days').toISOString(),
           numTabs: 5,
         },
       },
@@ -470,10 +464,7 @@ describe('logTab', () => {
     const maxTabsDayVal = updateMethod.mock.calls[0][1].maxTabsDay
     expect(maxTabsDayVal).toEqual({
       maxDay: {
-        date: moment
-          .utc()
-          .subtract(3, 'days')
-          .toISOString(),
+        date: moment.utc().subtract(3, 'days').toISOString(),
         numTabs: 20, // stayed the same
       },
       recentDay: {
@@ -491,10 +482,7 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numTabs: 20,
         },
         recentDay: {
@@ -516,10 +504,7 @@ describe('logTab', () => {
     const maxTabsDayVal = updateMethod.mock.calls[0][1].maxTabsDay
     expect(maxTabsDayVal).toEqual({
       maxDay: {
-        date: moment
-          .utc()
-          .subtract(3, 'days')
-          .toISOString(),
+        date: moment.utc().subtract(3, 'days').toISOString(),
         numTabs: 20, // stayed the same
       },
       recentDay: {
@@ -537,10 +522,7 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment
-            .utc()
-            .subtract(3, 'days')
-            .toISOString(),
+          date: moment.utc().subtract(3, 'days').toISOString(),
           numTabs: 44,
         },
         recentDay: {

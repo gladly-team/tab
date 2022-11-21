@@ -31,7 +31,7 @@ describe('dev-tools', () => {
     jwtDecode.mockImplementationOnce(() => mockToken)
     const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
-      header: headerName => {
+      header: (headerName) => {
         if (headerName === 'Authorization') {
           return 'fake.token'
         }
@@ -58,7 +58,7 @@ describe('dev-tools', () => {
 
     const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
-      header: headerName => {
+      header: (headerName) => {
         if (headerName === 'Authorization') {
           return 'fake.token'
         }
@@ -100,7 +100,7 @@ describe('dev-tools', () => {
   it('correctly forms GraphQL context from a request object when the user has an Authorization header value of "unauthenticated"', () => {
     const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
-      header: headerName => {
+      header: (headerName) => {
         if (headerName === 'Authorization') {
           return 'unauthenticated'
         }

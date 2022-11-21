@@ -129,8 +129,8 @@ const getMockCampaignConfiguration = () => ({
 describe('getCampaign', () => {
   it('returns the expected data when the campaign has not ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     getCurrentCampaignConfig.mockReturnValue(getMockCampaignConfiguration())
     const mockUserContext = getMockUserContext()
     const getCampaign = require('../getCampaign').default
@@ -206,8 +206,8 @@ describe('getCampaign', () => {
 
   it('uses "onEnd" config values if the campaign has ended due to "endTriggers.whenTimeEnds"', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -336,8 +336,8 @@ describe('getCampaign', () => {
 
   it('uses "onEnd" config values if the campaign has ended due to "endTriggers.whenGoalAchieved"', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -443,8 +443,8 @@ describe('getCampaign', () => {
   it('uses the "onEnd" config values if process.env.CAMPAIGN_END_OVERRIDE === "true"', async () => {
     expect.assertions(1)
     process.env.CAMPAIGN_END_OVERRIDE = 'true' // override
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -482,8 +482,8 @@ describe('getCampaign', () => {
   it('does NOT use "onEnd" config values if process.env.CAMPAIGN_END_OVERRIDE === "false"', async () => {
     expect.assertions(1)
     process.env.CAMPAIGN_END_OVERRIDE = 'false' // no override
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -520,8 +520,8 @@ describe('getCampaign', () => {
 
   it('does NOT use "onEnd" config values if the campaign has NOT ended with "endTriggers.whenTimeEnds"', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -558,8 +558,8 @@ describe('getCampaign', () => {
 
   it('does NOT use "onEnd" config values if the campaign has NOT ended with "endTriggers.whenGoalAchieved"', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -600,8 +600,8 @@ describe('getCampaign', () => {
 
   it('calls the campaign config\'s "addMoneyRaised" when the campaign has not ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
     const mockUserContext = getMockUserContext()
@@ -613,8 +613,8 @@ describe('getCampaign', () => {
 
   it('calls the campaign config\'s "incrementNewUserCount" when the campaign has not ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
     const mockUserContext = getMockUserContext()
@@ -626,8 +626,8 @@ describe('getCampaign', () => {
 
   it('calls the campaign config\'s "incrementTabCount" when the campaign has not ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue(mockCampaignConfig)
     const mockUserContext = getMockUserContext()
@@ -639,8 +639,8 @@ describe('getCampaign', () => {
 
   it('does NOT call the campaign config\'s "addMoneyRaised" when the campaign has ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -672,8 +672,8 @@ describe('getCampaign', () => {
 
   it('does NOT call the campaign config\'s "incrementNewUserCount" when the campaign has ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -705,8 +705,8 @@ describe('getCampaign', () => {
 
   it('does NOT call the campaign config\'s "incrementTabCount" when the campaign has ended', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -738,8 +738,8 @@ describe('getCampaign', () => {
 
   it('does not include a "charity" value if getCharityData returns null', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,
@@ -753,8 +753,8 @@ describe('getCampaign', () => {
 
   it('does not include a "goal" value if goal is not defined in the campaign config', async () => {
     expect.assertions(1)
-    const getCurrentCampaignConfig = require('../getCurrentCampaignConfig')
-      .default
+    const getCurrentCampaignConfig =
+      require('../getCurrentCampaignConfig').default
     const mockCampaignConfig = getMockCampaignConfiguration()
     getCurrentCampaignConfig.mockReturnValue({
       ...mockCampaignConfig,

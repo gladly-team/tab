@@ -36,8 +36,8 @@ describe('logUserExperimentActions', () => {
     const mockExperimentActions = {
       searchIntro: 2,
     }
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     await logUserExperimentActions(
       userContext,
       userContext.id,
@@ -60,8 +60,8 @@ describe('logUserExperimentActions', () => {
     const mockExperimentActions = {
       referralNotification: 1,
     }
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     await logUserExperimentActions(
       userContext,
       userContext.id,
@@ -82,8 +82,8 @@ describe('logUserExperimentActions', () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentActions = {}
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     await logUserExperimentActions(
       userContext,
       userContext.id,
@@ -99,8 +99,8 @@ describe('logUserExperimentActions', () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentActions = null
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     await logUserExperimentActions(
       userContext,
       userContext.id,
@@ -123,8 +123,8 @@ describe('logUserExperimentActions', () => {
     const mockExperimentActions = {
       searchIntro: 1,
     }
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     const returnedUser = await logUserExperimentActions(
       userContext,
       userContext.id,
@@ -143,8 +143,8 @@ describe('logUserExperimentActions', () => {
     })
 
     const mockExperimentActions = {}
-    const logUserExperimentActions = require('../logUserExperimentActions')
-      .default
+    const logUserExperimentActions =
+      require('../logUserExperimentActions').default
     const returnedUser = await logUserExperimentActions(
       userContext,
       userContext.id,

@@ -27,19 +27,10 @@ class UserDataConsent extends DynamoDBModel {
   static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types
-        .string()
-        .isoDate()
-        .required(),
+      timestamp: types.string().isoDate().required(),
       consentString: types.string().required(),
-      consentCreated: types
-        .string()
-        .isoDate()
-        .required(),
-      consentLastUpdated: types
-        .string()
-        .isoDate()
-        .required(),
+      consentCreated: types.string().isoDate().required(),
+      consentLastUpdated: types.string().isoDate().required(),
       version: types.number(),
       vendorListVersion: types.number(),
       cmpId: types.number(),

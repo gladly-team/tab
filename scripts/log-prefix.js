@@ -29,6 +29,6 @@ const rl = readline.createInterface({
   input: process.stdin,
 })
 
-rl.on('line', line => {
+rl.on('line', (line) => {
   log.all('', line)
 })

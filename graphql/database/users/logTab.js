@@ -59,11 +59,9 @@ const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
  * @return {String} An ISO datetime with the milliseconds up to
  *   20ms greater than the provided ISODatetime.
  */
-const addMillisecondsToISODatetime = ISODatetime => {
+const addMillisecondsToISODatetime = (ISODatetime) => {
   const msToAdd = random(1, 20)
-  return moment(ISODatetime)
-    .add(msToAdd, 'milliseconds')
-    .toISOString()
+  return moment(ISODatetime).add(msToAdd, 'milliseconds').toISOString()
 }
 
 /**
@@ -104,7 +102,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
         currentMissionId: user.currentMissionId,
         id: userId,
       })
-      const memberInfo = userMission.squadMembers.find(member => {
+      const memberInfo = userMission.squadMembers.find((member) => {
         return member.userId === user.id
       })
       if (userMission.status === 'started') {

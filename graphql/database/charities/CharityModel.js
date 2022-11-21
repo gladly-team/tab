@@ -67,8 +67,9 @@ class Charity extends DynamoDBModel {
 
   static get fieldDeserializers() {
     return {
-      logo: fileName => `${mediaRoot}/img/charities/charity-logos/${fileName}`,
-      image: fileName =>
+      logo: (fileName) =>
+        `${mediaRoot}/img/charities/charity-logos/${fileName}`,
+      image: (fileName) =>
         `${mediaRoot}/img/charities/charity-post-donation-images/${fileName}`,
     }
   }

@@ -1,9 +1,9 @@
 /* eslint-disable */
 // FIXME: update to new auth service.
 
-export const getUser = async username => {}
+export const getUser = async (username) => {}
 
-export const deleteUser = async username => {}
+export const deleteUser = async (username) => {}
 
 // const createUser = async (email, username, password) => {
 // }

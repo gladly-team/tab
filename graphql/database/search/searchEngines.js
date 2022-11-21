@@ -3,13 +3,13 @@ import SearchEngineModel from './SearchEngineModel'
 import { searchEngineData } from './searchEngineData'
 
 const searchEngineModels = searchEngineData.map(
-  engineData => new SearchEngineModel(engineData)
+  (engineData) => new SearchEngineModel(engineData)
 )
 
 // Validate data.
 // TODO: this should eventually live in a better ORM.
 const SearchEngineSchema = Joi.object(SearchEngineModel.schema)
-searchEngineModels.forEach(data => {
+searchEngineModels.forEach((data) => {
   // With abortEarly=false, collect all errors before exiting.
   // https://github.com/sideway/joi/blob/master/API.md#anyvalidatevalue-options
   const validation = SearchEngineSchema.validate(data, { abortEarly: false })

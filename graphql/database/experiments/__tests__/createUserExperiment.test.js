@@ -91,9 +91,7 @@ describe('createUserExperiment tests', () => {
       variationValueStr: 'green',
     })
     expect(logger.warn).toHaveBeenCalledWith(
-      `Expected to see same variationId 2 for userId ${
-        user.id
-      } and experimentId test-experiment, instead received variation 4`
+      `Expected to see same variationId 2 for userId ${user.id} and experimentId test-experiment, instead received variation 4`
     )
     expect(result).toEqual({ success: true })
   })

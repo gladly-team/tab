@@ -206,7 +206,9 @@ describe('buildMissionReturnType tests', () => {
       '123'
     )
     const { squadMembers } = missionReturn
-    const pendingEmailUser = squadMembers.filter(member => member.invitedEmail)
+    const pendingEmailUser = squadMembers.filter(
+      (member) => member.invitedEmail
+    )
     expect(pendingEmailUser).toEqual([
       {
         invitedEmail: 'test1@gmail.com',
@@ -245,7 +247,7 @@ describe('buildMissionReturnType tests', () => {
     )
     const { squadMembers } = missionReturn
     const pendingInviteUser = squadMembers.filter(
-      member => member.status === 'pending'
+      (member) => member.status === 'pending'
     )
     expect(pendingInviteUser).toEqual([
       {
@@ -277,7 +279,7 @@ describe('buildMissionReturnType tests', () => {
     )
     const { squadMembers } = missionReturn
     const rejectedUsers = squadMembers.filter(
-      member => member.status === 'rejected'
+      (member) => member.status === 'rejected'
     )
     expect(rejectedUsers).toEqual([
       {

@@ -24,8 +24,8 @@ function fetchQuery(graphQLQueryStr, variablesObj, userIdToken) {
       variables: variablesObj,
     }),
   })
-    .then(response => response.json())
-    .catch(err => {
+    .then((response) => response.json())
+    .catch((err) => {
       logger.error(err)
     })
 }

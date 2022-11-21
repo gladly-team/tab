@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import moment from 'moment'
 
 import UserModel from '../UserModel'
@@ -18,7 +18,7 @@ import getWidgets from '../../widgets/getWidgets'
 
 jest.mock('../../databaseClient')
 jest.mock('../../widgets/getWidgets')
-jest.mock('uuid/v4')
+jest.mock('uuid')
 
 beforeAll(() => {
   mockDate.on(null, { mockCurrentTimeOnly: true })
@@ -78,7 +78,7 @@ describe('deleteUser', () => {
     defaultUserContext.authTime = moment.utc().unix()
     await deleteUser(defaultUserContext, userInfo.id)
 
-    userWidgetsToGet.forEach(widget =>
+    userWidgetsToGet.forEach((widget) =>
       expect(userWidgetUpdateMethod).toHaveBeenCalledWith(defaultUserContext, {
         userId: userInfo.id,
         widgetId: widget.widgetId,
@@ -103,9 +103,7 @@ describe('deleteUser', () => {
     const userInfo = getMockUserInfo()
 
     const defaultUserContext = getMockUserContext()
-    defaultUserContext.authTime = moment()
-      .subtract(6, 'minutes')
-      .unix()
+    defaultUserContext.authTime = moment().subtract(6, 'minutes').unix()
 
     await expect(deleteUser(defaultUserContext, userInfo.id)).rejects.toThrow(
       'User must have authed in the last 5 minutes to perform this operation.'

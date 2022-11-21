@@ -2,7 +2,7 @@ dist: focal
 sudo: false
 language: node_js
 node_js:
-- '14'
+- '16'
 addons:
   apt:
     # Add Python 3 for installing aws-cli.

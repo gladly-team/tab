@@ -9,4 +9,4 @@ assignEnvVars('test')
 const tests = spawn('yarn', ['run', 'test:integration'], { stdio: 'inherit' })
 
 // Exit this process with the child process code.
-tests.on('exit', code => process.exit(code))
+tests.on('exit', (code) => process.exit(code))

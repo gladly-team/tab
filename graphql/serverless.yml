@@ -1,6 +1,6 @@
 
 service: graphql # Important: this must be unique in AWS Cloudformation!
-frameworkVersion: ">=1.14.0 <2.0.0"
+frameworkVersion: ">=3.24.1 <4.0.0"
 
 custom:
   stageDefault: dev
@@ -19,7 +19,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   # Let's be conservative and prevent any unexpected changes
@@ -316,9 +316,7 @@ plugins:
 
 # Only include the build and its node modules.
 package:
-  exclude:
-    - ./**
-  include:
+  patterns:
     - build/**
 
 functions:

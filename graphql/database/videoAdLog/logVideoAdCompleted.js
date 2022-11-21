@@ -55,9 +55,11 @@ export default async (
   if (alreadyCreditedLog.length) {
     return failure(userContext, userId)
   }
-  const videoAdLog = (await VideoAdLogModel.query(override, videoAdId)
-    .usingIndex('VideoAdLogsByUniqueId')
-    .execute())[0]
+  const videoAdLog = (
+    await VideoAdLogModel.query(override, videoAdId)
+      .usingIndex('VideoAdLogsByUniqueId')
+      .execute()
+  )[0]
   if (!videoAdLog) {
     return failure(userContext, userId)
   }

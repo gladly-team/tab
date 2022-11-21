@@ -66,8 +66,8 @@ export const mockImages = [
     updated: '2021-02-16T23:17:05.806Z',
   },
 ]
-export const mockLegacyImages = mockImages.filter(img => !img.category)
-export const mockCatImages = mockImages.filter(img => img.category === 'cats')
+export const mockLegacyImages = mockImages.filter((img) => !img.category)
+export const mockCatImages = mockImages.filter((img) => img.category === 'cats')
 export default {
   get: jest.fn(() => mockImages[1]),
   getAll: jest.fn(() => mockImages),

@@ -6,7 +6,7 @@ import MissionModel from '../MissionModel'
 
 jest.mock('../../invitedUsers/utils', () => ({
   verifyAndSendInvite: jest.fn(),
-  sanitize: string => string,
+  sanitize: (string) => string,
   getUserInvites: jest.fn(),
 }))
 // jest.mock('../../cause/getCause')

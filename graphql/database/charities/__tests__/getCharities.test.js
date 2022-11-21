@@ -109,7 +109,7 @@ describe('getCharities', () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    mockCharities.forEach(charity => {
+    mockCharities.forEach((charity) => {
       // eslint-disable-next-line no-param-reassign
       charity.inactive = true
     })
@@ -154,7 +154,7 @@ describe('getCharities', () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    mockCharities.forEach(charity => {
+    mockCharities.forEach((charity) => {
       // eslint-disable-next-line no-param-reassign
       charity.isPermanentPartner = false
     })

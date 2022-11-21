@@ -36,7 +36,7 @@ class BaseModel {
     //   the field if one exists.
     // * If both the value and default value are nil, do not set
     //   the property.
-    fieldNames.forEach(fieldName => {
+    fieldNames.forEach((fieldName) => {
       let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
@@ -60,7 +60,7 @@ class BaseModel {
     // * If the returned value is null or undefined, do not set
     //   the property.
     const self = this
-    fieldNames.forEach(fieldName => {
+    fieldNames.forEach((fieldName) => {
       let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
@@ -255,7 +255,7 @@ class BaseModel {
     const self = this
     // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
     let authorizationError = false
-    keys.forEach(key => {
+    keys.forEach((key) => {
       let hashKey
       let rangeKey
       if (isObject(key)) {
@@ -286,10 +286,7 @@ class BaseModel {
     }
     try {
       // https://github.com/clarkie/dynogels#scan
-      const data = await this.dynogelsModel
-        .scan()
-        .loadAll()
-        .execAsync()
+      const data = await this.dynogelsModel.scan().loadAll().execAsync()
       return this.deserialize(data.Items)
     } catch (e) {
       throw e
@@ -475,7 +472,7 @@ class BaseModel {
    *   of `obj` and possibly some additional default attributes.
    */
   static deserialize(data) {
-    const deserializeObj = item => {
+    const deserializeObj = (item) => {
       // Item may be null.
       if (!item) {
         return null
@@ -489,7 +486,7 @@ class BaseModel {
 
     let result
     if (data instanceof Array) {
-      result = data.map(val => deserializeObj(val))
+      result = data.map((val) => deserializeObj(val))
     } else {
       result = deserializeObj(data)
     }

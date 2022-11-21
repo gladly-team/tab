@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 
 const customTypes = {}
 customTypes.uuid = () =>

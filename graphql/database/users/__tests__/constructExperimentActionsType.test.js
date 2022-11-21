@@ -2,8 +2,8 @@
 
 describe('constructExperimentActionsType', () => {
   it('returns the expected value for referralNotification', () => {
-    const constructExperimentActionsType = require('../constructExperimentActionsType')
-      .default
+    const constructExperimentActionsType =
+      require('../constructExperimentActionsType').default
     expect(
       constructExperimentActionsType({
         testReferralNotificationAction: 2,
@@ -14,8 +14,8 @@ describe('constructExperimentActionsType', () => {
   })
 
   it('returns the expected value for searchIntro', () => {
-    const constructExperimentActionsType = require('../constructExperimentActionsType')
-      .default
+    const constructExperimentActionsType =
+      require('../constructExperimentActionsType').default
     expect(
       constructExperimentActionsType({
         testSearchIntroAction: 2,

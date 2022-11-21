@@ -28,7 +28,7 @@ export default async (userContext, userId, missionId) => {
   }
   const newMissionId = nanoid(9)
   const otherTeamMembers = previousMission.acceptedSquadMembers.filter(
-    otherUsers => otherUsers !== userId
+    (otherUsers) => otherUsers !== userId
   )
   const newMission = {
     id: newMissionId,
@@ -55,7 +55,7 @@ export default async (userContext, userId, missionId) => {
   ])
   // invite other users who accepted previous mission
   await Promise.all(
-    otherTeamMembers.map(async teamMemberId => {
+    otherTeamMembers.map(async (teamMemberId) => {
       const existingUser = await UserModel.get(override, teamMemberId)
       const { pendingMissionInvites } = existingUser
       pendingMissionInvites.push({
