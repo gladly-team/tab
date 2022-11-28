@@ -13,6 +13,7 @@ class BackgroundColorPicker extends React.Component {
 
     this.state = {
       selectedColor: '#000',
+      backgroundColor: '#000000'
     }
   }
 
