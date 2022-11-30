@@ -1,6 +1,4 @@
-import getUserFeature from '../experiments/getUserFeature'
 import logger from '../../utils/logger'
-import { NOTIF_ONE_AND_HALF_MILLION } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -10,16 +8,13 @@ import { NOTIF_ONE_AND_HALF_MILLION } from '../experiments/experimentConstants'
  *   array.
  */
 
-const getUserNotifications = async (userContext, user) => {
+const SHOW_CURRENT_NOTIF = false // TODO: enable when ready
+
+const getUserNotifications = async () => {
   let notifications = []
   try {
-    const NOTIF_CODE = '1.5Mraised' // edit per custom notification
-    const showNotif = await getUserFeature(
-      userContext,
-      user,
-      NOTIF_ONE_AND_HALF_MILLION
-    )
-    notifications = [...(showNotif.variation ? [{ code: NOTIF_CODE }] : [])]
+    const NOTIF_CODE = 'sfac-dec-2022' // edit per custom notification
+    notifications = [...(SHOW_CURRENT_NOTIF ? [{ code: NOTIF_CODE }] : [])]
   } catch (e) {
     logger.error(e)
   }
