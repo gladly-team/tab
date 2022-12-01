@@ -80,7 +80,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "echo \"Run either start:newtab or start:search\"",
+    "start": "yarn run start:newtab",
     "start:newtab": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:newtab:react-scripts & yarn run relay:watch",
     "start:newtab:react-scripts": "BROWSER=none REACT_APP_WHICH_APP=newtab react-scripts start",
     "start:search": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:search:react-scripts & yarn run relay:watch",
@@ -93,7 +93,7 @@
     "bundle:analyze": "source-map-explorer",
     "bundle:analyze-buddy": "bundle-buddy build/**/*.map",
     "postinstall": "patch-package",
-    "deploy": "npm-run-all -s sls:deploy build:newtab deploy:newtab build:search deploy:search",
+    "deploy": "npm-run-all -s sls:deploy build:newtab deploy:newtab",
     "deploy:newtab": "node scripts/syncToS3.js --app newtab",
     "deploy:search": "node scripts/syncToS3.js --app search",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
