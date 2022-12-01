@@ -13,7 +13,7 @@ const SHOW_CURRENT_NOTIF = false // TODO: enable when ready
 const getUserNotifications = async () => {
   let notifications = []
   try {
-    const NOTIF_CODE = 'sfac-dec-2022' // edit per custom notification
+    const NOTIF_CODE = 'SFACDec2022' // edit per custom notification
     notifications = [...(SHOW_CURRENT_NOTIF ? [{ code: NOTIF_CODE }] : [])]
   } catch (e) {
     logger.error(e)
