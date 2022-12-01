@@ -564,8 +564,8 @@ class Dashboard extends React.Component {
                         >
                           Search for a Cause
                         </Link>{' '}
-                        will contribute to the rehabilitation of a community
-                        well in Malawi through <b>charity:water</b>.{' '}
+                        this month will contribute to the rehabilitation of a
+                        community well in Malawi through <b>charity:water</b>.{' '}
                         <Link
                           to={'https://campaigns.gladly.io'}
                           target="_blank"
