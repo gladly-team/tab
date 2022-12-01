@@ -44,7 +44,6 @@ import {
   goTo,
   inviteFriendsURL,
   loginURL,
-  millionAndAHalfRaisedURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
@@ -74,7 +73,7 @@ import {
   YAHOO_USER_ID,
 } from 'js/constants'
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
-// import Link from 'js/components/General/Link'
+import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
 const NewUserTour = lazy(() =>
@@ -553,21 +552,32 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`$1.5M raised!`}
+                  title={`Give the gift of clean water this December!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Tabbers have now raised over $1,500,000 for charity!
-                        It's amazing what a dedicated community and a few
-                        (million) browser tabs can do :)
-                      </Typography>
-                      <Typography variant={'body2'} gutterBottom>
-                        See what we've accomplished together:
+                        Every search you make on{' '}
+                        <Link
+                          to={'http://tab.gladly.io/get-search/'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Search for a Cause
+                        </Link>{' '}
+                        this month will contribute to the rehabilitation of a
+                        community well in Malawi through <b>charity:water</b>.{' '}
+                        <Link
+                          to={'https://campaigns.gladly.io'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Learn more about the project here.
+                        </Link>
                       </Typography>
                     </>
                   }
-                  buttonText={'Check it out'}
-                  buttonURL={millionAndAHalfRaisedURL}
+                  buttonText={'Read more'}
+                  buttonURL={'https://campaigns.gladly.io'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
