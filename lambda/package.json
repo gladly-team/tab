@@ -45,9 +45,9 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^1.17.1",
     "regenerator-runtime": "^0.13.9",
-    "serverless": "^1.65.0",
-    "serverless-plugin-include-dependencies": "^3.2.1",
-    "serverless-prune-plugin": "^1.4.1",
+    "serverless": "^3.25.1",
+    "serverless-plugin-include-dependencies": "^5.0.0",
+    "serverless-prune-plugin": "^2.0.1",
     "yamljs": "^0.3.0"
   },
   "scripts": {
