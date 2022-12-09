@@ -8,12 +8,12 @@ import logger from '../../utils/logger'
  *   array.
  */
 
-const SHOW_CURRENT_NOTIF = false
+const SHOW_CURRENT_NOTIF = true
 
 const getUserNotifications = async () => {
   let notifications = []
   try {
-    const NOTIF_CODE = 'SFACDec2022' // edit per custom notification
+    const NOTIF_CODE = 'SFACDec2022v2' // edit per custom notification
     notifications = [...(SHOW_CURRENT_NOTIF ? [{ code: NOTIF_CODE }] : [])]
   } catch (e) {
     logger.error(e)
