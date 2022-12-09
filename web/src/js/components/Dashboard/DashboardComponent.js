@@ -75,6 +75,7 @@ import {
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -552,32 +553,30 @@ class Dashboard extends React.Component {
                 <Notification
                   data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Give the gift of clean water this December!`}
+                  title={`We're well on our way`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Every search you make on{' '}
-                        <Link
-                          to={'http://tab.gladly.io/get-search/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Search for a Cause
-                        </Link>{' '}
-                        this month will contribute to the rehabilitation of a
-                        community well in Malawi through <b>charity:water</b>.{' '}
+                        We’re 20% of the way to{' '}
                         <Link
                           to={'https://campaigns.gladly.io'}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          Learn more about the project here.
+                          restoring a well in Malawi
                         </Link>
+                        ! Try Search for a Cause to help us reach our goal by
+                        the end of the month.
                       </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={20}
+                        style={{ marginTop: 16, marginBottom: 0 }}
+                      />
                     </>
                   }
-                  buttonText={'Read more'}
-                  buttonURL={'https://campaigns.gladly.io'}
+                  buttonText={'Make a search'}
+                  buttonURL={'https://tab.gladly.io/get-search/'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
