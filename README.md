@@ -4,9 +4,11 @@
 
 # Tab for a Cause
 
-The easiest way to do good every day! Join in: [tab.gladly.io](https://tab.gladly.io/)
+The easiest way to do good every day. **[Join in](https://tab.gladly.io)**
 
 ## Developing
+
+This repo contains most backend services. See [gladly-team/tab-web](https://github.com/gladly-team/tab-web) for the latest web app.
 
 ### Prerequisites
 
