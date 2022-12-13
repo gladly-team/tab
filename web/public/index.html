@@ -92,8 +92,8 @@
         // var host = window.location.hostname;
         // var element = document.createElement('script');
         // var firstScript = document.getElementsByTagName('script')[0];
-        // var url = 'https://quantcast.mgr.consensu.org'
-        //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
+        // var url = 'https://cmp.quantcast.com'
+        //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js?tag_version=V2');
         var uspTries = 0;
         var uspTriesLimit = 3;
         // element.async = true;
@@ -219,6 +219,9 @@
                 args[2](retr);
               }
             } else {
+              if(args[0] === 'init' && typeof args[3] === 'object') {
+                args[3] = Object.assign(args[3], { tag_version: 'V2' });
+              }
               queue.push(args);
             }
           }
@@ -252,7 +255,9 @@
                   if (msgIsString) {
                     returnMsg = JSON.stringify(returnMsg);
                   }
-                  event.source.postMessage(returnMsg, '*');
+                  if (event && event.source && event.source.postMessage) {
+                    event.source.postMessage(returnMsg, '*');
+                  }
                 },
                 payload.parameter
               );
@@ -369,6 +374,7 @@
     </script>
     <!-- End Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <!-- End tab-cmp -->
+
 
     <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
     <!--
