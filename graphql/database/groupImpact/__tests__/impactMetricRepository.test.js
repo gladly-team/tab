@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import { DatabaseItemDoesNotExistException } from '../../../utils/exceptions'
+import getFeature from '../../experiments/getFeature'
 
 const mockImpactMetrics = [
   {
@@ -52,29 +53,73 @@ jest.mock('../impactMetrics', () => {
   return module
 })
 
+jest.mock('../../experiments/getFeature')
+
+beforeEach(() => {
+  getFeature.mockReturnValue({
+    featureName: 'reduced-impact-cost',
+    value: false,
+    inExperiment: false,
+  })
+})
+
 describe('impactMetricRepository', () => {
-  it('getImpactMetricById throws if impactMetric doesnt exist', () => {
+  test('getImpactMetricById throws if impactMetric doesnt exist', () => {
     const { getImpactMetricById } = require('../impactMetricRepository')
     expect(() => getImpactMetricById('non-existent-id')).toThrow(
       new DatabaseItemDoesNotExistException()
     )
   })
 
-  it('getImpactMetricById returns cause metric', () => {
+  test('getImpactMetricById returns cause metric', () => {
     const { getImpactMetricById } = require('../impactMetricRepository')
     expect(getImpactMetricById('nyXGkP6vB')).toEqual(mockImpactMetrics[2])
   })
 
-  it('getImpactMetricsByCharityId returns empty list if none applicable', () => {
+  test('getImpactMetricsByCharityId returns empty list if none applicable', () => {
     const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
     expect(getImpactMetricsByCharityId('fake-charity-id')).toEqual([])
   })
 
-  it('getImpactMetricsByCharityId fetches appropriate impact metrics', () => {
+  test('getImpactMetricsByCharityId fetches appropriate impact metrics', () => {
     const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
     expect(getImpactMetricsByCharityId('charity2')).toEqual([
       mockImpactMetrics[0],
       mockImpactMetrics[2],
     ])
+  })
+
+  test('getImpactMetricById does not modify the dollarAmount by default', () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    expect(getImpactMetricById('nyXGkP6vB').dollarAmount).toEqual(25e6)
+  })
+
+  test('getImpactMetricById does modifies the dollarAmount if the feature is enabled', () => {
+    getFeature.mockReturnValue({
+      featureName: 'reduced-impact-cost',
+      value: true,
+      inExperiment: false,
+    })
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    expect(getImpactMetricById('nyXGkP6vB').dollarAmount).toEqual(0.01e6)
+  })
+
+  test('getImpactMetricsByCharityId does not modify the dollarAmount by default', () => {
+    const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
+    expect(getImpactMetricsByCharityId('charity2')[1].dollarAmount).toEqual(
+      25e6
+    )
+  })
+
+  test('getImpactMetricsByCharityId does modifies the dollarAmount if the feature is enabled', () => {
+    getFeature.mockReturnValue({
+      featureName: 'reduced-impact-cost',
+      value: true,
+      inExperiment: false,
+    })
+    const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
+    expect(getImpactMetricsByCharityId('charity2')[1].dollarAmount).toEqual(
+      0.01e6
+    )
   })
 })

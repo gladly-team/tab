@@ -237,9 +237,9 @@ describe('growthbookUtils tests', () => {
     const growthbookUtils = require('../growthbookUtils')
     const configuredGrowthbook = growthbookUtils.getConfiguredGrowthbook(user)
     const { getFeatureWithoutUser } = growthbookUtils
-    await expect(
+    expect(() => {
       getFeatureWithoutUser(configuredGrowthbook, 'some-feature')
-    ).rejects.toThrow(
+    }).toThrow(
       'Running an experiment requires passing user attributes to Growthbook.'
     )
   })

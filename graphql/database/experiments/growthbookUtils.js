@@ -60,7 +60,7 @@ export const getConfiguredGrowthbook = ({
 }
 
 // Use this only to retrieve features that do not rely on user attributes.
-export const getFeatureWithoutUser = async (growthbook, featureName) => {
+export const getFeatureWithoutUser = (growthbook, featureName) => {
   const feature = growthbook.feature(featureName)
   if (feature.experimentResult) {
     throw new Error(

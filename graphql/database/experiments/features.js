@@ -15,7 +15,7 @@ import {
   V4_SHOW_THIRD_LOOKBACK_TIME,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
-  GLOBAL_HEALTH_REDUCED_IMPACT_COST,
+  REDUCED_IMPACT_COST,
 } from './experimentConstants'
 
 const features = {
@@ -400,7 +400,7 @@ const features = {
     ],
   },
   // Whether to reduce the impact cost -- only for internal testing.
-  [GLOBAL_HEALTH_REDUCED_IMPACT_COST]: {
+  [REDUCED_IMPACT_COST]: {
     defaultValue: false,
     rules: [
       // Local/dev for team only.
