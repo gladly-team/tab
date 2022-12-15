@@ -387,10 +387,9 @@ const features = {
   [GLOBAL_HEALTH_GROUP_IMPACT]: {
     defaultValue: false,
     rules: [
-      // Local/dev for team only.
+      // Local/dev only.
       {
         condition: {
-          isTabTeamMember: true,
           env: {
             $in: ['local', 'dev'],
           },
@@ -403,10 +402,9 @@ const features = {
   [REDUCED_IMPACT_COST]: {
     defaultValue: false,
     rules: [
-      // Local/dev for team only.
+      // Local/dev only.
       {
         condition: {
-          isTabTeamMember: true,
           env: {
             $in: ['local', 'dev'],
           },
