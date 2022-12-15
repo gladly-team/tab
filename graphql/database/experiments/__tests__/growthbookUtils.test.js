@@ -93,7 +93,7 @@ describe('growthbookUtils tests', () => {
     })
   })
 
-  it('getConfiguredGrowthbook correctly validates attributes object', async () => {
+  test('getConfiguredGrowthbook correctly validates attributes object', async () => {
     expect.assertions(2)
     const { getConfiguredGrowthbook } = require('../growthbookUtils')
     const logger = require('../../../utils/logger').default
@@ -111,6 +111,14 @@ describe('growthbookUtils tests', () => {
     expect(logger.warn).toHaveBeenCalledWith(
       'Growthbook attribute "v4BetaEnabled" for userId abcdefghijklmno is undefined'
     )
+  })
+
+  test('getConfiguredGrowthbook does not warn on missing user attributes when the attributes are expected', async () => {
+    expect.assertions(1)
+    const { getConfiguredGrowthbook } = require('../growthbookUtils')
+    const logger = require('../../../utils/logger').default
+    await getConfiguredGrowthbook({ noUserAttributes: true })
+    expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('properly sets growthbook features based on user properties', async () => {
@@ -203,5 +211,68 @@ describe('growthbookUtils tests', () => {
       })
     )
     expect(createUserExperiment).not.toHaveBeenCalledWith()
+  })
+
+  test('getFeatureWithoutUser throws if the feature returned is an experiment', async () => {
+    expect.assertions(1)
+    const { GrowthBook } = require('@growthbook/growthbook')
+    const mockGrowthbook = {
+      feature: jest.fn().mockReturnValue({
+        ...getMockGrowthBookFeature(),
+        value: 'abc-123',
+        experiment: {
+          variations: [false, true],
+          key: 'test-experiment',
+          coverage: 1,
+        },
+        experimentResult: {
+          inExperiment: true,
+        },
+      }),
+      setFeatures: jest.fn(),
+      setAttributes: jest.fn(),
+    }
+    GrowthBook.mockImplementation(() => mockGrowthbook)
+
+    const growthbookUtils = require('../growthbookUtils')
+    const configuredGrowthbook = growthbookUtils.getConfiguredGrowthbook(user)
+    const { getFeatureWithoutUser } = growthbookUtils
+    await expect(
+      getFeatureWithoutUser(configuredGrowthbook, 'some-feature')
+    ).rejects.toThrow(
+      'Running an experiment requires passing user attributes to Growthbook.'
+    )
+  })
+
+  test('getFeatureWithoutUser returns as expected', async () => {
+    expect.assertions(1)
+    const mockFeatures = {
+      'some-feature': {
+        defaultValue: 'def-456',
+        rules: [
+          {
+            force: 'abc-123',
+          },
+        ],
+      },
+    }
+    const featuresModule = require('../features')
+    jest
+      .spyOn(featuresModule, 'default', 'get')
+      .mockImplementation(() => mockFeatures)
+    const growthbookUtils = require('../growthbookUtils')
+    const configuredGrowthbook = growthbookUtils.getConfiguredGrowthbook(user)
+    const { getFeatureWithoutUser } = growthbookUtils
+    const result = await getFeatureWithoutUser(
+      configuredGrowthbook,
+      'some-feature'
+    )
+    expect(result).toEqual(
+      new Feature({
+        featureName: 'some-feature',
+        variation: 'abc-123',
+        inExperiment: false,
+      })
+    )
   })
 })

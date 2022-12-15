@@ -7,9 +7,9 @@ import features from './features'
 import logger from '../../utils/logger'
 import { GROWTHBOOK_ENV } from '../../config'
 
-const validateAttributesObject = (userId, attributes) => {
-  // Could always use joi or similar if needed later.
-  const requiredProperties = [
+const validateAttributesObject = (userId, attributes, { noUserAttributes }) => {
+  const alwaysRequiredProperties = []
+  const userRequiredProperties = [
     'id',
     'env',
     'causeId',
@@ -18,6 +18,9 @@ const validateAttributesObject = (userId, attributes) => {
     'isTabTeamMember',
     'tabs',
   ]
+  const requiredProperties = noUserAttributes
+    ? alwaysRequiredProperties
+    : [...alwaysRequiredProperties, ...userRequiredProperties]
   requiredProperties.forEach((attribute) => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
       logger.warn(
@@ -35,6 +38,7 @@ export const getConfiguredGrowthbook = ({
   email,
   internalExperimentOverrides = {},
   tabs,
+  noUserAttributes = false,
 }) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
@@ -50,9 +54,24 @@ export const getConfiguredGrowthbook = ({
     tabs,
     timeSinceJoined: joinedTime && moment.utc().valueOf() - joinedTime,
   }
-  validateAttributesObject(userId, attributes)
+  validateAttributesObject(userId, attributes, { noUserAttributes })
   growthbook.setAttributes(attributes)
   return growthbook
+}
+
+// Use this only to retrieve features that do not rely on user attributes.
+export const getFeatureWithoutUser = async (growthbook, featureName) => {
+  const feature = growthbook.feature(featureName)
+  if (feature.experimentResult) {
+    throw new Error(
+      'Running an experiment requires passing user attributes to Growthbook.'
+    )
+  }
+  return new Feature({
+    featureName,
+    variation: feature.value,
+    inExperiment: false,
+  })
 }
 
 export const getAndLogFeatureForUser = async (
