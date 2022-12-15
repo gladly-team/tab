@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import dataGlobalHealth from '../causes/globalHealth/causeData'
 
-jest.mock('../../../utils/feature-flags')
+jest.mock('../../experiments/getFeature')
 jest.mock('../causes/teamseas/causeData', () => {
   const module = {
     // Can spy on getters:
@@ -12,6 +12,15 @@ jest.mock('../causes/teamseas/causeData', () => {
     },
   }
   return module
+})
+
+beforeEach(() => {
+  const getFeature = require('../../experiments/getFeature').default
+  getFeature.mockReturnValue({
+    featureName: 'global-health-group-impact',
+    value: false,
+    inExperiment: false,
+  })
 })
 
 afterEach(() => {
@@ -55,17 +64,17 @@ describe('causes', () => {
     )
   })
 
-  // Todo, genericize if we have more custom per-cause logic
   it('overrides the impactType for the global health cause', () => {
-    const {
-      isGlobalHealthGroupImpactEnabled,
-    } = require('../../../utils/feature-flags')
-    isGlobalHealthGroupImpactEnabled.mockReturnValue(true)
+    const getFeature = require('../../experiments/getFeature').default
+    getFeature.mockReturnValue({
+      featureName: 'global-health-group-impact',
+      value: true,
+      inExperiment: false,
+    })
     const causes = require('../causes').default
     const globalHealthCause = causes.find(
       (cause) => cause.id === dataGlobalHealth.id
     )
-    expect(isGlobalHealthGroupImpactEnabled).toHaveBeenCalled()
     expect(globalHealthCause.impactType).toEqual('group')
   })
 })
