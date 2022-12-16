@@ -10,6 +10,8 @@ import types from '../fieldTypes'
 
 class RedisModel extends Model {
   static getClient() {
+    console.log('Upstash host:', process.env.UPSTASH_HOST)
+    console.log('Upstash password set?', !!process.env.UPSTASH_PASSWORD)
     return new Redis(
       `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`
     )
