@@ -11,7 +11,7 @@ import types from '../fieldTypes'
 import logger from '../../utils/logger'
 
 class RedisModel extends Model {
-  static async getClient() {
+  static getClient() {
     const client = new Redis(
       `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
       {
@@ -25,7 +25,7 @@ class RedisModel extends Model {
   }
 
   static async getInternal(key) {
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(key)
     const item = await redisClient.hgetall(redisKey)
     if (Object.keys(item).length === 0) {
@@ -41,7 +41,7 @@ class RedisModel extends Model {
   }
 
   static async createInternal(item, overwrite = false) {
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(item[this.hashKey])
     if (!overwrite) {
       const existingEntry = await redisClient.hgetall(redisKey)
@@ -62,7 +62,7 @@ class RedisModel extends Model {
   }
 
   static async updateInternal(item) {
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     const redisKey = this.getRedisKey(item[this.hashKey])
     const existingEntry = await redisClient.hgetall(redisKey)
     if (Object.keys(existingEntry).length === 0) {
@@ -90,7 +90,7 @@ class RedisModel extends Model {
     }
 
     const redisKey = this.getRedisKey(id)
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     const result = await redisClient.hget(redisKey, field)
 
     if (result === null) {
@@ -116,7 +116,7 @@ class RedisModel extends Model {
     }
 
     const redisKey = this.getRedisKey(id)
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     const result = await redisClient.hget(redisKey, field)
 
     if (result === null) {
@@ -134,7 +134,7 @@ class RedisModel extends Model {
   }
 
   static async getField(userContext, id, field) {
-    const redisClient = await this.getClient()
+    const redisClient = this.getClient()
     if (!this.isQueryAuthorized(userContext, 'get', id)) {
       throw new UnauthorizedQueryException()
     }
