@@ -13,7 +13,10 @@ class RedisModel extends Model {
     console.log('Upstash host:', process.env.UPSTASH_HOST)
     console.log('Upstash password set?', !!process.env.UPSTASH_PASSWORD)
     return new Redis(
-      `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`
+      `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`,
+      {
+        maxRetriesPerRequest: 3,
+      }
     )
   }
 
