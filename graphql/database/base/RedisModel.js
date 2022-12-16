@@ -1,5 +1,6 @@
 import Redis from 'ioredis'
 import Model from './Model'
+import config from '../../config'
 import {
   DatabaseConditionalCheckFailedException,
   DatabaseItemDoesNotExistException,
@@ -12,7 +13,7 @@ import logger from '../../utils/logger'
 class RedisModel extends Model {
   static async getClient() {
     const client = new Redis(
-      `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`,
+      `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
       {
         maxRetriesPerRequest: 3,
       }
