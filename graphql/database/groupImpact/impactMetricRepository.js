@@ -14,7 +14,7 @@ const modifyImpactCost = (metric) => {
 // Handle any modifications of the hardcoded metrics.
 const modifyMetrics = (metrics) => {
   let newMetrics = metrics
-  const reduceImpactCost = getFeature(REDUCED_IMPACT_COST).value
+  const reduceImpactCost = getFeature(REDUCED_IMPACT_COST).variation
   if (reduceImpactCost) {
     newMetrics = metrics.map(modifyImpactCost)
   }

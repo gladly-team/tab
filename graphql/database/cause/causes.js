@@ -28,7 +28,7 @@ const overrideCauseModel = (cause, index) => {
   if (cause.id === dataGlobalHealth.id) {
     const globalHealthGroupImpactEnabled = getFeature(
       GLOBAL_HEALTH_GROUP_IMPACT
-    ).value
+    ).variation
     causes[index].impactType = globalHealthGroupImpactEnabled
       ? CAUSE_IMPACT_TYPES.group
       : CAUSE_IMPACT_TYPES.none

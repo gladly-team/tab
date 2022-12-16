@@ -18,7 +18,7 @@ beforeEach(() => {
   const getFeature = require('../../experiments/getFeature').default
   getFeature.mockReturnValue({
     featureName: 'global-health-group-impact',
-    value: false,
+    variation: false,
     inExperiment: false,
   })
 })
@@ -68,7 +68,7 @@ describe('causes', () => {
     const getFeature = require('../../experiments/getFeature').default
     getFeature.mockReturnValue({
       featureName: 'global-health-group-impact',
-      value: true,
+      variation: true,
       inExperiment: false,
     })
     const causes = require('../causes').default

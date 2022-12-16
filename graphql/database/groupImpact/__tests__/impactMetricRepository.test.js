@@ -58,7 +58,7 @@ jest.mock('../../experiments/getFeature')
 beforeEach(() => {
   getFeature.mockReturnValue({
     featureName: 'reduced-impact-cost',
-    value: false,
+    variation: false,
     inExperiment: false,
   })
 })
@@ -97,7 +97,7 @@ describe('impactMetricRepository', () => {
   test('getImpactMetricById does modifies the dollarAmount if the feature is enabled', () => {
     getFeature.mockReturnValue({
       featureName: 'reduced-impact-cost',
-      value: true,
+      variation: true,
       inExperiment: false,
     })
     const { getImpactMetricById } = require('../impactMetricRepository')
@@ -114,7 +114,7 @@ describe('impactMetricRepository', () => {
   test('getImpactMetricsByCharityId does modifies the dollarAmount if the feature is enabled', () => {
     getFeature.mockReturnValue({
       featureName: 'reduced-impact-cost',
-      value: true,
+      variation: true,
       inExperiment: false,
     })
     const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
