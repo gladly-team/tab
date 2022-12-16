@@ -7,7 +7,7 @@ import { REDUCED_IMPACT_COST } from '../experiments/experimentConstants'
 const modifyImpactCost = (metric) => {
   return {
     ...metric,
-    dollarAmount: 0.01e6, // one cent
+    dollarAmount: 0.1e6, // 10 cents
   }
 }
 
