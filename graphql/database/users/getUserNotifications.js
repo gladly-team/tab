@@ -8,7 +8,7 @@ import logger from '../../utils/logger'
  *   array.
  */
 
-const SHOW_CURRENT_NOTIF = true
+const SHOW_CURRENT_NOTIF = false
 
 const getUserNotifications = async () => {
   let notifications = []
