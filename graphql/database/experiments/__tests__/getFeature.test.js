@@ -8,7 +8,7 @@ import {
 jest.mock('../growthbookUtils')
 
 describe('getFeature', () => {
-  it('configures Growthbook expected', async () => {
+  it('configures Growthbook as expected', async () => {
     expect.assertions(1)
     getFeatureWithoutUser.mockReturnValueOnce({
       featureName: 'test-feature',
@@ -18,7 +18,7 @@ describe('getFeature', () => {
     const getFeature = require('../getFeature').default
     await getFeature('test-feature')
     expect(getConfiguredGrowthbook).toHaveBeenCalledWith({
-      noUserAttributes: true,
+      userSpecific: false,
     })
   })
 

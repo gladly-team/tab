@@ -5,7 +5,7 @@ import {
 
 const getFeature = (featureName) => {
   const configuredGrowthbook = getConfiguredGrowthbook({
-    noUserAttributes: true,
+    userSpecific: false,
   })
   const feature = getFeatureWithoutUser(configuredGrowthbook, featureName)
   return feature

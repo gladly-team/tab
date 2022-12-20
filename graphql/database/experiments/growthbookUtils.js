@@ -7,7 +7,7 @@ import features from './features'
 import logger from '../../utils/logger'
 import { GROWTHBOOK_ENV } from '../../config'
 
-const validateAttributesObject = (userId, attributes, { noUserAttributes }) => {
+const validateAttributesObject = (userId, attributes, { userSpecific }) => {
   const alwaysRequiredProperties = []
   const userRequiredProperties = [
     'id',
@@ -18,9 +18,9 @@ const validateAttributesObject = (userId, attributes, { noUserAttributes }) => {
     'isTabTeamMember',
     'tabs',
   ]
-  const requiredProperties = noUserAttributes
-    ? alwaysRequiredProperties
-    : [...alwaysRequiredProperties, ...userRequiredProperties]
+  const requiredProperties = userSpecific
+    ? [...alwaysRequiredProperties, ...userRequiredProperties]
+    : alwaysRequiredProperties
   requiredProperties.forEach((attribute) => {
     if (attributes[attribute] === null || attributes[attribute] === undefined) {
       logger.warn(
@@ -38,7 +38,7 @@ export const getConfiguredGrowthbook = ({
   email,
   internalExperimentOverrides = {},
   tabs,
-  noUserAttributes = false,
+  userSpecific = true,
 }) => {
   const growthbook = new GrowthBook()
   growthbook.setFeatures(features)
@@ -54,7 +54,7 @@ export const getConfiguredGrowthbook = ({
     tabs,
     timeSinceJoined: joinedTime && moment.utc().valueOf() - joinedTime,
   }
-  validateAttributesObject(userId, attributes, { noUserAttributes })
+  validateAttributesObject(userId, attributes, { userSpecific })
   growthbook.setAttributes(attributes)
   return growthbook
 }

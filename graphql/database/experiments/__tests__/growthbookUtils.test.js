@@ -113,11 +113,11 @@ describe('growthbookUtils tests', () => {
     )
   })
 
-  test('getConfiguredGrowthbook does not warn on missing user attributes when the attributes are expected', async () => {
+  test('getConfiguredGrowthbook does not warn on missing user attributes when the attributes are *not* expected', async () => {
     expect.assertions(1)
     const { getConfiguredGrowthbook } = require('../growthbookUtils')
     const logger = require('../../../utils/logger').default
-    await getConfiguredGrowthbook({ noUserAttributes: true })
+    await getConfiguredGrowthbook({ userSpecific: false })
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
