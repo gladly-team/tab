@@ -82,6 +82,11 @@ export const envVars = [
   // Upstash/Redis
   { name: 'UPSTASH_HOST' },
   { name: 'UPSTASH_PASSWORD' },
+
+  /*
+    Note: env vars used in the graphql service must also be added to
+    the grapqhl config.js file.
+   */
 ]
 
 // Expect one argument, the stage name.
