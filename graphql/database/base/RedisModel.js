@@ -1,5 +1,6 @@
 import Redis from 'ioredis'
 import Model from './Model'
+import config from '../../config'
 import {
   DatabaseConditionalCheckFailedException,
   DatabaseItemDoesNotExistException,
@@ -7,12 +8,20 @@ import {
   UnauthorizedQueryException,
 } from '../../utils/exceptions'
 import types from '../fieldTypes'
+import logger from '../../utils/logger'
 
 class RedisModel extends Model {
   static getClient() {
-    return new Redis(
-      `rediss://:${process.env.UPSTASH_PASSWORD}@${process.env.UPSTASH_HOST}`
+    const client = new Redis(
+      `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
+      {
+        maxRetriesPerRequest: 3,
+      }
     )
+    client.on('error', (err) => {
+      logger.error(err)
+    })
+    return client
   }
 
   static async getInternal(key) {
@@ -47,8 +56,8 @@ class RedisModel extends Model {
       )
     )
 
-    const object = redisClient.hgetall(redisKey)
-    redisClient.quit()
+    const object = await redisClient.hgetall(redisKey)
+    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -60,12 +69,14 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    Object.entries(item).forEach(([key, value]) => {
-      redisClient.hset(redisKey, key, value)
-    })
+    await Promise.all(
+      Object.entries(item).map(([key, value]) =>
+        redisClient.hset(redisKey, key, value)
+      )
+    )
 
-    const object = redisClient.hgetall(redisKey)
-    redisClient.quit()
+    const object = await redisClient.hgetall(redisKey)
+    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -138,7 +149,7 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    redisClient.quit()
+    await redisClient.quit()
     return this.validateAndConvertField(field, result)
   }
 
