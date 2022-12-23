@@ -375,7 +375,7 @@ class Authentication extends React.Component {
                 <div
                   data-test-id={'logged-out-message'}
                   style={{
-                    backgroundColor: 'rgb(255, 244, 229)',
+                    backgroundColor: 'rgb(253, 237, 237)',
                     padding: '6px 16px',
                     marginBottom: '6px',
                   }}
@@ -386,13 +386,13 @@ class Authentication extends React.Component {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: 'rgb(102, 60, 0)',
+                      color: 'rgb(95, 33, 32)',
                     }}
                   >
                     <ErrorOutline
                       style={{
                         paddingRight: '6px',
-                        color: 'rgb(102, 60, 0)',
+                        color: 'rgb(95, 33, 32)',
                       }}
                     />
                     <span>
