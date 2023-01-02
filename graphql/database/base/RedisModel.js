@@ -12,9 +12,12 @@ import logger from '../../utils/logger'
 
 class RedisModel extends Model {
   static getClient() {
+    console.log(config)
+    console.log(`rediss://default:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`)
     const client = new Redis(
-      `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
+      `rediss://default:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
       {
+        connectTimeout: 10000,
         maxRetriesPerRequest: 3,
       }
     )
@@ -27,6 +30,7 @@ class RedisModel extends Model {
   static async getInternal(key) {
     const redisClient = this.getClient()
     const redisKey = this.getRedisKey(key)
+    console.log(redisKey)
     const item = await redisClient.hgetall(redisKey)
     if (Object.keys(item).length === 0) {
       throw new DatabaseItemDoesNotExistException()

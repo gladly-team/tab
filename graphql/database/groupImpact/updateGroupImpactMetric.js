@@ -68,6 +68,7 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
       causeId
     ))
   } catch (e) {
+    console.log('creating new instance')
     if (e.code === DatabaseItemDoesNotExistException.code) {
       groupImpactMetricId = nanoid(9)
       await createCauseGroupImpactMetricModel(causeId, groupImpactMetricId)
@@ -76,6 +77,7 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
     }
   }
 
+  console.log(groupImpactMetricId)
   // Fetch current GroupImpactMetric entry, create if does not exist
   let groupImpactMetric
   try {

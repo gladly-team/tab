@@ -20,11 +20,14 @@ const getGroupImpactMetricForCause = async (userContext, causeId) => {
     throw e
   }
 
+  console.log(causeGroupImpactMetric)
   try {
-    return await GroupImpactMetricModel.get(
+    const result = await GroupImpactMetricModel.get(
       userContext,
       causeGroupImpactMetric.groupImpactMetricId
     )
+    console.log(result)
+    return result
   } catch (e) {
     throw e
   }

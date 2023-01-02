@@ -25,13 +25,16 @@ const causes = [
 
 // Use this method to dynamically overwrite specific fields in Cause Models.
 const overrideCauseModel = (cause, index) => {
+  console.log('overrideCauseModel')
   if (cause.id === dataGlobalHealth.id) {
     const globalHealthGroupImpactEnabled = getFeature(
       GLOBAL_HEALTH_GROUP_IMPACT
     ).variation
+    console.log(globalHealthGroupImpactEnabled)
     causes[index].impactType = globalHealthGroupImpactEnabled
       ? CAUSE_IMPACT_TYPES.group
       : CAUSE_IMPACT_TYPES.none
+    console.log(causes[index])
   }
 }
 
