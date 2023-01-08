@@ -98,7 +98,7 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
 
   // Now update GroupImpactMetric
   const newDollarProgress =
-    groupImpactMetric.dollarProgress + 10 ** 6 * getEstimatedMoneyRaisedPerTab()
+    Math.round(groupImpactMetric.dollarProgress + 10 ** 6 * getEstimatedMoneyRaisedPerTab())
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
