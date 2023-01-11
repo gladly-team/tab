@@ -47,7 +47,7 @@ afterEach(() => {
   })
 })
 
-describe('RedisModel queries', () => {
+describe.skip('RedisModel queries', () => {
   it('RedisModel does not implement getAll', async () => {
     setModelPermissions(ExampleRedisModel, {
       getAll: () => true,

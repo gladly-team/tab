@@ -1,4 +1,4 @@
-import Redis from 'ioredis'
+import { Redis } from '@upstash/redis'
 import Model from './Model'
 import config from '../../config'
 import {
@@ -8,11 +8,16 @@ import {
   UnauthorizedQueryException,
 } from '../../utils/exceptions'
 import types from '../fieldTypes'
-import logger from '../../utils/logger'
+// import logger from '../../utils/logger'
 
 class RedisModel extends Model {
   static getClient() {
-    const client = new Redis(
+    const client = new Redis({
+      url: config.UPSTASH_HOST,
+      token: config.UPSTASH_PASSWORD,
+    })
+
+    /* const client = new Redis(
       `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
       {
         maxRetriesPerRequest: 3,
@@ -20,7 +25,7 @@ class RedisModel extends Model {
     )
     client.on('error', (err) => {
       logger.error(err)
-    })
+    }) */
     return client
   }
 
@@ -31,7 +36,7 @@ class RedisModel extends Model {
     if (Object.keys(item).length === 0) {
       throw new DatabaseItemDoesNotExistException()
     }
-    await redisClient.quit()
+
     return this.postProcessObject(item)
   }
 
@@ -57,7 +62,6 @@ class RedisModel extends Model {
     )
 
     const object = await redisClient.hgetall(redisKey)
-    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -76,7 +80,6 @@ class RedisModel extends Model {
     )
 
     const object = await redisClient.hgetall(redisKey)
-    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -98,7 +101,6 @@ class RedisModel extends Model {
     }
 
     await redisClient.hset(redisKey, field, value)
-    await redisClient.quit()
     return this.validateAndConvertField(field, value)
   }
 
@@ -129,7 +131,6 @@ class RedisModel extends Model {
 
     await redisClient.hincrby(redisKey, field, increment)
     const resultingValue = await redisClient.hget(redisKey, field)
-    await redisClient.quit()
     return this.validateAndConvertField(field, resultingValue)
   }
 
@@ -149,7 +150,6 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await redisClient.quit()
     return this.validateAndConvertField(field, result)
   }
 

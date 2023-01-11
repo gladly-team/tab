@@ -9,6 +9,7 @@
     "@hapi/joi": "^17.1.1",
     "@sendgrid/mail": "^7.4.4",
     "@sentry/node": "^7.20.0",
+    "@upstash/redis": "^1.19.1",
     "aws-sdk": "^2.1257.0",
     "aws4": "^1.8.0",
     "babel-watch": "^7.5.0",

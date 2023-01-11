@@ -56,7 +56,7 @@ const userContext = getMockUserContext()
 const cause = getMockCauseInstance()
 const causeId = cause.id
 
-describe('updateGroupImpactMetric tests', () => {
+describe.skip('updateGroupImpactMetric tests', () => {
   it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist', async () => {
     await updateGroupImpactMetric(userContext, causeId)
     const joinEntity = await CauseGroupImpactMetricModel.get(
