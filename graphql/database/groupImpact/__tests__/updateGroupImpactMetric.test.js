@@ -19,7 +19,7 @@ import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 
-const mockTestNanoId = '123456789'
+const mockTestNanoId = 'a23456789'
 const mockImpactId = 'abcd'
 const mockUSDsPerTab = 0.001
 
@@ -47,16 +47,17 @@ afterAll(() => {
   mockDate.off()
 })
 
-afterEach(() => {
-  const client = RedisModel.getClient()
-  client.flushall()
-})
-
 const userContext = getMockUserContext()
 const cause = getMockCauseInstance()
 const causeId = cause.id
 
-describe.skip('updateGroupImpactMetric tests', () => {
+afterEach(async () => {
+  const client = RedisModel.getClient()
+  await client.del(CauseGroupImpactMetricModel.getRedisKey(causeId))
+  await client.del(GroupImpactMetricModel.getRedisKey(mockTestNanoId))
+})
+
+describe('updateGroupImpactMetric tests', () => {
   it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist', async () => {
     await updateGroupImpactMetric(userContext, causeId)
     const joinEntity = await CauseGroupImpactMetricModel.get(
