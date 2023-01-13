@@ -1,4 +1,5 @@
-import Redis from 'ioredis'
+// eslint-disable-next-line import/no-unresolved
+import { Redis } from '@upstash/redis/with-fetch'
 import Model from './Model'
 import config from '../../config'
 import {
@@ -8,19 +9,14 @@ import {
   UnauthorizedQueryException,
 } from '../../utils/exceptions'
 import types from '../fieldTypes'
-import logger from '../../utils/logger'
 
 class RedisModel extends Model {
   static getClient() {
-    const client = new Redis(
-      `rediss://:${config.UPSTASH_PASSWORD}@${config.UPSTASH_HOST}`,
-      {
-        maxRetriesPerRequest: 3,
-      }
-    )
-    client.on('error', (err) => {
-      logger.error(err)
+    const client = new Redis({
+      url: config.UPSTASH_REDIS_REST_URL,
+      token: config.UPSTASH_REDIS_REST_TOKEN,
     })
+
     return client
   }
 
@@ -28,10 +24,10 @@ class RedisModel extends Model {
     const redisClient = this.getClient()
     const redisKey = this.getRedisKey(key)
     const item = await redisClient.hgetall(redisKey)
-    if (Object.keys(item).length === 0) {
+    if (item === null) {
       throw new DatabaseItemDoesNotExistException()
     }
-    await redisClient.quit()
+
     return this.postProcessObject(item)
   }
 
@@ -45,19 +41,14 @@ class RedisModel extends Model {
     const redisKey = this.getRedisKey(item[this.hashKey])
     if (!overwrite) {
       const existingEntry = await redisClient.hgetall(redisKey)
-      if (Object.keys(existingEntry).length !== 0) {
+      if (existingEntry !== null) {
         throw new DatabaseConditionalCheckFailedException()
       }
     }
 
-    await Promise.all(
-      Object.entries(item).map(([key, value]) =>
-        redisClient.hset(redisKey, key, value)
-      )
-    )
+    await redisClient.hset(redisKey, item)
 
     const object = await redisClient.hgetall(redisKey)
-    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -65,18 +56,13 @@ class RedisModel extends Model {
     const redisClient = this.getClient()
     const redisKey = this.getRedisKey(item[this.hashKey])
     const existingEntry = await redisClient.hgetall(redisKey)
-    if (Object.keys(existingEntry).length === 0) {
+    if (existingEntry === null) {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await Promise.all(
-      Object.entries(item).map(([key, value]) =>
-        redisClient.hset(redisKey, key, value)
-      )
-    )
+    await redisClient.hset(redisKey, item)
 
     const object = await redisClient.hgetall(redisKey)
-    await redisClient.quit()
     return this.postProcessObject(object)
   }
 
@@ -97,8 +83,9 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await redisClient.hset(redisKey, field, value)
-    await redisClient.quit()
+    const obj = {}
+    obj[field] = value
+    await redisClient.hset(redisKey, obj)
     return this.validateAndConvertField(field, value)
   }
 
@@ -129,7 +116,6 @@ class RedisModel extends Model {
 
     await redisClient.hincrby(redisKey, field, increment)
     const resultingValue = await redisClient.hget(redisKey, field)
-    await redisClient.quit()
     return this.validateAndConvertField(field, resultingValue)
   }
 
@@ -149,7 +135,6 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await redisClient.quit()
     return this.validateAndConvertField(field, result)
   }
 
@@ -179,9 +164,8 @@ class RedisModel extends Model {
       const validateResult = this.schema[field].validate(fieldValue, {
         convert: true,
       })
-      if (validateResult.error) {
-        throw validateResult.error
-      }
+      // todo: @jedtan Implement Solution here for RedisModels
+      // https://github.com/hapijs/joi/issues/1442
       return validateResult.value
     }
     return fieldValue
