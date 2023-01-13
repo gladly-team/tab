@@ -158,7 +158,7 @@ describe('RedisModel queries', () => {
     expect(createdItem).toEqual(expectedReturn)
   })
 
-  it.only('correctly creates item with default fields', async () => {
+  it('correctly creates item with default fields', async () => {
     setModelPermissions(ExampleRedisModel, {
       create: () => true,
     })
