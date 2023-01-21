@@ -1,3 +1,20 @@
+type Query {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+  app: App
+  user(userId: String!): User
+  userImpact(userId: String!, charityId: String!): UserImpact
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
 """Global app fields"""
 type App implements Node {
   """The ID of an object"""
@@ -7,25 +24,465 @@ type App implements Node {
   referralVcReward: Int
 
   """All the widgets"""
-  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+  widgets(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): WidgetConnection
 
   """One of the charities"""
   charity(charityId: String!): Charity
 
   """All the charities"""
-  charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
+  charities(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: CharitiesFilters
+  ): CharityConnection
 
   """All the causes"""
-  causes(after: String, first: Int, before: String, last: Int, filters: CausesFilters): CauseConnection
+  causes(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: CausesFilters
+  ): CauseConnection
 
   """Get all the "legacy" (uncategorized) background Images"""
-  backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
+  backgroundImages(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): BackgroundImageConnection
 
   """Campaigns (or "charity spotlights") shown to users."""
   campaign: Campaign
 
   """All the search engines"""
   searchEngines: SearchEngineConnection
+}
+
+"""A connection to a list of items."""
+type WidgetConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [WidgetEdge]
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type WidgetEdge {
+  """The item at the end of the edge"""
+  node: Widget
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""App widget"""
+type Widget implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Widget display name"""
+  name: String
+
+  """Widget type"""
+  type: String
+
+  """Widget icon"""
+  icon: String
+
+  """The Widget enabled state"""
+  enabled: Boolean
+
+  """The Widget visible state"""
+  visible: Boolean
+
+  """Widget data."""
+  data: String
+
+  """Widget user specific configuration."""
+  config: String
+
+  """Widget general configuration."""
+  settings: String
+}
+
+"""A charitable charity"""
+type Charity implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """the charity name"""
+  name: String
+
+  """the charity category"""
+  category: String
+
+  """the charity website"""
+  website: String
+
+  """the charity description"""
+  description: String
+
+  """the charity impact message"""
+  impact: String
+
+  """the charity logo image URI"""
+  logo: String
+
+  """the charity post-donation image URI"""
+  image: String
+
+  """An optional caption for the post-donation image"""
+  imageCaption: String
+
+  """The number of VC the charity has received in a given time period."""
+  vcReceived(startTime: String, endTime: String): Int
+
+  """Impact Metrics that belong to this Charity"""
+  impactMetrics: [ImpactMetric]
+}
+
+"""An instance of ImpactMetric"""
+type ImpactMetric implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Charity ID that this impact metric belongs to"""
+  charity: Charity
+
+  """
+  Dollar amount (in micro USDs) required to achieve an instance of this ImpactMetric
+  """
+  dollarAmount: Int!
+
+  """Markdown description of this ImpactMetric"""
+  description: String!
+
+  """
+  Markdown. A shorter version of the description that answers "why this impact matters".
+  """
+  whyValuableDescription: String!
+
+  """
+  Metric title. Should be placeable in a sentence. Example: "1 home visit"
+  """
+  metricTitle: String!
+
+  """
+  Impact action title. Should be a longer title with a verb as well as a noun. Example: "Provide 1 visit from a community health worker"
+  """
+  impactTitle: String!
+
+  """Whether or not this GroupImpactMetric is still active"""
+  active: Boolean!
+}
+
+"""A connection to a list of items."""
+type CharityConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CharityEdge]
+}
+
+"""An edge in a connection."""
+type CharityEdge {
+  """The item at the end of the edge"""
+  node: Charity
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Fields on which to filter the list of charities."""
+input CharitiesFilters {
+  isPermanentPartner: Boolean
+}
+
+"""A connection to a list of items."""
+type CauseConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CauseEdge]
+}
+
+"""An edge in a connection."""
+type CauseEdge {
+  """The item at the end of the edge"""
+  node: Cause
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""all cause specific data and ui content"""
+type Cause implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Markdown - content that populates an "About the Cause" page"""
+  about: String!
+
+  """String used to describe cause in account page"""
+  name: String!
+
+  """boolean if cause is available to select in ui"""
+  isAvailableToSelect: Boolean!
+
+  """Cause's id"""
+  causeId: String!
+
+  """Name of an icon, mapping to an icon component on the frontend"""
+  icon: String!
+
+  """URL path for the landing page belonging to this cause"""
+  landingPagePath: String!
+
+  """Whether or not the current cause supports individual impact"""
+  individualImpactEnabled: Boolean! @deprecated(reason: "Replaced by \"impactType\" field.")
+
+  """Whether or not the current cause supports individual impact"""
+  impactType: causeImpactType!
+
+  """
+  number of visits required for each impact unit (e.g. 14 for cat charity)
+  """
+  impactVisits: Int
+
+  """the impact object on cause model"""
+  impact: CauseSpecificImpactUI
+
+  """the theme object on cause model"""
+  theme: CauseTheming!
+
+  """the sharing object on cause model"""
+  sharing: SharingUICopy!
+
+  """the onboarding object on cause model"""
+  onboarding: OnboardingUICopy!
+
+  """the group impact metric currently associated with this cause"""
+  groupImpactMetric: GroupImpactMetric
+}
+
+"""The type of charitable impact that's enabled for this cause"""
+enum causeImpactType {
+  none
+  individual
+  group
+}
+
+"""cause specific UI content around impact"""
+type CauseSpecificImpactUI {
+  """markdown string: copy for ImpactCounter for normal case"""
+  impactCounterText: String!
+
+  """markdown string: title copy for referralReward UserImpact modal"""
+  referralRewardTitle: String!
+
+  """markdown string: subtitle copy for referralReward UserImpact modal"""
+  referralRewardSubtitle: String!
+
+  """markdown string: copy for referral reward notification"""
+  referralRewardNotification: String!
+
+  """markdown string: title for claimImpact notification in UserImpact"""
+  claimImpactTitle: String!
+
+  """markdown string: subtitle for claimImpact notification in UserImpact"""
+  claimImpactSubtitle: String!
+
+  """string: name of the icon to use in impact counter"""
+  impactIcon: String!
+
+  """file name of the cause GIF to use during onboarding"""
+  walkMeGif: String
+
+  """
+  markdown string: copy for impact walkthrough notification in UserImpact when user is referred
+  """
+  newlyReferredImpactWalkthroughText: String!
+
+  """
+  markdown string: copy for impact walkthrough notification in UserImpact
+  """
+  impactWalkthroughText: String!
+
+  """markdown string: copy for confirm impact modal in UserImpact"""
+  confirmImpactSubtitle: String!
+}
+
+"""css properties for a specific cause"""
+type CauseTheming {
+  """the primary color hex value"""
+  primaryColor: String!
+
+  """the secondary color hex value"""
+  secondaryColor: String!
+}
+
+"""cause specific UI content around sharing"""
+type SharingUICopy {
+  """markdown for modal title"""
+  title: String!
+
+  """markdown for modal subtitle"""
+  subtitle: String!
+
+  """
+  value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’
+  """
+  imgCategory: String!
+
+  """Image to use in email invite dialog"""
+  shareImage: String!
+
+  """Image shown after email invite sent"""
+  sentImage: String!
+
+  """copy for reddit button"""
+  redditButtonTitle: String!
+
+  """copy for facebook button"""
+  facebookButtonTitle: String!
+
+  """copy for twitter button"""
+  twitterButtonTitle: String!
+
+  """copy for tumblr button"""
+  tumblrTitle: String!
+
+  """copy for tumblr caption"""
+  tumblrCaption: String!
+}
+
+"""cause specific UI content around onboarding"""
+type OnboardingUICopy {
+  """the steps array in onboarding"""
+  steps: [onboardingUIStep]!
+
+  """
+  markdown string shown when prompting the user to open their first tab, currently info about cat treats
+  """
+  firstTabIntroDescription: String!
+}
+
+"""ui content for each onboarding step"""
+type onboardingUIStep {
+  """markdown title for onboarding step"""
+  title: String!
+
+  """markdown subtitle for onboarding step"""
+  subtitle: String!
+
+  """name of image to show"""
+  imgName: String!
+}
+
+"""A specific instance of GroupImpactMetric"""
+type GroupImpactMetric implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The cause ID this GroupImpactMetric belongs to"""
+  cause: Cause
+
+  """Information about the ImpactMetric"""
+  impactMetric: ImpactMetric
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far
+  """
+  dollarProgress: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far
+  """
+  dollarGoal: Int!
+
+  """ISO datetime string of when this GroupImpactMetric was started"""
+  dateStarted: String
+
+  """ISO datetime string of when this GroupImpactMetric was ended"""
+  dateCompleted: String
+}
+
+"""Fields on which to filter the list of causes."""
+input CausesFilters {
+  isAvailableToSelect: Boolean
+}
+
+"""A connection to a list of items."""
+type BackgroundImageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BackgroundImageEdge]
+}
+
+"""An edge in a connection."""
+type BackgroundImageEdge {
+  """The item at the end of the edge"""
+  node: BackgroundImage
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """A background image"""
@@ -55,24 +512,6 @@ type BackgroundImage implements Node {
   timestamp: String
 }
 
-"""A connection to a list of items."""
-type BackgroundImageConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [BackgroundImageEdge]
-}
-
-"""An edge in a connection."""
-type BackgroundImageEdge {
-  """The item at the end of the edge"""
-  node: BackgroundImage
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
 """Campaigns (or "charity spotlights") shown to users."""
 type Campaign {
   """The ID of the campaign"""
@@ -96,14 +535,13 @@ type Campaign {
   goal: CampaignGoal
 
   """The number of new users who joined during this campaign."""
-  numNewUsers: Int @deprecated(reason: "Replaced by the generalized\"goal\" data.")
+  numNewUsers: Int @deprecated(reason: "Replaced by the generalized \"goal\" data.")
 
   """Whether to show a countdown timer for when the campaign will end"""
   showCountdownTimer: Boolean!
 
   """
-  Whether to show a button to donate hearts to the charity featured in the
-  campaign -- which requires the "charity " field to be defined
+  Whether to show a button to donate hearts to the charity featured in the campaign -- which requires the "charity " field to be defined
   """
   showHeartsDonationButton: Boolean!
 
@@ -275,877 +713,22 @@ type CampaignTime {
   end: String!
 }
 
-"""all cause specific data and ui content"""
-type Cause implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """Markdown - content that populates an "About the Cause" page"""
-  about: String!
-
-  """String used to describe cause in account page"""
-  name: String!
-
-  """boolean if cause is available to select in ui"""
-  isAvailableToSelect: Boolean!
-
-  """Cause's id"""
-  causeId: String!
-
-  """Name of an icon, mapping to an icon component on the frontend"""
-  icon: String!
-
-  """URL path for the landing page belonging to this cause"""
-  landingPagePath: String!
-
-  """Whether or not the current cause supports individual impact"""
-  individualImpactEnabled: Boolean! @deprecated(reason: "Replaced by \"impactType\" field.")
-
-  """Whether or not the current cause supports individual impact"""
-  impactType: causeImpactType!
-
-  """
-  number of visits required for each impact unit (e.g. 14 for cat charity)
-  """
-  impactVisits: Int
-
-  """the impact object on cause model"""
-  impact: CauseSpecificImpactUI
-
-  """the theme object on cause model"""
-  theme: CauseTheming!
-
-  """the sharing object on cause model"""
-  sharing: SharingUICopy!
-
-  """the onboarding object on cause model"""
-  onboarding: OnboardingUICopy!
-
-  """the group impact metric currently associated with this cause"""
-  groupImpactMetric: GroupImpactMetric
-}
-
 """A connection to a list of items."""
-type CauseConnection {
+type SearchEngineConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [CauseEdge]
+  edges: [SearchEngineEdge]
 }
 
 """An edge in a connection."""
-type CauseEdge {
+type SearchEngineEdge {
   """The item at the end of the edge"""
-  node: Cause
+  node: SearchEngine
 
   """A cursor for use in pagination"""
   cursor: String!
-}
-
-"""The type of charitable impact that's enabled for this cause"""
-enum causeImpactType {
-  none
-  individual
-  group
-}
-
-"""Fields on which to filter the list of causes."""
-input CausesFilters {
-  isAvailableToSelect: Boolean
-}
-
-"""cause specific UI content around impact"""
-type CauseSpecificImpactUI {
-  """markdown string: copy for ImpactCounter for normal case"""
-  impactCounterText: String!
-
-  """markdown string: title copy for referralReward UserImpact modal"""
-  referralRewardTitle: String!
-
-  """markdown string: subtitle copy for referralReward UserImpact modal"""
-  referralRewardSubtitle: String!
-
-  """markdown string: copy for referral reward notification"""
-  referralRewardNotification: String!
-
-  """markdown string: title for claimImpact notification in UserImpact"""
-  claimImpactTitle: String!
-
-  """markdown string: subtitle for claimImpact notification in UserImpact"""
-  claimImpactSubtitle: String!
-
-  """string: name of the icon to use in impact counter"""
-  impactIcon: String!
-
-  """file name of the cause GIF to use during onboarding"""
-  walkMeGif: String
-
-  """
-  markdown string: copy for impact walkthrough notification in UserImpact when user is referred
-  """
-  newlyReferredImpactWalkthroughText: String!
-
-  """
-  markdown string: copy for impact walkthrough notification in UserImpact
-  """
-  impactWalkthroughText: String!
-
-  """markdown string: copy for confirm impact modal in UserImpact"""
-  confirmImpactSubtitle: String!
-}
-
-"""css properties for a specific cause"""
-type CauseTheming {
-  """the primary color hex value"""
-  primaryColor: String!
-
-  """the secondary color hex value"""
-  secondaryColor: String!
-}
-
-"""Fields on which to filter the list of charities."""
-input CharitiesFilters {
-  isPermanentPartner: Boolean
-}
-
-"""A charitable charity"""
-type Charity implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """the charity name"""
-  name: String
-
-  """the charity category"""
-  category: String
-
-  """the charity website"""
-  website: String
-
-  """the charity description"""
-  description: String
-
-  """the charity impact message"""
-  impact: String
-
-  """the charity logo image URI"""
-  logo: String
-
-  """the charity post-donation image URI"""
-  image: String
-
-  """An optional caption for the post-donation image"""
-  imageCaption: String
-
-  """The number of VC the charity has received in a given time period."""
-  vcReceived(startTime: String, endTime: String): Int
-
-  """Impact Metrics that belong to this Charity"""
-  impactMetrics: [ImpactMetric]
-}
-
-"""A connection to a list of items."""
-type CharityConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [CharityEdge]
-}
-
-"""An edge in a connection."""
-type CharityEdge {
-  """The item at the end of the edge"""
-  node: Charity
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input CreateInvitedUsersInput {
-  inviterId: String!
-  invitedEmails: [String]!
-  inviterName: String
-  inviterMessage: String
-  clientMutationId: String
-}
-
-type CreateInvitedUsersPayload {
-  successfulEmailAddresses: [successfulEmailAddresses]
-  failedEmailAddresses: [failedEmailAddresses]
-  clientMutationId: String
-}
-
-input CreateNewMissionInput {
-  userId: String!
-  squadName: String!
-  clientMutationId: String
-}
-
-type CreateNewMissionPayload {
-  """the current active mission for a user"""
-  currentMission: Mission
-  clientMutationId: String
-}
-
-input CreateNewUserInput {
-  userId: String!
-  email: String
-  referralData: ReferralData
-  experimentGroups: ExperimentGroups
-  extensionInstallId: String
-  extensionInstallTimeApprox: String
-  v4BetaEnabled: Boolean
-  missionId: String
-  causeId: String
-  clientMutationId: String
-}
-
-type CreateNewUserPayload {
-  user: User
-  clientMutationId: String
-}
-
-input CreateSearchEnginePromptLogInput {
-  userId: String!
-  searchEnginePrompted: String!
-  switched: Boolean!
-  clientMutationId: String
-}
-
-type CreateSearchEnginePromptLogPayload {
-  success: Boolean!
-  user: User
-  clientMutationId: String
-}
-
-input CreateSfacExtensionPromptResponseInput {
-  userId: String!
-  browser: String!
-  accepted: Boolean!
-  clientMutationId: String
-}
-
-type CreateSfacExtensionPromptResponsePayload {
-  user: User
-  clientMutationId: String
-}
-
-input CreateSquadInvitesInput {
-  inviterId: String!
-  invitedEmails: [String]!
-  inviterName: String!
-  inviterMessage: String
-  clientMutationId: String
-}
-
-type CreateSquadInvitesPayload {
-  """the current active mission for a user"""
-  currentMission: Mission
-  clientMutationId: String
-}
-
-input CreateUserExperimentInput {
-  userId: String!
-  experimentId: String!
-  variationId: Int!
-  variationValueStr: String
-  clientMutationId: String
-}
-
-type CreateUserExperimentPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input CreateVideoAdLogInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type CreateVideoAdLogPayload {
-  VideoAdLog: VideoAdLog
-  clientMutationId: String
-}
-
-"""For expected errors, such as during form validation"""
-type CustomError {
-  """The error code"""
-  code: String
-
-  """The error message"""
-  message: String
-}
-
-input DeleteUserInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type DeleteUserPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input DonateVcInput {
-  userId: String!
-  charityId: String!
-  vc: Int!
-  clientMutationId: String
-}
-
-type DonateVcPayload {
-  user: User
-  errors: [CustomError]
-  clientMutationId: String
-}
-
-"""An object representing a single revenue value"""
-input EncodedRevenueValue {
-  encodingType: EncodedRevenueValueTypeEnum!
-
-  """
-  A string that we can decode to a revenue value (float) using the "encodingType" method
-  """
-  encodedValue: String!
-  adSize: String
-}
-
-"""
-The type of transformation we should use to resolve the object into a revenue value
-"""
-enum EncodedRevenueValueTypeEnum {
-  AMAZON_CPM
-}
-
-"""persistant awards calculated at end of mission"""
-type EndOfMissionAward {
-  """users ID"""
-  user: String!
-
-  """the string name of the particular award"""
-  awardType: String!
-
-  """the numerical stat for the award, such as number of tabs"""
-  unit: Int!
-}
-
-"""Action taken in response to the "referral notification" experiment."""
-enum ExperimentActionReferralNotification {
-  NONE
-  DISMISS
-  CLICK
-}
-
-"""The actions a user may take in an experiment"""
-input ExperimentActions {
-  searchIntro: ExperimentActionSearchIntro
-  referralNotification: ExperimentActionReferralNotification
-}
-
-"""Action taken in response to the "search intro" experiment."""
-enum ExperimentActionSearchIntro {
-  NONE
-  DISMISS
-  CLICK
-}
-
-"""The actions a user has taken in an experiment"""
-type ExperimentActionsOutput {
-  searchIntro: ExperimentActionSearchIntro
-  referralNotification: ExperimentActionReferralNotification
-}
-
-"""The test of showing an explanation of why there are ads"""
-enum ExperimentGroupAdExplanation {
-  NONE
-  DEFAULT
-  SHOW_EXPLANATION
-}
-
-"""The test of allowing anonymous user authentication"""
-enum ExperimentGroupAnonSignIn {
-  NONE
-  AUTHED_USER_ONLY
-  ANONYMOUS_ALLOWED
-}
-
-"""The test of showing only one ad to new users"""
-enum ExperimentGroupOneAdForNewUsers {
-  NONE
-  DEFAULT
-  ONE_AD_AT_FIRST
-}
-
-"""The test of showing a notification to ask users to recruit friends"""
-enum ExperimentGroupReferralNotification {
-  NONE
-  NO_NOTIFICATION
-  COPY_A
-  COPY_B
-  COPY_C
-  COPY_D
-  COPY_E
-}
-
-"""The experimental groups to which the user is assigned"""
-input ExperimentGroups {
-  anonSignIn: ExperimentGroupAnonSignIn
-  variousAdSizes: ExperimentGroupVariousAdSizes
-  thirdAd: ExperimentGroupThirdAd
-  oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
-  adExplanation: ExperimentGroupAdExplanation
-  searchIntro: ExperimentGroupSearchIntro
-  referralNotification: ExperimentGroupReferralNotification
-}
-
-"""The test of showing an introduction message to Search for a Cause"""
-enum ExperimentGroupSearchIntro {
-  NONE
-  NO_INTRO
-  INTRO_A
-  INTRO_HOMEPAGE
-}
-
-"""The test of enabling a third ad"""
-enum ExperimentGroupThirdAd {
-  NONE
-  TWO_ADS
-  THREE_ADS
-}
-
-"""The test of enabling many different ad sizes"""
-enum ExperimentGroupVariousAdSizes {
-  NONE
-  STANDARD
-  VARIOUS
-}
-
-type failedEmailAddresses {
-  email: String
-  error: String
-}
-
-"""Feature name and variation value pair applicable to a user."""
-type Feature {
-  """Name of the Feature"""
-  featureName: String!
-
-  """the value of the variation for this specific user"""
-  variation: String!
-}
-
-"""A specific instance of GroupImpactMetric"""
-type GroupImpactMetric implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """The cause ID this GroupImpactMetric belongs to"""
-  cause: Cause
-
-  """Information about the ImpactMetric"""
-  impactMetric: ImpactMetric
-
-  """
-  The micro USD amount raised for this instance of GroupImpactMetric so far
-  """
-  dollarProgress: Int!
-
-  """
-  The micro USD amount raised for this instance of GroupImpactMetric so far
-  """
-  dollarGoal: Int!
-
-  """ISO datetime string of when this GroupImpactMetric was started"""
-  dateStarted: String
-
-  """ISO datetime string of when this GroupImpactMetric was ended"""
-  dateCompleted: String
-}
-
-"""An instance of ImpactMetric"""
-type ImpactMetric implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """Charity ID that this impact metric belongs to"""
-  charity: Charity
-
-  """
-  Dollar amount (in micro USDs) required to achieve an instance of this ImpactMetric
-  """
-  dollarAmount: Int!
-
-  """Markdown description of this ImpactMetric"""
-  description: String!
-
-  """
-  Markdown. A shorter version of the description that answers "why this impact matters".
-  """
-  whyValuableDescription: String!
-
-  """
-  Metric title. Should be placeable in a sentence. Example: "1 home visit"
-  """
-  metricTitle: String!
-
-  """
-  Impact action title. Should be a longer title with a verb as well as a noun.
-  Example: "Provide 1 visit from a community health worker"
-  """
-  impactTitle: String!
-
-  """Whether or not this GroupImpactMetric is still active"""
-  active: Boolean!
-}
-
-"""inviting user"""
-type InvitingUser {
-  """the name entered in invite"""
-  name: String!
-}
-
-input LogEmailVerifiedMutationInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type LogEmailVerifiedMutationPayload {
-  user: User
-  clientMutationId: String
-}
-
-input LogReferralLinkClickInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type LogReferralLinkClickPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input LogSearchInput {
-  """
-  The user Relay global ID. Provide either this or `userId` for an existing user.
-  """
-  userIdGlobal: String
-
-  """
-  The actual user ID (not the Relay global). Provide either this or `userIdGlobal` for an existing user.
-  """
-  userId: String
-
-  """The anonymous user ID. Provide this for an anonymous user."""
-  anonUserId: String
-  source: String
-  causeId: String
-  searchEngineId: String
-  version: Int
-  clientMutationId: String
-}
-
-type LogSearchPayload {
-  user: User
-  success: Boolean
-  clientMutationId: String
-}
-
-input LogTabInput {
-  userId: String!
-  tabId: String
-  isV4: Boolean
-  clientMutationId: String
-}
-
-type LogTabPayload {
-  user: User
-  clientMutationId: String
-}
-
-input LogUserDataConsentInput {
-  userId: String!
-  consentString: String!
-  isGlobalConsent: Boolean!
-  clientMutationId: String
-}
-
-type LogUserDataConsentPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input LogUserExperimentActionsInput {
-  userId: String!
-  experimentActions: ExperimentActions
-  clientMutationId: String
-}
-
-type LogUserExperimentActionsPayload {
-  user: User
-  clientMutationId: String
-}
-
-enum LogUserRevenueAggregationOperationEnum {
-  MAX
-}
-
-input LogUserRevenueInput {
-  userId: String!
-  revenue: Float
-
-  """A revenue value encoded because it is not available on the client side"""
-  encodedRevenue: EncodedRevenueValue
-  aggregationOperation: LogUserRevenueAggregationOperationEnum
-  dfpAdvertiserId: String
-  adUnitCode: String
-  tabId: String
-  adSize: String
-  isV4: Boolean
-  clientMutationId: String
-}
-
-type LogUserRevenuePayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input LogVideoAdCompleteInput {
-  userId: String!
-  signatureArgumentString: String!
-  signature: String!
-  videoAdId: String!
-  truexAdId: String!
-  truexCreativeId: String!
-  clientMutationId: String
-}
-
-type LogVideoAdCompletePayload {
-  success: Boolean!
-  user: User!
-  clientMutationId: String
-}
-
-"""Info about the user's day of most searches"""
-type MaxSearchesDay {
-  """The day (datetime)the most searches occurred"""
-  date: String
-
-  """The number of searches made on that day"""
-  numSearches: Int
-}
-
-"""Info about the user's day of most opened tabs"""
-type MaxTabsDay {
-  """The day the most tabs were opened"""
-  date: String
-
-  """The number of tabs opened on that day"""
-  numTabs: Int
-}
-
-input MergeIntoExistingUserInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type MergeIntoExistingUserPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-"""A goal that Tabbers complete with a group of friends"""
-type Mission {
-  """Mission ID"""
-  missionId: String!
-
-  """
-  the current status of the current mission - pending, started, completed
-  """
-  status: missionStatus!
-
-  """the name of the squad"""
-  squadName: String!
-
-  """the number of tabs to complete mission"""
-  tabGoal: Int!
-
-  """the sum of users' number of tabs towards mission"""
-  tabCount: Int!
-
-  """if a user has acknowledged mission complete"""
-  acknowledgedMissionComplete: Boolean!
-
-  """if a user has acknowledged mission started"""
-  acknowledgedMissionStarted: Boolean!
-
-  """stats and state of each squad member"""
-  squadMembers: [SquadMemberInfo]!
-
-  """the end of mission awards calculated when mission completes"""
-  endOfMissionAwards: [EndOfMissionAward]!
-
-  """ISO datetime string of when the mission started"""
-  started: String
-
-  """ISO datetime string of when the mission completed"""
-  completed: String
-}
-
-"""A connection to a list of items."""
-type MissionConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [MissionEdge]
-}
-
-"""An edge in a connection."""
-type MissionEdge {
-  """The item at the end of the edge"""
-  node: Mission
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""whether a user has accepted rejected or is pending invitation"""
-enum missionStatus {
-  pending
-  started
-  completed
-}
-
-type Mutation {
-  logTab(input: LogTabInput!): LogTabPayload
-  updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
-  createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
-  createSquadInvites(input: CreateSquadInvitesInput!): CreateSquadInvitesPayload
-  logSearch(input: LogSearchInput!): LogSearchPayload
-  logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
-  logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
-  donateVc(input: DonateVcInput!): DonateVcPayload
-  mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
-  logEmailVerified(input: LogEmailVerifiedMutationInput!): LogEmailVerifiedMutationPayload
-  logReferralLinkClick(input: LogReferralLinkClickInput!): LogReferralLinkClickPayload
-  setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
-  setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
-  setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
-  setUserBkgDailyImage(input: SetUserBkgDailyImageInput!): SetUserBkgDailyImagePayload
-  updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
-  updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
-  updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
-  updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
-  setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
-  createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
-  createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
-  setUsername(input: SetUsernameInput!): SetUsernamePayload
-  setEmail(input: SetEmailInput!): SetEmailPayload
-  updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
-  logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
-  setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
-  setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
-  setUserCause(input: SetUserCauseInput!): SetUserCausePayload
-  deleteUser(input: DeleteUserInput!): DeleteUserPayload
-  squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
-  updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
-  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
-  setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
-  restartMission(input: RestartMissionInput!): RestartMissionPayload
-  createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
-  logVideoAdComplete(input: LogVideoAdCompleteInput!): LogVideoAdCompletePayload
-  setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
-  setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
-  createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
-  createSfacExtensionPromptResponse(input: CreateSfacExtensionPromptResponseInput!): CreateSfacExtensionPromptResponsePayload
-  createUserExperiment(input: CreateUserExperimentInput!): CreateUserExperimentPayload
-}
-
-"""An object with an ID"""
-interface Node {
-  """The id of the object."""
-  id: ID!
-}
-
-"""user notifications to show on v4"""
-type notifications {
-  """the kind of notification it is"""
-  code: String
-}
-
-"""cause specific UI content around onboarding"""
-type OnboardingUICopy {
-  """the steps array in onboarding"""
-  steps: [onboardingUIStep]!
-
-  """
-  markdown string shown when prompting the user to open their first tab, currently info about cat treats
-  """
-  firstTabIntroDescription: String!
-}
-
-"""ui content for each onboarding step"""
-type onboardingUIStep {
-  """markdown title for onboarding step"""
-  title: String!
-
-  """markdown subtitle for onboarding step"""
-  subtitle: String!
-
-  """name of image to show"""
-  imgName: String!
-}
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
-"""pending mission invites for user"""
-type PendingMissionInvite {
-  """the mission id of the squad invite"""
-  missionId: String!
-  invitingUser: InvitingUser
-}
-
-type Query {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-  app: App
-  user(userId: String!): User
-  userImpact(userId: String!, charityId: String!): UserImpact
-}
-
-input ReferralData {
-  referringUser: String
-  referringChannel: String
-}
-
-input RestartMissionInput {
-  userId: String!
-  missionId: String!
-  clientMutationId: String
-}
-
-type RestartMissionPayload {
-  """the current active mission for a user"""
-  currentMission: Mission
-  clientMutationId: String
 }
 
 """all important data for a search engine."""
@@ -1169,409 +752,9 @@ type SearchEngine implements Node {
   id: ID!
 
   """
-  A search destination URL, with a {searchTerms} placeholder for the client to
-  replace. Use `user.searchEngine` if the user is authenticated.
+  A search destination URL, with a {searchTerms} placeholder for the client to replace. Use `user.searchEngine` if the user is authenticated.
   """
   searchUrl: String!
-}
-
-"""A connection to a list of items."""
-type SearchEngineConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [SearchEngineEdge]
-}
-
-"""An edge in a connection."""
-type SearchEngineEdge {
-  """The item at the end of the edge"""
-  node: SearchEngine
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""
-SearchEngineType extended with fields potentially personalized to the user
-"""
-type SearchEnginePersonalized implements Node {
-  """Engine's id"""
-  engineId: String!
-
-  """Name of the Search Engine"""
-  name: String!
-
-  """what order to display the search engine in a list"""
-  rank: Int!
-
-  """Whether or not the user can earn extra impact with this Search Engine"""
-  isCharitable: Boolean!
-
-  """Display string to display in the search bar"""
-  inputPrompt: String!
-
-  """
-  Use this for the user's search behavior. A search destination URL, with a
-  {searchTerms} placeholder for the client to replace. The URL might be
-  personalized based on the user.
-  """
-  searchUrlPersonalized: String!
-
-  """The ID of an object"""
-  id: ID!
-}
-
-"""Info about any rate-limiting for VC earned from search queries"""
-type SearchRateLimit {
-  """
-  Whether we are currently rate-limiting the user's VC earned from searches
-  """
-  limitReached: Boolean
-  reason: SearchRateLimitReason
-
-  """Whether we should present the user with a CAPTCHA"""
-  checkIfHuman: Boolean
-}
-
-"""Why we are rate-limiting the user's VC earned from searches"""
-enum SearchRateLimitReason {
-  NONE
-  ONE_MINUTE_MAX
-  FIVE_MINUTE_MAX
-  DAILY_MAX
-}
-
-input SetEmailInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type SetEmailPayload {
-  user: User
-  errors: [CustomError]
-  clientMutationId: String
-}
-
-input SetHasSeenCompletedMissionInput {
-  userId: String!
-  missionId: String!
-  clientMutationId: String
-}
-
-type SetHasSeenCompletedMissionPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input SetHasSeenSquadsInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type SetHasSeenSquadsPayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetHasViewedIntroFlowInput {
-  userId: String!
-  enabled: Boolean!
-  clientMutationId: String
-}
-
-type SetHasViewedIntroFlowPayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserActiveWidgetInput {
-  userId: String!
-  widgetId: String!
-  clientMutationId: String
-}
-
-type SetUserActiveWidgetPayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserBkgColorInput {
-  userId: String!
-  color: String!
-  clientMutationId: String
-}
-
-type SetUserBkgColorPayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserBkgCustomImageInput {
-  userId: String!
-  image: String!
-  clientMutationId: String
-}
-
-type SetUserBkgCustomImagePayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserBkgDailyImageInput {
-  userId: String!
-  category: String
-  clientMutationId: String
-}
-
-type SetUserBkgDailyImagePayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserBkgImageInput {
-  userId: String!
-  imageId: String!
-  clientMutationId: String
-}
-
-type SetUserBkgImagePayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUserCauseInput {
-  userId: String!
-  causeId: String!
-  clientMutationId: String
-}
-
-type SetUserCausePayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetUsernameInput {
-  userId: String!
-  username: String!
-  clientMutationId: String
-}
-
-type SetUsernamePayload {
-  user: User
-  errors: [CustomError]
-  clientMutationId: String
-}
-
-input SetUserSearchEngineInput {
-  userId: String!
-  searchEngine: String!
-  clientMutationId: String
-}
-
-type SetUserSearchEnginePayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetV4BetaInput {
-  userId: String!
-  enabled: Boolean!
-  clientMutationId: String
-}
-
-type SetV4BetaPayload {
-  user: User
-  clientMutationId: String
-}
-
-input SetYahooSearchOptInInput {
-  userId: String!
-  optIn: Boolean!
-  clientMutationId: String
-}
-
-type SetYahooSearchOptInPayload {
-  user: User
-  clientMutationId: String
-}
-
-"""what mode in which to show SFAC searches UI"""
-enum sfacActivityState {
-  new
-  active
-  inactive
-}
-
-"""cause specific UI content around sharing"""
-type SharingUICopy {
-  """markdown for modal title"""
-  title: String!
-
-  """markdown for modal subtitle"""
-  subtitle: String!
-
-  """
-  value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’
-  """
-  imgCategory: String!
-
-  """Image to use in email invite dialog"""
-  shareImage: String!
-
-  """Image shown after email invite sent"""
-  sentImage: String!
-
-  """copy for reddit button"""
-  redditButtonTitle: String!
-
-  """copy for facebook button"""
-  facebookButtonTitle: String!
-
-  """copy for twitter button"""
-  twitterButtonTitle: String!
-
-  """copy for tumblr button"""
-  tumblrTitle: String!
-
-  """copy for tumblr caption"""
-  tumblrCaption: String!
-}
-
-"""whether a user has accepted rejected or is pending invitation"""
-enum squadAcceptedStatus {
-  pending
-  accepted
-  rejected
-}
-
-input SquadInviteResponseInput {
-  userId: String!
-  missionId: String!
-  accepted: Boolean!
-  clientMutationId: String
-}
-
-type SquadInviteResponsePayload {
-  """the current active mission for a user"""
-  currentMission: Mission
-  clientMutationId: String
-}
-
-"""an individual's stats for a mission"""
-type SquadMemberInfo {
-  """Users's username if they have joined TFAC"""
-  username: String
-
-  """Users's invited email if they have not joined TFAC"""
-  invitedEmail: String
-  status: squadAcceptedStatus!
-
-  """the longest tab streak in days so far"""
-  longestTabStreak: Int!
-
-  """the current tab streak in days so far"""
-  currentTabStreak: Int!
-
-  """the most tabs in a single day"""
-  missionMaxTabsDay: Int!
-
-  """the current tabs today"""
-  missionCurrentTabsDay: Int!
-
-  """users tab contribution"""
-  tabs: Int!
-}
-
-type successfulEmailAddresses {
-  email: String
-}
-
-input UpdateImpactInput {
-  userId: String!
-  charityId: String
-  logImpact: Boolean
-  claimPendingUserReferralImpact: Boolean
-  confirmImpact: Boolean
-  claimLatestReward: Boolean
-  clientMutationId: String
-}
-
-type UpdateImpactPayload {
-  userImpact: UserImpact
-  clientMutationId: String
-}
-
-input UpdateMissionNotificationInput {
-  userId: String!
-  missionId: String!
-  action: String!
-  clientMutationId: String
-}
-
-type UpdateMissionNotificationPayload {
-  success: Boolean!
-  clientMutationId: String
-}
-
-input UpdateUserExperimentGroupsInput {
-  userId: String!
-  experimentGroups: ExperimentGroups
-  clientMutationId: String
-}
-
-type UpdateUserExperimentGroupsPayload {
-  user: User
-  clientMutationId: String
-}
-
-input UpdateWidgetConfigInput {
-  userId: String!
-  widgetId: String!
-  config: String!
-  clientMutationId: String
-}
-
-type UpdateWidgetConfigPayload {
-  widget: Widget
-  clientMutationId: String
-}
-
-input UpdateWidgetDataInput {
-  userId: String!
-  widgetId: String!
-  data: String!
-  clientMutationId: String
-}
-
-type UpdateWidgetDataPayload {
-  widget: Widget
-  clientMutationId: String
-}
-
-input UpdateWidgetEnabledInput {
-  userId: String!
-  widgetId: String!
-  enabled: Boolean!
-  clientMutationId: String
-}
-
-type UpdateWidgetEnabledPayload {
-  widget: Widget
-  clientMutationId: String
-}
-
-input UpdateWidgetVisibilityInput {
-  userId: String!
-  widgetId: String!
-  visible: Boolean!
-  clientMutationId: String
-}
-
-type UpdateWidgetVisibilityPayload {
-  widget: Widget
-  clientMutationId: String
 }
 
 """A person who uses our app"""
@@ -1607,6 +790,10 @@ type User implements Node {
 
   """ISO datetime string of when the user joined"""
   joined: String
+
+  """
+  Whether or not the user was created during this request. Helpful for a "get or create" mutation
+  """
   justCreated: Boolean
 
   """User's current VC"""
@@ -1640,13 +827,40 @@ type User implements Node {
   vcDonatedAllTime: Int
 
   """People recruited by this user"""
-  recruits(after: String, first: Int, before: String, last: Int, startTime: String, endTime: String): UserRecruitsConnection
+  recruits(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    startTime: String
+    endTime: String
+  ): UserRecruitsConnection
 
   """The number of users this user has recruited"""
   numUsersRecruited: Int
 
   """User widgets"""
-  widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
+  widgets(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    enabled: Boolean
+  ): WidgetConnection
 
   """User's active widget id"""
   activeWidget: String
@@ -1655,7 +869,19 @@ type User implements Node {
   currentMission: Mission
 
   """gets all the past missions for a user"""
-  pastMissions(after: String, first: Int, before: String, last: Int): MissionConnection
+  pastMissions(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): MissionConnection
 
   """User's background option"""
   backgroundOption: String
@@ -1739,13 +965,13 @@ type UserImpact {
   hasClaimedLatestReward: Boolean!
 }
 
-"""Info about a user recruited by a referring user"""
-type UserRecruits {
-  """The ID of an object"""
-  id: ID!
+"""Info about the user's day of most opened tabs"""
+type MaxTabsDay {
+  """The day the most tabs were opened"""
+  date: String
 
-  """ISO datetime string of when the recruited user joined"""
-  recruitedAt: String
+  """The number of tabs opened on that day"""
+  numTabs: Int
 }
 
 """A connection to a list of items."""
@@ -1775,56 +1001,921 @@ type UserRecruitsEdge {
   cursor: String!
 }
 
+"""Info about a user recruited by a referring user"""
+type UserRecruits {
+  """The ID of an object"""
+  id: ID!
+
+  """ISO datetime string of when the recruited user joined"""
+  recruitedAt: String
+}
+
+"""A goal that Tabbers complete with a group of friends"""
+type Mission {
+  """Mission ID"""
+  missionId: String!
+
+  """
+  the current status of the current mission - pending, started, completed
+  """
+  status: missionStatus!
+
+  """the name of the squad"""
+  squadName: String!
+
+  """the number of tabs to complete mission"""
+  tabGoal: Int!
+
+  """the sum of users' number of tabs towards mission"""
+  tabCount: Int!
+
+  """if a user has acknowledged mission complete"""
+  acknowledgedMissionComplete: Boolean!
+
+  """if a user has acknowledged mission started"""
+  acknowledgedMissionStarted: Boolean!
+
+  """stats and state of each squad member"""
+  squadMembers: [SquadMemberInfo]!
+
+  """the end of mission awards calculated when mission completes"""
+  endOfMissionAwards: [EndOfMissionAward]!
+
+  """ISO datetime string of when the mission started"""
+  started: String
+
+  """ISO datetime string of when the mission completed"""
+  completed: String
+}
+
+"""whether a user has accepted rejected or is pending invitation"""
+enum missionStatus {
+  pending
+  started
+  completed
+}
+
+"""an individual's stats for a mission"""
+type SquadMemberInfo {
+  """Users's username if they have joined TFAC"""
+  username: String
+
+  """Users's invited email if they have not joined TFAC"""
+  invitedEmail: String
+  status: squadAcceptedStatus!
+
+  """the longest tab streak in days so far"""
+  longestTabStreak: Int!
+
+  """the current tab streak in days so far"""
+  currentTabStreak: Int!
+
+  """the most tabs in a single day"""
+  missionMaxTabsDay: Int!
+
+  """the current tabs today"""
+  missionCurrentTabsDay: Int!
+
+  """users tab contribution"""
+  tabs: Int!
+}
+
+"""whether a user has accepted rejected or is pending invitation"""
+enum squadAcceptedStatus {
+  pending
+  accepted
+  rejected
+}
+
+"""persistant awards calculated at end of mission"""
+type EndOfMissionAward {
+  """users ID"""
+  user: String!
+
+  """the string name of the particular award"""
+  awardType: String!
+
+  """the numerical stat for the award, such as number of tabs"""
+  unit: Int!
+}
+
+"""A connection to a list of items."""
+type MissionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MissionEdge]
+}
+
+"""An edge in a connection."""
+type MissionEdge {
+  """The item at the end of the edge"""
+  node: Mission
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""user notifications to show on v4"""
+type notifications {
+  """the kind of notification it is"""
+  code: String
+}
+
+"""Info about any rate-limiting for VC earned from search queries"""
+type SearchRateLimit {
+  """
+  Whether we are currently rate-limiting the user's VC earned from searches
+  """
+  limitReached: Boolean
+  reason: SearchRateLimitReason
+
+  """Whether we should present the user with a CAPTCHA"""
+  checkIfHuman: Boolean
+}
+
+"""Why we are rate-limiting the user's VC earned from searches"""
+enum SearchRateLimitReason {
+  NONE
+  ONE_MINUTE_MAX
+  FIVE_MINUTE_MAX
+  DAILY_MAX
+}
+
+"""Info about the user's day of most searches"""
+type MaxSearchesDay {
+  """The day (datetime)the most searches occurred"""
+  date: String
+
+  """The number of searches made on that day"""
+  numSearches: Int
+}
+
+"""The actions a user has taken in an experiment"""
+type ExperimentActionsOutput {
+  searchIntro: ExperimentActionSearchIntro
+  referralNotification: ExperimentActionReferralNotification
+}
+
+"""Action taken in response to the "search intro" experiment."""
+enum ExperimentActionSearchIntro {
+  NONE
+  DISMISS
+  CLICK
+}
+
+"""Action taken in response to the "referral notification" experiment."""
+enum ExperimentActionReferralNotification {
+  NONE
+  DISMISS
+  CLICK
+}
+
+"""pending mission invites for user"""
+type PendingMissionInvite {
+  """the mission id of the squad invite"""
+  missionId: String!
+  invitingUser: InvitingUser
+}
+
+"""inviting user"""
+type InvitingUser {
+  """the name entered in invite"""
+  name: String!
+}
+
+"""Feature name and variation value pair applicable to a user."""
+type Feature {
+  """Name of the Feature"""
+  featureName: String!
+
+  """the value of the variation for this specific user"""
+  variation: String!
+}
+
+"""
+SearchEngineType extended with fields potentially personalized to the user
+"""
+type SearchEnginePersonalized implements Node {
+  """Engine's id"""
+  engineId: String!
+
+  """Name of the Search Engine"""
+  name: String!
+
+  """what order to display the search engine in a list"""
+  rank: Int!
+
+  """Whether or not the user can earn extra impact with this Search Engine"""
+  isCharitable: Boolean!
+
+  """Display string to display in the search bar"""
+  inputPrompt: String!
+
+  """
+  Use this for the user's search behavior. A search destination URL, with a {searchTerms} placeholder for the client to replace. The URL might be personalized based on the user.
+  """
+  searchUrlPersonalized: String!
+
+  """The ID of an object"""
+  id: ID!
+}
+
+"""what mode in which to show SFAC searches UI"""
+enum sfacActivityState {
+  new
+  active
+  inactive
+}
+
+type Mutation {
+  logTab(input: LogTabInput!): LogTabPayload
+  updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
+  createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
+  createSquadInvites(input: CreateSquadInvitesInput!): CreateSquadInvitesPayload
+  logSearch(input: LogSearchInput!): LogSearchPayload
+  logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
+  logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
+  donateVc(input: DonateVcInput!): DonateVcPayload
+  mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
+  logEmailVerified(input: LogEmailVerifiedMutationInput!): LogEmailVerifiedMutationPayload
+  logReferralLinkClick(input: LogReferralLinkClickInput!): LogReferralLinkClickPayload
+  setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+  setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
+  setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
+  setUserBkgDailyImage(input: SetUserBkgDailyImageInput!): SetUserBkgDailyImagePayload
+  updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
+  updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
+  updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
+  updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
+  setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
+  createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
+  createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
+  setUsername(input: SetUsernameInput!): SetUsernamePayload
+  setEmail(input: SetEmailInput!): SetEmailPayload
+  updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
+  logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
+  setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
+  setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
+  setUserCause(input: SetUserCauseInput!): SetUserCausePayload
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
+  updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
+  setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
+  restartMission(input: RestartMissionInput!): RestartMissionPayload
+  createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
+  logVideoAdComplete(input: LogVideoAdCompleteInput!): LogVideoAdCompletePayload
+  setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
+  setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
+  createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
+  createSfacExtensionPromptResponse(input: CreateSfacExtensionPromptResponseInput!): CreateSfacExtensionPromptResponsePayload
+  createUserExperiment(input: CreateUserExperimentInput!): CreateUserExperimentPayload
+}
+
+type LogTabPayload {
+  user: User
+  clientMutationId: String
+}
+
+input LogTabInput {
+  userId: String!
+  tabId: String
+  isV4: Boolean
+  clientMutationId: String
+}
+
+type UpdateImpactPayload {
+  userImpact: UserImpact
+  clientMutationId: String
+}
+
+input UpdateImpactInput {
+  userId: String!
+  charityId: String
+  logImpact: Boolean
+  claimPendingUserReferralImpact: Boolean
+  confirmImpact: Boolean
+  claimLatestReward: Boolean
+  clientMutationId: String
+}
+
+type CreateInvitedUsersPayload {
+  successfulEmailAddresses: [successfulEmailAddresses]
+  failedEmailAddresses: [failedEmailAddresses]
+  clientMutationId: String
+}
+
+type successfulEmailAddresses {
+  email: String
+}
+
+type failedEmailAddresses {
+  email: String
+  error: String
+}
+
+input CreateInvitedUsersInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type CreateSquadInvitesPayload {
+  """the current active mission for a user"""
+  currentMission: Mission
+  clientMutationId: String
+}
+
+input CreateSquadInvitesInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String!
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type LogSearchPayload {
+  user: User
+  success: Boolean
+  clientMutationId: String
+}
+
+input LogSearchInput {
+  """
+  The user Relay global ID. Provide either this or `userId` for an existing user.
+  """
+  userIdGlobal: String
+
+  """
+  The actual user ID (not the Relay global). Provide either this or `userIdGlobal` for an existing user.
+  """
+  userId: String
+
+  """The anonymous user ID. Provide this for an anonymous user."""
+  anonUserId: String
+  source: String
+  causeId: String
+  searchEngineId: String
+  version: Int
+  clientMutationId: String
+}
+
+type LogUserRevenuePayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input LogUserRevenueInput {
+  userId: String!
+  revenue: Float
+
+  """A revenue value encoded because it is not available on the client side"""
+  encodedRevenue: EncodedRevenueValue
+  aggregationOperation: LogUserRevenueAggregationOperationEnum
+  dfpAdvertiserId: String
+  adUnitCode: String
+  tabId: String
+  adSize: String
+  isV4: Boolean
+  clientMutationId: String
+}
+
+"""An object representing a single revenue value"""
+input EncodedRevenueValue {
+  encodingType: EncodedRevenueValueTypeEnum!
+
+  """
+  A string that we can decode to a revenue value (float) using the "encodingType" method
+  """
+  encodedValue: String!
+  adSize: String
+}
+
+"""
+The type of transformation we should use to resolve the object into a revenue value
+"""
+enum EncodedRevenueValueTypeEnum {
+  AMAZON_CPM
+}
+
+"""
+The operation to use to resolve multiple values into a final revenue value. We currently only support "MAX".
+"""
+enum LogUserRevenueAggregationOperationEnum {
+  MAX
+}
+
+type LogUserDataConsentPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input LogUserDataConsentInput {
+  userId: String!
+  consentString: String!
+  isGlobalConsent: Boolean!
+  clientMutationId: String
+}
+
+type DonateVcPayload {
+  user: User
+  errors: [CustomError]
+  clientMutationId: String
+}
+
+"""For expected errors, such as during form validation"""
+type CustomError {
+  """The error code"""
+  code: String
+
+  """The error message"""
+  message: String
+}
+
+input DonateVcInput {
+  userId: String!
+  charityId: String!
+  vc: Int!
+  clientMutationId: String
+}
+
+type MergeIntoExistingUserPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input MergeIntoExistingUserInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogEmailVerifiedMutationPayload {
+  user: User
+  clientMutationId: String
+}
+
+input LogEmailVerifiedMutationInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogReferralLinkClickPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input LogReferralLinkClickInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetUserBkgImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgImageInput {
+  userId: String!
+  imageId: String!
+  clientMutationId: String
+}
+
+type SetUserBkgColorPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgColorInput {
+  userId: String!
+  color: String!
+  clientMutationId: String
+}
+
+type SetUserBkgCustomImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgCustomImageInput {
+  userId: String!
+  image: String!
+  clientMutationId: String
+}
+
+type SetUserBkgDailyImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgDailyImageInput {
+  userId: String!
+  category: String
+  clientMutationId: String
+}
+
+type UpdateWidgetDataPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
+input UpdateWidgetDataInput {
+  userId: String!
+  widgetId: String!
+  data: String!
+  clientMutationId: String
+}
+
+type UpdateWidgetVisibilityPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
+input UpdateWidgetVisibilityInput {
+  userId: String!
+  widgetId: String!
+  visible: Boolean!
+  clientMutationId: String
+}
+
+type UpdateWidgetEnabledPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
+input UpdateWidgetEnabledInput {
+  userId: String!
+  widgetId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type UpdateWidgetConfigPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
+input UpdateWidgetConfigInput {
+  userId: String!
+  widgetId: String!
+  config: String!
+  clientMutationId: String
+}
+
+type SetUserActiveWidgetPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserActiveWidgetInput {
+  userId: String!
+  widgetId: String!
+  clientMutationId: String
+}
+
+type CreateNewUserPayload {
+  user: User
+  clientMutationId: String
+}
+
+input CreateNewUserInput {
+  userId: String!
+  email: String
+  referralData: ReferralData
+  experimentGroups: ExperimentGroups
+  extensionInstallId: String
+  extensionInstallTimeApprox: String
+  v4BetaEnabled: Boolean
+  missionId: String
+  causeId: String
+  clientMutationId: String
+}
+
+input ReferralData {
+  referringUser: String
+  referringChannel: String
+}
+
+"""The experimental groups to which the user is assigned"""
+input ExperimentGroups {
+  anonSignIn: ExperimentGroupAnonSignIn
+  variousAdSizes: ExperimentGroupVariousAdSizes
+  thirdAd: ExperimentGroupThirdAd
+  oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
+  adExplanation: ExperimentGroupAdExplanation
+  searchIntro: ExperimentGroupSearchIntro
+  referralNotification: ExperimentGroupReferralNotification
+}
+
+"""The test of allowing anonymous user authentication"""
+enum ExperimentGroupAnonSignIn {
+  NONE
+  AUTHED_USER_ONLY
+  ANONYMOUS_ALLOWED
+}
+
+"""The test of enabling many different ad sizes"""
+enum ExperimentGroupVariousAdSizes {
+  NONE
+  STANDARD
+  VARIOUS
+}
+
+"""The test of enabling a third ad"""
+enum ExperimentGroupThirdAd {
+  NONE
+  TWO_ADS
+  THREE_ADS
+}
+
+"""The test of showing only one ad to new users"""
+enum ExperimentGroupOneAdForNewUsers {
+  NONE
+  DEFAULT
+  ONE_AD_AT_FIRST
+}
+
+"""The test of showing an explanation of why there are ads"""
+enum ExperimentGroupAdExplanation {
+  NONE
+  DEFAULT
+  SHOW_EXPLANATION
+}
+
+"""The test of showing an introduction message to Search for a Cause"""
+enum ExperimentGroupSearchIntro {
+  NONE
+  NO_INTRO
+  INTRO_A
+  INTRO_HOMEPAGE
+}
+
+"""The test of showing a notification to ask users to recruit friends"""
+enum ExperimentGroupReferralNotification {
+  NONE
+  NO_NOTIFICATION
+  COPY_A
+  COPY_B
+  COPY_C
+  COPY_D
+  COPY_E
+}
+
+type CreateNewMissionPayload {
+  """the current active mission for a user"""
+  currentMission: Mission
+  clientMutationId: String
+}
+
+input CreateNewMissionInput {
+  userId: String!
+  squadName: String!
+  clientMutationId: String
+}
+
+type SetUsernamePayload {
+  user: User
+  errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetUsernameInput {
+  userId: String!
+  username: String!
+  clientMutationId: String
+}
+
+type SetEmailPayload {
+  user: User
+  errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetEmailInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type UpdateUserExperimentGroupsPayload {
+  user: User
+  clientMutationId: String
+}
+
+input UpdateUserExperimentGroupsInput {
+  userId: String!
+  experimentGroups: ExperimentGroups
+  clientMutationId: String
+}
+
+type LogUserExperimentActionsPayload {
+  user: User
+  clientMutationId: String
+}
+
+input LogUserExperimentActionsInput {
+  userId: String!
+  experimentActions: ExperimentActions
+  clientMutationId: String
+}
+
+"""The actions a user may take in an experiment"""
+input ExperimentActions {
+  searchIntro: ExperimentActionSearchIntro
+  referralNotification: ExperimentActionReferralNotification
+}
+
+type SetV4BetaPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetV4BetaInput {
+  userId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type SetHasViewedIntroFlowPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetHasViewedIntroFlowInput {
+  userId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type SetUserCausePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserCauseInput {
+  userId: String!
+  causeId: String!
+  clientMutationId: String
+}
+
+type DeleteUserPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input DeleteUserInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SquadInviteResponsePayload {
+  """the current active mission for a user"""
+  currentMission: Mission
+  clientMutationId: String
+}
+
+input SquadInviteResponseInput {
+  userId: String!
+  missionId: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type UpdateMissionNotificationPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input UpdateMissionNotificationInput {
+  userId: String!
+  missionId: String!
+  action: String!
+  clientMutationId: String
+}
+
+type SetHasSeenSquadsPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetHasSeenSquadsInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenCompletedMissionPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input SetHasSeenCompletedMissionInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type RestartMissionPayload {
+  """the current active mission for a user"""
+  currentMission: Mission
+  clientMutationId: String
+}
+
+input RestartMissionInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type CreateVideoAdLogPayload {
+  VideoAdLog: VideoAdLog
+  clientMutationId: String
+}
+
 """Video Ad Log type"""
 type VideoAdLog implements Node {
   """The ID of an object"""
   id: ID!
 }
 
-"""App widget"""
-type Widget implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """Widget display name"""
-  name: String
-
-  """Widget type"""
-  type: String
-
-  """Widget icon"""
-  icon: String
-
-  """The Widget enabled state"""
-  enabled: Boolean
-
-  """The Widget visible state"""
-  visible: Boolean
-
-  """Widget data."""
-  data: String
-
-  """Widget user specific configuration."""
-  config: String
-
-  """Widget general configuration."""
-  settings: String
+input CreateVideoAdLogInput {
+  userId: String!
+  clientMutationId: String
 }
 
-"""A connection to a list of items."""
-type WidgetConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [WidgetEdge]
+type LogVideoAdCompletePayload {
+  success: Boolean!
+  user: User!
+  clientMutationId: String
 }
 
-"""An edge in a connection."""
-type WidgetEdge {
-  """The item at the end of the edge"""
-  node: Widget
+input LogVideoAdCompleteInput {
+  userId: String!
+  signatureArgumentString: String!
+  signature: String!
+  videoAdId: String!
+  truexAdId: String!
+  truexCreativeId: String!
+  clientMutationId: String
+}
 
-  """A cursor for use in pagination"""
-  cursor: String!
+type SetYahooSearchOptInPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetYahooSearchOptInInput {
+  userId: String!
+  optIn: Boolean!
+  clientMutationId: String
+}
+
+type SetUserSearchEnginePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserSearchEngineInput {
+  userId: String!
+  searchEngine: String!
+  clientMutationId: String
+}
+
+type CreateSearchEnginePromptLogPayload {
+  success: Boolean!
+  user: User
+  clientMutationId: String
+}
+
+input CreateSearchEnginePromptLogInput {
+  userId: String!
+  searchEnginePrompted: String!
+  switched: Boolean!
+  clientMutationId: String
+}
+
+type CreateSfacExtensionPromptResponsePayload {
+  user: User
+  clientMutationId: String
+}
+
+input CreateSfacExtensionPromptResponseInput {
+  userId: String!
+  browser: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type CreateUserExperimentPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+input CreateUserExperimentInput {
+  userId: String!
+  experimentId: String!
+  variationId: Int!
+  variationValueStr: String
+  clientMutationId: String
 }
