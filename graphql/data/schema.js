@@ -578,8 +578,7 @@ const userType = new GraphQLObjectType({
     justCreated: {
       type: GraphQLBoolean,
       description:
-        'Whether or not the user was created during this request;' /
-        'helpful for a "get or create" mutation',
+        'Whether or not the user was created during this request. Helpful for a "get or create" mutation',
       resolve: (user) =>
         // The user will only have the 'justCreated' field when it's a
         // brand new user item
@@ -1638,7 +1637,7 @@ const campaignType = new GraphQLObjectType({
     // Deprecated.
     numNewUsers: {
       type: GraphQLInt,
-      deprecationReason: 'Replaced by the generalized"goal" data.',
+      deprecationReason: 'Replaced by the generalized "goal" data.',
       description: 'The number of new users who joined during this campaign.',
     },
     showCountdownTimer: {
@@ -2249,8 +2248,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       type: new GraphQLEnumType({
         name: 'LogUserRevenueAggregationOperationEnum',
         description:
-          'The operation to use to resolve multiple values into a final revenue value. ' /
-          'We currently only support "MAX".',
+          'The operation to use to resolve multiple values into a final revenue value. We currently only support "MAX".',
         values: {
           MAX: { value: 'MAX' },
         },
