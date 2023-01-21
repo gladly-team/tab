@@ -13,16 +13,15 @@ import { NOTIF_SFAC_JAN_2023 } from '../experiments/experimentConstants'
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
   try {
-    const notifVariation = await getUserFeature(
+    const notifFeature = await getUserFeature(
       userContext,
       user,
       NOTIF_SFAC_JAN_2023
     )
-    const enabled = notifVariation !== 'None'
-    const NOTIF_CODE = 'SFACDec2022v2'
+    const enabled = notifFeature.variation !== 'None'
     notifications = [
       ...(enabled
-        ? [{ code: NOTIF_SFAC_JAN_2023, variation: notifVariation }]
+        ? [{ code: NOTIF_SFAC_JAN_2023, variation: notifFeature.variation }]
         : []),
     ]
   } catch (e) {
