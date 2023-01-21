@@ -14,6 +14,8 @@ import {
   V4_SHOW_THIRD_AD,
   V4_SHOW_THIRD_LOOKBACK_TIME,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
+  GLOBAL_HEALTH_GROUP_IMPACT,
+  REDUCED_IMPACT_COST,
 } from './experimentConstants'
 
 const features = {
@@ -378,6 +380,36 @@ const features = {
             $gt: 3,
           },
         },
+      },
+    ],
+  },
+  // Whether to enable group impact on the Global Health cause.
+  [GLOBAL_HEALTH_GROUP_IMPACT]: {
+    defaultValue: false,
+    rules: [
+      // Local/dev only.
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+        },
+        force: true,
+      },
+    ],
+  },
+  // Whether to reduce the impact cost -- only for internal testing.
+  [REDUCED_IMPACT_COST]: {
+    defaultValue: false,
+    rules: [
+      // Local/dev only.
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+        },
+        force: true,
       },
     ],
   },

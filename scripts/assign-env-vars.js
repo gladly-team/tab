@@ -80,8 +80,13 @@ export const envVars = [
   { name: 'BROWSERSTACK_USER', optional: true },
   { name: 'BROWSERSTACK_KEY', optional: true },
   // Upstash/Redis
-  { name: 'UPSTASH_HOST' },
-  { name: 'UPSTASH_PASSWORD' },
+  { name: 'UPSTASH_REDIS_REST_URL' },
+  { name: 'UPSTASH_REDIS_REST_TOKEN' },
+
+  /*
+    Note: env vars used in the graphql service must also be added to
+    the grapqhl config.js file.
+   */
 ]
 
 // Expect one argument, the stage name.

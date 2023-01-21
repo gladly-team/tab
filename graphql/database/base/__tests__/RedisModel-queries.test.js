@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
+import { v4 as uuid } from 'uuid'
 import RedisModel from '../RedisModel'
 import ExampleRedisModel, { fixturesA } from '../test-utils/ExampleRedisModel'
 import {
@@ -17,6 +18,7 @@ import {
 } from '../../../utils/exceptions'
 
 const user = getMockUserContext()
+const testId = uuid()
 
 function removeCreatedAndUpdatedFields(item) {
   const newItem = Object.assign({}, item)
@@ -33,11 +35,10 @@ afterAll(() => {
   mockDate.off()
 })
 
-afterEach(() => {
+afterEach(async () => {
   jest.clearAllMocks()
   jest.resetModules()
   const client = RedisModel.getClient()
-  client.flushall()
 
   setModelPermissions(ExampleRedisModel, {
     get: () => false,
@@ -45,6 +46,13 @@ afterEach(() => {
     update: () => false,
     create: () => false,
   })
+
+  await Promise.all(
+    fixturesA.map(async (element) => {
+      await client.del(ExampleRedisModel.getRedisKey(element.id))
+    })
+  )
+  await client.del(ExampleRedisModel.getRedisKey(testId))
 })
 
 describe('RedisModel queries', () => {
@@ -156,7 +164,7 @@ describe('RedisModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToCreate = {}
+    const itemToCreate = { id: testId }
     const createdItem = await ExampleRedisModel.create(user, itemToCreate)
 
     // Verify returned object.
