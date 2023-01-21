@@ -516,7 +516,7 @@ class Dashboard extends React.Component {
                 </Paper>
               ) : null}
 
-              {/*** Notification enabled by user features ***/}
+              {/*** Notification enabled by user features data ***/}
               {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
                 <Notification
                   useGlobalDismissalTime
@@ -554,45 +554,40 @@ class Dashboard extends React.Component {
                 />
               ) : null}
 
-              {/*** General notification ***/}
-              {/* {this.state.showNotification ? ( */}
-              {/*   <Notification */}
-              {/*     data-test-id={'global-notification'} */}
-              {/*     useGlobalDismissalTime */}
-              {/*     title={`We're well on our way`} */}
-              {/*     message={ */}
-              {/*       <> */}
-              {/*         <Typography variant={'body2'} gutterBottom> */}
-              {/*           We’re 20% of the way to{' '} */}
-              {/*           <Link */}
-              {/*             to={'https://campaigns.gladly.io'} */}
-              {/*             target="_blank" */}
-              {/*             style={{ color: '#9d4ba3' }} */}
-              {/*           > */}
-              {/*             restoring a well in Malawi */}
-              {/*           </Link> */}
-              {/*           ! Try Search for a Cause to help us reach our goal by */}
-              {/*           the end of the month. */}
-              {/*         </Typography> */}
-              {/*         <LinearProgress */}
-              {/*           variant="determinate" */}
-              {/*           value={20} */}
-              {/*           style={{ marginTop: 16, marginBottom: 0 }} */}
-              {/*         /> */}
-              {/*       </> */}
-              {/*     } */}
-              {/*     buttonText={'Make a search'} */}
-              {/*     buttonURL={'https://tab.gladly.io/get-search/'} */}
-              {/*     onDismiss={() => { */}
-              {/*       this.setState({ */}
-              {/*         showNotification: false, */}
-              {/*       }) */}
-              {/*     }} */}
-              {/*     style={{ */}
-              {/*       marginTop: 4, */}
-              {/*     }} */}
-              {/*   /> */}
-              {/* ) : null} */}
+              {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
+              {this.state.showNotification ? (
+                <Notification
+                  data-test-id={'global-notification'}
+                  useGlobalDismissalTime
+                  title={`We're well on our way`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        We’re 20% of the way to{' '}
+                        <Link
+                          to={'https://campaigns.gladly.io'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          restoring a well in Malawi
+                        </Link>
+                        ! Try Search for a Cause to help us reach our goal by
+                        the end of the month.
+                      </Typography>
+                    </>
+                  }
+                  buttonText={'Make a search'}
+                  buttonURL={'https://tab.gladly.io/get-search/'}
+                  onDismiss={() => {
+                    this.setState({
+                      showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
 
               {/*** Charity spotlight voting ***
               {this.state.showNotification ? (
