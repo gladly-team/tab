@@ -75,7 +75,7 @@ import {
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
-import LinearProgress from '@material-ui/core/LinearProgress'
+import getFeatureValue from 'js/utils/getFeatureValue'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -230,7 +230,6 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    // Props will be null on first render.
     const { user, app, classes } = this.props
     const {
       adUnitsToShow,
@@ -416,6 +415,20 @@ class Dashboard extends React.Component {
       !this.state.userDismissedSurvey2022 &&
       !!notifications.find(notif => notif.code === 'userSurvey2022')
 
+    const { features = [] } = user || {}
+
+    // Jan 2023 SFAC notification
+    const SFAC_JAN_NONE = 'None'
+    const SFAC_JAN_EXT = 'LinkToExt'
+    const sfacJanNotifVariation = getFeatureValue(
+      features,
+      'notif-sfac-jan-2023'
+    )
+    const searchLink =
+      sfacJanNotifVariation === SFAC_JAN_EXT
+        ? 'https://tab.gladly.io/get-search/'
+        : 'https://search.gladly.io'
+
     return (
       <div
         style={{
@@ -502,40 +515,34 @@ class Dashboard extends React.Component {
                   </div>
                 </Paper>
               ) : null}
-              {/*** For a new v4 vertical ***
-              {this.state.showNotification ? (
+
+              {/*** Notification enabled by user features ***/}
+              {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
                 <Notification
-                  data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Help us defend and reestablish reproductive rights`}
+                  title={`Pick the next spotlight charity!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Your tabs can provide and advocate for safe reproductive
-                        health care on{' '}
+                        Help pick the next spotlight charity on{' '}
                         <Link
-                          to={'https://tab.gladly.io/reproductive-health/'}
+                          to={searchLink}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          Tab for Reproductive Health
+                          Search for a Cause
                         </Link>
-                        .
+                        !
                       </Typography>
                       <Typography variant={'body2'}>
-                        (Still in beta: some features like bookmarks are
-                        missing, but you can always switch back.)
+                        Vote for one of ten amazing non-profits for our
+                        community to support in February. Each search you make
+                        this week will count as an additional vote.
                       </Typography>
                     </>
                   }
-                  buttonText={'Switch'}
-                  onClick={() => {
-                    switchToV4({
-                      relayEnvironment: this.props.relay.environment,
-                      userId: user.id,
-                      causeId: STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
-                    })
-                  }}
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/2tApCrfUgQE2LhmA8'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
@@ -543,50 +550,50 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     marginTop: 4,
-                    width: 390, // Remove unless needed visually
                   }}
                 />
               ) : null}
-              */}
+
               {/*** General notification ***/}
-              {this.state.showNotification ? (
-                <Notification
-                  data-test-id={'global-notification'}
-                  useGlobalDismissalTime
-                  title={`We're well on our way`}
-                  message={
-                    <>
-                      <Typography variant={'body2'} gutterBottom>
-                        We’re 20% of the way to{' '}
-                        <Link
-                          to={'https://campaigns.gladly.io'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          restoring a well in Malawi
-                        </Link>
-                        ! Try Search for a Cause to help us reach our goal by
-                        the end of the month.
-                      </Typography>
-                      <LinearProgress
-                        variant="determinate"
-                        value={20}
-                        style={{ marginTop: 16, marginBottom: 0 }}
-                      />
-                    </>
-                  }
-                  buttonText={'Make a search'}
-                  buttonURL={'https://tab.gladly.io/get-search/'}
-                  onDismiss={() => {
-                    this.setState({
-                      showNotification: false,
-                    })
-                  }}
-                  style={{
-                    marginTop: 4,
-                  }}
-                />
-              ) : null}
+              {/* {this.state.showNotification ? ( */}
+              {/*   <Notification */}
+              {/*     data-test-id={'global-notification'} */}
+              {/*     useGlobalDismissalTime */}
+              {/*     title={`We're well on our way`} */}
+              {/*     message={ */}
+              {/*       <> */}
+              {/*         <Typography variant={'body2'} gutterBottom> */}
+              {/*           We’re 20% of the way to{' '} */}
+              {/*           <Link */}
+              {/*             to={'https://campaigns.gladly.io'} */}
+              {/*             target="_blank" */}
+              {/*             style={{ color: '#9d4ba3' }} */}
+              {/*           > */}
+              {/*             restoring a well in Malawi */}
+              {/*           </Link> */}
+              {/*           ! Try Search for a Cause to help us reach our goal by */}
+              {/*           the end of the month. */}
+              {/*         </Typography> */}
+              {/*         <LinearProgress */}
+              {/*           variant="determinate" */}
+              {/*           value={20} */}
+              {/*           style={{ marginTop: 16, marginBottom: 0 }} */}
+              {/*         /> */}
+              {/*       </> */}
+              {/*     } */}
+              {/*     buttonText={'Make a search'} */}
+              {/*     buttonURL={'https://tab.gladly.io/get-search/'} */}
+              {/*     onDismiss={() => { */}
+              {/*       this.setState({ */}
+              {/*         showNotification: false, */}
+              {/*       }) */}
+              {/*     }} */}
+              {/*     style={{ */}
+              {/*       marginTop: 4, */}
+              {/*     }} */}
+              {/*   /> */}
+              {/* ) : null} */}
+
               {/*** Charity spotlight voting ***
               {this.state.showNotification ? (
                 <Notification
@@ -980,6 +987,15 @@ Dashboard.propTypes = {
       referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
+    features: PropTypes.arrayOf(
+      PropTypes.shape({
+        featureName: PropTypes.string.isRequired,
+
+        // Allow any type for experiment variations.
+        // eslint-disable-next-line react/forbid-prop-types
+        variation: PropTypes.any,
+      })
+    ),
     joined: PropTypes.string.isRequired,
     searches: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,

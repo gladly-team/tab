@@ -11,6 +11,7 @@ export const V4_SHOW_THIRD_AD = 'v4-show-third-ad'
 export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
+export const NOTIF_SFAC_JAN_2023 = 'notif-sfac-jan-2023'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'
