@@ -520,7 +520,7 @@ class Dashboard extends React.Component {
               {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`Pick the next spotlight charity!`}
+                  title={`Choose the next spotlight charity!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
