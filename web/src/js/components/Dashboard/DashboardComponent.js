@@ -444,7 +444,6 @@ class Dashboard extends React.Component {
     const notificationsToShow = this.state.notificationsToShow
 
     // Jan 2023 SFAC notification
-    console.log('notificationsToShow', notificationsToShow)
     const notifSFACJanuary = notificationsToShow.find(
       notif => notif.code === 'notif-sfac-jan-2023'
     )
