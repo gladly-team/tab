@@ -1121,6 +1121,9 @@ type MissionEdge {
 type notifications {
   """the kind of notification it is"""
   code: String
+
+  """the variantion given to this user (e.g. for A/B testing)"""
+  variation: String!
 }
 
 """Info about any rate-limiting for VC earned from search queries"""
