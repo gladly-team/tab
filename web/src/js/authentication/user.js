@@ -102,9 +102,7 @@ const getCurrentFirebaseUser = async () => {
   // For development only: optionally mock the user
   // and user token.
   if (shouldMockAuthentication) {
-    return new Promise((resolve, reject) => {
-      resolve(getMockFirebaseUser())
-    })
+    return getMockFirebaseUser()
   }
   return new Promise((resolve, reject) => {
     try {
