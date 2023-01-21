@@ -1,8 +1,8 @@
 /* eslint no-console: 0 */
 import fs from 'fs'
 import path from 'path'
-import { validateSchema, graphql } from 'graphql'
-import { introspectionQuery, printSchema } from 'graphql/utilities'
+import { validateSchema } from 'graphql'
+import { printSchema } from 'graphql/utilities'
 
 // Print schema for client use.
 import { Schema } from '../data/schema'
