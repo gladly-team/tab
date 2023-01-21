@@ -73,7 +73,7 @@ const formatUser = authUserObj => {
  * Get a mock, pared-down Firebase user for offline development.
  * @return {Object}
  */
-const getMockFirebaseUser = () => {
+const getMockFirebaseUser = async () => {
   const userId = 'abcdefghijklmno'
   const email = 'kevin@example.com'
   const tokenPayload = {
@@ -81,8 +81,11 @@ const getMockFirebaseUser = () => {
     email: 'kevin@example.com',
     email_verified: true,
   }
-  const jwt = require('jsonwebtoken')
-  const token = jwt.sign(tokenPayload, 'fakeSecret')
+  const jose = require('jose')
+  const secret = new TextEncoder().encode('fakeSecret')
+  const token = await new jose.SignJWT(tokenPayload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .sign(secret)
   return {
     uid: userId,
     email: email,
@@ -151,14 +154,14 @@ export const getCurrentUser = async () => {
  * @return {Function} A function that, when called, will to unsubscribe
  *   the callback from future changes in authentication state.
  */
-export const onAuthStateChanged = callback => {
+export const onAuthStateChanged = async callback => {
   // Return the listener unsubscribe function.
   // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
-  const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+  const unsubscribe = firebase.auth().onAuthStateChanged(async firebaseUser => {
     let user = null
     if (shouldMockAuthentication) {
       // For development only. Return a mock user.
-      user = formatUser(getMockFirebaseUser())
+      user = formatUser(await getMockFirebaseUser())
     } else if (firebaseUser) {
       user = formatUser(firebaseUser)
     } else {
