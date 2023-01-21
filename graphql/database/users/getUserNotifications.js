@@ -1,4 +1,6 @@
 import logger from '../../utils/logger'
+import getUserFeature from '../experiments/getUserFeature'
+import { NOTIF_SFAC_JAN_2023 } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -8,13 +10,21 @@ import logger from '../../utils/logger'
  *   array.
  */
 
-const SHOW_CURRENT_NOTIF = false
-
-const getUserNotifications = async () => {
+const getUserNotifications = async (userContext, user) => {
   let notifications = []
   try {
-    const NOTIF_CODE = 'SFACDec2022v2' // edit per custom notification
-    notifications = [...(SHOW_CURRENT_NOTIF ? [{ code: NOTIF_CODE }] : [])]
+    const notifVariation = await getUserFeature(
+      userContext,
+      user,
+      NOTIF_SFAC_JAN_2023
+    )
+    const enabled = notifVariation !== 'None'
+    const NOTIF_CODE = 'SFACDec2022v2'
+    notifications = [
+      ...(enabled
+        ? [{ code: NOTIF_SFAC_JAN_2023, variation: notifVariation }]
+        : []),
+    ]
   } catch (e) {
     logger.error(e)
   }
