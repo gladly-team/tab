@@ -1122,7 +1122,9 @@ type notifications {
   """the kind of notification it is"""
   code: String
 
-  """the variantion given to this user (e.g. for A/B testing)"""
+  """
+  the variation of the notification given to this user (e.g. for A/B testing)
+  """
   variation: String!
 }
 

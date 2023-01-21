@@ -709,7 +709,7 @@ const userType = new GraphQLObjectType({
               variation: {
                 type: new GraphQLNonNull(GraphQLString),
                 description:
-                  'the variantion given to this user (e.g. for A/B testing)',
+                  'the variation of the notification given to this user (e.g. for A/B testing)',
               },
             }),
           })
