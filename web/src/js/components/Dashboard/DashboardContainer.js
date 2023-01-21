@@ -19,12 +19,9 @@ export default createFragmentContainer(Dashboard, {
         referralNotification
         searchIntro
       }
-      features {
-        featureName
-        variation
-      }
       notifications {
         code
+        variation
       }
       joined
       searches

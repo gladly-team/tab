@@ -31,8 +31,6 @@ import {
   setUserClickedNewTabSearchIntroNotif,
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
-  hasUserDismissedSurvey2022,
-  setUserDismissedSurvey2022,
   removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -75,7 +73,6 @@ import {
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
-import getFeatureValue from 'js/utils/getFeatureValue'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -178,12 +175,12 @@ class Dashboard extends React.Component {
         EXPERIMENT_REFERRAL_NOTIFICATION
       ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
-      userDismissedSurvey2022: hasUserDismissedSurvey2022(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
       hasDismissedYahooDemoInfo:
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
+      notificationsToShow: [],
     }
   }
 
@@ -193,6 +190,40 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
     loadAds()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setNotificationsToShow(nextProps)
+  }
+
+  setNotificationsToShow(props) {
+    const { user = {} } = props || this.props
+    const { notifications = [] } = user
+
+    // Determine if we should show any notifications. Currently, each
+    // notification is is configured on a one-off basis here (UI) and in the
+    // backend (enabling/disabling).
+    const setNotifsToShow = notifs => {
+      this.setState({ notificationsToShow: notifs })
+    }
+    const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
+    const getNotifDismissKey = code => `${NOTIF_DISMISS_PREFIX}.${code}`
+    const onNotificationClose = code => {
+      localStorageMgr.setItem(getNotifDismissKey(code), 'true')
+      setNotifsToShow(notifsToShow.filter(notif => notif.code !== code))
+    }
+    const hasDismissedNotif = notif =>
+      localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
+
+    // Filter out notifications that have been dismissed and add a
+    // helper for dismissing.
+    const notifsToShow = notifications
+      .filter(n => !hasDismissedNotif(n))
+      .map(n => ({
+        ...n,
+        onDismiss: () => onNotificationClose(n.code),
+      }))
+    this.setState({ notificationsToShow: notifsToShow })
   }
 
   /**
@@ -410,22 +441,17 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notifications = (user ? user.notifications : []) || []
-    const showUserSurvey2022 =
-      !this.state.userDismissedSurvey2022 &&
-      !!notifications.find(notif => notif.code === 'userSurvey2022')
-
-    const { features = [] } = user || {}
+    const notificationsToShow = this.state.notificationsToShow
 
     // Jan 2023 SFAC notification
+    console.log('notificationsToShow', notificationsToShow)
+    const notifSFACJanuary = notificationsToShow.find(
+      notif => notif.code === 'notif-sfac-jan-2023'
+    )
     const SFAC_JAN_NONE = 'None'
-    const SFAC_JAN_EXT = 'LinkToExt'
-    const sfacJanNotifVariation =
-      getFeatureValue(features, 'notif-sfac-jan-2023') || SFAC_JAN_NONE
-    const searchLink =
-      sfacJanNotifVariation === SFAC_JAN_EXT
-        ? 'https://tab.gladly.io/get-search/'
-        : 'https://search.gladly.io'
+    const shouldShowNotifSFACJanuary =
+      notifSFACJanuary &&
+      (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
     return (
       <div
@@ -514,8 +540,8 @@ class Dashboard extends React.Component {
                 </Paper>
               ) : null}
 
-              {/*** Notification enabled by user features data ***/}
-              {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
+              {/*** Notification ***/}
+              {shouldShowNotifSFACJanuary ? (
                 <Notification
                   useGlobalDismissalTime
                   title={`Choose the next spotlight charity!`}
@@ -524,7 +550,11 @@ class Dashboard extends React.Component {
                       <Typography variant={'body2'} gutterBottom>
                         Help pick the next spotlight charity on{' '}
                         <Link
-                          to={searchLink}
+                          to={
+                            notifSFACJanuary.variation === 'LinkToExt'
+                              ? 'https://tab.gladly.io/get-search/'
+                              : 'https://search.gladly.io'
+                          }
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
@@ -541,11 +571,7 @@ class Dashboard extends React.Component {
                   }
                   buttonText={'Vote'}
                   buttonURL={'https://forms.gle/2tApCrfUgQE2LhmA8'}
-                  onDismiss={() => {
-                    this.setState({
-                      showNotification: false,
-                    })
-                  }}
+                  onDismiss={notifSFACJanuary.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
@@ -737,32 +763,6 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     width: 440,
-                    marginTop: 4,
-                  }}
-                />
-              ) : null}
-              {showUserSurvey2022 ? (
-                <Notification
-                  data-test-id={'user-survey-2022-notif'}
-                  title={`Share Your Feedback`}
-                  message={
-                    <span>
-                      <Typography variant={'body2'} gutterBottom>
-                        We'd love to hear from you! Let us know how we can make
-                        Tab for a Cause even better with this 2-minute survey.
-                      </Typography>
-                    </span>
-                  }
-                  buttonText={'Take the Survey'}
-                  buttonURL="https://docs.google.com/forms/d/1lTUsZ03-9fl69wFLUAjJQ6VrdEWdW34mPLQ26uXjQUg/edit?usp=sharing"
-                  onDismiss={() => {
-                    this.setState({
-                      userDismissedSurvey2022: true,
-                    })
-                    setUserDismissedSurvey2022()
-                  }}
-                  style={{
-                    width: 380,
                     marginTop: 4,
                   }}
                 />
@@ -980,13 +980,10 @@ Dashboard.propTypes = {
       referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
-    features: PropTypes.arrayOf(
+    notifications: PropTypes.arrayOf(
       PropTypes.shape({
-        featureName: PropTypes.string.isRequired,
-
-        // Allow any type for experiment variations.
-        // eslint-disable-next-line react/forbid-prop-types
-        variation: PropTypes.any,
+        code: PropTypes.string.isRequired,
+        variation: PropTypes.string,
       })
     ),
     joined: PropTypes.string.isRequired,
@@ -1000,6 +997,8 @@ Dashboard.propTypes = {
   }),
 }
 
-Dashboard.defaultProps = {}
+Dashboard.defaultProps = {
+  notifications: [],
+}
 
 export default withStyles(styles, { withTheme: true })(Dashboard)
