@@ -420,10 +420,8 @@ class Dashboard extends React.Component {
     // Jan 2023 SFAC notification
     const SFAC_JAN_NONE = 'None'
     const SFAC_JAN_EXT = 'LinkToExt'
-    const sfacJanNotifVariation = getFeatureValue(
-      features,
-      'notif-sfac-jan-2023'
-    )
+    const sfacJanNotifVariation =
+      getFeatureValue(features, 'notif-sfac-jan-2023') || SFAC_JAN_NONE
     const searchLink =
       sfacJanNotifVariation === SFAC_JAN_EXT
         ? 'https://tab.gladly.io/get-search/'
