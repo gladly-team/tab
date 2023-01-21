@@ -81,6 +81,9 @@ function startServer(callback) {
 
   // Compile the schema
   exec('yarn run update-schema', (error, stdout) => {
+    if (error) {
+      throw error
+    }
     console.info(stdout)
     function handleTaskDone() {
       if (callback) {

@@ -4,10 +4,6 @@ npm-debug.log
 web/jest
 .env.local
 
-# generated schema files
-graphql/data/schema.json
-graphql/data/schema.graphql
-
 # serverless
 .serverless
 
