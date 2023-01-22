@@ -21,6 +21,7 @@ export default createFragmentContainer(Dashboard, {
       }
       notifications {
         code
+        variation
       }
       joined
       searches

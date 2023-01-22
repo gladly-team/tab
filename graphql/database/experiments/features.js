@@ -16,6 +16,7 @@ import {
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
+  NOTIF_SFAC_JAN_2023,
 } from './experimentConstants'
 
 const features = {
@@ -411,6 +412,53 @@ const features = {
         },
         force: true,
       },
+    ],
+  },
+  [NOTIF_SFAC_JAN_2023]: {
+    defaultValue: 'None',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${NOTIF_SFAC_JAN_2023}`]: {
+            $eq: 'LinkToLanding',
+          },
+          tabs: {
+            $gt: 20,
+          },
+        },
+        force: 'LinkToLanding',
+      },
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${NOTIF_SFAC_JAN_2023}`]: {
+            $eq: 'LinkToExt',
+          },
+          tabs: {
+            $gt: 20,
+          },
+        },
+        force: 'LinkToExt',
+      },
+      /* End internal overrides */
+
+      // TODO: enable to launch
+      // {
+      //   variations: ['LinkToLanding', 'LinkToExt'],
+      //   weights: [0.5, 0.5],
+      //   coverage: 1.0,
+      //   condition: {
+      //     tabs: {
+      //       $gt: 20,
+      //     },
+      //   },
+      // },
     ],
   },
 }

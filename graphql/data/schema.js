@@ -706,6 +706,11 @@ const userType = new GraphQLObjectType({
                 type: GraphQLString,
                 description: 'the kind of notification it is',
               },
+              variation: {
+                type: new GraphQLNonNull(GraphQLString),
+                description:
+                  'the variation of the notification given to this user (e.g. for A/B testing)',
+              },
             }),
           })
         )
