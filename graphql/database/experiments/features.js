@@ -447,18 +447,16 @@ const features = {
         force: 'LinkToExt',
       },
       /* End internal overrides */
-
-      // TODO: enable to launch
-      // {
-      //   variations: ['LinkToLanding', 'LinkToExt'],
-      //   weights: [0.5, 0.5],
-      //   coverage: 1.0,
-      //   condition: {
-      //     tabs: {
-      //       $gt: 20,
-      //     },
-      //   },
-      // },
+      {
+        variations: ['LinkToLanding', 'LinkToExt'],
+        weights: [0.5, 0.5],
+        coverage: 1.0,
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
+      },
     ],
   },
 }
