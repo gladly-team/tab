@@ -8,10 +8,17 @@ import {
   enterUsernameURL,
 } from 'js/navigation/navigation'
 
-jest.mock('js/utils/localstorage-mgr')
-jest.mock('jsonwebtoken', () => ({
-  sign: () => 'fake-signed-token',
+jest.mock('jose', () => ({
+  SignJWT: class {
+    setProtectedHeader() {
+      return {
+        sign: () => 'faketoken',
+      }
+    }
+  },
 }))
+
+jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/mutations/DeleteUserMutation')
 
 const storedMockDevAuthenticationEnvVar =

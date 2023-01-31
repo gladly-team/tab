@@ -5,3 +5,4 @@ build/
 amazon-cpm-codes.json
 amazon-cpm-codes-v2.json
 DBActionHelpers.js
+data/schema.json

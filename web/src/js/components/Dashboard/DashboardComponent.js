@@ -31,8 +31,6 @@ import {
   setUserClickedNewTabSearchIntroNotif,
   hasUserClickedNewTabSearchIntroNotifV2,
   setUserClickedNewTabSearchIntroNotifV2,
-  hasUserDismissedSurvey2022,
-  setUserDismissedSurvey2022,
   removeCampaignDismissTime,
 } from 'js/utils/local-user-data-mgr'
 import {
@@ -75,7 +73,6 @@ import {
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
-import LinearProgress from '@material-ui/core/LinearProgress'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -178,12 +175,12 @@ class Dashboard extends React.Component {
         EXPERIMENT_REFERRAL_NOTIFICATION
       ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
-      userDismissedSurvey2022: hasUserDismissedSurvey2022(),
       // Let's assume a Chrome browser until we detect it.
       browser: CHROME_BROWSER,
       hasDismissedYahooDemoInfo:
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
+      notificationsToShow: [],
     }
   }
 
@@ -193,6 +190,40 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
     loadAds()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setNotificationsToShow(nextProps)
+  }
+
+  setNotificationsToShow(props) {
+    const { user = {} } = props || this.props
+    const { notifications = [] } = user
+
+    // Determine if we should show any notifications. Currently, each
+    // notification is is configured on a one-off basis here (UI) and in the
+    // backend (enabling/disabling).
+    const setNotifsToShow = notifs => {
+      this.setState({ notificationsToShow: notifs })
+    }
+    const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
+    const getNotifDismissKey = code => `${NOTIF_DISMISS_PREFIX}.${code}`
+    const onNotificationClose = code => {
+      localStorageMgr.setItem(getNotifDismissKey(code), 'true')
+      setNotifsToShow(notifsToShow.filter(notif => notif.code !== code))
+    }
+    const hasDismissedNotif = notif =>
+      localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
+
+    // Filter out notifications that have been dismissed and add a
+    // helper for dismissing.
+    const notifsToShow = notifications
+      .filter(n => !hasDismissedNotif(n))
+      .map(n => ({
+        ...n,
+        onDismiss: () => onNotificationClose(n.code),
+      }))
+    this.setState({ notificationsToShow: notifsToShow })
   }
 
   /**
@@ -230,7 +261,6 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    // Props will be null on first render.
     const { user, app, classes } = this.props
     const {
       adUnitsToShow,
@@ -411,10 +441,16 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notifications = (user ? user.notifications : []) || []
-    const showUserSurvey2022 =
-      !this.state.userDismissedSurvey2022 &&
-      !!notifications.find(notif => notif.code === 'userSurvey2022')
+    const notificationsToShow = this.state.notificationsToShow
+
+    // Jan 2023 SFAC notification
+    const notifSFACJanuary = notificationsToShow.find(
+      notif => notif.code === 'notif-sfac-jan-2023'
+    )
+    const SFAC_JAN_NONE = 'None'
+    const shouldShowNotifSFACJanuary =
+      notifSFACJanuary &&
+      (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
     return (
       <div
@@ -502,53 +538,46 @@ class Dashboard extends React.Component {
                   </div>
                 </Paper>
               ) : null}
-              {/*** For a new v4 vertical ***
-              {this.state.showNotification ? (
+
+              {/*** Notification ***/}
+              {shouldShowNotifSFACJanuary ? (
                 <Notification
-                  data-test-id={'global-notification'}
                   useGlobalDismissalTime
-                  title={`Help us defend and reestablish reproductive rights`}
+                  title={`Choose the next spotlight charity!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Your tabs can provide and advocate for safe reproductive
-                        health care on{' '}
+                        Help pick the next spotlight charity on{' '}
                         <Link
-                          to={'https://tab.gladly.io/reproductive-health/'}
+                          to={
+                            notifSFACJanuary.variation === 'LinkToExt'
+                              ? 'https://tab.gladly.io/get-search/'
+                              : 'https://search.gladly.io'
+                          }
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
-                          Tab for Reproductive Health
+                          Search for a Cause
                         </Link>
-                        .
+                        !
                       </Typography>
                       <Typography variant={'body2'}>
-                        (Still in beta: some features like bookmarks are
-                        missing, but you can always switch back.)
+                        Vote for one of ten amazing non-profits for our
+                        community to support in February. Each search you make
+                        this week will count as an additional vote.
                       </Typography>
                     </>
                   }
-                  buttonText={'Switch'}
-                  onClick={() => {
-                    switchToV4({
-                      relayEnvironment: this.props.relay.environment,
-                      userId: user.id,
-                      causeId: STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
-                    })
-                  }}
-                  onDismiss={() => {
-                    this.setState({
-                      showNotification: false,
-                    })
-                  }}
+                  buttonText={'Vote'}
+                  buttonURL={'https://forms.gle/2tApCrfUgQE2LhmA8'}
+                  onDismiss={notifSFACJanuary.onDismiss}
                   style={{
                     marginTop: 4,
-                    width: 390, // Remove unless needed visually
                   }}
                 />
               ) : null}
-              */}
-              {/*** General notification ***/}
+
+              {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
@@ -568,11 +597,6 @@ class Dashboard extends React.Component {
                         ! Try Search for a Cause to help us reach our goal by
                         the end of the month.
                       </Typography>
-                      <LinearProgress
-                        variant="determinate"
-                        value={20}
-                        style={{ marginTop: 16, marginBottom: 0 }}
-                      />
                     </>
                   }
                   buttonText={'Make a search'}
@@ -587,6 +611,7 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
+
               {/*** Charity spotlight voting ***
               {this.state.showNotification ? (
                 <Notification
@@ -737,32 +762,6 @@ class Dashboard extends React.Component {
                   }}
                   style={{
                     width: 440,
-                    marginTop: 4,
-                  }}
-                />
-              ) : null}
-              {showUserSurvey2022 ? (
-                <Notification
-                  data-test-id={'user-survey-2022-notif'}
-                  title={`Share Your Feedback`}
-                  message={
-                    <span>
-                      <Typography variant={'body2'} gutterBottom>
-                        We'd love to hear from you! Let us know how we can make
-                        Tab for a Cause even better with this 2-minute survey.
-                      </Typography>
-                    </span>
-                  }
-                  buttonText={'Take the Survey'}
-                  buttonURL="https://docs.google.com/forms/d/1lTUsZ03-9fl69wFLUAjJQ6VrdEWdW34mPLQ26uXjQUg/edit?usp=sharing"
-                  onDismiss={() => {
-                    this.setState({
-                      userDismissedSurvey2022: true,
-                    })
-                    setUserDismissedSurvey2022()
-                  }}
-                  style={{
-                    width: 380,
                     marginTop: 4,
                   }}
                 />
@@ -980,6 +979,12 @@ Dashboard.propTypes = {
       referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
+    notifications: PropTypes.arrayOf(
+      PropTypes.shape({
+        code: PropTypes.string.isRequired,
+        variation: PropTypes.string,
+      })
+    ),
     joined: PropTypes.string.isRequired,
     searches: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,
@@ -991,6 +996,8 @@ Dashboard.propTypes = {
   }),
 }
 
-Dashboard.defaultProps = {}
+Dashboard.defaultProps = {
+  notifications: [],
+}
 
 export default withStyles(styles, { withTheme: true })(Dashboard)
