@@ -417,12 +417,8 @@ const features = {
   [NOTIF_SFAC_FEB_2023]: {
     defaultValue: false,
     rules: [
-      // Local/dev only.
       {
         condition: {
-          env: {
-            $in: ['local', 'dev'],
-          },
           tabs: {
             $gt: 20,
           },

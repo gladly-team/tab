@@ -539,12 +539,12 @@ class Dashboard extends React.Component {
               {notifSFACFeb ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`Support Rainforest Alliance this month!`}
+                  title={`Support Rainforest Alliance!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Your votes are counted and this month, the money raised
-                        on Search for a Cause will support{' '}
+                        Your votes are counted and this month Search for a Cause
+                        Cause will support{' '}
                         <Link
                           to={'https://www.rainforest-alliance.org/'}
                           target="_blank"
@@ -556,9 +556,9 @@ class Dashboard extends React.Component {
                       </Typography>
 
                       <Typography variant={'body2'} gutterBottom>
-                        Rainforest Alliance is committed to creating a world
-                        where people and nature thrive together through climate
-                        resilience, community forestry, and human rights.
+                        Rainforest Alliance helps people and nature thrive
+                        together through climate resilience, community forestry,
+                        and human rights.
                       </Typography>
 
                       <Typography variant={'body2'}>
@@ -569,8 +569,8 @@ class Dashboard extends React.Component {
                           style={{ color: '#9d4ba3' }}
                         >
                           Search for a Cause
-                        </Link>{' '}
-                        today!
+                        </Link>
+                        !
                       </Typography>
                     </>
                   }
