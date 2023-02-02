@@ -443,14 +443,10 @@ class Dashboard extends React.Component {
 
     const notificationsToShow = this.state.notificationsToShow
 
-    // Jan 2023 SFAC notification
-    const notifSFACJanuary = notificationsToShow.find(
-      notif => notif.code === 'notif-sfac-jan-2023'
+    // Feb 2023 SFAC notification
+    const notifSFACFeb = notificationsToShow.find(
+      notif => notif.code === 'notif-sfac-feb-2023'
     )
-    const SFAC_JAN_NONE = 'None'
-    const shouldShowNotifSFACJanuary =
-      notifSFACJanuary &&
-      (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
     return (
       <div
@@ -540,37 +536,45 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {shouldShowNotifSFACJanuary ? (
+              {notifSFACFeb ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`Choose the next spotlight charity!`}
+                  title={`Support Rainforest Alliance this month!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Help pick the next spotlight charity on{' '}
+                        Your votes are counted and this month, the money raised
+                        on Search for a Cause will support{' '}
                         <Link
-                          to={
-                            notifSFACJanuary.variation === 'LinkToExt'
-                              ? 'https://tab.gladly.io/get-search/'
-                              : 'https://search.gladly.io'
-                          }
+                          to={'https://www.rainforest-alliance.org/'}
+                          target="_blank"
+                          style={{ color: '#9d4ba3' }}
+                        >
+                          Rainforest Alliance
+                        </Link>
+                        !
+                      </Typography>
+
+                      <Typography variant={'body2'} gutterBottom>
+                        Rainforest Alliance is committed to creating a world
+                        where people and nature thrive together through climate
+                        resilience, community forestry, and human rights.
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        If you aren’t already, try out{' '}
+                        <Link
+                          to={'https://search.gladly.io/'}
                           target="_blank"
                           style={{ color: '#9d4ba3' }}
                         >
                           Search for a Cause
-                        </Link>
-                        !
-                      </Typography>
-                      <Typography variant={'body2'}>
-                        Vote for one of ten amazing non-profits for our
-                        community to support in February. Each search you make
-                        this week will count as an additional vote.
+                        </Link>{' '}
+                        today!
                       </Typography>
                     </>
                   }
-                  buttonText={'Vote'}
-                  buttonURL={'https://forms.gle/2tApCrfUgQE2LhmA8'}
-                  onDismiss={notifSFACJanuary.onDismiss}
+                  onDismiss={notifSFACFeb.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
