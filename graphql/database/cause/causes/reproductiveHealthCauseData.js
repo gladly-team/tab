@@ -16,6 +16,7 @@ const data = {
   impactType: 'none',
   impactVisits: null,
   landingPagePath: '/reproductive-health/',
+  landingPagePhrase: 'This tab helps Reproductive Health',
   slug: 'reproductive-health',
   onboarding: {
     steps: [

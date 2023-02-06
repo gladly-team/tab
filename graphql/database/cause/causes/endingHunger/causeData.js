@@ -16,6 +16,7 @@ const data = {
   impactType: 'individual',
   impactVisits: 366,
   landingPagePath: '/ending-hunger/',
+  landingPagePhrase: 'This tab feeds the hungry',
   slug: 'ending-hunger',
   impact: {
     impactCounterText:

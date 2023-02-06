@@ -36,3 +36,6 @@ export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC
 
 // Show third ad to v4 users
 export const V4_SHOW_THIRD_LOOKBACK_TIME = 1814400000 // 3 weeks
+
+// Test out stronger "supporting" statements : TFAC-1023
+export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
