@@ -22,6 +22,7 @@ const data = {
   impactType: 'none',
   impactVisits: null,
   landingPagePath: '/black-equity/',
+  landingPagePhrase: 'This tab supports Black empowerment',
   slug: 'black-equity',
   onboarding: {
     steps: [

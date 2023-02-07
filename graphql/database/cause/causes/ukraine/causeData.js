@@ -16,6 +16,7 @@ const data = {
   impactType: 'individual',
   impactVisits: 13,
   landingPagePath: '/ukraine/',
+  landingPagePhrase: 'This tab supports Ukrainian families',
   slug: 'ukraine',
   impact: {
     impactCounterText:

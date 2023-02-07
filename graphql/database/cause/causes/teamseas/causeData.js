@@ -30,6 +30,7 @@ const data = {
   impactType: 'individual',
   impactVisits: 10,
   landingPagePath: '/teamseas/',
+  landingPagePhrase: 'This tab protects the ocean',
   slug: 'teamseas',
   impact: {
     claimImpactSubtitle,

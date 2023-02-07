@@ -16,6 +16,7 @@ const data = {
   impactType: 'individual',
   impactVisits: 131,
   landingPagePath: '/global-health/',
+  landingPagePhrase: 'This tab provides health care',
   slug: 'global-health',
   impact: {
     impactCounterText:

@@ -293,6 +293,9 @@ type Cause implements Node {
   """URL path for the landing page belonging to this cause"""
   landingPagePath: String!
 
+  """Phrase for the landing page belonging to this cause"""
+  landingPagePhrase: String!
+
   """Whether or not the current cause supports individual impact"""
   individualImpactEnabled: Boolean! @deprecated(reason: "Replaced by \"impactType\" field.")
 
