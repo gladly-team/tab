@@ -157,6 +157,8 @@ export const getMockCauseInstance = (attributes) => {
         charityId: 'abcdefghijklmnop',
         landingPagePath: '/test',
         impactVisits: 10,
+        name: 'cause name',
+        landingPagePhrase: 'test landing page phrase',
         impact: {
           impactCounterText: 'impactCounterText',
           claimImpactSubtitle: 'claimImpactSubtitle',

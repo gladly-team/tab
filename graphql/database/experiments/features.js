@@ -17,6 +17,7 @@ import {
   GLOBAL_HEALTH_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
   NOTIF_SFAC_FEB_2023,
+  V4_SUPPORTING_STATEMENTS,
 } from './experimentConstants'
 
 const features = {
@@ -425,6 +426,43 @@ const features = {
         },
         force: true,
       },
+    ],
+  },
+  [V4_SUPPORTING_STATEMENTS]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${V4_SUPPORTING_STATEMENTS}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${V4_SUPPORTING_STATEMENTS}`]: {
+            $eq: 'Experiment',
+            $exists: true,
+          },
+        },
+        force: 'Experiment',
+      },
+      /* End internal overrides */
+      // {
+      //   variations: ['Control', 'Experiment'],
+      //   weights: [0.5, 0.5],
+      //   coverage: 1.0,
+      //   condition: {},
+      // },
     ],
   },
 }

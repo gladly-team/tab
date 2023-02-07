@@ -149,6 +149,7 @@ import getShouldShowSfacExtensionPrompt from '../database/users/getShouldShowSfa
 import getUserNotifications from '../database/users/getUserNotifications'
 import getSfacActivityState from '../database/users/getSfacActivityState'
 import getShouldShowSfacIcon from '../database/users/getShouldShowSfacIcon'
+import getLandingPagePhrase from '../database/users/getLandingPagePhrase'
 import {
   getImpactMetricById,
   getImpactMetricsByCharityId,
@@ -1105,6 +1106,11 @@ const CauseType = new GraphQLObjectType({
     landingPagePath: {
       type: new GraphQLNonNull(GraphQLString),
       description: `URL path for the landing page belonging to this cause`,
+    },
+    landingPagePhrase: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Phrase for the landing page belonging to this cause`,
+      resolve: (cause, _, context) => getLandingPagePhrase(context.user, cause),
     },
     individualImpactEnabled: {
       type: new GraphQLNonNull(GraphQLBoolean),

@@ -16,6 +16,7 @@ const data = {
   impactType: 'individual',
   impactVisits: 196,
   landingPagePath: '/trees/',
+  landingPagePhrase: 'This tab plants trees',
   slug: 'trees',
   impact: {
     impactCounterText:

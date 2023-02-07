@@ -182,12 +182,16 @@ class Cause extends DynamoDBModel {
         .string()
         .required()
         .description(
-          `the backgroundground Image Category to show by default for a cause`
+          `the background Image Category to show by default for a cause`
         ),
       landingPagePath: types
         .string()
         .required()
         .description(`URL path for the landing page belonging to this cause`),
+      landingPagePhrase: types
+        .string()
+        .required()
+        .description(`Phrase for the landing page belonging to this cause`),
       slug: types
         .string()
         .required()
