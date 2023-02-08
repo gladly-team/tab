@@ -457,12 +457,12 @@ const features = {
         force: 'Experiment',
       },
       /* End internal overrides */
-      // {
-      //   variations: ['Control', 'Experiment'],
-      //   weights: [0.5, 0.5],
-      //   coverage: 1.0,
-      //   condition: {},
-      // },
+      {
+        variations: ['Control', 'Experiment'],
+        weights: [0.5, 0.5],
+        coverage: 1.0,
+        condition: {},
+      },
     ],
   },
 }
