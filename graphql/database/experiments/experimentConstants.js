@@ -11,7 +11,7 @@ export const V4_SHOW_THIRD_AD = 'v4-show-third-ad'
 export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
-export const NOTIF_SFAC_JAN_2023 = 'notif-sfac-jan-2023'
+export const NOTIF_SFAC_FEB_2023 = 'notif-sfac-feb-2023'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'
@@ -36,3 +36,6 @@ export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC
 
 // Show third ad to v4 users
 export const V4_SHOW_THIRD_LOOKBACK_TIME = 1814400000 // 3 weeks
+
+// Test out stronger "supporting" statements : TFAC-1023
+export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'

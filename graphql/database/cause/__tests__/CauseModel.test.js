@@ -17,6 +17,7 @@ const getMockCauseObject = () => ({
   impactType: 'individual',
   impactVisits: 14,
   landingPagePath: '/cats/',
+  landingPagePhrase: 'This tab helps shelter cats',
   slug: 'cats',
   impact: {
     claimImpactSubtitle: 'paw',

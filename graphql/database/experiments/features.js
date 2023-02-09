@@ -16,7 +16,8 @@ import {
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
-  NOTIF_SFAC_JAN_2023,
+  NOTIF_SFAC_FEB_2023,
+  V4_SUPPORTING_STATEMENTS,
 } from './experimentConstants'
 
 const features = {
@@ -414,8 +415,21 @@ const features = {
       },
     ],
   },
-  [NOTIF_SFAC_JAN_2023]: {
-    defaultValue: 'None',
+  [NOTIF_SFAC_FEB_2023]: {
+    defaultValue: false,
+    rules: [
+      {
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
+        force: true,
+      },
+    ],
+  },
+  [V4_SUPPORTING_STATEMENTS]: {
+    defaultValue: 'Control',
     rules: [
       /* Begin internal overrides */
       {
@@ -423,40 +437,32 @@ const features = {
           env: {
             $in: ['local', 'dev'],
           },
-          [`internalExperimentOverrides.${NOTIF_SFAC_JAN_2023}`]: {
-            $eq: 'LinkToLanding',
-          },
-          tabs: {
-            $gt: 20,
+          [`internalExperimentOverrides.${V4_SUPPORTING_STATEMENTS}`]: {
+            $eq: 'Control',
+            $exists: true,
           },
         },
-        force: 'LinkToLanding',
+        force: 'Control',
       },
       {
         condition: {
           env: {
             $in: ['local', 'dev'],
           },
-          [`internalExperimentOverrides.${NOTIF_SFAC_JAN_2023}`]: {
-            $eq: 'LinkToExt',
-          },
-          tabs: {
-            $gt: 20,
+          [`internalExperimentOverrides.${V4_SUPPORTING_STATEMENTS}`]: {
+            $eq: 'Experiment',
+            $exists: true,
           },
         },
-        force: 'LinkToExt',
+        force: 'Experiment',
       },
       /* End internal overrides */
-      {
-        variations: ['LinkToLanding', 'LinkToExt'],
-        weights: [0.5, 0.5],
-        coverage: 1.0,
-        condition: {
-          tabs: {
-            $gt: 20,
-          },
-        },
-      },
+      // {
+      //   variations: ['Control', 'Experiment'],
+      //   weights: [0.5, 0.5],
+      //   coverage: 1.0,
+      //   condition: {},
+      // },
     ],
   },
 }
