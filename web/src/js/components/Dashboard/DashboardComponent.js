@@ -443,10 +443,10 @@ class Dashboard extends React.Component {
 
     const notificationsToShow = this.state.notificationsToShow
 
-    // Feb 2023 SFAC notification
-    const notifSFACFeb = notificationsToShow.find(
-      notif => notif.code === 'notif-sfac-feb-2023'
-    )
+    // // Feb 2023 SFAC notification
+    // const notifSFACFeb = notificationsToShow.find(
+    //   notif => notif.code === 'notif-sfac-feb-2023'
+    // )
 
     return (
       <div
@@ -536,7 +536,7 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {notifSFACFeb ? (
+              {/* {notifSFACFeb ? (
                 <Notification
                   useGlobalDismissalTime
                   title={`Support Rainforest Alliance!`}
@@ -579,7 +579,7 @@ class Dashboard extends React.Component {
                     marginTop: 4,
                   }}
                 />
-              ) : null}
+              ) : null} */}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (
