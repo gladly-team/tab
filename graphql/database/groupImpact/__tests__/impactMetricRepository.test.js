@@ -101,7 +101,7 @@ describe('impactMetricRepository', () => {
       inExperiment: false,
     })
     const { getImpactMetricById } = require('../impactMetricRepository')
-    expect(getImpactMetricById('nyXGkP6vB').dollarAmount).toEqual(0.1e6)
+    expect(getImpactMetricById('nyXGkP6vB').dollarAmount).toEqual(0.25e5)
   })
 
   test('getImpactMetricsByCharityId does not modify the dollarAmount by default', () => {
@@ -119,7 +119,7 @@ describe('impactMetricRepository', () => {
     })
     const { getImpactMetricsByCharityId } = require('../impactMetricRepository')
     expect(getImpactMetricsByCharityId('charity2')[1].dollarAmount).toEqual(
-      0.1e6
+      0.25e5
     )
   })
 })
