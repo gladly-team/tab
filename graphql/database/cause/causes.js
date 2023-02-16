@@ -31,7 +31,7 @@ const overrideCauseModel = (cause, index) => {
     ).variation
     causes[index].impactType = globalHealthGroupImpactEnabled
       ? CAUSE_IMPACT_TYPES.group
-      : CAUSE_IMPACT_TYPES.none
+      : CAUSE_IMPACT_TYPES.individual
   }
 }
 
