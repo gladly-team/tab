@@ -393,7 +393,7 @@ const features = {
       {
         condition: {
           env: {
-            $in: ['local', 'dev'],
+            $in: ['local', 'dev', 'production'],
           },
         },
         force: true,
