@@ -11,8 +11,6 @@ import {
   SEARCH_EXPERIMENT_NEW_USERS_CUTOFF_UNIX_TIME,
   SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME,
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
-  V4_SHOW_THIRD_AD,
-  V4_SHOW_THIRD_LOOKBACK_TIME,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
@@ -314,24 +312,6 @@ const features = {
           },
         },
         force: false,
-      },
-    ],
-  },
-  [V4_SHOW_THIRD_AD]: {
-    defaultValue: false,
-    rules: [
-      {
-        variations: [false, true],
-        weights: [0.1, 0.9],
-        coverage: 1.0,
-        condition: {
-          v4BetaEnabled: {
-            $eq: true,
-          },
-          timeSinceJoined: {
-            $gt: V4_SHOW_THIRD_LOOKBACK_TIME,
-          },
-        },
       },
     ],
   },

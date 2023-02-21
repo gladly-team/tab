@@ -7,7 +7,6 @@ export const SUPPORTING_CAUSE_CHIP = 'supporting-cause-chip'
 export const YAHOO_SEARCH_NEW_USERS = 'yahoo-search-new-users'
 export const YAHOO_SEARCH_NEW_USERS_V2 = 'yahoo-search-new-users-v2'
 export const YAHOO_SEARCH_EXISTING_USERS = 'yahoo-search-existing-users'
-export const V4_SHOW_THIRD_AD = 'v4-show-third-ad'
 export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
@@ -33,9 +32,6 @@ export const SEARCH_EXPERIMENT_NEW_USERS_V2_CUTOFF_UNIX_TIME = 1655843400000 // 
 // Cutoff time for search extension experiment. Users are considered
 // new if they join after this time.
 export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC 6 September 2022
-
-// Show third ad to v4 users
-export const V4_SHOW_THIRD_LOOKBACK_TIME = 1814400000 // 3 weeks
 
 // Test out stronger "supporting" statements : TFAC-1023
 export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
