@@ -1163,6 +1163,12 @@ const CauseType = new GraphQLObjectType({
       resolve: (cause, _args, context) =>
         getGroupImpactMetricForCause(context.user, cause.id),
     },
+    charity: {
+      type: charityType,
+      description: 'Charity that this cause is currently generating impact for',
+      resolve: (cause, _, context) =>
+        CharityModel.get(context.user, cause.charityId),
+    },
   }),
   interfaces: [nodeInterface],
 })
