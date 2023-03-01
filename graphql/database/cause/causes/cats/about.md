@@ -1,5 +1,3 @@
-### About the Cause
-
 Tab for Cats is proud to support Greater Good Charities' **The Jackson Galaxy Project**. With each tab opened, you are working toward a cat in need finding its fur-ever home.
 
 [Greater Good Charities](https://greatergood.org/about-us) is an independent 501(c)(3) organization that works toward improving the well-being of people, pets, and the planet through its own programs and charitable donations to programs worldwide working toward its mission.
