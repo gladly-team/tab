@@ -321,6 +321,9 @@ type Cause implements Node {
 
   """the group impact metric currently associated with this cause"""
   groupImpactMetric: GroupImpactMetric
+
+  """Charity that this cause is currently generating impact for"""
+  charity: Charity
 }
 
 """The type of charitable impact that's enabled for this cause"""

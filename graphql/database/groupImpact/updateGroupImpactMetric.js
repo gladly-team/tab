@@ -65,6 +65,10 @@ const updateGroupImpactMetricModel = async (
 const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   let groupImpactMetricId
 
+  console.log(userContext)
+  console.log(causeId)
+  console.log(revenueType)
+
   try {
     ;({ groupImpactMetricId } = await CauseGroupImpactMetricModel.get(
       userContext,
