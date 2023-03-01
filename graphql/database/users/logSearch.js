@@ -7,6 +7,9 @@ import getUserSearchEngine from './getUserSearchEngine'
 import getSearchEngine from '../search/getSearchEngine'
 import getCause from '../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
+import getCauseByUser from '../cause/getCauseByUser'
+import { CAUSE_IMPACT_TYPES } from '../constants'
+import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
 
 const getSource = (searchData) => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab', 'edge', 'safari']
@@ -41,6 +44,14 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
     user = await UserModel.get(userContext, userId)
   } catch (e) {
     throw e
+  }
+
+  if (!user.v4BetaEnabled) {
+    const cause = await getCauseByUser(userContext, userId)
+
+    if (cause && cause.impactType === CAUSE_IMPACT_TYPES.group) {
+      await updateGroupImpactMetric(userContext, cause.id, 'search')
+    }
   }
 
   // Update the user's counter for max searches in a day.
@@ -140,6 +151,11 @@ const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
  * @return {Promise<User>} A promise that resolves into a User instance.
  */
 const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
+  console.log(searchData)
+  console.log(userId)
+  console.log(userContext)
+  console.log(anonUserId)
+
   // Do some validation on searchData fields (searchEngineId, causeId)
   if (searchData.searchEngineId) {
     try {

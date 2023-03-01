@@ -8,7 +8,10 @@ import {
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
 import getNextImpactMetricForCause from './getNextImpactMetricForCause'
-import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import {
+  getEstimatedMoneyRaisedPerTab,
+  getEstimatedMoneyRaisedPerSearch,
+} from '../globals/globals'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 
@@ -59,7 +62,7 @@ const updateGroupImpactMetricModel = async (
   })
 }
 
-const updateGroupImpactMetric = async (userContext, causeId) => {
+const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   let groupImpactMetricId
 
   try {
@@ -97,9 +100,22 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
   }
 
   // Now update GroupImpactMetric
-  const newDollarProgress = Math.round(
-    groupImpactMetric.dollarProgress + 10 ** 6 * getEstimatedMoneyRaisedPerTab()
-  )
+  let newDollarProgress = 0.0
+
+  if (revenueType === 'tab') {
+    newDollarProgress = Math.round(
+      groupImpactMetric.dollarProgress +
+        10 ** 6 * getEstimatedMoneyRaisedPerTab()
+    )
+  }
+
+  if (revenueType === 'search') {
+    newDollarProgress = Math.round(
+      groupImpactMetric.dollarProgress +
+        10 ** 6 * getEstimatedMoneyRaisedPerSearch()
+    )
+  }
+
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
