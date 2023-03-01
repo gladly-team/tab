@@ -41,7 +41,3 @@ Thank you to the following projects and companies for supporting open source pro
 - [TravisCI](https://travis-ci.org/)
 - [Browserstack](https://www.browserstack.com)
 - [Codecov](https://codecov.io)
-
-## TravisCI Notes
-
-- To encyprt a secret = `travis encrypt FOO=bar --com -r gladly-team/tab`
