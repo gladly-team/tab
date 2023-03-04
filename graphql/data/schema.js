@@ -1356,8 +1356,7 @@ const charityType = new GraphQLObjectType({
     impactMetrics: {
       type: new GraphQLList(impactMetricType),
       description: 'Impact Metrics that belong to this Charity',
-      resolve: (charity, _args, context) =>
-        getImpactMetricsByCharityId(context.user, charity.id),
+      resolve: (charity) => getImpactMetricsByCharityId(charity.id),
     },
   }),
   interfaces: [nodeInterface],
