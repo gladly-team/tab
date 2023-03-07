@@ -441,7 +441,7 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notificationsToShow = this.state.notificationsToShow
+    // const notificationsToShow = this.state.notificationsToShow
 
     // // Feb 2023 SFAC notification
     // const notifSFACFeb = notificationsToShow.find(

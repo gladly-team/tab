@@ -108,6 +108,9 @@ export const SEARCH_STORAGE_REFERRAL_DATA_REFERRING_USER =
 export const SEARCH_STORAGE_REFERRAL_DATA_REFERRING_CHANNEL =
   'search.referralData.referringChannel'
 
+// Storage redirect keys
+export const STORAGE_REDIRECT_URI = 'auth.redirect.uri'
+
 /**
   Error codes passed from server-side.
 **/
@@ -118,6 +121,7 @@ export const ERROR_USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
   Code constants.
 **/
 export const TAB_APP = 'tab'
+export const SHOP_APP = 'shop'
 export const SEARCH_APP = 'search'
 
 export const CHROME_BROWSER = 'chrome'

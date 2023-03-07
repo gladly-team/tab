@@ -60,6 +60,9 @@ export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
 export const EDGE_BROWSER = 'edge'
 
+// Non-Model type names
+export const WILDFIRE = 'Wildfire'
+
 // Valid browsers for SFAC Extension
 export const VALID_SFAC_EXTENSION_BROWSERS = [
   CHROME_BROWSER,

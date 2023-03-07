@@ -17,6 +17,8 @@ export const USERS_OVERRIDE = 'USERS_OVERRIDE'
 export const MIGRATION_OVERRIDE = 'MIGRATION_OVERRIDE'
 export const VIDEO_ADS_OVERRIDE = 'VIDEO_ADS_OVERRIDE'
 export const GROUP_IMPACT_OVERRIDE = 'GROUP_IMPACT_OVERRIDE'
+export const WILDFIRE_BY_USER_ID_OVERRIDE = 'WILDFIRE_BY_USER_ID_OVERRIDE'
+
 // Make it less likely for somebody to use the override
 // string value directly.
 const rand = random(10000, 99999)
@@ -32,6 +34,7 @@ const validOverrides = {
   [MISSIONS_OVERRIDE]: `${MISSIONS_OVERRIDE}${validOverridesAppendix}`,
   [USERS_OVERRIDE]: `${USERS_OVERRIDE}${validOverridesAppendix}`,
   [VIDEO_ADS_OVERRIDE]: `${VIDEO_ADS_OVERRIDE}${validOverridesAppendix}`,
+  [WILDFIRE_BY_USER_ID_OVERRIDE]: `${WILDFIRE_BY_USER_ID_OVERRIDE}${validOverridesAppendix}`,
   // TODO: remove after migration
   [GROUP_IMPACT_OVERRIDE]: `${GROUP_IMPACT_OVERRIDE}${validOverridesAppendix}`,
 }
