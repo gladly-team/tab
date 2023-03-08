@@ -6,6 +6,7 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+  wildfire(userId: String!): Wildfire
   userImpact(userId: String!, charityId: String!): UserImpact
 }
 
@@ -1238,6 +1239,11 @@ enum sfacActivityState {
   new
   active
   inactive
+}
+
+"""The Wildfire object"""
+type Wildfire {
+  causeName: String
 }
 
 type Mutation {

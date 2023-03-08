@@ -5,7 +5,9 @@ import {
   isAbsoluteURL,
 } from 'js/navigation/utils'
 import { getUrlParameters } from 'js/utils/utils'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import qs from 'qs'
+import { STORAGE_REDIRECT_URI } from 'js/constants'
 
 export const browserHistory = createBrowserHistory()
 
@@ -254,8 +256,16 @@ export const postAuthURLs = {
   3: constructUrl(accountURL, { verified: true }, { absolute: true }),
 }
 
-export const getPostAuthURL = (index, { isSearchApp = false }) => {
+export const getPostAuthURL = (index, { isSearchApp = false, userId = '' }) => {
   const nextURLVal = postAuthURLs[index]
   const fallbackURL = isSearchApp ? searchBaseURL : dashboardURL
+
+  // If auth.redirect.uri in localStorage is set, use that as the url we redirect to.
+  const uri = localStorageMgr.getItem(STORAGE_REDIRECT_URI)
+  if (uri) {
+    localStorageMgr.removeItem(STORAGE_REDIRECT_URI)
+    return uri + (userId ? `?uuid=${userId}` : '')
+  }
+
   return nextURLVal || fallbackURL
 }

@@ -155,6 +155,11 @@ import {
   getImpactMetricsByCharityId,
 } from '../database/groupImpact/impactMetricRepository'
 
+import getCauseForWildfire from '../database/cause/getCauseForWildfire'
+
+// Types
+import wildfireType from './types/wildfire'
+
 class App {
   constructor(id) {
     this.id = id
@@ -3125,6 +3130,13 @@ const queryType = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_, args, context) => UserModel.get(context.user, args.userId),
+    },
+    wildfire: {
+      type: wildfireType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, args) => getCauseForWildfire(args.userId),
     },
     userImpact: {
       type: userImpactType,

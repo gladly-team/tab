@@ -37,6 +37,7 @@ import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import { flushAllPromises } from 'js/utils/test-utils'
 import { LOGGED_OUT_MESSAGE_TYPE } from 'js/constants'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { STORAGE_REDIRECT_URI } from 'js/constants'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -1328,5 +1329,57 @@ describe('Authentication.js tests', function() {
     // Mock a call from FirebaseUI after user signs in
     component.onSignInSuccess(mockFirebaseUserInstance)
     expect(clearLoggedOutTabs).toHaveBeenCalled()
+  })
+
+  it('navigateToAuthStep stores the URI in local storage', () => {
+    expect.assertions(1)
+
+    const localStorageMock = (() => {
+      let store = {}
+      return {
+        getItem: key => store[key],
+        setItem: (key, value) => (store[key] = value.toString()),
+        clear: () => (store = {}),
+      }
+    })()
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+    })
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?uri=http://example.com'
+    shallow(<Authentication {...mockProps} />)
+
+    expect(localStorageMock.getItem(STORAGE_REDIRECT_URI)).toBe(
+      'http://example.com'
+    )
+  })
+
+  it('navigateToAuthStep does not store the URI in local storage', () => {
+    expect.assertions(1)
+
+    const localStorageMock = (() => {
+      let store = {}
+      return {
+        getItem: key => store[key],
+        setItem: (key, value) => (store[key] = value.toString()),
+        clear: () => (store = {}),
+      }
+    })()
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+    })
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?blah=http://example.com'
+    shallow(<Authentication {...mockProps} />)
+
+    expect(localStorageMock.getItem(STORAGE_REDIRECT_URI)).toBeUndefined()
   })
 })
