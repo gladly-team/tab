@@ -10,7 +10,10 @@ import dataUkraine from './causes/ukraine/causeData'
 import dataReproductiveHealth from './causes/reproductiveHealthCauseData'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import getFeature from '../experiments/getFeature'
-import { GLOBAL_HEALTH_GROUP_IMPACT } from '../experiments/experimentConstants'
+import {
+  ENDING_HUNGER_GROUP_IMPACT,
+  GLOBAL_HEALTH_GROUP_IMPACT,
+} from '../experiments/experimentConstants'
 
 const causes = [
   new CauseModel(dataCats),
@@ -30,6 +33,15 @@ const overrideCauseModel = (cause, index) => {
       GLOBAL_HEALTH_GROUP_IMPACT
     ).variation
     causes[index].impactType = globalHealthGroupImpactEnabled
+      ? CAUSE_IMPACT_TYPES.group
+      : CAUSE_IMPACT_TYPES.individual
+  }
+
+  if (cause.id === dataEndingHunger.id) {
+    const endingHungerGroupImpactEnabled = getFeature(
+      ENDING_HUNGER_GROUP_IMPACT
+    ).variation
+    causes[index].impactType = endingHungerGroupImpactEnabled
       ? CAUSE_IMPACT_TYPES.group
       : CAUSE_IMPACT_TYPES.individual
   }

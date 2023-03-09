@@ -13,6 +13,7 @@ import {
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
+  ENDING_HUNGER_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
   NOTIF_SFAC_FEB_2023,
   V4_SUPPORTING_STATEMENTS,
@@ -374,6 +375,21 @@ const features = {
         condition: {
           env: {
             $in: ['local', 'dev', 'production'],
+          },
+        },
+        force: true,
+      },
+    ],
+  },
+  // Whether to enable group impact on the Ending Hunger cause.
+  [ENDING_HUNGER_GROUP_IMPACT]: {
+    defaultValue: false,
+    rules: [
+      // Local/dev only.
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
           },
         },
         force: true,
