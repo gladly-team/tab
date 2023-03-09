@@ -9,6 +9,7 @@ export const YAHOO_SEARCH_NEW_USERS_V2 = 'yahoo-search-new-users-v2'
 export const YAHOO_SEARCH_EXISTING_USERS = 'yahoo-search-existing-users'
 export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
+export const ENDING_HUNGER_GROUP_IMPACT = 'ending-hunger-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
 export const NOTIF_SFAC_FEB_2023 = 'notif-sfac-feb-2023'
 
