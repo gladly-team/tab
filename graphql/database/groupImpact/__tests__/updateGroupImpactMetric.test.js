@@ -16,6 +16,7 @@ import {
 } from '../../../utils/permissions-overrides'
 import getNextImpactMetricForCause from '../getNextImpactMetricForCause'
 import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
+import incrementCauseImpactMetricCount from '../incrementCauseImpactMetricCount'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 
@@ -28,6 +29,7 @@ jest.mock('nanoid', () => {
 })
 jest.mock('../getNextImpactMetricForCause')
 jest.mock('../../globals/globals')
+jest.mock('../incrementCauseImpactMetricCount')
 
 beforeAll(() => {
   mockDate.on()
@@ -234,5 +236,10 @@ describe('updateGroupImpactMetric tests', () => {
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
     })
+
+    expect(incrementCauseImpactMetricCount).toHaveBeenCalledWith(
+      causeId,
+      mockImpactId
+    )
   })
 })
