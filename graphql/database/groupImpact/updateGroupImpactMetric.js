@@ -9,6 +9,7 @@ import {
 } from '../../utils/permissions-overrides'
 import getNextImpactMetricForCause from './getNextImpactMetricForCause'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import incrementCauseImpactMetricCount from './incrementCauseImpactMetricCount'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 
@@ -114,6 +115,11 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
       causeId,
       newGroupImpactMetricId,
       getNextImpactMetricForCause(causeId)
+    )
+    // Update Count entity
+    await incrementCauseImpactMetricCount(
+      causeId,
+      groupImpactMetric.impactMetricId
     )
     // Update join table
     return updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
