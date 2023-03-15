@@ -554,7 +554,7 @@ class Dashboard extends React.Component {
                   }
                   buttonText={'Take Survey'}
                   buttonURL={
-                    'https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform'
+                    'https://docs.google.com/forms/d/1XurFYryQrIU6vokfP-w9ES7x_uj4vqlDQKFh25ByJO4/edit'
                   }
                   onDismiss={notif.onDismiss}
                   style={{
