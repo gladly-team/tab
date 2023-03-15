@@ -439,8 +439,7 @@ class User extends DynamoDBModel {
       deleted: false,
       pendingMissionInvites: [],
       hasSeenSquads: false,
-      // cats cause ID for default.
-      causeId: 'CA6A5C2uj',
+      causeId: '',
       yahooPaidSearchRewardOptIn: false,
     }
   }

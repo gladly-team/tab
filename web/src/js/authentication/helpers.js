@@ -1,5 +1,6 @@
 import moment from 'moment'
 import {
+  goTo,
   replaceUrl,
   authMessageURL,
   enterUsernameURL,
@@ -168,6 +169,15 @@ export const redirectToAuthIfNeeded = ({
 
   // User does not exist. Require login.
   if (!authUser || !authUser.id) {
+    // If the user is on the shop page and not logged in we
+    // redirect to our post install chrome extension landing page
+    // from there we will likely redirect back to here to login.
+    if (window.location.pathname === '/newtab/shop/') {
+      console.log(process.env)
+      goTo(process.env.REACT_APP_SHOP_LOGIN_REQUEST)
+      return
+    }
+
     goToMainLoginPage(urlParams)
     redirected = true
     // If the user has an anonymous account and is allowed to be

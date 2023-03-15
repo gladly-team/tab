@@ -7,16 +7,18 @@ import switchToV4 from 'js/utils/switchToV4'
 
 class SwitchToV4Component extends React.Component {
   async onClick() {
-    const { causeId, user } = this.props
+    const { causeId, user, redirect } = this.props
+
     await switchToV4({
       relayEnvironment: this.props.relay.environment,
       userId: user.id,
       causeId,
+      redirect: redirect,
     })
   }
 
   render() {
-    const { causeName, causeShortDesc, imgSrc, title } = this.props
+    const { causeName, causeShortDesc, imgSrc, title, prefix } = this.props
     return (
       <Paper
         style={Object.assign(
@@ -96,7 +98,7 @@ class SwitchToV4Component extends React.Component {
               variant={'contained'}
               onClick={this.onClick.bind(this)}
             >
-              Try {causeName}
+              {prefix} {causeName}
             </Button>
           </span>
         </span>
@@ -114,8 +116,13 @@ SwitchToV4Component.propTypes = {
   causeName: PropTypes.string.isRequired, // e.g.: Tab for Cats
   causeShortDesc: PropTypes.string.isRequired, // e.g.: Turn your tabs into helping shelter cats get adopted!
   imgSrc: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
+  redirect: PropTypes.string,
 }
 
-SwitchToV4Component.defaultProps = {}
+SwitchToV4Component.defaultProps = {
+  prefix: 'Try',
+  redirect: '',
+}
 
 export default SwitchToV4Component

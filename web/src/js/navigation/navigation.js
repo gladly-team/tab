@@ -263,8 +263,7 @@ export const getPostAuthURL = (index, { isSearchApp = false, userId = '' }) => {
   // If auth.redirect.uri in localStorage is set, use that as the url we redirect to.
   const uri = localStorageMgr.getItem(STORAGE_REDIRECT_URI)
   if (uri) {
-    localStorageMgr.removeItem(STORAGE_REDIRECT_URI)
-    return uri + (userId ? `?uuid=${userId}` : '')
+    return '/newtab/shop'
   }
 
   return nextURLVal || fallbackURL
