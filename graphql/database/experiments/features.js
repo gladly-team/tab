@@ -15,7 +15,7 @@ import {
   GLOBAL_HEALTH_GROUP_IMPACT,
   ENDING_HUNGER_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
-  NOTIF_SFAC_FEB_2023,
+  USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
 } from './experimentConstants'
 
@@ -411,7 +411,7 @@ const features = {
       },
     ],
   },
-  [NOTIF_SFAC_FEB_2023]: {
+  [USER_SURVEY_MARCH_2023]: {
     defaultValue: false,
     rules: [
       {

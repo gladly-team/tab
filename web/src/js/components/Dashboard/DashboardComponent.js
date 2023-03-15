@@ -441,12 +441,12 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    // const notificationsToShow = this.state.notificationsToShow
+    const notificationsToShow = this.state.notificationsToShow
 
-    // // Feb 2023 SFAC notification
-    // const notifSFACFeb = notificationsToShow.find(
-    //   notif => notif.code === 'notif-sfac-feb-2023'
-    // )
+    // Our Notification
+    const notif = notificationsToShow.find(
+      notif => notif.code === 'user-survey-march-2023'
+    )
 
     return (
       <div
@@ -536,50 +536,32 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {/* {notifSFACFeb ? (
+              {notif ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`Support Rainforest Alliance!`}
+                  title={`We want to hear from you!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Your votes are counted and this month Search for a Cause
-                        Cause will support{' '}
-                        <Link
-                          to={'https://www.rainforest-alliance.org/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Rainforest Alliance
-                        </Link>
-                        !
+                        Let us know how we can make Tab for a Cause even better
+                        by filling out this quick survey.
                       </Typography>
-
+                      <br />
                       <Typography variant={'body2'} gutterBottom>
-                        Rainforest Alliance helps people and nature thrive
-                        together through climate resilience, community forestry,
-                        and human rights.
-                      </Typography>
-
-                      <Typography variant={'body2'}>
-                        If you aren’t already, try out{' '}
-                        <Link
-                          to={'https://search.gladly.io/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Search for a Cause
-                        </Link>
-                        !
+                        Thanks for your help!
                       </Typography>
                     </>
                   }
-                  onDismiss={notifSFACFeb.onDismiss}
+                  buttonText={'Take Survey'}
+                  buttonURL={
+                    'https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform'
+                  }
+                  onDismiss={notif.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
                 />
-              ) : null} */}
+              ) : null}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (
