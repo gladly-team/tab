@@ -124,7 +124,7 @@ describe('invite users to mission', () => {
     })
   })
 
-  it('it seperates failed email creations from succesful email creations', async () => {
+  it('it seperates failed email creations from successful email creations', async () => {
     expect.assertions(2)
     getUserInvites.mockReturnValueOnce([
       getMockUserInstance(),

@@ -63,12 +63,14 @@ const styles = theme => ({
 const ShopComponent = ({ user, classes }) => {
   // See if we have a cause id. If we have no cause id then
   // we need to redirect to a cause select page.
-  if (user.causeId !== '') {
+  if (user.causeId !== '' && user.causeId !== 'no-cause') {
     // If auth.redirect.uri in localStorage is set, use that as the url we redirect to.
     const uri = localStorageMgr.getItem(STORAGE_REDIRECT_URI)
     if (uri) {
       localStorageMgr.removeItem(STORAGE_REDIRECT_URI)
       goTo(uri + (user.userId ? `?uuid=${user.userId}` : ''))
+    } else {
+      goTo('/newtab')
     }
   }
 

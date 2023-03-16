@@ -61,7 +61,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -80,7 +80,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -102,7 +102,7 @@ describe('logRevenue', () => {
         dfpAdvertiserId: '2468',
         tabId: someTabId,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -134,7 +134,7 @@ describe('logRevenue', () => {
         tabId: someTabId,
         adSize: '728x90',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -169,7 +169,7 @@ describe('logRevenue', () => {
         adSize: '728x90',
         adUnitCode: someAdUnitCode,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -294,7 +294,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -323,7 +323,7 @@ describe('logRevenue', () => {
         revenue: 0.0085,
         adSize: '300x250',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -384,7 +384,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
 
@@ -400,7 +400,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068,
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -440,7 +440,7 @@ describe('logRevenue', () => {
         tabId: someTabId,
         adSize: '300x600', // The encoded revenue value was higher
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
 
@@ -467,7 +467,7 @@ describe('logRevenue', () => {
         tabId: someTabId,
         adSize: '728x90', // The non-encoded revenue value was higher
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -533,7 +533,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
@@ -544,7 +544,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })
@@ -594,7 +594,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         isV4: true,
-        causeId: 'CA6A5C2uj',
+        causeId: 'no-cause',
       })
     )
   })

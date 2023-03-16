@@ -439,7 +439,7 @@ class User extends DynamoDBModel {
       deleted: false,
       pendingMissionInvites: [],
       hasSeenSquads: false,
-      causeId: '',
+      causeId: 'no-cause',
       yahooPaidSearchRewardOptIn: false,
     }
   }
