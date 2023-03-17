@@ -4,9 +4,15 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'js/constants'
 import { reloadDashboard } from 'js/navigation/navigation'
 import SetUserCauseMutation from 'js/mutations/SetUserCauseMutation'
+import { goTo } from 'js/navigation/navigation'
 
 // Opt the user into v4 and refresh.
-const switchToV4 = async ({ relayEnvironment, userId, causeId }) => {
+const switchToV4 = async ({
+  relayEnvironment,
+  userId,
+  causeId,
+  redirect = '',
+}) => {
   await Promise.all([
     optIntoV4Beta(),
     SetUserCauseMutation(relayEnvironment, userId, causeId),
@@ -16,7 +22,12 @@ const switchToV4 = async ({ relayEnvironment, userId, causeId }) => {
       enabled: true,
     }),
   ])
-  reloadDashboard()
+
+  if (redirect) {
+    goTo(redirect)
+  } else {
+    reloadDashboard()
+  }
 }
 
 export default switchToV4

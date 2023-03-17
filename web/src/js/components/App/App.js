@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import defaultTheme from 'js/theme/defaultV1'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
+import ShopView from 'js/components/Shop/ShopView'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
@@ -118,6 +119,7 @@ class App extends React.Component {
                       component={InternalDemosView}
                     />
                   ) : null}
+                  <Route exact path="/newtab/shop" component={ShopView} />
                   <Route path="*" component={NotFoundPage} />
                 </Switch>
               </Suspense>

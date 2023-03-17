@@ -601,6 +601,32 @@ describe('redirectToAuthIfNeeded tests', () => {
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(redirected).toBe(false)
   })
+
+  it('redirects to shop login request site if the user is not logged in an the request is /newtab/shop/', () => {
+    setIfAnonymousUserIsAllowed(false)
+    const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
+    delete window.location
+    window.location = new URL('https://www.example.com/newtab/shop/')
+    const authUser = null
+    const user = null
+    const redirected = redirectToAuthIfNeeded({ authUser, user })
+
+    expect(goTo).toHaveBeenCalledWith(process.env.REACT_APP_SHOP_LOGIN_REQUEST)
+    expect(redirected).toBe(true)
+  })
+
+  it('redirects to shop login request site if the user is not logged in an the request is /newtab/shop', () => {
+    setIfAnonymousUserIsAllowed(false)
+    const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
+    delete window.location
+    window.location = new URL('https://www.example.com/newtab/shop')
+    const authUser = null
+    const user = null
+    const redirected = redirectToAuthIfNeeded({ authUser, user })
+
+    expect(goTo).toHaveBeenCalledWith(process.env.REACT_APP_SHOP_LOGIN_REQUEST)
+    expect(redirected).toBe(true)
+  })
 })
 
 describe('createNewUser tests', () => {

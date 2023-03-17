@@ -49,8 +49,6 @@ import {
   clearLoggedOutTabs,
 } from 'js/utils/local-user-data-mgr'
 import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
-import localStorageMgr from 'js/utils/localstorage-mgr'
-import { STORAGE_REDIRECT_URI } from 'js/constants'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -179,13 +177,6 @@ class Authentication extends React.Component {
     }
     const { authUser, location, user } = this.props
     const urlParams = parseUrlSearchString(location.search)
-
-    // If a "uri" was passed in the URL, store it in localStorage.
-    // After the auth is complete we redirect to this URI.
-    // This was first introduced for working with our shop for a cause extension.
-    if (typeof urlParams.uri !== 'undefined') {
-      localStorageMgr.setItem(STORAGE_REDIRECT_URI, urlParams.uri)
-    }
 
     const redirected = redirectToAuthIfNeeded({
       authUser,

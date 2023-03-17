@@ -566,6 +566,12 @@ const userType = new GraphQLObjectType({
       description: 'a unique user ID sent to video ad partner truex',
       resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
     },
+    causeId: {
+      type: GraphQLString,
+      description:
+        "The users's cause id. If empty the user does not have a cause.",
+      resolve: (user) => user.causeId,
+    },
     cause: {
       type: CauseType,
       description: 'cause type for the user',

@@ -789,6 +789,9 @@ type User implements Node {
   """a unique user ID sent to video ad partner truex"""
   truexId: String!
 
+  """The users's cause id. If empty the user does not have a cause."""
+  causeId: String
+
   """cause type for the user"""
   cause: Cause
 
