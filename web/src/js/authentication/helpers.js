@@ -189,7 +189,7 @@ export const redirectToAuthIfNeeded = ({
       window.location.pathname === '/newtab/shop'
     ) {
       goTo(process.env.REACT_APP_SHOP_LOGIN_REQUEST)
-      return
+      return true
     }
 
     goToMainLoginPage(urlParams)

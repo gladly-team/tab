@@ -76,6 +76,21 @@ describe('Switch to V4 component', () => {
     ).toEqual('Try Tab for Whales')
   })
 
+  it('contains the expected button text with prefix', () => {
+    const Comp = require('js/components/Donate/SwitchToV4Component').default
+    const mockProps = getMockProps()
+    mockProps.prefix = 'Shop for'
+    mockProps.causeName = 'Whales'
+    const wrapper = shallow(<Comp {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Shop for Whales')
+  })
+
   it('opts user into v4 and sets the new cause on click', async () => {
     expect.assertions(1)
     const Comp = require('js/components/Donate/SwitchToV4Component').default
@@ -88,6 +103,7 @@ describe('Switch to V4 component', () => {
       relayEnvironment: expect.any(Object),
       userId: 'abc123',
       causeId: 'fake-cause-id-1',
+      redirect: '',
     })
   })
 })
