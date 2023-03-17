@@ -32,6 +32,7 @@ exports.handler = (event, context, callback) => {
   // If this is an auth page, or an auth page resource with a referrer
   // from an auth page, always use the legacy Tab app until the auth
   // functionality in Tab v4 is complete.
+  // TEST SPICER
   const USE_LEGACY_APP_FOR_AUTH = true
 
   let showLegacyAuthPage = false
