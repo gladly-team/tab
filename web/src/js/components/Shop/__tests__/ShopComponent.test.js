@@ -18,7 +18,7 @@ jest.mock('@material-ui/core/styles', () => {
 
 describe('Shop component', () => {
   it('redirect if user is logged and has a cause and no STORAGE_REDIRECT_URI', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const ShopComponent = require('js/components/Shop/ShopComponent').default
     const mockProps = {
       user: {
@@ -27,12 +27,13 @@ describe('Shop component', () => {
       },
       style: {},
     }
-    await shallow(<ShopComponent {...mockProps} />)
+    const wrapper = await shallow(<ShopComponent {...mockProps} />)
+    expect(wrapper).toBe(null)
     expect(goTo).toHaveBeenCalledWith('/newtab')
   })
 
   it('redirect if user is logged and has a cause and has STORAGE_REDIRECT_URI', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const localStorageMock = (() => {
       let store = {}
@@ -57,7 +58,8 @@ describe('Shop component', () => {
       },
       style: {},
     }
-    await shallow(<ShopComponent {...mockProps} />)
+    const wrapper = await shallow(<ShopComponent {...mockProps} />)
+    expect(wrapper).toBe(null)
     expect(goTo).toHaveBeenCalledWith('http://www.google.com?uuid=abc123')
   })
 })
