@@ -69,8 +69,10 @@ const ShopComponent = ({ user, classes }) => {
     if (uri) {
       localStorageMgr.removeItem(STORAGE_REDIRECT_URI)
       goTo(uri + (user.userId ? `?uuid=${user.userId}` : ''))
+      return
     } else {
       goTo('/newtab')
+      return
     }
   }
 
