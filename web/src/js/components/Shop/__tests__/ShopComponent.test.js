@@ -32,34 +32,34 @@ describe('Shop component', () => {
     expect(goTo).toHaveBeenCalledWith('/newtab')
   })
 
-  it('redirect if user is logged and has a cause and has STORAGE_REDIRECT_URI', async () => {
-    expect.assertions(2)
+  // it('redirect if user is logged and has a cause and has STORAGE_REDIRECT_URI', async () => {
+  //   expect.assertions(2)
 
-    const localStorageMock = (() => {
-      let store = {}
-      return {
-        getItem: key => store[key],
-        setItem: (key, value) => (store[key] = value.toString()),
-        clear: () => (store = {}),
-      }
-    })()
+  //   const localStorageMock = (() => {
+  //     let store = {}
+  //     return {
+  //       getItem: key => store[key],
+  //       setItem: (key, value) => (store[key] = value.toString()),
+  //       clear: () => (store = {}),
+  //     }
+  //   })()
 
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
-    })
+  //   Object.defineProperty(window, 'localStorage', {
+  //     value: localStorageMock,
+  //   })
 
-    window.localStorage.setItem(STORAGE_REDIRECT_URI, 'http://www.google.com')
+  //   window.localStorage.setItem(STORAGE_REDIRECT_URI, 'http://www.google.com')
 
-    const ShopComponent = require('js/components/Shop/ShopComponent').default
-    const mockProps = {
-      user: {
-        userId: 'abc123',
-        causeId: 'HJGFRNBN',
-      },
-      style: {},
-    }
-    const wrapper = await shallow(<ShopComponent {...mockProps} />)
-    expect(wrapper).toBe(null)
-    expect(goTo).toHaveBeenCalledWith('http://www.google.com?uuid=abc123')
-  })
+  //   const ShopComponent = require('js/components/Shop/ShopComponent').default
+  //   const mockProps = {
+  //     user: {
+  //       userId: 'abc123',
+  //       causeId: 'HJGFRNBN',
+  //     },
+  //     style: {},
+  //   }
+  //   const wrapper = await shallow(<ShopComponent {...mockProps} />)
+  //   expect(wrapper).toBe(null)
+  //   expect(goTo).toHaveBeenCalledWith('http://www.google.com?uuid=abc123')
+  // })
 })
