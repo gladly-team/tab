@@ -97,4 +97,99 @@ describe('getCauseByUser', () => {
       'The database does not contain an item with these keys.'
     )
   })
+
+  it('set user to a default cause if they are v4BetaEnabled and have no cause', async () => {
+    expect.assertions(1)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      v4BetaEnabled: true,
+      causeId: 'no-cause',
+    })
+
+    const UserModel = require('../../users/UserModel').default
+    jest.spyOn(UserModel, 'get').mockResolvedValue(mockUser)
+    const userModelUpdate = jest.spyOn(UserModel, 'update').mockResolvedValue(
+      getMockUserInstance({
+        id: userId,
+        causeId: 'CA6A5C2uj',
+      })
+    )
+
+    const getCauseByUser = require('../getCauseByUser').default
+    await getCauseByUser(userContext, userId)
+
+    expect(userModelUpdate).toHaveBeenCalledWith(userContext, {
+      id: userId,
+      causeId: 'CA6A5C2uj',
+    })
+  })
+
+  it('does not update update cause if they are v4BetaEnabled is not true and have no cause', async () => {
+    expect.assertions(1)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      v4BetaEnabled: false,
+      causeId: 'no-cause',
+    })
+
+    const UserModel = require('../../users/UserModel').default
+    jest.spyOn(UserModel, 'get').mockResolvedValue(mockUser)
+    const userModelUpdate = jest
+      .spyOn(UserModel, 'update')
+      .mockResolvedValue({})
+
+    const getCauseByUser = require('../getCauseByUser').default
+    await getCauseByUser(userContext, userId)
+
+    expect(userModelUpdate).not.toHaveBeenCalled()
+  })
+
+  it('does not update update cause if they are v4BetaEnabled is true but causeId is set to a cause id', async () => {
+    expect.assertions(1)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      v4BetaEnabled: true,
+      causeId: 'CA6A5C2uj',
+    })
+
+    const UserModel = require('../../users/UserModel').default
+    jest.spyOn(UserModel, 'get').mockResolvedValue(mockUser)
+    const userModelUpdate = jest
+      .spyOn(UserModel, 'update')
+      .mockResolvedValue({})
+
+    const getCauseByUser = require('../getCauseByUser').default
+    await getCauseByUser(userContext, userId)
+
+    expect(userModelUpdate).not.toHaveBeenCalled()
+  })
+
+  it('returns null if the user has v4BetaEnabled set to false (legacy user) and cause is set to no-cause', async () => {
+    expect.assertions(2)
+    const userContext = getMockUserContext()
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      id: userId,
+      v4BetaEnabled: false,
+      causeId: 'no-cause',
+    })
+
+    const UserModel = require('../../users/UserModel').default
+    jest.spyOn(UserModel, 'get').mockResolvedValue(mockUser)
+    const userModelUpdate = jest
+      .spyOn(UserModel, 'update')
+      .mockResolvedValue({})
+
+    const getCauseByUser = require('../getCauseByUser').default
+    const rt = await getCauseByUser(userContext, userId)
+
+    expect(rt).toBe(null)
+    expect(userModelUpdate).not.toHaveBeenCalled()
+  })
 })
