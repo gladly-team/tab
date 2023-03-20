@@ -441,12 +441,12 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notificationsToShow = this.state.notificationsToShow
+    // const notificationsToShow = this.state.notificationsToShow
 
-    // Our Notification
-    const notif = notificationsToShow.find(
-      notif => notif.code === 'user-survey-march-2023'
-    )
+    // // Our Notification
+    // const notif = notificationsToShow.find(
+    //   notif => notif.code === 'user-survey-march-2023'
+    // )
 
     return (
       <div
@@ -536,7 +536,7 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {notif ? (
+              {/* {notif ? (
                 <Notification
                   useGlobalDismissalTime
                   title={`We want to hear from you!`}
@@ -561,7 +561,7 @@ class Dashboard extends React.Component {
                     marginTop: 4,
                   }}
                 />
-              ) : null}
+              ) : null} */}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (
