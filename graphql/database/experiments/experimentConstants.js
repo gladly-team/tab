@@ -36,3 +36,6 @@ export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC
 
 // Test out stronger "supporting" statements : TFAC-1023
 export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
+
+// Notify users that SHFAC has launched
+export const SHFAC_NOTIFY_LAUNCH = 'shfac-notify-launch'

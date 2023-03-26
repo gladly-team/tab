@@ -17,6 +17,7 @@ import {
   REDUCED_IMPACT_COST,
   USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
+  SHFAC_NOTIFY_LAUNCH,
 } from './experimentConstants'
 
 const features = {
@@ -456,6 +457,43 @@ const features = {
       {
         variations: ['Control', 'Experiment'],
         weights: [0.5, 0.5],
+        coverage: 1.0,
+        condition: {},
+      },
+    ],
+  },
+  [SHFAC_NOTIFY_LAUNCH]: {
+    defaultValue: 'Control',
+    rules: [
+      /* Begin internal overrides */
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
+            $eq: 'Control',
+            $exists: true,
+          },
+        },
+        force: 'Control',
+      },
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+          [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
+            $eq: 'Experiment',
+            $exists: true,
+          },
+        },
+        force: 'Experiment',
+      },
+      /* End internal overrides */
+      {
+        variations: ['Control', 'Experiment'],
+        weights: [0.9, 0.1],
         coverage: 1.0,
         condition: {},
       },

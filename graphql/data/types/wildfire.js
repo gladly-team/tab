@@ -14,7 +14,7 @@ const wildfireType = new GraphQLObjectType({
   fields: () => ({
     causeName: {
       type: GraphQLString,
-      resolve: (cause) => cause.name,
+      resolve: (cause) => cause.nameForShop,
     },
   }),
 })

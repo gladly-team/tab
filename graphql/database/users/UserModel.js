@@ -211,6 +211,12 @@ class User extends DynamoDBModel {
         .string()
         .isoDate()
         .description(`The datetime of the last time the user opened a tab`),
+      lastShopOpenTimestamp: types
+        .string()
+        .isoDate()
+        .description(
+          `The datetime of the last time the user opened the shop extention`
+        ),
       mergedIntoExistingUser: types.boolean()
         .description(`This is true if this user was anonymous but then later signed
           in as another existing user. This value is assigned on the client so is not

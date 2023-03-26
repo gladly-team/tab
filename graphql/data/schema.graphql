@@ -282,6 +282,9 @@ type Cause implements Node {
   """String used to describe cause in account page"""
   name: String!
 
+  """String used to describe cause in the shop extension"""
+  nameForShop: String!
+
   """boolean if cause is available to select in ui"""
   isAvailableToSelect: Boolean!
 

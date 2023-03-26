@@ -23,6 +23,7 @@ const data = {
   id: 'CA6A5C2uj',
   about,
   name: 'Cats',
+  nameForShop: 'Shelter Cats',
   isAvailableToSelect: true,
   icon: 'paw',
   backgroundImageCategory: 'cats',

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import getCause from './getCause'
 import UserModel from '../users/UserModel'
 import {
@@ -12,7 +13,16 @@ const getCauseForWildfire = async (userId) => {
   const user = await UserModel.get(getOverride, userId)
 
   // We return the cause record for the user.
-  return getCause(user.causeId)
+  const cause = getCause(user.causeId)
+
+  // A little hacky but here is where we record usage by a user.
+  // TODO(spicer): find a better place for this since the extension only calls then every min. a user is using it.
+  await UserModel.update(getOverride, {
+    id: userId,
+    lastShopOpenTimestamp: moment.utc().toISOString(),
+  })
+
+  return cause
 }
 
 export default getCauseForWildfire
