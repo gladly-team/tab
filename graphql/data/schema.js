@@ -1101,6 +1101,10 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `String used to describe cause in account page`,
     },
+    nameForShop: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `String used to describe cause in the shop extension`,
+    },
     isAvailableToSelect: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'boolean if cause is available to select in ui',

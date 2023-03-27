@@ -14,6 +14,7 @@ const data = {
   id: 'q1FFsAhbV',
   about,
   name: 'Black Equity',
+  nameForShop: 'Black Equity',
   isAvailableToSelect: true,
   icon: 'handshake',
   backgroundImageCategory: 'black-photographers',

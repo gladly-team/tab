@@ -8,6 +8,7 @@ const data = {
   about:
     '**Tab for Ukraine** is proud to support [Save the Children](https://ukraine.savethechildren.net/), an incredible organization working to save lives and provide ongoing humanitarian aid to Ukrainian families.\n\n**Save the Children** has been working to provide lifesaving interventions in Ukraine since 2014. They work to provide the basic needs of the most vulnerable families including food, shelter, clothing, cash grants, and medicine. They also provide children and their caregivers with psychosocial support as well as work with schools to increase awareness of the dangers of mines and other remnants of war.\n\nIf you would like to make an immediate monetary impact, donations to Save the Children can be made [here](https://support.savethechildren.org/site/Donation2?df_id=1620&1620.donation=form1).\n\n**Your tabs are making an impact**. The counter on your new tab page (with the water icon) estimates how many water-purifying aquatabs your tabs have funded. **This is a representation of just one small part of the humanitarian aid that Save the Children provides.** The money you raise for Save the Children will support whatever supplies and support are most needed.',
   name: 'Ukraine',
+  nameForShop: 'Ukraine',
   isAvailableToSelect: true,
   icon: 'water',
   backgroundImageCategory: 'trees', // TODO: update with new collection

@@ -441,12 +441,16 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    // const notificationsToShow = this.state.notificationsToShow
+    const notificationsToShow = this.state.notificationsToShow
 
-    // // Our Notification
-    // const notif = notificationsToShow.find(
-    //   notif => notif.code === 'user-survey-march-2023'
-    // )
+    // Our Notification
+    let notif = notificationsToShow.find(
+      notif => notif.code === 'shfac-notify-launch'
+    )
+
+    if (notif && notif.variation !== 'Experiment') {
+      notif = null
+    }
 
     return (
       <div
@@ -536,32 +540,28 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {/* {notif ? (
+              {notif ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`We want to hear from you!`}
+                  title={`Raise money for charity by shopping online!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Let us know how we can make Tab for a Cause even better
-                        by filling out this quick survey.
-                      </Typography>
-                      <br />
-                      <Typography variant={'body2'} gutterBottom>
-                        Thanks for your help!
+                        Try our newest project, Shop for a Cause, to get
+                        discounts at 10,000+ online stores while raising even
+                        more money for your favorite charities. Just like
+                        Tabbing it is free, easy, and impactful ♥️
                       </Typography>
                     </>
                   }
-                  buttonText={'Take Survey'}
-                  buttonURL={
-                    'https://docs.google.com/forms/d/1XurFYryQrIU6vokfP-w9ES7x_uj4vqlDQKFh25ByJO4/edit'
-                  }
+                  buttonText={'Learn More'}
+                  buttonURL={'https://shop.gladly.io/'}
                   onDismiss={notif.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
                 />
-              ) : null} */}
+              ) : null}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (

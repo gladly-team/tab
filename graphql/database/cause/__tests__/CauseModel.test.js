@@ -10,6 +10,7 @@ const getMockCauseObject = () => ({
   id: 'CA6A5C2uj',
   about: 'paw',
   name: 'Cats',
+  nameForShop: 'Shelter Cats',
   isAvailableToSelect: true,
   icon: 'paw',
   backgroundImageCategory: 'cats',

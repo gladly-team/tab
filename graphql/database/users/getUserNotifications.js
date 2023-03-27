@@ -1,6 +1,6 @@
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
-import { USER_SURVEY_MARCH_2023 } from '../experiments/experimentConstants'
+import { SHFAC_NOTIFY_LAUNCH } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -16,12 +16,12 @@ const getUserNotifications = async (userContext, user) => {
     const notifFeature = await getUserFeature(
       userContext,
       user,
-      USER_SURVEY_MARCH_2023
+      SHFAC_NOTIFY_LAUNCH
     )
     const enabled = notifFeature.variation !== 'None'
     notifications = [
       ...(enabled
-        ? [{ code: USER_SURVEY_MARCH_2023, variation: notifFeature.variation }]
+        ? [{ code: SHFAC_NOTIFY_LAUNCH, variation: notifFeature.variation }]
         : []),
     ]
   } catch (e) {

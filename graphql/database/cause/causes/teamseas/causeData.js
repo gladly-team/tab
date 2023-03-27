@@ -22,6 +22,7 @@ const data = {
   id: 'SGa6zohkY',
   about,
   name: '#TeamSeas',
+  nameForShop: 'Our Oceans',
   isAvailableToSelect: true,
   icon: 'jellyfish',
   backgroundImageCategory: 'seas',

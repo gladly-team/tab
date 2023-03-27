@@ -138,6 +138,10 @@ class Cause extends DynamoDBModel {
         .string()
         .required()
         .description(`String used to describe Cause in account page`),
+      nameForShop: types
+        .string()
+        .required()
+        .description(`String used to describe Cause on the shop extension.`),
       charityId: types
         .string()
         .required()

@@ -8,6 +8,7 @@ const data = {
   about:
     '**Tab for Reproductive Health** is proud to support Planned Parenthood and Center for Reproductive Rights. With each tab opened, you are making a positive impact toward providing reproductive health services and protecting reproductive rights.\n\n[Planned Parenthood](https://www.plannedparenthood.org/) is a 501(c)(3) organization that works to provide reproductive and sexual health care and education for all people. In addition to providing a wide range of services including birth control, testing and treatment for sexually transmitted infections, and screenings for cervical and other cancers, Planned Parenthood provides [comprehensive sex education](https://www.plannedparenthood.org/learn) that is medically accurate, culturally responsive, equitable, and accessible. \n\n[Center for Reproductive Rights](https://reproductiverights.org/) is a 501(c)(3) organization of lawyers and advocates who ensure reproductive rights are protected in law as fundamental human rights. They have participated in every major U.S. Supreme Court abortion case since their founding in 1992 and have strengthened reproductive laws and policies in more than 60 countries.',
   name: 'Reproductive Health',
+  nameForShop: 'Reproductive Health',
   isAvailableToSelect: true,
   icon: 'person-heart',
   backgroundImageCategory: 'trees', // TODO: update with new collection
