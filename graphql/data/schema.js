@@ -1373,6 +1373,10 @@ const charityType = new GraphQLObjectType({
       description: 'Impact Metrics that belong to this Charity',
       resolve: (charity) => getImpactMetricsByCharityId(charity.id),
     },
+    longformDescription: {
+      type: GraphQLString,
+      description: 'the longform charity impact message',
+    },
   }),
   interfaces: [nodeInterface],
 })

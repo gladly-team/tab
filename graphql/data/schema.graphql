@@ -193,6 +193,9 @@ type Charity implements Node {
 
   """Impact Metrics that belong to this Charity"""
   impactMetrics: [ImpactMetric]
+
+  """the longform charity impact message"""
+  longformDescription: String
 }
 
 """An instance of ImpactMetric"""

@@ -35,6 +35,7 @@ describe('CharityModel', () => {
       website: 'https://example.com',
       description: 'Info here.',
       impact: '',
+      longformDescription: 'Long Info here.',
     }
     const item = Object.assign({}, new Charity(charityInfo))
     expect(item).toEqual(
