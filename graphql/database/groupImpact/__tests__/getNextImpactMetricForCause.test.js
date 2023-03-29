@@ -3,6 +3,7 @@
 import getNextImpactMetricForCause from '../getNextImpactMetricForCause'
 import dataGlobalHealth from '../../cause/causes/globalHealth/causeData'
 import dataEndingHunger from '../../cause/causes/endingHunger/causeData'
+import dataLgbtq from '../../cause/causes/lgbtq/causeData'
 
 jest.mock('../impactMetricRepository')
 
@@ -38,6 +39,14 @@ describe('getNextImpactMetricForCause', () => {
     expect(getNextImpactMetricForCause(dataEndingHunger.id)).toEqual(
       mockImpactMetric
     )
+    expect(getImpactMetricById).toHaveBeenCalled()
+  })
+
+  it('returns appropriate impact metric for lgbtq', async () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    getImpactMetricById.mockReturnValue(mockImpactMetric)
+
+    expect(getNextImpactMetricForCause(dataLgbtq.id)).toEqual(mockImpactMetric)
     expect(getImpactMetricById).toHaveBeenCalled()
   })
 })
