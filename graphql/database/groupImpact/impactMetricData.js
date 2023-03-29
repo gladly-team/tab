@@ -47,19 +47,6 @@ const data = [
       'Hunger is predictable, preventable, and treatable. Yet, one in ten people suffer from hunger. This malnutrition treatment saves and improves lives of children around the world.',
     active: false,
   },
-  {
-    id: 'VqnFnXXML',
-    charityId: '76d50b8c-b611-46d9-8d9d-bab962c2cb41', // Point of Pride
-    dollarAmount: 20e6, // $20
-    impactTitle:
-      'Provide 5 chest binders to trans youth and adults across the country',
-    metricTitle: '5 chest binders',
-    description:
-      'Not all trans people can afford or safely obtain chest binders which are specially-designed compression garments. These help trans people of all ages feel confident and fight gender dysphoria safely.',
-    whyValuableDescription:
-      'These specially-designed compression garments help trans people of all ages feel confident and fight gender dysphoria safely.',
-    active: false,
-  },
 ]
 
 export default data
