@@ -314,6 +314,12 @@ class Cause extends DynamoDBModel {
           .required()
           .description(`the secondary color hex value`),
       }),
+      charityIds: types
+        .array()
+        .items(types.string())
+        .description(
+          `Charities that this cause is currently generating impact for`
+        ),
     }
   }
 
