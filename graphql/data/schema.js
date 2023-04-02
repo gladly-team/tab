@@ -156,6 +156,7 @@ import {
 } from '../database/groupImpact/impactMetricRepository'
 
 import getCauseForWildfire from '../database/cause/getCauseForWildfire'
+import getCharitiesForCause from '../database/charities/getCharityForCause'
 
 // Types
 import wildfireType from './types/wildfire'
@@ -1183,6 +1184,12 @@ const CauseType = new GraphQLObjectType({
       description: 'Charity that this cause is currently generating impact for',
       resolve: (cause, _, context) =>
         CharityModel.get(context.user, cause.charityId),
+    },
+    charities: {
+      type: new GraphQLList(charityType),
+      description: 'Charity that this cause is currently generating impact for',
+      resolve: (cause, _, context) =>
+        getCharitiesForCause(context.user, cause.charityIds, cause.charityId),
     },
   }),
   interfaces: [nodeInterface],
