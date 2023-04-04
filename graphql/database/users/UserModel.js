@@ -211,6 +211,12 @@ class User extends DynamoDBModel {
         .string()
         .isoDate()
         .description(`The datetime of the last time the user opened a tab`),
+      shopSignupTimestamp: types
+        .string()
+        .isoDate()
+        .description(
+          `The datetime of of when the user signed up for the shop extention`
+        ),
       lastShopOpenTimestamp: types
         .string()
         .isoDate()

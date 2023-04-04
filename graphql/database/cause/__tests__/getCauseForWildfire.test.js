@@ -60,6 +60,7 @@ describe('getCauseForWildfire', () => {
 
     expect(updateMethod).toHaveBeenCalledWith(getOverride, {
       id: userId,
+      shopSignupTimestamp: moment.utc().toISOString(),
       lastShopOpenTimestamp: moment.utc().toISOString(),
     })
   })
