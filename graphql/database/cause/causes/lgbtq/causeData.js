@@ -113,6 +113,10 @@ const data = {
     primaryColor: '#A27DF8',
     secondaryColor: '#29BEBA',
   },
+  charityIds: [
+    '76d50b8c-b611-46d9-8d9d-bab962c2cb41',
+    'dbb8efdc-0a5e-41d2-981e-5a1fdd363628',
+  ],
 }
 
 export default data
