@@ -20,6 +20,7 @@ const getCauseForWildfire = async (userId) => {
   await UserModel.update(getOverride, {
     id: userId,
     lastShopOpenTimestamp: moment.utc().toISOString(),
+    shopSignupTimestamp: user.shopSignupTimestamp || moment.utc().toISOString(),
   })
 
   return cause

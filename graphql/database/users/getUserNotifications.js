@@ -13,17 +13,9 @@ import { SHFAC_NOTIFY_LAUNCH } from '../experiments/experimentConstants'
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
   try {
-    const notifFeature = await getUserFeature(
-      userContext,
-      user,
-      SHFAC_NOTIFY_LAUNCH
-    )
-    const enabled = notifFeature.variation !== 'None'
-    notifications = [
-      ...(enabled
-        ? [{ code: SHFAC_NOTIFY_LAUNCH, variation: notifFeature.variation }]
-        : []),
-    ]
+    await getUserFeature(userContext, user, SHFAC_NOTIFY_LAUNCH)
+
+    notifications = [{ code: SHFAC_NOTIFY_LAUNCH, variation: 'Experiment' }]
   } catch (e) {
     logger.error(e)
   }
