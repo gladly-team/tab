@@ -1,6 +1,7 @@
 import dataEndingHunger from '../cause/causes/endingHunger/causeData'
 import dataGlobalHealth from '../cause/causes/globalHealth/causeData'
 import dataLgbtq from '../cause/causes/lgbtq/causeData'
+import dataReproductiveHealth from '../cause/causes/reproductiveHealthCauseData'
 import { getImpactMetricById } from './impactMetricRepository'
 
 /**
@@ -19,6 +20,10 @@ const getNextImpactMetricForCause = (causeId) => {
 
   if (causeId === dataLgbtq.id) {
     return getImpactMetricById('VqnFnXXML')
+  }
+
+  if (causeId === dataReproductiveHealth.id) {
+    return getImpactMetricById('T79t1sGuc')
   }
 
   throw new Error('No Impact Metric can be selected for this causeId')
