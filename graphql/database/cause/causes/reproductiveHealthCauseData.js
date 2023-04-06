@@ -14,7 +14,7 @@ const data = {
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
   individualImpactEnabled: false, // Deprecated. Use "impactType".
-  impactType: 'none',
+  impactType: 'group',
   impactVisits: null,
   landingPagePath: '/reproductive-health/',
   landingPagePhrase: 'This tab helps Reproductive Health',
@@ -85,6 +85,10 @@ const data = {
     primaryColor: '#FB5050',
     secondaryColor: '#29BEBA',
   },
+  charityIds: [
+    'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
+    '4deceda9-ee4e-47ac-8f6b-29115af38f5a',
+  ],
 }
 
 export default data
