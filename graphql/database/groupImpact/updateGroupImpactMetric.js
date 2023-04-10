@@ -54,11 +54,15 @@ const createGroupImpactMetricModel = async (
 const updateGroupImpactMetricModel = async (
   groupImpactMetricId,
   dollarProgress,
+  dollarProgressFromTab,
+  dollarProgressFromSearch,
   dateCompleted
 ) => {
   return GroupImpactMetricModel.update(groupImpactOverride, {
     id: groupImpactMetricId,
     dollarProgress,
+    dollarProgressFromTab,
+    dollarProgressFromSearch,
     ...(dateCompleted && { dateCompleted }),
   })
 }
@@ -106,18 +110,22 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
 
   // Now update GroupImpactMetric
   let newDollarProgress = 0.0
+  let newDollarProgressTab = 0.0
+  let newDollarProgressSearch = 0.0
 
   if (revenueType === 'tab') {
-    newDollarProgress = Math.round(
-      groupImpactMetric.dollarProgress +
-        10 ** 6 * getEstimatedMoneyRaisedPerTab()
+    const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
+    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
+    newDollarProgressTab = Math.round(
+      groupImpactMetric.dollarProgressTab + addTo
     )
   }
 
   if (revenueType === 'search') {
-    newDollarProgress = Math.round(
-      groupImpactMetric.dollarProgress +
-        10 ** 6 * getEstimatedMoneyRaisedPerSearch()
+    const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
+    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
+    newDollarProgressSearch = Math.round(
+      groupImpactMetric.dollarProgressSearch + addTo
     )
   }
 
@@ -127,6 +135,8 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
     await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
+      newDollarProgressTab,
+      newDollarProgressSearch,
       moment.utc().toISOString()
     )
     // Create new GroupImpactMetric model
@@ -145,7 +155,12 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
     return updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
   }
   // Update GroupImpactMetric
-  return updateGroupImpactMetricModel(groupImpactMetricId, newDollarProgress)
+  return updateGroupImpactMetricModel(
+    groupImpactMetricId,
+    newDollarProgress,
+    newDollarProgressTab,
+    newDollarProgressSearch
+  )
 }
 
 export default updateGroupImpactMetric
