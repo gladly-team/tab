@@ -75,6 +75,7 @@ export const CAUSE_IMPACT_TYPES = {
   none: 'none',
   individual: 'individual',
   group: 'group',
+  individual_and_group: 'individual_and_group',
 }
 
 export const SFAC_ACTIVITY_STATES = {

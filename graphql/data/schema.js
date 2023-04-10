@@ -1143,6 +1143,9 @@ const CauseType = new GraphQLObjectType({
             none: { value: CAUSE_IMPACT_TYPES.none },
             individual: { value: CAUSE_IMPACT_TYPES.individual },
             group: { value: CAUSE_IMPACT_TYPES.group },
+            individual_and_group: {
+              value: CAUSE_IMPACT_TYPES.individual_and_group,
+            },
           },
         })
       ),
