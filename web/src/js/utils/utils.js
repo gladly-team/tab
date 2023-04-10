@@ -8,6 +8,7 @@ import {
   STORAGE_REFERRAL_DATA_REFERRING_USER,
   SEARCH_APP,
   TAB_APP,
+  SHOP_APP,
 } from 'js/constants'
 import qs from 'qs'
 
@@ -331,12 +332,14 @@ export const getTabGlobal = () => {
 }
 
 /**
- * Return the app name if it's valid or return the Tab for a Caise
+ * Return the app name if it's valid or return the Tab for a Cause
  * app name ("tab") as a fallback.
  * @param {String} appName -
  * @return {String} The value of appName, if it is one of our apps,
  *   or "tab".
  */
 export const validateAppName = appName => {
-  return [TAB_APP, SEARCH_APP].indexOf(appName) > -1 ? appName : TAB_APP
+  return [TAB_APP, SEARCH_APP, SHOP_APP].indexOf(appName) > -1
+    ? appName
+    : TAB_APP
 }

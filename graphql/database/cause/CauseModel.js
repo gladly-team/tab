@@ -138,6 +138,10 @@ class Cause extends DynamoDBModel {
         .string()
         .required()
         .description(`String used to describe Cause in account page`),
+      nameForShop: types
+        .string()
+        .required()
+        .description(`String used to describe Cause on the shop extension.`),
       charityId: types
         .string()
         .required()
@@ -310,6 +314,12 @@ class Cause extends DynamoDBModel {
           .required()
           .description(`the secondary color hex value`),
       }),
+      charityIds: types
+        .array()
+        .items(types.string())
+        .description(
+          `Charities that this cause is currently generating impact for`
+        ),
     }
   }
 

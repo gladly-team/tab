@@ -13,7 +13,7 @@ import VerifyEmailMessage from 'js/components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from 'js/components/Authentication/SignInIframeMessage'
 import MissingEmailMessage from 'js/components/Authentication/MissingEmailMessage'
-import { sendVerificationEmail } from 'js/authentication/user'
+import { sendVerificationEmail, getCurrentUser } from 'js/authentication/user'
 import {
   redirectToAuthIfNeeded,
   createNewUser,
@@ -135,6 +135,7 @@ class Authentication extends React.Component {
   // creation.
   async onAuthProcessCompleted() {
     const { user } = this.props
+    const authedUser = await getCurrentUser()
 
     // If needed, opt the user into Tab v4. We need to
     // do this *after* all of the auth logic on this app
@@ -142,7 +143,10 @@ class Authentication extends React.Component {
     const enableTabV4 = get(user, 'v4BetaEnabled') || isTabV4BetaUser()
     const nextURLIndex = this.getNextURLIndex()
     const isSearchApp = this.getApp() === SEARCH_APP
-    const destinationURL = getPostAuthURL(nextURLIndex, { isSearchApp })
+    const destinationURL = getPostAuthURL(nextURLIndex, {
+      isSearchApp,
+      userId: authedUser.id,
+    })
 
     if (enableTabV4) {
       try {

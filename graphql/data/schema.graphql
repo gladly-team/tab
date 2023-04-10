@@ -6,6 +6,7 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+  wildfire(userId: String!): Wildfire
   userImpact(userId: String!, charityId: String!): UserImpact
 }
 
@@ -192,6 +193,9 @@ type Charity implements Node {
 
   """Impact Metrics that belong to this Charity"""
   impactMetrics: [ImpactMetric]
+
+  """the longform charity impact message"""
+  longformDescription: String
 }
 
 """An instance of ImpactMetric"""
@@ -281,6 +285,9 @@ type Cause implements Node {
   """String used to describe cause in account page"""
   name: String!
 
+  """String used to describe cause in the shop extension"""
+  nameForShop: String!
+
   """boolean if cause is available to select in ui"""
   isAvailableToSelect: Boolean!
 
@@ -324,6 +331,9 @@ type Cause implements Node {
 
   """Charity that this cause is currently generating impact for"""
   charity: Charity
+
+  """Charity that this cause is currently generating impact for"""
+  charities: [Charity]
 }
 
 """The type of charitable impact that's enabled for this cause"""
@@ -788,6 +798,9 @@ type User implements Node {
   """a unique user ID sent to video ad partner truex"""
   truexId: String!
 
+  """The users's cause id. If empty the user does not have a cause."""
+  causeId: String
+
   """cause type for the user"""
   cause: Cause
 
@@ -1238,6 +1251,11 @@ enum sfacActivityState {
   new
   active
   inactive
+}
+
+"""The Wildfire object"""
+type Wildfire {
+  causeName: String
 }
 
 type Mutation {

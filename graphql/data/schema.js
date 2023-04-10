@@ -155,6 +155,12 @@ import {
   getImpactMetricsByCharityId,
 } from '../database/groupImpact/impactMetricRepository'
 
+import getCauseForWildfire from '../database/cause/getCauseForWildfire'
+import getCharitiesForCause from '../database/charities/getCharityForCause'
+
+// Types
+import wildfireType from './types/wildfire'
+
 class App {
   constructor(id) {
     this.id = id
@@ -560,6 +566,12 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'a unique user ID sent to video ad partner truex',
       resolve: (user, _args, context) => getOrCreateTruexId(context.user, user),
+    },
+    causeId: {
+      type: GraphQLString,
+      description:
+        "The users's cause id. If empty the user does not have a cause.",
+      resolve: (user) => user.causeId,
     },
     cause: {
       type: CauseType,
@@ -1090,6 +1102,10 @@ const CauseType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `String used to describe cause in account page`,
     },
+    nameForShop: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `String used to describe cause in the shop extension`,
+    },
     isAvailableToSelect: {
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'boolean if cause is available to select in ui',
@@ -1168,6 +1184,12 @@ const CauseType = new GraphQLObjectType({
       description: 'Charity that this cause is currently generating impact for',
       resolve: (cause, _, context) =>
         CharityModel.get(context.user, cause.charityId),
+    },
+    charities: {
+      type: new GraphQLList(charityType),
+      description: 'Charity that this cause is currently generating impact for',
+      resolve: (cause, _, context) =>
+        getCharitiesForCause(context.user, cause.charityIds, cause.charityId),
     },
   }),
   interfaces: [nodeInterface],
@@ -1356,8 +1378,11 @@ const charityType = new GraphQLObjectType({
     impactMetrics: {
       type: new GraphQLList(impactMetricType),
       description: 'Impact Metrics that belong to this Charity',
-      resolve: (charity, _args, context) =>
-        getImpactMetricsByCharityId(context.user, charity.id),
+      resolve: (charity) => getImpactMetricsByCharityId(charity.id),
+    },
+    longformDescription: {
+      type: GraphQLString,
+      description: 'the longform charity impact message',
     },
   }),
   interfaces: [nodeInterface],
@@ -3126,6 +3151,13 @@ const queryType = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_, args, context) => UserModel.get(context.user, args.userId),
+    },
+    wildfire: {
+      type: wildfireType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, args) => getCauseForWildfire(args.userId),
     },
     userImpact: {
       type: userImpactType,

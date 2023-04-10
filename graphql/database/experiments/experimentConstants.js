@@ -9,8 +9,9 @@ export const YAHOO_SEARCH_NEW_USERS_V2 = 'yahoo-search-new-users-v2'
 export const YAHOO_SEARCH_EXISTING_USERS = 'yahoo-search-existing-users'
 export const SEARCHBAR_SFAC_EXTENSION_PROMPT = 'searchbar-sfac-extension-prompt'
 export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
+export const ENDING_HUNGER_GROUP_IMPACT = 'ending-hunger-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
-export const NOTIF_SFAC_FEB_2023 = 'notif-sfac-feb-2023'
+export const USER_SURVEY_MARCH_2023 = 'user-survey-march-2023'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'
@@ -35,3 +36,6 @@ export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC
 
 // Test out stronger "supporting" statements : TFAC-1023
 export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
+
+// Notify users that SHFAC has launched
+export const SHFAC_NOTIFY_LAUNCH = 'shfac-notify-launch'

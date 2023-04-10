@@ -443,10 +443,14 @@ class Dashboard extends React.Component {
 
     const notificationsToShow = this.state.notificationsToShow
 
-    // // Feb 2023 SFAC notification
-    // const notifSFACFeb = notificationsToShow.find(
-    //   notif => notif.code === 'notif-sfac-feb-2023'
-    // )
+    // Our Notification
+    let notif = notificationsToShow.find(
+      notif => notif.code === 'shfac-notify-launch'
+    )
+
+    if (notif && notif.variation !== 'Experiment') {
+      notif = null
+    }
 
     return (
       <div
@@ -536,50 +540,28 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {/* {notifSFACFeb ? (
+              {notif ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`Support Rainforest Alliance!`}
+                  title={`Raise money for charity by shopping online!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        Your votes are counted and this month Search for a Cause
-                        Cause will support{' '}
-                        <Link
-                          to={'https://www.rainforest-alliance.org/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Rainforest Alliance
-                        </Link>
-                        !
-                      </Typography>
-
-                      <Typography variant={'body2'} gutterBottom>
-                        Rainforest Alliance helps people and nature thrive
-                        together through climate resilience, community forestry,
-                        and human rights.
-                      </Typography>
-
-                      <Typography variant={'body2'}>
-                        If you aren’t already, try out{' '}
-                        <Link
-                          to={'https://search.gladly.io/'}
-                          target="_blank"
-                          style={{ color: '#9d4ba3' }}
-                        >
-                          Search for a Cause
-                        </Link>
-                        !
+                        Try our newest project, Shop for a Cause, to get
+                        discounts at 10,000+ online stores while raising even
+                        more money for your favorite charities. Just like
+                        Tabbing it is free, easy, and impactful ♥️
                       </Typography>
                     </>
                   }
-                  onDismiss={notifSFACFeb.onDismiss}
+                  buttonText={'Learn More'}
+                  buttonURL={'https://shop.gladly.io/'}
+                  onDismiss={notif.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
                 />
-              ) : null} */}
+              ) : null}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (

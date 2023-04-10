@@ -20,7 +20,7 @@ import {
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
-import { sendVerificationEmail } from 'js/authentication/user'
+import { sendVerificationEmail, getCurrentUser } from 'js/authentication/user'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
 import tabTheme from 'js/theme/defaultV1'
@@ -37,6 +37,7 @@ import SetV4BetaMutation from 'js/mutations/SetV4BetaMutation'
 import { flushAllPromises } from 'js/utils/test-utils'
 import { LOGGED_OUT_MESSAGE_TYPE } from 'js/constants'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { STORAGE_REDIRECT_URI } from 'js/constants'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -77,6 +78,15 @@ const mockCreateNewUserResponse = () => ({
 })
 
 const mockNow = '2017-05-19T13:59:58.000Z'
+
+// Mock the authed user
+getCurrentUser.mockResolvedValue({
+  id: 'abc123',
+  email: 'somebody@example.com',
+  username: null,
+  isAnonymous: false,
+  emailVerified: false,
+})
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
@@ -271,7 +281,7 @@ describe('Authentication.js tests', function() {
     })
   })
 
-  it('redirects to the app (Tab for a Cause, by default) if the user is fully authenticated', () => {
+  it('redirects to the app (Tab for a Cause, by default) if the user is fully authenticated', async () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -281,11 +291,12 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = ''
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
     expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
-  it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', () => {
+  it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', async () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -295,11 +306,12 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?app=search'
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
     expect(externalRedirect).toHaveBeenCalledWith(searchBaseURL)
   })
 
-  it('opts in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', () => {
+  it('opts in to Tab V4 (based on local storage flag) before redirecting to the app when the user is fully authenticated', async () => {
     expect.assertions(1)
 
     // Set that the user's local storage is flagged to use
@@ -320,12 +332,13 @@ describe('Authentication.js tests', function() {
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
 
-    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
+    expect(optIntoV4Beta).toHaveBeenCalledTimes(2)
   })
 
-  it('does NOT opt in to Tab V4 (based on local storage and user profiel flags) before redirecting to the app when the user is fully authenticated', () => {
+  it('does NOT opt in to Tab V4 (based on local storage and user profiel flags) before redirecting to the app when the user is fully authenticated', async () => {
     expect.assertions(1)
 
     // Set that the user's local storage is NOT flagged to use
@@ -346,12 +359,13 @@ describe('Authentication.js tests', function() {
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
 
     expect(optIntoV4Beta).not.toHaveBeenCalled()
   })
 
-  it('opts in to Tab V4 (based on user profile field) before redirecting to the app when the user is fully authenticated', () => {
+  it('opts in to Tab V4 (based on user profile field) before redirecting to the app when the user is fully authenticated', async () => {
     expect.assertions(1)
 
     const defaultMockProps = MockProps()
@@ -373,9 +387,10 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     mockProps.location.search = ''
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
 
-    expect(optIntoV4Beta).toHaveBeenCalledTimes(1)
+    expect(optIntoV4Beta).toHaveBeenCalledTimes(2)
   })
 
   it('calls SetV4BetaMutation to enable Tab V4 when the user profile field is not set but local storage is set', async () => {
@@ -435,7 +450,7 @@ describe('Authentication.js tests', function() {
     expect(SetV4BetaMutation).not.toHaveBeenCalled()
   })
 
-  it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
+  it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', async () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -445,11 +460,12 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?app=foobar'
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
     expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
-  it('redirects to the "next" URL if it is set and the user is fully authenticated', () => {
+  it('redirects to the "next" URL if it is set and the user is fully authenticated', async () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -459,7 +475,8 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?app=search&next=2'
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
     expect(externalRedirect).toHaveBeenCalledWith(
       'https://tab-test-env.gladly.io/newtab/account/?reauthed=true'
     )
@@ -490,7 +507,8 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?noredirect=something'
-    shallow(<Authentication {...mockProps} />)
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    await wrapper.instance().componentDidMount()
 
     expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
@@ -1055,7 +1073,7 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
-  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it goes to the new tab page when invoked', () => {
+  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it goes to the new tab page when invoked', async () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
@@ -1068,11 +1086,11 @@ describe('Authentication.js tests', function() {
     const onCompletedCallback = shallow(<RenderedComponent />).prop(
       'onCompleted'
     )
-    onCompletedCallback()
+    await onCompletedCallback()
     expect(externalRedirect).toHaveBeenCalledWith('/newtab/')
   })
 
-  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it calls to enable Tab v4 when invoked and the user has v4BetaEnabled === true', () => {
+  it('passes the onAuthProcessCompleted function as the "onCompleted" prop to the EnterUsernameForm, so it calls to enable Tab v4 when invoked and the user has v4BetaEnabled === true', async () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const defaultMockProps = MockProps()
@@ -1092,7 +1110,7 @@ describe('Authentication.js tests', function() {
     const onCompletedCallback = shallow(<RenderedComponent />).prop(
       'onCompleted'
     )
-    onCompletedCallback()
+    await onCompletedCallback()
     expect(optIntoV4Beta).toHaveBeenCalled()
   })
 
@@ -1328,5 +1346,30 @@ describe('Authentication.js tests', function() {
     // Mock a call from FirebaseUI after user signs in
     component.onSignInSuccess(mockFirebaseUserInstance)
     expect(clearLoggedOutTabs).toHaveBeenCalled()
+  })
+
+  it('navigateToAuthStep does not store the URI in local storage', () => {
+    expect.assertions(1)
+
+    const localStorageMock = (() => {
+      let store = {}
+      return {
+        getItem: key => store[key],
+        setItem: (key, value) => (store[key] = value.toString()),
+        clear: () => (store = {}),
+      }
+    })()
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+    })
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?blah=http://example.com'
+    shallow(<Authentication {...mockProps} />)
+
+    expect(localStorageMock.getItem(STORAGE_REDIRECT_URI)).toBeUndefined()
   })
 })

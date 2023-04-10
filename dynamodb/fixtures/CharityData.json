@@ -573,5 +573,19 @@
     "updated": "2022-05-03T10:00:00.000Z",
     "inactive": false,
     "isPermanentPartner": false
-  }
+  },
+  {
+    "id": "76d50b8c-b611-46d9-8d9d-bab962c2cb41",
+    "category": "Human Rights",
+    "created": "2020-03-19T19:00:00.000Z",
+    "description": "[Point of Pride](https://www.pointofpride.org/) is a 501(c)(3) organization that works to provide access to life-saving health and wellness services to the Trans community. They help members of the Trans community gain access to things such as hormone replacement therapy, chest binders and femme shapewear, and other gender-affirming procedures.\n[Outright International](https://outrightinternational.org/) is a 501(c)(3) organization that advocates for legal protection, representation, and emergency relief for “people along the spectrum of diverse sexual and gender identities.” ",
+    "image": "point_of_pride.jpg",
+    "impact": "[Point of Pride](https://www.pointofpride.org/) is a 501(c)(3) organization that works to provide access to life-saving health and wellness services to the Trans community. They help members of the Trans community gain access to things such as hormone replacement therapy, chest binders and femme shapewear, and other gender-affirming procedures.\n[Outright International](https://outrightinternational.org/) is a 501(c)(3) organization that advocates for legal protection, representation, and emergency relief for “people along the spectrum of diverse sexual and gender identities.” ",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "point_of_pride.png",
+    "name": "Point of Pride",
+    "updated": "2020-03-19T19:00:00.000Z",
+    "website": "https://www.pointofpride.org/"
+   }
 ]

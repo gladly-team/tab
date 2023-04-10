@@ -6,14 +6,15 @@
 const data = {
   id: '4mC9rt2rb',
   about:
-    '### About Tab for Reproductive Health\n\n**Tab for Reproductive Health** is proud to support Planned Parenthood and Center for Reproductive Rights. With each tab opened, you are making a positive impact toward providing reproductive health services and protecting reproductive rights.\n\n[Planned Parenthood](https://www.plannedparenthood.org/) is a 501(c)(3) organization that works to provide reproductive and sexual health care and education for all people. In addition to providing a wide range of services including birth control, testing and treatment for sexually transmitted infections, and screenings for cervical and other cancers, Planned Parenthood provides [comprehensive sex education](https://www.plannedparenthood.org/learn) that is medically accurate, culturally responsive, equitable, and accessible. \n\n[Center for Reproductive Rights](https://reproductiverights.org/) is a 501(c)(3) organization of lawyers and advocates who ensure reproductive rights are protected in law as fundamental human rights. They have participated in every major U.S. Supreme Court abortion case since their founding in 1992 and have strengthened reproductive laws and policies in more than 60 countries.',
+    '**Tab for Reproductive Health** is proud to support Planned Parenthood and Center for Reproductive Rights. With each tab opened, you are making a positive impact toward providing reproductive health services and protecting reproductive rights.\n\n[Planned Parenthood](https://www.plannedparenthood.org/) is a 501(c)(3) organization that works to provide reproductive and sexual health care and education for all people. In addition to providing a wide range of services including birth control, testing and treatment for sexually transmitted infections, and screenings for cervical and other cancers, Planned Parenthood provides [comprehensive sex education](https://www.plannedparenthood.org/learn) that is medically accurate, culturally responsive, equitable, and accessible. \n\n[Center for Reproductive Rights](https://reproductiverights.org/) is a 501(c)(3) organization of lawyers and advocates who ensure reproductive rights are protected in law as fundamental human rights. They have participated in every major U.S. Supreme Court abortion case since their founding in 1992 and have strengthened reproductive laws and policies in more than 60 countries.',
   name: 'Reproductive Health',
+  nameForShop: 'Reproductive Health',
   isAvailableToSelect: true,
   icon: 'person-heart',
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
   individualImpactEnabled: false, // Deprecated. Use "impactType".
-  impactType: 'none',
+  impactType: 'group',
   impactVisits: null,
   landingPagePath: '/reproductive-health/',
   landingPagePhrase: 'This tab helps Reproductive Health',
@@ -84,6 +85,10 @@ const data = {
     primaryColor: '#FB5050',
     secondaryColor: '#29BEBA',
   },
+  charityIds: [
+    'ba4c2888-1d89-4c68-a47d-4f15f1445b6a',
+    '4deceda9-ee4e-47ac-8f6b-29115af38f5a',
+  ],
 }
 
 export default data

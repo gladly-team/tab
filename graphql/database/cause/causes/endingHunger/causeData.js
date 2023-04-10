@@ -6,8 +6,9 @@
 const data = {
   id: '1HCq9sFTp',
   about:
-    '### About Tab for Ending Hunger\n\n**Tab for Ending Hunger** is proud to support Action Against Hunger. With each tab opened, you are providing life-saving nutrition to people currently facing hunger. \n \n[Action Against Hunger](https://www.actionagainsthunger.org/) works to prevent and treat severe malnutrition around the world. It provides long-term results by gathering, analyzing, and sharing data, treating people in need, addressing both direct and underlying causes, and strengthening local capacity to combat this issue. \n \n**Your tabs are making an impact**. The counter on your new tab page (with the apple icon) estimates how many ready-to-use therapeutic food packs you’ve helped provide. Action Against Hunger helps provide this formula and other nutritional resources to ensure communities can thrive for years to come. Thank you for making a difference.',
+    '**Tab for Ending Hunger** is proud to support Action Against Hunger. With each tab opened, you are providing life-saving nutrition to people currently facing hunger. \n \n[Action Against Hunger](https://www.actionagainsthunger.org/) works to prevent and treat severe malnutrition around the world. It provides long-term results by gathering, analyzing, and sharing data, treating people in need, addressing both direct and underlying causes, and strengthening local capacity to combat this issue. \n \n**Your tabs are making an impact**. The counter on your new tab page (with the apple icon) estimates how many ready-to-use therapeutic food packs you’ve helped provide. Action Against Hunger helps provide this formula and other nutritional resources to ensure communities can thrive for years to come. Thank you for making a difference.',
   name: 'Ending Hunger',
+  nameForShop: 'Ending Hunger',
   isAvailableToSelect: true,
   icon: 'food-apple',
   backgroundImageCategory: 'trees', // TODO: update with new collection

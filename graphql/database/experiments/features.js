@@ -13,8 +13,9 @@ import {
   SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
   GLOBAL_HEALTH_GROUP_IMPACT,
+  ENDING_HUNGER_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
-  NOTIF_SFAC_FEB_2023,
+  USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
 } from './experimentConstants'
 
@@ -380,6 +381,21 @@ const features = {
       },
     ],
   },
+  // Whether to enable group impact on the Ending Hunger cause.
+  [ENDING_HUNGER_GROUP_IMPACT]: {
+    defaultValue: false,
+    rules: [
+      // Local/dev only.
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev', 'production'],
+          },
+        },
+        force: true,
+      },
+    ],
+  },
   // Whether to reduce the impact cost -- only for internal testing.
   [REDUCED_IMPACT_COST]: {
     defaultValue: false,
@@ -395,7 +411,7 @@ const features = {
       },
     ],
   },
-  [NOTIF_SFAC_FEB_2023]: {
+  [USER_SURVEY_MARCH_2023]: {
     defaultValue: false,
     rules: [
       {

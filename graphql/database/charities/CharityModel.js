@@ -48,6 +48,7 @@ class Charity extends DynamoDBModel {
         .description(
           `Whether to show the charity on the "Donate Hearts" page and elsewhere`
         ),
+      longformDescription: types.string(),
     }
   }
 

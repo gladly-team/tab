@@ -7,8 +7,7 @@
 # Serverless also does not support customizing the yml filename,
 # so we just cp the file before deploying.
 # https://github.com/serverless/serverless/issues/4473
-service:
-  name: lambda-edge # Important: this must be unique in AWS Cloudformation!
+service: lambda-edge # Important: this must be unique in AWS Cloudformation!
 frameworkVersion: ">=3.24.1 <4.0.0"
 
 provider:

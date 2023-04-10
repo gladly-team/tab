@@ -211,6 +211,18 @@ class User extends DynamoDBModel {
         .string()
         .isoDate()
         .description(`The datetime of the last time the user opened a tab`),
+      shopSignupTimestamp: types
+        .string()
+        .isoDate()
+        .description(
+          `The datetime of of when the user signed up for the shop extention`
+        ),
+      lastShopOpenTimestamp: types
+        .string()
+        .isoDate()
+        .description(
+          `The datetime of the last time the user opened the shop extention`
+        ),
       mergedIntoExistingUser: types.boolean()
         .description(`This is true if this user was anonymous but then later signed
           in as another existing user. This value is assigned on the client so is not
@@ -439,8 +451,7 @@ class User extends DynamoDBModel {
       deleted: false,
       pendingMissionInvites: [],
       hasSeenSquads: false,
-      // cats cause ID for default.
-      causeId: 'CA6A5C2uj',
+      causeId: 'no-cause',
       yahooPaidSearchRewardOptIn: false,
     }
   }
