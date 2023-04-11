@@ -196,6 +196,17 @@ class Model {
     }
   }
 
+  static async getOrNull(userContext, key) {
+    try {
+      return await this.get(userContext, key)
+    } catch (e) {
+      if (e.code === DatabaseItemDoesNotExistException.code) {
+        return null
+      }
+      throw e
+    }
+  }
+
   static async getBatchInternal() {
     throw new NotImplementedException()
   }

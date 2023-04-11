@@ -103,6 +103,43 @@ describe('RedisModel queries', () => {
     )
   })
 
+  it('correctly fetches with `getOrNull` method', async () => {
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+    const response = await ExampleRedisModel.getOrNull(user, item.id)
+    expect(response).toEqual(createdItem)
+  })
+
+  it('returns null `getOrNull` when no item', async () => {
+    setModelPermissions(ExampleRedisModel, {
+      get: () => true,
+    })
+
+    return expect(
+      await ExampleRedisModel.getOrNull(user, fixturesA[0].id)
+    ).toEqual(null)
+  })
+
+  it('fails with unauthorized `getOrNull`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      get: () => false,
+    })
+    const itemToGet = Object.assign({}, fixturesA[0])
+    return expect(
+      ExampleRedisModel.getOrNull(user, itemToGet.id)
+    ).rejects.toEqual(new UnauthorizedQueryException())
+  })
+
   it('correctly fetches with `getBatch` method', async () => {
     setModelPermissions(ExampleRedisModel, {
       create: () => true,

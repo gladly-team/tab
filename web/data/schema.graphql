@@ -957,6 +957,9 @@ type User implements Node {
 
   """whether or not the user has opted into searching for extra impact"""
   yahooPaidSearchRewardOptIn: Boolean!
+
+  """Current UserGroupImpactMetric"""
+  userGroupImpactMetric: UserGroupImpactMetric
 }
 
 """a user's charity specific impact"""
@@ -1252,6 +1255,23 @@ enum sfacActivityState {
   new
   active
   inactive
+}
+
+"""A specific users contribution to a GroupImpactMetric"""
+type UserGroupImpactMetric implements Node {
+  """Information about the GroupImpactMetric"""
+  groupImpactMetric: GroupImpactMetric
+
+  """The ID of an object"""
+  id: ID!
+
+  """The ID of the user which the UserGroupImpactMetric belongs to"""
+  userId: String!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user
+  """
+  dollarContribution: Int!
 }
 
 """The Wildfire object"""

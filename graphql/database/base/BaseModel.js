@@ -293,6 +293,17 @@ class BaseModel {
     }
   }
 
+  static async getOrNull(userContext, hashKey, rangeKey) {
+    try {
+      return await this.get(userContext, hashKey, rangeKey)
+    } catch (e) {
+      if (e.code === DatabaseItemDoesNotExistException.code) {
+        return null
+      }
+      throw e
+    }
+  }
+
   static query(userContext, hashKey) {
     // logger.debug(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
 
