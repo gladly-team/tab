@@ -171,6 +171,88 @@ describe('BaseModel queries', () => {
     )
   })
 
+  it('correctly fetches with `getOrNull` method for a model with no range key', async () => {
+    setModelPermissions(ExampleModel, {
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const itemToGet = Object.assign({}, fixturesA[0])
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: itemToGet,
+        })
+      }
+    )
+    const expectedDBParams = {
+      TableName: ExampleModel.tableName,
+      Key: {
+        id: itemToGet.id,
+      },
+    }
+    const response = await ExampleModel.getOrNull(user, itemToGet.id)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemToGet)
+  })
+
+  it('returns null when a `getOrNull` returns no item', async () => {
+    setModelPermissions(ExampleModel, {
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const itemToGet = Object.assign({}, fixturesA[0])
+    databaseClient.get.mockImplementation((params, callback) => {
+      callback(null, {
+        Item: null,
+      })
+    })
+
+    expect(await ExampleModel.getOrNull(user, itemToGet.id)).toEqual(null)
+  })
+
+  it('correctly uses `getOrNull` method for a model with a range key', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const itemToGet = Object.assign({}, fixturesRangeKeyA[0])
+    const dbQueryMock = databaseClient.get.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Item: itemToGet,
+        })
+      }
+    )
+    const expectedDBParams = {
+      TableName: ExampleModelRangeKey.tableName,
+      Key: {
+        id: itemToGet.id,
+        age: itemToGet.age,
+      },
+    }
+    const response = await ExampleModelRangeKey.getOrNull(
+      user,
+      itemToGet.id,
+      itemToGet.age
+    )
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemToGet)
+  })
+
+  it('fails with unauthorized `getOrNull`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      get: () => false,
+    })
+    const itemToGet = Object.assign({}, fixturesA[0])
+    return expect(ExampleModel.getOrNull(user, itemToGet.id)).rejects.toEqual(
+      new UnauthorizedQueryException()
+    )
+  })
+
   it('correctly fetches with `getBatch` method', async () => {
     setModelPermissions(ExampleModel, {
       get: () => true,
