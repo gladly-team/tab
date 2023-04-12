@@ -52,7 +52,7 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "deploy": "yarn run build && cp serverless-lambda.yml serverless.yml && serverless deploy -v && cp serverless-lambda-edge.yml serverless.yml && serverless deploy --verbose ",
+    "deploy": "yarn run build && cp serverless-lambda.yml serverless.yml && serverless deploy -v && cp serverless-lambda-edge.yml serverless.yml && serverless deploy --verbose --force",
     "build": "rm -rf ./build && npm run build:transpile",
     "build:transpile": "babel-node ./scripts/build.js",
     "test": "npm-run-all -s lint test:run test:codecov",
