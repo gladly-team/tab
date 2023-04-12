@@ -25,6 +25,7 @@ import getCurrentUserMission from '../../missions/getCurrentUserMission'
 import completeMission from '../../missions/completeMission'
 import getCauseByUser from '../../cause/getCauseByUser'
 import updateGroupImpactMetric from '../../groupImpact/updateGroupImpactMetric'
+import updateUserGroupImpactMetric from '../../groupImpact/updateUserGroupImpactMetric'
 import { CAUSE_IMPACT_TYPES } from '../../constants'
 
 jest.mock('lodash/number')
@@ -36,6 +37,7 @@ jest.mock('../../missions/getCurrentUserMission')
 jest.mock('../../missions/completeMission')
 jest.mock('../../cause/getCauseByUser')
 jest.mock('../../groupImpact/updateGroupImpactMetric')
+jest.mock('../../groupImpact/updateUserGroupImpactMetric')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -1219,7 +1221,7 @@ describe('campaign: estimating money raised', () => {
 
   describe('correctly updates group impact if applicable', () => {
     it('does nothing if user is not part of a cause', async () => {
-      expect.assertions(2)
+      expect.assertions(3)
       const userId = userContext.id
 
       // Mock fetching the user.
@@ -1232,10 +1234,11 @@ describe('campaign: estimating money raised', () => {
       await logTab(userContext, userId)
       expect(getCauseByUser).not.toHaveBeenCalled()
       expect(updateGroupImpactMetric).not.toHaveBeenCalled()
+      expect(updateUserGroupImpactMetric).not.toHaveBeenCalled()
     })
 
     it('does nothing if the cause is not group impact', async () => {
-      expect.assertions(2)
+      expect.assertions(3)
       const userId = userContext.id
 
       // Mock fetching the user.
@@ -1251,10 +1254,11 @@ describe('campaign: estimating money raised', () => {
       await logTab(userContext, userId)
       expect(getCauseByUser).toHaveBeenCalled()
       expect(updateGroupImpactMetric).not.toHaveBeenCalled()
+      expect(updateUserGroupImpactMetric).not.toHaveBeenCalled()
     })
 
     it('calls updateGroupImpactMetric if group cause', async () => {
-      expect.assertions(1)
+      expect.assertions(2)
       const userId = userContext.id
 
       // Mock fetching the user.
@@ -1270,11 +1274,26 @@ describe('campaign: estimating money raised', () => {
       }
       jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
 
+      const groupImpactMetric = {
+        dollarProgress: 250,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: 'impact-title',
+          whyValuableDescription: 'why-valuable-description',
+        },
+      }
+
       getCauseByUser.mockResolvedValue(groupCause)
+      updateGroupImpactMetric.mockResolvedValue(groupImpactMetric)
       await logTab(userContext, userId)
       expect(updateGroupImpactMetric).toHaveBeenCalledWith(
         userContext,
         groupCause.id
+      )
+      expect(updateUserGroupImpactMetric).toHaveBeenCalledWith(
+        userContext,
+        mockUser,
+        groupImpactMetric
       )
     })
   })
