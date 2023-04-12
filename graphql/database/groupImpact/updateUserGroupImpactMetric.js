@@ -7,6 +7,7 @@ import {
 } from '../../utils/permissions-overrides'
 import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 import UserModel from '../users/UserModel'
+import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 
@@ -87,19 +88,22 @@ const updateUserGroupImpactMetric = async (
 
   const microUSDsForTab = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
   if (groupImpactMetric.id !== userGroupImpactMetric.groupImpactMetricId) {
-    // Create new UserGroupImpactMetric model
+    // Create new UserGroupImpactMetric model and update leaderboard
+    const amount = Math.round(microUSDsForTab)
     const userGroupImpactMetricModel = replaceUserGroupImpactMetricModel(
       userContext,
       user.id,
       groupImpactMetric.id,
       userGroupImpactMetric.id,
-      Math.round(microUSDsForTab)
+      amount
     )
+    GroupImpactLeaderboard.add(groupImpactMetric.id, user.id, amount)
     return userGroupImpactMetricModel
   }
   const newDollarProgress = Math.round(
     userGroupImpactMetric.dollarContribution + microUSDsForTab
   )
+  GroupImpactLeaderboard.add(groupImpactMetric.id, user.id, newDollarProgress)
   return updateUserGroupImpactMetricModel(
     userGroupImpactMetric.id,
     newDollarProgress

@@ -1,7 +1,12 @@
 /* eslint-env jest */
-
-const store = {}
+let store = {}
 const methods = {
+  clear: () => {
+    store = {}
+  },
+  fetchRawObject: (key) => {
+    return store[key]
+  },
   hgetall: (key) => {
     // console.log(store)
     if (!(key in store)) {
@@ -36,6 +41,14 @@ const methods = {
       return 1
     }
     return 0
+  },
+  zadd: (key, value) => {
+    if (!(key in store)) {
+      store[key] = {}
+    }
+    store[key][value.member] = value.score
+
+    return 1
   },
 }
 
