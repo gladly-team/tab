@@ -30,7 +30,11 @@ module.exports = {
         store[key][field] += increment
       },
       del: (key) => {
-        delete store[key]
+        if (key in store) {
+          delete store[key]
+          return 1
+        }
+        return 0
       },
     }
   },

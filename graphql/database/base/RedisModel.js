@@ -138,6 +138,16 @@ class RedisModel extends Model {
     return this.validateAndConvertField(field, result)
   }
 
+  static async delete(key) {
+    const redisClient = this.getClient()
+    const redisKey = this.getRedisKey(key)
+    const item = await redisClient.del(redisKey)
+
+    if (item === 0) {
+      throw new DatabaseItemDoesNotExistException()
+    }
+  }
+
   // Wraps the object in the expected format for Model.js.
   static async postProcessObject(dataPromise) {
     const rawObject = await dataPromise
