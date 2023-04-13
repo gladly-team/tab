@@ -5,6 +5,9 @@ import dataGlobalHealth from '../../cause/causes/globalHealth/causeData'
 import dataEndingHunger from '../../cause/causes/endingHunger/causeData'
 import dataLgbtq from '../../cause/causes/lgbtq/causeData'
 import dataReproductiveHealth from '../../cause/causes/reproductiveHealthCauseData'
+import dataSeas from '../../cause/causes/teamseas/causeData'
+import dataTrees from '../../cause/causes/trees/causeData'
+import dataUkraine from '../../cause/causes/ukraine/causeData'
 
 jest.mock('../impactMetricRepository')
 
@@ -56,6 +59,32 @@ describe('getNextImpactMetricForCause', () => {
     getImpactMetricById.mockReturnValue(mockImpactMetric)
 
     expect(getNextImpactMetricForCause(dataReproductiveHealth.id)).toEqual(
+      mockImpactMetric
+    )
+    expect(getImpactMetricById).toHaveBeenCalled()
+  })
+
+  it('returns appropriate impact metric for teamseas', async () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    getImpactMetricById.mockReturnValue(mockImpactMetric)
+
+    expect(getNextImpactMetricForCause(dataSeas.id)).toEqual(mockImpactMetric)
+    expect(getImpactMetricById).toHaveBeenCalled()
+  })
+
+  it('returns appropriate impact metric for trees', async () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    getImpactMetricById.mockReturnValue(mockImpactMetric)
+
+    expect(getNextImpactMetricForCause(dataTrees.id)).toEqual(mockImpactMetric)
+    expect(getImpactMetricById).toHaveBeenCalled()
+  })
+
+  it('returns appropriate impact metric for ukraine', async () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    getImpactMetricById.mockReturnValue(mockImpactMetric)
+
+    expect(getNextImpactMetricForCause(dataUkraine.id)).toEqual(
       mockImpactMetric
     )
     expect(getImpactMetricById).toHaveBeenCalled()

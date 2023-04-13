@@ -28,7 +28,7 @@ const data = {
   backgroundImageCategory: 'seas',
   charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e',
   individualImpactEnabled: true, // Deprecated. Use "impactType".
-  impactType: 'individual',
+  impactType: 'individual_and_group',
   impactVisits: 10,
   landingPagePath: '/teamseas/',
   landingPagePhrase: 'This tab protects the ocean',

@@ -208,7 +208,11 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
 
   if (user.v4BetaEnabled) {
     const cause = await getCauseByUser(userContext, userId)
-    if (cause && cause.impactType === CAUSE_IMPACT_TYPES.group) {
+    if (
+      cause &&
+      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
+        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
+    ) {
       await updateGroupImpactMetric(userContext, cause.id)
     }
   }
