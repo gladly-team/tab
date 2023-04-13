@@ -623,4 +623,31 @@ describe('RedisModel queries', () => {
       ExampleRedisModel.getField(user, 'dummy', 'name')
     ).rejects.toEqual(new DatabaseItemDoesNotExistException())
   })
+
+  it('deletes if record exists', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+
+    await ExampleRedisModel.delete(createdItem.id)
+    expect(ExampleRedisModel.get(user, createdItem.id)).rejects.toEqual(
+      new DatabaseItemDoesNotExistException()
+    )
+  })
+
+  it('throws on delete if record does not exist', async () => {
+    expect.assertions(1)
+    expect(ExampleRedisModel.delete('dummy')).rejects.toEqual(
+      new DatabaseItemDoesNotExistException()
+    )
+  })
 })
