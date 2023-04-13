@@ -106,18 +106,6 @@ custom:
     dev: dev-SearchRequest
     prod: SearchRequest
 
-# Don't include any dependencies by default. CloudFront-triggered Lambdas
-# have stricter package size limitations.
-# https://www.serverless.com/framework/docs/providers/aws/guide/packaging/
-package:
-  patterns:
-    - '!./**'
-    - build/**
-    - node_modules/@aws-sdk/**
-    - node_modules/accept-language-parser/**
-    - node_modules/cookie/**
-    - node_modules/lodash/**
-
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
 # Custom IAM roles:
