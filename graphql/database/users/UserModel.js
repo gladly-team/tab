@@ -403,6 +403,11 @@ class User extends DynamoDBModel {
         .description(
           'For internal use only: a property that helps manually put this user in an A/B experiment group'
         ),
+      userGroupImpactMetricId: types
+        .string()
+        .description(
+          'the ID for the current UserGroupImpactMetric entity belonging to this user.'
+        ),
     }
   }
 

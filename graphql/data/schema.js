@@ -40,6 +40,7 @@ import {
   CAUSE_IMPACT_TYPES,
   IMPACT_METRIC,
   GROUP_IMPACT_METRIC,
+  USER_GROUP_IMPACT_METRIC,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -129,6 +130,7 @@ import getUserFeatures from '../database/experiments/getUserFeatures'
 import getGroupImpactMetricForCause from '../database/groupImpact/getGroupImpactMetricForCause'
 import GroupImpactMetricModel from '../database/groupImpact/GroupImpactMetricModel'
 import ImpactMetricModel from '../database/groupImpact/ImpactMetricModel'
+import UserGroupImpactMetricModel from '../database/groupImpact/UserGroupImpactMetricModel'
 
 // eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
@@ -225,6 +227,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if (type === IMPACT_METRIC) {
       return getImpactMetricById(id)
+    }
+    if (type === USER_GROUP_IMPACT_METRIC) {
+      return UserGroupImpactMetricModel.get(context.user, id)
     }
     return null
   },
@@ -830,6 +835,15 @@ const userType = new GraphQLObjectType({
       description:
         'whether or not the user has opted into searching for extra impact',
     },
+    userGroupImpactMetric: {
+      type: userGroupImpactMetricType,
+      description: 'Current UserGroupImpactMetric',
+      resolve: (user, _, context) =>
+        UserGroupImpactMetricModel.getOrNull(
+          context,
+          user.userGroupImpactMetricId
+        ),
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1089,6 +1103,34 @@ const groupImpactMetricType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const userGroupImpactMetricType = new GraphQLObjectType({
+  name: USER_GROUP_IMPACT_METRIC,
+  description: 'A specific users contribution to a GroupImpactMetric',
+  fields: () => ({
+    groupImpactMetric: {
+      type: groupImpactMetricType,
+      description: 'Information about the GroupImpactMetric',
+      resolve: (userGroupImpactMetric, _, context) =>
+        GroupImpactMetricModel.get(
+          context,
+          userGroupImpactMetric.groupImpactMetricId
+        ),
+    },
+    id: globalIdField(USER_GROUP_IMPACT_METRIC),
+    userId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The ID of the user which the UserGroupImpactMetric belongs to',
+    },
+    dollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
+
 const CauseType = new GraphQLObjectType({
   name: CAUSE,
   description: 'all cause specific data and ui content',
@@ -1143,6 +1185,9 @@ const CauseType = new GraphQLObjectType({
             none: { value: CAUSE_IMPACT_TYPES.none },
             individual: { value: CAUSE_IMPACT_TYPES.individual },
             group: { value: CAUSE_IMPACT_TYPES.group },
+            individual_and_group: {
+              value: CAUSE_IMPACT_TYPES.individual_and_group,
+            },
           },
         })
       ),
