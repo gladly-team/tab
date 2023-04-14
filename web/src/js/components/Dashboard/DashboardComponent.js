@@ -549,9 +549,7 @@ class Dashboard extends React.Component {
               {notif ? (
                 <ShfacExtensionSellNotification
                   userId={user.id}
-                  variation={'Version3'}
-                  // variation={notif.variation}
-                  showShfacExtensionPrompt={true}
+                  variation={notif.variation}
                 />
               ) : null}
 
@@ -747,8 +745,7 @@ class Dashboard extends React.Component {
 
               <SfacExtensionSellNotification
                 userId={user.id}
-                showSfacExtensionPrompt={true}
-                // showSfacExtensionPrompt={user.showSfacExtensionPrompt}
+                showSfacExtensionPrompt={user.showSfacExtensionPrompt}
               />
             </div>
           </FadeInDashboardAnimation>

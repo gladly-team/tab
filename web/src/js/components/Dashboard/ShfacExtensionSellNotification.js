@@ -16,6 +16,7 @@ import Notification from 'js/components/Dashboard/NotificationV2'
 import { withStyles } from '@material-ui/core/styles'
 import useDoesBrowserSupportSearchExtension from 'js/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'js/utils/hooks/useBrowserName'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 
 const styles = theme => ({
   noButton: {
@@ -57,49 +58,36 @@ const styles = theme => ({
   },
 })
 
-const ShfacExtensionSellNotification = ({
-  classes,
-  userId,
-  variation,
-  showShfacExtensionPrompt,
-}) => {
-  const [open, setOpen] = useState(false)
+const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
+  const [open, setOpen] = useState(true)
   const [browser, setBrowser] = useState(null)
   const browserName = useBrowserName()
   const searchExtensionSupported = useDoesBrowserSupportSearchExtension()
 
   useEffect(() => {
-    if (searchExtensionSupported) {
-      setOpen(showShfacExtensionPrompt)
-    }
     setBrowser(browserName)
-  }, [searchExtensionSupported, showShfacExtensionPrompt, browserName])
+  }, [searchExtensionSupported, browserName])
+
+  const setDismissed = () => {
+    const CODE = 'shfac-notify-launch'
+    const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
+    localStorageMgr.setItem(`${NOTIF_DISMISS_PREFIX}.${CODE}`, 'true')
+  }
 
   const onYesClick = useCallback(async () => {
-    // // Log the search event but time-cap how long we wait to avoid a bad UX
-    // // if the request hangs.
-    // try {
-    //   const MS_TO_WAIT_FOR_LOG = 1500
-    //   await awaitTimeLimit(
-    //     CreateSfacExtensionPromptResponseMutation(userId, browser, true),
-    //     MS_TO_WAIT_FOR_LOG
-    //   )
-    // } catch (e) {
-    //   if (e.code !== AwaitedPromiseTimeout.code) {
-    //     logger.error(e)
-    //   }
-    // }
-    setOpen(false)
+    setDismissed()
 
     if (variation == 'Version1' || variation == 'Version3') {
-      replaceUrl(getShopExtensionPage)
+      //replaceUrl(getShopExtensionPage)
+      // Did this because our shop.gladly.io page is not working
+      replaceUrl(shopChromeExtensionPage)
     } else {
       replaceUrl(shopChromeExtensionPage)
     }
   }, [userId, browser])
 
   const onNoClick = () => {
-    //CreateSfacExtensionPromptResponseMutation(userId, browser, false)
+    setDismissed()
     setOpen(false)
   }
 
@@ -159,7 +147,7 @@ const ShfacExtensionSellNotification = ({
                 <Typography className={classes.title}>
                   Introducing: Shop for a Cause
                 </Typography>
-                <Typography variant={'body1'}>
+                <Typography className={classes.subtitle} variant={'body1'}>
                   We are excited to officially launch{' '}
                   <Link
                     to={getShopExtensionPage}
@@ -203,7 +191,7 @@ const ShfacExtensionSellNotification = ({
                 <Typography className={classes.title}>
                   Shop for a Cause
                 </Typography>
-                <Typography variant={'body1'}>
+                <Typography className={classes.subtitle} variant={'body1'}>
                   When Amazon{' '}
                   <Link
                     to={
@@ -225,7 +213,7 @@ const ShfacExtensionSellNotification = ({
                   </Link>
                   , our newest extension that raises money for charity as you
                   shop online at over 10,000 partner stores. It is simple, free,
-                  and impactful :heart:
+                  and impactful &hearts;.
                 </Typography>
               </span>
             }
@@ -253,7 +241,6 @@ const ShfacExtensionSellNotification = ({
 ShfacExtensionSellNotification.propTypes = {
   userId: PropTypes.string,
   variation: PropTypes.string.isRequired,
-  showShfacExtensionPrompt: PropTypes.bool.isRequired,
 }
 
 ShfacExtensionSellNotification.defaultProps = {
