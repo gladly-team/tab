@@ -5,11 +5,7 @@ import Link from 'js/components/General/Link'
 import { Typography } from '@material-ui/core'
 // import CreateSfacExtensionPromptResponseMutation from 'js/mutations/CreateSfacExtensionPromptResponseMutation'
 // import awaitTimeLimit from 'js/utils/awaitTimeLimit'
-import {
-  getShopExtensionPage,
-  shopChromeExtensionPage,
-  replaceUrl,
-} from 'js/navigation/navigation'
+import { shopChromeExtensionPage, replaceUrl } from 'js/navigation/navigation'
 // import { AwaitedPromiseTimeout } from 'js/utils/errors'
 // import logger from 'js/utils/logger'
 import Notification from 'js/components/Dashboard/NotificationV2'
@@ -106,7 +102,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Typography className={classes.subtitle} variant="body1">
                   We are excited to officially launch{' '}
                   <Link
-                    to={getShopExtensionPage}
+                    to={shopChromeExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
@@ -150,7 +146,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Typography className={classes.subtitle} variant={'body1'}>
                   We are excited to officially launch{' '}
                   <Link
-                    to={getShopExtensionPage}
+                    to={shopChromeExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
@@ -205,7 +201,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                   to focus on more profit, it was a huge loss to charities. In
                   response, we are proud to present{' '}
                   <Link
-                    to={'https://shop.gladly.io/'}
+                    to={shopChromeExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
