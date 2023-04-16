@@ -14,7 +14,7 @@ const data = {
   backgroundImageCategory: 'trees',
   charityId: '17099402-4e53-4b42-ad0b-6b89492b61cb',
   individualImpactEnabled: true, // Deprecated. Use "impactType".
-  impactType: 'individual',
+  impactType: 'individual_and_group',
   impactVisits: 196,
   landingPagePath: '/trees/',
   landingPagePhrase: 'This tab plants trees',
