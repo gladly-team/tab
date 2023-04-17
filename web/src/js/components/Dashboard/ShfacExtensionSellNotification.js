@@ -5,12 +5,17 @@ import Link from 'js/components/General/Link'
 import { Typography } from '@material-ui/core'
 // import CreateSfacExtensionPromptResponseMutation from 'js/mutations/CreateSfacExtensionPromptResponseMutation'
 // import awaitTimeLimit from 'js/utils/awaitTimeLimit'
-import { shopChromeExtensionPage, replaceUrl } from 'js/navigation/navigation'
+import {
+  shopChromeExtensionPage,
+  shopEdgeExtensionPage,
+  getShopExtensionPage,
+  replaceUrl,
+} from 'js/navigation/navigation'
 // import { AwaitedPromiseTimeout } from 'js/utils/errors'
 // import logger from 'js/utils/logger'
 import Notification from 'js/components/Dashboard/NotificationV2'
 import { withStyles } from '@material-ui/core/styles'
-import useDoesBrowserSupportSearchExtension from 'js/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useDoesBrowserSupportShopExtension from 'js/utils/hooks/useDoesBrowserSupportShopExtension'
 import useBrowserName from 'js/utils/hooks/useBrowserName'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 
@@ -55,14 +60,20 @@ const styles = theme => ({
 })
 
 const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [browser, setBrowser] = useState(null)
   const browserName = useBrowserName()
-  const searchExtensionSupported = useDoesBrowserSupportSearchExtension()
+  const shopExtensionSupported = useDoesBrowserSupportShopExtension()
 
   useEffect(() => {
-    setBrowser(browserName)
-  }, [searchExtensionSupported, browserName])
+    if (browserName) {
+      const capitalized =
+        browserName.charAt(0).toUpperCase() + browserName.slice(1)
+      setBrowser(capitalized)
+    }
+
+    setOpen(shopExtensionSupported)
+  }, [shopExtensionSupported, browserName])
 
   const setDismissed = () => {
     const CODE = 'shfac-notify-launch'
@@ -74,11 +85,16 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
     setDismissed()
 
     if (variation == 'Version1' || variation == 'Version3') {
-      //replaceUrl(getShopExtensionPage)
-      // Did this because our shop.gladly.io page is not working
-      replaceUrl(shopChromeExtensionPage)
+      replaceUrl(getShopExtensionPage)
     } else {
-      replaceUrl(shopChromeExtensionPage)
+      if (browser == 'Chrome') {
+        replaceUrl(shopChromeExtensionPage)
+      } else if (browser == 'Edge') {
+        replaceUrl(shopEdgeExtensionPage)
+      } else {
+        // Default should it not detect browser (not likely)
+        replaceUrl(getShopExtensionPage)
+      }
     }
   }, [userId, browser])
 
@@ -102,7 +118,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Typography className={classes.subtitle} variant="body1">
                   We are excited to officially launch{' '}
                   <Link
-                    to={shopChromeExtensionPage}
+                    to={getShopExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
@@ -120,13 +136,15 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Button onClick={onNoClick} className={classes.noButton}>
                   Maybe later
                 </Button>
-                <Button
-                  onClick={onYesClick}
-                  className={classes.yesButton}
-                  variant="contained"
-                >
-                  Add to Chrome
-                </Button>
+                {browser ? (
+                  <Button
+                    onClick={onYesClick}
+                    className={classes.yesButton}
+                    variant="contained"
+                  >
+                    Add to {browser}
+                  </Button>
+                ) : null}
               </div>
             }
           />
@@ -146,7 +164,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Typography className={classes.subtitle} variant={'body1'}>
                   We are excited to officially launch{' '}
                   <Link
-                    to={shopChromeExtensionPage}
+                    to={getShopExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
@@ -164,13 +182,15 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Button onClick={onNoClick} className={classes.noButton}>
                   Maybe later
                 </Button>
-                <Button
-                  onClick={onYesClick}
-                  className={classes.yesButton}
-                  variant="contained"
-                >
-                  Add to Chrome
-                </Button>
+                {browser ? (
+                  <Button
+                    onClick={onYesClick}
+                    className={classes.yesButton}
+                    variant="contained"
+                  >
+                    Add to {browser}
+                  </Button>
+                ) : null}
               </div>
             }
           />
@@ -201,7 +221,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                   to focus on more profit, it was a huge loss to charities. In
                   response, we are proud to present{' '}
                   <Link
-                    to={shopChromeExtensionPage}
+                    to={getShopExtensionPage}
                     target="_blank"
                     style={{ color: '#9d4ba3' }}
                   >
@@ -218,13 +238,15 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
                 <Button onClick={onNoClick} className={classes.noButton}>
                   Maybe later
                 </Button>
-                <Button
-                  onClick={onYesClick}
-                  className={classes.yesButton}
-                  variant="contained"
-                >
-                  Add to Chrome
-                </Button>
+                {browser ? (
+                  <Button
+                    onClick={onYesClick}
+                    className={classes.yesButton}
+                    variant="contained"
+                  >
+                    Add to {browser}
+                  </Button>
+                ) : null}
               </div>
             }
           />

@@ -85,3 +85,15 @@ export const isSearchExtensionSupported = browserNameSimplified => {
   const sfacSupportedBrowsers = [CHROME_BROWSER, FIREFOX_BROWSER]
   return sfacSupportedBrowsers.indexOf(browserNameSimplified) > -1
 }
+
+/**
+ * Given a browser name, return whether we have a Shop for a Cause
+ * extension for that browser.
+ * @param {String} browserNameSimplified - The browser name. It should be one
+ *   of the return values from `simplifyBrowserName`.
+ * @return {Boolean} Whether the browser supports a search extension
+ */
+export const isShopExtensionSupported = browserNameSimplified => {
+  const supportedBrowsers = [CHROME_BROWSER, EDGE_BROWSER]
+  return supportedBrowsers.indexOf(browserNameSimplified) > -1
+}

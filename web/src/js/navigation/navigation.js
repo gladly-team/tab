@@ -212,7 +212,8 @@ export const searchChromeExtensionPage =
 export const getSearchExtensionPage = 'https://tab.gladly.io/get-search/'
 
 // Browser extension pages - shop
-export const shopEdgeExtensionPage = ''
+export const shopEdgeExtensionPage =
+  'https://microsoftedge.microsoft.com/addons/detail/shop-for-a-cause/mbopcbcenhmgfmgaaebibbpldghdjibj'
 export const shopChromeExtensionPage =
   'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
 export const getShopExtensionPage = 'https://shop.gladly.io/'
