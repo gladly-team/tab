@@ -50,21 +50,29 @@ const updateUserGroupImpactMetric = async (
 ) => {
   // Fetch current UserGroupImpactMetric entry, create if does not exist
   let userGroupImpactMetric
-  try {
-    userGroupImpactMetric = await UserGroupImpactMetric.get(
+  if (!('userGroupImpactMetricId' in user)) {
+    userGroupImpactMetric = await replaceUserGroupImpactMetricModel(
       userContext,
-      user.userGroupImpactMetricId
+      user.id,
+      groupImpactMetric.id
     )
-  } catch (e) {
-    if (e.code === DatabaseItemDoesNotExistException.code) {
-      // Get the impact metric ID here
-      userGroupImpactMetric = await replaceUserGroupImpactMetricModel(
+  } else {
+    try {
+      userGroupImpactMetric = await UserGroupImpactMetric.get(
         userContext,
-        user.id,
-        groupImpactMetric.id
+        user.userGroupImpactMetricId
       )
-    } else {
-      throw e
+    } catch (e) {
+      if (e.code === DatabaseItemDoesNotExistException.code) {
+        // Get the impact metric ID here
+        userGroupImpactMetric = await replaceUserGroupImpactMetricModel(
+          userContext,
+          user.id,
+          groupImpactMetric.id
+        )
+      } else {
+        throw e
+      }
     }
   }
 
