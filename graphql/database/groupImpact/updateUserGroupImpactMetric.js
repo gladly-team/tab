@@ -31,6 +31,9 @@ const replaceUserGroupImpactMetricModel = async (
   }
 
   console.log('#################')
+
+  console.log(userGroupImpactMetric)
+
   console.log(
     `UserModel.update userId: ${userId}, impactId: ${userGroupImpactMetric.id}.`
   )
