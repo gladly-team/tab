@@ -23,7 +23,6 @@ const getUserNotifications = async (userContext, user) => {
         ? [{ code: SHFAC_NOTIFY_LAUNCH, variation: notifFeature.variation }]
         : []),
     ]
-    await getUserFeature(userContext, user, SHFAC_NOTIFY_LAUNCH)
   } catch (e) {
     logger.error(e)
   }
