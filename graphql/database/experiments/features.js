@@ -506,7 +506,7 @@ const features = {
       {
         variations: ['Version1', 'Version2', 'Version3'],
         weights: [0.33, 0.33, 0.33],
-        coverage: 0.0,
+        coverage: 1.0,
         condition: {},
       },
     ],
