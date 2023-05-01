@@ -37,6 +37,32 @@ class UserGroupImpactMetricModel extends RedisModel {
         .description(
           `the contribution of the individual user to the GroupImpactMetric in micro USDs`
         ),
+      tabDollarContribution: types
+        .number()
+        .required()
+        .description(
+          `the contribution of the individual user to the GroupImpactMetric in micro USDs from tabs`
+        ),
+      searchDollarContribution: types
+        .number()
+        .required()
+        .description(
+          `the contribution of the individual user to the GroupImpactMetric in micro USDs from search`
+        ),
+      shopDollarContribution: types
+        .number()
+        .required()
+        .description(
+          `the contribution of the individual user to the GroupImpactMetric in micro USDs from shopping`
+        ),
+    }
+  }
+
+  static get fieldDefaults() {
+    return {
+      tabDollarContribution: 0,
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
     }
   }
 

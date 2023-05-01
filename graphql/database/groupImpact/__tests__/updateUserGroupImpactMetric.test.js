@@ -79,6 +79,9 @@ describe('updateUserGroupImpactMetric tests', () => {
       dollarContribution: 1000,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -122,6 +125,9 @@ describe('updateUserGroupImpactMetric tests', () => {
       dollarContribution: 2000,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
     })
     expect(updateMethod).not.toHaveBeenCalled()
     expect(deleteMethod).not.toHaveBeenCalled()
@@ -162,6 +168,9 @@ describe('updateUserGroupImpactMetric tests', () => {
       dollarContribution: 1000,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
