@@ -39,3 +39,6 @@ export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
 
 // Notify users that SHFAC has launched
 export const SHFAC_NOTIFY_LAUNCH = 'shfac-notify-launch-v2'
+
+// Bookmarks Feature Flag
+export const LAUNCH_BOOKMARKS = 'launch-bookmarks'
