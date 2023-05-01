@@ -199,6 +199,28 @@ export const getMockCauseInstance = (attributes) => {
     )
   )
 }
+
+export const getMockGroupImpactInstance = (attributes) => {
+  return new CauseModel(
+    Object.assign(
+      {},
+      {
+        id: 'abcdefghijkl',
+        causeId: 'b23456789',
+        impactMetricId: 'a123456789',
+        dollarProgress: 2000,
+        dollarGoal: 25000000,
+        dollarProgressFromSearch: 2000,
+        dollarProgressFromTab: 0,
+        dateStarted: moment.utc().toISOString(),
+        created: moment.utc().toISOString(),
+        updated: moment.utc().toISOString(),
+      },
+      attributes
+    )
+  )
+}
+
 /**
  * Get a mock User instance.
  * @param {Object} attributes - Attributes to override when getting the mock user.
