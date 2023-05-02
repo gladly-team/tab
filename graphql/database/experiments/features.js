@@ -18,6 +18,7 @@ import {
   USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
   SHFAC_NOTIFY_LAUNCH,
+  LAUNCH_BOOKMARKS,
 } from './experimentConstants'
 
 const features = {
@@ -508,6 +509,19 @@ const features = {
         weights: [0.33, 0.33, 0.33],
         coverage: 1.0,
         condition: {},
+      },
+    ],
+  },
+  [LAUNCH_BOOKMARKS]: {
+    defaultValue: false,
+    rules: [
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+        },
+        force: true,
       },
     ],
   },
