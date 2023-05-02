@@ -7,9 +7,7 @@
 # Serverless also does not support customizing the yml filename,
 # so we just cp the file before deploying.
 # https://github.com/serverless/serverless/issues/4473
-service:
-  name: lambda # Important: this must be unique in AWS Cloudformation!
-  awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
+service: lambda # Important: this must be unique in AWS Cloudformation!
 frameworkVersion: ">=3.24.1 <4.0.0"
 
 provider:
@@ -17,6 +15,7 @@ provider:
   runtime: nodejs14.x
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  kmsKeyArn: ${self:custom.awsKmsKeyArn}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -78,18 +77,6 @@ custom:
 plugins:
   # https://github.com/claygregory/serverless-prune-plugin
   - serverless-prune-plugin
-
-# Only include the build and its node modules.
-package:
-  patterns:
-    - '!node_modules/**'
-    - 'node_modules/@aws-sdk/**'
-    - 'node_modules/firebase-admin/**'
-    - 'node_modules/lodash/**'
-    - 'node_modules/next-firebase-auth/**'
-    - 'node_modules/node-fetch/**'
-    - 'node_modules/uuid/**'
-
 
 functions:
   firebaseAuthorizer:

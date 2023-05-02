@@ -19,6 +19,7 @@ import logger from '../../utils/logger'
 import getCauseByUser from '../cause/getCauseByUser'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
+import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -208,8 +209,21 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
 
   if (user.v4BetaEnabled) {
     const cause = await getCauseByUser(userContext, userId)
+<<<<<<< HEAD
     if (cause && cause.impactType === CAUSE_IMPACT_TYPES.group) {
       await updateGroupImpactMetric(userContext, cause.id, 'tab')
+=======
+    if (
+      cause &&
+      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
+        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
+    ) {
+      const groupImpactMetric = await updateGroupImpactMetric(
+        userContext,
+        cause.id
+      )
+      await updateUserGroupImpactMetric(userContext, user, groupImpactMetric)
+>>>>>>> 75902f7e4c140df863b5ba179d605b7f23295771
     }
   }
   return user

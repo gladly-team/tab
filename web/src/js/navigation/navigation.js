@@ -204,12 +204,19 @@ export const facebookPageURL = 'https://www.facebook.com/TabForACause'
 export const instagramPageURL = 'https://www.instagram.com/tabforacause/'
 export const twitterPageURL = 'https://twitter.com/TabForACause'
 
-// Browser extension pages
+// Browser extension pages - search
 export const searchFirefoxExtensionPage =
   'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
 export const searchChromeExtensionPage =
   'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
 export const getSearchExtensionPage = 'https://tab.gladly.io/get-search/'
+
+// Browser extension pages - shop
+export const shopEdgeExtensionPage =
+  'https://microsoftedge.microsoft.com/addons/detail/shop-for-a-cause/mbopcbcenhmgfmgaaebibbpldghdjibj'
+export const shopChromeExtensionPage =
+  'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
+export const getShopExtensionPage = 'https://shop.gladly.io/'
 
 // TODO: stop using these and replace the existing uses.
 //   They only cause additional complication during testing.

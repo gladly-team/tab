@@ -33,6 +33,7 @@ export const GROUP_IMPACT_METRIC = 'GroupImpactMetric'
 export const CAUSE_GROUP_IMPACT_METRIC = 'CauseGroupImpactMetric'
 export const CAUSE_IMPACT_METRIC_COUNT = 'CauseImpactMetricCount'
 export const USER_GROUP_IMPACT_METRIC = 'UserGroupImpactMetric'
+export const CAUSE_GROUP_IMPACT_LEADERBOARD = 'CauseGroupImpactLeaderboard'
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'

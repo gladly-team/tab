@@ -46,10 +46,12 @@ class RedisModel extends Model {
       }
     }
 
-    await redisClient.hset(redisKey, item)
-
-    const object = await redisClient.hgetall(redisKey)
-    return this.postProcessObject(object)
+    const result = await redisClient
+      .multi()
+      .hset(redisKey, item)
+      .hgetall(redisKey)
+      .exec()
+    return this.postProcessObject(result.slice(-1)[0])
   }
 
   static async updateInternal(item) {
@@ -60,10 +62,12 @@ class RedisModel extends Model {
       throw new DatabaseItemDoesNotExistException()
     }
 
-    await redisClient.hset(redisKey, item)
-
-    const object = await redisClient.hgetall(redisKey)
-    return this.postProcessObject(object)
+    const result = await redisClient
+      .multi()
+      .hset(redisKey, item)
+      .hgetall(redisKey)
+      .exec()
+    return this.postProcessObject(result.slice(-1)[0])
   }
 
   static async updateField(userContext, id, field, value) {

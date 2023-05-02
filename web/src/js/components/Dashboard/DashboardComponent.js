@@ -71,6 +71,7 @@ import {
   YAHOO_USER_ID,
 } from 'js/constants'
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
+import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
@@ -448,7 +449,12 @@ class Dashboard extends React.Component {
       notif => notif.code === 'shfac-notify-launch'
     )
 
-    if (notif && notif.variation !== 'Experiment') {
+    if (
+      notif &&
+      notif.variation !== 'Version1' &&
+      notif.variation !== 'Version2' &&
+      notif.variation !== 'Version3'
+    ) {
       notif = null
     }
 
@@ -541,25 +547,9 @@ class Dashboard extends React.Component {
 
               {/*** Notification ***/}
               {notif ? (
-                <Notification
-                  useGlobalDismissalTime
-                  title={`Raise money for charity by shopping online!`}
-                  message={
-                    <>
-                      <Typography variant={'body2'} gutterBottom>
-                        Try our newest project, Shop for a Cause, to get
-                        discounts at 10,000+ online stores while raising even
-                        more money for your favorite charities. Just like
-                        Tabbing it is free, easy, and impactful ♥️
-                      </Typography>
-                    </>
-                  }
-                  buttonText={'Learn More'}
-                  buttonURL={'https://shop.gladly.io/'}
-                  onDismiss={notif.onDismiss}
-                  style={{
-                    marginTop: 4,
-                  }}
+                <ShfacExtensionSellNotification
+                  userId={user.id}
+                  variation={notif.variation}
                 />
               ) : null}
 
@@ -752,6 +742,7 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
+
               <SfacExtensionSellNotification
                 userId={user.id}
                 showSfacExtensionPrompt={user.showSfacExtensionPrompt}

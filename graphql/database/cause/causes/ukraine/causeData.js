@@ -14,7 +14,7 @@ const data = {
   backgroundImageCategory: 'trees', // TODO: update with new collection
   charityId: '90bfe202-54a9-4eea-9003-5e91572387dd',
   individualImpactEnabled: true, // Deprecated. Use "impactType".
-  impactType: 'individual',
+  impactType: 'individual_and_group',
   impactVisits: 13,
   landingPagePath: '/ukraine/',
   landingPagePhrase: 'This tab supports Ukrainian families',
