@@ -46,6 +46,8 @@ const createGroupImpactMetricModel = async (
     causeId,
     impactMetricId: impactMetric.id,
     dollarProgress: 0,
+    dollarProgressFromTab: 0,
+    dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
   })
@@ -69,10 +71,6 @@ const updateGroupImpactMetricModel = async (
 
 const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   let groupImpactMetricId
-
-  console.log(userContext)
-  console.log(causeId)
-  console.log(revenueType)
 
   try {
     ;({ groupImpactMetricId } = await CauseGroupImpactMetricModel.get(
@@ -110,22 +108,22 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
 
   // Now update GroupImpactMetric
   let newDollarProgress = 0.0
-  let newDollarProgressTab = 0.0
-  let newDollarProgressSearch = 0.0
+  let { dollarProgressFromTab } = groupImpactMetric
+  let { dollarProgressFromSearch } = groupImpactMetric
 
   if (revenueType === 'tab') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
     newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
-    newDollarProgressTab = Math.round(
-      groupImpactMetric.dollarProgressTab + addTo
+    dollarProgressFromTab = Math.round(
+      groupImpactMetric.dollarProgressFromTab + addTo
     )
   }
 
   if (revenueType === 'search') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
     newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
-    newDollarProgressSearch = Math.round(
-      groupImpactMetric.dollarProgressSearch + addTo
+    dollarProgressFromSearch = Math.round(
+      groupImpactMetric.dollarProgressFromSearch + addTo
     )
   }
 
@@ -135,8 +133,8 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
     await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
-      newDollarProgressTab,
-      newDollarProgressSearch,
+      dollarProgressFromTab,
+      dollarProgressFromSearch,
       moment.utc().toISOString()
     )
     // Create new GroupImpactMetric model
@@ -158,8 +156,8 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   return updateGroupImpactMetricModel(
     groupImpactMetricId,
     newDollarProgress,
-    newDollarProgressTab,
-    newDollarProgressSearch
+    dollarProgressFromTab,
+    dollarProgressFromSearch
   )
 }
 

@@ -31,12 +31,6 @@ exports.handler = async event => {
     operationName: 'LogSearchMutation',
   }
 
-  console.log(
-    `[test] getAuthorizationHeaderFromMessage ${JSON.stringify(
-      graphqlMutationPayload
-    )}.`
-  )
-
   const response = await fetch(process.env.GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {

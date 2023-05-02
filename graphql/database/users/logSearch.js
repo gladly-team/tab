@@ -46,10 +46,14 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
     throw e
   }
 
-  if (!user.v4BetaEnabled) {
+  if (user.v4BetaEnabled) {
     const cause = await getCauseByUser(userContext, userId)
 
-    if (cause && cause.impactType === CAUSE_IMPACT_TYPES.group) {
+    if (
+      cause &&
+      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
+        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
+    ) {
       await updateGroupImpactMetric(userContext, cause.id, 'search')
     }
   }
@@ -151,11 +155,6 @@ const logSearchAnonUser = async (userContext, anonUserId, searchData) => {
  * @return {Promise<User>} A promise that resolves into a User instance.
  */
 const logSearch = async (userContext, userId, anonUserId, searchData = {}) => {
-  console.log(searchData)
-  console.log(userId)
-  console.log(userContext)
-  console.log(anonUserId)
-
   // Do some validation on searchData fields (searchEngineId, causeId)
   if (searchData.searchEngineId) {
     try {
