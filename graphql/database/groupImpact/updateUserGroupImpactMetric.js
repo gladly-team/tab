@@ -31,14 +31,6 @@ const replaceUserGroupImpactMetricModel = async (
     await UserGroupImpactMetric.delete(oldUserGroupImpactMetricId)
   }
 
-  console.log('#################')
-
-  console.log(userGroupImpactMetric)
-
-  console.log(
-    `UserModel.update userId: ${userId}, impactId: ${userGroupImpactMetric.id}.`
-  )
-  console.log('%%%%%%%%%%%%%%%%%')
   await UserModel.update(userContext, {
     id: userId,
     userGroupImpactMetricId: userGroupImpactMetric.id,

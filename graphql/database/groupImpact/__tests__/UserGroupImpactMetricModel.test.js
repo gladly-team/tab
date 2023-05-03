@@ -28,6 +28,9 @@ describe('UserGroupImpactMetricModel', () => {
         userId: 'abcd',
         groupImpactMetricId: '12345',
         dollarContribution: 1000,
+        tabDollarContribution: 333,
+        searchDollarContribution: 333,
+        shopDollarContribution: 334,
       })
     )
     expect(item).toEqual({
@@ -35,6 +38,30 @@ describe('UserGroupImpactMetricModel', () => {
       userId: 'abcd',
       groupImpactMetricId: '12345',
       dollarContribution: 1000,
+      tabDollarContribution: 333,
+      searchDollarContribution: 333,
+      shopDollarContribution: 334,
+    })
+  })
+
+  it('constructs as expected with defaults', () => {
+    const item = Object.assign(
+      {},
+      new UserGroupImpactMetric({
+        id: '123456789',
+        userId: 'abcd',
+        groupImpactMetricId: '12345',
+        dollarContribution: 1000,
+      })
+    )
+    expect(item).toEqual({
+      id: '123456789',
+      userId: 'abcd',
+      groupImpactMetricId: '12345',
+      dollarContribution: 1000,
+      tabDollarContribution: 0,
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
     })
   })
 
