@@ -8,7 +8,10 @@ import {
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
 import getNextImpactMetricForCause from './getNextImpactMetricForCause'
-import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import {
+  getEstimatedMoneyRaisedPerTab,
+  getEstimatedMoneyRaisedPerSearch,
+} from '../globals/globals'
 import incrementCauseImpactMetricCount from './incrementCauseImpactMetricCount'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
@@ -43,6 +46,8 @@ const createGroupImpactMetricModel = async (
     causeId,
     impactMetricId: impactMetric.id,
     dollarProgress: 0,
+    dollarProgressFromTab: 0,
+    dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
   })
@@ -51,16 +56,20 @@ const createGroupImpactMetricModel = async (
 const updateGroupImpactMetricModel = async (
   groupImpactMetricId,
   dollarProgress,
+  dollarProgressFromTab,
+  dollarProgressFromSearch,
   dateCompleted
 ) => {
   return GroupImpactMetricModel.update(groupImpactOverride, {
     id: groupImpactMetricId,
     dollarProgress,
+    dollarProgressFromTab,
+    dollarProgressFromSearch,
     ...(dateCompleted && { dateCompleted }),
   })
 }
 
-const updateGroupImpactMetric = async (userContext, causeId) => {
+const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   let groupImpactMetricId
 
   try {
@@ -98,15 +107,34 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
   }
 
   // Now update GroupImpactMetric
-  const newDollarProgress = Math.round(
-    groupImpactMetric.dollarProgress + 10 ** 6 * getEstimatedMoneyRaisedPerTab()
-  )
+  let newDollarProgress = 0.0
+  let { dollarProgressFromTab } = groupImpactMetric
+  let { dollarProgressFromSearch } = groupImpactMetric
+
+  if (revenueType === 'tab') {
+    const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
+    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
+    dollarProgressFromTab = Math.round(
+      groupImpactMetric.dollarProgressFromTab + addTo
+    )
+  }
+
+  if (revenueType === 'search') {
+    const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
+    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
+    dollarProgressFromSearch = Math.round(
+      groupImpactMetric.dollarProgressFromSearch + addTo
+    )
+  }
+
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
     await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
+      dollarProgressFromTab,
+      dollarProgressFromSearch,
       moment.utc().toISOString()
     )
     // Create new GroupImpactMetric model
@@ -125,7 +153,12 @@ const updateGroupImpactMetric = async (userContext, causeId) => {
     return updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
   }
   // Update GroupImpactMetric
-  return updateGroupImpactMetricModel(groupImpactMetricId, newDollarProgress)
+  return updateGroupImpactMetricModel(
+    groupImpactMetricId,
+    newDollarProgress,
+    dollarProgressFromTab,
+    dollarProgressFromSearch
+  )
 }
 
 export default updateGroupImpactMetric

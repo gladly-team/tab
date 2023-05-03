@@ -1288,7 +1288,8 @@ describe('campaign: estimating money raised', () => {
       await logTab(userContext, userId)
       expect(updateGroupImpactMetric).toHaveBeenCalledWith(
         userContext,
-        groupCause.id
+        groupCause.id,
+        'tab'
       )
       expect(updateUserGroupImpactMetric).toHaveBeenCalledWith(
         userContext,

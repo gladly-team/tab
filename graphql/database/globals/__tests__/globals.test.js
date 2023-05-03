@@ -47,10 +47,43 @@ describe('globals', () => {
     expect(getEstimatedMoneyRaisedPerTab()).toBe(0.0)
   })
 
-  it('logs an error if we cannot get the estimated money raised from process.env.EST_MONEY_RAISED_PER_TAB', () => {
-    process.env.EST_MONEY_RAISED_PER_TAB = undefined
-    const { getEstimatedMoneyRaisedPerTab } = require('../globals')
-    getEstimatedMoneyRaisedPerTab()
+  it('logs an error if we cannot get the estimated money raised from process.env.EST_MONEY_RAISED_PER_SEARCH', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = undefined
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    getEstimatedMoneyRaisedPerSearch()
+    expect(logger.error).toHaveBeenCalledWith(
+      'Could not parse float from money raised env var value undefined'
+    )
+  })
+
+  it('returns the estimated money raised per search [test #1]', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = '0.01287'
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    expect(getEstimatedMoneyRaisedPerSearch()).toBe(0.01287)
+  })
+
+  it('returns the estimated money raised per search [test #2]', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = '2'
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    expect(getEstimatedMoneyRaisedPerSearch()).toBe(2.0)
+  })
+
+  it('returns 0 for the estimated money raised per search if process.env.EST_MONEY_RAISED_PER_SEARCH is undefined', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = undefined
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    expect(getEstimatedMoneyRaisedPerSearch()).toBe(0.0)
+  })
+
+  it('returns 0 for the estimated money raised per search if process.env.EST_MONEY_RAISED_PER_SEARCH does not parse into a float', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = 'xyz'
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    expect(getEstimatedMoneyRaisedPerSearch()).toBe(0.0)
+  })
+
+  it('logs an error if we cannot get the estimated money raised from process.env.EST_MONEY_RAISED_PER_SEARCH', () => {
+    process.env.EST_MONEY_RAISED_PER_SEARCH = undefined
+    const { getEstimatedMoneyRaisedPerSearch } = require('../globals')
+    getEstimatedMoneyRaisedPerSearch()
     expect(logger.error).toHaveBeenCalledWith(
       'Could not parse float from money raised env var value undefined'
     )

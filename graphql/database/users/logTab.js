@@ -216,7 +216,8 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     ) {
       const groupImpactMetric = await updateGroupImpactMetric(
         userContext,
-        cause.id
+        cause.id,
+        'tab'
       )
       await updateUserGroupImpactMetric(userContext, user, groupImpactMetric)
     }

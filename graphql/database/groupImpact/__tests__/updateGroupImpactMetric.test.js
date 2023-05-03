@@ -15,7 +15,10 @@ import {
   getPermissionsOverride,
 } from '../../../utils/permissions-overrides'
 import getNextImpactMetricForCause from '../getNextImpactMetricForCause'
-import { getEstimatedMoneyRaisedPerTab } from '../../globals/globals'
+import {
+  getEstimatedMoneyRaisedPerTab,
+  getEstimatedMoneyRaisedPerSearch,
+} from '../../globals/globals'
 import incrementCauseImpactMetricCount from '../incrementCauseImpactMetricCount'
 
 const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
@@ -23,6 +26,7 @@ const groupImpactOverride = getPermissionsOverride(GROUP_IMPACT_OVERRIDE)
 const mockTestNanoId = 'a23456789'
 const mockImpactId = 'abcd'
 const mockUSDsPerTab = 0.001
+const mockUSDsPerSearch = 0.002
 
 jest.mock('nanoid', () => {
   return { nanoid: () => mockTestNanoId }
@@ -43,6 +47,7 @@ beforeAll(() => {
     active: true,
   })
   getEstimatedMoneyRaisedPerTab.mockReturnValue(mockUSDsPerTab)
+  getEstimatedMoneyRaisedPerSearch.mockReturnValue(mockUSDsPerSearch)
 })
 
 afterAll(() => {
@@ -60,8 +65,8 @@ afterEach(async () => {
 })
 
 describe('updateGroupImpactMetric tests', () => {
-  it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist', async () => {
-    await updateGroupImpactMetric(userContext, causeId)
+  it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist (tab)', async () => {
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
     const joinEntity = await CauseGroupImpactMetricModel.get(
       userContext,
       causeId
@@ -83,6 +88,39 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 1000,
       dollarGoal: 25000000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1000,
+      dateStarted: moment.utc().toISOString(),
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+  })
+
+  it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist (search)', async () => {
+    await updateGroupImpactMetric(userContext, causeId, 'search')
+    const joinEntity = await CauseGroupImpactMetricModel.get(
+      userContext,
+      causeId
+    )
+    expect(joinEntity).toEqual({
+      causeId,
+      groupImpactMetricId: mockTestNanoId,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    const groupImpactMetricModel = await GroupImpactMetricModel.get(
+      userContext,
+      mockTestNanoId
+    )
+    expect(groupImpactMetricModel).toEqual({
+      id: mockTestNanoId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 2000,
+      dollarGoal: 25000000,
+      dollarProgressFromSearch: 2000,
+      dollarProgressFromTab: 0,
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
@@ -95,7 +133,7 @@ describe('updateGroupImpactMetric tests', () => {
       causeId,
       groupImpactMetricId,
     })
-    await updateGroupImpactMetric(userContext, causeId)
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
     const joinEntity = await CauseGroupImpactMetricModel.get(
       userContext,
       causeId
@@ -117,6 +155,8 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 1000,
       dollarGoal: 25000000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1000,
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
@@ -135,11 +175,13 @@ describe('updateGroupImpactMetric tests', () => {
       causeId,
       impactMetricId: mockImpactId,
       dollarProgress: 10,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 0,
       dollarGoal: 25000000,
       dateStarted: moment.utc().toISOString(),
     })
 
-    await updateGroupImpactMetric(userContext, causeId)
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
     const joinEntity = await CauseGroupImpactMetricModel.get(
       userContext,
       causeId
@@ -161,6 +203,8 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 1010,
       dollarGoal: 25000000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1000,
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
@@ -180,10 +224,12 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 95,
       dollarGoal: 1000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1000,
       dateStarted: moment.utc().toISOString(),
     })
 
-    await updateGroupImpactMetric(userContext, causeId)
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
     const joinEntity = await CauseGroupImpactMetricModel.get(
       userContext,
       causeId
@@ -205,6 +251,8 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 1095,
       dollarGoal: 1000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 2000,
       dateStarted: moment.utc().toISOString(),
       dateCompleted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
@@ -232,6 +280,8 @@ describe('updateGroupImpactMetric tests', () => {
       impactMetricId: mockImpactId,
       dollarProgress: 0,
       dollarGoal: 25000000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 0,
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),

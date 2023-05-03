@@ -356,6 +356,7 @@ functions:
     environment:
       IS_GLOBAL_CAMPAIGN_LIVE: false
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
+      EST_MONEY_RAISED_PER_SEARCH: ${env:EST_MONEY_RAISED_PER_SEARCH}
       # @service/redis - Set the Redis endpoint if we re-launch the Redis service.
       REDIS_SERVICE_ENDPOINT: ""
       # REDIS_SERVICE_ENDPOINT:

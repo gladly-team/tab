@@ -7,6 +7,9 @@ import getUserSearchEngine from './getUserSearchEngine'
 import getSearchEngine from '../search/getSearchEngine'
 import getCause from '../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
+import getCauseByUser from '../cause/getCauseByUser'
+import { CAUSE_IMPACT_TYPES } from '../constants'
+import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
 
 const getSource = (searchData) => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab', 'edge', 'safari']
@@ -41,6 +44,18 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
     user = await UserModel.get(userContext, userId)
   } catch (e) {
     throw e
+  }
+
+  if (user.v4BetaEnabled) {
+    const cause = await getCauseByUser(userContext, userId)
+
+    if (
+      cause &&
+      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
+        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
+    ) {
+      await updateGroupImpactMetric(userContext, cause.id, 'search')
+    }
   }
 
   // Update the user's counter for max searches in a day.

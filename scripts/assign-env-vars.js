@@ -50,6 +50,7 @@ export const envVars = [
   { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
   { name: 'EST_MONEY_RAISED_PER_TAB' },
+  { name: 'EST_MONEY_RAISED_PER_SEARCH' },
   { name: 'LAMBDA_TAB_V4_HOST' },
   { name: 'GROWTHBOOK_ENV' },
   { name: 'GQL_SEARCH_ENDPOINT' },
