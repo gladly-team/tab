@@ -71,6 +71,8 @@ class GroupImpactMetric extends RedisModel {
 
   static get fieldDefaults() {
     return {
+      dollarProgressFromTab: 0,
+      dollarProgressFromSearch: 0,
       dateStarted: moment.utc().toISOString(),
     }
   }
