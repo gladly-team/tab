@@ -108,8 +108,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
 
   // Now update GroupImpactMetric
   let newDollarProgress = 0.0
-  let { dollarProgressFromTab } = groupImpactMetric
-  let { dollarProgressFromSearch } = groupImpactMetric
+  let { dollarProgressFromTab, dollarProgressFromSearch } = groupImpactMetric
 
   if (revenueType === 'tab') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
@@ -130,7 +129,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
-    await updateGroupImpactMetricModel(
+    const gt = await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
       dollarProgressFromTab,
@@ -150,7 +149,9 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
       groupImpactMetric.impactMetricId
     )
     // Update join table
-    return updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
+    await updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
+
+    return gt
   }
   // Update GroupImpactMetric
   return updateGroupImpactMetricModel(

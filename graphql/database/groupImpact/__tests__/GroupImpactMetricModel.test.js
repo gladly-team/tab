@@ -31,6 +31,8 @@ describe('GroupImpactMetricModel', () => {
         impactMetricId: '12345',
         dollarProgress: 1000,
         dollarGoal: 10000,
+        dollarProgressFromSearch: 100,
+        dollarProgressFromTab: 200,
       })
     )
     expect(item).toEqual({
@@ -39,6 +41,8 @@ describe('GroupImpactMetricModel', () => {
       impactMetricId: '12345',
       dollarProgress: 1000,
       dollarGoal: 10000,
+      dollarProgressFromSearch: 100,
+      dollarProgressFromTab: 200,
       dateStarted: moment.utc().toISOString(),
     })
   })
