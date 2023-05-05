@@ -15,6 +15,12 @@ export default createFragmentContainer(Dashboard, {
   user: graphql`
     fragment DashboardContainer_user on User {
       id
+      userId
+      cause {
+        id
+        name
+        nameForShop
+      }
       experimentActions {
         referralNotification
         searchIntro

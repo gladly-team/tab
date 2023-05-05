@@ -41,7 +41,7 @@ const createGroupImpactMetricModel = async (
   groupImpactMetricId,
   impactMetric
 ) => {
-  return GroupImpactMetricModel.create(groupImpactOverride, {
+  const rt = {
     id: groupImpactMetricId,
     causeId,
     impactMetricId: impactMetric.id,
@@ -50,7 +50,14 @@ const createGroupImpactMetricModel = async (
     dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
-  })
+  }
+
+  console.log('####', rt)
+  const r = GroupImpactMetricModel.create(groupImpactOverride, rt)
+
+  console.log('@@@', rt)
+
+  return r
 }
 
 const updateGroupImpactMetricModel = async (
@@ -108,8 +115,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
 
   // Now update GroupImpactMetric
   let newDollarProgress = 0.0
-  let { dollarProgressFromTab } = groupImpactMetric
-  let { dollarProgressFromSearch } = groupImpactMetric
+  let { dollarProgressFromTab, dollarProgressFromSearch } = groupImpactMetric
 
   if (revenueType === 'tab') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
@@ -130,7 +136,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
-    await updateGroupImpactMetricModel(
+    const gi = await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
       dollarProgressFromTab,
@@ -144,13 +150,17 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
       newGroupImpactMetricId,
       getNextImpactMetricForCause(causeId)
     )
+
     // Update Count entity
     await incrementCauseImpactMetricCount(
       causeId,
       groupImpactMetric.impactMetricId
     )
+
     // Update join table
-    return updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
+    await updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
+
+    return gi
   }
   // Update GroupImpactMetric
   return updateGroupImpactMetricModel(
