@@ -107,32 +107,29 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   }
 
   // Now update GroupImpactMetric
-  let newDollarProgress = 0.0
-  let { dollarProgressFromTab } = groupImpactMetric
-  let { dollarProgressFromSearch } = groupImpactMetric
+  let { dollarProgress, dollarProgressFromSearch, dollarProgressFromTab } =
+    groupImpactMetric
+  dollarProgressFromSearch = dollarProgressFromSearch || 0
+  dollarProgressFromTab = dollarProgressFromTab || 0
 
   if (revenueType === 'tab') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
-    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
-    dollarProgressFromTab = Math.round(
-      groupImpactMetric.dollarProgressFromTab + addTo
-    )
+    dollarProgress = Math.round(dollarProgress + addTo)
+    dollarProgressFromTab = Math.round(dollarProgressFromTab + addTo)
   }
 
   if (revenueType === 'search') {
     const addTo = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
-    newDollarProgress = Math.round(groupImpactMetric.dollarProgress + addTo)
-    dollarProgressFromSearch = Math.round(
-      groupImpactMetric.dollarProgressFromSearch + addTo
-    )
+    dollarProgress = Math.round(dollarProgress + addTo)
+    dollarProgressFromSearch = Math.round(dollarProgressFromSearch + addTo)
   }
 
-  if (newDollarProgress > groupImpactMetric.dollarGoal) {
+  if (dollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
     await updateGroupImpactMetricModel(
       groupImpactMetricId,
-      newDollarProgress,
+      dollarProgress,
       dollarProgressFromTab,
       dollarProgressFromSearch,
       moment.utc().toISOString()
@@ -155,7 +152,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   // Update GroupImpactMetric
   return updateGroupImpactMetricModel(
     groupImpactMetricId,
-    newDollarProgress,
+    dollarProgress,
     dollarProgressFromTab,
     dollarProgressFromSearch
   )
