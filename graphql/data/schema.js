@@ -1099,6 +1099,16 @@ const groupImpactMetricType = new GraphQLObjectType({
       description:
         'ISO datetime string of when this GroupImpactMetric was ended',
     },
+    dollarProgressFromTab: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far from tabs',
+    },
+    dollarProgressFromSearch: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far from search',
+    },
   }),
   interfaces: [nodeInterface],
 })

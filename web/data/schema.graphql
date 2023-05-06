@@ -477,6 +477,16 @@ type GroupImpactMetric implements Node {
 
   """ISO datetime string of when this GroupImpactMetric was ended"""
   dateCompleted: String
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far from tabs
+  """
+  dollarProgressFromTab: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far from search
+  """
+  dollarProgressFromSearch: Int!
 }
 
 """Fields on which to filter the list of causes."""
