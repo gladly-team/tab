@@ -5,7 +5,10 @@ import {
   GROUP_IMPACT_OVERRIDE,
   getPermissionsOverride,
 } from '../../utils/permissions-overrides'
-import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
+import {
+  getEstimatedMoneyRaisedPerTab,
+  getEstimatedMoneyRaisedPerSearch,
+} from '../globals/globals'
 import UserModel from '../users/UserModel'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 
@@ -16,7 +19,8 @@ const replaceUserGroupImpactMetricModel = async (
   userId,
   groupImpactMetricId,
   oldUserGroupImpactMetricId = null,
-  dollarContribution = 0
+  tabDollarContribution = 0,
+  searchDollarContribution = 0
 ) => {
   const userGroupImpactMetric = await UserGroupImpactMetric.create(
     groupImpactOverride,
@@ -24,7 +28,9 @@ const replaceUserGroupImpactMetricModel = async (
       id: uuid(),
       userId,
       groupImpactMetricId,
-      dollarContribution,
+      dollarContribution: tabDollarContribution + searchDollarContribution,
+      tabDollarContribution,
+      searchDollarContribution,
     }
   )
   if (oldUserGroupImpactMetricId !== null) {
@@ -38,18 +44,29 @@ const replaceUserGroupImpactMetricModel = async (
   return userGroupImpactMetric
 }
 
-const updateUserGroupImpactMetricModel = async (id, dollarContribution) => {
+const updateUserGroupImpactMetricModel = async (
+  id,
+  dollarContribution,
+  tabDollarContribution,
+  searchDollarContribution
+) => {
   return UserGroupImpactMetric.update(groupImpactOverride, {
     id,
     dollarContribution,
+    tabDollarContribution,
+    searchDollarContribution,
   })
 }
 
 const updateUserGroupImpactMetric = async (
   userContext,
   user,
-  groupImpactMetric
+  groupImpactMetric,
+  source
 ) => {
+  if (!source) {
+    throw new Error('Update Source Required')
+  }
   // Fetch current UserGroupImpactMetric entry, create if does not exist
   let userGroupImpactMetric
   if (!('userGroupImpactMetricId' in user)) {
@@ -79,26 +96,71 @@ const updateUserGroupImpactMetric = async (
   }
 
   const microUSDsForTab = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
+  const microUSDsForSearch = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
   if (groupImpactMetric.id !== userGroupImpactMetric.groupImpactMetricId) {
     // Create new UserGroupImpactMetric model and update leaderboard
-    const amount = Math.round(microUSDsForTab)
-    const userGroupImpactMetricModel = replaceUserGroupImpactMetricModel(
-      userContext,
-      user.id,
+    let userGroupImpactMetricModel
+    if (source === 'tab') {
+      const amount = Math.round(microUSDsForTab)
+      userGroupImpactMetricModel = await replaceUserGroupImpactMetricModel(
+        userContext,
+        user.id,
+        groupImpactMetric.id,
+        userGroupImpactMetric.id,
+        amount
+      )
+    } else if (source === 'search') {
+      const amount = Math.round(microUSDsForSearch)
+      userGroupImpactMetricModel = await replaceUserGroupImpactMetricModel(
+        userContext,
+        user.id,
+        groupImpactMetric.id,
+        userGroupImpactMetric.id,
+        0,
+        amount
+      )
+    }
+    GroupImpactLeaderboard.add(
       groupImpactMetric.id,
-      userGroupImpactMetric.id,
-      amount
+      user.id,
+      userGroupImpactMetricModel.dollarContribution
     )
-    GroupImpactLeaderboard.add(groupImpactMetric.id, user.id, amount)
     return userGroupImpactMetricModel
   }
-  const newDollarProgress = Math.round(
-    userGroupImpactMetric.dollarContribution + microUSDsForTab
-  )
+  let newDollarProgress
+  let newTabDollarProgress
+  let newSearchDollarProgress
+  if (source === 'tab') {
+    newTabDollarProgress = Math.round(
+      userGroupImpactMetric.tabDollarContribution
+        ? userGroupImpactMetric.tabDollarContribution + microUSDsForTab
+        : microUSDsForTab
+    )
+    newSearchDollarProgress = userGroupImpactMetric.searchDollarContribution
+      ? userGroupImpactMetric.searchDollarContribution
+      : 0
+    newDollarProgress = Math.round(
+      userGroupImpactMetric.dollarContribution + microUSDsForTab
+    )
+  } else if (source === 'search') {
+    newTabDollarProgress = userGroupImpactMetric.tabDollarContribution
+      ? userGroupImpactMetric.tabDollarContribution
+      : 0
+    newSearchDollarProgress = Math.round(
+      userGroupImpactMetric.searchDollarContribution
+        ? userGroupImpactMetric.searchDollarContribution + microUSDsForSearch
+        : microUSDsForSearch
+    )
+    newDollarProgress = Math.round(
+      userGroupImpactMetric.dollarContribution + microUSDsForSearch
+    )
+  }
   GroupImpactLeaderboard.add(groupImpactMetric.id, user.id, newDollarProgress)
   return updateUserGroupImpactMetricModel(
     userGroupImpactMetric.id,
-    newDollarProgress
+    newDollarProgress,
+    newTabDollarProgress,
+    newSearchDollarProgress
   )
 }
 

@@ -1294,7 +1294,8 @@ describe('campaign: estimating money raised', () => {
       expect(updateUserGroupImpactMetric).toHaveBeenCalledWith(
         userContext,
         mockUser,
-        groupImpactMetric
+        groupImpactMetric,
+        'tab'
       )
     })
   })

@@ -10,6 +10,7 @@ import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import getCauseByUser from '../cause/getCauseByUser'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
+import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
 
 const getSource = (searchData) => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab', 'edge', 'safari']
@@ -54,7 +55,17 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
       (cause.impactType === CAUSE_IMPACT_TYPES.group ||
         cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
     ) {
-      await updateGroupImpactMetric(userContext, cause.id, 'search')
+      const groupImpactMetric = await updateGroupImpactMetric(
+        userContext,
+        cause.id,
+        'search'
+      )
+      await updateUserGroupImpactMetric(
+        userContext,
+        user,
+        groupImpactMetric,
+        'search'
+      )
     }
   }
 
