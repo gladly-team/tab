@@ -159,6 +159,7 @@ import {
 
 import getCauseForWildfire from '../database/cause/getCauseForWildfire'
 import getCharitiesForCause from '../database/charities/getCharityForCause'
+import GroupImpactLeaderboard from '../database/groupImpact/GroupImpactLeaderboard'
 
 // Types
 import wildfireType from './types/wildfire'
@@ -842,6 +843,34 @@ const userType = new GraphQLObjectType({
         UserGroupImpactMetricModel.getOrNull(
           context,
           user.userGroupImpactMetricId
+        ),
+    },
+    leaderboard: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'leaderboardEntry',
+          description: 'content for each leaderboard',
+          fields: () => ({
+            position: {
+              type: new GraphQLNonNull(GraphQLInt),
+            },
+            userGroupImpactMetric: {
+              type: userGroupImpactMetricType,
+              description: 'UserGroupImpactMetric entity',
+            },
+            user: {
+              type: userType,
+              description: 'User associated with this leaderboard entry',
+            },
+          }),
+        })
+      ),
+      description: 'Current UserGroupImpactMetrics leaderboard',
+      resolve: (user) =>
+        user.userGroupImpactMetricId &&
+        GroupImpactLeaderboard.getLeaderboardForUser(
+          user.userGroupImpactMetricId,
+          user.id
         ),
     },
   }),

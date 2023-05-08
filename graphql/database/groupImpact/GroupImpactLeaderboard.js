@@ -32,9 +32,15 @@ class GroupImpactLeaderboard {
     return redisClient.zadd(redisKey, { member: userId, score: contribution })
   }
 
-  static async getLeaderboardForUser(groupImpactId, userId) {
+  static async getLeaderboardForUser(userGroupImpactMetricId, userId) {
+    const userGroupImpactMetricModel = await UserGroupImpactMetricModel.get(
+      groupImpactOverride,
+      userGroupImpactMetricId
+    )
     const redisClient = this.getClient()
-    const redisKey = this.getRedisKey(groupImpactId)
+    const redisKey = this.getRedisKey(
+      userGroupImpactMetricModel.groupImpactMetricId
+    )
 
     // Get Top 3 users
     const topUsers = await redisClient.zrange(redisKey, 0, 2)
@@ -66,18 +72,21 @@ class GroupImpactLeaderboard {
         ]
     }
 
-    const userGroupImpactModels = await this.fetchGroupImpactMetricModels([
+    const userModels = await UserModel.getBatch(groupImpactOverride, [
       ...topUsers,
       ...nextUsers,
     ])
+    const userGroupImpactModels = await this.fetchGroupImpactMetricModels(
+      userModels
+    )
     return userPositions.map((element, index) => ({
+      user: userModels[index],
       position: element,
       userGroupImpactMetric: userGroupImpactModels[index],
     }))
   }
 
-  static async fetchGroupImpactMetricModels(users) {
-    const userModels = await UserModel.getBatch(groupImpactOverride, users)
+  static async fetchGroupImpactMetricModels(userModels) {
     const userGroupImpactMetricIds = userModels.map(
       (user) => user.userGroupImpactMetricId
     )

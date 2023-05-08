@@ -7,6 +7,11 @@ let client
 
 beforeAll(() => {
   client = RedisModel.getClient()
+  const UserGroupImpactMetricModel =
+    require('../../groupImpact/UserGroupImpactMetricModel').default
+  jest
+    .spyOn(UserGroupImpactMetricModel, 'get')
+    .mockResolvedValue({ groupImpactMetricId: 'key' })
 })
 
 afterEach(async () => {
@@ -82,12 +87,36 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity6')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 5, userGroupImpactMetric: batchOfModels[3] },
-      { position: 6, userGroupImpactMetric: batchOfModels[4] },
-      { position: 7, userGroupImpactMetric: batchOfModels[5] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 5,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity5', userGroupImpactMetricId: 'entity5u' },
+      },
+      {
+        position: 6,
+        userGroupImpactMetric: batchOfModels[4],
+        user: { id: 'entity6', userGroupImpactMetricId: 'entity6u' },
+      },
+      {
+        position: 7,
+        userGroupImpactMetric: batchOfModels[5],
+        user: { id: 'entity7', userGroupImpactMetricId: 'entity7u' },
+      },
     ])
   })
 
@@ -147,12 +176,36 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity1')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 4, userGroupImpactMetric: batchOfModels[3] },
-      { position: 5, userGroupImpactMetric: batchOfModels[4] },
-      { position: 6, userGroupImpactMetric: batchOfModels[5] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 4,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity5', userGroupImpactMetricId: 'entity5u' },
+      },
+      {
+        position: 5,
+        userGroupImpactMetric: batchOfModels[4],
+        user: { id: 'entity6', userGroupImpactMetricId: 'entity6u' },
+      },
+      {
+        position: 6,
+        userGroupImpactMetric: batchOfModels[5],
+        user: { id: 'entity7', userGroupImpactMetricId: 'entity7u' },
+      },
     ])
   })
 
@@ -208,11 +261,31 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity7')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 6, userGroupImpactMetric: batchOfModels[3] },
-      { position: 7, userGroupImpactMetric: batchOfModels[4] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 6,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity6', userGroupImpactMetricId: 'entity6u' },
+      },
+      {
+        position: 7,
+        userGroupImpactMetric: batchOfModels[4],
+        user: { id: 'entity7', userGroupImpactMetricId: 'entity7u' },
+      },
     ])
   })
 
@@ -272,12 +345,36 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity4')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 4, userGroupImpactMetric: batchOfModels[3] },
-      { position: 5, userGroupImpactMetric: batchOfModels[4] },
-      { position: 6, userGroupImpactMetric: batchOfModels[5] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 4,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity4', userGroupImpactMetricId: 'entity4u' },
+      },
+      {
+        position: 5,
+        userGroupImpactMetric: batchOfModels[4],
+        user: { id: 'entity5', userGroupImpactMetricId: 'entity5u' },
+      },
+      {
+        position: 6,
+        userGroupImpactMetric: batchOfModels[5],
+        user: { id: 'entity6', userGroupImpactMetricId: 'entity6u' },
+      },
     ])
   })
 
@@ -331,11 +428,31 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity4')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 4, userGroupImpactMetric: batchOfModels[3] },
-      { position: 5, userGroupImpactMetric: batchOfModels[4] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 4,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity4', userGroupImpactMetricId: 'entity4u' },
+      },
+      {
+        position: 5,
+        userGroupImpactMetric: batchOfModels[4],
+        user: { id: 'entity5', userGroupImpactMetricId: 'entity5u' },
+      },
     ])
   })
 
@@ -374,10 +491,26 @@ describe('GroupImpactLeaderboard entity', () => {
     expect(
       await GroupImpactLeaderboard.getLeaderboardForUser('key', 'entity4')
     ).toEqual([
-      { position: 1, userGroupImpactMetric: batchOfModels[0] },
-      { position: 2, userGroupImpactMetric: batchOfModels[1] },
-      { position: 3, userGroupImpactMetric: batchOfModels[2] },
-      { position: 4, userGroupImpactMetric: batchOfModels[3] },
+      {
+        position: 1,
+        userGroupImpactMetric: batchOfModels[0],
+        user: { id: 'entity1', userGroupImpactMetricId: 'entity1u' },
+      },
+      {
+        position: 2,
+        userGroupImpactMetric: batchOfModels[1],
+        user: { id: 'entity2', userGroupImpactMetricId: 'entity2u' },
+      },
+      {
+        position: 3,
+        userGroupImpactMetric: batchOfModels[2],
+        user: { id: 'entity3', userGroupImpactMetricId: 'entity3u' },
+      },
+      {
+        position: 4,
+        userGroupImpactMetric: batchOfModels[3],
+        user: { id: 'entity4', userGroupImpactMetricId: 'entity4u' },
+      },
     ])
   })
 })

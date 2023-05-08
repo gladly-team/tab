@@ -970,6 +970,9 @@ type User implements Node {
 
   """Current UserGroupImpactMetric"""
   userGroupImpactMetric: UserGroupImpactMetric
+
+  """Current UserGroupImpactMetrics leaderboard"""
+  leaderboard: [leaderboardEntry]
 }
 
 """a user's charity specific impact"""
@@ -1282,6 +1285,17 @@ type UserGroupImpactMetric implements Node {
   The micro USD amount raised for this instance of GroupImpactMetric so far by this user
   """
   dollarContribution: Int!
+}
+
+"""content for each leaderboard"""
+type leaderboardEntry {
+  position: Int!
+
+  """UserGroupImpactMetric entity"""
+  userGroupImpactMetric: UserGroupImpactMetric
+
+  """User associated with this leaderboard entry"""
+  user: User
 }
 
 """The Wildfire object"""
