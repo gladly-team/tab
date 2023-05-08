@@ -13,10 +13,16 @@ import {
   getMockUserContext,
   getMockUserInstance,
   getMockAnonUserContext,
+  getMockCauseInstance,
+  getMockGroupImpactInstance,
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
 import getUserSearchEngine from '../getUserSearchEngine'
+import updateGroupImpactMetric from '../../groupImpact/updateGroupImpactMetric'
+import updateUserGroupImpactMetric from '../../groupImpact/updateUserGroupImpactMetric'
+import getCauseByUser from '../../cause/getCauseByUser'
+import { CAUSE_IMPACT_TYPES } from '../../constants'
 
 const mockTestNanoId = '12345'
 
@@ -27,6 +33,9 @@ jest.mock('../checkSearchRateLimit')
 jest.mock('nanoid', () => {
   return { nanoid: () => mockTestNanoId }
 })
+jest.mock('../../groupImpact/updateGroupImpactMetric')
+jest.mock('../../groupImpact/updateUserGroupImpactMetric')
+jest.mock('../../cause/getCauseByUser')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -140,6 +149,74 @@ describe('logSearch', () => {
         version: 1,
       })
     )
+  })
+
+  test('it updates group impact if applicable', async () => {
+    expect.assertions(2)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      v4BetaEnabled: true,
+      causeId: 'testCauseId',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: false,
+        reason: 'NONE',
+      })
+    )
+    const cause = getMockCauseInstance()
+    getCauseByUser.mockResolvedValue({
+      ...cause,
+      impactType: CAUSE_IMPACT_TYPES.group,
+    })
+    const groupImpact = getMockGroupImpactInstance()
+    updateGroupImpactMetric.mockResolvedValue(groupImpact)
+
+    await logSearch(userContext, userId)
+
+    expect(updateGroupImpactMetric).toHaveBeenCalledWith(
+      userContext,
+      cause.id,
+      'search'
+    )
+    expect(updateUserGroupImpactMetric).toHaveBeenCalledWith(
+      userContext,
+      mockUser,
+      groupImpact,
+      'search'
+    )
+  })
+
+  test('it does not group impact if applicable', async () => {
+    expect.assertions(2)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      v4BetaEnabled: true,
+      causeId: 'testCauseId',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: false,
+        reason: 'NONE',
+      })
+    )
+    const cause = getMockCauseInstance()
+    getCauseByUser.mockResolvedValue(cause)
+
+    await logSearch(userContext, userId)
+
+    expect(updateGroupImpactMetric).not.toHaveBeenCalled()
+    expect(updateUserGroupImpactMetric).not.toHaveBeenCalled()
   })
 
   test('it logs the search with cause ID', async () => {
