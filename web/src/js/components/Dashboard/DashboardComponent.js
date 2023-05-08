@@ -506,9 +506,12 @@ class Dashboard extends React.Component {
             <Typography variant={'h4'} gutterBottom>
               Mother's Day Is Almost Here!
             </Typography>
-            <Typography variant={'body'} gutterBottom>
+            <Typography variant={'body1'} gutterBottom>
               8 great gift suggestions that will also raise money for{' '}
-              {user.cause.nameForShop || 'Charity'}.
+              {user.cause && user.cause.nameForShop
+                ? user.cause.nameForShop
+                : 'Charity'}
+              .
             </Typography>
 
             <Button
