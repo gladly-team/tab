@@ -41,7 +41,7 @@ const createGroupImpactMetricModel = async (
   groupImpactMetricId,
   impactMetric
 ) => {
-  return GroupImpactMetricModel.create(groupImpactOverride, {
+  const rt = {
     id: groupImpactMetricId,
     causeId,
     impactMetricId: impactMetric.id,
@@ -50,7 +50,10 @@ const createGroupImpactMetricModel = async (
     dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
-  })
+  }
+
+  const r = GroupImpactMetricModel.create(groupImpactOverride, rt)
+  return r
 }
 
 const updateGroupImpactMetricModel = async (
@@ -129,7 +132,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
   if (newDollarProgress > groupImpactMetric.dollarGoal) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
-    const gt = await updateGroupImpactMetricModel(
+    const gi = await updateGroupImpactMetricModel(
       groupImpactMetricId,
       newDollarProgress,
       dollarProgressFromTab,
@@ -143,15 +146,17 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
       newGroupImpactMetricId,
       getNextImpactMetricForCause(causeId)
     )
+
     // Update Count entity
     await incrementCauseImpactMetricCount(
       causeId,
       groupImpactMetric.impactMetricId
     )
+
     // Update join table
     await updateCauseGroupImpactMetricModel(causeId, newGroupImpactMetricId)
 
-    return gt
+    return gi
   }
   // Update GroupImpactMetric
   return updateGroupImpactMetricModel(

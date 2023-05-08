@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
+import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -36,6 +37,7 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
+  WIDGET_MOTHERS_DAY_2023_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -182,6 +184,7 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
+      showIFrameWidget: false,
     }
   }
 
@@ -195,6 +198,14 @@ class Dashboard extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setNotificationsToShow(nextProps)
+  }
+
+  oniFrameWidgetOpen = () => {
+    this.setState({ showIFrameWidget: true })
+  }
+
+  onCloseiFrameWidget = () => {
+    this.setState({ showIFrameWidget: false })
   }
 
   setNotificationsToShow(props) {
@@ -478,6 +489,39 @@ class Dashboard extends React.Component {
           user={user}
           showError={this.showError.bind(this)}
         />
+
+        {/* Mother's day widget promo */}
+        {user ? (
+          <Paper
+            align="center"
+            style={{
+              width: 650,
+              position: 'relative',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: 50,
+              padding: 20,
+            }}
+          >
+            <Typography variant={'h4'} gutterBottom>
+              Mother's Day Is Almost Here!
+            </Typography>
+            <Typography variant={'body'} gutterBottom>
+              8 great gift suggestions that will also raise money for{' '}
+              {user.cause.nameForShop || 'Charity'}.
+            </Typography>
+
+            <Button
+              onClick={this.oniFrameWidgetOpen}
+              variant="contained"
+              color="primary"
+              style={{ marginTop: 10, marginBottom: 10 }}
+            >
+              Click to Shop and Raise
+            </Button>
+          </Paper>
+        ) : null}
+
         {user && app ? (
           <FadeInDashboardAnimation>
             <div
@@ -944,6 +988,23 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
+        {user && this.state.showIFrameWidget ? (
+          <FadeInDashboardAnimation>
+            <WidgetIFrame
+              widgetName={'mothers-day-2023'}
+              onClose={() => {
+                this.onCloseiFrameWidget()
+              }}
+              url={
+                WIDGET_MOTHERS_DAY_2023_URL +
+                '&cause_name=' +
+                (user.cause.nameForShop || 'Charity') +
+                '&user_id=' +
+                user.userId
+              }
+            />
+          </FadeInDashboardAnimation>
+        ) : null}
       </div>
     )
   }
