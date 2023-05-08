@@ -1180,7 +1180,7 @@ describe('campaign: estimating money raised', () => {
     jest.spyOn(UserModel, 'update').mockImplementationOnce(() => mockUser)
     getCampaign.mockReturnValue(mockCampaign)
 
-    await (userContext, userId)
+    await logTab(userContext, userId)
     expect(mockCampaign.addMoneyRaised).not.toHaveBeenCalled()
   })
 

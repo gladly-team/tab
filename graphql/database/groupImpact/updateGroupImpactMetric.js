@@ -52,11 +52,7 @@ const createGroupImpactMetricModel = async (
     dateStarted: moment.utc().toISOString(),
   }
 
-  console.log('####', rt)
   const r = GroupImpactMetricModel.create(groupImpactOverride, rt)
-
-  console.log('@@@', rt)
-
   return r
 }
 

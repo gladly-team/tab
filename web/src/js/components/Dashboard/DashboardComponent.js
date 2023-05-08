@@ -507,8 +507,8 @@ class Dashboard extends React.Component {
               Mother's Day Is Almost Here!
             </Typography>
             <Typography variant={'body'} gutterBottom>
-              Want to find a special mother a perfect gift and raise money for{' '}
-              {user.cause.nameForShop}?
+              8 great gift suggestions that will also raise money for{' '}
+              {user.cause.nameForShop || 'Charity'}.
             </Typography>
 
             <Button
@@ -517,7 +517,7 @@ class Dashboard extends React.Component {
               color="primary"
               style={{ marginTop: 10, marginBottom: 10 }}
             >
-              Click Here to Learn More
+              Click to Shop and Raise
             </Button>
           </Paper>
         ) : null}
@@ -998,7 +998,7 @@ class Dashboard extends React.Component {
               url={
                 WIDGET_MOTHERS_DAY_2023_URL +
                 '&cause_name=' +
-                user.cause.nameForShop +
+                (user.cause.nameForShop || 'Charity') +
                 '&user_id=' +
                 user.userId
               }

@@ -164,4 +164,4 @@ export const YAHOO_USER_ID = 'VXNlcjpFaDFTMGd0RXZZU1daalo4QjBrazRqazZ6Qm0y'
 
 // iFrameBased Widget URLs
 export const WIDGET_MOTHERS_DAY_2023_URL =
-  'http://localhost:8002/promos/mothers-day-2023?nolayout=true'
+  'https://tab.gladly.io/promos/mothers-day-2023/?nolayout=true'
