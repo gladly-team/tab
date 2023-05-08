@@ -1,5 +1,15 @@
 /* eslint-env jest */
 let store = {}
+const sortMap = (map) => {
+  return Object.entries(map).sort((a, b) => {
+    const x = a[1]
+    const y = b[1]
+    if (x < y) return 1
+    if (x > 1) return -1
+    return 0
+  })
+}
+
 const methods = {
   clear: () => {
     store = {}
@@ -8,14 +18,12 @@ const methods = {
     return store[key]
   },
   hgetall: (key) => {
-    // console.log(store)
     if (!(key in store)) {
       return null
     }
     return store[key]
   },
   hget: (key, field) => {
-    // console.log(store)
     if (!(key in store)) {
       return null
     }
@@ -35,7 +43,6 @@ const methods = {
     store[key][field] += increment
   },
   del: (key) => {
-    // console.log(store)
     if (key in store) {
       delete store[key]
       return 1
@@ -49,6 +56,15 @@ const methods = {
     store[key][value.member] = value.score
 
     return 1
+  },
+  zrank: (key, value) => {
+    const sortedEntries = sortMap(store[key])
+    return sortedEntries.findIndex((element) => element[0] === value)
+  },
+  zrange: (key, from, to) => {
+    const sortedEntries = sortMap(store[key])
+    const slice = sortedEntries.slice(from, to + 1)
+    return slice.map((entry) => entry[0])
   },
 }
 
