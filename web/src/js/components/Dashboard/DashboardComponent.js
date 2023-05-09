@@ -502,7 +502,7 @@ class Dashboard extends React.Component {
         />
 
         {/* Mother's day widget promo */}
-        {user && !this.state.dissmissedMothers ? (
+        {user && !this.state.dissmissedMothers && false ? (
           <Paper
             align="center"
             style={{
