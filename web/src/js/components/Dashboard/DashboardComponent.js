@@ -77,6 +77,9 @@ import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensi
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
@@ -150,6 +153,8 @@ const styles = theme => ({
   },
 })
 
+const MOM_DISMISS = 'tab.user.dismissedNotif.mothers-day-2023'
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -185,6 +190,7 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: false,
+      dissmissedMothers: localStorageMgr.getItem(MOM_DISMISS) === 'true',
     }
   }
 
@@ -270,6 +276,11 @@ class Dashboard extends React.Component {
     this.setState({
       errorOpen: false,
     })
+  }
+
+  onDismissMothers() {
+    localStorageMgr.setItem(MOM_DISMISS, true)
+    this.setState({ dissmissedMothers: true })
   }
 
   render() {
@@ -491,7 +502,7 @@ class Dashboard extends React.Component {
         />
 
         {/* Mother's day widget promo */}
-        {user ? (
+        {user && !this.state.dissmissedMothers ? (
           <Paper
             align="center"
             style={{
@@ -503,6 +514,13 @@ class Dashboard extends React.Component {
               padding: 20,
             }}
           >
+            <IconButton
+              onClick={this.onDismissMothers.bind(this)}
+              style={{ position: 'absolute', right: 5, top: 0 }}
+            >
+              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
+            </IconButton>
+
             <Typography variant={'h4'} gutterBottom>
               Mother's Day Is Almost Here!
             </Typography>
