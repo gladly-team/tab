@@ -329,6 +329,11 @@ type Cause implements Node {
   """the group impact metric currently associated with this cause"""
   groupImpactMetric: GroupImpactMetric
 
+  """
+  how many times this particular group impact metric has been completed for this cause
+  """
+  groupImpactMetricCount: Int
+
   """Charity that this cause is currently generating impact for"""
   charity: Charity
 
