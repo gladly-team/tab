@@ -1019,7 +1019,9 @@ class Dashboard extends React.Component {
               url={
                 WIDGET_MOTHERS_DAY_2023_URL +
                 '&cause_name=' +
-                (user.cause.nameForShop || 'Charity') +
+                (user.cause && user.cause.nameForShop
+                  ? user.cause.nameForShop
+                  : 'Charity') +
                 '&user_id=' +
                 user.userId
               }
