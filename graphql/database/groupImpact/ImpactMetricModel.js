@@ -63,6 +63,12 @@ class ImpactMetric extends Model {
         .description(
           `Whether or not this ImpactMetric is eligible to be selected for a Group`
         ),
+      impactCountPerMetric: types
+        .number()
+        .required()
+        .description(
+          `How many instances of the impact are provided per completion of a GroupImpactMetric run. Example: 1 for 'provide 1 visit from a community health worker'`
+        ),
     }
   }
 
