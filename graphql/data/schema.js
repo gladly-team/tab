@@ -1058,6 +1058,11 @@ const impactMetricType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLBoolean),
       description: 'Whether or not this GroupImpactMetric is still active',
     },
+    impactCountPerMetric: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'How many instances of the impact are provided per completion of a GroupImpactMetric run.',
+    },
   }),
   interfaces: [nodeInterface],
 })
