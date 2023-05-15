@@ -77,8 +77,8 @@ import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensi
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+// import IconButton from '@material-ui/core/IconButton'
+// import CloseIcon from '@material-ui/icons/Close'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -502,7 +502,7 @@ class Dashboard extends React.Component {
         />
 
         {/* Mother's day widget promo */}
-        {user && !this.state.dissmissedMothers ? (
+        {/* {user && !this.state.dissmissedMothers ? (
           <Paper
             align="center"
             style={{
@@ -541,7 +541,7 @@ class Dashboard extends React.Component {
               Click to Shop and Raise
             </Button>
           </Paper>
-        ) : null}
+        ) : null} */}
 
         {user && app ? (
           <FadeInDashboardAnimation>
