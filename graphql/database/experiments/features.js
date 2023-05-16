@@ -497,7 +497,7 @@ const features = {
             $in: ['local', 'dev'],
           },
           [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
-            $eq: 'Version2',
+            $eq: 'Version3',
             $exists: true,
           },
         },
