@@ -468,7 +468,7 @@ class Dashboard extends React.Component {
 
     // Our Notification
     let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-launch'
+      notif => notif.code === 'shfac-notify-launch-v2'
     )
 
     if (
