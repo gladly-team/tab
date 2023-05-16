@@ -10,6 +10,7 @@ const data = [
     whyValuableDescription:
       'Community health workers provide quality health care to those who might not otherwise have access.',
     active: false,
+    impactCountPerMetric: 1,
   },
   {
     id: 'mhwYA7KbK',
@@ -22,6 +23,7 @@ const data = [
     whyValuableDescription:
       'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
     active: false,
+    impactCountPerMetric: 1,
   },
   {
     id: 'CwxR9zA5W',
@@ -34,6 +36,7 @@ const data = [
     whyValuableDescription:
       'This kit provides newborn essentials including hats, socks, diapers, and sanitation for the first 6 weeks, helping ensure a healthy start.',
     active: false,
+    impactCountPerMetric: 1,
   },
   {
     id: '3wHhDkuRR',
@@ -46,6 +49,7 @@ const data = [
     whyValuableDescription:
       'Hunger is predictable, preventable, and treatable. Yet, one in ten people suffer from hunger. This malnutrition treatment saves and improves lives of children around the world.',
     active: false,
+    impactCountPerMetric: 1,
   },
   {
     id: 'VqnFnXXML',
@@ -59,6 +63,7 @@ const data = [
     whyValuableDescription:
       'These specially-designed compression garments help trans people of all ages feel confident and fight gender dysphoria safely.',
     active: false,
+    impactCountPerMetric: 5,
   },
   {
     id: 'gGJy2ebUD',
@@ -71,6 +76,7 @@ const data = [
     whyValuableDescription:
       'Our oceans are increasingly filled with pastic and other waste. TeamSeas is working to remove existing plastic as well as divert plastic coming from rivers and streams to ensure a future for our oceans and marine life.',
     active: false,
+    impactCountPerMetric: 5000,
   },
   {
     id: 'Te3oC8KIP',
@@ -83,6 +89,7 @@ const data = [
     whyValuableDescription:
       'Planting trees restores vital ecosystems, removes CO2 from the atmosphere, and helps prevent erosion. Together with our planting partner, Eden Reforestation, we can help reforest important coastal mangrove forests and provide important, fair wage jobs in Madagascar and Indonesia.',
     active: false,
+    impactCountPerMetric: 25,
   },
   {
     id: 'OyxVM0_Vc',
@@ -96,6 +103,7 @@ const data = [
     whyValuableDescription:
       "Families fleeing the war in Ukraine are in need of vital supplies. Each kit provides a week's worth of supplies for a family of 5",
     active: false,
+    impactCountPerMetric: 3,
   },
   {
     id: 'T79t1sGuc',
@@ -109,6 +117,7 @@ const data = [
     whyValuableDescription:
       'It can be difficult and expensive to find and afford reproductive healthcare. Through Planned Parenthood, those in need can recieve timely and vital care when and where it is most needed',
     active: false,
+    impactCountPerMetric: 2,
   },
 ]
 

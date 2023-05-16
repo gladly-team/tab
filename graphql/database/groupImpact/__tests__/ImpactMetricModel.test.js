@@ -34,6 +34,7 @@ describe('ImpactMetricModel', () => {
         metricTitle: '1 home visit',
         impactTitle: 'Provide 1 visit from a community health worker',
         whyValuableDescription: 'It makes a difference.',
+        impactCountPerMetric: 1,
       })
     )
     expect(item).toEqual({
@@ -46,6 +47,7 @@ describe('ImpactMetricModel', () => {
       impactTitle: 'Provide 1 visit from a community health worker',
       active: true,
       whyValuableDescription: 'It makes a difference.',
+      impactCountPerMetric: 1,
     })
   })
 })

@@ -231,6 +231,11 @@ type ImpactMetric implements Node {
 
   """Whether or not this GroupImpactMetric is still active"""
   active: Boolean!
+
+  """
+  How many instances of the impact are provided per completion of a GroupImpactMetric run.
+  """
+  impactCountPerMetric: Int!
 }
 
 """A connection to a list of items."""
