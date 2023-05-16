@@ -128,6 +128,7 @@ import getSearchEngine from '../database/search/getSearchEngine'
 import SearchEngineModel from '../database/search/SearchEngineModel'
 import getUserFeatures from '../database/experiments/getUserFeatures'
 import getGroupImpactMetricForCause from '../database/groupImpact/getGroupImpactMetricForCause'
+import getCauseImpactMetricCount from '../database/groupImpact/getCauseImpactMetricCount'
 import GroupImpactMetricModel from '../database/groupImpact/GroupImpactMetricModel'
 import ImpactMetricModel from '../database/groupImpact/ImpactMetricModel'
 import UserGroupImpactMetricModel from '../database/groupImpact/UserGroupImpactMetricModel'
@@ -1233,6 +1234,13 @@ const CauseType = new GraphQLObjectType({
         'the group impact metric currently associated with this cause',
       resolve: (cause, _args, context) =>
         getGroupImpactMetricForCause(context.user, cause.id),
+    },
+    groupImpactMetricCount: {
+      type: GraphQLInt,
+      description:
+        'how many times this particular group impact metric has been completed for this cause',
+      resolve: (cause, _args, context) =>
+        getCauseImpactMetricCount(context.user, cause.id),
     },
     charity: {
       type: charityType,
