@@ -76,7 +76,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
   }, [shopExtensionSupported, browserName])
 
   const setDismissed = () => {
-    const CODE = 'shfac-notify-launch'
+    const CODE = 'shfac-notify-launch-v2'
     const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
     localStorageMgr.setItem(`${NOTIF_DISMISS_PREFIX}.${CODE}`, 'true')
   }
