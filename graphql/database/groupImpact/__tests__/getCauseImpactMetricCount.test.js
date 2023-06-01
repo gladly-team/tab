@@ -39,7 +39,7 @@ describe('getCauseImpactMetricCount', () => {
     expect.assertions(1)
     getGroupImpactMetricForCause.mockResolvedValue(mockGroupImpactMetric)
 
-    CauseImpactMetricCount.get.mockResolvedValue(null)
+    CauseImpactMetricCount.getOrNull.mockResolvedValue(null)
     expect(await getCauseImpactMetricCount(userContext, mockCause.id)).toEqual(
       null
     )
@@ -49,7 +49,7 @@ describe('getCauseImpactMetricCount', () => {
     expect.assertions(1)
     getGroupImpactMetricForCause.mockResolvedValue(mockGroupImpactMetric)
 
-    CauseImpactMetricCount.get.mockResolvedValue(mockCauseImpactCount)
+    CauseImpactMetricCount.getOrNull.mockResolvedValue(mockCauseImpactCount)
     expect(await getCauseImpactMetricCount(userContext, mockCause.id)).toEqual(
       5
     )
