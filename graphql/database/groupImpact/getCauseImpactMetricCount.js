@@ -12,7 +12,7 @@ const getCauseImpactMetricCount = async (userContext, causeId) => {
 
   if (groupImpactMetric === null) return null
 
-  const causeImpactMetricCount = await CauseImpactMetricCount.get(
+  const causeImpactMetricCount = await CauseImpactMetricCount.getOrNull(
     userContext,
     getCauseImpactMetricCountKey(causeId, groupImpactMetric.impactMetricId)
   )
