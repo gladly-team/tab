@@ -3,16 +3,12 @@ import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import Link from 'js/components/General/Link'
 import { Typography } from '@material-ui/core'
-// import CreateSfacExtensionPromptResponseMutation from 'js/mutations/CreateSfacExtensionPromptResponseMutation'
-// import awaitTimeLimit from 'js/utils/awaitTimeLimit'
 import {
   shopChromeExtensionPage,
   shopEdgeExtensionPage,
   getShopExtensionPage,
   replaceUrl,
 } from 'js/navigation/navigation'
-// import { AwaitedPromiseTimeout } from 'js/utils/errors'
-// import logger from 'js/utils/logger'
 import Notification from 'js/components/Dashboard/NotificationV2'
 import { withStyles } from '@material-ui/core/styles'
 import useDoesBrowserSupportShopExtension from 'js/utils/hooks/useDoesBrowserSupportShopExtension'
@@ -76,7 +72,7 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
   }, [shopExtensionSupported, browserName])
 
   const setDismissed = () => {
-    const CODE = 'shfac-notify-launch-v2'
+    const CODE = 'shfac-notify-launch-fullpage'
     const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
     localStorageMgr.setItem(`${NOTIF_DISMISS_PREFIX}.${CODE}`, 'true')
   }
@@ -103,101 +99,14 @@ const ShfacExtensionSellNotification = ({ classes, userId, variation }) => {
     setOpen(false)
   }
 
+  // We only support Version1 for now
+  if (variation !== 'Version1') {
+    return null
+  }
+
   return (
     <>
       {variation == 'Version1' ? (
-        <div className={classes.wrapper}>
-          <Notification
-            className={classes.notification}
-            open={open}
-            text={
-              <span className={classes.text}>
-                <Typography className={classes.title}>
-                  Introducing: Shop for a Cause
-                </Typography>
-                <Typography className={classes.subtitle} variant="body1">
-                  We are excited to officially launch{' '}
-                  <Link
-                    to={getShopExtensionPage}
-                    target="_blank"
-                    style={{ color: '#9d4ba3' }}
-                  >
-                    Shop for a Cause
-                  </Link>
-                  ! Now, you can raise even more money for charity when you shop
-                  online. Like Tab for a Cause, it is simple, free, and
-                  impactful. It takes 10 seconds to get started, try it out
-                  today!
-                </Typography>
-              </span>
-            }
-            buttons={
-              <div className={classes.buttonsWrapper}>
-                <Button onClick={onNoClick} className={classes.noButton}>
-                  Maybe later
-                </Button>
-                {browser ? (
-                  <Button
-                    onClick={onYesClick}
-                    className={classes.yesButton}
-                    variant="contained"
-                  >
-                    Add to {browser}
-                  </Button>
-                ) : null}
-              </div>
-            }
-          />
-        </div>
-      ) : null}
-
-      {variation == 'Version2' ? (
-        <div className={classes.wrapper}>
-          <Notification
-            className={classes.notification}
-            open={open}
-            text={
-              <span className={classes.text}>
-                <Typography className={classes.title}>
-                  Introducing: Shop for a Cause
-                </Typography>
-                <Typography className={classes.subtitle} variant={'body1'}>
-                  We are excited to officially launch{' '}
-                  <Link
-                    to={getShopExtensionPage}
-                    target="_blank"
-                    style={{ color: '#9d4ba3' }}
-                  >
-                    Shop for a Cause
-                  </Link>
-                  ! Now, you can raise even more money for charity when you shop
-                  online. Like Tab for a Cause, it is simple, free, and
-                  impactful. It takes 10 seconds to get started, try it out
-                  today!
-                </Typography>
-              </span>
-            }
-            buttons={
-              <div className={classes.buttonsWrapper}>
-                <Button onClick={onNoClick} className={classes.noButton}>
-                  Maybe later
-                </Button>
-                {browser ? (
-                  <Button
-                    onClick={onYesClick}
-                    className={classes.yesButton}
-                    variant="contained"
-                  >
-                    Add to {browser}
-                  </Button>
-                ) : null}
-              </div>
-            }
-          />
-        </div>
-      ) : null}
-
-      {variation == 'Version3' ? (
         <div className={classes.wrapper}>
           <Notification
             className={classes.notification}
