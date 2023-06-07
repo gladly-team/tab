@@ -8,7 +8,7 @@ const data = {
   about:
     '**Tab for LGBTQ+** is proud to support Point of Pride and Outright International. With each tab opened, you are making a positive impact toward LGBTQ+ support and gender-affirming care.\n\n[Point of Pride](https://www.pointofpride.org/) is a 501(c)(3) organization that works to provide access to life-saving health and wellness services to the Trans community. They help members of the Trans community gain access to things such as hormone replacement therapy, chest binders and femme shapewear, and other gender-affirming procedures.\n\n[Outright International](https://outrightinternational.org/) is a 501(c)(3) organization that advocates for legal protection, representation, and emergency relief for “people along the spectrum of diverse sexual and gender identities.',
   name: 'LGBTQ+',
-  nameForShop: 'LGBTQ+',
+  nameForShop: 'the LGBTQ+ community',
   isAvailableToSelect: true,
   icon: 'transgender',
   backgroundImageCategory: 'lgbtq', // TODO: update with new collection
