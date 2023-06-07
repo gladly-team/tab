@@ -17,7 +17,7 @@ import {
   REDUCED_IMPACT_COST,
   USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
-  SHFAC_NOTIFY_LAUNCH,
+  SHFAC_NOTIFY_LAUNCH_FULLPAGE,
   LAUNCH_BOOKMARKS,
 } from './experimentConstants'
 
@@ -463,52 +463,18 @@ const features = {
       },
     ],
   },
-  [SHFAC_NOTIFY_LAUNCH]: {
+  [SHFAC_NOTIFY_LAUNCH_FULLPAGE]: {
     defaultValue: 'Version1',
     rules: [
-      /* Begin internal overrides */
-      {
-        condition: {
-          env: {
-            $in: ['local', 'dev'],
-          },
-          [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
-            $eq: 'Version1',
-            $exists: true,
-          },
-        },
-        force: 'Version1',
-      },
-      {
-        condition: {
-          env: {
-            $in: ['local', 'dev'],
-          },
-          [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
-            $eq: 'Version2',
-            $exists: true,
-          },
-        },
-        force: 'Version2',
-      },
-      {
-        condition: {
-          env: {
-            $in: ['local', 'dev'],
-          },
-          [`internalExperimentOverrides.${SHFAC_NOTIFY_LAUNCH}`]: {
-            $eq: 'Version3',
-            $exists: true,
-          },
-        },
-        force: 'Version3',
-      },
-      /* End internal overrides */
       {
         variations: ['Version1', 'Version2', 'Version3'],
-        weights: [0.33, 0.33, 0.33],
+        weights: [0.8, 0.1, 0.1],
         coverage: 1.0,
-        condition: {},
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
       },
     ],
   },
