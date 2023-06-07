@@ -37,7 +37,7 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
-  WIDGET_MOTHERS_DAY_2023_URL,
+  WIDGET_FULLPAGE_SHOP_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -189,7 +189,7 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
-      showIFrameWidget: false,
+      showIFrameWidget: true,
       dissmissedMothers: localStorageMgr.getItem(MOM_DISMISS) === 'true',
     }
   }
@@ -241,6 +241,7 @@ class Dashboard extends React.Component {
         ...n,
         onDismiss: () => onNotificationClose(n.code),
       }))
+
     this.setState({ notificationsToShow: notifsToShow })
   }
 
@@ -468,7 +469,7 @@ class Dashboard extends React.Component {
 
     // Our Notification
     let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-launch-v2'
+      notif => notif.code === 'shfac-notify-launch-fullpage'
     )
 
     if (
@@ -1009,21 +1010,26 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {user && this.state.showIFrameWidget ? (
+        {user &&
+        this.state.showIFrameWidget &&
+        notif &&
+        (notif.variation == 'Version2' || notif.variation == 'Version3') ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'mothers-day-2023'}
+              widgetName={'shfac-notify-launch-fullpage'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
               url={
-                WIDGET_MOTHERS_DAY_2023_URL +
-                '&cause_name=' +
+                WIDGET_FULLPAGE_SHOP_URL +
+                '?cause_name=' +
                 (user.cause && user.cause.nameForShop
                   ? user.cause.nameForShop
                   : 'Charity') +
                 '&user_id=' +
-                user.userId
+                user.userId +
+                '&version=' +
+                notif.variation
               }
             />
           </FadeInDashboardAnimation>
