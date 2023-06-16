@@ -472,14 +472,18 @@ class Dashboard extends React.Component {
       notif => notif.code === 'shfac-notify-launch-fullpage'
     )
 
-    if (
-      notif &&
-      notif.variation !== 'Version1' &&
-      notif.variation !== 'Version2' &&
-      notif.variation !== 'Version3'
-    ) {
-      notif = null
+    if (notif) {
+      notif.variation = 'Version3'
     }
+
+    // if (
+    //   notif &&
+    //   notif.variation !== 'Version1' &&
+    //   notif.variation !== 'Version2' &&
+    //   notif.variation !== 'Version3'
+    // ) {
+    //   notif = null
+    // }
 
     return (
       <div
@@ -612,12 +616,12 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {notif ? (
+              {/* {notif ? (
                 <ShfacExtensionSellNotification
                   userId={user.id}
                   variation={notif.variation}
                 />
-              ) : null}
+              ) : null} */}
 
               {/*** Deprecated: Notification enabled by hardcoded feature flag ***/}
               {this.state.showNotification ? (
