@@ -472,18 +472,14 @@ class Dashboard extends React.Component {
       notif => notif.code === 'shfac-notify-launch-fullpage'
     )
 
-    if (notif) {
-      notif.variation = 'Version3'
+    if (
+      notif &&
+      notif.variation !== 'Version1' &&
+      notif.variation !== 'Version2' &&
+      notif.variation !== 'Version3'
+    ) {
+      notif = null
     }
-
-    // if (
-    //   notif &&
-    //   notif.variation !== 'Version1' &&
-    //   notif.variation !== 'Version2' &&
-    //   notif.variation !== 'Version3'
-    // ) {
-    //   notif = null
-    // }
 
     return (
       <div

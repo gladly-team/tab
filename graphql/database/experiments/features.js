@@ -464,11 +464,11 @@ const features = {
     ],
   },
   [SHFAC_NOTIFY_LAUNCH_FULLPAGE]: {
-    defaultValue: 'Version1',
+    defaultValue: 'Version3',
     rules: [
       {
-        variations: ['Version1', 'Version2', 'Version3'],
-        weights: [0.8, 0.1, 0.1],
+        variations: ['Version3'],
+        weights: [1.0],
         coverage: 1.0,
         condition: {
           tabs: {
