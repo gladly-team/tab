@@ -1295,6 +1295,21 @@ type UserGroupImpactMetric implements Node {
   The micro USD amount raised for this instance of GroupImpactMetric so far by this user
   """
   dollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from tabs
+  """
+  tabDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from search
+  """
+  searchDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping
+  """
+  shopDollarContribution: Int!
 }
 
 """content for each leaderboard"""
