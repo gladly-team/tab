@@ -19,6 +19,7 @@ import {
   V4_SUPPORTING_STATEMENTS,
   SHFAC_NOTIFY_LAUNCH_FULLPAGE,
   LAUNCH_BOOKMARKS,
+  GROUP_IMPACT_LEADERBOARD,
 } from './experimentConstants'
 
 const features = {
@@ -486,6 +487,25 @@ const features = {
           env: {
             $in: ['local', 'dev'],
           },
+        },
+        force: true,
+      },
+    ],
+  },
+  [GROUP_IMPACT_LEADERBOARD]: {
+    defaultValue: false,
+    rules: [
+      // Show on local/dev for our team only.
+      {
+        condition: {
+          env: 'dev',
+        },
+        force: true,
+      },
+      {
+        condition: {
+          isTabTeamMember: true,
+          env: 'production',
         },
         force: true,
       },
