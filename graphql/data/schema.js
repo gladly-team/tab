@@ -1172,6 +1172,21 @@ const userGroupImpactMetricType = new GraphQLObjectType({
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far by this user',
     },
+    tabDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from tabs',
+    },
+    searchDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from search',
+    },
+    shopDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping',
+    },
   }),
   interfaces: [nodeInterface],
 })
