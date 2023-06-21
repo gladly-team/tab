@@ -42,3 +42,6 @@ export const SHFAC_NOTIFY_LAUNCH_FULLPAGE = 'shfac-notify-launch-fullpage'
 
 // Bookmarks Feature Flag
 export const LAUNCH_BOOKMARKS = 'launch-bookmarks'
+
+// Feature Flag to show Group Impact Leaderboard
+export const GROUP_IMPACT_LEADERBOARD = 'group-impact-leaderboard'
