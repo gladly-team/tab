@@ -116,7 +116,7 @@ const data = [
     charityId: 'ba4c2888-1d89-4c68-a47d-4f15f1445b6a', // Planned Parenthood
     dollarAmount: 244e6, // $244
     impactTitle:
-      'Cover the costs of 2 reproductive healthcare visits to someone in need',
+      'Cover the costs of {{count}} reproductive healthcare visits to someone in need',
     metricTitle: '{{count}} healthcare visits',
     description:
       'It can be difficult and expensive to find and afford reproductive healthcare. Through Planned Parenthood, those in need can recieve timely and vital care when and where it is most needed',
@@ -124,6 +124,19 @@ const data = [
       'It can be difficult and expensive to find and afford reproductive healthcare. Through Planned Parenthood, those in need can recieve timely and vital care when and where it is most needed',
     active: false,
     impactCountPerMetric: 2,
+  },
+  {
+    id: 'GIDw4XMeW',
+    charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
+    dollarAmount: 3715e5, // $371.5
+    impactTitle: 'Educate {{count}} pet caretaker{{#if multiple}}s{{/if}}',
+    metricTitle: 'Educate 1 pet caretaker',
+    description:
+      "Help educate a pet caretaker on the intricacies of properly caring for felines, ultimately improving cats' lives in shelters and helping them more quickly find permanent homes",
+    whyValuableDescription:
+      "Help educate a pet caretaker on the intricacies of properly caring for felines, ultimately improving cats' lives in shelters and helping them more quickly find permanent homes",
+    active: false,
+    impactCountPerMetric: 1,
   },
 ]
 

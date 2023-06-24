@@ -5,6 +5,7 @@ import dataReproductiveHealth from '../cause/causes/reproductiveHealthCauseData'
 import dataSeas from '../cause/causes/teamseas/causeData'
 import dataTrees from '../cause/causes/trees/causeData'
 import dataUkraine from '../cause/causes/ukraine/causeData'
+import dataCats from '../cause/causes/cats/causeData'
 
 import { getImpactMetricById } from './impactMetricRepository'
 
@@ -40,6 +41,10 @@ const getNextImpactMetricForCause = (causeId) => {
 
   if (causeId === dataUkraine.id) {
     return getImpactMetricById('OyxVM0_Vc')
+  }
+
+  if (causeId === dataCats.id) {
+    return getImpactMetricById('GIDw4XMeW')
   }
   throw new Error('No Impact Metric can be selected for this causeId')
 }
