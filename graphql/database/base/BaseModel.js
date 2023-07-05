@@ -249,6 +249,30 @@ class BaseModel {
     }
   }
 
+  static getKeyString(key) {
+    const self = this
+    const keyHasRange = isObject(key)
+    if (keyHasRange) {
+      const hashKey = get(key, [self.hashKey], null)
+      const rangeKey = get(key, [self.rangeKey], null)
+      return `${hashKey}_${rangeKey}`
+    }
+    return get(key, [self.hashKey], null)
+  }
+
+  // Wrapper around getBatch that returns items in the same order as they are
+  // listed in the keys object.
+  static async getBatchInOrder(userContext, keys, options) {
+    const data = await this.getBatch(userContext, keys, options)
+    const dataAsMap = {}
+    data.forEach((model) => {
+      dataAsMap[this.getKeyString(model)] = model
+    })
+    return keys.map((key) => {
+      return dataAsMap[this.getKeyString(key)]
+    })
+  }
+
   // `keys` can be an array of hashKey strings or an array of objects
   // containing hashKeys and rangeKeys
   static async getBatch(userContext, keys, options) {

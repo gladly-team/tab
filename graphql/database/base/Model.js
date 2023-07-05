@@ -213,6 +213,7 @@ class Model {
 
   // `keys` can be an array of hashKey strings or an array of objects
   // containing hashKeys and rangeKeys
+  // Note: GetBatch does not return items in the same order as keys.
   static async getBatch(userContext, keys, options) {
     const self = this
     // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
