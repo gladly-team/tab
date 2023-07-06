@@ -1,11 +1,16 @@
 /* eslint-env jest */
 let store = {}
-const sortMap = (map) => {
+const sortMap = (map, rev = false) => {
   return Object.entries(map).sort((a, b) => {
     const x = a[1]
     const y = b[1]
-    if (x < y) return 1
-    if (x > 1) return -1
+    if (rev) {
+      if (x < y) return 1
+      if (x > 1) return -1
+    } else {
+      if (x < y) return -1
+      if (x > 1) return +1
+    }
     return 0
   })
 }
@@ -61,8 +66,12 @@ const methods = {
     const sortedEntries = sortMap(store[key])
     return sortedEntries.findIndex((element) => element[0] === value)
   },
-  zrange: (key, from, to) => {
-    const sortedEntries = sortMap(store[key])
+  zrevrank: (key, value) => {
+    const sortedEntries = sortMap(store[key], true)
+    return sortedEntries.findIndex((element) => element[0] === value)
+  },
+  zrange: (key, from, to, opts) => {
+    const sortedEntries = sortMap(store[key], !!opts.rev)
     const slice = sortedEntries.slice(from, to + 1)
     return slice.map((entry) => entry[0])
   },

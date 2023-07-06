@@ -140,6 +140,33 @@ describe('RedisModel queries', () => {
     ).rejects.toEqual(new UnauthorizedQueryException())
   })
 
+  it('correctly fetches with `getBatchInOrder` method', async () => {
+    setModelPermissions(ExampleRedisModel, {
+      create: () => true,
+      get: () => true,
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+    const item2 = Object.assign({}, fixturesA[1])
+
+    // 'created' and 'updated' field should be automatically added.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+    const itemToCreate2 = removeCreatedAndUpdatedFields(item2)
+    const createdItem = await ExampleRedisModel.create(user, itemToCreate)
+    const createdItem2 = await ExampleRedisModel.create(user, itemToCreate2)
+
+    // Verify returned object.
+    const expectedReturn = addTimestampFieldsToItem(item)
+    expect(createdItem).toEqual(expectedReturn)
+
+    const itemsToGet = [createdItem, createdItem2]
+    const keys = [itemsToGet[0].id, itemsToGet[1].id]
+
+    const response = await ExampleRedisModel.getBatchInOrder(user, keys)
+    expect(response).toEqual(itemsToGet)
+  })
+
   it('correctly fetches with `getBatch` method', async () => {
     setModelPermissions(ExampleRedisModel, {
       create: () => true,
