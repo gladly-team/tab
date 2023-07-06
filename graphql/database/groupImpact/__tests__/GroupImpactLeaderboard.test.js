@@ -41,7 +41,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual([
         'entity1',
         'entity2',
@@ -130,7 +130,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual([
         'entity1',
         'entity2',
@@ -219,7 +219,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual([
         'entity1',
         'entity2',
@@ -299,7 +299,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual([
         'entity1',
         'entity2',
@@ -386,7 +386,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual([
         'entity1',
         'entity2',
@@ -463,7 +463,7 @@ describe('GroupImpactLeaderboard entity', () => {
     await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
-    jest.spyOn(UserModel, 'getBatch').mockImplementation((_, ids) => {
+    jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
       expect(ids).toEqual(['entity1', 'entity2', 'entity3', 'entity4'])
       return [
         { id: 'entity1', userGroupImpactMetricId: 'entity1u' },

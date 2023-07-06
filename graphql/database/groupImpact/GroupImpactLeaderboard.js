@@ -72,7 +72,7 @@ class GroupImpactLeaderboard {
         ]
     }
 
-    const userModels = await UserModel.getBatch(groupImpactOverride, [
+    const userModels = await UserModel.getBatchInOrder(groupImpactOverride, [
       ...topUsers,
       ...nextUsers,
     ])

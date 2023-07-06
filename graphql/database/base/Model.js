@@ -211,6 +211,30 @@ class Model {
     throw new NotImplementedException()
   }
 
+  static getKeyString(key) {
+    const self = this
+    if (isObject(key)) {
+      const hashKey = get(key, [self.hashKey], null)
+      const rangeKey = get(key, [self.rangeKey], null)
+      return rangeKey === null ? hashKey : `${hashKey}_${rangeKey}`
+    }
+    return key
+  }
+
+  // Wrapper around getBatch that returns items in the same order as they are
+  // listed in the keys object.
+  static async getBatchInOrder(userContext, keys, options) {
+    const data = await this.getBatch(userContext, keys, options)
+    const dataAsMap = {}
+    data.forEach((model) => {
+      dataAsMap[this.getKeyString(model)] = model
+    })
+    const result = keys.map((key) => {
+      return dataAsMap[this.getKeyString(key)]
+    })
+    return result
+  }
+
   // `keys` can be an array of hashKey strings or an array of objects
   // containing hashKeys and rangeKeys
   // Note: GetBatch does not return items in the same order as keys.
