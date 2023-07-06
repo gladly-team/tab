@@ -363,7 +363,7 @@ describe('BaseModel queries', () => {
     expect(response).toEqual(itemsToGet)
   })
 
-  it.only('correctly fetches with `getBatchWithOrder` method with range keys', async () => {
+  it.only('correctly fetches with `getBatchInOrder` method with range keys', async () => {
     setModelPermissions(ExampleModelRangeKey, {
       get: () => true,
     })

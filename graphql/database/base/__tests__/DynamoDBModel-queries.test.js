@@ -173,6 +173,42 @@ describe('DynamoDBModel queries', () => {
     )
   })
 
+  it.only('correctly fetches with `getBatchInOrder` method', async () => {
+    setModelPermissions(ExampleDynamoDBModel, {
+      get: () => true,
+    })
+    const itemsToGet = [fixturesA[0], fixturesA[1]]
+    const keys = [itemsToGet[0].id, itemsToGet[1].id]
+
+    // Set mock response from DB client.
+    const dbQueryMock = databaseClient.batchGet.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Responses: {
+            [ExampleDynamoDBModel.tableName]: [...itemsToGet].reverse(),
+          },
+        })
+      }
+    )
+    const expectedDBParams = {
+      RequestItems: {
+        [ExampleDynamoDBModel.tableName]: {
+          Keys: [
+            {
+              id: itemsToGet[0].id,
+            },
+            {
+              id: itemsToGet[1].id,
+            },
+          ],
+        },
+      },
+    }
+    const response = await ExampleDynamoDBModel.getBatchInOrder(user, keys)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemsToGet)
+  })
+
   it('correctly fetches with `getBatch` method', async () => {
     setModelPermissions(ExampleDynamoDBModel, {
       get: () => true,
@@ -205,6 +241,47 @@ describe('DynamoDBModel queries', () => {
       },
     }
     const response = await ExampleDynamoDBModel.getBatch(user, keys)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemsToGet)
+  })
+
+  it('correctly fetches with `getBatchInOrder` method with range keys', async () => {
+    setModelPermissions(ExampleDynamoDBModelRangeKey, {
+      get: () => true,
+    })
+    const itemsToGet = [fixturesRangeKeyA[0], fixturesRangeKeyA[1]]
+    const keys = [
+      {
+        id: fixturesRangeKeyA[0].id,
+        age: fixturesRangeKeyA[0].age,
+      },
+      {
+        id: fixturesRangeKeyA[1].id,
+        age: fixturesRangeKeyA[1].age,
+      },
+    ]
+
+    // Set mock response from DB client.
+    const dbQueryMock = databaseClient.batchGet.mockImplementation(
+      (params, callback) => {
+        callback(null, {
+          Responses: {
+            [ExampleDynamoDBModelRangeKey.tableName]: [...itemsToGet].reverse(),
+          },
+        })
+      }
+    )
+    const expectedDBParams = {
+      RequestItems: {
+        [ExampleDynamoDBModelRangeKey.tableName]: {
+          Keys: keys,
+        },
+      },
+    }
+    const response = await ExampleDynamoDBModelRangeKey.getBatchInOrder(
+      user,
+      keys
+    )
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response).toEqual(itemsToGet)
   })
