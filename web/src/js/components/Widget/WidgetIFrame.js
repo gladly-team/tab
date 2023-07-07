@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import localStorageMgr from 'js/utils/localstorage-mgr'
+//import localStorageMgr from 'js/utils/localstorage-mgr'
 
-const dismissBase = 'tab.user.dismissedNotif.'
+//const dismissBase = 'tab.user.dismissedNotif.'
 
 const marginStyle = {
   top: 20,
@@ -28,7 +28,7 @@ const fullScreenStyle = {
 const WidgetIFame = ({ url, onClose, widgetName }) => {
   // On close
   const onCloseWidget = () => {
-    localStorageMgr.setItem(dismissBase + widgetName, 'true')
+    //localStorageMgr.setItem(dismissBase + widgetName, 'true')
     onClose()
   }
 
@@ -45,10 +45,10 @@ const WidgetIFame = ({ url, onClose, widgetName }) => {
     return () => window.removeEventListener('message', handler)
   }, [onCloseWidget])
 
-  // Don't show if user has dismissed it
-  if (localStorageMgr.getItem(dismissBase + widgetName) === 'true') {
-    return null
-  }
+  // // Don't show if user has dismissed it
+  // if (localStorageMgr.getItem(dismissBase + widgetName) === 'true') {
+  //   return null
+  // }
 
   return (
     <Modal open={true} onClose={onCloseWidget} style={fullScreenStyle}>

@@ -37,7 +37,8 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
-  WIDGET_FULLPAGE_SHOP_URL,
+  //WIDGET_FULLPAGE_SHOP_URL,
+  WIDGET_PRIME_DAY_2023_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -73,12 +74,12 @@ import {
   YAHOO_USER_ID,
 } from 'js/constants'
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
-import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
+//import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
 
-// import IconButton from '@material-ui/core/IconButton'
-// import CloseIcon from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -153,7 +154,7 @@ const styles = theme => ({
   },
 })
 
-const MOM_DISMISS = 'tab.user.dismissedNotif.mothers-day-2023'
+const PRIME_DAY_DISMISS = 'tab.user.dismissedNotif.prime-day-2023'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -189,8 +190,8 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
-      showIFrameWidget: true,
-      dissmissedMothers: localStorageMgr.getItem(MOM_DISMISS) === 'true',
+      showIFrameWidget: false,
+      dissmissedPrimeDay: localStorageMgr.getItem(PRIME_DAY_DISMISS) === 'true',
     }
   }
 
@@ -279,9 +280,9 @@ class Dashboard extends React.Component {
     })
   }
 
-  onDismissMothers() {
-    localStorageMgr.setItem(MOM_DISMISS, true)
-    this.setState({ dissmissedMothers: true })
+  onDismissPrimeDay() {
+    localStorageMgr.setItem(PRIME_DAY_DISMISS, true)
+    this.setState({ dissmissedPrimeDay: true })
   }
 
   render() {
@@ -468,18 +469,22 @@ class Dashboard extends React.Component {
     const notificationsToShow = this.state.notificationsToShow
 
     // Our Notification
-    let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-launch-fullpage'
+    const notif = notificationsToShow.find(
+      notif => notif.code === 'shfac-notify-prime-day-2023'
     )
 
-    if (
-      notif &&
-      notif.variation !== 'Version1' &&
-      notif.variation !== 'Version2' &&
-      notif.variation !== 'Version3'
-    ) {
-      notif = null
-    }
+    // let notif = notificationsToShow.find(
+    //   notif => notif.code === 'shfac-notify-launch-fullpage'
+    // )
+
+    // if (
+    //   notif &&
+    //   notif.variation !== 'Version1' &&
+    //   notif.variation !== 'Version2' &&
+    //   notif.variation !== 'Version3'
+    // ) {
+    //   notif = null
+    // }
 
     return (
       <div
@@ -502,8 +507,8 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Mother's day widget promo */}
-        {/* {user && !this.state.dissmissedMothers ? (
+        {/* Prime Day 2023 widget promo */}
+        {user && notif && !this.state.dissmissedPrimeDay ? (
           <Paper
             align="center"
             style={{
@@ -516,17 +521,29 @@ class Dashboard extends React.Component {
             }}
           >
             <IconButton
-              onClick={this.onDismissMothers.bind(this)}
+              onClick={this.onDismissPrimeDay.bind(this)}
               style={{ position: 'absolute', right: 5, top: 0 }}
             >
               <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
             </IconButton>
 
             <Typography variant={'h4'} gutterBottom>
-              Mother's Day Is Almost Here!
+              Skip Prime Day, Support Charity
             </Typography>
             <Typography variant={'body1'} gutterBottom>
-              8 great gift suggestions that will also raise money for{' '}
+              Since Amazon killed{' '}
+              <a
+                href="https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Amazon Smile
+              </a>{' '}
+              we got you covered with{' '}
+              <a href="https://shop.gladly.io" target="_blank" rel="noreferrer">
+                Shop for a Cause
+              </a>
+              . Click below to shop and raise money for{' '}
               {user.cause && user.cause.nameForShop
                 ? user.cause.nameForShop
                 : 'Charity'}
@@ -542,7 +559,7 @@ class Dashboard extends React.Component {
               Click to Shop and Raise
             </Button>
           </Paper>
-        ) : null} */}
+        ) : null}
 
         {user && app ? (
           <FadeInDashboardAnimation>
@@ -1010,18 +1027,15 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {user &&
-        this.state.showIFrameWidget &&
-        notif &&
-        (notif.variation == 'Version2' || notif.variation == 'Version3') ? (
+        {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'shfac-notify-launch-fullpage'}
+              widgetName={'shfac-notify-prime-day-2023'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
               url={
-                WIDGET_FULLPAGE_SHOP_URL +
+                WIDGET_PRIME_DAY_2023_URL +
                 '?cause_name=' +
                 (user.cause && user.cause.nameForShop
                   ? user.cause.nameForShop
