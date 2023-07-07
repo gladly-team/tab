@@ -167,3 +167,5 @@ export const WIDGET_MOTHERS_DAY_2023_URL =
   'https://tab.gladly.io/promos/mothers-day-2023/?nolayout=true'
 export const WIDGET_FULLPAGE_SHOP_URL =
   'https://tab.gladly.io/promos/full-page-shop-2023/'
+export const WIDGET_PRIME_DAY_2023_URL =
+  'https://tab.gladly.io/promos/prime-day-day-2023/'
