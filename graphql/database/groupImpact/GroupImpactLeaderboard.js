@@ -87,9 +87,10 @@ class GroupImpactLeaderboard {
   }
 
   static async fetchGroupImpactMetricModels(userModels) {
-    const userGroupImpactMetricIds = userModels.map(
-      (user) => user.userGroupImpactMetricId
-    )
+    const userGroupImpactMetricIds = userModels
+      .filter((element) => element) // TODO(spicer): figure out why some elements are undefined
+      .map((User) => User.userGroupImpactMetricId)
+
     return UserGroupImpactMetricModel.getBatch(
       groupImpactOverride,
       userGroupImpactMetricIds

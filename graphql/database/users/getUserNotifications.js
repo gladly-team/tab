@@ -1,6 +1,6 @@
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
-import { SHFAC_NOTIFY_LAUNCH_FULLPAGE } from '../experiments/experimentConstants'
+import { SHFAC_PRIME_DAY_2023 } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -21,22 +21,47 @@ const getUserNotifications = async (userContext, user) => {
     const notifFeature = await getUserFeature(
       userContext,
       user,
-      SHFAC_NOTIFY_LAUNCH_FULLPAGE
+      SHFAC_PRIME_DAY_2023
     )
-    const enabled = notifFeature.variation !== 'None'
+
     notifications = [
-      ...(enabled
-        ? [
-            {
-              code: SHFAC_NOTIFY_LAUNCH_FULLPAGE,
-              variation: notifFeature.variation,
-            },
-          ]
-        : []),
+      ...[
+        {
+          code: SHFAC_PRIME_DAY_2023,
+          variation: notifFeature.variation,
+        },
+      ],
     ]
   } catch (e) {
     logger.error(e)
   }
+
+  // // Only show the notification if the user has not signed up for a shop yet.
+  // if (user.shopSignupTimestamp) {
+  //   return notifications
+  // }
+
+  // try {
+  //   const notifFeature = await getUserFeature(
+  //     userContext,
+  //     user,
+  //     SHFAC_NOTIFY_LAUNCH_FULLPAGE
+  //   )
+  //   const enabled = notifFeature.variation !== 'None'
+  //   notifications = [
+  //     ...(enabled
+  //       ? [
+  //           {
+  //             code: SHFAC_NOTIFY_LAUNCH_FULLPAGE,
+  //             variation: notifFeature.variation,
+  //           },
+  //         ]
+  //       : []),
+  //   ]
+  // } catch (e) {
+  //   logger.error(e)
+  // }
+
   return notifications
 }
 
