@@ -29,7 +29,7 @@ const data = {
   backgroundImageCategory: 'cats',
   charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
   individualImpactEnabled: true, // Deprecated. Use "impactType".
-  impactType: 'individual',
+  impactType: 'group',
   impactVisits: 14,
   landingPagePath: '/cats/',
   landingPagePhrase: 'This tab helps shelter cats',
@@ -110,6 +110,10 @@ const data = {
     primaryColor: '#9d4ba3', // purple
     secondaryColor: '#29BEBA',
   },
+  charityIds: [
+    '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
+    '747b5c5f-201d-4862-ad89-8917be2d7e9b',
+  ],
 }
 
 export default data

@@ -8,6 +8,7 @@ import dataReproductiveHealth from '../../cause/causes/reproductiveHealthCauseDa
 import dataSeas from '../../cause/causes/teamseas/causeData'
 import dataTrees from '../../cause/causes/trees/causeData'
 import dataUkraine from '../../cause/causes/ukraine/causeData'
+import dataCats from '../../cause/causes/cats/causeData'
 
 jest.mock('../impactMetricRepository')
 
@@ -87,6 +88,14 @@ describe('getNextImpactMetricForCause', () => {
     expect(getNextImpactMetricForCause(dataUkraine.id)).toEqual(
       mockImpactMetric
     )
+    expect(getImpactMetricById).toHaveBeenCalled()
+  })
+
+  it('returns appropriate impact metric for ukraine', async () => {
+    const { getImpactMetricById } = require('../impactMetricRepository')
+    getImpactMetricById.mockReturnValue(mockImpactMetric)
+
+    expect(getNextImpactMetricForCause(dataCats.id)).toEqual(mockImpactMetric)
     expect(getImpactMetricById).toHaveBeenCalled()
   })
 })
