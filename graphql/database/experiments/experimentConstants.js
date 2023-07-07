@@ -45,3 +45,6 @@ export const LAUNCH_BOOKMARKS = 'launch-bookmarks'
 
 // Feature Flag to show Group Impact Leaderboard
 export const GROUP_IMPACT_LEADERBOARD = 'group-impact-leaderboard'
+
+// Promo for Prime day 2023
+export const SHFAC_PRIME_DAY_2023 = 'shfac-notify-prime-day-2023'
