@@ -210,13 +210,13 @@ describe('GroupImpactLeaderboard entity', () => {
   })
 
   it('leaderboard works for last place', async () => {
+    await GroupImpactLeaderboard.add('key', 'entity1', 9)
+    await GroupImpactLeaderboard.add('key', 'entity2', 7)
+    await GroupImpactLeaderboard.add('key', 'entity3', 5)
     await GroupImpactLeaderboard.add('key', 'entity4', 4)
     await GroupImpactLeaderboard.add('key', 'entity5', 3)
     await GroupImpactLeaderboard.add('key', 'entity6', 2)
     await GroupImpactLeaderboard.add('key', 'entity7', 1)
-    await GroupImpactLeaderboard.add('key', 'entity1', 9)
-    await GroupImpactLeaderboard.add('key', 'entity2', 7)
-    await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
     jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {
@@ -290,13 +290,13 @@ describe('GroupImpactLeaderboard entity', () => {
   })
 
   it('leaderboard works for 4th place', async () => {
+    await GroupImpactLeaderboard.add('key', 'entity1', 9)
+    await GroupImpactLeaderboard.add('key', 'entity2', 7)
+    await GroupImpactLeaderboard.add('key', 'entity3', 5)
     await GroupImpactLeaderboard.add('key', 'entity4', 4)
     await GroupImpactLeaderboard.add('key', 'entity5', 3)
     await GroupImpactLeaderboard.add('key', 'entity6', 2)
     await GroupImpactLeaderboard.add('key', 'entity7', 1)
-    await GroupImpactLeaderboard.add('key', 'entity1', 9)
-    await GroupImpactLeaderboard.add('key', 'entity2', 7)
-    await GroupImpactLeaderboard.add('key', 'entity3', 5)
 
     const UserModel = require('../../users/UserModel').default
     jest.spyOn(UserModel, 'getBatchInOrder').mockImplementation((_, ids) => {

@@ -46,30 +46,28 @@ class GroupImpactLeaderboard {
     const topUsers = (await redisClient.zrange(redisKey, -3, -1)).reverse()
 
     // Get user's position
-    const currentPosition = await redisClient.zrank(redisKey, userId)
-    let nextUsers
-    let userPositions
+    const currentPosition = await redisClient.zrevrank(redisKey, userId)
+    let nextUsers = []
+    let userPositions = []
     // Get users around user
     if (currentPosition < 3) {
       // If user in top 3, just get next 3 users
-      nextUsers = await redisClient.zrange(redisKey, 3, 5)
-      userPositions = [1, 2, 3, 4, 5, 6]
+      nextUsers = (await redisClient.zrange(redisKey, -6, -4)).reverse()
+      for (let i = 0; i < nextUsers.length + topUsers.length; i += 1) {
+        userPositions.push(i + 1)
+      }
     } else {
-      const lowerBound = Math.max(3, currentPosition - 1)
-      nextUsers = await redisClient.zrange(redisKey, lowerBound, lowerBound + 2)
+      const lowerBound = Math.max(4, currentPosition)
+      nextUsers = (
+        await redisClient.zrange(redisKey, -lowerBound - 2, -lowerBound)
+      ).reverse()
       if (nextUsers.length === 1) {
-        userPositions = [1, 2, 3, lowerBound + 1]
+        userPositions = [1, 2, 3, lowerBound]
       } else if (nextUsers.length === 2) {
-        userPositions = [1, 2, 3, lowerBound + 1, lowerBound + 2]
-      } else if (nextUsers.length === 3)
-        userPositions = [
-          1,
-          2,
-          3,
-          lowerBound + 1,
-          lowerBound + 2,
-          lowerBound + 3,
-        ]
+        userPositions = [1, 2, 3, lowerBound, lowerBound + 1]
+      } else if (nextUsers.length === 3) {
+        userPositions = [1, 2, 3, lowerBound, lowerBound + 1, lowerBound + 2]
+      }
     }
 
     const userModels = await UserModel.getBatchInOrder(groupImpactOverride, [
