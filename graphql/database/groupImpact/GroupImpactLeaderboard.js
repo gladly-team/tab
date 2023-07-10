@@ -43,26 +43,20 @@ class GroupImpactLeaderboard {
     )
 
     // Get Top 3 users
-    const topUsers = (await redisClient.zrange(redisKey, -3, -1)).reverse
+    const topUsers = (await redisClient.zrange(redisKey, -3, -1)).reverse()
 
     // Get user's position
-    const currentPosition = await redisClient.zrevrank(redisKey, userId)
-    let nextUsers = []
-    let userPositions = []
+    const currentPosition = await redisClient.zrank(redisKey, userId)
+    let nextUsers
+    let userPositions
     // Get users around user
     if (currentPosition < 3) {
       // If user in top 3, just get next 3 users
-      nextUsers = await redisClient.zrange(redisKey, -6, -4)
-      for (let i = 0; i < nextUsers.length + topUsers.length; i += 1) {
-        userPositions.push(i + 1)
-      }
+      nextUsers = await redisClient.zrange(redisKey, 3, 5)
+      userPositions = [1, 2, 3, 4, 5, 6]
     } else {
       const lowerBound = Math.max(3, currentPosition - 1)
-      nextUsers = await redisClient.zrange(
-        redisKey,
-        -lowerBound - 2,
-        -lowerBound
-      )
+      nextUsers = await redisClient.zrange(redisKey, lowerBound, lowerBound + 2)
       if (nextUsers.length === 1) {
         userPositions = [1, 2, 3, lowerBound + 1]
       } else if (nextUsers.length === 2) {

@@ -69,6 +69,7 @@ const methods = {
   zrange: (key, from, to) => {
     const sortedEntries = sortMap(store[key])
     const slice = sortedEntries.slice(from, to + 1)
+    console.log(slice)
     return slice.map((entry) => entry[0])
   },
   zrevrank: (key, value) => {
