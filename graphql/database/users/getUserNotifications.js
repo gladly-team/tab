@@ -12,10 +12,10 @@ import { SHFAC_PRIME_DAY_2023 } from '../experiments/experimentConstants'
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
 
-  // Only show the notification if the user has not signed up for a shop yet.
-  if (user.shopSignupTimestamp) {
-    return notifications
-  }
+  // // Only show the notification if the user has not signed up for a shop yet.
+  // if (user.shopSignupTimestamp) {
+  //   return notifications
+  // }
 
   try {
     const notifFeature = await getUserFeature(
