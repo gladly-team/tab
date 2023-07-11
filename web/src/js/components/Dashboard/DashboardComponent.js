@@ -538,8 +538,8 @@ class Dashboard extends React.Component {
                 rel="noreferrer"
               >
                 Amazon Smile
-              </a>{' '}
-              we got you covered with{' '}
+              </a>
+              , we launched a better version:{' '}
               <a href="https://shop.gladly.io" target="_blank" rel="noreferrer">
                 Shop for a Cause
               </a>
@@ -547,7 +547,6 @@ class Dashboard extends React.Component {
               {user.cause && user.cause.nameForShop
                 ? user.cause.nameForShop
                 : 'Charity'}
-              .
             </Typography>
 
             <Button
