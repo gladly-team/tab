@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -38,7 +37,6 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   //WIDGET_FULLPAGE_SHOP_URL,
-  WIDGET_PRIME_DAY_2023_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -154,7 +152,7 @@ const styles = theme => ({
   },
 })
 
-const PRIME_DAY_DISMISS = 'tab.user.dismissedNotif.prime-day-2023'
+//const PRIME_DAY_DISMISS = 'tab.user.dismissedNotif.prime-day-2023'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -191,7 +189,6 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: false,
-      dissmissedPrimeDay: localStorageMgr.getItem(PRIME_DAY_DISMISS) === 'true',
     }
   }
 
@@ -280,10 +277,10 @@ class Dashboard extends React.Component {
     })
   }
 
-  onDismissPrimeDay() {
-    localStorageMgr.setItem(PRIME_DAY_DISMISS, true)
-    this.setState({ dissmissedPrimeDay: true })
-  }
+  // onDismissPrimeDay() {
+  //   localStorageMgr.setItem(PRIME_DAY_DISMISS, true)
+  //   this.setState({ dissmissedPrimeDay: true })
+  // }
 
   render() {
     const { user, app, classes } = this.props
@@ -466,12 +463,12 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notificationsToShow = this.state.notificationsToShow
+    //const notificationsToShow = this.state.notificationsToShow
 
     // Our Notification
-    const notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-prime-day-2023'
-    )
+    // const notif = notificationsToShow.find(
+    //   notif => notif.code === 'shfac-notify-prime-day-2023'
+    // )
 
     // let notif = notificationsToShow.find(
     //   notif => notif.code === 'shfac-notify-launch-fullpage'
@@ -508,7 +505,7 @@ class Dashboard extends React.Component {
         />
 
         {/* Prime Day 2023 widget promo */}
-        {user && notif && !this.state.dissmissedPrimeDay ? (
+        {/* {user && notif && !this.state.dissmissedPrimeDay ? (
           <Paper
             align="center"
             style={{
@@ -558,7 +555,7 @@ class Dashboard extends React.Component {
               Click to Shop and Raise
             </Button>
           </Paper>
-        ) : null}
+        ) : null} */}
 
         {user && app ? (
           <FadeInDashboardAnimation>
@@ -1026,7 +1023,7 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {user && this.state.showIFrameWidget && notif ? (
+        {/* {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
               widgetName={'shfac-notify-prime-day-2023'}
@@ -1046,7 +1043,7 @@ class Dashboard extends React.Component {
               }
             />
           </FadeInDashboardAnimation>
-        ) : null}
+        ) : null} */}
       </div>
     )
   }

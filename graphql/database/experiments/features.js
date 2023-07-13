@@ -20,7 +20,6 @@ import {
   SHFAC_NOTIFY_LAUNCH_FULLPAGE,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
-  SHFAC_PRIME_DAY_2023,
 } from './experimentConstants'
 
 const features = {
@@ -480,10 +479,6 @@ const features = {
         },
       },
     ],
-  },
-
-  [SHFAC_PRIME_DAY_2023]: {
-    defaultValue: true,
   },
 
   [LAUNCH_BOOKMARKS]: {
