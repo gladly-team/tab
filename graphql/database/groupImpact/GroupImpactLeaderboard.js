@@ -79,14 +79,20 @@ class GroupImpactLeaderboard {
         ]
     }
 
-    const userModels = await UserModel.getBatchInOrder(groupImpactOverride, [
-      ...topUsers,
-      ...nextUsers,
-    ])
+    const potentialUsers = [...topUsers, ...nextUsers]
+    // Safety check to ensure we don't fetch duplicate users
+    const [dedupedUsers, dedupedUserPositions] = this.removeDuplicates(
+      potentialUsers,
+      userPositions
+    )
+    const userModels = await UserModel.getBatchInOrder(
+      groupImpactOverride,
+      dedupedUsers
+    )
     const userGroupImpactModels = await this.fetchGroupImpactMetricModels(
       userModels
     )
-    return userPositions.map((element, index) => ({
+    return dedupedUserPositions.map((element, index) => ({
       user: userModels[index],
       position: element,
       userGroupImpactMetric: userGroupImpactModels[index],
@@ -106,6 +112,24 @@ class GroupImpactLeaderboard {
 
   static getRedisKey(hashKey) {
     return `${this.name}_${hashKey}`
+  }
+
+  static removeDuplicates(listA, listB) {
+    const seen = {}
+    const deduplicatedListA = []
+    const deduplicatedListB = []
+
+    for (let i = 0; i < listA.length; i += 1) {
+      const currentItem = listA[i]
+
+      if (!seen[currentItem]) {
+        deduplicatedListA.push(currentItem)
+        deduplicatedListB.push(listB[i])
+        seen[currentItem] = true
+      }
+    }
+
+    return [deduplicatedListA, deduplicatedListB]
   }
 }
 
