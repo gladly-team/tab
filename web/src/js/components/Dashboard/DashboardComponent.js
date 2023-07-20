@@ -36,7 +36,7 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
-  //WIDGET_FULLPAGE_SHOP_URL,
+  WIDGET_FULLPAGE_SHOP_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -75,9 +75,10 @@ import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtension
 //import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
+import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+// import IconButton from '@material-ui/core/IconButton'
+// import CloseIcon from '@material-ui/icons/Close'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -188,7 +189,7 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
-      showIFrameWidget: false,
+      showIFrameWidget: true,
     }
   }
 
@@ -463,25 +464,21 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    //const notificationsToShow = this.state.notificationsToShow
+    const notificationsToShow = this.state.notificationsToShow
 
     // Our Notification
-    // const notif = notificationsToShow.find(
-    //   notif => notif.code === 'shfac-notify-prime-day-2023'
-    // )
+    let notif = notificationsToShow.find(
+      notif => notif.code === 'shfac-notify-fullpage-aug'
+    )
 
-    // let notif = notificationsToShow.find(
-    //   notif => notif.code === 'shfac-notify-launch-fullpage'
-    // )
-
-    // if (
-    //   notif &&
-    //   notif.variation !== 'Version1' &&
-    //   notif.variation !== 'Version2' &&
-    //   notif.variation !== 'Version3'
-    // ) {
-    //   notif = null
-    // }
+    if (
+      notif &&
+      notif.variation !== 'Version1' &&
+      notif.variation !== 'Version2' &&
+      notif.variation !== 'Version3'
+    ) {
+      notif = null
+    }
 
     return (
       <div
@@ -1023,15 +1020,15 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {/* {user && this.state.showIFrameWidget && notif ? (
+        {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'shfac-notify-prime-day-2023'}
+              widgetName={'shfac-notify-fullpage-aug'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
               url={
-                WIDGET_PRIME_DAY_2023_URL +
+                WIDGET_FULLPAGE_SHOP_URL +
                 '?cause_name=' +
                 (user.cause && user.cause.nameForShop
                   ? user.cause.nameForShop
@@ -1043,7 +1040,7 @@ class Dashboard extends React.Component {
               }
             />
           </FadeInDashboardAnimation>
-        ) : null} */}
+        ) : null}
       </div>
     )
   }
