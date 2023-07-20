@@ -17,9 +17,9 @@ import {
   REDUCED_IMPACT_COST,
   USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
-  SHFAC_NOTIFY_LAUNCH_FULLPAGE,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
+  SHFAC_NOTIFY_FULLPAGE_AUG,
 } from './experimentConstants'
 
 const features = {
@@ -465,11 +465,11 @@ const features = {
     ],
   },
 
-  [SHFAC_NOTIFY_LAUNCH_FULLPAGE]: {
-    defaultValue: 'Version3',
+  [SHFAC_NOTIFY_FULLPAGE_AUG]: {
+    defaultValue: 'Version1',
     rules: [
       {
-        variations: ['Version3'],
+        variations: ['Version1', 'Version2', 'Version3'],
         weights: [1.0],
         coverage: 1.0,
         condition: {
