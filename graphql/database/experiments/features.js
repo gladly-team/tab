@@ -496,23 +496,7 @@ const features = {
   },
 
   [GROUP_IMPACT_LEADERBOARD]: {
-    defaultValue: false,
-    rules: [
-      // Show on local/dev for our team only.
-      {
-        condition: {
-          env: 'dev',
-        },
-        force: true,
-      },
-      {
-        condition: {
-          isTabTeamMember: true,
-          env: 'production',
-        },
-        force: true,
-      },
-    ],
+    defaultValue: true,
   },
 }
 
