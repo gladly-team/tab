@@ -469,7 +469,7 @@ const features = {
     defaultValue: 'Version1',
     rules: [
       {
-        variations: ['Version1', 'Version2', 'Version3'],
+        variations: ['Version1'],
         weights: [1.0],
         coverage: 1.0,
         condition: {
