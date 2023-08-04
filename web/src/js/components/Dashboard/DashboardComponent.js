@@ -480,11 +480,6 @@ class Dashboard extends React.Component {
       notif = null
     }
 
-    // Survey notifications
-    let surveyNotif = notificationsToShow.find(
-      notif => notif.code === 'user-survey-august-2023'
-    )
-
     return (
       <div
         style={{
@@ -627,7 +622,7 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {surveyNotif ? (
+              {/* {surveyNotif ? (
                 <Notification
                   useGlobalDismissalTime
                   title={`We want to hear from you!`}
@@ -650,7 +645,7 @@ class Dashboard extends React.Component {
                     marginTop: 4,
                   }}
                 />
-              ) : null}
+              ) : null} */}
 
               {/* {notif ? (
                 <ShfacExtensionSellNotification

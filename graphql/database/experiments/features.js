@@ -19,7 +19,6 @@ import {
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
   SHFAC_NOTIFY_FULLPAGE_AUG,
-  USER_SURVEY_AUGUST_2023,
 } from './experimentConstants'
 
 const features = {
@@ -408,19 +407,6 @@ const features = {
         condition: {
           env: {
             $in: ['local', 'dev'],
-          },
-        },
-        force: true,
-      },
-    ],
-  },
-  [USER_SURVEY_AUGUST_2023]: {
-    defaultValue: false,
-    rules: [
-      {
-        condition: {
-          tabs: {
-            $gt: 20,
           },
         },
         force: true,
