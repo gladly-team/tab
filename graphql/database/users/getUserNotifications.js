@@ -1,6 +1,9 @@
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
-import { SHFAC_NOTIFY_FULLPAGE_AUG } from '../experiments/experimentConstants'
+import {
+  SHFAC_NOTIFY_FULLPAGE_AUG,
+  USER_SURVEY_AUGUST_2023,
+} from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -12,6 +15,25 @@ import { SHFAC_NOTIFY_FULLPAGE_AUG } from '../experiments/experimentConstants'
 
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
+
+  // Survey notifications
+  try {
+    const notifFeature = await getUserFeature(
+      userContext,
+      user,
+      USER_SURVEY_AUGUST_2023
+    )
+
+    notifications = [
+      ...notifications,
+      {
+        code: USER_SURVEY_AUGUST_2023,
+        variation: notifFeature.variation,
+      },
+    ]
+  } catch (e) {
+    logger.error(e)
+  }
 
   // Only show the notification if the user has not signed up for a shop yet.
   if (user.shopSignupTimestamp) {
@@ -26,12 +48,11 @@ const getUserNotifications = async (userContext, user) => {
     )
 
     notifications = [
-      ...[
-        {
-          code: SHFAC_NOTIFY_FULLPAGE_AUG,
-          variation: notifFeature.variation,
-        },
-      ],
+      ...notifications,
+      {
+        code: SHFAC_NOTIFY_FULLPAGE_AUG,
+        variation: notifFeature.variation,
+      },
     ]
   } catch (e) {
     logger.error(e)

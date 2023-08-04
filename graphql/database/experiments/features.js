@@ -15,11 +15,11 @@ import {
   GLOBAL_HEALTH_GROUP_IMPACT,
   ENDING_HUNGER_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
-  USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
   SHFAC_NOTIFY_FULLPAGE_AUG,
+  USER_SURVEY_AUGUST_2023,
 } from './experimentConstants'
 
 const features = {
@@ -414,7 +414,7 @@ const features = {
       },
     ],
   },
-  [USER_SURVEY_MARCH_2023]: {
+  [USER_SURVEY_AUGUST_2023]: {
     defaultValue: false,
     rules: [
       {

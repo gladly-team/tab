@@ -480,6 +480,11 @@ class Dashboard extends React.Component {
       notif = null
     }
 
+    // Survey notifications
+    let surveyNotif = notificationsToShow.find(
+      notif => notif.code === 'user-survey-august-2023'
+    )
+
     return (
       <div
         style={{
@@ -622,6 +627,31 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
+              {surveyNotif ? (
+                <Notification
+                  useGlobalDismissalTime
+                  title={`We want to hear from you!`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        We'd love your feedback via this quick (&lt;2 min)
+                        survey to help improve Tab for a Cause!
+                      </Typography>
+                      <br />
+                      <Typography variant={'body2'} gutterBottom>
+                        Thanks for your help!
+                      </Typography>
+                    </>
+                  }
+                  buttonText={'Take Survey'}
+                  buttonURL={'https://forms.gle/u6wpP3teLpBB4yZP6'}
+                  onDismiss={surveyNotif.onDismiss}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+
               {/* {notif ? (
                 <ShfacExtensionSellNotification
                   userId={user.id}
