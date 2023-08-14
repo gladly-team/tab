@@ -492,10 +492,8 @@ class Dashboard extends React.Component {
       notifSearch.variation !== 'Version2' &&
       notifSearch.variation !== 'Version3'
     ) {
-      notif = null
+      notifSearch = null
     }
-
-    console.log(notifSearch)
 
     return (
       <div
