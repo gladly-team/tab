@@ -37,6 +37,7 @@ import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
   WIDGET_FULLPAGE_SHOP_URL,
+  WIDGET_FULLPAGE_SEARCH_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -466,7 +467,7 @@ class Dashboard extends React.Component {
 
     const notificationsToShow = this.state.notificationsToShow
 
-    // Our Notification
+    // Our Notification - Shop
     let notif = notificationsToShow.find(
       notif => notif.code === 'shfac-notify-fullpage-aug'
     )
@@ -479,6 +480,22 @@ class Dashboard extends React.Component {
     ) {
       notif = null
     }
+
+    // Our Notification - Search
+    let notifSearch = notificationsToShow.find(
+      notif => notif.code === 'sfac-notify-fullpage-aug'
+    )
+
+    if (
+      notifSearch &&
+      notifSearch.variation !== 'Version1' &&
+      notifSearch.variation !== 'Version2' &&
+      notifSearch.variation !== 'Version3'
+    ) {
+      notif = null
+    }
+
+    console.log(notifSearch)
 
     return (
       <div
@@ -1062,6 +1079,28 @@ class Dashboard extends React.Component {
                 user.userId +
                 '&version=' +
                 notif.variation
+              }
+            />
+          </FadeInDashboardAnimation>
+        ) : null}
+
+        {user && this.state.showIFrameWidget && notifSearch ? (
+          <FadeInDashboardAnimation>
+            <WidgetIFrame
+              widgetName={'sfac-notify-fullpage-aug'}
+              onClose={() => {
+                this.onCloseiFrameWidget()
+              }}
+              url={
+                WIDGET_FULLPAGE_SEARCH_URL +
+                '?cause_name=' +
+                (user.cause && user.cause.nameForShop
+                  ? user.cause.nameForShop
+                  : 'Charity') +
+                '&user_id=' +
+                user.userId +
+                '&version=' +
+                notifSearch.variation
               }
             />
           </FadeInDashboardAnimation>
