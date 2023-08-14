@@ -40,6 +40,9 @@ export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
 // Notify users that SHFAC has launched
 export const SHFAC_NOTIFY_FULLPAGE_AUG = 'shfac-notify-fullpage-aug'
 
+// Notify users that SHFAC has launched
+export const SFAC_NOTIFY_FULLPAGE_AUG = 'sfac-notify-fullpage-aug'
+
 // Bookmarks Feature Flag
 export const LAUNCH_BOOKMARKS = 'launch-bookmarks'
 

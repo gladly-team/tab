@@ -18,6 +18,7 @@ import {
   V4_SUPPORTING_STATEMENTS,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
+  SFAC_NOTIFY_FULLPAGE_AUG,
   SHFAC_NOTIFY_FULLPAGE_AUG,
 } from './experimentConstants'
 
@@ -457,6 +458,22 @@ const features = {
       {
         variations: ['Version1'],
         weights: [1.0],
+        coverage: 1.0,
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
+      },
+    ],
+  },
+
+  [SFAC_NOTIFY_FULLPAGE_AUG]: {
+    defaultValue: 'Version0',
+    rules: [
+      {
+        variations: ['Version0', 'Version1', 'Version2'],
+        weights: [0.33, 0.33, 0.33],
         coverage: 1.0,
         condition: {
           tabs: {
