@@ -1,5 +1,8 @@
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
+import getSfacActivityState from './getSfacActivityState'
+import { SFAC_ACTIVITY_STATES } from '../constants'
+
 import {
   SHFAC_NOTIFY_FULLPAGE_AUG,
   SFAC_NOTIFY_FULLPAGE_AUG,
@@ -16,14 +19,17 @@ import {
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
 
+  const sfacActivityState = await getSfacActivityState(userContext, user)
+
   // SFAC_NOTIFY_FULLPAGE_AUG
   const signupDate = new Date(user.shopSignupTimestamp)
   const currentDate = new Date()
   const thirtyDaysAgo = new Date(currentDate - 30 * 24 * 60 * 60 * 1000) // 30 days in milliseconds
 
   if (
-    !user.shopSignupTimestamp ||
-    signupDate.getTime() < thirtyDaysAgo.getTime()
+    (!user.shopSignupTimestamp ||
+      signupDate.getTime() < thirtyDaysAgo.getTime()) &&
+    sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE
   ) {
     try {
       const notifFeature = await getUserFeature(
