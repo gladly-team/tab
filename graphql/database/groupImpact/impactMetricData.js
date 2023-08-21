@@ -13,6 +13,7 @@ const data = [
     active: false,
     impactCountPerMetric: 1,
   },
+
   {
     id: 'mhwYA7KbK',
     charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
@@ -75,13 +76,28 @@ const data = [
     dollarAmount: 100e6, // $100
     impactTitle:
       'Remove {{count}} water bottles worth of plastic from our oceans',
-    metricTitle: '5000 water bottles removed',
+    metricTitle: '{{count}} water bottles removed',
     description:
       'Our oceans are increasingly filled with pastic and other waste. TeamSeas is working to remove existing plastic as well as divert plastic coming from rivers and streams to ensure a future for our oceans and marine life.',
     whyValuableDescription:
       'Our oceans are increasingly filled with pastic and other waste. TeamSeas is working to remove existing plastic as well as divert plastic coming from rivers and streams to ensure a future for our oceans and marine life.',
     active: false,
     impactCountPerMetric: 5000,
+  },
+  {
+    id: 'kTeL0g_HM',
+    charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e', // #TeamSeas
+    dollarAmount: 300e6, // $300
+    impactTitle:
+      'Remove {{count}} water bottles worth of plastic from our oceans',
+    metricTitle: '{{count}} water bottles removed',
+    description:
+      'Our oceans are increasingly filled with pastic and other waste. TeamSeas is working to remove existing plastic as well as divert plastic coming from rivers and streams to ensure a future for our oceans and marine life.',
+    whyValuableDescription:
+      'Our oceans are increasingly filled with pastic and other waste. TeamSeas is working to remove existing plastic as well as divert plastic coming from rivers and streams to ensure a future for our oceans and marine life.',
+    active: false,
+    impactCountPerMetric: 15000,
+    timeboxed: true,
   },
   {
     id: 'Te3oC8KIP',
