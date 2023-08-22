@@ -71,6 +71,10 @@ const allFixtures = [
     tableName: 'UserEventLog',
     jsonFile: 'UserEventLog.json',
   },
+  {
+    tableName: 'UserGroupImpactMetricLog',
+    jsonFile: 'UserGroupImpactMetricLog.json',
+  },
 ]
 
 const getFixtures = () => {

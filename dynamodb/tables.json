@@ -500,5 +500,20 @@
       "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
+  },
+  {
+    "TableName": "UserGroupImpactMetricLog",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "dateStarted", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "dateStarted", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
   }
 ]
