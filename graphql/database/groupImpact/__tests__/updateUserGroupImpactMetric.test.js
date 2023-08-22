@@ -30,7 +30,7 @@ jest.mock('../../databaseClient')
 jest.mock('../GroupImpactLeaderboard')
 
 beforeAll(() => {
-  mockDate.on()
+  mockDate.on(null, { mockCurrentTimeOnly: true })
 })
 
 afterAll(() => {
@@ -57,6 +57,7 @@ const getGroupImpactMetric = () => ({
   impactMetricId: 'abcd',
   dollarProgress: 1000,
   dollarGoal: 25000000,
+  dateStarted: moment.utc().toISOString(),
 })
 
 describe('updateUserGroupImpactMetric tests', () => {
@@ -260,8 +261,11 @@ describe('updateUserGroupImpactMetric tests', () => {
     const UserModel = require('../../users/UserModel').default
     const UserGroupImpactModel =
       require('../UserGroupImpactMetricModel').default
+    const UserGroupImpactMetricLogModel =
+      require('../UserGroupImpactMetricLogModel').default
     const updateMethod = jest.spyOn(UserModel, 'update')
     const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+    const createMethod = jest.spyOn(UserGroupImpactMetricLogModel, 'create')
 
     const result = await updateUserGroupImpactMetric(
       userContext,
@@ -295,6 +299,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       user.id,
       1000
     )
+    expect(createMethod).not.toHaveBeenCalled()
   })
 
   it('correctly ends and starts new user group impact metric when applicable for search', async () => {
@@ -313,8 +318,11 @@ describe('updateUserGroupImpactMetric tests', () => {
     const UserModel = require('../../users/UserModel').default
     const UserGroupImpactModel =
       require('../UserGroupImpactMetricModel').default
+    const UserGroupImpactMetricLogModel =
+      require('../UserGroupImpactMetricLogModel').default
     const updateMethod = jest.spyOn(UserModel, 'update')
     const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+    const createMethod = jest.spyOn(UserGroupImpactMetricLogModel, 'create')
 
     const result = await updateUserGroupImpactMetric(
       userContext,
@@ -348,6 +356,133 @@ describe('updateUserGroupImpactMetric tests', () => {
       user.id,
       2000
     )
+    expect(createMethod).not.toHaveBeenCalled()
+  })
+
+  it('correctly ends and starts new user group impact metric when applicable - timeboxed', async () => {
+    const userGroupImpactMetricId = uuid()
+    const user = getMockUserInstance({
+      userGroupImpactMetricId,
+    })
+    const groupImpactMetric = {
+      ...getGroupImpactMetric(),
+      dateExpires: moment.utc().add(1, 'day').toISOString(),
+    }
+    const oldUserGroupImpactMetricModel =
+      await UserGroupImpactMetricModel.create(groupImpactOverride, {
+        id: userGroupImpactMetricId,
+        groupImpactMetricId: uuid(), // Other Group Impact Metric
+        userId: user.id,
+        dollarContribution: 1000,
+      })
+    const UserModel = require('../../users/UserModel').default
+    const UserGroupImpactModel =
+      require('../UserGroupImpactMetricModel').default
+    const UserGroupImpactMetricLogModel =
+      require('../UserGroupImpactMetricLogModel').default
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+    const createMethod = jest.spyOn(UserGroupImpactMetricLogModel, 'create')
+
+    const result = await updateUserGroupImpactMetric(
+      userContext,
+      user,
+      groupImpactMetric,
+      'tab'
+    )
+    const userGroupImpactMetric = await UserGroupImpactMetricModel.get(
+      userContext,
+      result.id
+    )
+    expect(userGroupImpactMetric).toEqual({
+      id: result.id,
+      userId: user.id,
+      groupImpactMetricId: groupImpactMetric.id,
+      dollarContribution: 1000,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 1000,
+    })
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: user.id,
+      userGroupImpactMetricId: result.id,
+      updated: moment.utc().toISOString(),
+    })
+    expect(deleteMethod).toHaveBeenCalledWith(oldUserGroupImpactMetricModel.id)
+    expect(GroupImpactLeaderboard.add).toHaveBeenCalledWith(
+      groupImpactMetric.id,
+      user.id,
+      1000
+    )
+    expect(createMethod).toHaveBeenCalledWith(groupImpactOverride, {
+      ...oldUserGroupImpactMetricModel,
+      dateStarted: groupImpactMetric.dateStarted,
+    })
+  })
+
+  it('correctly ends and starts new user group impact metric when applicable for search - timeboxed', async () => {
+    const userGroupImpactMetricId = uuid()
+    const user = getMockUserInstance({
+      userGroupImpactMetricId,
+    })
+    const groupImpactMetric = {
+      ...getGroupImpactMetric(),
+      dateExpires: moment.utc().add(1, 'day').toISOString(),
+    }
+    const oldUserGroupImpactMetricModel =
+      await UserGroupImpactMetricModel.create(groupImpactOverride, {
+        id: userGroupImpactMetricId,
+        groupImpactMetricId: uuid(), // Other Group Impact Metric
+        userId: user.id,
+        dollarContribution: 1000,
+      })
+    const UserModel = require('../../users/UserModel').default
+    const UserGroupImpactModel =
+      require('../UserGroupImpactMetricModel').default
+    const UserGroupImpactMetricLogModel =
+      require('../UserGroupImpactMetricLogModel').default
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+    const createMethod = jest.spyOn(UserGroupImpactMetricLogModel, 'create')
+
+    const result = await updateUserGroupImpactMetric(
+      userContext,
+      user,
+      groupImpactMetric,
+      'search'
+    )
+    const userGroupImpactMetric = await UserGroupImpactMetricModel.get(
+      userContext,
+      result.id
+    )
+    expect(userGroupImpactMetric).toEqual({
+      id: result.id,
+      userId: user.id,
+      groupImpactMetricId: groupImpactMetric.id,
+      dollarContribution: 2000,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      searchDollarContribution: 2000,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
+    })
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: user.id,
+      userGroupImpactMetricId: result.id,
+      updated: moment.utc().toISOString(),
+    })
+    expect(deleteMethod).toHaveBeenCalledWith(oldUserGroupImpactMetricModel.id)
+    expect(GroupImpactLeaderboard.add).toHaveBeenCalledWith(
+      groupImpactMetric.id,
+      user.id,
+      2000
+    )
+    expect(createMethod).toHaveBeenCalledWith(groupImpactOverride, {
+      ...oldUserGroupImpactMetricModel,
+      dateStarted: groupImpactMetric.dateStarted,
+    })
   })
 
   it('throws if no source provided', async () => {

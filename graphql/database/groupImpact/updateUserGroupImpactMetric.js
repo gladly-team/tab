@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import UserGroupImpactMetric from './UserGroupImpactMetricModel'
+import UserGroupImpactMetricLogModel from './UserGroupImpactMetricLogModel'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
 import {
   GROUP_IMPACT_OVERRIDE,
@@ -55,6 +56,19 @@ const updateUserGroupImpactMetricModel = async (
     dollarContribution,
     tabDollarContribution,
     searchDollarContribution,
+  })
+}
+
+const logUserGroupImpactMetricIfApplicable = async (
+  groupImpactMetric,
+  userGroupImpactMetric
+) => {
+  if (!groupImpactMetric.dateExpires) return
+
+  const { dateStarted } = groupImpactMetric
+  await UserGroupImpactMetricLogModel.create(groupImpactOverride, {
+    ...userGroupImpactMetric,
+    dateStarted,
   })
 }
 
@@ -124,6 +138,10 @@ const updateUserGroupImpactMetric = async (
       groupImpactMetric.id,
       user.id,
       userGroupImpactMetricModel.dollarContribution
+    )
+    await logUserGroupImpactMetricIfApplicable(
+      groupImpactMetric,
+      userGroupImpactMetric
     )
     return userGroupImpactMetricModel
   }
