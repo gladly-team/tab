@@ -1,0 +1,12 @@
+[
+  {
+    "id": "abcdefghijklmno",
+    "causeId": "abcd",
+    "impactMetricId": "12345",
+    "dollarProgress": 1000,
+    "dollarGoal": 10000,
+    "dollarProgressFromSearch": 100,
+    "dollarProgressFromTab": 200,
+    "dateStarted": "2017-07-17T20:45:53Z"
+  }
+]
