@@ -46,6 +46,7 @@ describe('ImpactMetricModel', () => {
       metricTitle: '1 home visit',
       impactTitle: 'Provide 1 visit from a community health worker',
       active: true,
+      timeboxed: false,
       whyValuableDescription: 'It makes a difference.',
       impactCountPerMetric: 1,
     })
