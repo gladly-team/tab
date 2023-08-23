@@ -31,6 +31,7 @@ describe('UserGroupImpactMetricModel', () => {
         tabDollarContribution: 333,
         searchDollarContribution: 333,
         shopDollarContribution: 334,
+        referralDollarContribution: 345,
       })
     )
     expect(item).toEqual({
@@ -41,6 +42,7 @@ describe('UserGroupImpactMetricModel', () => {
       tabDollarContribution: 333,
       searchDollarContribution: 333,
       shopDollarContribution: 334,
+      referralDollarContribution: 345,
     })
   })
 
@@ -62,6 +64,7 @@ describe('UserGroupImpactMetricModel', () => {
       tabDollarContribution: 0,
       searchDollarContribution: 0,
       shopDollarContribution: 0,
+      referralDollarContribution: 0,
     })
   })
 
