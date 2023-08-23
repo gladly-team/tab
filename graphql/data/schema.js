@@ -1144,6 +1144,11 @@ const groupImpactMetricType = new GraphQLObjectType({
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far from search',
     },
+    dateExpires: {
+      type: GraphQLString,
+      description:
+        'ISO datetime string of when this GroupImpactMetric will expire',
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1186,6 +1191,11 @@ const userGroupImpactMetricType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLInt),
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping',
+    },
+    referralDollarContribution: {
+      type: GraphQLInt,
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals',
     },
   }),
   interfaces: [nodeInterface],
