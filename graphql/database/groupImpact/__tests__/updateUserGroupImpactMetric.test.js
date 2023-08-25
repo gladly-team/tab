@@ -504,6 +504,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 0,
       shopDollarContribution: 0,
       tabDollarContribution: 1000,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -567,6 +568,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 2000,
       shopDollarContribution: 0,
       tabDollarContribution: 0,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
