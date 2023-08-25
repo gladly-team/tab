@@ -21,7 +21,8 @@ const replaceUserGroupImpactMetricModel = async (
   groupImpactMetricId,
   oldUserGroupImpactMetricId = null,
   tabDollarContribution = 0,
-  searchDollarContribution = 0
+  searchDollarContribution = 0,
+  referralDollarContribution = 0
 ) => {
   const userGroupImpactMetric = await UserGroupImpactMetric.create(
     groupImpactOverride,
@@ -29,9 +30,13 @@ const replaceUserGroupImpactMetricModel = async (
       id: uuid(),
       userId,
       groupImpactMetricId,
-      dollarContribution: tabDollarContribution + searchDollarContribution,
+      dollarContribution:
+        tabDollarContribution +
+        searchDollarContribution +
+        referralDollarContribution,
       tabDollarContribution,
       searchDollarContribution,
+      referralDollarContribution,
     }
   )
   if (oldUserGroupImpactMetricId !== null) {
@@ -49,13 +54,15 @@ const updateUserGroupImpactMetricModel = async (
   id,
   dollarContribution,
   tabDollarContribution,
-  searchDollarContribution
+  searchDollarContribution,
+  referralDollarContribution
 ) => {
   return UserGroupImpactMetric.update(groupImpactOverride, {
     id,
     dollarContribution,
     tabDollarContribution,
     searchDollarContribution,
+    referralDollarContribution,
   })
 }
 
@@ -111,27 +118,36 @@ const updateUserGroupImpactMetric = async (
 
   const microUSDsForTab = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
   const microUSDsForSearch = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
+  const microUSDsForReferral = 10 ** 6 // TODO: make into a config
   if (groupImpactMetric.id !== userGroupImpactMetric.groupImpactMetricId) {
     // Create new UserGroupImpactMetric model and update leaderboard
     let userGroupImpactMetricModel
     if (source === 'tab') {
-      const amount = Math.round(microUSDsForTab)
       userGroupImpactMetricModel = await replaceUserGroupImpactMetricModel(
         userContext,
         user.id,
         groupImpactMetric.id,
         userGroupImpactMetric.id,
-        amount
+        Math.round(microUSDsForTab)
       )
     } else if (source === 'search') {
-      const amount = Math.round(microUSDsForSearch)
       userGroupImpactMetricModel = await replaceUserGroupImpactMetricModel(
         userContext,
         user.id,
         groupImpactMetric.id,
         userGroupImpactMetric.id,
         0,
-        amount
+        Math.round(microUSDsForSearch)
+      )
+    } else if (source === 'referral') {
+      userGroupImpactMetricModel = await replaceUserGroupImpactMetricModel(
+        userContext,
+        user.id,
+        groupImpactMetric.id,
+        userGroupImpactMetric.id,
+        0,
+        0,
+        Math.round(microUSDsForReferral)
       )
     }
     GroupImpactLeaderboard.add(
@@ -148,6 +164,7 @@ const updateUserGroupImpactMetric = async (
   let newDollarProgress
   let newTabDollarProgress
   let newSearchDollarProgress
+  let newReferralDollarProgress
   if (source === 'tab') {
     newTabDollarProgress = Math.round(
       userGroupImpactMetric.tabDollarContribution
@@ -156,6 +173,9 @@ const updateUserGroupImpactMetric = async (
     )
     newSearchDollarProgress = userGroupImpactMetric.searchDollarContribution
       ? userGroupImpactMetric.searchDollarContribution
+      : 0
+    newReferralDollarProgress = userGroupImpactMetric.referralDollarContribution
+      ? userGroupImpactMetric.referralDollarContribution
       : 0
     newDollarProgress = Math.round(
       userGroupImpactMetric.dollarContribution + microUSDsForTab
@@ -169,8 +189,24 @@ const updateUserGroupImpactMetric = async (
         ? userGroupImpactMetric.searchDollarContribution + microUSDsForSearch
         : microUSDsForSearch
     )
+    newReferralDollarProgress = userGroupImpactMetric.referralDollarContribution
+      ? userGroupImpactMetric.referralDollarContribution
+      : 0
     newDollarProgress = Math.round(
       userGroupImpactMetric.dollarContribution + microUSDsForSearch
+    )
+  } else if (source === 'referral') {
+    newTabDollarProgress = userGroupImpactMetric.tabDollarContribution
+      ? userGroupImpactMetric.tabDollarContribution
+      : 0
+    newSearchDollarProgress = userGroupImpactMetric.searchDollarContribution
+      ? userGroupImpactMetric.searchDollarContribution
+      : 0
+    newReferralDollarProgress = userGroupImpactMetric.referralDollarContribution
+      ? userGroupImpactMetric.referralDollarContribution + microUSDsForReferral
+      : microUSDsForReferral
+    newDollarProgress = Math.round(
+      userGroupImpactMetric.dollarContribution + microUSDsForReferral
     )
   }
   GroupImpactLeaderboard.add(groupImpactMetric.id, user.id, newDollarProgress)
@@ -178,7 +214,8 @@ const updateUserGroupImpactMetric = async (
     userGroupImpactMetric.id,
     newDollarProgress,
     newTabDollarProgress,
-    newSearchDollarProgress
+    newSearchDollarProgress,
+    newReferralDollarProgress
   )
 }
 

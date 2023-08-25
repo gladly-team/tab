@@ -91,6 +91,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 0,
       shopDollarContribution: 0,
       tabDollarContribution: 1000,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -135,6 +136,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 2000,
       shopDollarContribution: 0,
       tabDollarContribution: 0,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -146,6 +148,51 @@ describe('updateUserGroupImpactMetric tests', () => {
       groupImpactMetric.id,
       user.id,
       2000
+    )
+  })
+
+  it('creates correct instances of UserGroupImpactMetricModel if both do not exist for referral', async () => {
+    const user = getMockUserInstance()
+    const groupImpactMetric = getGroupImpactMetric()
+    const UserModel = require('../../users/UserModel').default
+    const UserGroupImpactModel =
+      require('../UserGroupImpactMetricModel').default
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+    const result = await updateUserGroupImpactMetric(
+      userContext,
+      user,
+      groupImpactMetric,
+      'referral'
+    )
+
+    const userGroupImpactMetric = await UserGroupImpactMetricModel.get(
+      userContext,
+      result.id
+    )
+
+    expect(userGroupImpactMetric).toEqual({
+      id: result.id,
+      userId: user.id,
+      groupImpactMetricId: groupImpactMetric.id,
+      dollarContribution: 10 ** 6,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
+      referralDollarContribution: 10 ** 6,
+    })
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: user.id,
+      userGroupImpactMetricId: result.id,
+      updated: moment.utc().toISOString(),
+    })
+    expect(deleteMethod).not.toHaveBeenCalled()
+    expect(GroupImpactLeaderboard.add).toHaveBeenCalledWith(
+      groupImpactMetric.id,
+      user.id,
+      10 ** 6
     )
   })
 
@@ -187,6 +234,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 0,
       shopDollarContribution: 0,
       tabDollarContribution: 1000,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).not.toHaveBeenCalled()
     expect(deleteMethod).not.toHaveBeenCalled()
@@ -235,6 +283,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 2000,
       shopDollarContribution: 0,
       tabDollarContribution: 0,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).not.toHaveBeenCalled()
     expect(deleteMethod).not.toHaveBeenCalled()
@@ -242,6 +291,55 @@ describe('updateUserGroupImpactMetric tests', () => {
       groupImpactMetric.id,
       user.id,
       3000
+    )
+  })
+
+  it('normally updates group impact metric with referral', async () => {
+    const userGroupImpactMetricId = uuid()
+    const user = getMockUserInstance({
+      userGroupImpactMetricId,
+    })
+    const groupImpactMetric = getGroupImpactMetric()
+    await UserGroupImpactMetricModel.create(groupImpactOverride, {
+      id: userGroupImpactMetricId,
+      groupImpactMetricId: groupImpactMetric.id,
+      userId: user.id,
+      dollarContribution: 1000,
+    })
+    const UserModel = require('../../users/UserModel').default
+    const UserGroupImpactModel =
+      require('../UserGroupImpactMetricModel').default
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+
+    const result = await updateUserGroupImpactMetric(
+      userContext,
+      user,
+      groupImpactMetric,
+      'referral'
+    )
+    const userGroupImpactMetric = await UserGroupImpactMetricModel.get(
+      userContext,
+      result.id
+    )
+    expect(userGroupImpactMetric).toEqual({
+      id: result.id,
+      userId: user.id,
+      groupImpactMetricId: groupImpactMetric.id,
+      dollarContribution: 1000 + 10 ** 6,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
+      referralDollarContribution: 10 ** 6,
+    })
+    expect(updateMethod).not.toHaveBeenCalled()
+    expect(deleteMethod).not.toHaveBeenCalled()
+    expect(GroupImpactLeaderboard.add).toHaveBeenCalledWith(
+      groupImpactMetric.id,
+      user.id,
+      1000 + 10 ** 6
     )
   })
 
@@ -287,6 +385,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 0,
       shopDollarContribution: 0,
       tabDollarContribution: 1000,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -344,6 +443,7 @@ describe('updateUserGroupImpactMetric tests', () => {
       searchDollarContribution: 2000,
       shopDollarContribution: 0,
       tabDollarContribution: 0,
+      referralDollarContribution: 0,
     })
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: user.id,
@@ -483,6 +583,60 @@ describe('updateUserGroupImpactMetric tests', () => {
       ...oldUserGroupImpactMetricModel,
       dateStarted: groupImpactMetric.dateStarted,
     })
+  })
+
+  it('correctly ends and starts new user group impact metric when applicable for referral', async () => {
+    const userGroupImpactMetricId = uuid()
+    const user = getMockUserInstance({
+      userGroupImpactMetricId,
+    })
+    const groupImpactMetric = getGroupImpactMetric()
+    const oldUserGroupImpactMetricModel =
+      await UserGroupImpactMetricModel.create(groupImpactOverride, {
+        id: userGroupImpactMetricId,
+        groupImpactMetricId: uuid(), // Other Group Impact Metric
+        userId: user.id,
+        dollarContribution: 1000,
+      })
+    const UserModel = require('../../users/UserModel').default
+    const UserGroupImpactModel =
+      require('../UserGroupImpactMetricModel').default
+    const updateMethod = jest.spyOn(UserModel, 'update')
+    const deleteMethod = jest.spyOn(UserGroupImpactModel, 'delete')
+
+    const result = await updateUserGroupImpactMetric(
+      userContext,
+      user,
+      groupImpactMetric,
+      'referral'
+    )
+    const userGroupImpactMetric = await UserGroupImpactMetricModel.get(
+      userContext,
+      result.id
+    )
+    expect(userGroupImpactMetric).toEqual({
+      id: result.id,
+      userId: user.id,
+      groupImpactMetricId: groupImpactMetric.id,
+      dollarContribution: 10 ** 6,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      searchDollarContribution: 0,
+      shopDollarContribution: 0,
+      tabDollarContribution: 0,
+      referralDollarContribution: 10 ** 6,
+    })
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: user.id,
+      userGroupImpactMetricId: result.id,
+      updated: moment.utc().toISOString(),
+    })
+    expect(deleteMethod).toHaveBeenCalledWith(oldUserGroupImpactMetricModel.id)
+    expect(GroupImpactLeaderboard.add).toHaveBeenCalledWith(
+      groupImpactMetric.id,
+      user.id,
+      10 ** 6
+    )
   })
 
   it('throws if no source provided', async () => {
