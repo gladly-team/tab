@@ -469,11 +469,11 @@ const features = {
   },
 
   [SFAC_NOTIFY_FULLPAGE_AUG]: {
-    defaultValue: 'Version0',
+    defaultValue: 'Version2',
     rules: [
       {
-        variations: ['Version0', 'Version1', 'Version2'],
-        weights: [0.33, 0.33, 0.33],
+        variations: ['Version2'],
+        weights: [1.0],
         coverage: 1.0,
         condition: {
           tabs: {
