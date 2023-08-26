@@ -497,6 +497,9 @@ type GroupImpactMetric implements Node {
   The micro USD amount raised for this instance of GroupImpactMetric so far from search
   """
   dollarProgressFromSearch: Int!
+
+  """ISO datetime string of when this GroupImpactMetric will expire"""
+  dateExpires: String
 }
 
 """Fields on which to filter the list of causes."""
@@ -1310,6 +1313,11 @@ type UserGroupImpactMetric implements Node {
   The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping
   """
   shopDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals
+  """
+  referralDollarContribution: Int
 }
 
 """content for each leaderboard"""
