@@ -133,6 +133,7 @@ const rewardReferringUser = async (userContext, userId) => {
     const referringUser = await UserModel.get(override, referringUserId)
     if (referringUser.v4BetaEnabled) {
       const groupImpactMetric = await getGroupImpactMetricForCause(
+        userContext,
         referringUser.causeId
       )
       if (groupImpactMetric) {
