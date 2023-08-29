@@ -118,7 +118,7 @@ const updateUserGroupImpactMetric = async (
 
   const microUSDsForTab = 10 ** 6 * getEstimatedMoneyRaisedPerTab()
   const microUSDsForSearch = 10 ** 6 * getEstimatedMoneyRaisedPerSearch()
-  const microUSDsForReferral = 10 ** 6 // TODO: make into a config
+  const microUSDsForReferral = 1000 * microUSDsForTab // TODO: make into a config
   if (groupImpactMetric.id !== userGroupImpactMetric.groupImpactMetricId) {
     // Create new UserGroupImpactMetric model and update leaderboard
     let userGroupImpactMetricModel
