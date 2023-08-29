@@ -43,6 +43,7 @@ describe('UserGroupImpactMetricLogModel', () => {
         tabDollarContribution: 333,
         searchDollarContribution: 333,
         shopDollarContribution: 334,
+        referralDollarContribution: 10,
         dateStarted: moment.utc().toISOString(),
       })
     )
@@ -54,6 +55,7 @@ describe('UserGroupImpactMetricLogModel', () => {
       tabDollarContribution: 333,
       searchDollarContribution: 333,
       shopDollarContribution: 334,
+      referralDollarContribution: 10,
       dateStarted: moment.utc().toISOString(),
     })
   })
@@ -77,6 +79,7 @@ describe('UserGroupImpactMetricLogModel', () => {
       tabDollarContribution: 0,
       searchDollarContribution: 0,
       shopDollarContribution: 0,
+      referralDollarContribution: 0,
       dateStarted: moment.utc().toISOString(),
     })
   })

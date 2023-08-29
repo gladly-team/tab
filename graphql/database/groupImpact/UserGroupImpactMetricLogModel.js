@@ -1,13 +1,13 @@
-import RedisModel from '../base/RedisModel'
 import types from '../fieldTypes'
 import { USER_GROUP_IMPACT_METRIC_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import tableNames from '../tables'
+import DynamoDBModel from '../base/DynamoDBModel'
 
 /*
- * @extends RedisModel
+ * @extends DynamoDBModel
  */
-class UserGroupImpactMetricLogModel extends RedisModel {
+class UserGroupImpactMetricLogModel extends DynamoDBModel {
   static get name() {
     return USER_GROUP_IMPACT_METRIC_LOG
   }
@@ -22,6 +22,17 @@ class UserGroupImpactMetricLogModel extends RedisModel {
 
   static get tableName() {
     return tableNames.userGroupImpactMetricLog
+  }
+
+  static get indexes() {
+    return [
+      {
+        hashKey: 'userId',
+        rangeKey: 'dateStarted',
+        name: 'UserGroupImpactMetricLogByUser',
+        type: 'global',
+      },
+    ]
   }
 
   static get schema() {
@@ -64,6 +75,12 @@ class UserGroupImpactMetricLogModel extends RedisModel {
         .description(
           `the contribution of the individual user to the GroupImpactMetric in micro USDs from shopping`
         ),
+      referralDollarContribution: types
+        .number()
+        .required()
+        .description(
+          `the contribution of the individual user to the GroupImpactMetric in micro USDs from shopping`
+        ),
       dateStarted: types
         .string()
         .isoDate()
@@ -76,12 +93,21 @@ class UserGroupImpactMetricLogModel extends RedisModel {
       tabDollarContribution: 0,
       searchDollarContribution: 0,
       shopDollarContribution: 0,
+      referralDollarContribution: 0,
     }
   }
 
   static get permissions() {
     return {
       get: permissionAuthorizers.allowAll,
+      create: permissionAuthorizers.allowAll,
+      indexPermissions: {
+        UserGroupImpactMetricLogByUser: {
+          // Note: we should avoid showing a user the user IDs (or other
+          // details) of their recruited users.
+          get: permissionAuthorizers.userIdMatchesHashKey,
+        },
+      },
     }
   }
 }

@@ -16,12 +16,12 @@ function createOrUpdateTable(tableConfig) {
   dynamodb.describeTable(describeParams, (err, tableDescription) => {
     // Table does not exist, so create it.
     if (err && err.code === 'ResourceNotFoundException') {
-      dynamodb.createTable(tableConfig, () => {
-        if (err) {
+      dynamodb.createTable(tableConfig, creationErr => {
+        if (creationErr) {
           console.error(
             `Unable to create table "${
               tableConfig.TableName
-            }". Error JSON: ${JSON.stringify(err, null, 2)}`
+            }". Error JSON: ${JSON.stringify(creationErr, null, 2)}`
           )
         } else {
           console.log(`Created table "${tableConfig.TableName}"`)
