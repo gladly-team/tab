@@ -716,6 +716,8 @@ custom:
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.usage}
     - table: userGroupImpactMetricLogTable
+      index:
+        - UserGroupImpactMetricLogByUser
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.maximum}
@@ -1361,13 +1363,23 @@ resources:
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: dateStarted
-            KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
           - AttributeName: dateStarted
             AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: UserGroupImpactMetricLogByUser
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: dateStarted
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

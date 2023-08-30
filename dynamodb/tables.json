@@ -504,12 +504,33 @@
   {
     "TableName": "UserGroupImpactMetricLog",
     "KeySchema": [
-      { "AttributeName": "userId", "KeyType": "HASH" },
-      { "AttributeName": "dateStarted", "KeyType": "RANGE" }
+      { "AttributeName": "userId", "KeyType": "HASH" }
     ],
     "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "dateStarted", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "UserGroupImpactMetricLogByUser",
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "dateStarted",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
     ],
     "ProvisionedThroughput": {
       "ReadCapacityUnits": 1,

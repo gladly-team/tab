@@ -986,6 +986,9 @@ type User implements Node {
 
   """Current UserGroupImpactMetrics leaderboard"""
   leaderboard: [leaderboardEntry]
+
+  """User historical data related to group impacts"""
+  groupImpactHistory: [UserGroupImpactMetricLog]
 }
 
 """a user's charity specific impact"""
@@ -1329,6 +1332,45 @@ type leaderboardEntry {
 
   """User associated with this leaderboard entry"""
   user: User
+}
+
+"""
+A historical view of a specific users contribution to a GroupImpactMetric
+"""
+type UserGroupImpactMetricLog implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The ID of the user which the UserGroupImpactMetric belongs to"""
+  userId: String!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user
+  """
+  dollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from tabs
+  """
+  tabDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from search
+  """
+  searchDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping
+  """
+  shopDollarContribution: Int!
+
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals
+  """
+  referralDollarContribution: Int!
+
+  """Date the group impact metric started"""
+  dateStarted: Int!
 }
 
 """The Wildfire object"""
