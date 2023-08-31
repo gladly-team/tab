@@ -19,7 +19,7 @@ import {
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
   SFAC_NOTIFY_FULLPAGE_AUG,
-  SHFAC_NOTIFY_FULLPAGE_AUG,
+  SHFAC_NOTIFY_FULLPAGE_SEPT,
 } from './experimentConstants'
 
 const features = {
@@ -452,12 +452,12 @@ const features = {
     ],
   },
 
-  [SHFAC_NOTIFY_FULLPAGE_AUG]: {
+  [SHFAC_NOTIFY_FULLPAGE_SEPT]: {
     defaultValue: 'Version1',
     rules: [
       {
-        variations: ['Version1'],
-        weights: [1.0],
+        variations: ['Version1', 'Version2'],
+        weights: [0.5, 0.5],
         coverage: 1.0,
         condition: {
           tabs: {

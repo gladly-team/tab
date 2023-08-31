@@ -4,7 +4,7 @@ import getSfacActivityState from './getSfacActivityState'
 import { SFAC_ACTIVITY_STATES } from '../constants'
 
 import {
-  SHFAC_NOTIFY_FULLPAGE_AUG,
+  SHFAC_NOTIFY_FULLPAGE_SEPT,
   SFAC_NOTIFY_FULLPAGE_AUG,
 } from '../experiments/experimentConstants'
 
@@ -26,9 +26,10 @@ const getUserNotifications = async (userContext, user) => {
   const currentDate = new Date()
   const thirtyDaysAgo = new Date(currentDate - 30 * 24 * 60 * 60 * 1000) // 30 days in milliseconds
 
+  // Show search full page if a user already has shop, and has not see a full page notification in the last 30 days.
   if (
-    (!user.shopSignupTimestamp ||
-      signupDate.getTime() < thirtyDaysAgo.getTime()) &&
+    user.shopSignupTimestamp &&
+    signupDate.getTime() < thirtyDaysAgo.getTime() &&
     sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE
   ) {
     try {
@@ -61,13 +62,13 @@ const getUserNotifications = async (userContext, user) => {
     const notifFeature = await getUserFeature(
       userContext,
       user,
-      SHFAC_NOTIFY_FULLPAGE_AUG
+      SHFAC_NOTIFY_FULLPAGE_SEPT
     )
 
     notifications = [
       ...notifications,
       {
-        code: SHFAC_NOTIFY_FULLPAGE_AUG,
+        code: SHFAC_NOTIFY_FULLPAGE_SEPT,
         variation: notifFeature.variation,
       },
     ]
