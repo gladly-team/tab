@@ -39,9 +39,10 @@ const updateCauseGroupImpactMetricModel = async (
 const createGroupImpactMetricModel = async (
   causeId,
   groupImpactMetricId,
-  impactMetric
+  impactMetric,
+  groupImpactMetric
 ) => {
-  const rt = {
+  let rt = {
     id: groupImpactMetricId,
     causeId,
     impactMetricId: impactMetric.id,
@@ -52,8 +53,41 @@ const createGroupImpactMetricModel = async (
     dateStarted: moment.utc().toISOString(),
   }
 
+  if (impactMetric.timeboxed) {
+    const dateExpires = groupImpactMetric.dateExpires
+      ? moment(groupImpactMetric.dateExpires).add(1, 'week').toISOString()
+      : moment()
+          .utc()
+          .day(8)
+          .set({ hour: 9, minute: 0, second: 0, millisecond: 0 })
+          .toISOString() // Default to 9AM, following Monday
+    rt = {
+      ...rt,
+      dateExpires,
+    }
+  }
+
   const r = GroupImpactMetricModel.create(groupImpactOverride, rt)
   return r
+}
+
+const isGroupImpactMetricCompleted = (groupImpactMetric, dollarProgress) => {
+  // Timeboxed GroupImpactMetric
+  if (
+    groupImpactMetric.dateExpires &&
+    moment().diff(moment(groupImpactMetric.dateExpires)) > 0
+  ) {
+    return true
+  }
+
+  if (
+    !groupImpactMetric.dateExpires &&
+    dollarProgress > groupImpactMetric.dollarGoal
+  ) {
+    return true
+  }
+
+  return false
 }
 
 const updateGroupImpactMetricModel = async (
@@ -129,7 +163,7 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
     )
   }
 
-  if (newDollarProgress > groupImpactMetric.dollarGoal) {
+  if (isGroupImpactMetricCompleted(groupImpactMetric, newDollarProgress)) {
     // todo: @jtan figure out transactionality
     // Update (End) GroupImpactMetric
     const gi = await updateGroupImpactMetricModel(
@@ -144,7 +178,8 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
     await createGroupImpactMetricModel(
       causeId,
       newGroupImpactMetricId,
-      getNextImpactMetricForCause(causeId)
+      getNextImpactMetricForCause(causeId),
+      groupImpactMetric
     )
 
     // Update Count entity

@@ -30,6 +30,7 @@ const tables = {
   userSearchSettingsLog: 'UserSearchSettingsLog',
   userExperiment: 'UserExperiment',
   userEventLog: 'UserEventLog',
+  userGroupImpactMetricLog: 'UserGroupImpactMetricLog',
 }
 
 export default mapValues(tables, (name) => `${name}${tableNameAppendix}`)
