@@ -469,7 +469,7 @@ class Dashboard extends React.Component {
 
     // Our Notification - Shop
     let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-fullpage-aug'
+      notif => notif.code === 'shfac-notify-fullpage-sept'
     )
 
     if (
@@ -1063,7 +1063,7 @@ class Dashboard extends React.Component {
         {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'shfac-notify-fullpage-aug'}
+              widgetName={'shfac-notify-fullpage-sept'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
