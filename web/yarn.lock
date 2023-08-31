@@ -12831,9 +12831,9 @@ proto-list@~1.2.1:
   integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
 protobufjs@^6.8.6:
-  version "6.11.3"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.3.tgz#637a527205a35caa4f3e2a9a4a13ddffe0e7af74"
-  integrity sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg==
+  version "6.11.4"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.4.tgz#29a412c38bf70d89e537b6d02d904a6f448173aa"
+  integrity sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -15236,10 +15236,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^1.1.10:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.12.tgz#787e9a0cd773bce6d5b2f6d4f684ebd25e891dc8"
-  integrity sha512-+GyoqM6Dw+/k57flZtLJL3wBXJZdcGWspOL+lG7hdm+FtSobhb3yU6QcYJKxSTfDyHgZsu9EkZulrwe7bNEuCA==
+tab-ads@^1.1.14:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.14.tgz#f0884419ba15843f20deee8769feb79e3353757e"
+  integrity sha512-mcKuqH7ueUZBp7g9PmptlgaPWdGt0/TCLKsgXjMJpa6v/cKcNc0OV9h/v+JED9Us4vTrOwRAE3sowkEb9T1fXw==
   dependencies:
     lodash "^4.17.21"
 

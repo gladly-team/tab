@@ -1,0 +1,14 @@
+[
+  {
+    "id": "abcdefghijklmno",
+    "userId": "abcdefghijklmno",
+    "causeId": "abcd",
+    "impactMetricId": "12345",
+    "dollarContribution": 10000,
+    "tabDollarContribution": 1000,
+    "searchDollarContribution": 100,
+    "shopDollarContribuition": 200,
+    "referralDollarContribution": 8700,
+    "dateStarted": "2017-07-17T20:45:53Z"
+  }
+]

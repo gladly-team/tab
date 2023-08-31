@@ -14,6 +14,8 @@ import {
 import addVc from './addVc'
 import addUsersRecruited from './addUsersRecruited'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
+import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
+import getGroupImpactMetricForCause from '../groupImpact/getGroupImpactMetricForCause'
 
 const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 
@@ -128,6 +130,21 @@ const rewardReferringUser = async (userContext, userId) => {
   try {
     await addVc(override, referringUserId, USER_REFERRAL_VC_REWARD)
     await addUsersRecruited(referringUserId, 1)
+    const referringUser = await UserModel.get(override, referringUserId)
+    if (referringUser.v4BetaEnabled) {
+      const groupImpactMetric = await getGroupImpactMetricForCause(
+        userContext,
+        referringUser.causeId
+      )
+      if (groupImpactMetric) {
+        await updateUserGroupImpactMetric(
+          userContext,
+          referringUser,
+          groupImpactMetric,
+          'referral'
+        )
+      }
+    }
   } catch (e) {
     throw e
   }

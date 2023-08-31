@@ -69,12 +69,19 @@ class ImpactMetric extends Model {
         .description(
           `How many instances of the impact are provided per completion of a GroupImpactMetric run. Example: 1 for 'provide 1 visit from a community health worker'`
         ),
+      timeboxed: types
+        .boolean()
+        .default(self.fieldDefaults.timeboxed)
+        .description(
+          'Whether or not this ImpactMetric is timeboxed, e.g. starts / ends weekly'
+        ),
     }
   }
 
   static get fieldDefaults() {
     return {
       active: true,
+      timeboxed: false,
     }
   }
 }

@@ -1,6 +1,12 @@
-// import logger from '../../utils/logger'
-// import getUserFeature from '../experiments/getUserFeature'
-// import { SHFAC_PRIME_DAY_2023 } from '../experiments/experimentConstants'
+import logger from '../../utils/logger'
+import getUserFeature from '../experiments/getUserFeature'
+import getSfacActivityState from './getSfacActivityState'
+import { SFAC_ACTIVITY_STATES } from '../constants'
+
+import {
+  SHFAC_NOTIFY_FULLPAGE_SEPT,
+  SFAC_NOTIFY_FULLPAGE_AUG,
+} from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -10,60 +16,65 @@
  *   array.
  */
 
-// const getUserNotifications = async (userContext, user) => {
+const getUserNotifications = async (userContext, user) => {
+  let notifications = []
 
-const getUserNotifications = async () => {
-  const notifications = []
+  const sfacActivityState = await getSfacActivityState(userContext, user)
 
-  // // Only show the notification if the user has not signed up for a shop yet.
-  // if (user.shopSignupTimestamp) {
-  //   return notifications
-  // }
+  // SFAC_NOTIFY_FULLPAGE_AUG
+  const signupDate = new Date(user.shopSignupTimestamp)
+  const currentDate = new Date()
+  const thirtyDaysAgo = new Date(currentDate - 30 * 24 * 60 * 60 * 1000) // 30 days in milliseconds
 
-  // try {
-  //   const notifFeature = await getUserFeature(
-  //     userContext,
-  //     user,
-  //     SHFAC_PRIME_DAY_2023
-  //   )
+  // Show search full page if a user already has shop, and has not see a full page notification in the last 30 days.
+  if (
+    user.shopSignupTimestamp &&
+    signupDate.getTime() < thirtyDaysAgo.getTime() &&
+    sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE
+  ) {
+    try {
+      const notifFeature = await getUserFeature(
+        userContext,
+        user,
+        SFAC_NOTIFY_FULLPAGE_AUG
+      )
 
-  //   notifications = [
-  //     ...[
-  //       {
-  //         code: SHFAC_PRIME_DAY_2023,
-  //         variation: notifFeature.variation,
-  //       },
-  //     ],
-  //   ]
-  // } catch (e) {
-  //   logger.error(e)
-  // }
+      notifications = [
+        ...notifications,
+        {
+          code: SFAC_NOTIFY_FULLPAGE_AUG,
+          variation: notifFeature.variation,
+        },
+      ]
 
-  // // Only show the notification if the user has not signed up for a shop yet.
-  // if (user.shopSignupTimestamp) {
-  //   return notifications
-  // }
+      return notifications
+    } catch (e) {
+      logger.error(e)
+    }
+  }
 
-  // try {
-  //   const notifFeature = await getUserFeature(
-  //     userContext,
-  //     user,
-  //     SHFAC_NOTIFY_LAUNCH_FULLPAGE
-  //   )
-  //   const enabled = notifFeature.variation !== 'None'
-  //   notifications = [
-  //     ...(enabled
-  //       ? [
-  //           {
-  //             code: SHFAC_NOTIFY_LAUNCH_FULLPAGE,
-  //             variation: notifFeature.variation,
-  //           },
-  //         ]
-  //       : []),
-  //   ]
-  // } catch (e) {
-  //   logger.error(e)
-  // }
+  // Only show the notification if the user has not signed up for a shop yet.
+  if (user.shopSignupTimestamp) {
+    return notifications
+  }
+
+  try {
+    const notifFeature = await getUserFeature(
+      userContext,
+      user,
+      SHFAC_NOTIFY_FULLPAGE_SEPT
+    )
+
+    notifications = [
+      ...notifications,
+      {
+        code: SHFAC_NOTIFY_FULLPAGE_SEPT,
+        variation: notifFeature.variation,
+      },
+    ]
+  } catch (e) {
+    logger.error(e)
+  }
 
   return notifications
 }

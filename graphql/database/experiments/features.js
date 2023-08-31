@@ -15,11 +15,11 @@ import {
   GLOBAL_HEALTH_GROUP_IMPACT,
   ENDING_HUNGER_GROUP_IMPACT,
   REDUCED_IMPACT_COST,
-  USER_SURVEY_MARCH_2023,
   V4_SUPPORTING_STATEMENTS,
-  SHFAC_NOTIFY_LAUNCH_FULLPAGE,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
+  SFAC_NOTIFY_FULLPAGE_AUG,
+  SHFAC_NOTIFY_FULLPAGE_SEPT,
 } from './experimentConstants'
 
 const features = {
@@ -414,19 +414,6 @@ const features = {
       },
     ],
   },
-  [USER_SURVEY_MARCH_2023]: {
-    defaultValue: false,
-    rules: [
-      {
-        condition: {
-          tabs: {
-            $gt: 20,
-          },
-        },
-        force: true,
-      },
-    ],
-  },
   [V4_SUPPORTING_STATEMENTS]: {
     defaultValue: 'Control',
     rules: [
@@ -465,11 +452,27 @@ const features = {
     ],
   },
 
-  [SHFAC_NOTIFY_LAUNCH_FULLPAGE]: {
-    defaultValue: 'Version3',
+  [SHFAC_NOTIFY_FULLPAGE_SEPT]: {
+    defaultValue: 'Version1',
     rules: [
       {
-        variations: ['Version3'],
+        variations: ['Version1', 'Version2'],
+        weights: [0.5, 0.5],
+        coverage: 1.0,
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
+      },
+    ],
+  },
+
+  [SFAC_NOTIFY_FULLPAGE_AUG]: {
+    defaultValue: 'Version2',
+    rules: [
+      {
+        variations: ['Version2'],
         weights: [1.0],
         coverage: 1.0,
         condition: {
@@ -496,23 +499,7 @@ const features = {
   },
 
   [GROUP_IMPACT_LEADERBOARD]: {
-    defaultValue: false,
-    rules: [
-      // Show on local/dev for our team only.
-      {
-        condition: {
-          env: 'dev',
-        },
-        force: true,
-      },
-      {
-        condition: {
-          isTabTeamMember: true,
-          env: 'production',
-        },
-        force: true,
-      },
-    ],
+    defaultValue: true,
   },
 }
 

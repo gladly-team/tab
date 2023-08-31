@@ -41,6 +41,7 @@ import {
   IMPACT_METRIC,
   GROUP_IMPACT_METRIC,
   USER_GROUP_IMPACT_METRIC,
+  USER_GROUP_IMPACT_METRIC_LOG,
 } from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
@@ -164,6 +165,7 @@ import GroupImpactLeaderboard from '../database/groupImpact/GroupImpactLeaderboa
 
 // Types
 import wildfireType from './types/wildfire'
+import UserGroupImpactMetricLogModel from '../database/groupImpact/UserGroupImpactMetricLogModel'
 
 class App {
   constructor(id) {
@@ -874,6 +876,14 @@ const userType = new GraphQLObjectType({
           user.id
         ),
     },
+    groupImpactHistory: {
+      type: new GraphQLList(userGroupImpactMetricLogType),
+      description: 'User historical data related to group impacts',
+      resolve: (user, _args, context) =>
+        UserGroupImpactMetricLogModel.query(context.user, user.id)
+          .usingIndex('UserGroupImpactMetricLogByUser')
+          .execute(),
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1144,6 +1154,11 @@ const groupImpactMetricType = new GraphQLObjectType({
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far from search',
     },
+    dateExpires: {
+      type: GraphQLString,
+      description:
+        'ISO datetime string of when this GroupImpactMetric will expire',
+    },
   }),
   interfaces: [nodeInterface],
 })
@@ -1186,6 +1201,55 @@ const userGroupImpactMetricType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLInt),
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping',
+    },
+    referralDollarContribution: {
+      type: GraphQLInt,
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals',
+    },
+  }),
+  interfaces: [nodeInterface],
+})
+
+const userGroupImpactMetricLogType = new GraphQLObjectType({
+  name: USER_GROUP_IMPACT_METRIC_LOG,
+  description:
+    'A historical view of a specific users contribution to a GroupImpactMetric',
+  fields: () => ({
+    id: globalIdField(USER_GROUP_IMPACT_METRIC),
+    userId: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The ID of the user which the UserGroupImpactMetric belongs to',
+    },
+    dollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user',
+    },
+    tabDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from tabs',
+    },
+    searchDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from search',
+    },
+    shopDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from shopping',
+    },
+    referralDollarContribution: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals',
+    },
+    dateStarted: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'Date the group impact metric started',
     },
   }),
   interfaces: [nodeInterface],

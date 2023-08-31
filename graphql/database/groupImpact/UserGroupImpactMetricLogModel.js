@@ -1,18 +1,38 @@
-import RedisModel from '../base/RedisModel'
 import types from '../fieldTypes'
-import { USER_GROUP_IMPACT_METRIC } from '../constants'
+import { USER_GROUP_IMPACT_METRIC_LOG } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
+import tableNames from '../tables'
+import DynamoDBModel from '../base/DynamoDBModel'
 
 /*
- * @extends RedisModel
+ * @extends DynamoDBModel
  */
-class UserGroupImpactMetricModel extends RedisModel {
+class UserGroupImpactMetricLogModel extends DynamoDBModel {
   static get name() {
-    return USER_GROUP_IMPACT_METRIC
+    return USER_GROUP_IMPACT_METRIC_LOG
   }
 
   static get hashKey() {
     return 'id'
+  }
+
+  static get rangeKey() {
+    return 'dateStarted'
+  }
+
+  static get tableName() {
+    return tableNames.userGroupImpactMetricLog
+  }
+
+  static get indexes() {
+    return [
+      {
+        hashKey: 'userId',
+        rangeKey: 'dateStarted',
+        name: 'UserGroupImpactMetricLogByUser',
+        type: 'global',
+      },
+    ]
   }
 
   static get schema() {
@@ -59,8 +79,12 @@ class UserGroupImpactMetricModel extends RedisModel {
         .number()
         .required()
         .description(
-          `the contribution of the individual user to the GroupImpactMetric in micro USDs from referrals`
+          `the contribution of the individual user to the GroupImpactMetric in micro USDs from shopping`
         ),
+      dateStarted: types
+        .string()
+        .isoDate()
+        .description(`the date the group impact started`),
     }
   }
 
@@ -76,10 +100,18 @@ class UserGroupImpactMetricModel extends RedisModel {
   static get permissions() {
     return {
       get: permissionAuthorizers.allowAll,
+      create: permissionAuthorizers.allowAll,
+      indexPermissions: {
+        UserGroupImpactMetricLogByUser: {
+          // Note: we should avoid showing a user the user IDs (or other
+          // details) of their recruited users.
+          get: permissionAuthorizers.userIdMatchesHashKey,
+        },
+      },
     }
   }
 }
 
-UserGroupImpactMetricModel.register()
+UserGroupImpactMetricLogModel.register()
 
-export default UserGroupImpactMetricModel
+export default UserGroupImpactMetricLogModel

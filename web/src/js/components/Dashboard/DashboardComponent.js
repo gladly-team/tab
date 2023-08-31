@@ -36,7 +36,8 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
-  //WIDGET_FULLPAGE_SHOP_URL,
+  WIDGET_FULLPAGE_SHOP_URL,
+  WIDGET_FULLPAGE_SEARCH_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -75,9 +76,10 @@ import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtension
 //import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 // import switchToV4 from 'js/utils/switchToV4'
+import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+// import IconButton from '@material-ui/core/IconButton'
+// import CloseIcon from '@material-ui/icons/Close'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -188,7 +190,7 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
-      showIFrameWidget: false,
+      showIFrameWidget: true,
     }
   }
 
@@ -463,25 +465,35 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    //const notificationsToShow = this.state.notificationsToShow
+    const notificationsToShow = this.state.notificationsToShow
 
-    // Our Notification
-    // const notif = notificationsToShow.find(
-    //   notif => notif.code === 'shfac-notify-prime-day-2023'
-    // )
+    // Our Notification - Shop
+    let notif = notificationsToShow.find(
+      notif => notif.code === 'shfac-notify-fullpage-sept'
+    )
 
-    // let notif = notificationsToShow.find(
-    //   notif => notif.code === 'shfac-notify-launch-fullpage'
-    // )
+    if (
+      notif &&
+      notif.variation !== 'Version1' &&
+      notif.variation !== 'Version2' &&
+      notif.variation !== 'Version3'
+    ) {
+      notif = null
+    }
 
-    // if (
-    //   notif &&
-    //   notif.variation !== 'Version1' &&
-    //   notif.variation !== 'Version2' &&
-    //   notif.variation !== 'Version3'
-    // ) {
-    //   notif = null
-    // }
+    // Our Notification - Search
+    let notifSearch = notificationsToShow.find(
+      notif => notif.code === 'sfac-notify-fullpage-aug'
+    )
+
+    if (
+      notifSearch &&
+      notifSearch.variation !== 'Version1' &&
+      notifSearch.variation !== 'Version2' &&
+      notifSearch.variation !== 'Version3'
+    ) {
+      notifSearch = null
+    }
 
     return (
       <div
@@ -625,6 +637,31 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
+              {/* {surveyNotif ? (
+                <Notification
+                  useGlobalDismissalTime
+                  title={`We want to hear from you!`}
+                  message={
+                    <>
+                      <Typography variant={'body2'} gutterBottom>
+                        We'd love your feedback via this quick (&lt;2 min)
+                        survey to help improve Tab for a Cause!
+                      </Typography>
+                      <br />
+                      <Typography variant={'body2'} gutterBottom>
+                        Thanks for your help!
+                      </Typography>
+                    </>
+                  }
+                  buttonText={'Take Survey'}
+                  buttonURL={'https://forms.gle/u6wpP3teLpBB4yZP6'}
+                  onDismiss={surveyNotif.onDismiss}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null} */}
+
               {/* {notif ? (
                 <ShfacExtensionSellNotification
                   userId={user.id}
@@ -1023,15 +1060,15 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {/* {user && this.state.showIFrameWidget && notif ? (
+        {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'shfac-notify-prime-day-2023'}
+              widgetName={'shfac-notify-fullpage-sept'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
               url={
-                WIDGET_PRIME_DAY_2023_URL +
+                WIDGET_FULLPAGE_SHOP_URL +
                 '?cause_name=' +
                 (user.cause && user.cause.nameForShop
                   ? user.cause.nameForShop
@@ -1043,7 +1080,29 @@ class Dashboard extends React.Component {
               }
             />
           </FadeInDashboardAnimation>
-        ) : null} */}
+        ) : null}
+
+        {user && this.state.showIFrameWidget && notifSearch ? (
+          <FadeInDashboardAnimation>
+            <WidgetIFrame
+              widgetName={'sfac-notify-fullpage-aug'}
+              onClose={() => {
+                this.onCloseiFrameWidget()
+              }}
+              url={
+                WIDGET_FULLPAGE_SEARCH_URL +
+                '?cause_name=' +
+                (user.cause && user.cause.nameForShop
+                  ? user.cause.nameForShop
+                  : 'Charity') +
+                '&user_id=' +
+                user.userId +
+                '&version=' +
+                notifSearch.variation
+              }
+            />
+          </FadeInDashboardAnimation>
+        ) : null}
       </div>
     )
   }
