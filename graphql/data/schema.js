@@ -1248,7 +1248,7 @@ const userGroupImpactMetricLogType = new GraphQLObjectType({
         'The micro USD amount raised for this instance of GroupImpactMetric so far by this user from referrals',
     },
     dateStarted: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Date the group impact metric started',
     },
   }),
