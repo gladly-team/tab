@@ -251,7 +251,7 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
-      userGroupImpactMetricLogTable:
+      userGroupImpactMetricLogTableOld:
         read:
           minimum: 1
           maximum: 12
@@ -715,17 +715,17 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.usage}
-    - table: userGroupImpactMetricLogTable
+    - table: userGroupImpactMetricLogTableOld
       index:
         - UserGroupImpactMetricLogByUser
       read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.read.usage}
       write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.usage}
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTableOld.write.usage}
     
 resources:
   Resources:
@@ -1354,12 +1354,12 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
-    userGroupImpactMetricLogTable:  
+    userGroupImpactMetricLogTableOld:  
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain
       UpdateReplacePolicy: Retain
       Properties:  
-        TableName: UserGroupImpactMetricLog-${self:provider.stage}
+        TableName: UserGroupImpactMetricLogOld-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
@@ -1369,7 +1369,7 @@ resources:
           - AttributeName: dateStarted
             AttributeType: S
         GlobalSecondaryIndexes:
-          - IndexName: UserGroupImpactMetricLogByUser
+          - IndexName: UserGroupImpactMetricLogByUserOld
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
