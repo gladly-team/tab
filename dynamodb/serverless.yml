@@ -251,15 +251,15 @@ custom:
           minimum: 1
           maximum: 12
           usage: 0.60
-      userGroupImpactMetricLogTable:
-        read:
-          minimum: 1
-          maximum: 12
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 12
-          usage: 0.60
+      # userGroupImpactMetricLogTable:
+      #   read:
+      #     minimum: 1
+      #     maximum: 12
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 12
+      #     usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
@@ -715,17 +715,17 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userEventLogTable.write.usage}
-    - table: userGroupImpactMetricLogTable
-      index:
-        - UserGroupImpactMetricLogByUser
-      read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.usage}
-      write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.usage}
+    # - table: userGroupImpactMetricLogTable
+    #   index:
+    #     - UserGroupImpactMetricLogByUser
+    #   read:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.read.usage}
+    #   write:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userGroupImpactMetricLogTable.write.usage}
     
 resources:
   Resources:
@@ -1354,34 +1354,34 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
-    userGroupImpactMetricLogTable:  
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      UpdateReplacePolicy: Retain
-      Properties:  
-        TableName: UserGroupImpactMetricLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: dateStarted
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: UserGroupImpactMetricLogByUser
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: dateStarted
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+    # userGroupImpactMetricLogTable:  
+    #   Type: AWS::DynamoDB::Table
+    #   DeletionPolicy: Retain
+    #   UpdateReplacePolicy: Retain
+    #   Properties:  
+    #     TableName: UserGroupImpactMetricLog-${self:provider.stage}
+    #     KeySchema:
+    #       - AttributeName: userId
+    #         KeyType: HASH
+    #     AttributeDefinitions:
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: dateStarted
+    #         AttributeType: S
+    #     GlobalSecondaryIndexes:
+    #       - IndexName: UserGroupImpactMetricLogByUser
+    #         KeySchema:
+    #           - AttributeName: userId
+    #             KeyType: HASH
+    #           - AttributeName: dateStarted
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #         ProvisionedThroughput:
+    #           ReadCapacityUnits: 1
+    #           WriteCapacityUnits: 1
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
+    #     StreamSpecification:
+    #       StreamViewType: NEW_AND_OLD_IMAGES
