@@ -305,6 +305,7 @@ describe('updateGroupImpactMetric tests', () => {
       impactTitle: 'Provide 1 impact',
       timeboxed: true,
       active: true,
+      impactCountPerMetric: 100,
     })
     const { nanoid: realNanoId } = jest.requireActual('nanoid')
     const groupImpactMetricId = realNanoId(9)
@@ -319,7 +320,8 @@ describe('updateGroupImpactMetric tests', () => {
       dollarProgress: 95,
       dollarGoal: 1000,
       dollarProgressFromSearch: 0,
-      dollarProgressFromTab: 1000,
+      dollarProgressFromTab: 1100,
+      impactCountForMetric: 100,
       dateStarted: moment.utc().toISOString(),
       dateExpires: moment.utc().add(-1, 'day').toISOString(),
     })
@@ -347,7 +349,8 @@ describe('updateGroupImpactMetric tests', () => {
       dollarProgress: 1095,
       dollarGoal: 1000,
       dollarProgressFromSearch: 0,
-      dollarProgressFromTab: 2000,
+      dollarProgressFromTab: 2100,
+      impactCountForMetric: 100,
       dateStarted: moment.utc().toISOString(),
       dateCompleted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
@@ -375,9 +378,10 @@ describe('updateGroupImpactMetric tests', () => {
       causeId,
       impactMetricId: mockImpactId,
       dollarProgress: 0,
-      dollarGoal: 25000000,
+      dollarGoal: 1100,
       dollarProgressFromSearch: 0,
       dollarProgressFromTab: 0,
+      impactCountForMetric: 110,
       dateStarted: moment.utc().toISOString(),
       dateExpires: moment.utc().add(-1, 'day').add(1, 'week').toISOString(),
       created: moment.utc().toISOString(),
@@ -390,7 +394,7 @@ describe('updateGroupImpactMetric tests', () => {
     )
   })
 
-  it.only('correctly ends and starts new group impact metric when applicable - timeboxed, first iteration', async () => {
+  it('correctly ends and starts new group impact metric when applicable - timeboxed, first iteration', async () => {
     getNextImpactMetricForCause.mockReturnValue({
       id: mockImpactId,
       charityId: 'orphan-impact-metric',
@@ -400,6 +404,7 @@ describe('updateGroupImpactMetric tests', () => {
       impactTitle: 'Provide 1 impact',
       timeboxed: true,
       active: true,
+      impactCountPerMetric: 100,
     })
     const { nanoid: realNanoId } = jest.requireActual('nanoid')
     const groupImpactMetricId = realNanoId(9)
@@ -468,9 +473,10 @@ describe('updateGroupImpactMetric tests', () => {
       causeId,
       impactMetricId: mockImpactId,
       dollarProgress: 0,
-      dollarGoal: 25000000,
+      dollarGoal: 25e6,
       dollarProgressFromSearch: 0,
       dollarProgressFromTab: 0,
+      impactCountForMetric: 100,
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
@@ -479,6 +485,205 @@ describe('updateGroupImpactMetric tests', () => {
         .day(8)
         .set({ hour: 9, minute: 0, second: 0, millisecond: 0 })
         .toISOString(),
+    })
+
+    expect(incrementCauseImpactMetricCount).toHaveBeenCalledWith(
+      causeId,
+      mockImpactId
+    )
+  })
+
+  it('correctly ends and starts new group impact metric when applicable - decreases goal', async () => {
+    getNextImpactMetricForCause.mockReturnValue({
+      id: mockImpactId,
+      charityId: 'orphan-impact-metric',
+      dollarAmount: 25e6,
+      description: 'This is a test impact metric.',
+      metricTitle: '1 impact',
+      impactTitle: 'Provide 1 impact',
+      timeboxed: true,
+      active: true,
+      impactCountPerMetric: 1000,
+    })
+    const { nanoid: realNanoId } = jest.requireActual('nanoid')
+    const groupImpactMetricId = realNanoId(9)
+    await CauseGroupImpactMetricModel.create(groupImpactOverride, {
+      causeId,
+      groupImpactMetricId,
+    })
+    await GroupImpactMetricModel.create(groupImpactOverride, {
+      id: groupImpactMetricId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 95,
+      dollarGoal: 10000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1100,
+      impactCountForMetric: 900,
+      dateStarted: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').toISOString(),
+    })
+
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
+    const joinEntity = await CauseGroupImpactMetricModel.get(
+      userContext,
+      causeId
+    )
+    expect(joinEntity).toEqual({
+      causeId,
+      groupImpactMetricId: mockTestNanoId,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    const groupImpactMetricModel = await GroupImpactMetricModel.get(
+      userContext,
+      groupImpactMetricId
+    )
+    expect(groupImpactMetricModel).toEqual({
+      id: groupImpactMetricId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 1095,
+      dollarGoal: 10000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 2100,
+      impactCountForMetric: 900,
+      dateStarted: moment.utc().toISOString(),
+      dateCompleted: moment.utc().toISOString(),
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').toISOString(),
+    })
+
+    const newJoinEntity = await CauseGroupImpactMetricModel.get(
+      userContext,
+      causeId
+    )
+    expect(newJoinEntity).toEqual({
+      causeId,
+      groupImpactMetricId: mockTestNanoId,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    const newGroupImpactMetricModel = await GroupImpactMetricModel.get(
+      userContext,
+      mockTestNanoId
+    )
+    expect(newGroupImpactMetricModel).toEqual({
+      id: mockTestNanoId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 0,
+      dollarGoal: 8500,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 0,
+      impactCountForMetric: 850,
+      dateStarted: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').add(1, 'week').toISOString(),
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    expect(incrementCauseImpactMetricCount).toHaveBeenCalledWith(
+      causeId,
+      mockImpactId
+    )
+  })
+
+  it('correctly ends and starts new group impact metric when applicable - decreases goal when small', async () => {
+    getEstimatedMoneyRaisedPerTab.mockReturnValue(mockUSDsPerTab)
+    getNextImpactMetricForCause.mockReturnValue({
+      id: mockImpactId,
+      charityId: 'orphan-impact-metric',
+      dollarAmount: 25e6,
+      description: 'This is a test impact metric.',
+      metricTitle: '1 impact',
+      impactTitle: 'Provide 1 impact',
+      timeboxed: true,
+      active: true,
+      impactCountPerMetric: 5,
+    })
+    const { nanoid: realNanoId } = jest.requireActual('nanoid')
+    const groupImpactMetricId = realNanoId(9)
+    await CauseGroupImpactMetricModel.create(groupImpactOverride, {
+      causeId,
+      groupImpactMetricId,
+    })
+    await GroupImpactMetricModel.create(groupImpactOverride, {
+      id: groupImpactMetricId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 95,
+      dollarGoal: 10000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 1100,
+      impactCountForMetric: 5,
+      dateStarted: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').toISOString(),
+    })
+
+    await updateGroupImpactMetric(userContext, causeId, 'tab')
+    const joinEntity = await CauseGroupImpactMetricModel.get(
+      userContext,
+      causeId
+    )
+    expect(joinEntity).toEqual({
+      causeId,
+      groupImpactMetricId: mockTestNanoId,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    const groupImpactMetricModel = await GroupImpactMetricModel.get(
+      userContext,
+      groupImpactMetricId
+    )
+    expect(groupImpactMetricModel).toEqual({
+      id: groupImpactMetricId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 1095,
+      dollarGoal: 10000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 2100,
+      impactCountForMetric: 5,
+      dateStarted: moment.utc().toISOString(),
+      dateCompleted: moment.utc().toISOString(),
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').toISOString(),
+    })
+
+    const newJoinEntity = await CauseGroupImpactMetricModel.get(
+      userContext,
+      causeId
+    )
+    expect(newJoinEntity).toEqual({
+      causeId,
+      groupImpactMetricId: mockTestNanoId,
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+
+    const newGroupImpactMetricModel = await GroupImpactMetricModel.get(
+      userContext,
+      mockTestNanoId
+    )
+    expect(newGroupImpactMetricModel).toEqual({
+      id: mockTestNanoId,
+      causeId,
+      impactMetricId: mockImpactId,
+      dollarProgress: 0,
+      dollarGoal: 8000,
+      dollarProgressFromSearch: 0,
+      dollarProgressFromTab: 0,
+      impactCountForMetric: 4,
+      dateStarted: moment.utc().toISOString(),
+      dateExpires: moment.utc().add(-1, 'day').add(1, 'week').toISOString(),
+      created: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
     })
 
     expect(incrementCauseImpactMetricCount).toHaveBeenCalledWith(
