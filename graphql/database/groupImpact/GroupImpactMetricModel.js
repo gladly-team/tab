@@ -70,6 +70,9 @@ class GroupImpactMetric extends RedisModel {
         .string()
         .isoDate()
         .description(`When this GroupImpactMetric expires`),
+      impactCountForMetric: types
+        .number()
+        .description(`Impact Count for this GroupImpactMetric`),
     }
   }
 
