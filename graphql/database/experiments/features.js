@@ -485,7 +485,17 @@ const features = {
   },
 
   [LAUNCH_BOOKMARKS]: {
-    defaultValue: true,
+    defaultValue: false,
+    rules: [
+      {
+        condition: {
+          env: {
+            $in: ['local', 'dev'],
+          },
+        },
+        force: true,
+      },
+    ],
   },
 
   [GROUP_IMPACT_LEADERBOARD]: {
