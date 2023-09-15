@@ -47,6 +47,7 @@ beforeAll(() => {
     metricTitle: '1 impact',
     impactTitle: 'Provide 1 impact',
     active: true,
+    impactCountPerMetric: 100,
   })
   getEstimatedMoneyRaisedPerTab.mockReturnValue(mockUSDsPerTab)
   getEstimatedMoneyRaisedPerSearch.mockReturnValue(mockUSDsPerSearch)
@@ -95,6 +96,7 @@ describe('updateGroupImpactMetric tests', () => {
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      impactCountForMetric: 100,
     })
   })
 
@@ -126,6 +128,7 @@ describe('updateGroupImpactMetric tests', () => {
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      impactCountForMetric: 100,
     })
   })
 
@@ -162,6 +165,7 @@ describe('updateGroupImpactMetric tests', () => {
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      impactCountForMetric: 100,
     })
   })
 
@@ -287,6 +291,7 @@ describe('updateGroupImpactMetric tests', () => {
       dateStarted: moment.utc().toISOString(),
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
+      impactCountForMetric: 100,
     })
 
     expect(incrementCauseImpactMetricCount).toHaveBeenCalledWith(

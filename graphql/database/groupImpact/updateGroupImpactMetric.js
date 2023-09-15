@@ -71,7 +71,7 @@ const createGroupImpactMetricModel = async (
     dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
-    impactCountForMetric: impactMetric.impactCountForMetric,
+    impactCountForMetric: impactMetric.impactCountPerMetric,
   }
 
   if (impactMetric.timeboxed) {
