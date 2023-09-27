@@ -587,5 +587,19 @@
     "name": "Point of Pride",
     "updated": "2020-03-19T19:00:00.000Z",
     "website": "https://www.pointofpride.org/"
+   },
+   {
+    "id": "a3f8c9a8-9c4a-4b1e-82ca-25e9b9d99962",
+    "category": "Games for Love",
+    "created": "2023-09-18T19:00:00.000Z",
+    "description": "--",
+    "image": "--",
+    "impact": "--",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "--",
+    "name": "Games for Love",
+    "updated": "2023-09-18T19:00:00.000Z",
+    "website": "https://gamesforlove.org/"
    }
 ]
