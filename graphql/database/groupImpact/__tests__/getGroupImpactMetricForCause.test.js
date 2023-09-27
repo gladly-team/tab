@@ -19,6 +19,7 @@ const mockCauseGroupImpactMetric = {
   causeId: mockCause.id,
   groupImpactMetricId: 'test-metric-id',
 }
+
 const mockGroupImpactMetric = {
   id: mockCauseGroupImpactMetric.id,
   causeId: mockCause.id,
@@ -37,7 +38,6 @@ describe('getGroupImpactMetricForCause', () => {
     CauseGroupImpactMetricModel.get.mockImplementation(() => {
       throw new UserDoesNotExistException()
     })
-
     expect(
       getGroupImpactMetricForCause(userContext, mockCause.id)
     ).rejects.toThrow(new UserDoesNotExistException())
@@ -48,13 +48,12 @@ describe('getGroupImpactMetricForCause', () => {
     CauseGroupImpactMetricModel.get.mockImplementation(() => {
       throw new DatabaseItemDoesNotExistException()
     })
-
     expect(
       await getGroupImpactMetricForCause(userContext, mockCause.id)
     ).toEqual(null)
   })
 
-  it('throws if GroupImpactMetricModel fetch throws', async () => {
+  it('returns null if GroupImpactMetricModel does not exist', async () => {
     expect.assertions(1)
     CauseGroupImpactMetricModel.get.mockResolvedValue(
       mockCauseGroupImpactMetric
@@ -63,8 +62,8 @@ describe('getGroupImpactMetricForCause', () => {
       throw new DatabaseItemDoesNotExistException()
     })
     expect(
-      getGroupImpactMetricForCause(userContext, mockCause.id)
-    ).rejects.toThrow(new DatabaseItemDoesNotExistException())
+      await getGroupImpactMetricForCause(userContext, mockCause.id)
+    ).toEqual(null)
   })
 
   it('fetches GroupImpactMetric with key from CauseGroupImpactMetric', async () => {
@@ -73,7 +72,6 @@ describe('getGroupImpactMetricForCause', () => {
       mockCauseGroupImpactMetric
     )
     GroupImpactMetricModel.get.mockResolvedValue(mockGroupImpactMetric)
-
     expect(
       await getGroupImpactMetricForCause(userContext, mockCause.id)
     ).toEqual(mockGroupImpactMetric)

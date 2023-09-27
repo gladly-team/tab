@@ -26,6 +26,10 @@ const getGroupImpactMetricForCause = async (userContext, causeId) => {
       causeGroupImpactMetric.groupImpactMetricId
     )
   } catch (e) {
+    // We just return null if there is no GroupImpactMetric for a causeId.
+    if (e.code === DatabaseItemDoesNotExistException.code) {
+      return null
+    }
     throw e
   }
 }
