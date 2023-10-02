@@ -2,6 +2,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
+  STORAGE_REFERRAL_DATA_REFERRING_CAMPAIGN,
   SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO,
   SEARCH_STORAGE_USER_BING_CLIENT_ID,
   STORAGE_DISMISSED_AD_EXPLANATION,
@@ -351,6 +352,9 @@ export const getMissionId = () => {
 }
 export const getCauseId = () => {
   return localStorageMgr.getItem(STORAGE_NEW_USER_CAUSE_ID)
+}
+export const getCampaignId = () => {
+  return localStorageMgr.getItem(STORAGE_REFERRAL_DATA_REFERRING_CAMPAIGN)
 }
 
 export const setUserDismissedSurvey2022 = () => {

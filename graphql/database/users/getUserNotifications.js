@@ -19,6 +19,11 @@ import {
 const getUserNotifications = async (userContext, user) => {
   let notifications = []
 
+  // TODO(spicer): Look into why this does not work with growthbook filter.
+  if (user.tabs <= 0) {
+    return notifications
+  }
+
   const sfacActivityState = await getSfacActivityState(userContext, user)
 
   // SFAC_NOTIFY_FULLPAGE_AUG
