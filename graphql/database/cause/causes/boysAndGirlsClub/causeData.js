@@ -14,7 +14,7 @@ const data = {
   isAvailableToSelect: false,
   icon: '---',
   backgroundImageCategory: 'trees', // TODO: update with new collection
-  charityId: 'a3f8c9a8-9c4a-4b1e-82ca-25e9b9d99962',
+  charityId: '28919dc7-220f-43ac-a6ae-3880f7b7ebed',
   individualImpactEnabled: false, // Deprecated. Use "impactType".
   impactType: 'none',
   impactVisits: 131,
@@ -110,7 +110,7 @@ const data = {
     primaryColor: '#A27DF8',
     secondaryColor: '#29BEBA',
   },
-  charityIds: ['a3f8c9a8-9c4a-4b1e-82ca-25e9b9d99962'],
+  charityIds: ['28919dc7-220f-43ac-a6ae-3880f7b7ebed'],
 }
 
 export default data
