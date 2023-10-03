@@ -11,7 +11,7 @@ const data = {
     '### About Tab for Games for Love Games For Love is a 501(c)(3) organization dedicated to easing suffering, saving lives, and creating sustainable futures for children. Their six core programs work in tandem to meet the needs of kids as they grow and provide an ever-present community of support. Kids everywhere combat illness, isolation, and opportunity ceilings. They need access to healthcare, education, and hope. [Games For Love](https://gamesforlove.org/) mobilizes gaming communities to help kids around the world — for life.',
   name: 'Games for Love',
   nameForShop: 'the Games for Love community',
-  isAvailableToSelect: false,
+  isAvailableToSelect: true,
   icon: '---',
   backgroundImageCategory: 'lgbtq', // TODO: update with new collection
   charityId: 'a3f8c9a8-9c4a-4b1e-82ca-25e9b9d99962',

@@ -38,7 +38,8 @@ const createUser = async (
   extensionInstallTimeApprox = null,
   v4BetaEnabled = false,
   missionId = false,
-  causeId = false
+  causeId = false,
+  campaignId = ''
 ) => {
   // Get or create the user.
   let userInfo = Object.assign(
@@ -54,6 +55,7 @@ const createUser = async (
       currentMissionId: missionId || undefined,
       causeId: causeId || undefined,
       v4BetaEnabled,
+      campaignId: campaignId || undefined,
     },
     !isNil(extensionInstallId)
       ? {

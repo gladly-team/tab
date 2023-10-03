@@ -75,6 +75,8 @@ export const STORAGE_CLICKED_NEW_TAB_SEARCH_INTRO_V2 =
   'tab.newUser.clickedNewTabSearchIntroV2'
 export const STORAGE_NEW_USER_IS_TAB_V4_BETA = 'tab.newUser.isTabV4Enabled'
 export const STORAGE_NEW_USER_CAUSE_ID = 'tab.newUser.causeId'
+export const STORAGE_REFERRAL_DATA_REFERRING_CAMPAIGN =
+  'tab.referralData.referringCampaign'
 export const STORAGE_CATS_CAUSE_ID = 'CA6A5C2uj'
 export const STORAGE_SEAS_CAUSE_ID = 'SGa6zohkY'
 export const STORAGE_TREES_CAUSE_ID = 'tdU_PsRIM'
