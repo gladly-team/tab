@@ -20,7 +20,7 @@ const getUserNotifications = async (userContext, user) => {
   let notifications = []
 
   // TODO(spicer): Look into why this does not work with growthbook filter.
-  if (user.tabs <= 0) {
+  if (user.tabs <= 20) {
     return notifications
   }
 
