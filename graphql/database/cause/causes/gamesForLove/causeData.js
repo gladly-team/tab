@@ -75,21 +75,21 @@ const data = {
       image:
         'https://prod-tab2017-media.gladly.io/img/cause/lgbtq/invitelgbtq.jpg',
       title:
-        'We all have a part to play in supporting the LGBTQ+ community. That’s why {{name}} thinks you should join them on Tab for LGBTQ+.',
+        'We all have a part to play in supporting the Games for Love community. That’s why {{name}} thinks you should join them on Tab for Games for Love.',
       about:
-        '<div>Tab for LGBTQ+ turns your web browser into a force for good. With each tab opened, ad revenue supports Point of Pride and Outright International, uplifting the LGBTQ+ community through empowerment, advocacy, and life-changing access to gender-affirming care.</div>\n\n',
-      faq: 'We’re supporting Point of Pride and Outright International to ensure the money raised will directly support their goals to make a positive impact on the LGBTQ+ community.',
+        '<div>Tab for Games for Love turns your web browser into a force for good. With each tab opened, ad revenue supports Games for Love.</div>\n\n',
+      faq: 'We’re supporting Games for Love to ensure the money raised will directly support their goals to make a positive impact on the Games for Love community.',
       sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
     sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     facebookButtonTitle:
-      'I joined Tab for LGBTQ+, and now every tab I open helps raise money for Point of Pride and Outright International. Check it out - it’s free!',
+      'I joined Tab for Games for Love, and now every tab I open helps raise money for Games for Love. Check it out - it’s free!',
     twitterButtonTitle:
-      'I joined Tab for LGBTQ+, and now every tab I open helps raise money for Point of Pride and Outright International. Check it out - it’s free!',
-    redditButtonTitle: 'Support the LGBTQ+ community with each tab',
-    tumblrTitle: 'Support the LGBTQ+ community with each tab',
+      'I joined Tab for Games for Love, and now every tab I open helps raise money for Games for Love. Check it out - it’s free!',
+    redditButtonTitle: 'Support the Games for Love community with each tab',
+    tumblrTitle: 'Support the Games for Love community with each tab',
     tumblrCaption:
-      'Every time I open a new tab I am raising money to support the LGBTQ+ community through Point of Pride and Outright International. Join for free and start making an impact today!',
+      'Every time I open a new tab I am raising money to support the Games for Love community. Join for free and start making an impact today!',
   },
   // TODO
   squads: {
