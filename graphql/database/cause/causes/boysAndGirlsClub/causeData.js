@@ -49,19 +49,19 @@ const data = {
         title: '### Your tabs are doing great things',
         subtitle:
           'Now, every tab you open works to support the Boys & Girls Clubs of America community. Tabbers like you are supporting critical nonprofit work all around the world. Thank you!\n\n',
-        imgName: 'lgbtq/onboarding1.svg',
+        imgName: 'boysandgirlsclub/onboarding1.svg',
       },
       {
         title: '### Do more with your squad',
         subtitle:
           'Support the Boys & Girls Clubs of America community even faster with a squad!\n\nYou and your friends can team up to do more good.\n\n',
-        imgName: 'lgbtq/onboarding2.svg',
+        imgName: 'boysandgirlsclub/onboarding2.svg',
       },
       {
         title: "### It doesn't cost you a thing",
         subtitle:
           "Ads on the new tab page raise money that we give to nonprofits. Most ads aren't good—but these ones are :)\n\n",
-        imgName: 'lgbtq/onboarding3.svg',
+        imgName: 'boysandgirlsclub/onboarding3.svg',
       },
     ],
   },
@@ -69,12 +69,12 @@ const data = {
     title: '### **Get a friend on board**',
     subtitle:
       '##### Everyone can and _should_ make a difference: invite a friend to join in.\n\n',
-    shareImage: 'lgbtq/invitelgbtq.svg',
-    sentImage: 'lgbtq/invitelgbtq.svg',
+    shareImage: 'boysandgirlsclub/invite.svg',
+    sentImage: 'boysandgirlsclub/invite.svg',
     imgCategory: 'lgbtq',
     email: {
       image:
-        'https://prod-tab2017-media.gladly.io/img/cause/lgbtq/invitelgbtq.jpg',
+        'https://prod-tab2017-media.gladly.io/img/cause/boysandgirlsclub/invite.jpg',
       title:
         'We all have a part to play in supporting the Boys & Girls Clubs of America community. That’s why {{name}} thinks you should join them on Tab for Boys & Girls Clubs of America .',
       about:
