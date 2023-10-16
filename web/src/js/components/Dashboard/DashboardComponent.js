@@ -208,14 +208,13 @@ class Dashboard extends React.Component {
     this.setNotificationsToShow(nextProps)
   }
 
-  async onGiveDirectlyClick(relay) {
-    const currentUser = await getCurrentUser()
+  async onGiveDirectlyClick() {
+    const { user, relay } = this.props
 
     await switchToV4({
       relayEnvironment: relay.environment,
-      userId: currentUser.id,
+      userId: user.id,
       causeId: 'p7HGxRbQZ',
-      redirect: window.location.href,
     })
   }
 
@@ -585,9 +584,7 @@ class Dashboard extends React.Component {
             </Typography>
 
             <Button
-              onClick={() => {
-                this.onGiveDirectlyClick(relay)
-              }}
+              onClick={this.onGiveDirectlyClick.bind(this)}
               variant="contained"
               color="primary"
               style={{ marginTop: 10, marginBottom: 10 }}
