@@ -16,7 +16,7 @@ import ukraineImage from 'js/assets/ukraine.png'
 import endingHungerImage from 'js/assets/endingHunger.png'
 import reproductiveHealthImage from 'js/assets/reproductiveHealth.png'
 import lgbtqImage from 'js/assets/lgbtq.png'
-import giveDirectlyImage from 'js/assets/givedirectly.png'
+import giveDirectlyImage from 'js/assets/cashHand.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
@@ -169,7 +169,7 @@ class ProfileDonateHearts extends React.Component {
             title="Help End Poverty (Beta)"
             causeId={STORAGE_END_POVERTY_CAUSE_ID}
             causeName="Tab for Ending Poverty"
-            causeShortDesc="Open Tabs, provide direct cash transfers through GiveDirectly."
+            causeShortDesc="Open Tabs, help deliver cash to people in poverty through GiveDirectly."
             imgSrc={giveDirectlyImage}
           />
         </span>
