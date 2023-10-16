@@ -215,7 +215,7 @@ class Dashboard extends React.Component {
       relayEnvironment: relay.environment,
       userId: currentUser.id,
       causeId: 'p7HGxRbQZ',
-      redirect: '',
+      redirect: window.location.href,
     })
   }
 
