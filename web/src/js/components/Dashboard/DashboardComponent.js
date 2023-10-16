@@ -75,11 +75,11 @@ import {
 import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtensionSellNotification'
 //import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
-// import switchToV4 from 'js/utils/switchToV4'
+import switchToV4 from 'js/utils/switchToV4'
 import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
-// import IconButton from '@material-ui/core/IconButton'
-// import CloseIcon from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -154,7 +154,7 @@ const styles = theme => ({
   },
 })
 
-//const PRIME_DAY_DISMISS = 'tab.user.dismissedNotif.prime-day-2023'
+const GIVE_DIRECTLY_DISMISS = 'tab.user.dismissedNotif.give-directly-10-2023'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -191,6 +191,8 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: true,
+      dismissGiveDirectly:
+        localStorageMgr.getItem(GIVE_DIRECTLY_DISMISS) === 'true',
     }
   }
 
@@ -206,8 +208,15 @@ class Dashboard extends React.Component {
     this.setNotificationsToShow(nextProps)
   }
 
-  oniFrameWidgetOpen = () => {
-    this.setState({ showIFrameWidget: true })
+  async onGiveDirectlyClick(relay) {
+    const currentUser = await getCurrentUser()
+
+    await switchToV4({
+      relayEnvironment: relay.environment,
+      userId: currentUser.id,
+      causeId: 'p7HGxRbQZ',
+      redirect: '',
+    })
   }
 
   onCloseiFrameWidget = () => {
@@ -279,13 +288,13 @@ class Dashboard extends React.Component {
     })
   }
 
-  // onDismissPrimeDay() {
-  //   localStorageMgr.setItem(PRIME_DAY_DISMISS, true)
-  //   this.setState({ dissmissedPrimeDay: true })
-  // }
+  onDismissGiveDirectly() {
+    localStorageMgr.setItem(GIVE_DIRECTLY_DISMISS, true)
+    this.setState({ dismissGiveDirectly: true })
+  }
 
   render() {
-    const { user, app, classes } = this.props
+    const { user, app, classes, relay } = this.props
     const {
       adUnitsToShow,
       browser,
@@ -516,12 +525,12 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Prime Day 2023 widget promo */}
-        {/* {user && notif && !this.state.dissmissedPrimeDay ? (
+        {/* Give Directly Promo */}
+        {user && !this.state.dismissGiveDirectly ? (
           <Paper
             align="center"
             style={{
-              width: 650,
+              width: 675,
               position: 'relative',
               marginLeft: 'auto',
               marginRight: 'auto',
@@ -530,44 +539,63 @@ class Dashboard extends React.Component {
             }}
           >
             <IconButton
-              onClick={this.onDismissPrimeDay.bind(this)}
+              onClick={this.onDismissGiveDirectly.bind(this)}
               style={{ position: 'absolute', right: 5, top: 0 }}
             >
               <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
             </IconButton>
 
             <Typography variant={'h4'} gutterBottom>
-              Skip Prime Day, Support Charity
+              Help Eradicate Extreme Poverty
             </Typography>
             <Typography variant={'body1'} gutterBottom>
-              Since Amazon killed{' '}
+              Nearly 700 million people live in extreme poverty (earning less
+              than $2.15 per day). We’ve partnered with{' '}
               <a
-                href="https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program"
+                href="https://www.givedirectly.org/?utm_source=tabforcause"
                 target="_blank"
                 rel="noreferrer"
               >
-                Amazon Smile
-              </a>
-              , we launched a better version:{' '}
-              <a href="https://shop.gladly.io" target="_blank" rel="noreferrer">
-                Shop for a Cause
-              </a>
-              . Click below to shop and raise money for{' '}
-              {user.cause && user.cause.nameForShop
-                ? user.cause.nameForShop
-                : 'Charity'}
+                GiveDirectly
+              </a>{' '}
+              to create Tab for Ending Poverty to address this large but
+              solvable problem. Money raised will support GiveDirectly’s
+              unconditional cash transfers which{' '}
+              <a
+                href="https://www.givedirectly.org/research-at-give-directly/?utm_source=tabforacause"
+                target="_blank"
+                rel="noreferrer"
+              >
+                research has shown
+              </a>{' '}
+              improve the health, income, education, and self-reliance of
+              recipients.
+            </Typography>
+
+            <Typography variant={'body1'} gutterBottom>
+              Read more on our{' '}
+              <a
+                href="https://www.instagram.com/tabforacause/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </a>{' '}
+              and join our effort to eliminate extreme poverty!
             </Typography>
 
             <Button
-              onClick={this.oniFrameWidgetOpen}
+              onClick={() => {
+                this.onGiveDirectlyClick(relay)
+              }}
               variant="contained"
               color="primary"
               style={{ marginTop: 10, marginBottom: 10 }}
             >
-              Click to Shop and Raise
+              Join Tab for Ending Poverty
             </Button>
           </Paper>
-        ) : null} */}
+        ) : null}
 
         {user && app ? (
           <FadeInDashboardAnimation>
