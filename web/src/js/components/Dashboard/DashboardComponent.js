@@ -535,6 +535,7 @@ class Dashboard extends React.Component {
               marginRight: 'auto',
               marginTop: 50,
               padding: 20,
+              zIndex: '100',
             }}
           >
             <IconButton
