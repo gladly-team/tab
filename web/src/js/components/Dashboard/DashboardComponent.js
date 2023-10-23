@@ -191,8 +191,8 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: true,
-      dismissGiveDirectly:
-        localStorageMgr.getItem(GIVE_DIRECTLY_DISMISS) === 'true',
+      // dismissGiveDirectly:
+      //   localStorageMgr.getItem(GIVE_DIRECTLY_DISMISS) === 'true',
     }
   }
 
@@ -287,10 +287,10 @@ class Dashboard extends React.Component {
     })
   }
 
-  onDismissGiveDirectly() {
-    localStorageMgr.setItem(GIVE_DIRECTLY_DISMISS, true)
-    this.setState({ dismissGiveDirectly: true })
-  }
+  // onDismissGiveDirectly() {
+  //   localStorageMgr.setItem(GIVE_DIRECTLY_DISMISS, true)
+  //   this.setState({ dismissGiveDirectly: true })
+  // }
 
   render() {
     const { user, app, classes, relay } = this.props
@@ -524,7 +524,7 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Give Directly Promo */}
+        {/* Give Directly Promo
         {user && !this.state.dismissGiveDirectly ? (
           <Paper
             align="center"
@@ -593,7 +593,7 @@ class Dashboard extends React.Component {
               Join Tab for Ending Poverty
             </Button>
           </Paper>
-        ) : null}
+        ) : null} */}
 
         {user && app ? (
           <FadeInDashboardAnimation>
