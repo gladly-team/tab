@@ -477,7 +477,7 @@ class Dashboard extends React.Component {
 
     // Our Notification - Shop
     let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-fullpage-sept'
+      notif => notif.code === 'shfac-notify-fullpage-nov'
     )
 
     if (
@@ -491,7 +491,7 @@ class Dashboard extends React.Component {
 
     // Our Notification - Search
     let notifSearch = notificationsToShow.find(
-      notif => notif.code === 'sfac-notify-fullpage-aug'
+      notif => notif.code === 'sfac-notify-fullpage-nov'
     )
 
     if (
@@ -1089,7 +1089,7 @@ class Dashboard extends React.Component {
         {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'shfac-notify-fullpage-sept'}
+              widgetName={'shfac-notify-fullpage-nov'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}
@@ -1111,7 +1111,7 @@ class Dashboard extends React.Component {
         {user && this.state.showIFrameWidget && notifSearch ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
-              widgetName={'sfac-notify-fullpage-aug'}
+              widgetName={'sfac-notify-fullpage-nov'}
               onClose={() => {
                 this.onCloseiFrameWidget()
               }}

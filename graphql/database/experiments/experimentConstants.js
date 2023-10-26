@@ -38,10 +38,10 @@ export const SFAC_EXTENSION_PROMPT_CUTOFF_UNIX_TIME = 1662494400000 // 20:00 UTC
 export const V4_SUPPORTING_STATEMENTS = 'v4-supporting-statements'
 
 // Notify users that SHFAC has launched
-export const SHFAC_NOTIFY_FULLPAGE_SEPT = 'shfac-notify-fullpage-sept'
+export const SHFAC_NOTIFY_FULLPAGE_NOV = 'shfac-notify-fullpage-nov'
 
 // Notify users that SHFAC has launched
-export const SFAC_NOTIFY_FULLPAGE_AUG = 'sfac-notify-fullpage-aug'
+export const SFAC_NOTIFY_FULLPAGE_NOV = 'sfac-notify-fullpage-nov'
 
 // Bookmarks Feature Flag
 export const LAUNCH_BOOKMARKS = 'launch-bookmarks'

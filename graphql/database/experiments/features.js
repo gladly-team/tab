@@ -18,8 +18,8 @@ import {
   V4_SUPPORTING_STATEMENTS,
   LAUNCH_BOOKMARKS,
   GROUP_IMPACT_LEADERBOARD,
-  SFAC_NOTIFY_FULLPAGE_AUG,
-  SHFAC_NOTIFY_FULLPAGE_SEPT,
+  SFAC_NOTIFY_FULLPAGE_NOV,
+  SHFAC_NOTIFY_FULLPAGE_NOV,
 } from './experimentConstants'
 
 const features = {
@@ -452,7 +452,7 @@ const features = {
     ],
   },
 
-  [SHFAC_NOTIFY_FULLPAGE_SEPT]: {
+  [SHFAC_NOTIFY_FULLPAGE_NOV]: {
     defaultValue: 'Version1',
     rules: [
       {
@@ -468,12 +468,12 @@ const features = {
     ],
   },
 
-  [SFAC_NOTIFY_FULLPAGE_AUG]: {
-    defaultValue: 'Version2',
+  [SFAC_NOTIFY_FULLPAGE_NOV]: {
+    defaultValue: 'Version1',
     rules: [
       {
-        variations: ['Version2'],
-        weights: [1.0],
+        variations: ['Version1', 'Version2'],
+        weights: [0.5, 0.5],
         coverage: 1.0,
         condition: {
           tabs: {
