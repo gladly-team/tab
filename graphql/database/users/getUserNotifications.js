@@ -4,8 +4,8 @@ import getSfacActivityState from './getSfacActivityState'
 import { SFAC_ACTIVITY_STATES } from '../constants'
 
 import {
-  SHFAC_NOTIFY_FULLPAGE_SEPT,
-  SFAC_NOTIFY_FULLPAGE_AUG,
+  SHFAC_NOTIFY_FULLPAGE_NOV,
+  SFAC_NOTIFY_FULLPAGE_NOV,
 } from '../experiments/experimentConstants'
 
 /**
@@ -26,7 +26,7 @@ const getUserNotifications = async (userContext, user) => {
 
   const sfacActivityState = await getSfacActivityState(userContext, user)
 
-  // SFAC_NOTIFY_FULLPAGE_AUG
+  // SFAC_NOTIFY_FULLPAGE_NOV
   const signupDate = new Date(user.shopSignupTimestamp)
   const currentDate = new Date()
   const thirtyDaysAgo = new Date(currentDate - 30 * 24 * 60 * 60 * 1000) // 30 days in milliseconds
@@ -41,13 +41,13 @@ const getUserNotifications = async (userContext, user) => {
       const notifFeature = await getUserFeature(
         userContext,
         user,
-        SFAC_NOTIFY_FULLPAGE_AUG
+        SFAC_NOTIFY_FULLPAGE_NOV
       )
 
       notifications = [
         ...notifications,
         {
-          code: SFAC_NOTIFY_FULLPAGE_AUG,
+          code: SFAC_NOTIFY_FULLPAGE_NOV,
           variation: notifFeature.variation,
         },
       ]
@@ -67,13 +67,13 @@ const getUserNotifications = async (userContext, user) => {
     const notifFeature = await getUserFeature(
       userContext,
       user,
-      SHFAC_NOTIFY_FULLPAGE_SEPT
+      SHFAC_NOTIFY_FULLPAGE_NOV
     )
 
     notifications = [
       ...notifications,
       {
-        code: SHFAC_NOTIFY_FULLPAGE_SEPT,
+        code: SHFAC_NOTIFY_FULLPAGE_NOV,
         variation: notifFeature.variation,
       },
     ]
