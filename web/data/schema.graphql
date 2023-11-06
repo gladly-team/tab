@@ -1740,6 +1740,7 @@ input CreateNewUserInput {
   v4BetaEnabled: Boolean
   missionId: String
   causeId: String
+  campaignId: String
   clientMutationId: String
 }
 

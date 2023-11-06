@@ -408,6 +408,9 @@ class User extends DynamoDBModel {
         .description(
           'the ID for the current UserGroupImpactMetric entity belonging to this user.'
         ),
+      campaignId: types
+        .string()
+        .description('the ID for the campaign the user came to tabs from.'),
     }
   }
 

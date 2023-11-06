@@ -28,6 +28,7 @@ import {
   isTabV4BetaUser,
   getCauseId,
   getMissionId,
+  getCampaignId,
 } from 'js/utils/local-user-data-mgr'
 import logger from 'js/utils/logger'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -290,7 +291,8 @@ export const createNewUser = () => {
                 reject(err)
               },
               getMissionId(),
-              getCauseId()
+              getCauseId(),
+              getCampaignId()
             )
           })
         })

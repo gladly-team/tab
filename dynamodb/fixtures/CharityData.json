@@ -587,5 +587,48 @@
     "name": "Point of Pride",
     "updated": "2020-03-19T19:00:00.000Z",
     "website": "https://www.pointofpride.org/"
+   },
+   {
+    "id": "a3f8c9a8-9c4a-4b1e-82ca-25e9b9d99962",
+    "category": "Games for Love",
+    "created": "2023-09-18T19:00:00.000Z",
+    "description": "--",
+    "image": "--",
+    "impact": "--",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "--",
+    "name": "Games for Love",
+    "updated": "2023-09-18T19:00:00.000Z",
+    "website": "https://gamesforlove.org/"
+   },
+   {
+    "id": "28919dc7-220f-43ac-a6ae-3880f7b7ebed",
+    "category": "Boys & Girls Clubs of America",
+    "created": "2023-09-18T19:00:00.000Z",
+    "description": "--",
+    "image": "--",
+    "impact": "--",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "--",
+    "name": "Boys & Girls Clubs of America",
+    "updated": "2023-09-18T19:00:00.000Z",
+    "website": "https://www.bgca.org/"
+   },
+   {
+    "id": "123e4567-e89b-12d3-a456-426655440000",
+    "category": "Give Directly",
+    "created": "2023-09-18T19:00:00.000Z",
+    "description": "--",
+    "image": "give-directly.jpg",
+    "impact": "--",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "give-directly.svg",
+    "name": "Give Directly",
+    "updated": "2023-09-18T19:00:00.000Z",
+    "website": "https://www.givedirectly.org/",
+    "longformDescription": "**Tab for Ending Poverty** supports [GiveDirectly](https://www.givedirectly.org/?utm_source=tabforcause), a nonprofit that lets you send money directly to the world’s poorest, no strings attached. We believe people in poverty deserve the dignity to choose for themselves how best to improve their lives – cash enables that choice. [Research](http://GiveDirectly.org/research/?utm_source=tabforacause) shows people in poverty use cash to improve their health, education, income, self-reliance, and more. In the last decade, we’ve reached over 1.5 million people in poverty across 14 countries, largely via simple banking technology called mobile money. Historically, GiveDirectly delivered about 90 cents of every dollar directly to those in need. The remaining 10 cents cover the [costs of delivery](https://www.givedirectly.org/yes-we-have-costs/?utm_source=tabforacause), including foreign exchange fees, fraud prevention, and in-country staff that provide customer service to recipients. Today, most funds are sent to families in Kenya, Malawi, Liberia, and Rwanda."
    }
 ]

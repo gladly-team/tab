@@ -694,6 +694,7 @@ describe('createNewUser tests', () => {
       expect.any(Function),
       expect.any(Function),
       undefined,
+      undefined,
       undefined
     )
   })
@@ -763,6 +764,7 @@ describe('createNewUser tests', () => {
       expect.any(Function),
       expect.any(Function),
       '123456789',
+      undefined,
       undefined
     )
   })
@@ -832,7 +834,8 @@ describe('createNewUser tests', () => {
       expect.any(Function),
       expect.any(Function),
       undefined,
-      'mock-cause'
+      'mock-cause',
+      undefined
     )
   })
 

@@ -2796,6 +2796,7 @@ const createNewUserMutation = mutationWithClientMutationId({
     v4BetaEnabled: { type: GraphQLBoolean },
     missionId: { type: GraphQLString },
     causeId: { type: GraphQLString },
+    campaignId: { type: GraphQLString },
   },
   outputFields: {
     user: {
@@ -2814,6 +2815,7 @@ const createNewUserMutation = mutationWithClientMutationId({
       v4BetaEnabled,
       missionId,
       causeId,
+      campaignId,
     },
     context
   ) =>
@@ -2827,7 +2829,8 @@ const createNewUserMutation = mutationWithClientMutationId({
       extensionInstallTimeApprox,
       v4BetaEnabled,
       missionId,
-      causeId
+      causeId,
+      campaignId
     ),
 })
 

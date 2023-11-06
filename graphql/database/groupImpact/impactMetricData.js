@@ -71,6 +71,20 @@ const data = [
     impactCountPerMetric: 5,
   },
   {
+    id: 'V9nF1X2ML',
+    charityId: '123e4567-e89b-12d3-a456-426655440000', // Ending Poverty
+    dollarAmount: 92e6, // $92
+    impactTitle:
+      'Provide {{count}} month of cash for a family in extreme poverty',
+    metricTitle: '1 month of costs for a family',
+    description:
+      'GiveDirectly provides direct cash relief to those living in extreme poverty. This life-saving money allows families to improve their health, education, and income.',
+    whyValuableDescription:
+      'GiveDirectly provides direct cash relief to those living in extreme poverty. This life-saving money allows families to improve their health, education, and income.',
+    active: false,
+    impactCountPerMetric: 1,
+  },
+  {
     id: 'gGJy2ebUD',
     charityId: 'f3c349d0-61ab-4301-b3dd-d56895dbbd4e', // #TeamSeas
     dollarAmount: 100e6, // $100

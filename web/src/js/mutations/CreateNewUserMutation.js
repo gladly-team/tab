@@ -25,7 +25,8 @@ function commit(
   onCompleted,
   onError,
   missionId,
-  causeId
+  causeId,
+  campaignId
 ) {
   return commitMutation(environment, {
     mutation,
@@ -40,6 +41,7 @@ function commit(
         v4BetaEnabled,
         missionId,
         causeId,
+        campaignId,
       },
     },
     onCompleted: response => {

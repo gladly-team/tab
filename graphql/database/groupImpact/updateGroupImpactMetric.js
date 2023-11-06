@@ -36,6 +36,26 @@ const updateCauseGroupImpactMetricModel = async (
   })
 }
 
+const adjustValue = (goal) => {
+  if (goal < 10) {
+    return 1
+  }
+  if (goal >= 10 && goal < 30) {
+    return 2
+  }
+  if (goal >= 30 && goal < 100) {
+    return 5
+  }
+  if (goal >= 100 && goal < 500) {
+    return 10
+  }
+  if (goal >= 500 && goal < 1000) {
+    return 50
+  }
+
+  return Math.min(100, Math.ceil(goal / 100) * 10)
+}
+
 const createGroupImpactMetricModel = async (
   causeId,
   groupImpactMetricId,
@@ -51,19 +71,49 @@ const createGroupImpactMetricModel = async (
     dollarProgressFromSearch: 0,
     dollarGoal: impactMetric.dollarAmount,
     dateStarted: moment.utc().toISOString(),
+    impactCountForMetric: impactMetric.impactCountPerMetric,
   }
 
   if (impactMetric.timeboxed) {
-    const dateExpires = groupImpactMetric.dateExpires
-      ? moment(groupImpactMetric.dateExpires).add(1, 'week').toISOString()
-      : moment()
-          .utc()
-          .day(8)
-          .set({ hour: 9, minute: 0, second: 0, millisecond: 0 })
-          .toISOString() // Default to 9AM, following Monday
+    const dateExpires =
+      groupImpactMetric && groupImpactMetric.dateExpires
+        ? moment(groupImpactMetric.dateExpires).add(1, 'week').toISOString()
+        : moment()
+            .utc()
+            .day(8)
+            .set({ hour: 9, minute: 0, second: 0, millisecond: 0 })
+            .toISOString() // Default to 9AM, following Monday
+    // Scale value based on previous. Increase or decrease by 1 or 10% based on previous success.
+    let newGoal = impactMetric.dollarAmount
+    let newImpactCountForMetric = impactMetric.impactCountPerMetric
+    if (
+      groupImpactMetric &&
+      groupImpactMetric.impactCountForMetric &&
+      groupImpactMetric.dollarProgress >= groupImpactMetric.dollarGoal
+    ) {
+      newImpactCountForMetric =
+        groupImpactMetric.impactCountForMetric +
+        adjustValue(groupImpactMetric.impactCountForMetric)
+      newGoal =
+        (groupImpactMetric.dollarGoal * newImpactCountForMetric) /
+        impactMetric.impactCountPerMetric
+    } else if (
+      groupImpactMetric &&
+      groupImpactMetric.impactCountForMetric &&
+      groupImpactMetric.dollarProgress < groupImpactMetric.dollarGoal
+    ) {
+      newImpactCountForMetric =
+        groupImpactMetric.impactCountForMetric -
+        adjustValue(groupImpactMetric.impactCountForMetric)
+      newGoal =
+        (groupImpactMetric.dollarGoal * newImpactCountForMetric) /
+        impactMetric.impactCountPerMetric
+    }
     rt = {
       ...rt,
       dateExpires,
+      dollarGoal: newGoal,
+      impactCountForMetric: newImpactCountForMetric,
     }
   }
 
@@ -179,7 +229,10 @@ const updateGroupImpactMetric = async (userContext, causeId, revenueType) => {
       causeId,
       newGroupImpactMetricId,
       getNextImpactMetricForCause(causeId),
-      groupImpactMetric
+      {
+        ...groupImpactMetric,
+        dollarProgress: newDollarProgress,
+      }
     )
 
     // Update Count entity
