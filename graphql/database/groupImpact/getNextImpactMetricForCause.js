@@ -33,7 +33,7 @@ const getNextImpactMetricForCause = (causeId) => {
   }
 
   if (causeId === dataSeas.id) {
-    return getImpactMetricById('gGJy2ebUD')
+    return getImpactMetricById('kTeL0g_HM')
   }
 
   if (causeId === dataTrees.id) {
