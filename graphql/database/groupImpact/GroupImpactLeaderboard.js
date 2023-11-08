@@ -33,70 +33,81 @@ class GroupImpactLeaderboard {
   }
 
   static async getLeaderboardForUser(userGroupImpactMetricId, userId) {
-    const userGroupImpactMetricModel = await UserGroupImpactMetricModel.get(
-      groupImpactOverride,
-      userGroupImpactMetricId
-    )
-    const redisClient = this.getClient()
-    const redisKey = this.getRedisKey(
-      userGroupImpactMetricModel.groupImpactMetricId
-    )
-
-    // Get Top 3 users
-    const topUsers = await redisClient.zrange(redisKey, 0, 2, { rev: true })
-
-    // Get user's position
-    const currentPosition = await redisClient.zrevrank(redisKey, userId)
-    let nextUsers = []
-    let userPositions = []
-    // Get users around user
-    if (currentPosition < 3) {
-      // If user in top 3, just get next 3 users
-      nextUsers = await redisClient.zrange(redisKey, 3, 5, { rev: true })
-      for (let i = 0; i < nextUsers.length + topUsers.length; i += 1) {
-        userPositions.push(i + 1)
-      }
-    } else {
-      const lowerBound = Math.max(3, currentPosition - 1)
-      nextUsers = await redisClient.zrange(
-        redisKey,
-        lowerBound,
-        lowerBound + 2,
-        { rev: true }
+    // This will fail if redis does not have data.
+    try {
+      const userGroupImpactMetricModel = await UserGroupImpactMetricModel.get(
+        groupImpactOverride,
+        userGroupImpactMetricId
       )
-      if (nextUsers.length === 1) {
-        userPositions = [1, 2, 3, lowerBound + 1]
-      } else if (nextUsers.length === 2) {
-        userPositions = [1, 2, 3, lowerBound + 1, lowerBound + 2]
-      } else if (nextUsers.length === 3)
-        userPositions = [
-          1,
-          2,
-          3,
-          lowerBound + 1,
-          lowerBound + 2,
-          lowerBound + 3,
-        ]
-    }
 
-    const potentialUsers = [...topUsers, ...nextUsers]
-    // Safety check to ensure we don't fetch duplicate users
-    const [dedupedUsers, dedupedUserPositions] = this.removeDuplicates(
-      potentialUsers,
-      userPositions
-    )
-    const userModels = await UserModel.getBatchInOrder(
-      groupImpactOverride,
-      dedupedUsers
-    )
-    const userGroupImpactModels = await this.fetchGroupImpactMetricModels(
-      userModels
-    )
-    return dedupedUserPositions.map((element, index) => ({
-      user: userModels[index],
-      position: element,
-      userGroupImpactMetric: userGroupImpactModels[index],
-    }))
+      const redisClient = this.getClient()
+      const redisKey = this.getRedisKey(
+        userGroupImpactMetricModel.groupImpactMetricId
+      )
+
+      // Get Top 3 users
+      const topUsers = await redisClient.zrange(redisKey, 0, 2, { rev: true })
+      // Get user's position
+      const currentPosition = await redisClient.zrevrank(redisKey, userId)
+
+      let nextUsers = []
+      let userPositions = []
+
+      // Get users around user
+
+      if (currentPosition < 3) {
+        // If user in top 3, just get next 3 users
+        nextUsers = await redisClient.zrange(redisKey, 3, 5, { rev: true })
+        for (let i = 0; i < nextUsers.length + topUsers.length; i += 1) {
+          userPositions.push(i + 1)
+        }
+      } else {
+        const lowerBound = Math.max(3, currentPosition - 1)
+        nextUsers = await redisClient.zrange(
+          redisKey,
+          lowerBound,
+          lowerBound + 2,
+          { rev: true }
+        )
+        if (nextUsers.length === 1) {
+          userPositions = [1, 2, 3, lowerBound + 1]
+        } else if (nextUsers.length === 2) {
+          userPositions = [1, 2, 3, lowerBound + 1, lowerBound + 2]
+        } else if (nextUsers.length === 3)
+          userPositions = [
+            1,
+            2,
+            3,
+            lowerBound + 1,
+            lowerBound + 2,
+            lowerBound + 3,
+          ]
+      }
+
+      const potentialUsers = [...topUsers, ...nextUsers]
+      // Safety check to ensure we don't fetch duplicate users
+      const [dedupedUsers, dedupedUserPositions] = this.removeDuplicates(
+        potentialUsers,
+        userPositions
+      )
+      const userModels = await UserModel.getBatchInOrder(
+        groupImpactOverride,
+        dedupedUsers
+      )
+      const userGroupImpactModels = await this.fetchGroupImpactMetricModels(
+        userModels
+      )
+
+      return dedupedUserPositions
+        .map((element, index) => ({
+          user: userModels[index],
+          position: element,
+          userGroupImpactMetric: userGroupImpactModels[index],
+        }))
+        .filter((elem) => elem.user && elem.userGroupImpactMetric)
+    } catch (e) {
+      return []
+    }
   }
 
   static async fetchGroupImpactMetricModels(userModels) {
