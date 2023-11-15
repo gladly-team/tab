@@ -839,6 +839,11 @@ const userType = new GraphQLObjectType({
       description:
         'whether or not the user has opted into searching for extra impact',
     },
+    shopSignupTimestamp: {
+      type: GraphQLString,
+      description:
+        'ISO datetime string of when this Shop Signup Timestamp was started',
+    },
     userGroupImpactMetric: {
       type: userGroupImpactMetricType,
       description: 'Current UserGroupImpactMetric',
