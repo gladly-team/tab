@@ -149,7 +149,7 @@ const updateGroupImpactMetricModel = async (
 ) => {
   return GroupImpactMetricModel.update(groupImpactOverride, {
     id: groupImpactMetricId,
-    dollarProgress,
+    dollarProgress: Math.round(dollarProgress),
     dollarProgressFromTab,
     dollarProgressFromSearch,
     ...(dateCompleted && { dateCompleted }),
