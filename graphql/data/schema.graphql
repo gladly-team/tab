@@ -981,6 +981,9 @@ type User implements Node {
   """whether or not the user has opted into searching for extra impact"""
   yahooPaidSearchRewardOptIn: Boolean!
 
+  """ISO datetime string of when this Shop Signup Timestamp was started"""
+  shopSignupTimestamp: String
+
   """Current UserGroupImpactMetric"""
   userGroupImpactMetric: UserGroupImpactMetric
 
