@@ -32,6 +32,7 @@ export default createFragmentContainer(Dashboard, {
       joined
       searches
       tabs
+      shopSignupTimestamp
       showSfacExtensionPrompt
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
