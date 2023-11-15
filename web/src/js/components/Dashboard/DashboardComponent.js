@@ -154,7 +154,8 @@ const styles = theme => ({
   },
 })
 
-const GIVE_DIRECTLY_DISMISS = 'tab.user.dismissedNotif.give-directly-10-2023'
+const NOV_NO_SHOP_DISMISS = 'tab.user.dismissedNotif.november-2023-no-shop'
+//const GIVE_DIRECTLY_DISMISS = 'tab.user.dismissedNotif.give-directly-10-2023'
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -191,6 +192,7 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: true,
+      dismissNovShop: localStorageMgr.getItem(NOV_NO_SHOP_DISMISS) === 'true',
       // dismissGiveDirectly:
       //   localStorageMgr.getItem(GIVE_DIRECTLY_DISMISS) === 'true',
     }
@@ -206,6 +208,15 @@ class Dashboard extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setNotificationsToShow(nextProps)
+  }
+
+  onNovShopClick = () => {
+    window.open('https://shop.gladly.io/', '_blank')
+  }
+
+  onDismissNovShop() {
+    localStorageMgr.setItem(NOV_NO_SHOP_DISMISS, true)
+    this.setState({ dismissNovShop: true })
   }
 
   async onGiveDirectlyClick() {
@@ -523,6 +534,61 @@ class Dashboard extends React.Component {
           user={user}
           showError={this.showError.bind(this)}
         />
+
+        {/* Nov 2023 Shop promo */}
+        {user && !user.shopSignupTimestamp && !this.state.dismissNovShop ? (
+          <Paper
+            align="center"
+            style={{
+              width: 650,
+              position: 'relative',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: 50,
+              padding: 20,
+              zIndex: '1000',
+            }}
+          >
+            <IconButton
+              onClick={this.onDismissNovShop.bind(this)}
+              style={{ position: 'absolute', right: 5, top: 0 }}
+            >
+              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
+            </IconButton>
+
+            <Typography variant={'h4'} gutterBottom>
+              Win $100 by Giving Back during Black Friday and Cyber Monday
+            </Typography>
+            <Typography variant={'body'} gutterBottom>
+              Expand your giving this holiday season by using{' '}
+              <a href="http://shop.gladly.io" target="_blank" rel="noreferrer">
+                Shop for a Cause
+              </a>
+              , allowing you to make a positive impact with every purchase, and
+              double the joy of giving back while you shop. As a bonus, everyone
+              who activates Shop for a Cause on one of our over 10,000 partner
+              shops in November will be entered into a drawing for two $100 Visa
+              gift cards (
+              <a
+                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
+                target="_blank"
+                rel="noreferrer"
+              >
+                promo details
+              </a>
+              ).
+            </Typography>
+
+            <Button
+              onClick={this.onNovShopClick}
+              variant="contained"
+              color="primary"
+              style={{ marginTop: 10, marginBottom: 10 }}
+            >
+              Install Shop for a Cause
+            </Button>
+          </Paper>
+        ) : null}
 
         {/* Give Directly Promo
         {user && !this.state.dismissGiveDirectly ? (
