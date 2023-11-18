@@ -613,7 +613,7 @@ class Dashboard extends React.Component {
               position: 'relative',
               marginLeft: 'auto',
               marginRight: 'auto',
-              marginTop: 50,
+              marginTop: 25,
               padding: 20,
               zIndex: '1000',
             }}
@@ -666,7 +666,7 @@ class Dashboard extends React.Component {
               position: 'relative',
               marginLeft: 'auto',
               marginRight: 'auto',
-              marginTop: 50,
+              marginTop: 25,
               padding: 20,
               zIndex: '1000',
             }}
