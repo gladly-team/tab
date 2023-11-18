@@ -1,0 +1,13 @@
+.hoverable {
+  border: 1px solid transparent;
+  transition: 0.3s;
+  width: 100px;
+  height: 100px;
+}
+
+.hoverable:hover {
+  width: 100px;
+  height: 100px;
+  border: 3px solid #ccc;
+  margin-bottom: -5px;
+}

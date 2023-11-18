@@ -81,6 +81,36 @@ import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
+import LegoLogo from 'js/assets/promos/lego.png'
+import WalmartLogo from 'js/assets/promos/walmart.png'
+import SephoraLogo from 'js/assets/promos/sephora.png'
+import UltraBeautyLogo from 'js/assets/promos/ultra-beauty.png'
+import ThriftBooksLogo from 'js/assets/promos/thriftbooks.png'
+import OldNavyLogo from 'js/assets/promos/oldnavy.png'
+import KiwicoLogo from 'js/assets/promos/kiwico.png'
+import SamsungLogo from 'js/assets/promos/samsung.png'
+import SonosLogo from 'js/assets/promos/sonos.png'
+import MacysLogo from 'js/assets/promos/macys.png'
+import MicrosoftLogo from 'js/assets/promos/microsoft.png'
+import ZulilyLogo from 'js/assets/promos/zulily.png'
+import promoStyles from './November2023ShopUser.module.css'
+
+const contStyles = {
+  position: 'relative',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  width: 700,
+  marginTop: 40,
+  marginBottom: 20,
+  zIndex: 100000,
+}
+
+const imageGroupStyles = {
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  marginTop: 20,
+}
+
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
@@ -154,6 +184,8 @@ const styles = theme => ({
   },
 })
 
+const batchKey = 'november-2023-shop-batch'
+const baseUrl = 'https://wild.link/e?d=54321'
 const NOV_NO_SHOP_DISMISS = 'tab.user.dismissedNotif.november-2023-no-shop'
 //const GIVE_DIRECTLY_DISMISS = 'tab.user.dismissedNotif.give-directly-10-2023'
 
@@ -193,8 +225,43 @@ class Dashboard extends React.Component {
       notificationsToShow: [],
       showIFrameWidget: true,
       dismissNovShop: localStorageMgr.getItem(NOV_NO_SHOP_DISMISS) === 'true',
+      batch: 1,
       // dismissGiveDirectly:
       //   localStorageMgr.getItem(GIVE_DIRECTLY_DISMISS) === 'true',
+    }
+  }
+
+  // Function to update the state
+  updateState() {
+    const now = new Date().getTime()
+    const storedData = localStorageMgr.getItem(batchKey)
+
+    if (storedData) {
+      const { timestamp, currentState } = JSON.parse(storedData)
+
+      // Calculate the number of 3-min intervals passed since the timestamp
+      const intervalsPassed = Math.floor((now - timestamp) / (3 * 60 * 1000))
+
+      if (intervalsPassed > 0) {
+        // Calculate the new state based on intervals passed
+        const newState = ((currentState + intervalsPassed - 1) % 4) + 1
+        const newTimestamp = timestamp + intervalsPassed * 3 * 60 * 1000
+
+        // Update local storage and state
+        localStorageMgr.setItem(
+          batchKey,
+          JSON.stringify({ timestamp: newTimestamp, currentState: newState })
+        )
+        this.setState({ batch: newState })
+      } else {
+        // If less than 3 min have passed, keep the current state
+        this.setState({ batch: currentState })
+      }
+    } else {
+      // If no data in local storage, set default state and store it
+      const defaultData = { timestamp: now, currentState: 1 }
+      localStorageMgr.setItem(batchKey, JSON.stringify(defaultData))
+      this.setState({ batch: 1 })
     }
   }
 
@@ -204,6 +271,8 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
     loadAds()
+
+    this.updateState()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -535,7 +604,7 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Nov 2023 Shop promo */}
+        {/* Nov 2023 Shop promo - no shop */}
         {user && !user.shopSignupTimestamp && !this.state.dismissNovShop ? (
           <Paper
             align="center"
@@ -559,16 +628,14 @@ class Dashboard extends React.Component {
             <Typography variant={'h4'} gutterBottom>
               Win $100 by Giving Back during Black Friday and Cyber Monday
             </Typography>
-            <Typography variant={'body'} gutterBottom>
-              Expand your giving this holiday season by using{' '}
+            <Typography variant={'body1'} gutterBottom>
+              Double your impact when you shop this holiday season with{' '}
               <a href="http://shop.gladly.io" target="_blank" rel="noreferrer">
                 Shop for a Cause
               </a>
-              , allowing you to make a positive impact with every purchase, and
-              double the joy of giving back while you shop. As a bonus, everyone
-              who activates Shop for a Cause on one of our over 10,000 partner
-              shops in November will be entered into a drawing for two $100 Visa
-              gift cards (
+              . Simply add the extension, activate the offers, and shop. As a
+              bonus for activating an offer, you’ll be entered into a drawing
+              for one of two $100 Visa gift cards (
               <a
                 href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
                 target="_blank"
@@ -587,6 +654,187 @@ class Dashboard extends React.Component {
             >
               Install Shop for a Cause
             </Button>
+          </Paper>
+        ) : null}
+
+        {/* Nov 2023 Shop promo - shop */}
+        {user && user.shopSignupTimestamp && !this.state.dismissNovShop ? (
+          <Paper
+            align="center"
+            style={{
+              width: 650,
+              position: 'relative',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: 50,
+              padding: 20,
+              zIndex: '1000',
+            }}
+          >
+            <IconButton
+              onClick={this.onDismissNovShop.bind(this)}
+              style={{ position: 'absolute', right: 5, top: 0 }}
+            >
+              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
+            </IconButton>
+
+            <Typography variant={'h4'} gutterBottom>
+              Give back during your Holiday Shopping
+            </Typography>
+            <Typography variant={'body1'} gutterBottom>
+              Raise money for {user.cause.nameForShop || 'Charity'} when you
+              shop these Black Friday deals–you can earn up to 10% back! As a
+              bonus for activating an offer, you’ll be entered into a drawing
+              for one of two $100 Visa gift cards (
+              <a
+                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
+                target="_blank"
+                rel="noreferrer"
+              >
+                promo details
+              </a>
+              ).
+            </Typography>
+
+            {this.state.batch === 1 && (
+              <div style={imageGroupStyles}>
+                <a
+                  href={`${baseUrl}&c=5482116&UUID=${
+                    user.userId
+                  }&url=https://www.lego.com/`}
+                  className={promoStyles.hoverable}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={LegoLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5483936&UUID=${
+                    user.userId
+                  }&url=https://www.walmart.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={WalmartLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5481985&UUID=${
+                    user.userId
+                  }&url=https://www.sephora.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={SephoraLogo} width="100" alt="" />
+                </a>
+              </div>
+            )}
+
+            {this.state.batch === 2 && (
+              <div style={imageGroupStyles}>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5483579&UUID=${
+                    user.userId
+                  }&url=https://www.ulta.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={UltraBeautyLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=144406&UUID=${
+                    user.userId
+                  }&url=https://www.thriftbooks.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={ThriftBooksLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5480737&UUID=${
+                    user.userId
+                  }&url=https://oldnavy.gap.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={OldNavyLogo} width="100" alt="" />
+                </a>
+              </div>
+            )}
+
+            {this.state.batch === 3 && (
+              <div style={imageGroupStyles}>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5479361&UUID=${
+                    user.userId
+                  }&url=https://www.kiwico.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={KiwicoLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5481855&UUID=${
+                    user.userId
+                  }&url=https://www.samsung.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={SamsungLogo} width="100" alt="" />
+                </a>{' '}
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5482453&UUID=${
+                    user.userId
+                  }&url=https://www.sonos.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={SonosLogo} width="100" alt="" />
+                </a>{' '}
+              </div>
+            )}
+
+            {this.state.batch === 4 && (
+              <div style={imageGroupStyles}>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5479868&UUID=${
+                    user.userId
+                  }&url=https://www.macys.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={MacysLogo} width="100" alt="" />
+                </a>{' '}
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5482649&UUID=${
+                    user.userId
+                  }&url=https://www.microsoft.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={MicrosoftLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=5484304&UUID=${
+                    user.userId
+                  }&url=https://shop.zulily.com/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={ZulilyLogo} width="100" alt="" />
+                </a>
+              </div>
+            )}
           </Paper>
         ) : null}
 
