@@ -84,15 +84,15 @@ import CloseIcon from '@material-ui/icons/Close'
 import LegoLogo from 'js/assets/promos/lego.png'
 import WalmartLogo from 'js/assets/promos/walmart.png'
 import SephoraLogo from 'js/assets/promos/sephora.png'
-import UltraBeautyLogo from 'js/assets/promos/ultra-beauty.png'
 import ThriftBooksLogo from 'js/assets/promos/thriftbooks.png'
-import OldNavyLogo from 'js/assets/promos/oldnavy.png'
 import KiwicoLogo from 'js/assets/promos/kiwico.png'
 import SamsungLogo from 'js/assets/promos/samsung.png'
 import SonosLogo from 'js/assets/promos/sonos.png'
-import MacysLogo from 'js/assets/promos/macys.png'
-import MicrosoftLogo from 'js/assets/promos/microsoft.png'
-import ZulilyLogo from 'js/assets/promos/zulily.png'
+import horseLogo from 'js/assets/promos/horse.png'
+import allExpressLogo from 'js/assets/promos/allexpress.png'
+import glossierLogo from 'js/assets/promos/glossier.png'
+import bookshopLogo from 'js/assets/promos/bookshop.png'
+import lowesLogo from 'js/assets/promos/lowes.png'
 import promoStyles from './November2023ShopUser.module.css'
 
 const contStyles = {
@@ -677,7 +677,6 @@ class Dashboard extends React.Component {
             >
               <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
             </IconButton>
-
             <Typography variant={'h4'} gutterBottom>
               Give back during your Holiday Shopping
             </Typography>
@@ -695,7 +694,6 @@ class Dashboard extends React.Component {
               </a>
               ).
             </Typography>
-
             {this.state.batch === 1 && (
               <div style={imageGroupStyles}>
                 <a
@@ -735,13 +733,13 @@ class Dashboard extends React.Component {
               <div style={imageGroupStyles}>
                 <a
                   className={promoStyles.hoverable}
-                  href={`${baseUrl}&c=5483579&tc=${
+                  href={`${baseUrl}&c=5475597&tc=${
                     user.userId
-                  }&url=${encodeURIComponent('https://www.ulta.com/')}`}
+                  }&url=${encodeURIComponent('https://www.backcountry.com/')}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={UltraBeautyLogo} width="100" alt="" />
+                  <img src={horseLogo} width="100" alt="" />
                 </a>
                 <a
                   className={promoStyles.hoverable}
@@ -755,17 +753,16 @@ class Dashboard extends React.Component {
                 </a>
                 <a
                   className={promoStyles.hoverable}
-                  href={`${baseUrl}&c=5480737&tc=${
+                  href={`${baseUrl}&c=5475228&tc=${
                     user.userId
-                  }&url=${encodeURIComponent('https://oldnavy.gap.com/')}`}
+                  }&url=${encodeURIComponent('https://www.aliexpress.us/')}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={OldNavyLogo} width="100" alt="" />
+                  <img src={allExpressLogo} width="100" alt="" />
                 </a>
               </div>
             )}
-
             {this.state.batch === 3 && (
               <div style={imageGroupStyles}>
                 <a
@@ -800,39 +797,38 @@ class Dashboard extends React.Component {
                 </a>{' '}
               </div>
             )}
-
             {this.state.batch === 4 && (
               <div style={imageGroupStyles}>
                 <a
                   className={promoStyles.hoverable}
-                  href={`${baseUrl}&c=5479868&tc=${
+                  href={`${baseUrl}&c=5478249&tc=${
                     user.userId
-                  }&url=${encodeURIComponent('https://www.macys.com/')}`}
+                  }&url=${encodeURIComponent('https://www.glossier.com/')}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={MacysLogo} width="100" alt="" />
+                  <img src={glossierLogo} width="100" alt="" />
+                </a>
+                <a
+                  className={promoStyles.hoverable}
+                  href={`${baseUrl}&c=145193&tc=${
+                    user.userId
+                  }&url=${encodeURIComponent('https://bookshop.org/')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={bookshopLogo} width="100" alt="" />
                 </a>{' '}
                 <a
                   className={promoStyles.hoverable}
-                  href={`${baseUrl}&c=5482649&tc=${
+                  href={`${baseUrl}&c=5479801&tc=${
                     user.userId
-                  }&url=${encodeURIComponent('https://www.microsoft.com/')}`}
+                  }&url=${encodeURIComponent('https://www.lowes.com/')}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={MicrosoftLogo} width="100" alt="" />
-                </a>
-                <a
-                  className={promoStyles.hoverable}
-                  href={`${baseUrl}&c=5484304&tc=${
-                    user.userId
-                  }&url=${encodeURIComponent('https://shop.zulily.com/')}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={ZulilyLogo} width="100" alt="" />
-                </a>
+                  <img src={lowesLogo} width="100" alt="" />
+                </a>{' '}
               </div>
             )}
           </Paper>
