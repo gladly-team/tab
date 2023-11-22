@@ -165,6 +165,9 @@ const mockProps = {
     tabs: 12,
     experimentActions: {},
     showSfacExtensionPrompt: false,
+    cause: {
+      nameForShop: 'cats',
+    },
   },
   app: {
     campaign: {

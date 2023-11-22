@@ -95,15 +95,15 @@ import bookshopLogo from 'js/assets/promos/bookshop.png'
 import lowesLogo from 'js/assets/promos/lowes.png'
 import promoStyles from './November2023ShopUser.module.css'
 
-const contStyles = {
-  position: 'relative',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  width: 700,
-  marginTop: 40,
-  marginBottom: 20,
-  zIndex: 100000,
-}
+// const contStyles = {
+//   position: 'relative',
+//   marginLeft: 'auto',
+//   marginRight: 'auto',
+//   width: 700,
+//   marginTop: 40,
+//   marginBottom: 20,
+//   zIndex: 100000,
+// }
 
 const imageGroupStyles = {
   display: 'flex',
@@ -373,7 +373,7 @@ class Dashboard extends React.Component {
   // }
 
   render() {
-    const { user, app, classes, relay } = this.props
+    const { user, app, classes } = this.props
     const {
       adUnitsToShow,
       browser,
@@ -637,7 +637,7 @@ class Dashboard extends React.Component {
                 <a
                   href="http://shop.gladly.io/"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   Shop for a Cause
                 </a>{' '}
@@ -655,7 +655,7 @@ class Dashboard extends React.Component {
                 <a
                   href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   promo details
                 </a>
@@ -671,7 +671,7 @@ class Dashboard extends React.Component {
                   }&url=${encodeURIComponent('https://www.lego.com/')}`}
                   className={promoStyles.hoverable}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={LegoLogo} width="100" alt="" />
                 </a>
@@ -681,7 +681,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.walmart.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={WalmartLogo} width="100" alt="" />
                 </a>
@@ -691,7 +691,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.sephora.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SephoraLogo} width="100" alt="" />
                 </a>
@@ -706,7 +706,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.backcountry.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={horseLogo} width="100" alt="" />
                 </a>
@@ -716,7 +716,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.thriftbooks.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={ThriftBooksLogo} width="100" alt="" />
                 </a>
@@ -726,7 +726,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.aliexpress.us/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={allExpressLogo} width="100" alt="" />
                 </a>
@@ -740,7 +740,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.kiwico.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={KiwicoLogo} width="100" alt="" />
                 </a>
@@ -750,7 +750,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.samsung.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SamsungLogo} width="100" alt="" />
                 </a>{' '}
@@ -760,7 +760,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.sonos.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SonosLogo} width="100" alt="" />
                 </a>{' '}
@@ -774,7 +774,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.glossier.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={glossierLogo} width="100" alt="" />
                 </a>
@@ -784,7 +784,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://bookshop.org/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={bookshopLogo} width="100" alt="" />
                 </a>{' '}
@@ -794,7 +794,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.lowes.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={lowesLogo} width="100" alt="" />
                 </a>{' '}
@@ -833,7 +833,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.givedirectly.org/?utm_source=tabforcause"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 GiveDirectly
               </a>{' '}
@@ -843,7 +843,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.givedirectly.org/research-at-give-directly/?utm_source=tabforacause"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 research has shown
               </a>{' '}
@@ -856,7 +856,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.instagram.com/tabforacause/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Instagram
               </a>{' '}
