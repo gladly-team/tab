@@ -95,15 +95,15 @@ import bookshopLogo from 'js/assets/promos/bookshop.png'
 import lowesLogo from 'js/assets/promos/lowes.png'
 import promoStyles from './November2023ShopUser.module.css'
 
-const contStyles = {
-  position: 'relative',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  width: 700,
-  marginTop: 40,
-  marginBottom: 20,
-  zIndex: 100000,
-}
+// const contStyles = {
+//   position: 'relative',
+//   marginLeft: 'auto',
+//   marginRight: 'auto',
+//   width: 700,
+//   marginTop: 40,
+//   marginBottom: 20,
+//   zIndex: 100000,
+// }
 
 const imageGroupStyles = {
   display: 'flex',
@@ -373,7 +373,7 @@ class Dashboard extends React.Component {
   // }
 
   render() {
-    const { user, app, classes, relay } = this.props
+    const { user, app, classes } = this.props
     const {
       adUnitsToShow,
       browser,
@@ -604,61 +604,8 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Nov 2023 Shop promo - no shop */}
-        {user && !user.shopSignupTimestamp && !this.state.dismissNovShop ? (
-          <Paper
-            align="center"
-            style={{
-              width: 650,
-              position: 'relative',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 25,
-              padding: 20,
-              zIndex: '1000',
-            }}
-          >
-            <IconButton
-              onClick={this.onDismissNovShop.bind(this)}
-              style={{ position: 'absolute', right: 5, top: 0 }}
-            >
-              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
-            </IconButton>
-
-            <Typography variant={'h4'} gutterBottom>
-              Win $100 by Giving Back during Black Friday and Cyber Monday
-            </Typography>
-            <Typography variant={'body1'} gutterBottom>
-              Double your impact when you shop this holiday season with{' '}
-              <a href="http://shop.gladly.io" target="_blank" rel="noreferrer">
-                Shop for a Cause
-              </a>
-              . Simply add the extension, activate the offers, and shop. As a
-              bonus for activating an offer, you’ll be entered into a drawing
-              for one of two $100 Visa gift cards (
-              <a
-                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
-                target="_blank"
-                rel="noreferrer"
-              >
-                promo details
-              </a>
-              ).
-            </Typography>
-
-            <Button
-              onClick={this.onNovShopClick}
-              variant="contained"
-              color="primary"
-              style={{ marginTop: 10, marginBottom: 10 }}
-            >
-              Install Shop for a Cause
-            </Button>
-          </Paper>
-        ) : null}
-
         {/* Nov 2023 Shop promo - shop */}
-        {user && user.shopSignupTimestamp && !this.state.dismissNovShop ? (
+        {user && !this.state.dismissNovShop ? (
           <Paper
             align="center"
             style={{
@@ -680,20 +627,42 @@ class Dashboard extends React.Component {
             <Typography variant={'h4'} gutterBottom>
               Give back during your Holiday Shopping
             </Typography>
-            <Typography variant={'body1'} gutterBottom>
-              Raise money for {user.cause.nameForShop || 'Charity'} when you
-              shop these Black Friday deals–you can earn up to 10% back! As a
-              bonus for activating an offer, you’ll be entered into a drawing
-              for one of two $100 Visa gift cards (
-              <a
-                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
-                target="_blank"
-                rel="noreferrer"
-              >
-                promo details
-              </a>
-              ).
-            </Typography>
+
+            {!user.shopSignupTimestamp && (
+              <Typography variant="body1" gutterBottom>
+                Raise money for {user.cause.nameForShop || 'Charity'} when you
+                shop these Black Friday deals! Just click the links below before
+                to shop through our partner stores and they’ll give up to 5%
+                back for your cause. Or, you can download{' '}
+                <a
+                  href="http://shop.gladly.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Shop for a Cause
+                </a>{' '}
+                which will automatically help you raise money from over 10,000
+                stores.
+              </Typography>
+            )}
+
+            {user.shopSignupTimestamp && (
+              <Typography variant={'body1'} gutterBottom>
+                Raise money for {user.cause.nameForShop || 'Charity'} when you
+                shop these Black Friday deals–you can earn up to 10% back! As a
+                bonus for activating an offer, you’ll be entered into a drawing
+                for one of two $100 Visa gift cards (
+                <a
+                  href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  promo details
+                </a>
+                ).
+              </Typography>
+            )}
+
             {this.state.batch === 1 && (
               <div style={imageGroupStyles}>
                 <a
@@ -702,7 +671,7 @@ class Dashboard extends React.Component {
                   }&url=${encodeURIComponent('https://www.lego.com/')}`}
                   className={promoStyles.hoverable}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={LegoLogo} width="100" alt="" />
                 </a>
@@ -712,7 +681,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.walmart.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={WalmartLogo} width="100" alt="" />
                 </a>
@@ -722,7 +691,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.sephora.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SephoraLogo} width="100" alt="" />
                 </a>
@@ -737,7 +706,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.backcountry.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={horseLogo} width="100" alt="" />
                 </a>
@@ -747,7 +716,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.thriftbooks.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={ThriftBooksLogo} width="100" alt="" />
                 </a>
@@ -757,7 +726,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.aliexpress.us/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={allExpressLogo} width="100" alt="" />
                 </a>
@@ -771,7 +740,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.kiwico.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={KiwicoLogo} width="100" alt="" />
                 </a>
@@ -781,7 +750,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.samsung.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SamsungLogo} width="100" alt="" />
                 </a>{' '}
@@ -791,7 +760,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.sonos.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={SonosLogo} width="100" alt="" />
                 </a>{' '}
@@ -805,7 +774,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.glossier.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={glossierLogo} width="100" alt="" />
                 </a>
@@ -815,7 +784,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://bookshop.org/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={bookshopLogo} width="100" alt="" />
                 </a>{' '}
@@ -825,7 +794,7 @@ class Dashboard extends React.Component {
                     user.userId
                   }&url=${encodeURIComponent('https://www.lowes.com/')}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <img src={lowesLogo} width="100" alt="" />
                 </a>{' '}
@@ -864,7 +833,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.givedirectly.org/?utm_source=tabforcause"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 GiveDirectly
               </a>{' '}
@@ -874,7 +843,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.givedirectly.org/research-at-give-directly/?utm_source=tabforacause"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 research has shown
               </a>{' '}
@@ -887,7 +856,7 @@ class Dashboard extends React.Component {
               <a
                 href="https://www.instagram.com/tabforacause/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Instagram
               </a>{' '}
