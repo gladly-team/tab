@@ -604,61 +604,8 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Nov 2023 Shop promo - no shop */}
-        {user && !user.shopSignupTimestamp && !this.state.dismissNovShop ? (
-          <Paper
-            align="center"
-            style={{
-              width: 650,
-              position: 'relative',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 25,
-              padding: 20,
-              zIndex: '1000',
-            }}
-          >
-            <IconButton
-              onClick={this.onDismissNovShop.bind(this)}
-              style={{ position: 'absolute', right: 5, top: 0 }}
-            >
-              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
-            </IconButton>
-
-            <Typography variant={'h4'} gutterBottom>
-              Win $100 by Giving Back during Black Friday and Cyber Monday
-            </Typography>
-            <Typography variant={'body1'} gutterBottom>
-              Double your impact when you shop this holiday season with{' '}
-              <a href="http://shop.gladly.io" target="_blank" rel="noreferrer">
-                Shop for a Cause
-              </a>
-              . Simply add the extension, activate the offers, and shop. As a
-              bonus for activating an offer, you’ll be entered into a drawing
-              for one of two $100 Visa gift cards (
-              <a
-                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
-                target="_blank"
-                rel="noreferrer"
-              >
-                promo details
-              </a>
-              ).
-            </Typography>
-
-            <Button
-              onClick={this.onNovShopClick}
-              variant="contained"
-              color="primary"
-              style={{ marginTop: 10, marginBottom: 10 }}
-            >
-              Install Shop for a Cause
-            </Button>
-          </Paper>
-        ) : null}
-
         {/* Nov 2023 Shop promo - shop */}
-        {user && user.shopSignupTimestamp && !this.state.dismissNovShop ? (
+        {user && !this.state.dismissNovShop ? (
           <Paper
             align="center"
             style={{
@@ -680,20 +627,42 @@ class Dashboard extends React.Component {
             <Typography variant={'h4'} gutterBottom>
               Give back during your Holiday Shopping
             </Typography>
-            <Typography variant={'body1'} gutterBottom>
-              Raise money for {user.cause.nameForShop || 'Charity'} when you
-              shop these Black Friday deals–you can earn up to 10% back! As a
-              bonus for activating an offer, you’ll be entered into a drawing
-              for one of two $100 Visa gift cards (
-              <a
-                href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
-                target="_blank"
-                rel="noreferrer"
-              >
-                promo details
-              </a>
-              ).
-            </Typography>
+
+            {!user.shopSignupTimestamp && (
+              <Typography variant="body1" gutterBottom>
+                Raise money for {user.cause.nameForShop || 'Charity'} when you
+                shop these Black Friday deals! Just click the links below before
+                to shop through our partner stores and they’ll give up to 5%
+                back for your cause. Or, you can download{' '}
+                <a
+                  href="http://shop.gladly.io/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Shop for a Cause
+                </a>{' '}
+                which will automatically help you raise money from over 10,000
+                stores.
+              </Typography>
+            )}
+
+            {user.shopSignupTimestamp && (
+              <Typography variant={'body1'} gutterBottom>
+                Raise money for {user.cause.nameForShop || 'Charity'} when you
+                shop these Black Friday deals–you can earn up to 10% back! As a
+                bonus for activating an offer, you’ll be entered into a drawing
+                for one of two $100 Visa gift cards (
+                <a
+                  href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  promo details
+                </a>
+                ).
+              </Typography>
+            )}
+
             {this.state.batch === 1 && (
               <div style={imageGroupStyles}>
                 <a
