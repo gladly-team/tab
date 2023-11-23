@@ -630,10 +630,10 @@ class Dashboard extends React.Component {
 
             {!user.shopSignupTimestamp && (
               <Typography variant="body1" gutterBottom>
-                Raise money for {user.cause.nameForShop || 'Charity'} when you
-                shop these Black Friday deals! Just click the links below before
-                to shop through our partner stores and they’ll give up to 5%
-                back for your cause. Or, you can download{' '}
+                Raise money for Charity when you shop these Black Friday deals!
+                Just click the links below before to shop through our partner
+                stores and they’ll give up to 5% back for your cause. Or, you
+                can download{' '}
                 <a
                   href="http://shop.gladly.io/"
                   target="_blank"
