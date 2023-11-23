@@ -390,6 +390,13 @@ class Dashboard extends React.Component {
       // userClickedSearchIntroV2,
     } = this.state
 
+    // See if we have a shop name for our charity
+    var shopCharityName = 'Charity'
+
+    if (user && user.cause && 'nameForShop' in user.cause) {
+      shopCharityName = user.cause.nameForShop
+    }
+
     /*
      * A handler for AdComponents' onAdDisplayed callbacks, which receives
      * info about the displayed ad.
@@ -630,10 +637,10 @@ class Dashboard extends React.Component {
 
             {!user.shopSignupTimestamp && (
               <Typography variant="body1" gutterBottom>
-                Raise money for Charity when you shop these Black Friday deals!
-                Just click the links below before to shop through our partner
-                stores and they’ll give up to 5% back for your cause. Or, you
-                can download{' '}
+                Raise money for {shopCharityName} when you shop these Black
+                Friday deals! Just click the links below before to shop through
+                our partner stores and they’ll give up to 5% back for your
+                cause. Or, you can download{' '}
                 <a
                   href="http://shop.gladly.io/"
                   target="_blank"
