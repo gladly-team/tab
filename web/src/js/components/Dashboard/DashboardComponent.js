@@ -78,33 +78,6 @@ import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
 import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
-
-import LegoLogo from 'js/assets/promos/lego.png'
-import WalmartLogo from 'js/assets/promos/walmart.png'
-import SephoraLogo from 'js/assets/promos/sephora.png'
-import ThriftBooksLogo from 'js/assets/promos/thriftbooks.png'
-import KiwicoLogo from 'js/assets/promos/kiwico.png'
-import SamsungLogo from 'js/assets/promos/samsung.png'
-import SonosLogo from 'js/assets/promos/sonos.png'
-import horseLogo from 'js/assets/promos/horse.png'
-import allExpressLogo from 'js/assets/promos/allexpress.png'
-import glossierLogo from 'js/assets/promos/glossier.png'
-import bookshopLogo from 'js/assets/promos/bookshop.png'
-import lowesLogo from 'js/assets/promos/lowes.png'
-import promoStyles from './November2023ShopUser.module.css'
-
-// const contStyles = {
-//   position: 'relative',
-//   marginLeft: 'auto',
-//   marginRight: 'auto',
-//   width: 700,
-//   marginTop: 40,
-//   marginBottom: 20,
-//   zIndex: 100000,
-// }
-
 const imageGroupStyles = {
   display: 'flex',
   justifyContent: 'space-evenly',
@@ -611,7 +584,7 @@ class Dashboard extends React.Component {
           showError={this.showError.bind(this)}
         />
 
-        {/* Nov 2023 Shop promo - shop */}
+        {/* Nov 2023 Shop promo - shop 
         {user && !this.state.dismissNovShop ? (
           <Paper
             align="center"
@@ -635,7 +608,9 @@ class Dashboard extends React.Component {
               Give back during your Holiday Shopping
             </Typography>
 
-            {!user.shopSignupTimestamp && (
+            
+            
+            !user.shopSignupTimestamp && (
               <Typography variant="body1" gutterBottom>
                 Raise money for {shopCharityName} when you shop these Black
                 Friday deals! Just click the links below before to shop through
@@ -808,7 +783,7 @@ class Dashboard extends React.Component {
               </div>
             )}
           </Paper>
-        ) : null}
+                ) : null */}
 
         {/* Give Directly Promo
         {user && !this.state.dismissGiveDirectly ? (
