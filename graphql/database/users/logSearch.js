@@ -163,7 +163,7 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
   // Publish to Brandfluence SNS topic.
   // dYr9lq7, WerUli7
   if (
-    user.campaignId &&
+    typeof user?.campaignId !== 'undefined' &&
     (user.causeId === 'dYr9lq7' || user.causeId === 'WerUli7')
   ) {
     try {
