@@ -1,6 +1,7 @@
 import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import { nanoid } from 'nanoid'
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
@@ -11,6 +12,29 @@ import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
 import getUserFeature from '../experiments/getUserFeature'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from '../experiments/experimentConstants'
+
+// const PRODUCTION_STAGE = 'prod'
+
+// TODO(spicer): Pull into a separate library.
+const publishBrandfluenceToSNS = async ({ messageData }) => {
+  // Get the SNS topic ARN. Example:
+  //   "arn:aws:sns:us-west-2:167811431063:dev-Brandfluence"
+  const awsRegion = process.env.AWS_REGION
+  const awsAccountId = '167811431063'
+  const snsTopicName = 'Brandfluence'
+  const snsTopicNamePrefix = ''
+  // const snsTopicNamePrefix = stage === PRODUCTION_STAGE ? '' : 'dev-'
+  const snsTopicARN = `arn:aws:sns:${awsRegion}:${awsAccountId}:${snsTopicNamePrefix}${snsTopicName}`
+
+  // Publish.
+  const message = JSON.stringify(messageData)
+  const sns = new SNSClient()
+  const params = {
+    Message: message,
+    TopicArn: snsTopicARN,
+  }
+  await sns.send(new PublishCommand(params))
+}
 
 /**
  * Create a new user and performs other setup actions.
@@ -84,6 +108,30 @@ const createUser = async (
     throw e
   }
   let returnedUser = response.item
+
+  // TODO(spicer): Pull into a separate library.
+  // Publish to Brandfluence SNS topic.
+  // dYr9lq7, WerUli7
+  if (
+    returnedUser.campaignId &&
+    (returnedUser.causeId === 'dYr9lq7' || returnedUser.causeId === 'WerUli7')
+  ) {
+    try {
+      const messageData = {
+        data: {
+          event: 'new-user',
+          userId: returnedUser.id,
+          causeId: returnedUser.causeId,
+          campaignId: returnedUser.campaignId,
+        },
+      }
+      await publishBrandfluenceToSNS({ messageData })
+    } catch (e) {
+      // TODO: add Sentry error logging.
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
 
   // If the user's email differs from the one in the database,
   // update it. This will happen when anonymous users sign in.
