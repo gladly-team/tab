@@ -109,6 +109,29 @@ const createUser = async (
   }
   let returnedUser = response.item
 
+  // If the user's email differs from the one in the database,
+  // update it. This will happen when anonymous users sign in.
+  if (returnedUser.email !== userContext.email) {
+    returnedUser = await UserModel.update(userContext, {
+      id: userId,
+      email: userContext.email,
+    })
+  }
+
+  // If the user's email is verified but the user's emailVerified
+  // property is false, update it. This can happen when a
+  // previously-anonymous user signs in with a provider
+  // whose emails are auto-verified (such as Google).
+  if (userContext.emailVerified && !get(returnedUser, 'emailVerified')) {
+    returnedUser = await logEmailVerified(userContext, userId)
+  }
+
+  // If the user already existed, return it without doing other
+  // setup tasks.
+  if (!response.created) {
+    return returnedUser
+  }
+
   // TODO(spicer): Pull into a separate library.
   // Publish to Brandfluence SNS topic.
   // dYr9lq7, WerUli7
@@ -131,29 +154,6 @@ const createUser = async (
       // eslint-disable-next-line no-console
       console.error(e)
     }
-  }
-
-  // If the user's email differs from the one in the database,
-  // update it. This will happen when anonymous users sign in.
-  if (returnedUser.email !== userContext.email) {
-    returnedUser = await UserModel.update(userContext, {
-      id: userId,
-      email: userContext.email,
-    })
-  }
-
-  // If the user's email is verified but the user's emailVerified
-  // property is false, update it. This can happen when a
-  // previously-anonymous user signs in with a provider
-  // whose emails are auto-verified (such as Google).
-  if (userContext.emailVerified && !get(returnedUser, 'emailVerified')) {
-    returnedUser = await logEmailVerified(userContext, userId)
-  }
-
-  // If the user already existed, return it without doing other
-  // setup tasks.
-  if (!response.created) {
-    return returnedUser
   }
 
   /**
