@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { nanoid } from 'nanoid'
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
 import { getTodaySearchCount } from './user-utils'
@@ -11,6 +12,31 @@ import getCauseByUser from '../cause/getCauseByUser'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
 import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
+
+// const PRODUCTION_STAGE = 'prod'
+
+// TODO(spicer): Pull into a separate library.
+const publishBrandfluenceToSNS = async ({ messageData }) => {
+  // Get the SNS topic ARN. Example:
+  //   "arn:aws:sns:us-west-2:167811431063:dev-Brandfluence"
+  const awsRegion = process.env.AWS_REGION
+  const awsAccountId = '167811431063'
+  const snsTopicName = 'Brandfluence'
+  const snsTopicNamePrefix = ''
+  // const snsTopicNamePrefix = stage === PRODUCTION_STAGE ? '' : 'dev-'
+  const snsTopicARN = `arn:aws:sns:${awsRegion}:${awsAccountId}:${snsTopicNamePrefix}${snsTopicName}`
+
+  console.log(snsTopicARN)
+
+  // Publish.
+  const message = JSON.stringify(messageData)
+  const sns = new SNSClient()
+  const params = {
+    Message: message,
+    TopicArn: snsTopicARN,
+  }
+  await sns.send(new PublishCommand(params))
+}
 
 const getSource = (searchData) => {
   const validSearchSources = ['self', 'chrome', 'ff', 'tab', 'edge', 'safari']
@@ -132,6 +158,31 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
   } catch (e) {
     throw e
   }
+
+  // TODO(spicer): Pull into a separate library.
+  // Publish to Brandfluence SNS topic.
+  // dYr9lq7, WerUli7
+  if (
+    user.campaignId &&
+    (user.causeId === 'dYr9lq7' || user.causeId === 'WerUli7')
+  ) {
+    try {
+      const messageData = {
+        data: {
+          event: 'search',
+          userId: user.id,
+          causeId: user.causeId,
+          campaignId: user.campaignId,
+        },
+      }
+      await publishBrandfluenceToSNS({ messageData })
+    } catch (e) {
+      // TODO: add Sentry error logging.
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
   return {
     user,
     success: true,

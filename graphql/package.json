@@ -11,6 +11,7 @@
     "@sentry/node": "^7.20.0",
     "@upstash/redis": "^1.19.1",
     "aws-sdk": "^2.1257.0",
+    "@aws-sdk/client-sns": "^3.121.0",
     "aws4": "^1.8.0",
     "babel-watch": "^7.5.0",
     "bluebird": "^3.5.4",
