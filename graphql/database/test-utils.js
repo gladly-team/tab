@@ -211,6 +211,7 @@ export const getMockGroupImpactInstance = (attributes) => {
         dollarProgress: 2000,
         dollarGoal: 25000000,
         dollarProgressFromSearch: 2000,
+        dollarProgressFromSop: 1000,
         dollarProgressFromTab: 0,
         dateStarted: moment.utc().toISOString(),
         created: moment.utc().toISOString(),

@@ -51,6 +51,12 @@ class GroupImpactMetric extends RedisModel {
         .description(
           `the dollar amount raised for this instance of GroupImpactMetric so far in microUSDs from just search`
         ),
+      dollarProgressFromShop: types
+        .number()
+        .required()
+        .description(
+          `the dollar amount raised for this instance of GroupImpactMetric so far in microUSDs from just shop`
+        ),
       dollarGoal: types
         .number()
         .required()
@@ -80,6 +86,7 @@ class GroupImpactMetric extends RedisModel {
     return {
       dollarProgressFromTab: 0,
       dollarProgressFromSearch: 0,
+      dollarProgressFromShop: 0,
       dateStarted: moment.utc().toISOString(),
     }
   }
