@@ -1159,6 +1159,11 @@ const groupImpactMetricType = new GraphQLObjectType({
       description:
         'The micro USD amount raised for this instance of GroupImpactMetric so far from search',
     },
+    dollarProgressFromShop: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description:
+        'The micro USD amount raised for this instance of GroupImpactMetric so far from shop',
+    },
     dateExpires: {
       type: GraphQLString,
       description:

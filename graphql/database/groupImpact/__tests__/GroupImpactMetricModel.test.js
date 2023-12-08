@@ -32,6 +32,7 @@ describe('GroupImpactMetricModel', () => {
         dollarProgress: 1000,
         dollarGoal: 10000,
         dollarProgressFromSearch: 100,
+        dollarProgressFromShop: 200,
         dollarProgressFromTab: 200,
       })
     )
@@ -42,6 +43,7 @@ describe('GroupImpactMetricModel', () => {
       dollarProgress: 1000,
       dollarGoal: 10000,
       dollarProgressFromSearch: 100,
+      dollarProgressFromShop: 200,
       dollarProgressFromTab: 200,
       dateStarted: moment.utc().toISOString(),
     })

@@ -45,6 +45,7 @@ const getMockGroupImpact = () => ({
   dollarProgress: 1000,
   dollarGoal: 25000000,
   dollarProgressFromSearch: 0,
+  dollarProgressFromShop: 0,
   dollarProgressFromTab: 1000,
 })
 

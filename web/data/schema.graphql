@@ -498,6 +498,11 @@ type GroupImpactMetric implements Node {
   """
   dollarProgressFromSearch: Int!
 
+  """
+  The micro USD amount raised for this instance of GroupImpactMetric so far from shop
+  """
+  dollarProgressFromShop: Int!
+
   """ISO datetime string of when this GroupImpactMetric will expire"""
   dateExpires: String
 }
