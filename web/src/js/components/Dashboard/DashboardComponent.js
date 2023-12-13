@@ -535,33 +535,38 @@ class Dashboard extends React.Component {
 
     const notificationsToShow = this.state.notificationsToShow
 
-    // Our Notification - Shop
-    let notif = notificationsToShow.find(
-      notif => notif.code === 'shfac-notify-fullpage-nov'
+    // Our Notification
+    const notif = notificationsToShow.find(
+      notif => notif.code === 'user-survey-december-2023'
     )
 
-    if (
-      notif &&
-      notif.variation !== 'Version1' &&
-      notif.variation !== 'Version2' &&
-      notif.variation !== 'Version3'
-    ) {
-      notif = null
-    }
+    // // Our Notification - Shop
+    // let notif = notificationsToShow.find(
+    //   notif => notif.code === 'shfac-notify-fullpage-nov'
+    // )
 
-    // Our Notification - Search
-    let notifSearch = notificationsToShow.find(
-      notif => notif.code === 'sfac-notify-fullpage-nov'
-    )
+    // if (
+    //   notif &&
+    //   notif.variation !== 'Version1' &&
+    //   notif.variation !== 'Version2' &&
+    //   notif.variation !== 'Version3'
+    // ) {
+    //   notif = null
+    // }
 
-    if (
-      notifSearch &&
-      notifSearch.variation !== 'Version1' &&
-      notifSearch.variation !== 'Version2' &&
-      notifSearch.variation !== 'Version3'
-    ) {
-      notifSearch = null
-    }
+    // // Our Notification - Search
+    // let notifSearch = notificationsToShow.find(
+    //   notif => notif.code === 'sfac-notify-fullpage-nov'
+    // )
+
+    // if (
+    //   notifSearch &&
+    //   notifSearch.variation !== 'Version1' &&
+    //   notifSearch.variation !== 'Version2' &&
+    //   notifSearch.variation !== 'Version3'
+    // ) {
+    //   notifSearch = null
+    // }
 
     return (
       <div
@@ -924,30 +929,28 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {/* {surveyNotif ? (
+              {notif ? (
                 <Notification
                   useGlobalDismissalTime
-                  title={`We want to hear from you!`}
+                  title={`Time for the 2023 Tabber Survey!`}
                   message={
                     <>
                       <Typography variant={'body2'} gutterBottom>
-                        We'd love your feedback via this quick (&lt;2 min)
-                        survey to help improve Tab for a Cause!
-                      </Typography>
-                      <br />
-                      <Typography variant={'body2'} gutterBottom>
-                        Thanks for your help!
+                        Help decide what is next for Tab for a Cause by
+                        providing your feedback. Thanks for Tabbing!
                       </Typography>
                     </>
                   }
                   buttonText={'Take Survey'}
-                  buttonURL={'https://forms.gle/u6wpP3teLpBB4yZP6'}
-                  onDismiss={surveyNotif.onDismiss}
+                  buttonURL={
+                    'https://docs.google.com/forms/d/e/1FAIpQLScnsvTq8s3oSOzD9jaCCYcsa-LbNPQyIZDU9lSVSJWIMPeNWg/viewform'
+                  }
+                  onDismiss={notif.onDismiss}
                   style={{
                     marginTop: 4,
                   }}
                 />
-              ) : null} */}
+              ) : null}
 
               {/* {notif ? (
                 <ShfacExtensionSellNotification
@@ -1369,7 +1372,7 @@ class Dashboard extends React.Component {
           </FadeInDashboardAnimation>
         ) : null}
 
-        {user && this.state.showIFrameWidget && notifSearch ? (
+        {/* {user && this.state.showIFrameWidget && notifSearch ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
               widgetName={'sfac-notify-fullpage-nov'}
@@ -1389,7 +1392,7 @@ class Dashboard extends React.Component {
               }
             />
           </FadeInDashboardAnimation>
-        ) : null}
+        ) : null} */}
       </div>
     )
   }
