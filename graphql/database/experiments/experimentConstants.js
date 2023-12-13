@@ -12,6 +12,7 @@ export const GLOBAL_HEALTH_GROUP_IMPACT = 'global-health-group-impact'
 export const ENDING_HUNGER_GROUP_IMPACT = 'ending-hunger-group-impact'
 export const REDUCED_IMPACT_COST = 'reduced-impact-cost'
 export const USER_SURVEY_MARCH_2023 = 'user-survey-march-2023'
+export const USER_SURVEY_DECEMBER_2023 = 'user-survey-december-2023'
 
 // One-off notifications
 export const COLLEGE_AMBASSADOR_2022_NOTIF = 'college-ambassador-2022-notif'

@@ -20,6 +20,7 @@ import {
   GROUP_IMPACT_LEADERBOARD,
   SFAC_NOTIFY_FULLPAGE_NOV,
   SHFAC_NOTIFY_FULLPAGE_NOV,
+  USER_SURVEY_DECEMBER_2023,
 } from './experimentConstants'
 
 const features = {
@@ -490,6 +491,20 @@ const features = {
 
   [GROUP_IMPACT_LEADERBOARD]: {
     defaultValue: true,
+  },
+
+  [USER_SURVEY_DECEMBER_2023]: {
+    defaultValue: false,
+    rules: [
+      {
+        condition: {
+          tabs: {
+            $gt: 20,
+          },
+        },
+        force: true,
+      },
+    ],
   },
 }
 
