@@ -15,7 +15,7 @@ const data = {
   charityId: '17099402-4e53-4b42-ad0b-6b89492b61cb',
   individualImpactEnabled: true, // Deprecated. Use "impactType".
   impactType: 'individual_and_group',
-  impactVisits: 196,
+  impactVisits: 980,
   landingPagePath: '/trees/',
   landingPagePhrase: 'This tab plants trees',
   slug: 'trees',
