@@ -196,7 +196,7 @@ class Dashboard extends React.Component {
         localStorageMgr.getItem(STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF) ===
         'true',
       notificationsToShow: [],
-      showIFrameWidget: true,
+      showIFrameWidget: false,
       dismissNovShop: localStorageMgr.getItem(NOV_NO_SHOP_DISMISS) === 'true',
       batch: 1,
       // dismissGiveDirectly:
@@ -1350,7 +1350,7 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
-        {user && this.state.showIFrameWidget && notif ? (
+        {/* {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
               widgetName={'shfac-notify-fullpage-nov'}
@@ -1370,7 +1370,7 @@ class Dashboard extends React.Component {
               }
             />
           </FadeInDashboardAnimation>
-        ) : null}
+        ) : null} */}
 
         {/* {user && this.state.showIFrameWidget && notifSearch ? (
           <FadeInDashboardAnimation>
