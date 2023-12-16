@@ -76,7 +76,7 @@ import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtension
 //import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
-import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
+//import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
 const imageGroupStyles = {
   display: 'flex',
@@ -533,12 +533,12 @@ class Dashboard extends React.Component {
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
-    const notificationsToShow = this.state.notificationsToShow
+    // const notificationsToShow = this.state.notificationsToShow
 
-    // Our Notification
-    const notif = notificationsToShow.find(
-      notif => notif.code === 'user-survey-december-2023'
-    )
+    // // Our Notification
+    // const notif = notificationsToShow.find(
+    //   notif => notif.code === 'user-survey-december-2023'
+    // )
 
     // // Our Notification - Shop
     // let notif = notificationsToShow.find(
@@ -929,7 +929,7 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
-              {notif ? (
+              {/* {notif ? (
                 <Notification
                   useGlobalDismissalTime
                   title={`Time for the 2023 Tabber Survey!`}
@@ -950,7 +950,7 @@ class Dashboard extends React.Component {
                     marginTop: 4,
                   }}
                 />
-              ) : null}
+              ) : null} */}
 
               {/* {notif ? (
                 <ShfacExtensionSellNotification
