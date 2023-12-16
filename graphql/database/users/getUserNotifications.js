@@ -1,6 +1,6 @@
-import logger from '../../utils/logger'
-import getUserFeature from '../experiments/getUserFeature'
-import { USER_SURVEY_DECEMBER_2023 } from '../experiments/experimentConstants'
+// import logger from '../../utils/logger'
+// import getUserFeature from '../experiments/getUserFeature'
+// import { USER_SURVEY_DECEMBER_2023 } from '../experiments/experimentConstants'
 
 /**
  * Get data for notifications the user should see.
@@ -11,28 +11,28 @@ import { USER_SURVEY_DECEMBER_2023 } from '../experiments/experimentConstants'
  */
 
 // const getUserNotifications = async (userContext, user) => {
-const getUserNotifications = async (userContext, user) => {
-  let notifications = []
-  try {
-    const notifFeature = await getUserFeature(
-      userContext,
-      user,
-      USER_SURVEY_DECEMBER_2023
-    )
-    const enabled = notifFeature.variation !== 'None'
-    notifications = [
-      ...(enabled
-        ? [
-            {
-              code: USER_SURVEY_DECEMBER_2023,
-              variation: notifFeature.variation,
-            },
-          ]
-        : []),
-    ]
-  } catch (e) {
-    logger.error(e)
-  }
+const getUserNotifications = async () => {
+  const notifications = []
+  // try {
+  //   const notifFeature = await getUserFeature(
+  //     userContext,
+  //     user,
+  //     USER_SURVEY_DECEMBER_2023
+  //   )
+  //   const enabled = notifFeature.variation !== 'None'
+  //   notifications = [
+  //     ...(enabled
+  //       ? [
+  //           {
+  //             code: USER_SURVEY_DECEMBER_2023,
+  //             variation: notifFeature.variation,
+  //           },
+  //         ]
+  //       : []),
+  //   ]
+  // } catch (e) {
+  //   logger.error(e)
+  // }
   return notifications
 }
 
