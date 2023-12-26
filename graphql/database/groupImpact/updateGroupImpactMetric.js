@@ -70,7 +70,7 @@ const createGroupImpactMetricModel = async (
     dollarProgressFromTab: 0,
     dollarProgressFromSearch: 0,
     dollarProgressFromShop: 0,
-    dollarGoal: impactMetric.dollarAmount,
+    dollarGoal: Math.round(impactMetric.dollarAmount),
     dateStarted: moment.utc().toISOString(),
     impactCountForMetric: impactMetric.impactCountPerMetric,
   }
@@ -113,7 +113,7 @@ const createGroupImpactMetricModel = async (
     rt = {
       ...rt,
       dateExpires,
-      dollarGoal: newGoal,
+      dollarGoal: Math.round(newGoal),
       impactCountForMetric: newImpactCountForMetric,
     }
   }
