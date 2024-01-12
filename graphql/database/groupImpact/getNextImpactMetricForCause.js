@@ -45,7 +45,7 @@ const getNextImpactMetricForCause = (causeId) => {
   }
 
   if (causeId === dataCats.id) {
-    return getImpactMetricById('GIDw4XMeW')
+    return getImpactMetricById('A8bVxmrf')
   }
 
   if (causeId === dataEndingPoverty.id) {
