@@ -83,7 +83,7 @@ describe('logTab', () => {
       .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => mockUser)
 
-    const returnedUser = await logTab(userContext, userId)
+    const returnedUser = await logTab(userContext, userId, null, false)
 
     // VC should increment.
     expect(addVc).toHaveBeenCalled()

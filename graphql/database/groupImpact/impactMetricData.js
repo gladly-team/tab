@@ -160,7 +160,7 @@ const data = [
     charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
     dollarAmount: 3715e5, // $371.5
     impactTitle: 'Educate {{count}} pet caretaker{{#if multiple}}s{{/if}}',
-    metricTitle: 'Educate 1 pet caretaker',
+    metricTitle: 'Educate {{count}} pet caretaker',
     description:
       "Help educate a pet caretaker on the intricacies of properly caring for felines, ultimately improving cats' lives in shelters and helping them more quickly find permanent homes",
     whyValuableDescription:
@@ -173,7 +173,7 @@ const data = [
     charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z', // Greater Good
     dollarAmount: 3715e5, // $371.5
     impactTitle: 'Educate {{count}} pet caretaker{{#if multiple}}s{{/if}}',
-    metricTitle: 'Educate 1 pet caretaker',
+    metricTitle: 'Educate {{count}} pet caretaker',
     description:
       "Help educate a pet caretaker on the intricacies of properly caring for felines, ultimately improving cats' lives in shelters and helping them more quickly find permanent homes",
     whyValuableDescription:

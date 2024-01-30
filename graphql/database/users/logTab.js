@@ -35,8 +35,6 @@ const publishBrandfluenceToSNS = async ({ messageData }) => {
   // const snsTopicNamePrefix = stage === PRODUCTION_STAGE ? '' : 'dev-'
   const snsTopicARN = `arn:aws:sns:${awsRegion}:${awsAccountId}:${snsTopicNamePrefix}${snsTopicName}`
 
-  console.log(snsTopicARN)
-
   // Publish.
   const message = JSON.stringify(messageData)
   const sns = new SNSClient()
@@ -119,7 +117,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
 
   try {
     // TODO: parallelize the multiple awaits
-    if (isValid) {
+    if (isValid && !isV4) {
       // Only increment VC if we consider this a valid tab.
       user = await addVc(userContext, userId, 1)
     }
