@@ -35,7 +35,7 @@ function getMockProps() {
       data: JSON.stringify({}),
       settings: JSON.stringify([
         {
-          choices: ['Google', 'Bing', 'DuckDuckGo', 'Ecosia'],
+          choices: ['Google', 'Bing', 'DuckDuckGo', 'Ecosia', 'Kagi'],
           defaultValue: 'Google',
           display: 'Search engine',
           field: 'engine',
@@ -61,7 +61,7 @@ function getMockYahooProps() {
       data: JSON.stringify({}),
       settings: JSON.stringify([
         {
-          choices: ['Yahoo', 'Bing', 'DuckDuckGo', 'Ecosia'],
+          choices: ['Yahoo', 'Bing', 'DuckDuckGo', 'Ecosia', 'Kagi'],
           defaultValue: 'Yahoo',
           display: 'Search engine',
           field: 'engine',

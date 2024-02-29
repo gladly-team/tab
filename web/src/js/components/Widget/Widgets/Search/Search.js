@@ -124,6 +124,8 @@ class Search extends React.Component {
         return 'https://www.ecosia.org/search?q='
       case 'Yahoo':
         return 'https://search.yahoo.com/search;?q='
+      case 'Kagi':
+        return 'https://kagi.com/search?q='
       default:
         return 'https://www.google.com/search?q='
     }
