@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
-import { isNil } from 'lodash/lang'
-import { get } from 'lodash/object'
 import uuid from 'uuid/v4'
 import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
@@ -15,8 +13,7 @@ import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
-import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import { primaryColor, dashboardIconInactiveColor } from 'js/theme/default'
+import { dashboardIconInactiveColor } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
@@ -24,7 +21,6 @@ import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import {
-  setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
   hasUserClickedNewTabSearchIntroNotif,
@@ -36,8 +32,6 @@ import {
 import {
   CHROME_BROWSER,
   FIREFOX_BROWSER,
-  WIDGET_FULLPAGE_SHOP_URL,
-  WIDGET_FULLPAGE_SEARCH_URL,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
 import {
@@ -47,11 +41,9 @@ import {
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
-import { getCurrentURL } from 'js/navigation/utils'
 import {
   showGlobalNotification,
   showSearchIntroductionMessage,
-  isGAMDevEnvironment,
 } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_REFERRAL_NOTIFICATION,
@@ -59,15 +51,7 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
-import {
-  areAdsEnabled,
-  getAdUnits,
-  shouldShowAdExplanation,
-  showMockAds,
-} from 'js/ads/adHelpers'
-import { AdComponent, fetchAds } from 'tab-ads'
-import logger from 'js/utils/logger'
+import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
 import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
@@ -78,12 +62,6 @@ import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
 //import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
-const imageGroupStyles = {
-  display: 'flex',
-  justifyContent: 'space-evenly',
-  marginTop: 20,
-}
-
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
 )
@@ -91,51 +69,51 @@ const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
 
-// Load ads immediately when we parse this file rather than
-// waiting for component mount. As a quick hack to make the
-// existing tests work without resetting this module, also
-// fetch ads component mount and provide a helper function
-// to reset module state.
-let calledLoadAds = false
-export const __resetAds = () => {
-  // This function is only a quick fix for tests.
-  calledLoadAds = false
-}
-const loadAds = () => {
-  if (calledLoadAds) {
-    return
-  }
-  calledLoadAds = true
-  const setGAMDevKey = isGAMDevEnvironment()
-  try {
-    // Debugging can be enabled with URL param tabAdsDebug=true.
-    fetchAds({
-      adUnits: Object.values(getAdUnits()),
-      pageLevelKeyValues: { v4: 'false', ...(setGAMDevKey && { dev: 'true' }) },
-      auctionTimeout: 1000,
-      consent: {
-        enabled: true,
-        // Time to wait for the consent management platform (CMP) to respond.
-        // If the CMP does not respond in this time, ad auctions may be cancelled.
-        // The tab-cmp package aims to make the CMP respond much more quickly
-        // than this after the user's first page load.
-        timeout: 500,
-      },
-      publisher: {
-        pageUrl: getCurrentURL(),
-      },
-      logLevel: 'error',
-      onError: e => {
-        logger.error(e)
-      },
-      disableAds: !areAdsEnabled(),
-      useMockAds: showMockAds(),
-    })
-  } catch (e) {
-    logger.error(e)
-  }
-}
-loadAds()
+// // Load ads immediately when we parse this file rather than
+// // waiting for component mount. As a quick hack to make the
+// // existing tests work without resetting this module, also
+// // fetch ads component mount and provide a helper function
+// // to reset module state.
+// let calledLoadAds = false
+// export const __resetAds = () => {
+//   // This function is only a quick fix for tests.
+//   calledLoadAds = false
+// }
+// const loadAds = () => {
+//   if (calledLoadAds) {
+//     return
+//   }
+//   calledLoadAds = true
+//   const setGAMDevKey = isGAMDevEnvironment()
+//   try {
+//     // Debugging can be enabled with URL param tabAdsDebug=true.
+//     fetchAds({
+//       adUnits: Object.values(getAdUnits()),
+//       pageLevelKeyValues: { v4: 'false', ...(setGAMDevKey && { dev: 'true' }) },
+//       auctionTimeout: 1000,
+//       consent: {
+//         enabled: true,
+//         // Time to wait for the consent management platform (CMP) to respond.
+//         // If the CMP does not respond in this time, ad auctions may be cancelled.
+//         // The tab-cmp package aims to make the CMP respond much more quickly
+//         // than this after the user's first page load.
+//         timeout: 500,
+//       },
+//       publisher: {
+//         pageUrl: getCurrentURL(),
+//       },
+//       logLevel: 'error',
+//       onError: e => {
+//         logger.error(e)
+//       },
+//       disableAds: !areAdsEnabled(),
+//       useMockAds: showMockAds(),
+//     })
+//   } catch (e) {
+//     logger.error(e)
+//   }
+// }
+// loadAds()
 
 const styles = theme => ({
   paperArrow: {
@@ -158,7 +136,7 @@ const styles = theme => ({
 })
 
 const batchKey = 'november-2023-shop-batch'
-const baseUrl = 'https://wild.link/e?d=20397233'
+// const baseUrl = 'https://wild.link/e?d=20397233'
 const NOV_NO_SHOP_DISMISS = 'tab.user.dismissedNotif.november-2023-no-shop'
 //const GIVE_DIRECTLY_DISMISS = 'tab.user.dismissedNotif.give-directly-10-2023'
 
@@ -243,8 +221,6 @@ class Dashboard extends React.Component {
     this.setState({
       browser: detectSupportedBrowser(),
     })
-    loadAds()
-
     this.updateState()
   }
 
@@ -348,7 +324,6 @@ class Dashboard extends React.Component {
   render() {
     const { user, app, classes } = this.props
     const {
-      adUnitsToShow,
       browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
@@ -363,64 +338,64 @@ class Dashboard extends React.Component {
       // userClickedSearchIntroV2,
     } = this.state
 
-    // See if we have a shop name for our charity
-    var shopCharityName = 'Charity'
+    // // See if we have a shop name for our charity
+    // var shopCharityName = 'Charity'
 
-    if (user && user.cause && 'nameForShop' in user.cause) {
-      shopCharityName = user.cause.nameForShop
-    }
+    // if (user && user.cause && 'nameForShop' in user.cause) {
+    //   shopCharityName = user.cause.nameForShop
+    // }
 
-    /*
-     * A handler for AdComponents' onAdDisplayed callbacks, which receives
-     * info about the displayed ad.
-     * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
-     *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
-     * @param {Object} context - Additional info to help with revenue logging
-     * @param {Object} context.user - The user object
-     * @param {String} context.user.id - The user ID
-     * @param {String} context.tabId - A UUID for this page load
-     * @return {undefined}
-     */
-    const onAdDisplayed = (displayedAdInfo, context) => {
-      // No ad was shown.
-      if (!displayedAdInfo) {
-        return
-      }
+    // /*
+    //  * A handler for AdComponents' onAdDisplayed callbacks, which receives
+    //  * info about the displayed ad.
+    //  * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
+    //  *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
+    //  * @param {Object} context - Additional info to help with revenue logging
+    //  * @param {Object} context.user - The user object
+    //  * @param {String} context.user.id - The user ID
+    //  * @param {String} context.tabId - A UUID for this page load
+    //  * @return {undefined}
+    //  */
+    // const onAdDisplayed = (displayedAdInfo, context) => {
+    //   // No ad was shown.
+    //   if (!displayedAdInfo) {
+    //     return
+    //   }
 
-      const {
-        revenue,
-        encodedRevenue,
-        GAMAdvertiserId,
-        GAMAdUnitId,
-        adSize,
-      } = displayedAdInfo
+    //   const {
+    //     revenue,
+    //     encodedRevenue,
+    //     GAMAdvertiserId,
+    //     GAMAdUnitId,
+    //     adSize,
+    //   } = displayedAdInfo
 
-      // Log the revenue from the ad.
-      LogUserRevenueMutation({
-        userId: context.user.id,
-        revenue,
-        ...(encodedRevenue && {
-          encodedRevenue: {
-            encodingType: 'AMAZON_CPM',
-            encodedValue: encodedRevenue,
-          },
-        }),
-        dfpAdvertiserId: GAMAdvertiserId.toString(),
-        adSize,
-        // Only send aggregationOperation value if we have more than one
-        // revenue value
-        aggregationOperation:
-          !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
-        tabId: context.tabId,
-        adUnitCode: GAMAdUnitId,
-        isV4: false,
-      })
-    }
+    //   // Log the revenue from the ad.
+    //   LogUserRevenueMutation({
+    //     userId: context.user.id,
+    //     revenue,
+    //     ...(encodedRevenue && {
+    //       encodedRevenue: {
+    //         encodingType: 'AMAZON_CPM',
+    //         encodedValue: encodedRevenue,
+    //       },
+    //     }),
+    //     dfpAdvertiserId: GAMAdvertiserId.toString(),
+    //     adSize,
+    //     // Only send aggregationOperation value if we have more than one
+    //     // revenue value
+    //     aggregationOperation:
+    //       !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
+    //     tabId: context.tabId,
+    //     adUnitCode: GAMAdUnitId,
+    //     isV4: false,
+    //   })
+    // }
 
-    // Logs any errors the occur in the ad components
-    const onAdError = e => {
-      logger.error(e)
-    }
+    // // Logs any errors the occur in the ad components
+    // const onAdError = e => {
+    //   logger.error(e)
+    // }
 
     // Whether or not a campaign should show on the dashboard
     const isCampaignLive = !!(app && app.campaign && app.campaign.isLive)
@@ -524,12 +499,6 @@ class Dashboard extends React.Component {
       default:
         break
     }
-
-    const adContext = {
-      user,
-      tabId,
-    }
-    const adContextReady = get(adContext, 'user.id') && get(adContext, 'tabId')
 
     const isYahooUser = user && user.id === YAHOO_USER_ID
 
@@ -1220,128 +1189,7 @@ class Dashboard extends React.Component {
             <NewUserTour user={user} />
           </Suspense>
         ) : null}
-        <div
-          style={{
-            position: 'absolute',
-            overflow: 'visible',
-            display: 'flex',
-            alignItems: 'flex-end',
-            flexDirection: 'row-reverse',
-            bottom: 10,
-            right: 10,
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'visible',
-            }}
-          >
-            {adUnitsToShow.rectangleAdSecondary && adContextReady ? (
-              <AdComponent
-                adId={adUnitsToShow.rectangleAdSecondary.adId}
-                onAdDisplayed={displayedAdInfo => {
-                  onAdDisplayed(displayedAdInfo, adContext)
-                }}
-                onError={onAdError}
-                style={{
-                  display: 'flex',
-                  minWidth: 300,
-                  overflow: 'visible',
-                }}
-              />
-            ) : null}
-            {adUnitsToShow.rectangleAdPrimary && adContextReady ? (
-              <AdComponent
-                adId={adUnitsToShow.rectangleAdPrimary.adId}
-                onAdDisplayed={displayedAdInfo => {
-                  onAdDisplayed(displayedAdInfo, adContext)
-                }}
-                onError={onAdError}
-                style={{
-                  display: 'flex',
-                  minWidth: 300,
-                  overflow: 'visible',
-                  marginTop: 10,
-                }}
-              />
-            ) : null}
-          </div>
-          {adUnitsToShow.leaderboard && adContextReady ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'visible',
-                marginRight: 10,
-              }}
-            >
-              {this.state.showAdExplanation && user ? (
-                <FadeInDashboardAnimation>
-                  <div
-                    data-test-id={'ad-explanation'}
-                    style={{
-                      display: 'inline-block',
-                      float: 'right',
-                    }}
-                  >
-                    <Paper>
-                      <div
-                        style={{
-                          display: 'flex',
-                          padding: '6px 14px',
-                          marginBottom: 10,
-                          alignItems: 'center',
-                          background: dashboardIconInactiveColor,
-                        }}
-                      >
-                        <HeartIcon
-                          color={primaryColor}
-                          style={{
-                            width: 24,
-                            height: 24,
-                            marginRight: 14,
-                          }}
-                        />
-                        <Typography variant={'body2'}>
-                          Did you know? The ads here are raising money for
-                          charity.
-                        </Typography>
-                        <Button
-                          color={'primary'}
-                          style={{
-                            marginLeft: 20,
-                            marginRight: 10,
-                          }}
-                          onClick={() => {
-                            setUserDismissedAdExplanation()
-                            this.setState({
-                              showAdExplanation: false,
-                            })
-                          }}
-                        >
-                          Got it
-                        </Button>
-                      </div>
-                    </Paper>
-                  </div>
-                </FadeInDashboardAnimation>
-              ) : null}
-              <AdComponent
-                adId={adUnitsToShow.leaderboard.adId}
-                onAdDisplayed={displayedAdInfo => {
-                  onAdDisplayed(displayedAdInfo, adContext)
-                }}
-                onError={onAdError}
-                style={{
-                  overflow: 'visible',
-                  minWidth: 728,
-                }}
-              />
-            </div>
-          ) : null}
-        </div>
+
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
