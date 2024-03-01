@@ -69,52 +69,6 @@ const CampaignGeneric = lazy(() =>
   import('js/components/Campaign/CampaignGenericView')
 )
 
-// // Load ads immediately when we parse this file rather than
-// // waiting for component mount. As a quick hack to make the
-// // existing tests work without resetting this module, also
-// // fetch ads component mount and provide a helper function
-// // to reset module state.
-// let calledLoadAds = false
-// export const __resetAds = () => {
-//   // This function is only a quick fix for tests.
-//   calledLoadAds = false
-// }
-// const loadAds = () => {
-//   if (calledLoadAds) {
-//     return
-//   }
-//   calledLoadAds = true
-//   const setGAMDevKey = isGAMDevEnvironment()
-//   try {
-//     // Debugging can be enabled with URL param tabAdsDebug=true.
-//     fetchAds({
-//       adUnits: Object.values(getAdUnits()),
-//       pageLevelKeyValues: { v4: 'false', ...(setGAMDevKey && { dev: 'true' }) },
-//       auctionTimeout: 1000,
-//       consent: {
-//         enabled: true,
-//         // Time to wait for the consent management platform (CMP) to respond.
-//         // If the CMP does not respond in this time, ad auctions may be cancelled.
-//         // The tab-cmp package aims to make the CMP respond much more quickly
-//         // than this after the user's first page load.
-//         timeout: 500,
-//       },
-//       publisher: {
-//         pageUrl: getCurrentURL(),
-//       },
-//       logLevel: 'error',
-//       onError: e => {
-//         logger.error(e)
-//       },
-//       disableAds: !areAdsEnabled(),
-//       useMockAds: showMockAds(),
-//     })
-//   } catch (e) {
-//     logger.error(e)
-//   }
-// }
-// loadAds()
-
 const styles = theme => ({
   paperArrow: {
     position: 'relative',
@@ -1189,6 +1143,62 @@ class Dashboard extends React.Component {
             <NewUserTour user={user} />
           </Suspense>
         ) : null}
+
+        <div
+          style={{
+            position: 'absolute',
+            overflow: 'visible',
+            display: 'flex',
+            alignItems: 'flex-end',
+            flexDirection: 'row-reverse',
+            bottom: 10,
+            right: 10,
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'visible',
+            }}
+          >
+            <div
+              id="raptive-content-ad-1"
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+              }}
+            />
+
+            <div
+              id="raptive-content-ad-2"
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+                marginTop: 10,
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'visible',
+              marginRight: 10,
+            }}
+          >
+            <div
+              id="raptive-content-ad-3"
+              style={{
+                overflow: 'visible',
+                minWidth: 728,
+              }}
+            />
+          </div>
+        </div>
 
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
