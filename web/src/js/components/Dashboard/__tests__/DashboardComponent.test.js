@@ -31,12 +31,6 @@ import {
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
 import {
-  areAdsEnabled,
-  getAdUnits,
-  shouldShowAdExplanation,
-  showMockAds,
-} from 'js/ads/adHelpers'
-import {
   setUserDismissedAdExplanation,
   hasUserDismissedCampaignRecently,
   hasUserDismissedNotificationRecently,
@@ -55,7 +49,6 @@ import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
-import { AdComponent, fetchAds } from 'tab-ads'
 import { getHostname, getCurrentURL } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
 import {
@@ -71,7 +64,6 @@ jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
-jest.mock('js/ads/adHelpers')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
@@ -109,32 +101,6 @@ beforeAll(() => {
 beforeEach(() => {
   detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
   LogUserExperimentActionsMutation.mockResolvedValue()
-
-  // Default to showing three ad units.
-  getAdUnits.mockReturnValue({
-    leaderboard: {
-      // The long leaderboard ad.
-      adId: 'div-gpt-ad-1464385677836-0',
-      adUnitId: '/43865596/HBTL',
-      sizes: [[728, 90]],
-    },
-    rectangleAdPrimary: {
-      // The primary rectangle ad (bottom-right).
-      adId: 'div-gpt-ad-1464385742501-0',
-      adUnitId: '/43865596/HBTR',
-      sizes: [[300, 250]],
-    },
-    rectangleAdSecondary: {
-      // The second rectangle ad (right side, above the first).
-      adId: 'div-gpt-ad-1539903223131-0',
-      adUnitId: '/43865596/HBTR2',
-      sizes: [[300, 250]],
-    },
-  })
-
-  // Default to enabled ads.
-  areAdsEnabled.mockReturnValue(true)
-  showMockAds.mockReturnValue(false)
 
   // Default to non-dev GAM key-value.
   isGAMDevEnvironment.mockReturnValue(false)
