@@ -15203,13 +15203,6 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
-tab-ads@^1.1.14:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.14.tgz#f0884419ba15843f20deee8769feb79e3353757e"
-  integrity sha512-mcKuqH7ueUZBp7g9PmptlgaPWdGt0/TCLKsgXjMJpa6v/cKcNc0OV9h/v+JED9Us4vTrOwRAE3sowkEb9T1fXw==
-  dependencies:
-    lodash "^4.17.21"
-
 tab-cmp@0.15.0-alpha.1:
   version "0.15.0-alpha.1"
   resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.15.0-alpha.1.tgz#7ee10816adcb2887106105a8e2101888d6bf02ae"

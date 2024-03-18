@@ -51,7 +51,6 @@ import {
   getUserExperimentGroup,
 } from 'js/utils/experiments'
 import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
-import { getAdUnits, shouldShowAdExplanation } from 'js/ads/adHelpers'
 import {
   STORAGE_YAHOO_SEARCH_DEMO_INFO_NOTIF,
   YAHOO_USER_ID,
@@ -108,11 +107,9 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour:
         localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
-      showAdExplanation: shouldShowAdExplanation(),
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
-      adUnitsToShow: getAdUnits(),
       // Whether to show an introduction to Search for a Cause.
       showSearchIntroductionMessage: showSearchIntroductionMessage(),
       userClickedSearchIntroV1: hasUserClickedNewTabSearchIntroNotif(),
