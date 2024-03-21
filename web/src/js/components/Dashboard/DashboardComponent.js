@@ -20,6 +20,7 @@ import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import { getUserToken } from 'js/authentication/user'
 import {
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
@@ -165,6 +166,30 @@ class Dashboard extends React.Component {
       localStorageMgr.setItem(batchKey, JSON.stringify(defaultData))
       this.setState({ batch: 1 })
     }
+
+    // Log tab with V5
+    this.logTabWithV5()
+  }
+
+  logTabWithV5 = async () => {
+    const userToken = await getUserToken()
+
+    // This should not happen
+    if (!userToken) {
+      return
+    }
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + userToken,
+    }
+
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/tab/log`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({}),
+    })
   }
 
   componentDidMount() {

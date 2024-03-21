@@ -2,240 +2,243 @@ dist: jammy
 sudo: false
 language: node_js
 node_js:
-- '16'
+  - '16'
 
 env:
   global:
-  - CI=true
-  - CXX=g++-5
-  - SLS_DEBUG=true
-  - LOG_TEST_COVERAGE=true
-  - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/5e058db8-5c79-4bae-9209-cde666eda29e
-  ########## Test stage ##########
-  # Note: Material UI creates different DOM between development
-  # and production Node environments, which breaks Jest snapshot tests.
-  # https://github.com/mui-org/material-ui/issues/4466#issuecomment-247424816
-  # https://github.com/mui-org/material-ui/blob/master/src/utils/callOnce.js#L6
-  # This is why we don't run tests in NODE_ENV=production.
-  # Material UI 1.x may fix this, at which point we can use the production
-  # environment for testing.
-  # @material-ui-1-todo
-  - TEST_NODE_ENV=test
-  - TEST_E2E_MISSIONS_TEST_TAB_GOAL=true
-  - TEST_AWS_REGION=us-west-2
-  - TEST_AWS_ACCOUNT_ID=167811431063
-  - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
-  # Web app
-  - TEST_REACT_APP_WEBSITE_DOMAIN=test-tab2017.gladly.io # user-visible domain, used in app JS
-  - TEST_REACT_APP_WEBSITE_PROTOCOL=https
-  - TEST_REACT_APP_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
-  - TEST_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
-  - TEST_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
-  - TEST_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
-  - TEST_REACT_APP_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
-  - TEST_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
-  - TEST_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  - TEST_REACT_APP_SENTRY_STAGE=test
-  - TEST_REACT_APP_ADS_ENABLED=true
-  - TEST_REACT_APP_GAM_DEV_ENVIRONMENT=true
-  - TEST_REACT_APP_CMP_ENABLED=false
-  - TEST_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
-  - TEST_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
-  - TEST_REACT_APP_MOCK_SEARCH_RESULTS=true
-  - TEST_REACT_APP_SEARCH_PROVIDER=codefuel
-  - TEST_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
-  - TEST_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://test-tab2017.gladly.io/search/api/v2/query
-  - TEST_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
-  - TEST_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=false
-  - TEST_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
-  - TEST_REACT_APP_SHOW_DEMOS_PAGE=false
-  # GraphQL / Lambda
-  - TEST_GQL_LOGGER=sentry
-  - TEST_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - TEST_GQL_SENTRY_PROJECT_ID=184604
-  - TEST_GQL_SENTRY_STAGE=test
-  - TEST_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
-  - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
-  - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
-  - TEST_GROWTHBOOK_ENV=dev
-  - TEST_GQL_SEARCH_ENDPOINT=test-tab2017.gladly.io/search/
-  # Important: changing this requires updating the Lambda@Edge function
-  # version associated with the CloudFront /newtab* cache behavior, because
-  # Lambda@Edge does not support environment variables and thus the
-  # host is hardcoded in deploys.
-  - TEST_LAMBDA_TAB_V4_HOST=tab-web-qa-gladly-team.vercel.app
-  # Endpoints
-  - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
-  - TEST_DB_TABLE_NAME_APPENDIX="-test"
-  # Deployment
-  - TEST_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
-  - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=test-tab2017.gladly.io
-  - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
-  - TEST_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://test-tab2017.gladly.io/newtab/
-  - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=test-search.gladly.io
-  - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
-  - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1451 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1472 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - TEST_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
-  - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
-  - TEST_DEPLOYMENT_LANDING_PAGE_DOMAIN=test-tab-website.s3-website-us-west-2.amazonaws.com
-  - TEST_DEPLOYMENT_GRAPHQL_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
-  - TEST_DEPLOYMENT_GRAPHQL_PATH=/test
-  - TEST_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=dev-search-api.gladly.io
-  # End-to-end testing
-  - TEST_SELENIUM_DRIVER_TYPE=remote
-  - TEST_SELENIUM_HOST=https://test-tab2017.gladly.io
-  - TEST_BROWSERSTACK_USER=kevinjennison1
-  # Upstash
-  - TEST_UPSTASH_REDIS_REST_URL=https://usw2-flowing-bullfrog-30109.upstash.io
-  # Secrets: BROWSERSTACK_KEY, SENTRY_PRIVATE_KEY, EST_MONEY_RAISED_PER_TAB
-  - secure: YM/qYdVY0vUEXkE8HnrP1ihOwnPDqP5mgYL1HcNNLinJ2Jkno1EeGzXFghzckCr87mfJsjgboPw8Xqj9+K5snOkHYZdW5fHQEwxWMWBWtMrhX96j8rN1B48W5qPIa5N+UfLjvGsxjwn3RwMvnZBYS6YZ1Oxzi/PT9sAHACdNgcWMYhASi5WtkD26qZ2mm0VgOSY3xtlPCoKa8GfPXg5c/mdn/LYM6MOT72QWA0xjnIc/YGYWwxLT5cCcFyfY4a9tVl33topZmAyt8uhLL0b+EaYDR+ND9xTaLZQxaW0ftZaQD60rt7ARUKKfTb+tfmB8gekZl/Zjlymw9G6QN+D6zDTmv8RwDW/izHK1galWjmMGeIel8ueNcLkgVhxnIDF7J4hr/d4zaHtl8fq37BnG5Ns/+8LfHQVe5UuX+ODmj4lAxbWqE+dXFCiLmw4t3mgPRGsgGd64G/+mDsZ0RCweP8USLAYfwsk5OlYQocJSMIFyU1///+ykE1RnI+HAV4QqsTnrfM1ZlocJOajlDt3x4s4MVD1TXug8FOodWzVRtIYN/4Bi6m224T1+slZwC1KGbbZKnEgSUQYRTkPPQFjTqE6okkr/5kwTFwOPdBT8QlA56iySfu0CUICOCCy0T4pP/mi83WbL7QSpLUYnVfBdysvv6au+dzn1smsE1M89ppo=
-  - secure: X6PhAUEGOu5YkRpFJhpngWQHnH+PexndfgWbXlFV7r9hBZGN/8wKYSV29mCGW7TP1yZpWV5iXNx9APiq5M9ZtFQAz5BIVGRMfOnmcu3ieVbmtEdIoAQYUKb+ueOgqZU5P477VLXdqFsiHOPneLPY6B16YBD/V9LlknuGFsan2S6tqMqxqviLH2VYVUhSqIutkd4UY5V9i1CgWXov3oBs2hJTZMnAfo2yZlj50D1kK9oJHCOaPPxgwCm6cyZVAYFckh6xZrxhNmmsq2Ca5XgOq8rUGh2i+l+3kBFl8y//TqvIw9fu55LewtT1zLjYGbMaosIsLFY53yPSl80lOAXoq0N7pZ/AAUhoqvyClzWGbJGwBx8brkdu3KwaSyDHDqK9S3d0ct4dlZYoJ18wB3ymnYQIWP3bSDYV9bR3wEebXqmb4npydXKLqj8VG8tDenbImCJvbkllyQUvy0R9t4HFD5PQOskabkAtdNZqO9G1XQM2fZBZ0zVQuwptEtd+Amh2h4apTLc7TRTMELHUPQ8bxr7p/AtaPejFvBeeP/4UFAZV0j33zjIva2FD6ZVoZO0x5LNIx/lWs/059/X2veZi7qi7uC2OI5w8MhvgTEmJWmh653iv5aG0axKLlIAwOZHc40+afDb6z+ViwT9inZeAOgn23XJ049ojyHvjj8GzmdU=
-  ########## Dev stage ##########
-  - DEV_NODE_ENV=production
-  - DEV_AWS_REGION=us-west-2
-  - DEV_E2E_MISSIONS_TEST_TAB_GOAL=false
-  - DEV_AWS_ACCOUNT_ID=167811431063
-  - DEV_LOG_LEVEL=error
-  # Web app
-  - DEV_REACT_APP_WEBSITE_DOMAIN=dev-tab2017.gladly.io  # user-visible domain, used in app JS
-  - DEV_REACT_APP_WEBSITE_PROTOCOL=https
-  - DEV_REACT_APP_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
-  - DEV_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
-  - DEV_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
-  - DEV_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
-  - DEV_REACT_APP_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
-  - DEV_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
-  - DEV_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  - DEV_REACT_APP_SENTRY_STAGE=dev
-  - DEV_REACT_APP_ADS_ENABLED=true
-  - DEV_REACT_APP_GAM_DEV_ENVIRONMENT=true
-  - DEV_REACT_APP_CMP_ENABLED=true
-  - DEV_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
-  - DEV_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
-  - DEV_REACT_APP_MOCK_SEARCH_RESULTS=false
-  - DEV_REACT_APP_SEARCH_PROVIDER=codefuel
-  - DEV_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
-  - DEV_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://dev-tab2017.gladly.io/search/api/v2/query
-  - DEV_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
-  - DEV_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=false
-  - DEV_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
-  - DEV_REACT_APP_SHOW_DEMOS_PAGE=true
-  # GraphQL / Lambda
-  - DEV_GQL_LOGGER=sentry
-  - DEV_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - DEV_GQL_SENTRY_PROJECT_ID=184604
-  - DEV_GQL_SENTRY_STAGE=dev
-  - DEV_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
-  - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
-  - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
-  - DEV_GROWTHBOOK_ENV=dev
-  - DEV_GQL_SEARCH_ENDPOINT=dev-tab2017.gladly.io/search/
-  # Important: changing this requires updating the Lambda@Edge function
-  # version associated with the CloudFront /newtab* cache behavior, because
-  # Lambda@Edge does not support environment variables and thus the
-  # host is hardcoded in deploys.
-  - DEV_LAMBDA_TAB_V4_HOST=tab-web-git-dev-gladly-team.vercel.app
-  # Endpoints
-  - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
-  - DEV_DB_TABLE_NAME_APPENDIX="-dev"
-  # Deployment
-  - DEV_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
-  - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=dev-tab2017.gladly.io
-  - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
-  - DEV_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://dev-tab2017.gladly.io/newtab/
-  - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=dev-search.gladly.io
-  - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
-  - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1227 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1279 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - DEV_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=7 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
-  - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
-  - DEV_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
-  - DEV_DEPLOYMENT_GRAPHQL_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
-  - DEV_DEPLOYMENT_GRAPHQL_PATH=/dev
-  - DEV_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=dev-search-api.gladly.io
-  # Upstash
-  - DEV_UPSTASH_REDIS_REST_URL=https://usw2-flowing-bullfrog-30109.upstash.io
-  # Secrets: SENTRY_PRIVATE_KEY, EST_MONEY_RAISED_PER_TAB
-  - secure: N8SoSEmnhULeDYaLVhxJuEc81RfYhSEZmntH9SjTj9IfKbHlY5P6SMueYZH1uFpImj/m1VC1qy1fyULtUDKXVjXtZynQg2/3rnrjvoVP0Jp9Mv0dpbx179jv/M6Q6+WqygM48kSszMjFnnKo4mCMQCdXvfGLYEvktCLU2+4Mza4TxoDTNzWykc+HZcJgTAVUt2Un4wLqR6rUnHIUDMnXnjHPETcw3ndIZFJx0sPQHr144vZid/yF3hwO5u3oNmnSz6Yad19GaYvDbb3Mo6cwz05mycKUQgYrTi9cgtBW1dJqjUA7a2vbaGqc/Pmer/y8vw9pzC8dhkkCYuSv0YJddGC+7DnKHnuzC6iFPWsgbGZiOPdr+m+KRApFALMLH7Y1t08zVdNc0nQrx52oDHVANek90Kv1J5EKAMpB7vWJQVeONua0dhq2QfbO3fdLmf90/r64GVfg30rWbKZkPh9QscFQpJT/fksLzjUHZUYwtWXTW9EK2iituionK71Gn/+YiFi75QBdVO6HOoWFAXQ5DKQnQ1XSwogOUuxk/9CMR9DgBPk+angi1t6Jd5ybrKqpSC/wAZOH/Vc/6N4B0xJrhH2q4ed8zAJXBqPZDRNk64NrkKPULYVlfotIbRCbkPCLKE2ImpZJMPxifKN7SQ3IGwz/KGfKn7NjX56i6cMjxDs=
-  ########## Production stage ##########
-  - PROD_NODE_ENV=production
-  - PROD_AWS_REGION=us-west-2
-  - PROD_E2E_MISSIONS_TEST_TAB_GOAL=false
-  - PROD_AWS_ACCOUNT_ID=167811431063
-  - PROD_LOG_LEVEL=error
-  # Web app
-  - PROD_REACT_APP_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
-  - PROD_REACT_APP_WEBSITE_PROTOCOL=https
-  - PROD_REACT_APP_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
-  - PROD_REACT_APP_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk
-  - PROD_REACT_APP_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
-  - PROD_REACT_APP_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
-  - PROD_REACT_APP_FIREBASE_PROJECT_ID=tab-for-a-cause
-  - PROD_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
-  - PROD_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  - PROD_REACT_APP_SENTRY_STAGE=prod
-  - PROD_REACT_APP_ADS_ENABLED=true
-  - PROD_REACT_APP_GAM_DEV_ENVIRONMENT=false
-  - PROD_REACT_APP_CMP_ENABLED=true
-  - PROD_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
-  - PROD_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
-  - PROD_REACT_APP_MOCK_SEARCH_RESULTS=false
-  - PROD_REACT_APP_SEARCH_PROVIDER=codefuel
-  - PROD_REACT_APP_SEARCH_QUERY_ENDPOINT=https://search-api.gladly.io/api/query
-  - PROD_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://tab.gladly.io/search/api/v2/query
-  - PROD_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
-  - PROD_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=true
-  - PROD_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
-  - PROD_REACT_APP_SHOW_DEMOS_PAGE=false
-  # GraphQL / Lambda
-  - PROD_GQL_LOGGER=sentry
-  - PROD_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - PROD_GQL_SENTRY_PROJECT_ID=184604
-  - PROD_GQL_SENTRY_STAGE=production
-  - PROD_LAMBDA_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
-  - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
-  - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
-  - PROD_GROWTHBOOK_ENV=production
-  - PROD_GQL_SEARCH_ENDPOINT=tab.gladly.io/search/
-  # Important: changing this requires updating the Lambda@Edge function
-  # version associated with the CloudFront /newtab* cache behavior, because
-  # Lambda@Edge does not support environment variables and thus the
-  # host is hardcoded in deploys.
-  - PROD_LAMBDA_TAB_V4_HOST=tab-web-gladly-team.vercel.app
-  # Endpoints
-  - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
-  - PROD_DB_TABLE_NAME_APPENDIX="-prod"
-  # Deployment
-  - PROD_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
-  - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=prod-tab2017.gladly.io
-  - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
-  - PROD_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://tab.gladly.io/newtab/
-  - PROD_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=prod-search.gladly.io
-  - PROD_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
-  # react-snap does not yet support absolute URLs:
-  # https://github.com/stereobooster/react-snap/issues/157
-  - PROD_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
-  - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=562 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - PROD_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=582 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - PROD_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
-  - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
-  - PROD_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
-  - PROD_DEPLOYMENT_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
-  - PROD_DEPLOYMENT_GRAPHQL_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
-  - PROD_DEPLOYMENT_GRAPHQL_PATH=/prod
-  - PROD_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=search-api.gladly.io
-  # Upstash
-  - PROD_UPSTASH_REDIS_REST_URL=https://usw2-glowing-cockatoo-30106.upstash.io
-  # Secrets
-  - secure: qlZ0YAeyIPNqdc3mNYMuvzpsYidLk4fooBpbEGCyeU9l+9OPzrZDc6Cut5p9g8jk6pw6OuCGd+gdKhgoKh/XoW7S5u1EVfu6Ggmoy3jZJKfouKHVnRsrnFlUj1mnP9Q0qI6IZy8mXeEvJlQUtZ5j2VWt3LfH59iK8sALtkFpbQfmeFYV71AGjKlUFm1F68cKph3qPbbjGgGtrCbprLOHcpzLjEQLBhLl7zSgEE/eubwzeGHJKW1x1iCxrT8rn8ryBJZJRDOPPKZ/dX52VsJjHBxa/WZY0riocs5WYh5imQNGHt2sVrAdWuvXzGlPnDDKKGR3QMAxEUXPaT0Gq4VZz9/Xm6WgDdQRT01XFbztmZfSmQCnajpv2RfCdU0HLdZt0LN5mQGXP+Iekngk3AOJxw7yEfVgMN1xEU0NxGHrTqiXMcXQQDgybM2X7lLo/MiwViyNmKODzKJUoN5mDp5J3ORSGFymQ4y16eltkiWuZcynN2WIeEsKcM+OX8+savK/Rl7htWkdFh+AkBQHXXX8k3LdRDrS7IOPkAjtQQFmGoMMfPTkTyX395BUgpT8c1gvE9eiJC5OkVIyQ1ebNTx8HEcpAUwIRfR12icX6jC+eW+qhaaHW1MKSTCN9vl5o3Ug12RjfLlTFAvAs//XjJrOklyAdbikV8HU7AtHQF24ny4=
+    - CI=true
+    - CXX=g++-5
+    - SLS_DEBUG=true
+    - LOG_TEST_COVERAGE=true
+    - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/5e058db8-5c79-4bae-9209-cde666eda29e
+    ########## Test stage ##########
+    # Note: Material UI creates different DOM between development
+    # and production Node environments, which breaks Jest snapshot tests.
+    # https://github.com/mui-org/material-ui/issues/4466#issuecomment-247424816
+    # https://github.com/mui-org/material-ui/blob/master/src/utils/callOnce.js#L6
+    # This is why we don't run tests in NODE_ENV=production.
+    # Material UI 1.x may fix this, at which point we can use the production
+    # environment for testing.
+    # @material-ui-1-todo
+    - TEST_NODE_ENV=test
+    - TEST_E2E_MISSIONS_TEST_TAB_GOAL=true
+    - TEST_AWS_REGION=us-west-2
+    - TEST_AWS_ACCOUNT_ID=167811431063
+    - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
+    # Web app
+    - TEST_REACT_APP_WEBSITE_DOMAIN=test-tab2017.gladly.io # user-visible domain, used in app JS
+    - TEST_REACT_APP_WEBSITE_PROTOCOL=https
+    - TEST_REACT_APP_API_ENDPOINT=http://127.0.0.1:9000
+    - TEST_REACT_APP_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
+    - TEST_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
+    - TEST_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
+    - TEST_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+    - TEST_REACT_APP_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+    - TEST_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
+    - TEST_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
+    - TEST_REACT_APP_SENTRY_STAGE=test
+    - TEST_REACT_APP_ADS_ENABLED=true
+    - TEST_REACT_APP_GAM_DEV_ENVIRONMENT=true
+    - TEST_REACT_APP_CMP_ENABLED=false
+    - TEST_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
+    - TEST_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
+    - TEST_REACT_APP_MOCK_SEARCH_RESULTS=true
+    - TEST_REACT_APP_SEARCH_PROVIDER=codefuel
+    - TEST_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
+    - TEST_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://test-tab2017.gladly.io/search/api/v2/query
+    - TEST_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
+    - TEST_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=false
+    - TEST_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
+    - TEST_REACT_APP_SHOW_DEMOS_PAGE=false
+    # GraphQL / Lambda
+    - TEST_GQL_LOGGER=sentry
+    - TEST_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+    - TEST_GQL_SENTRY_PROJECT_ID=184604
+    - TEST_GQL_SENTRY_STAGE=test
+    - TEST_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+    - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+    - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+    - TEST_GROWTHBOOK_ENV=dev
+    - TEST_GQL_SEARCH_ENDPOINT=test-tab2017.gladly.io/search/
+    # Important: changing this requires updating the Lambda@Edge function
+    # version associated with the CloudFront /newtab* cache behavior, because
+    # Lambda@Edge does not support environment variables and thus the
+    # host is hardcoded in deploys.
+    - TEST_LAMBDA_TAB_V4_HOST=tab-web-qa-gladly-team.vercel.app
+    # Endpoints
+    - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+    - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
+    - TEST_DB_TABLE_NAME_APPENDIX="-test"
+    # Deployment
+    - TEST_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
+    - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=test-tab2017.gladly.io
+    - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+    - TEST_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://test-tab2017.gladly.io/newtab/
+    - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=test-search.gladly.io
+    - TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
+    - TEST_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
+    - TEST_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1451 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - TEST_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1472 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - TEST_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
+    - TEST_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017-media.gladly.io
+    - TEST_DEPLOYMENT_LANDING_PAGE_DOMAIN=test-tab-website.s3-website-us-west-2.amazonaws.com
+    - TEST_DEPLOYMENT_GRAPHQL_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
+    - TEST_DEPLOYMENT_GRAPHQL_PATH=/test
+    - TEST_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=dev-search-api.gladly.io
+    # End-to-end testing
+    - TEST_SELENIUM_DRIVER_TYPE=remote
+    - TEST_SELENIUM_HOST=https://test-tab2017.gladly.io
+    - TEST_BROWSERSTACK_USER=kevinjennison1
+    # Upstash
+    - TEST_UPSTASH_REDIS_REST_URL=https://usw2-flowing-bullfrog-30109.upstash.io
+    # Secrets: BROWSERSTACK_KEY, SENTRY_PRIVATE_KEY, EST_MONEY_RAISED_PER_TAB
+    - secure: YM/qYdVY0vUEXkE8HnrP1ihOwnPDqP5mgYL1HcNNLinJ2Jkno1EeGzXFghzckCr87mfJsjgboPw8Xqj9+K5snOkHYZdW5fHQEwxWMWBWtMrhX96j8rN1B48W5qPIa5N+UfLjvGsxjwn3RwMvnZBYS6YZ1Oxzi/PT9sAHACdNgcWMYhASi5WtkD26qZ2mm0VgOSY3xtlPCoKa8GfPXg5c/mdn/LYM6MOT72QWA0xjnIc/YGYWwxLT5cCcFyfY4a9tVl33topZmAyt8uhLL0b+EaYDR+ND9xTaLZQxaW0ftZaQD60rt7ARUKKfTb+tfmB8gekZl/Zjlymw9G6QN+D6zDTmv8RwDW/izHK1galWjmMGeIel8ueNcLkgVhxnIDF7J4hr/d4zaHtl8fq37BnG5Ns/+8LfHQVe5UuX+ODmj4lAxbWqE+dXFCiLmw4t3mgPRGsgGd64G/+mDsZ0RCweP8USLAYfwsk5OlYQocJSMIFyU1///+ykE1RnI+HAV4QqsTnrfM1ZlocJOajlDt3x4s4MVD1TXug8FOodWzVRtIYN/4Bi6m224T1+slZwC1KGbbZKnEgSUQYRTkPPQFjTqE6okkr/5kwTFwOPdBT8QlA56iySfu0CUICOCCy0T4pP/mi83WbL7QSpLUYnVfBdysvv6au+dzn1smsE1M89ppo=
+    - secure: X6PhAUEGOu5YkRpFJhpngWQHnH+PexndfgWbXlFV7r9hBZGN/8wKYSV29mCGW7TP1yZpWV5iXNx9APiq5M9ZtFQAz5BIVGRMfOnmcu3ieVbmtEdIoAQYUKb+ueOgqZU5P477VLXdqFsiHOPneLPY6B16YBD/V9LlknuGFsan2S6tqMqxqviLH2VYVUhSqIutkd4UY5V9i1CgWXov3oBs2hJTZMnAfo2yZlj50D1kK9oJHCOaPPxgwCm6cyZVAYFckh6xZrxhNmmsq2Ca5XgOq8rUGh2i+l+3kBFl8y//TqvIw9fu55LewtT1zLjYGbMaosIsLFY53yPSl80lOAXoq0N7pZ/AAUhoqvyClzWGbJGwBx8brkdu3KwaSyDHDqK9S3d0ct4dlZYoJ18wB3ymnYQIWP3bSDYV9bR3wEebXqmb4npydXKLqj8VG8tDenbImCJvbkllyQUvy0R9t4HFD5PQOskabkAtdNZqO9G1XQM2fZBZ0zVQuwptEtd+Amh2h4apTLc7TRTMELHUPQ8bxr7p/AtaPejFvBeeP/4UFAZV0j33zjIva2FD6ZVoZO0x5LNIx/lWs/059/X2veZi7qi7uC2OI5w8MhvgTEmJWmh653iv5aG0axKLlIAwOZHc40+afDb6z+ViwT9inZeAOgn23XJ049ojyHvjj8GzmdU=
+    ########## Dev stage ##########
+    - DEV_NODE_ENV=production
+    - DEV_AWS_REGION=us-west-2
+    - DEV_E2E_MISSIONS_TEST_TAB_GOAL=false
+    - DEV_AWS_ACCOUNT_ID=167811431063
+    - DEV_LOG_LEVEL=error
+    # Web app
+    - DEV_REACT_APP_WEBSITE_DOMAIN=dev-tab2017.gladly.io # user-visible domain, used in app JS
+    - DEV_REACT_APP_WEBSITE_PROTOCOL=https
+    - DEV_REACT_APP_API_ENDPOINT=http://127.0.0.1:9000
+    - DEV_REACT_APP_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
+    - DEV_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
+    - DEV_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
+    - DEV_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+    - DEV_REACT_APP_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+    - DEV_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
+    - DEV_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
+    - DEV_REACT_APP_SENTRY_STAGE=dev
+    - DEV_REACT_APP_ADS_ENABLED=true
+    - DEV_REACT_APP_GAM_DEV_ENVIRONMENT=true
+    - DEV_REACT_APP_CMP_ENABLED=true
+    - DEV_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
+    - DEV_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
+    - DEV_REACT_APP_MOCK_SEARCH_RESULTS=false
+    - DEV_REACT_APP_SEARCH_PROVIDER=codefuel
+    - DEV_REACT_APP_SEARCH_QUERY_ENDPOINT=https://dev-search-api.gladly.io/api/query
+    - DEV_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://dev-tab2017.gladly.io/search/api/v2/query
+    - DEV_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
+    - DEV_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=false
+    - DEV_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
+    - DEV_REACT_APP_SHOW_DEMOS_PAGE=true
+    # GraphQL / Lambda
+    - DEV_GQL_LOGGER=sentry
+    - DEV_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+    - DEV_GQL_SENTRY_PROJECT_ID=184604
+    - DEV_GQL_SENTRY_STAGE=dev
+    - DEV_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+    - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+    - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+    - DEV_GROWTHBOOK_ENV=dev
+    - DEV_GQL_SEARCH_ENDPOINT=dev-tab2017.gladly.io/search/
+    # Important: changing this requires updating the Lambda@Edge function
+    # version associated with the CloudFront /newtab* cache behavior, because
+    # Lambda@Edge does not support environment variables and thus the
+    # host is hardcoded in deploys.
+    - DEV_LAMBDA_TAB_V4_HOST=tab-web-git-dev-gladly-team.vercel.app
+    # Endpoints
+    - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+    - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
+    - DEV_DB_TABLE_NAME_APPENDIX="-dev"
+    # Deployment
+    - DEV_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
+    - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=dev-tab2017.gladly.io
+    - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+    - DEV_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://dev-tab2017.gladly.io/newtab/
+    - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=dev-search.gladly.io
+    - DEV_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
+    - DEV_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
+    - DEV_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=1227 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - DEV_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=1279 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - DEV_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=7 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
+    - DEV_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
+    - DEV_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
+    - DEV_DEPLOYMENT_GRAPHQL_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
+    - DEV_DEPLOYMENT_GRAPHQL_PATH=/dev
+    - DEV_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=dev-search-api.gladly.io
+    # Upstash
+    - DEV_UPSTASH_REDIS_REST_URL=https://usw2-flowing-bullfrog-30109.upstash.io
+    # Secrets: SENTRY_PRIVATE_KEY, EST_MONEY_RAISED_PER_TAB
+    - secure: N8SoSEmnhULeDYaLVhxJuEc81RfYhSEZmntH9SjTj9IfKbHlY5P6SMueYZH1uFpImj/m1VC1qy1fyULtUDKXVjXtZynQg2/3rnrjvoVP0Jp9Mv0dpbx179jv/M6Q6+WqygM48kSszMjFnnKo4mCMQCdXvfGLYEvktCLU2+4Mza4TxoDTNzWykc+HZcJgTAVUt2Un4wLqR6rUnHIUDMnXnjHPETcw3ndIZFJx0sPQHr144vZid/yF3hwO5u3oNmnSz6Yad19GaYvDbb3Mo6cwz05mycKUQgYrTi9cgtBW1dJqjUA7a2vbaGqc/Pmer/y8vw9pzC8dhkkCYuSv0YJddGC+7DnKHnuzC6iFPWsgbGZiOPdr+m+KRApFALMLH7Y1t08zVdNc0nQrx52oDHVANek90Kv1J5EKAMpB7vWJQVeONua0dhq2QfbO3fdLmf90/r64GVfg30rWbKZkPh9QscFQpJT/fksLzjUHZUYwtWXTW9EK2iituionK71Gn/+YiFi75QBdVO6HOoWFAXQ5DKQnQ1XSwogOUuxk/9CMR9DgBPk+angi1t6Jd5ybrKqpSC/wAZOH/Vc/6N4B0xJrhH2q4ed8zAJXBqPZDRNk64NrkKPULYVlfotIbRCbkPCLKE2ImpZJMPxifKN7SQ3IGwz/KGfKn7NjX56i6cMjxDs=
+    ########## Production stage ##########
+    - PROD_NODE_ENV=production
+    - PROD_AWS_REGION=us-west-2
+    - PROD_E2E_MISSIONS_TEST_TAB_GOAL=false
+    - PROD_AWS_ACCOUNT_ID=167811431063
+    - PROD_LOG_LEVEL=error
+    # Web app
+    - PROD_REACT_APP_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
+    - PROD_REACT_APP_WEBSITE_PROTOCOL=https
+    - PROD_REACT_APP_API_ENDPOINT=https://eijq6rabyeqoo6nfdhnbh5mqze0getbq.lambda-url.us-west-2.on.aws
+    - PROD_REACT_APP_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
+    - PROD_REACT_APP_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk
+    - PROD_REACT_APP_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
+    - PROD_REACT_APP_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
+    - PROD_REACT_APP_FIREBASE_PROJECT_ID=tab-for-a-cause
+    - PROD_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
+    - PROD_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
+    - PROD_REACT_APP_SENTRY_STAGE=prod
+    - PROD_REACT_APP_ADS_ENABLED=true
+    - PROD_REACT_APP_GAM_DEV_ENVIRONMENT=false
+    - PROD_REACT_APP_CMP_ENABLED=true
+    - PROD_REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
+    - PROD_REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY=false
+    - PROD_REACT_APP_MOCK_SEARCH_RESULTS=false
+    - PROD_REACT_APP_SEARCH_PROVIDER=codefuel
+    - PROD_REACT_APP_SEARCH_QUERY_ENDPOINT=https://search-api.gladly.io/api/query
+    - PROD_REACT_APP_SEARCH_QUERY_ENDPOINT_CODEFUEL=https://tab.gladly.io/search/api/v2/query
+    - PROD_REACT_APP_FEATURE_FLAG_BING_JS_ADS=false
+    - PROD_REACT_APP_FEATURE_FLAG_BING_JS_ADS_PRODUCTION_MODE=true
+    - PROD_REACT_APP_MEASURE_TIME_TO_INTERACTIVE=false
+    - PROD_REACT_APP_SHOW_DEMOS_PAGE=false
+    # GraphQL / Lambda
+    - PROD_GQL_LOGGER=sentry
+    - PROD_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+    - PROD_GQL_SENTRY_PROJECT_ID=184604
+    - PROD_GQL_SENTRY_STAGE=production
+    - PROD_LAMBDA_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
+    - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
+    - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
+    - PROD_GROWTHBOOK_ENV=production
+    - PROD_GQL_SEARCH_ENDPOINT=tab.gladly.io/search/
+    # Important: changing this requires updating the Lambda@Edge function
+    # version associated with the CloudFront /newtab* cache behavior, because
+    # Lambda@Edge does not support environment variables and thus the
+    # host is hardcoded in deploys.
+    - PROD_LAMBDA_TAB_V4_HOST=tab-web-gladly-team.vercel.app
+    # Endpoints
+    - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+    - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
+    - PROD_DB_TABLE_NAME_APPENDIX="-prod"
+    # Deployment
+    - PROD_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
+    - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=prod-tab2017.gladly.io
+    - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+    - PROD_DEPLOYMENT_WEB_APP_PUBLIC_URL=https://tab.gladly.io/newtab/
+    - PROD_DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME=prod-search.gladly.io
+    - PROD_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH=/search
+    # react-snap does not yet support absolute URLs:
+    # https://github.com/stereobooster/react-snap/issues/157
+    - PROD_DEPLOYMENT_SEARCH_APP_PUBLIC_URL=/search/
+    - PROD_DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION=562 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - PROD_DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION=582 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - PROD_DEPLOYMENT_HOMEPAGE_404_LAMBDA_EDGE_FUNCTION_VERSION=1 # Important: create an alias for this function. See serverless-lambda-edge.yml.
+    - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
+    - PROD_DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
+    - PROD_DEPLOYMENT_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
+    - PROD_DEPLOYMENT_GRAPHQL_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
+    - PROD_DEPLOYMENT_GRAPHQL_PATH=/prod
+    - PROD_DEPLOYMENT_SEARCH_API_ORIGIN_DOMAIN=search-api.gladly.io
+    # Upstash
+    - PROD_UPSTASH_REDIS_REST_URL=https://usw2-glowing-cockatoo-30106.upstash.io
+    # Secrets
+    - secure: qlZ0YAeyIPNqdc3mNYMuvzpsYidLk4fooBpbEGCyeU9l+9OPzrZDc6Cut5p9g8jk6pw6OuCGd+gdKhgoKh/XoW7S5u1EVfu6Ggmoy3jZJKfouKHVnRsrnFlUj1mnP9Q0qI6IZy8mXeEvJlQUtZ5j2VWt3LfH59iK8sALtkFpbQfmeFYV71AGjKlUFm1F68cKph3qPbbjGgGtrCbprLOHcpzLjEQLBhLl7zSgEE/eubwzeGHJKW1x1iCxrT8rn8ryBJZJRDOPPKZ/dX52VsJjHBxa/WZY0riocs5WYh5imQNGHt2sVrAdWuvXzGlPnDDKKGR3QMAxEUXPaT0Gq4VZz9/Xm6WgDdQRT01XFbztmZfSmQCnajpv2RfCdU0HLdZt0LN5mQGXP+Iekngk3AOJxw7yEfVgMN1xEU0NxGHrTqiXMcXQQDgybM2X7lLo/MiwViyNmKODzKJUoN5mDp5J3ORSGFymQ4y16eltkiWuZcynN2WIeEsKcM+OX8+savK/Rl7htWkdFh+AkBQHXXX8k3LdRDrS7IOPkAjtQQFmGoMMfPTkTyX395BUgpT8c1gvE9eiJC5OkVIyQ1ebNTx8HEcpAUwIRfR12icX6jC+eW+qhaaHW1MKSTCN9vl5o3Ug12RjfLlTFAvAs//XjJrOklyAdbikV8HU7AtHQF24ny4=
 before_install:
   # Decrypt amazon-cpm-codes.json
   - openssl aes-256-cbc -K $encrypted_588fdee4d9e2_key -iv $encrypted_588fdee4d9e2_iv
@@ -270,7 +273,7 @@ script:
   ### parts of our stack.
   ### TODO: remove after above is enabled
   - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
-      yarn run ci:deploy test || travis_terminate 1;
+    yarn run ci:deploy test || travis_terminate 1;
     fi'
 
 # TODO: master branch deploy to prod; other logic for test/dev
