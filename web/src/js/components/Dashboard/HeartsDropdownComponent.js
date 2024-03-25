@@ -82,11 +82,11 @@ const HeartsDropdownComponent = props => {
             </span>
             <Typography variant={'body2'}>donated</Typography>
           </span>
-          <Link to={donateURL}>
+          <a href={donateURL}>
             <Button variant={'contained'} color={'primary'} style={buttonStyle}>
               Donate Hearts
             </Button>
-          </Link>
+          </a>
         </div>
         <Divider />
         <div style={sectionStyle}>
@@ -94,11 +94,11 @@ const HeartsDropdownComponent = props => {
             <Typography variant={'h5'}>{user.numUsersRecruited}</Typography>
             <Typography variant={'body2'}>{friendWord} recruited</Typography>
           </div>
-          <Link to={inviteFriendsURL}>
+          <a href={inviteFriendsURL}>
             <Button variant={'contained'} color={'primary'} style={buttonStyle}>
               Invite A Friend
             </Button>
-          </Link>
+          </a>
         </div>
         <Divider />
         <div
