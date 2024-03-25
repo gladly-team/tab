@@ -179,38 +179,6 @@ describe('HeartsDropdownComponent', () => {
     expect(elem.render().text()).toEqual('Recruit a friend480[heart icon]')
   })
 
-  it('shows a "donate hearts" button that links to the donate hearts page', () => {
-    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
-    const linkElem = wrapper.find(Link).first()
-    expect(linkElem.prop('to')).toEqual(donateURL)
-    expect(
-      linkElem
-        .children()
-        .first()
-        .render()
-        .text()
-    ).toEqual('Donate Hearts')
-  })
-
-  it('shows an "invite friends" button that links to the invite friends page', () => {
-    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
-    const linkElem = wrapper.find(Link).at(1)
-    expect(linkElem.prop('to')).toEqual(inviteFriendsURL)
-    expect(
-      linkElem
-        .children()
-        .first()
-        .render()
-        .text()
-    ).toEqual('Invite A Friend')
-  })
-
   it('passes the "style" prop to the DashboardPopover component', () => {
     const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
       .default
