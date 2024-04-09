@@ -51,7 +51,10 @@ const publishToSNS = async ({ stage, messageData }) => {
 const publishToSQS = async ({ stage, messageData }) => {
   const awsRegion = process.env.AWS_REGION
   const sqsClient = new SQSClient({ region: awsRegion })
-  const payload = { ...messageData, stage }
+  const payload = {
+    data: { ...messageData, stage },
+    job: 'App\\Jobs\\LogSearch@handle',
+  }
 
   // Set the queue URL and the message body
   const queueUrl =
