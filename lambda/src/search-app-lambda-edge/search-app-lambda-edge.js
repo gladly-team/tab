@@ -8,6 +8,7 @@ import searchURLByRegion from './searchURLByRegion'
 import { AUTH_COOKIE_NAME, AUTH_SIG_COOKIE_NAME } from '../utils/constants'
 
 const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns')
+const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs')
 
 const PRODUCTION_STAGE = 'prod'
 const POST_UNININSTALL_SURVEY_URL = 'https://forms.gle/A3Xam2op2gFjoQNU6'
@@ -44,6 +45,39 @@ const publishToSNS = async ({ stage, messageData }) => {
     TopicArn: snsTopicARN,
   }
   await sns.send(new PublishCommand(params))
+}
+
+// We use SQS to log this search to our new v5 platform.
+const publishToSQS = async ({ stage, messageData }) => {
+  const awsRegion = process.env.AWS_REGION
+  const sqsClient = new SQSClient({ region: awsRegion })
+  const payload = {
+    data: { ...messageData, stage },
+    job: 'App\\Jobs\\LogSearch@handle',
+  }
+
+  // Set the queue URL and the message body
+  const queueUrl =
+    'https://sqs.us-west-2.amazonaws.com/167811431063/tab-v5-production'
+  const messageBody = JSON.stringify(payload)
+
+  try {
+    // Set the parameters
+    const params = {
+      QueueUrl: queueUrl,
+      MessageBody: messageBody,
+    }
+
+    // Create a command to send a message
+    const command = new SendMessageCommand(params)
+
+    // Send the message to the specified queue
+    const response = await sqsClient.send(command)
+
+    console.log('Success, message sent. Message ID:', response.MessageId)
+  } catch (error) {
+    console.error('Error:', error)
+  }
 }
 
 const constructRedirectResponse = redirectURL => {
@@ -171,7 +205,9 @@ exports.handler = async event => {
           causeId,
         },
       }
+
       await publishToSNS({ stage, messageData })
+      await publishToSQS({ stage, messageData })
     } catch (e) {
       // TODO: add Sentry error logging.
       // eslint-disable-next-line no-console

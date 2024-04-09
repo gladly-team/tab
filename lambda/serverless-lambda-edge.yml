@@ -1,14 +1,13 @@
-
 # We have a separate Serverless config file because Lambda@Edge
 # functions must be in us-east-1 and Serverless does not support
-# multi-region deployments or Lambda@Edge: 
+# multi-region deployments or Lambda@Edge:
 # https://github.com/serverless/serverless/issues/4123
 # https://github.com/serverless/serverless/issues/3944
 # Serverless also does not support customizing the yml filename,
 # so we just cp the file before deploying.
 # https://github.com/serverless/serverless/issues/4473
 service: lambda-edge # Important: this must be unique in AWS Cloudformation!
-frameworkVersion: ">=3.24.1 <4.0.0"
+frameworkVersion: '>=3.24.1 <4.0.0'
 
 provider:
   name: aws
@@ -45,45 +44,45 @@ provider:
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/NewtabAppLambdaEdgeLambdaVersion*"
+      Principal: '*'
+      Action: 'Update:*'
+      Resource: 'LogicalResourceId/NewtabAppLambdaEdgeLambdaVersion*'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/NewtabAppLambdaEdgeLogGroup"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/NewtabAppLambdaEdgeLogGroup'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/SearchAppLambdaEdgeLambdaFunction'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
+      Principal: '*'
+      Action: 'Update:*'
+      Resource: 'LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/SearchAppLambdaEdgeLogGroup'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/Homepage404LambdaEdgeLambdaFunction"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/Homepage404LambdaEdgeLambdaFunction'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/Homepage404LambdaEdgeLambdaVersion*"
+      Principal: '*'
+      Action: 'Update:*'
+      Resource: 'LogicalResourceId/Homepage404LambdaEdgeLambdaVersion*'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/Homepage404LambdaEdgeLogGroup"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/Homepage404LambdaEdgeLogGroup'
     - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/gladlyLambdaEdgeRole"
+      Principal: '*'
+      Action: 'Update:Modify'
+      Resource: 'LogicalResourceId/gladlyLambdaEdgeRole'
 
 plugins:
   # https://github.com/claygregory/serverless-prune-plugin
@@ -150,20 +149,19 @@ resources:
                     - logs:DescribeLogStreams
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
-                -  Effect: "Allow"
-                   Action:
-                     - "s3:PutObject"
-                   Resource:
-                     Fn::Join:
-                       - ""
-                       - - "arn:aws:s3:::"
-                         - "Ref" : "ServerlessDeploymentBucket"
+                        - ':'
+                        - - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
+                - Effect: 'Allow'
+                  Action:
+                    - 's3:PutObject'
+                  Resource:
+                    Fn::Join:
+                      - ''
+                      - - 'arn:aws:s3:::'
+                        - 'Ref': 'ServerlessDeploymentBucket'
           # Give permission to publish to the SNS SearchRequest topic in any
           # region.
           - PolicyName: gladly-${self:custom.stage}-search-request-log-role
@@ -172,15 +170,18 @@ resources:
               Statement:
                 - Effect: Allow
                   Action:
+                    - sqs:*
+                  Resource: arn:aws:sqs:*
+                - Effect: Allow
+                  Action:
                     - sns:Publish
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:sns:*' # allow in any region
-                        - Ref: 'AWS::AccountId'
-                        # SNS topic: SearchRequest or dev-SearchRequest
-                        - ${self:custom.searchRequestSNSTopicName.${self:custom.stage}}
+                        - ':'
+                        - - 'arn:aws:sns:*' # allow in any region
+                          - Ref: 'AWS::AccountId'
+                          # SNS topic: SearchRequest or dev-SearchRequest
+                          - ${self:custom.searchRequestSNSTopicName.${self:custom.stage}}
 
 functions:
   # We manually reference the ARN of these Lambda@Edge functions in our
