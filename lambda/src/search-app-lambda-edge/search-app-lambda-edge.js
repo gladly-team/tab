@@ -51,13 +51,12 @@ const publishToSNS = async ({ stage, messageData }) => {
 const publishToSQS = async ({ stage, messageData }) => {
   const awsRegion = process.env.AWS_REGION
   const sqsClient = new SQSClient({ region: awsRegion })
-
-  console.log(stage)
+  const payload = { ...messageData, stage }
 
   // Set the queue URL and the message body
   const queueUrl =
     'https://sqs.us-west-2.amazonaws.com/167811431063/tab-v5-production'
-  const messageBody = JSON.stringify(messageData)
+  const messageBody = JSON.stringify(payload)
 
   try {
     // Set the parameters
