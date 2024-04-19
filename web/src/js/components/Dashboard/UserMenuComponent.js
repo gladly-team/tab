@@ -34,6 +34,7 @@ import {
 } from 'js/constants'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import StarIcon from '@material-ui/icons/Star'
+import BarChart from '@material-ui/icons/BarChart'
 import VideoEngagement from 'js/components/Dashboard/VideoEngagementContainer'
 import { showVideoAds } from 'js/utils/feature-flags'
 const Sparkle = lazy(() => import('react-sparkle'))
@@ -85,6 +86,7 @@ class UserMenu extends React.Component {
       classes,
       user,
       isUserAnonymous,
+      onClickLeaderboardOpen,
       onClickCampaignReopen,
       onClickSparklySearchIntroButton,
       showSparklySearchIntroButton,
@@ -306,6 +308,28 @@ class UserMenu extends React.Component {
             </>
           )}
 
+          <>
+            <div
+              style={{
+                marginRight: 0,
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+              onClick={onClickLeaderboardOpen}
+            >
+              <BarChart className={classes.treeIcon} />
+            </div>
+            <CircleIcon
+              style={{
+                marginLeft: 10,
+                color: 'rgba(255, 255, 255, 0.8)',
+              }}
+              classes={{
+                root: classes.circleIcon,
+              }}
+            />
+          </>
+
           <Hearts
             app={app}
             user={user}
@@ -349,6 +373,7 @@ UserMenu.propTypes = {
   ]).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
+  onClickLeaderboardOpen: PropTypes.func,
   onClickCampaignReopen: PropTypes.func,
   onClickSparklySearchIntroButton: PropTypes.func,
   showSparklySearchIntroButton: PropTypes.bool,
@@ -357,6 +382,7 @@ UserMenu.propTypes = {
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
+  onClickLeaderboardOpen: () => {},
   onClickCampaignReopen: () => {},
   onClickSparklySearchIntroButton: () => {},
   showSparklySearchIntroButton: false,
