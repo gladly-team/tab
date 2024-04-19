@@ -60,6 +60,7 @@ import SfacExtensionSellNotification from 'js/components/Dashboard/SfacExtension
 //import ShfacExtensionSellNotification from 'js/components/Dashboard/ShfacExtensionSellNotification'
 import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
+import Leaderboard from 'js/components/Widget/Leaderboard'
 //import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
 
 const NewUserTour = lazy(() =>
@@ -127,6 +128,7 @@ class Dashboard extends React.Component {
         'true',
       notificationsToShow: [],
       showIFrameWidget: false,
+      showLeaderboard: false,
       dismissNovShop: localStorageMgr.getItem(NOV_NO_SHOP_DISMISS) === 'true',
       batch: 1,
       // dismissGiveDirectly:
@@ -225,6 +227,10 @@ class Dashboard extends React.Component {
 
   onCloseiFrameWidget = () => {
     this.setState({ showIFrameWidget: false })
+  }
+
+  onCloseLeaderboard = () => {
+    this.setState({ showLeaderboard: false })
   }
 
   setNotificationsToShow(props) {
@@ -734,7 +740,6 @@ class Dashboard extends React.Component {
             )}
           </Paper>
                 ) : null */}
-
         {/* Give Directly Promo
         {user && !this.state.dismissGiveDirectly ? (
           <Paper
@@ -834,6 +839,9 @@ class Dashboard extends React.Component {
                 showCampaignReopenButton={
                   isCampaignLive && hasUserDismissedCampaignRecently
                 }
+                onClickLeaderboardOpen={() => {
+                  this.setState({ showLeaderboard: true })
+                }}
                 onClickCampaignReopen={() => {
                   this.setState({
                     hasUserDismissedCampaignRecently: false,
@@ -1165,7 +1173,6 @@ class Dashboard extends React.Component {
             <NewUserTour user={user} />
           </Suspense>
         ) : null}
-
         <div
           style={{
             position: 'absolute',
@@ -1221,7 +1228,6 @@ class Dashboard extends React.Component {
             />
           </div>
         </div>
-
         {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
@@ -1230,6 +1236,18 @@ class Dashboard extends React.Component {
           open={errorOpen}
           onClose={this.clearError.bind(this)}
         />
+
+        {user && this.state.showLeaderboard ? (
+          <FadeInDashboardAnimation>
+            <Leaderboard
+              user={user}
+              onClose={() => {
+                this.onCloseLeaderboard()
+              }}
+            />
+          </FadeInDashboardAnimation>
+        ) : null}
+
         {/* {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
@@ -1251,7 +1269,6 @@ class Dashboard extends React.Component {
             />
           </FadeInDashboardAnimation>
         ) : null} */}
-
         {/* {user && this.state.showIFrameWidget && notifSearch ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame
