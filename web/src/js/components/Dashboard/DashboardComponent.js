@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 import moment from 'moment'
+import gtag from 'js/analytics/google-analytics'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -840,6 +841,7 @@ class Dashboard extends React.Component {
                   isCampaignLive && hasUserDismissedCampaignRecently
                 }
                 onClickLeaderboardOpen={() => {
+                  gtag('event', 'leaderboard_open')
                   this.setState({ showLeaderboard: true })
                 }}
                 onClickCampaignReopen={() => {

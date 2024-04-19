@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import gtag from 'js/analytics/google-analytics'
 
 const fullScreenStyle = {
   top: 10,
@@ -24,6 +25,7 @@ const Leaderboard = ({ user, onClose }) => {
   // On close
   const onCloseWidget = () => {
     onClose()
+    gtag('event', 'leaderboard_close')
   }
 
   // This hook is listening an event that came from the Iframe
