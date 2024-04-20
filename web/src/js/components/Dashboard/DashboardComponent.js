@@ -18,6 +18,7 @@ import { dashboardIconInactiveColor } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
+import NewNotification from 'js/components/Notification/Notification'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
@@ -884,6 +885,9 @@ class Dashboard extends React.Component {
               ) : null}
 
               {/*** Notification ***/}
+
+              <NewNotification slot="top-right" user={user} />
+
               {/* {notif ? (
                 <Notification
                   useGlobalDismissalTime
@@ -1111,6 +1115,7 @@ class Dashboard extends React.Component {
             </div>
           </FadeInDashboardAnimation>
         ) : null}
+
         {this.state.isUserAnonymous && user ? (
           <FadeInDashboardAnimation>
             <div
