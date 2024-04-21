@@ -300,6 +300,11 @@ class Dashboard extends React.Component {
     })
   }
 
+  openLeaderboard() {
+    gtag('event', 'leaderboard_open')
+    this.setState({ showLeaderboard: true })
+  }
+
   // onDismissGiveDirectly() {
   //   localStorageMgr.setItem(GIVE_DIRECTLY_DISMISS, true)
   //   this.setState({ dismissGiveDirectly: true })
@@ -841,10 +846,7 @@ class Dashboard extends React.Component {
                 showCampaignReopenButton={
                   isCampaignLive && hasUserDismissedCampaignRecently
                 }
-                onClickLeaderboardOpen={() => {
-                  gtag('event', 'leaderboard_open')
-                  this.setState({ showLeaderboard: true })
-                }}
+                onClickLeaderboardOpen={this.openLeaderboard.bind(this)}
                 onClickCampaignReopen={() => {
                   this.setState({
                     hasUserDismissedCampaignRecently: false,
@@ -886,7 +888,11 @@ class Dashboard extends React.Component {
 
               {/*** Notification ***/}
 
-              <NewNotification slot="top-right" user={user} />
+              <NewNotification
+                slot="top-right"
+                user={user}
+                onOpenLeaderboard={this.openLeaderboard.bind(this)}
+              />
 
               {/* {notif ? (
                 <Notification

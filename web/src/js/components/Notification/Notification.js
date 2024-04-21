@@ -21,12 +21,9 @@ if (isBrowser) {
 // Example Overrides: ?notification-override=leaderboard-change-flat
 // Example Overrides: ?notification-override=leaderboard-change-down
 // Example Overrides: ?notification-override=leaderboard-change-up
-const Notification = ({ slot, user }) => {
+const Notification = ({ slot, user, onOpenLeaderboard }) => {
   const [show, setShow] = useState(true)
   const [height, setHeight] = useState(0)
-
-  console.log('HERE')
-  console.log(user)
 
   // User is not loaded yet.
   if (!user) {
@@ -52,6 +49,22 @@ const Notification = ({ slot, user }) => {
     } else {
       setShow(false)
       setHeight(0)
+    }
+
+    // See if we have any actions
+    if (event.data.action) {
+      switch (event.data.action) {
+        // Open the leaderboard
+        case 'leaderboard-open':
+          if (onOpenLeaderboard) {
+            onOpenLeaderboard()
+          }
+          break
+
+        // Default do nothing
+        default:
+          break
+      }
     }
 
     // Log or use the received message
@@ -94,8 +107,12 @@ Notification.propTypes = {
   user: PropTypes.shape({
     userId: PropTypes.string,
   }).isRequired,
+
+  onOpenLeaderboard: PropTypes.func,
 }
 
-Notification.defaultProps = {}
+Notification.defaultProps = {
+  onOpenLeaderboard: null,
+}
 
 export default Notification
