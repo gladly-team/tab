@@ -175,7 +175,7 @@ env:
     # Web app
     - PROD_REACT_APP_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
     - PROD_REACT_APP_WEBSITE_PROTOCOL=https
-    - PROD_REACT_APP_API_ENDPOINT=https://snowy-stream-wljibw2liswn.vapor-farm-g1.com
+    - PROD_REACT_APP_API_ENDPOINT=https://tab.gladly.io
     - PROD_REACT_APP_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
     - PROD_REACT_APP_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk
     - PROD_REACT_APP_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
