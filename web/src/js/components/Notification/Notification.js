@@ -81,7 +81,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
         <iframe
           src={`${
             process.env.REACT_APP_API_ENDPOINT
-          }/newtab/notifications?user_id=${user.userId}&slot=${slot}&override=${
+          }/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${
             sParams.NotificationOverride
           }`}
           title={`notification-${slot}`}
