@@ -18,8 +18,7 @@ const fullScreenStyle = {
   zIndex: 100000000,
 }
 
-const iframeURL =
-  'https://snowy-stream-wljibw2liswn.vapor-farm-g1.com/newtab/leaderboard?user_id='
+const iframeURL = 'https://tab.gladly.io/v5/leaderboard?user_id='
 
 const Leaderboard = ({ user, onClose }) => {
   // On close
