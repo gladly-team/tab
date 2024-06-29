@@ -74,7 +74,7 @@ const getMockYahooDemoProps = () => ({
             name: 'Search',
             type: 'search',
             settings:
-              '[{"field":"engine","type":"choices","choices":["Google","Bing","DuckDuckGo","Ecosia"],"defaultValue":"Google","display":"Search engine"}]',
+              '[{"field":"engine","type":"choices","choices":["Google","Bing","DuckDuckGo","Ecosia", "Kagi"],"defaultValue":"Google","display":"Search engine"}]',
           },
         },
       ],
@@ -90,7 +90,7 @@ const getMockYahooDemoProps = () => ({
             name: 'Search',
             enabled: true,
             settings:
-              '[{"field":"engine","type":"choices","choices":["Google","Bing","DuckDuckGo","Ecosia"],"defaultValue":"Google","display":"Search engine"}]',
+              '[{"field":"engine","type":"choices","choices":["Google","Bing","DuckDuckGo","Ecosia","Kagi"],"defaultValue":"Google","display":"Search engine"}]',
           },
         },
       ],
