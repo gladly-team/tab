@@ -2,10 +2,15 @@
 
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Modal from '@material-ui/core/Modal'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import gtag from 'js/analytics/google-analytics'
 
 const isBrowser = typeof window !== 'undefined'
 
 const sParams = {
+  Version: '',
   NotificationOverride: null,
 }
 
@@ -15,15 +20,21 @@ if (isBrowser) {
     get: (searchParams, prop) => searchParams.get(prop),
   })
 
+  sParams.Version = p.version || ''
   sParams.NotificationOverride = p['notification-override'] || ''
 }
 
 // Example Overrides: ?notification-override=leaderboard-change-flat
 // Example Overrides: ?notification-override=leaderboard-change-down
 // Example Overrides: ?notification-override=leaderboard-change-up
+// Example Overrides: ?notification-override=vote-america-boot-up-june-2024&version=Version1
 const Notification = ({ slot, user, onOpenLeaderboard }) => {
   const [show, setShow] = useState(true)
   const [height, setHeight] = useState(0)
+  const [openWidget, setOpenWidget] = useState(false)
+  const [iframeUrl, setIframeUrl] = useState('')
+  const [notification, setNotification] = useState('')
+  const [version, setVersion] = useState('')
 
   // User is not loaded yet.
   if (!user) {
@@ -34,13 +45,39 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     return null
   }
 
+  //
+  // Called when widget is closed by user.
+  //
+  const onClose = () => {
+    setOpenWidget(false)
+    gtag('event', `${slot}_${notification}_close`)
+    gtag('event', `${slot}_${notification}_${version}_close`)
+  }
+
   // Function to handle received messages
-  function receiveMessage(event) {
+  function receiveMessage(event, scopeSlot) {
     // TODO(spicer): Add origin check for added security
     // if (event.origin !== 'http://127.0.0.1:9000') return
 
     // Check if the message is for us. If not, ignore it.
     if (typeof event.data.show === 'undefined') return
+
+    // Check if the message is for us. If not, ignore it.
+    if (event.data.slot !== scopeSlot) {
+      return
+    }
+
+    console.log(event.data)
+
+    // Did we get the version? - Which version of the notification did we show?
+    if (event.data.version) {
+      setVersion(event.data.version)
+    }
+
+    // Did we get the notification? - Which notification did we show?
+    if (event.data.notification) {
+      setNotification(event.data.notification)
+    }
 
     // Do we want to show the notification?
     if (event.data.show) {
@@ -49,6 +86,12 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     } else {
       setShow(false)
       setHeight(0)
+    }
+
+    // Did we get a new iframe URL?
+    if (event.data.iframe) {
+      setIframeUrl(event.data.iframe)
+      setOpenWidget(true)
     }
 
     // See if we have any actions
@@ -73,27 +116,85 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
   // Set up the event listener
   // eslint-disable-next-line no-undef
-  window.addEventListener('message', receiveMessage, false)
+  window.addEventListener(
+    'message',
+    event => {
+      receiveMessage(event, slot)
+    },
+    false
+  )
 
   return (
     <>
       {show && (
         <iframe
+          id={`notification-${slot}`}
           src={`${
             process.env.REACT_APP_API_ENDPOINT
           }/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${
             sParams.NotificationOverride
-          }`}
+          }&version=${sParams.Version}`}
           title={`notification-${slot}`}
           style={{
             marginTop: '10px',
             marginBottom: '10px',
             backgroundColor: 'white',
+            zIndex: 100000000,
           }}
           width="100%"
           height={height}
           frameBorder="0"
         />
+      )}
+
+      {/* Used for top-center modal windows */}
+      {iframeUrl && openWidget && (
+        <Modal
+          id={`notification-modal-${slot}`}
+          open={openWidget}
+          style={{
+            top: 10,
+            left: 0,
+            right: 0,
+            bottom: 100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            maxWidth: 800,
+            position: 'absolute',
+            backgroundColor: 'white',
+            zIndex: 100000000,
+          }}
+        >
+          <div style={{ height: '100%' }}>
+            <IconButton
+              onClick={onClose}
+              style={{ position: 'absolute', right: 0, top: 5 }}
+            >
+              <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
+            </IconButton>
+
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                padding: 5,
+                paddingTop: 20,
+                paddingBottom: 20,
+                backgroundColor: 'white',
+                display: 'flex',
+                flexFlow: 'column',
+              }}
+            >
+              <iframe
+                style={{ border: 'none', flex: '1 1 auto' }}
+                id={`notification-widget-${slot}`}
+                title={`notification-widget-${slot}`}
+                src={iframeUrl}
+                width="100%"
+              />
+            </div>
+          </div>
+        </Modal>
       )}
     </>
   )

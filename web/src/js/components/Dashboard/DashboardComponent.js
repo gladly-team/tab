@@ -818,6 +818,21 @@ class Dashboard extends React.Component {
           </Paper>
         ) : null} */}
 
+        {user && (
+          <div
+            style={{
+              width: 500,
+              position: 'relative',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: 50,
+              zIndex: '100',
+            }}
+          >
+            <NewNotification slot="top-center" user={user} />
+          </div>
+        )}
+
         {user && app ? (
           <FadeInDashboardAnimation>
             <div
