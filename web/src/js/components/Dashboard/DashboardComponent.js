@@ -1276,6 +1276,8 @@ class Dashboard extends React.Component {
           </FadeInDashboardAnimation>
         ) : null}
 
+        {user && <NewNotification slot="modal-center" user={user} />}
+
         {/* {user && this.state.showIFrameWidget && notif ? (
           <FadeInDashboardAnimation>
             <WidgetIFrame

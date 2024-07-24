@@ -31,6 +31,7 @@ if (isBrowser) {
 const Notification = ({ slot, user, onOpenLeaderboard }) => {
   const [show, setShow] = useState(true)
   const [height, setHeight] = useState(0)
+  const [showModal, setShowModal] = useState(false)
   const [openWidget, setOpenWidget] = useState(false)
   const [iframeUrl, setIframeUrl] = useState('')
   const [notification, setNotification] = useState('')
@@ -83,9 +84,17 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     if (event.data.show) {
       setShow(true)
       setHeight(event.data.height)
+
+      if (event.data.slot === 'modal-center') {
+        setShowModal(true)
+      }
     } else {
       setShow(false)
       setHeight(0)
+
+      if (event.data.slot === 'modal-center') {
+        setShowModal(false)
+      }
     }
 
     // Did we get a new iframe URL?
@@ -126,7 +135,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
   return (
     <>
-      {show && (
+      {show && (slot === 'top-right' || slot === 'top-center') && (
         <iframe
           id={`notification-${slot}`}
           src={`${
@@ -145,6 +154,67 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           height={height}
           frameBorder="0"
         />
+      )}
+
+      {slot === 'modal-center' && (
+        <iframe
+          id={`notification-hidden-${slot}`}
+          src={`${
+            process.env.REACT_APP_API_ENDPOINT
+          }/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${
+            sParams.NotificationOverride
+          }&version=${sParams.Version}`}
+          title={`notification-hidden-${slot}`}
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+          frameBorder="0"
+        />
+      )}
+
+      {showModal && slot === 'modal-center' && (
+        <Modal
+          id={`notification-modal-${slot}`}
+          open={showModal}
+          style={{
+            height: height + 30,
+            marginTop: 'auto',
+            marginBottom: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            maxWidth: 800,
+            position: 'absolute',
+            backgroundColor: '#fff',
+            zIndex: 100000000,
+          }}
+        >
+          <div style={{ height: '100%' }}>
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                padding: 0,
+                backgroundColor: 'white',
+                display: 'flex',
+                flexFlow: 'column',
+              }}
+            >
+              <iframe
+                id={`notification-${slot}`}
+                src={`${
+                  process.env.REACT_APP_API_ENDPOINT
+                }/v5/notifications?user_id=${
+                  user.userId
+                }&slot=${slot}&override=${
+                  sParams.NotificationOverride
+                }&version=${sParams.Version}`}
+                title={`notification-${slot}`}
+                style={{ marginTop: '10px', marginBottom: '10px' }}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+              />
+            </div>
+          </div>
+        </Modal>
       )}
 
       {/* Used for top-center modal windows */}
