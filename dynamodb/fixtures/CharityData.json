@@ -644,5 +644,20 @@
     "updated": "2023-09-18T19:00:00.000Z",
     "website": "https://www.givedirectly.org/",
     "longformDescription": "**Tab for Ending Poverty** supports [GiveDirectly](https://www.givedirectly.org/?utm_source=tabforcause), a nonprofit that lets you send money directly to the world’s poorest, no strings attached. We believe people in poverty deserve the dignity to choose for themselves how best to improve their lives – cash enables that choice. [Research](http://GiveDirectly.org/research/?utm_source=tabforacause) shows people in poverty use cash to improve their health, education, income, self-reliance, and more. In the last decade, we’ve reached over 1.5 million people in poverty across 14 countries, largely via simple banking technology called mobile money. Historically, GiveDirectly delivered about 90 cents of every dollar directly to those in need. The remaining 10 cents cover the [costs of delivery](https://www.givedirectly.org/yes-we-have-costs/?utm_source=tabforacause), including foreign exchange fees, fraud prevention, and in-country staff that provide customer service to recipients. Today, most funds are sent to families in Kenya, Malawi, Liberia, and Rwanda."
+   },
+   {
+    "id": "c3f24359-5b91-4721-a938-41d9c8f4e5b0",
+    "category": "Democracy",
+    "created": "2024-08-01T19:00:00.000Z",
+    "description": "--",
+    "image": "give-directly.jpg",
+    "impact": "--",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "give-directly.svg",
+    "name": "VoteAmerica",
+    "updated": "2024-08-01T19:00:00.000Z",
+    "website": "https://about.voteamerica.com/",
+    "longformDescription": "**VoteAmerica** works to strengthen American democracy by removing barriers to voting. The end result is a larger and more diverse electorate – one that is better prepared to hold lawmakers accountable. They have a three-prong approach: 1. **Software Development**: They build easy-to-use software that helps people navigate needlessly complicated voting processes. 2. **Voter Registration and Mobilization**: They run large-scale voter registration and mobilization campaigns. They are goal-oriented and tactic-agnostic, which means they’ll abandon any tactic that stops producing results. 3. **Impact Litigation**: They engage in impact litigation against states that pass voter suppression laws. They recently won lawsuits against Kansas and Georgia. Learn more at [VoteAmerica](https://about.voteamerica.com/)."
    }
 ]

@@ -17,6 +17,7 @@ import endingHungerImage from 'js/assets/endingHunger.png'
 import reproductiveHealthImage from 'js/assets/reproductiveHealth.png'
 import lgbtqImage from 'js/assets/lgbtq.png'
 import giveDirectlyImage from 'js/assets/cashHand.png'
+import democracyImage from 'js/assets/democracy.png'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
@@ -28,6 +29,7 @@ import {
   STORAGE_REPRODUCTIVE_HEALTH_CAUSE_ID,
   STORAGE_LGBTQ_CAUSE_ID,
   STORAGE_END_POVERTY_CAUSE_ID,
+  STORAGE_DEMOCRACY_CAUSE_ID,
 } from 'js/constants'
 
 const spacingPx = 6
@@ -171,6 +173,14 @@ class ProfileDonateHearts extends React.Component {
             causeName="Tab for Ending Poverty"
             causeShortDesc="Open Tabs, help deliver cash to people in poverty through GiveDirectly."
             imgSrc={giveDirectlyImage}
+          />
+          <SwitchToV4
+            user={user}
+            title="Help Democracy (Beta)"
+            causeId={STORAGE_DEMOCRACY_CAUSE_ID}
+            causeName="Tab for Democracy"
+            causeShortDesc="Open Tabs, help strengthen American democracy through VoteAmerica."
+            imgSrc={democracyImage}
           />
         </span>
       </div>
