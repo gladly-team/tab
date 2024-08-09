@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Tab for a Cause.",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "js-cookie": "^3.0.5"
+  },
   "devDependencies": {
     "@aws-sdk/credential-providers": "^3.301.0",
     "@babel/core": "^7.20.2",

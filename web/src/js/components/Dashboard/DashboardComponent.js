@@ -64,6 +64,7 @@ import Link from 'js/components/General/Link'
 import switchToV4 from 'js/utils/switchToV4'
 import Leaderboard from 'js/components/Widget/Leaderboard'
 //import WidgetIFrame from 'js/components/Widget/WidgetIFrame'
+import Cookies from 'js-cookie'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
@@ -182,6 +183,9 @@ class Dashboard extends React.Component {
     if (!userToken) {
       return
     }
+
+    // This is used by v5 of our app as cloudfront does not support cookies with dots in them.
+    Cookies.set('TabAuthToken', userToken, { expires: 365 })
 
     const headers = {
       Accept: 'application/json',
