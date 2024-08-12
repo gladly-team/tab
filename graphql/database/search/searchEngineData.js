@@ -52,6 +52,14 @@ export const searchEngineData = [
     isCharitable: false,
     inputPrompt: 'Search Yahoo',
   },
+  {
+    name: 'Kagi',
+    id: 'Kagi',
+    searchUrl: 'https://kagi.com/search?q={searchTerms}',
+    rank: 6,
+    isCharitable: false,
+    inputPrompt: 'Search Kagi',
+  },
 ]
 
 export const VALID_SEARCH_ENGINES = searchEngineData.map((data) => data.id)
