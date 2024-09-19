@@ -316,7 +316,7 @@ describe('Yahoo Search Demo', () => {
     searchInput.simulate('keypress', { key: 'Enter' })
     await flushAllPromises()
     expect(windowOpenMock).toHaveBeenCalledWith(
-      'https://search.yahoo.com/search;?q=taco',
+      'https://tab.gladly.io/search?src=legacy&q=taco',
       '_top'
     )
     expect(LogSearchMutation).toHaveBeenCalled()

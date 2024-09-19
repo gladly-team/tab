@@ -26,8 +26,6 @@ const publishBrandfluenceToSNS = async ({ messageData }) => {
   // const snsTopicNamePrefix = stage === PRODUCTION_STAGE ? '' : 'dev-'
   const snsTopicARN = `arn:aws:sns:${awsRegion}:${awsAccountId}:${snsTopicNamePrefix}${snsTopicName}`
 
-  console.log(snsTopicARN)
-
   // Publish.
   const message = JSON.stringify(messageData)
   const sns = new SNSClient()
