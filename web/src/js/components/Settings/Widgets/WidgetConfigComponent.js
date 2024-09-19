@@ -72,7 +72,7 @@ class ChoicesWidgetConfig extends React.Component {
     const { setting } = this.props
 
     const choicesContainerStyle = {
-      width: '90%',
+      width: '95%',
       margin: 'auto',
       display: 'flex',
     }
@@ -81,7 +81,7 @@ class ChoicesWidgetConfig extends React.Component {
     }
     const btnGroupStyle = {
       display: 'flex',
-      width: 'auto',
+      width: '100%',
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'flex-end',
@@ -91,6 +91,7 @@ class ChoicesWidgetConfig extends React.Component {
       width: 'auto',
       marginBottom: 6,
       fontSize: 14,
+      minWidth: 200,
     }
 
     return (

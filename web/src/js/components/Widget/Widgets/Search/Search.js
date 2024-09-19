@@ -123,9 +123,13 @@ class Search extends React.Component {
       case 'Ecosia':
         return 'https://www.ecosia.org/search?q='
       case 'Yahoo':
-        return 'https://search.yahoo.com/search;?q='
+        return 'https://tab.gladly.io/search?src=legacy&q='
+      case 'Search for a Cause':
+        return 'https://tab.gladly.io/search?src=legacy&q='
+      case 'SearchForACause':
+        return 'https://tab.gladly.io/search?src=legacy&q='
       default:
-        return 'https://www.google.com/search?q='
+        return 'https://tab.gladly.io/search?src=legacy&q='
     }
   }
   onClose() {
