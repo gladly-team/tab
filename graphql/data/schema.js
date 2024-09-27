@@ -875,11 +875,12 @@ const userType = new GraphQLObjectType({
       ),
       description: 'Current UserGroupImpactMetrics leaderboard',
       resolve: (user) =>
-        user.userGroupImpactMetricId &&
-        GroupImpactLeaderboard.getLeaderboardForUser(
-          user.userGroupImpactMetricId,
-          user.id
-        ),
+        (user.userGroupImpactMetricId &&
+          GroupImpactLeaderboard.getLeaderboardForUser(
+            user.userGroupImpactMetricId,
+            user.id
+          )) ||
+        [],
     },
     groupImpactHistory: {
       type: new GraphQLList(userGroupImpactMetricLogType),
