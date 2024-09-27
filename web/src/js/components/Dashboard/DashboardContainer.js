@@ -16,11 +16,6 @@ export default createFragmentContainer(Dashboard, {
     fragment DashboardContainer_user on User {
       id
       userId
-      cause {
-        id
-        name
-        nameForShop
-      }
       experimentActions {
         referralNotification
         searchIntro
