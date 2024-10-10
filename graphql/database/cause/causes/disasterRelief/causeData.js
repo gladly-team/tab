@@ -84,7 +84,7 @@ const data = {
     squadInviteTemplateId: 'TODO',
   },
   theme: {
-    primaryColor: '#A27DF8', // purple
+    primaryColor: '#FB5050', // red
     secondaryColor: '#29BEBA',
   },
 }
