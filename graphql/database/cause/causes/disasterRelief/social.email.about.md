@@ -1,0 +1,1 @@
+<div>Tab for Disaster Relief turns your web browser into a force for good. With each tab opened, ad revenue supports Direct Relief and World Central Kitchen, responding to disasters with food and medical care.</div>
