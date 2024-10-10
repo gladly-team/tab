@@ -113,6 +113,11 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           }
           break
 
+        // Reload the entire page.
+        case 'reload-page':
+          window.location.reload()
+          break
+
         // Default do nothing
         default:
           break
