@@ -115,6 +115,8 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
         // Reload the entire page.
         case 'reload-page':
+          document.cookie =
+            'tabV4OptIn=enabled; expires=Thu, 18 Dec 2028 12:00:00 UTC'
           window.location.reload()
           break
 
