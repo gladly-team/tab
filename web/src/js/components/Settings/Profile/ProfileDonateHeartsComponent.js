@@ -188,7 +188,7 @@ class ProfileDonateHearts extends React.Component {
             user={user}
             title="Disaster Relief (Beta)"
             causeId={STORAGE_DISASTER_RELIEF_CAUSE_ID}
-            causeName="Tab for Democracy"
+            causeName="Tab for Disaster Relief"
             causeShortDesc="Open Tabs, Help support victims of natural disasters through World Central Kitchen and Direct Relief."
             imgSrc={disasterReliefImage}
           />
