@@ -6,6 +6,8 @@ import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import gtag from 'js/analytics/google-analytics'
+import switchToV4 from 'js/utils/switchToV4'
+import environment from 'js/relay-env'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -115,9 +117,17 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
         // Reload the entire page.
         case 'reload-page':
-          document.cookie =
-            'tabV4OptIn=enabled; expires=Thu, 18 Dec 2028 12:00:00 UTC'
-          window.location.reload()
+          // document.cookie =
+          //   'tabV4OptIn=enabled; expires=Thu, 18 Dec 2028 12:00:00 UTC'
+          // window.location.reload()
+
+          switchToV4({
+            relayEnvironment: environment,
+            userId: user.id,
+            causeId: 'w3ZvQrMnB',
+            redirect: '',
+          })
+
           break
 
         // Default do nothing
