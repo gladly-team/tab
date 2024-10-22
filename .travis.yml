@@ -104,7 +104,7 @@ env:
     # Web app
     - DEV_REACT_APP_WEBSITE_DOMAIN=dev-tab2017.gladly.io # user-visible domain, used in app JS
     - DEV_REACT_APP_WEBSITE_PROTOCOL=https
-    - DEV_REACT_APP_API_ENDPOINT=http://127.0.0.1:9000
+    - DEV_REACT_APP_API_ENDPOINT=https://dev-tab2017.gladly.io
     - DEV_REACT_APP_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
     - DEV_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
     - DEV_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
