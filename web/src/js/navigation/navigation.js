@@ -37,7 +37,9 @@ export const goTo = (path, paramsObj = {}, { keepURLParams = false } = {}) => {
     path === '/newtab/profile/donate/' ||
     path === '/newtab/profile/invite/' ||
     path === '/newtab/account/' ||
-    path === '/newtab/auth/'
+    path === '/newtab/auth/' ||
+    path === '/newtab/v5/login/' ||
+    path === '/newtab/v5/logout/'
   ) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
@@ -140,7 +142,7 @@ export const constructUrl = (
 export const dashboardURL = '/newtab/'
 
 // Auth routes
-export const loginURL = '/newtab/auth/'
+export const loginURL = '/v5/login'
 export const verifyEmailURL = '/newtab/auth/verify-email/'
 export const enterUsernameURL = '/newtab/auth/username/'
 export const authMessageURL = '/newtab/auth/welcome/'
