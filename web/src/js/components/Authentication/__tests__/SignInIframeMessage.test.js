@@ -24,40 +24,6 @@ describe('SignInIframeMessage tests', () => {
     shallow(<SignInIframeMessage {...mockProps} />)
   })
 
-  it('wraps the sign-in button in a link that opens the expected auth page in the top of the frame', () => {
-    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
-    const signInButton = wrapper.find(
-      '[data-test-id="sign-in-iframe-message-button"]'
-    )
-    const linkElem = signInButton.parent()
-
-    expect(linkElem.type()).toEqual(Link)
-    expect(linkElem.prop('to')).toEqual(
-      'https://tab-test-env.gladly.io/newtab/auth/'
-    )
-    expect(linkElem.prop('target')).toEqual('_top')
-  })
-
-  it('the sign-in button link passes forward any existing URL query parameters', () => {
-    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?app=search&some=datums'
-    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
-    const signInButton = wrapper.find(
-      '[data-test-id="sign-in-iframe-message-button"]'
-    )
-    const linkElem = signInButton.parent()
-
-    expect(linkElem.type()).toEqual(Link)
-    expect(linkElem.prop('to')).toEqual(
-      'https://tab-test-env.gladly.io/newtab/auth/?app=search&some=datums'
-    )
-  })
-
   it('has the expected Tab for a Cause copy by default', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default

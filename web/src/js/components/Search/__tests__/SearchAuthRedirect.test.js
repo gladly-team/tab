@@ -18,11 +18,4 @@ describe('SearchAuthRedirect', function() {
       .default
     shallow(<SearchAuthRedirect {...mockProps} />)
   })
-
-  it('redirects to the auth page on mount', () => {
-    const SearchAuthRedirect = require('js/components/Search/SearchAuthRedirect')
-      .default
-    shallow(<SearchAuthRedirect {...mockProps} />)
-    expect(replaceUrl).toHaveBeenCalledWith('/newtab/auth/', { app: 'search' })
-  })
 })

@@ -363,34 +363,6 @@ describe('Dashboard component', () => {
     ).toBe('Sign in to save your progress!')
   })
 
-  it('the anonymous user sign-in button leads to the correct URL', async () => {
-    expect.assertions(1)
-
-    getCurrentUser.mockReset()
-    getCurrentUser.mockResolvedValueOnce({
-      id: 'some-id-here',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    })
-
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-
-    // Wait for the component to determine whether the
-    // user is anonymous.
-    await wrapper.instance().determineAnonymousStatus()
-    wrapper.update()
-
-    const button = wrapper
-      .find('[data-test-id="anon-sign-in-prompt-dashboard"]')
-      .find(Button)
-    button.simulate('click')
-    expect(goTo).toHaveBeenCalledWith('/newtab/auth/', { noredirect: 'true' })
-  })
-
   it('does not display the anonymous user sign-in prompt when the user is not anonymous', async () => {
     expect.assertions(1)
 

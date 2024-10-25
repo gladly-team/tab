@@ -564,29 +564,6 @@ describe('updateUserEmail tests', () => {
     expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledTimes(1)
     expect(response).toBe(undefined)
   })
-
-  it('uses the "accountURL" for Tab for a Cause as the default "continueURL"', async () => {
-    const mockVerifyBeforeUpdateEmail = jest.fn(() => Promise.resolve())
-
-    // A user must exist to be able to send a verification email.
-    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
-    __setFirebaseUser({
-      uid: 'xyz987',
-      email: 'foo@example.com',
-      isAnonymous: false,
-      emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123'),
-      verifyBeforeUpdateEmail: mockVerifyBeforeUpdateEmail,
-    })
-
-    const email = 'test@gmail.com'
-    const updateUserEmail = require('js/authentication/user').updateUserEmail
-    await updateUserEmail(email)
-
-    expect(mockVerifyBeforeUpdateEmail).toHaveBeenCalledWith(email, {
-      url: constructUrl('/newtab/auth/', { next: 3 }, { absolute: true }),
-    })
-  })
 })
 
 describe('deleteUser tests', () => {

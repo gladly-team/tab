@@ -196,9 +196,5 @@ functions:
   # serverless.yml).
   newtabAppLambdaEdge:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
-  searchAppLambdaEdge:
-    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
-    memorySize: 128 # 128 is max allowed for CloudFront-triggered Lambda
-    timeout: 3 # 5s is max allowed for CloudFront-triggered Lambda
   homepage404LambdaEdge:
     handler: build/homepage-404-lambda-edge/homepage-404-lambda-edge.handler
