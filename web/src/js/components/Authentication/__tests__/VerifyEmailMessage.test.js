@@ -69,8 +69,7 @@ describe('VerifyEmailMessage tests', function() {
 
     setImmediate(() => {
       expect(sendVerificationEmail).toHaveBeenCalledWith({
-        continueURL:
-          'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+        continueURL: 'https://tab-test-env.gladly.io/v5/set-username/?app=tab',
       })
       done()
     })
@@ -92,8 +91,7 @@ describe('VerifyEmailMessage tests', function() {
 
     setImmediate(() => {
       expect(sendVerificationEmail).toHaveBeenCalledWith({
-        continueURL:
-          'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+        continueURL: 'https://tab-test-env.gladly.io/v5/set-username/?app=tab',
       })
       done()
     })
@@ -112,8 +110,7 @@ describe('VerifyEmailMessage tests', function() {
 
     setImmediate(() => {
       expect(sendVerificationEmail).toHaveBeenCalledWith({
-        continueURL:
-          'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+        continueURL: 'https://tab-test-env.gladly.io/v5/set-username/?app=tab',
       })
       done()
     })
@@ -133,7 +130,7 @@ describe('VerifyEmailMessage tests', function() {
     setImmediate(() => {
       expect(sendVerificationEmail).toHaveBeenCalledWith({
         continueURL:
-          'https://tab-test-env.gladly.io/newtab/auth/username/?app=search',
+          'https://tab-test-env.gladly.io/v5/set-username/?app=search',
       })
       done()
     })

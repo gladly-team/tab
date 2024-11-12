@@ -142,9 +142,9 @@ export const constructUrl = (
 export const dashboardURL = '/newtab/'
 
 // Auth routes
-export const loginURL = '/v5/login'
+export const loginURL = '/v5/login/'
 export const verifyEmailURL = '/newtab/auth/verify-email/'
-export const enterUsernameURL = '/newtab/auth/username/'
+export const enterUsernameURL = '/v5/set-username/'
 export const authMessageURL = '/newtab/auth/welcome/'
 export const missingEmailMessageURL = '/newtab/auth/missing-email/'
 
