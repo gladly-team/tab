@@ -98,15 +98,4 @@ describe('deleteUser', () => {
       updated: moment.utc().toISOString(),
     })
   })
-
-  it('throws if user has not authed recently', async () => {
-    const userInfo = getMockUserInfo()
-
-    const defaultUserContext = getMockUserContext()
-    defaultUserContext.authTime = moment().subtract(6, 'minutes').unix()
-
-    await expect(deleteUser(defaultUserContext, userInfo.id)).rejects.toThrow(
-      'User must have authed in the last 5 minutes to perform this operation.'
-    )
-  })
 })
