@@ -106,18 +106,7 @@ class Account extends React.Component {
     this.setState({ usernameUpdated: true })
   }
 
-  reauthIfNecessary() {
-    const { reauthed } = getUrlParameters()
-    if (!reauthed) {
-      replaceUrl(loginURL, {
-        next: 2,
-        reauth: 'true',
-      })
-    }
-  }
-
   openEmailDialog() {
-    //this.reauthIfNecessary()
     this.setState({ emailOpen: true, emailUpdated: false })
   }
 
@@ -129,7 +118,6 @@ class Account extends React.Component {
   }
 
   openDeleteAccountDialog() {
-    //this.reauthIfNecessary()
     this.setState({
       deleteAccountOpen: true,
     })

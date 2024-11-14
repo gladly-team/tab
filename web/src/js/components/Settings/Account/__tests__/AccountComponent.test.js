@@ -293,22 +293,6 @@ describe('Account component', () => {
     expect(state.usernameOpen).toEqual(true)
   })
 
-  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
-    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
-      .default
-    const userData = getMockUserData()
-    const wrapper = mount(<AccountComponent user={userData} />)
-    const buttons = wrapper.find(Button)
-
-    const emailButton = buttons.at(1)
-    emailButton.simulate('click')
-
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
-      next: 2,
-      reauth: 'true',
-    })
-  })
-
   it('does not redirect on clicking the check email form if there is reauthed parameter', () => {
     const AccountComponent = require('js/components/Settings/Account/AccountComponent')
       .default
@@ -350,23 +334,6 @@ describe('Account component', () => {
       .first()
 
     expect(dialog.text()).toEqual('Your email has been updated.')
-  })
-
-  it('redirects on clicking the check email form if there is no reauthed parameter', () => {
-    const AccountComponent = require('js/components/Settings/Account/AccountComponent')
-      .default
-    const userData = getMockUserData()
-    const wrapper = mount(<AccountComponent user={userData} />)
-
-    const accountItems = wrapper.find(AccountItem)
-    const deleteUserButton = accountItems.last().find(Button)
-
-    deleteUserButton.simulate('click')
-
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {
-      next: 2,
-      reauth: 'true',
-    })
   })
 
   it('does not redirect on clicking the delete user form if there is reauthed parameter', () => {
