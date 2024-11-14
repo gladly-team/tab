@@ -117,7 +117,7 @@ class Account extends React.Component {
   }
 
   openEmailDialog() {
-    this.reauthIfNecessary()
+    //this.reauthIfNecessary()
     this.setState({ emailOpen: true, emailUpdated: false })
   }
 
@@ -129,7 +129,7 @@ class Account extends React.Component {
   }
 
   openDeleteAccountDialog() {
-    this.reauthIfNecessary()
+    //this.reauthIfNecessary()
     this.setState({
       deleteAccountOpen: true,
     })
