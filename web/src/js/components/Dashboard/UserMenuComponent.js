@@ -37,6 +37,7 @@ import StarIcon from '@material-ui/icons/Star'
 import BarChart from '@material-ui/icons/BarChart'
 import VideoEngagement from 'js/components/Dashboard/VideoEngagementContainer'
 import { showVideoAds } from 'js/utils/feature-flags'
+import VideogameAsset from '@material-ui/icons/VideogameAsset'
 const Sparkle = lazy(() => import('react-sparkle'))
 
 const defaultTheme = createMuiTheme(theme)
@@ -92,6 +93,7 @@ class UserMenu extends React.Component {
       showSparklySearchIntroButton,
       showCampaignReopenButton,
     } = this.props
+    const userId = get(user, '__id', null)
     return (
       <MuiThemeProvider
         theme={{
@@ -329,6 +331,17 @@ class UserMenu extends React.Component {
               }}
             />
           </>
+
+          {userId && (
+            <Link to={`https://tab.gladly.io/v5/games?user_id=${userId}`}>
+              <VideogameAsset
+                style={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  marginRight: 16,
+                }}
+              />
+            </Link>
+          )}
 
           <Hearts
             app={app}
