@@ -32,7 +32,7 @@ This repo contains most backend services. See [gladly-team/tab-web](https://gith
 
 ### Deployment
 
-See [Deployment Overview](./DEPLOYMENT.md) for how deployment works
+See [Deployment Overview](./DEPLOYMENT.md) for how deployment works.
 
 ## Acknowledgements
 
