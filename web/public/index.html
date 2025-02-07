@@ -16,8 +16,8 @@
     -->
   <script>
     ; (function (w, d) {
-      // Check if the current pathname is '/newtab/' and show-ads=true is present
-      if (w.location.pathname === '/newtab/' && new URLSearchParams(w.location.search).get('show-ads') === 'true') {
+      // Check if the current pathname is '/newtab/'
+      if (w.location.pathname === '/newtab/') {
         w.adthrive = w.adthrive || {}
         w.adthrive.cmd = w.adthrive.cmd || []
         w.adthrive.plugin = 'adthrive-ads-manual'
@@ -35,7 +35,7 @@
         var n = d.getElementsByTagName('script')[0]
         n.parentNode.insertBefore(s, n)
       } else {
-        console.log('Ads not loaded: either not on newtab page or show-ads parameter is not true')
+        console.log('Ads not loaded: either not on newtab page')
       }
     })(window, document)
   </script>
