@@ -8,7 +8,7 @@ import { USER_REFERRAL_VC_REWARD } from '../constants'
 // * in the search-homepage repository
 const MONEY_RAISED = 1900000.0
 const MONEY_RAISED_UPDATE_TIME = moment('2025-03-11T21:00:00.000Z')
-const MONEY_RAISED_PER_DAY = 563.71
+const MONEY_RAISED_PER_DAY = 380.0
 
 /**
  * Get an estimate of how much we've raised, using a combination of
