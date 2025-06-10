@@ -76,9 +76,9 @@ const data = {
       about:
         '<div>Tab for Dogs turns your web browser into a force for good. With each tab opened, ad revenue supports Best Friends Animal Society in their mission to save shelter dogs across America.</div>\n\n',
       faq: "We're supporting Best Friends Animal Society to ensure the money raised will directly support their goals to save shelter dogs and bring the nation to no-kill.",
-      sendgridEmailTemplateId: 'd-dogs-template-placeholder', // Will need to be updated
+      sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     },
-    sendgridEmailTemplateId: 'd-dogs-template-placeholder', // Will need to be updated
+    sendgridEmailTemplateId: 'd-c925270aca954ff3b4c05f436cb52b54',
     facebookButtonTitle:
       "I joined Tab for Dogs, and now every tab I open helps save shelter dogs. Check it out - it's free!",
     twitterButtonTitle:
