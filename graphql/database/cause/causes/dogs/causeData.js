@@ -13,8 +13,8 @@ const data = {
   icon: 'dog',
   backgroundImageCategory: 'dogs',
   charityId: '6f0e2d9a-8b3c-4d1e-a5f7-9c8b7a6e5d4f',
-  individualImpactEnabled: true, // From the JSON data
-  impactType: 'individual', // Since group is false in the JSON
+  individualImpactEnabled: false, // From the JSON data
+  impactType: 'none', // Since group is false in the JSON
   impactVisits: 14, // Based on tabs_per_impact from JSON
   landingPagePath: '/dogs/',
   landingPagePhrase: 'This tab helps shelter dogs',
