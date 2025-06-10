@@ -5,6 +5,7 @@ import sgMail from '@sendgrid/mail'
 import xssFilters from 'xss-filters'
 import InvitedUsersModel from './InvitedUsersModel'
 import UserModel from '../users/UserModel'
+import logger from '../../utils/logger'
 import {
   ADMIN_MANAGEMENT,
   getPermissionsOverride,
@@ -92,7 +93,12 @@ export const verifyAndSendInvite = async ({
   try {
     await sgMail.send(msg)
   } catch (e) {
-    return { email: inviteEmail, error: 'email failed to send' }
+    logger.warn(`Error sending invite email to ${inviteEmail}: ${e.message}`, {
+      userId: inviterId,
+      inviteEmail,
+      inviterName,
+    })
+    return { email: inviteEmail, error: `email failed to send - ${e.message}` }
   }
   try {
     await InvitedUsersModel.create(userContext, {
