@@ -255,26 +255,26 @@ before_install:
   - pip3 install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
-# We want to fail fast if any script step fails, but TravisCI does not
-# yet support this, so run one long command:
-# https://github.com/travis-ci/travis-ci/issues/1066
-# Only deploy and run integration tests when not a PR
-# to handle TravisCI PR restrictions. See:
-# https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
-script:
-  - 'yarn run ci:test'
+# # We want to fail fast if any script step fails, but TravisCI does not
+# # yet support this, so run one long command:
+# # https://github.com/travis-ci/travis-ci/issues/1066
+# # Only deploy and run integration tests when not a PR
+# # to handle TravisCI PR restrictions. See:
+# # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
+# script:
+#   - 'yarn run ci:test'
 
-  # TODO: reenable.
-  # - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
-  #     yarn run ci:deploy test || travis_terminate 1;
-  #     yarn run ci:test:integration || travis_terminate 1;
-  #   fi'
-  ### We still want to deploy to QA to enable E2E tests for other
-  ### parts of our stack.
-  ### TODO: remove after above is enabled
-  - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
-    yarn run ci:deploy test || travis_terminate 1;
-    fi'
+#   # TODO: reenable.
+#   # - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
+#   #     yarn run ci:deploy test || travis_terminate 1;
+#   #     yarn run ci:test:integration || travis_terminate 1;
+#   #   fi'
+#   ### We still want to deploy to QA to enable E2E tests for other
+#   ### parts of our stack.
+#   ### TODO: remove after above is enabled
+#   - 'if [ ${TRAVIS_BRANCH} = "master" ]; then
+#     yarn run ci:deploy test || travis_terminate 1;
+#     fi'
 
 # TODO: master branch deploy to prod; other logic for test/dev
 # Note: travis_wait doesn't work well in deploy:

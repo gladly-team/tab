@@ -14,6 +14,7 @@ import dataEndingPoverty from './causes/endingPoverty/causeData'
 import dataGamesForLove from './causes/gamesForLove/causeData'
 import dataBoysAndGirlsClub from './causes/boysAndGirlsClub/causeData'
 import dataDisasterRelief from './causes/disasterRelief/causeData'
+import dataDogs from './causes/dogs/causeData'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import getFeature from '../experiments/getFeature'
 import {
@@ -23,6 +24,7 @@ import {
 
 const causes = [
   new CauseModel(dataCats),
+  new CauseModel(dataDogs),
   new CauseModel(dataTeamseas),
   new CauseModel(dataBlackEquity),
   new CauseModel(dataTrees),

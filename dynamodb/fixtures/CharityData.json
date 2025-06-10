@@ -674,5 +674,20 @@
     "updated": "2024-08-01T19:00:00.000Z",
     "website": "https://www.directrelief.org",
     "longformDescription": ""
+   },
+   {
+    "id": "d3f7b1e2-4c8a-45e9-b6d2-8f9c1a7e0b3d",
+    "category": "Best Friends Animal Society",
+    "created": "2025-06-09T19:00:00.000Z",
+    "description": "Best Friends Animal Society is a leading animal welfare organization working to save the lives of dogs and cats in shelters across America.",
+    "image": "best-friends.jpg",
+    "impact": "Your tabs help provide food, medical care, and shelter for dogs waiting to find their forever homes.",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "best-friends.svg",
+    "name": "Best Friends Animal Society",
+    "updated": "2024-01-06T19:00:00.000Z",
+    "website": "https://bestfriends.org/",
+    "longformDescription": "**Tab for Dogs** supports [Best Friends Animal Society](https://bestfriends.org/), a leading animal welfare organization working to save the lives of dogs and cats in shelters across America. Best Friends runs lifesaving programs in partnership with more than 3,300 animal shelters and rescue groups across the country. Together, we are working to Save Them All® and bring the entire nation to no-kill by 2025. Every tab you open helps provide food, medical care, and shelter for dogs waiting to find their forever homes."
    }
 ]

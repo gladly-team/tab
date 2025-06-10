@@ -7,6 +7,7 @@ import dataTrees from '../cause/causes/trees/causeData'
 import dataUkraine from '../cause/causes/ukraine/causeData'
 import dataCats from '../cause/causes/cats/causeData'
 import dataEndingPoverty from '../cause/causes/endingPoverty/causeData'
+import dataDogs from '../cause/causes/dogs/causeData'
 
 import { getImpactMetricById } from './impactMetricRepository'
 
@@ -50,6 +51,10 @@ const getNextImpactMetricForCause = (causeId) => {
 
   if (causeId === dataEndingPoverty.id) {
     return getImpactMetricById('V9nF1X2ML')
+  }
+
+  if (causeId === dataDogs.id) {
+    return getImpactMetricById('Z4pLqjWn9')
   }
 
   throw new Error('No Impact Metric can be selected for this causeId')

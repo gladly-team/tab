@@ -182,6 +182,20 @@ const data = [
     impactCountPerMetric: 1,
     timeboxed: true,
   },
+  {
+    id: 'Z4pLqjWn9',
+    charityId: 'd3f7b1e2-4c8a-45e9-b6d2-8f9c1a7e0b3d', // Best Friends Animal Society
+    dollarAmount: 20e6, // $20
+    impactTitle:
+      'Provide care for {{count}} shelter dog{{#if multiple}}s{{/if}}',
+    metricTitle: 'Care for {{count}} shelter dog',
+    description:
+      'Your tabs help provide food, medical care, and shelter for dogs waiting to find their forever homes. Every contribution helps save lives and brings us closer to a no-kill nation.',
+    whyValuableDescription:
+      'Your tabs help provide food, medical care, and shelter for dogs waiting to find their forever homes. Every contribution helps save lives and brings us closer to a no-kill nation.',
+    active: false,
+    impactCountPerMetric: 1,
+  },
 ]
 
 export default data

@@ -20,6 +20,7 @@ import giveDirectlyImage from 'js/assets/cashHand.png'
 import democracyImage from 'js/assets/democracy.png'
 import disasterReliefImage from 'js/assets/disasterRelief.png'
 import {
+  STORAGE_DOGS_CAUSE_ID,
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
   STORAGE_BLACK_EQUITY_CAUSE_ID,
@@ -143,6 +144,14 @@ class ProfileDonateHearts extends React.Component {
             causeName="Tab for Cats"
             causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
             imgSrc={catImage}
+          />
+          <SwitchToV4
+            user={user}
+            title="Help Shelter Dogs (Beta)"
+            causeId={STORAGE_DOGS_CAUSE_ID}
+            causeName="Tab for Dogs"
+            causeShortDesc="Turn your tabs into helping shelter dogs get adopted!"
+            imgSrc={dogImage}
           />
           <SwitchToV4
             user={user}

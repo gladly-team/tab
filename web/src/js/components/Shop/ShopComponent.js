@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_REDIRECT_URI } from 'js/constants'
 import {
+  STORAGE_DOGS_CAUSE_ID,
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
   STORAGE_BLACK_EQUITY_CAUSE_ID,
@@ -144,6 +145,16 @@ const ShopComponent = ({ user, classes }) => {
           causeName="Shop for Cats"
           causeShortDesc="Turn your tabs into helping shelter cats get adopted!"
           imgSrc={catImage}
+        />
+        <SwitchToV4
+          user={user}
+          prefix=""
+          redirect={window.location.href}
+          title="Help Shelter Dogs (Beta)"
+          causeId={STORAGE_DOGS_CAUSE_ID}
+          causeName="Shop for Dogs"
+          causeShortDesc="Turn your tabs into helping shelter dogs get adopted!"
+          imgSrc={dogImage}
         />
         <SwitchToV4
           user={user}
