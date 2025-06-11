@@ -3,10 +3,11 @@
 // We have a little templating "engine" that replaces placeholders.
 /* eslint no-template-curly-in-string: 0 */
 
+import about from './about.md'
+
 const data = {
   id: 'FtiPvpU1p',
-  about:
-    '### About Tab for Dogs\n\n**Tab for Dogs** supports [Best Friends Animal Society](https://bestfriends.org/), a leading animal welfare organization working to save the lives of dogs and cats in shelters across America. Best Friends runs lifesaving programs in partnership with more than 3,300 animal shelters and rescue groups across the country. Together, we are working to Save Them All® and bring the entire nation to no-kill by 2025. Every tab you open helps provide food, medical care, and shelter for dogs waiting to find their forever homes.',
+  about,
   name: 'Dogs',
   nameForShop: 'Shelter Dogs',
   isAvailableToSelect: true,
