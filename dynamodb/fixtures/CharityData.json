@@ -689,5 +689,20 @@
     "updated": "2024-01-06T19:00:00.000Z",
     "website": "https://bestfriends.org/",
     "longformDescription": "**Tab for Dogs** supports [Best Friends Animal Society](https://bestfriends.org/), a leading animal welfare organization working to save the lives of dogs and cats in shelters across America. Best Friends runs lifesaving programs in partnership with more than 3,300 animal shelters and rescue groups across the country. Together, we are working to Save Them All® and bring the entire nation to no-kill by 2025. Every tab you open helps provide food, medical care, and shelter for dogs waiting to find their forever homes."
+   },
+   {
+    "id": "e4f8c2d5-5b9a-46f8-b7e3-9d2c7b6a1e4f",
+    "category": "Animal Welfare",
+    "created": "2025-03-01T16:00:00.000Z",
+    "description": "The Humane League is a global nonprofit working to end the abuse of animals raised for food.",
+    "image": "humane-league.jpg",
+    "impact": "Your tabs help drive systemic change for billions of chickens, pigs, and cows trapped on factory farms.",
+    "inactive": false,
+    "isPermanentPartner": false,
+    "logo": "humane-league.svg",
+    "name": "The Humane League",
+    "updated": "2025-03-01T16:00:00.000Z",
+    "website": "https://thehumaneleague.org/",
+    "longformDescription": "**The Humane League (THL)** is a global nonprofit working to end the abuse of animals raised for food. By leading high-impact corporate campaigns, defending animal protection laws, and building powerful coalitions like the Open Wing Alliance and Animal Policy Alliance, THL drives systemic change for billions of chickens, pigs, and cows. Their research-driven, results-oriented approach has secured over 3,000 corporate commitments to end extreme cruelty and transformed industry standards worldwide. Recognized as a top charity for effectiveness, THL's mission is to build a future where compassion—not cruelty—guides our food system."
    }
 ]
