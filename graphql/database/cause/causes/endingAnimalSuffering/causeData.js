@@ -16,7 +16,7 @@ const data = {
   name: 'Ending Animal Suffering',
   nameForShop: 'Ending Animal Suffering',
   isAvailableToSelect: true,
-  icon: 'paw',
+  icon: 'cow',
   backgroundImageCategory: 'animals',
   charityId: 'e4f8c2d5-5b9a-46f8-b7e3-9d2c7b6a1e4f',
   individualImpactEnabled: false, // Deprecated. Use "impactType".
