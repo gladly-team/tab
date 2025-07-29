@@ -15,6 +15,7 @@ import dataGamesForLove from './causes/gamesForLove/causeData'
 import dataBoysAndGirlsClub from './causes/boysAndGirlsClub/causeData'
 import dataDisasterRelief from './causes/disasterRelief/causeData'
 import dataDogs from './causes/dogs/causeData'
+import dataEndingAnimalSuffering from './causes/endingAnimalSuffering/causeData'
 import { CAUSE_IMPACT_TYPES } from '../constants'
 import getFeature from '../experiments/getFeature'
 import {
@@ -38,6 +39,7 @@ const causes = [
   new CauseModel(dataBoysAndGirlsClub),
   new CauseModel(dataDemocracy),
   new CauseModel(dataDisasterRelief),
+  new CauseModel(dataEndingAnimalSuffering),
 ]
 
 // Use this method to dynamically overwrite specific fields in Cause Models.
