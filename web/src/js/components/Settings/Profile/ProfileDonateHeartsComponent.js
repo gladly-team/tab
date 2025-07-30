@@ -20,6 +20,7 @@ import lgbtqImage from 'js/assets/lgbtq.png'
 import giveDirectlyImage from 'js/assets/cashHand.png'
 import democracyImage from 'js/assets/democracy.png'
 import disasterReliefImage from 'js/assets/disasterRelief.png'
+import animalShelterImage from 'js/assets/animalShelter.png'
 import {
   STORAGE_DOGS_CAUSE_ID,
   STORAGE_CATS_CAUSE_ID,
@@ -34,6 +35,7 @@ import {
   STORAGE_END_POVERTY_CAUSE_ID,
   STORAGE_DEMOCRACY_CAUSE_ID,
   STORAGE_DISASTER_RELIEF_CAUSE_ID,
+  STORAGE_ANIMAL_CAUSE_ID,
 } from 'js/constants'
 
 const spacingPx = 6
@@ -201,6 +203,14 @@ class ProfileDonateHearts extends React.Component {
             causeName="Tab for Disaster Relief"
             causeShortDesc="Open Tabs, Help support victims of natural disasters through World Central Kitchen and Direct Relief."
             imgSrc={disasterReliefImage}
+          />
+          <SwitchToV4
+            user={user}
+            title="End Animal Suffering (Beta)"
+            causeId={STORAGE_ANIMAL_CAUSE_ID}
+            causeName="Tab for Animals"
+            causeShortDesc="Open Tabs, Help end the abuse of animals on factory farms."
+            imgSrc={animalShelterImage}
           />
         </span>
       </div>
