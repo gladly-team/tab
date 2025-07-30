@@ -90,6 +90,7 @@ export const STORAGE_END_POVERTY_CAUSE_ID = 'p7HGxRbQZ'
 export const STORAGE_DEMOCRACY_CAUSE_ID = 'n7XpTlKgY'
 export const STORAGE_DISASTER_RELIEF_CAUSE_ID = 'w3ZvQrMnB'
 export const STORAGE_DOGS_CAUSE_ID = 'FtiPvpU1p'
+export const STORAGE_ANIMAL_CAUSE_ID = 'a5f8d2c9e'
 export const STORAGE_REFERRAL_DATA_MISSION_ID = 'tab.referralData.missionId'
 // tab.experiments: values related to split-testing features
 // We may assign other values to localStorage with the tab.experiments.*
