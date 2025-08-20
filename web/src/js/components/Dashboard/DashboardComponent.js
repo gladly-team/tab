@@ -1051,49 +1051,49 @@ class Dashboard extends React.Component {
               ) : null}
               */}
               {// @experiment-referral-notification
-              isInReferralNotificationExperimentalGroup &&
-              !(
-                user.experimentActions.referralNotification === 'CLICK' ||
-                user.experimentActions.referralNotification === 'DISMISS'
-              ) ? (
-                <Notification
-                  data-test-id={'experiment-referral-notification'}
-                  title={referralNotificationTitle}
-                  message={referralNotificationBody}
-                  buttonText={'Tell a friend'}
-                  onClick={async () => {
-                    // Log the click.
-                    await LogUserExperimentActionsMutation({
-                      userId: user.id,
-                      experimentActions: {
-                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'CLICK',
-                      },
-                    })
-                    this.setState({
-                      referralNotificationExperimentGroup: false,
-                    })
+                isInReferralNotificationExperimentalGroup &&
+                  !(
+                    user.experimentActions.referralNotification === 'CLICK' ||
+                    user.experimentActions.referralNotification === 'DISMISS'
+                  ) ? (
+                    <Notification
+                      data-test-id={'experiment-referral-notification'}
+                      title={referralNotificationTitle}
+                      message={referralNotificationBody}
+                      buttonText={'Tell a friend'}
+                      onClick={async () => {
+                        // Log the click.
+                        await LogUserExperimentActionsMutation({
+                          userId: user.id,
+                          experimentActions: {
+                            [EXPERIMENT_REFERRAL_NOTIFICATION]: 'CLICK',
+                          },
+                        })
+                        this.setState({
+                          referralNotificationExperimentGroup: false,
+                        })
 
-                    // Open the "invite friends" page.
-                    goTo(inviteFriendsURL)
-                  }}
-                  onDismiss={async () => {
-                    // Log the dismissal.
-                    await LogUserExperimentActionsMutation({
-                      userId: user.id,
-                      experimentActions: {
-                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'DISMISS',
-                      },
-                    })
-                    this.setState({
-                      referralNotificationExperimentGroup: false,
-                    })
-                  }}
-                  style={{
-                    width: 380,
-                    marginTop: 4,
-                  }}
-                />
-              ) : null}
+                        // Open the "invite friends" page.
+                        goTo(inviteFriendsURL)
+                      }}
+                      onDismiss={async () => {
+                        // Log the dismissal.
+                        await LogUserExperimentActionsMutation({
+                          userId: user.id,
+                          experimentActions: {
+                            [EXPERIMENT_REFERRAL_NOTIFICATION]: 'DISMISS',
+                          },
+                        })
+                        this.setState({
+                          referralNotificationExperimentGroup: false,
+                        })
+                      }}
+                      style={{
+                        width: 380,
+                        marginTop: 4,
+                      }}
+                    />
+                  ) : null}
               {showSearchIntro ? (
                 <Notification
                   data-test-id={'search-intro-notif'}
@@ -1119,8 +1119,8 @@ class Dashboard extends React.Component {
                     browser === CHROME_BROWSER
                       ? searchChromeExtensionPage
                       : browser === FIREFOX_BROWSER
-                      ? searchFirefoxExtensionPage
-                      : searchChromeExtensionPage
+                        ? searchFirefoxExtensionPage
+                        : searchChromeExtensionPage
                   }
                   onClick={() => {
                     // Hide the message because we don't want the user to
@@ -1233,6 +1233,13 @@ class Dashboard extends React.Component {
               overflow: 'visible',
             }}
           >
+
+            <div id="bsa-zone_1754918740585-0_123456"></div>
+
+
+            <div id="bsa-zone_1755538933410-5_123456"></div>
+
+
             <div
               id="raptive-content-ad-1"
               style={{

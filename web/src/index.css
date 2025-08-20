@@ -159,3 +159,45 @@ body {
 a.active {
   font-weight: bold;
 }
+
+@media only screen and (min-width: 0px) and (min-height: 0px) {
+	div[id^="bsa-zone_1754918740585-0_123456"] {
+		min-width: 300px;
+		min-height: 50px;
+	}
+}
+
+@media only screen and (min-width: 880px) and (min-height: 0px) {
+	div[id^="bsa-zone_1754918740585-0_123456"] {
+		min-width: 250px;
+		min-height: 250px;
+	}
+}
+
+@media only screen and (min-width: 0px) and (min-height: 0px) {
+	div[id^="bsa-zone_1755538933410-5_123456"] {
+		min-width: 300px;
+		min-height: 50px;
+	}
+}
+
+@media only screen and (min-width: 880px) and (min-height: 0px) {
+	div[id^="bsa-zone_1755538933410-5_123456"] {
+		min-width: 250px;
+		min-height: 250px;
+	}
+}
+
+@media only screen and (min-width: 0px) and (min-height: 0px) {
+	div[id^="bsa-zone_1754918586325-1_123456"] {
+		min-width: 300px;
+		min-height: 50px;
+	}
+}
+
+@media only screen and (min-width: 880px) and (min-height: 0px) {
+	div[id^="bsa-zone_1754918586325-1_123456"] {
+		min-width: 468px;
+		min-height: 60px;
+	}
+}
