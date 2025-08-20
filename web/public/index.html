@@ -17,6 +17,25 @@
     <script>
         ;
         (function(w, d) {
+            // Check for URL parameter to set ad provider preference
+            function checkAndSetAdProviderFromURL() {
+                var BUCKET_KEY = 'tab_ad_provider_bucket'
+                
+                try {
+                    // Parse URL parameters
+                    var urlParams = new URLSearchParams(w.location.search)
+                    var adsParam = urlParams.get('ads')
+                    
+                    // If ads parameter is present and valid, update localStorage
+                    if (adsParam === 'buysellads' || adsParam === 'raptive') {
+                        localStorage.setItem(BUCKET_KEY, adsParam)
+                        console.log('[Ad Provider] Set via URL parameter: ' + adsParam)
+                    }
+                } catch (e) {
+                    console.error('Failed to process URL parameter:', e)
+                }
+            }
+            
             // A/B Test: Determine which ad provider to use
             function getAdProviderBucket() {
                 var BUCKET_KEY = 'tab_ad_provider_bucket'
@@ -29,9 +48,10 @@
                 }
 
                 // TESTING MODE: Always default to 'raptive' unless manually set
-                // To test Buy/Sell Ads, run in console:
+                // To test Buy/Sell Ads via URL: ?ads=buysellads
+                // To test Raptive via URL: ?ads=raptive
+                // Or set via console:
                 // localStorage.setItem('tab_ad_provider_bucket', 'buysellads')
-                // To switch back to Raptive:
                 // localStorage.setItem('tab_ad_provider_bucket', 'raptive')
                 // Or clear: localStorage.removeItem('tab_ad_provider_bucket')
                 if (!bucket) {
@@ -60,9 +80,12 @@
 
             // Check if the current pathname is '/newtab/'
             if (w.location.pathname === '/newtab/') {
+                // Check URL parameters first to see if we need to update the ad provider
+                checkAndSetAdProviderFromURL()
+                
                 var adBucket = getAdProviderBucket()
                 console.log('[Ad Provider] Current bucket:', adBucket, 
-                    '| Testing mode - Use localStorage.setItem("tab_ad_provider_bucket", "buysellads") to test Buy/Sell Ads')
+                    '| Testing mode - Use ?ads=buysellads or ?ads=raptive in URL to switch')
 
                 if (adBucket === 'raptive') {
                     // Load Raptive Ads (90% of users)
