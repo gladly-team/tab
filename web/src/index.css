@@ -164,6 +164,7 @@ a.active {
 	div[id^="bsa-zone_1754918740585-0_123456"] {
 		min-width: 300px;
 		min-height: 50px;
+    margin-bottom: 30px;
 	}
 }
 
@@ -171,6 +172,7 @@ a.active {
 	div[id^="bsa-zone_1754918740585-0_123456"] {
 		min-width: 250px;
 		min-height: 250px;
+    margin-bottom: 30px;
 	}
 }
 
@@ -178,6 +180,7 @@ a.active {
 	div[id^="bsa-zone_1755538933410-5_123456"] {
 		min-width: 300px;
 		min-height: 50px;
+    margin-bottom: 130px;
 	}
 }
 
@@ -185,6 +188,7 @@ a.active {
 	div[id^="bsa-zone_1755538933410-5_123456"] {
 		min-width: 250px;
 		min-height: 250px;
+    margin-bottom: 150px;
 	}
 }
 
