@@ -28,7 +28,18 @@
                     console.error('Failed to access localStorage:', e)
                 }
 
+                // TESTING MODE: Always default to 'raptive' unless manually set
+                // To test Buy/Sell Ads, run in console:
+                // localStorage.setItem('tab_ad_provider_bucket', 'buysellads')
+                // To switch back to Raptive:
+                // localStorage.setItem('tab_ad_provider_bucket', 'raptive')
+                // Or clear: localStorage.removeItem('tab_ad_provider_bucket')
                 if (!bucket) {
+                    bucket = 'raptive'  // Always default to Raptive for testing
+                    
+                    // PRODUCTION CODE (commented out for testing):
+                    // Uncomment the lines below to enable 90/10 A/B test
+                    /*
                     // Generate random bucket (0-99)
                     // 0-9 (10%) = buysellads, 10-99 (90%) = raptive
                     var randomValue = Math.floor(Math.random() * 100)
@@ -41,6 +52,7 @@
                         // Default to raptive if localStorage fails
                         bucket = 'raptive'
                     }
+                    */
                 }
 
                 return bucket
@@ -49,7 +61,8 @@
             // Check if the current pathname is '/newtab/'
             if (w.location.pathname === '/newtab/') {
                 var adBucket = getAdProviderBucket()
-                console.log('Ad provider bucket:', adBucket)
+                console.log('[Ad Provider] Current bucket:', adBucket, 
+                    '| Testing mode - Use localStorage.setItem("tab_ad_provider_bucket", "buysellads") to test Buy/Sell Ads')
 
                 if (adBucket === 'raptive') {
                     // Load Raptive Ads (90% of users)
