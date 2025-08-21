@@ -216,6 +216,44 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
     this.updateState()
+    
+    // Initialize optimize for BuySellAds zones
+    this.initializeOptimize()
+  }
+  
+  /**
+   * Initialize the optimize script for BuySellAds ad zones
+   * This pushes the zone IDs to the optimize queue for ad optimization
+   * Only runs when BuySellAds is the active ad provider
+   */
+  initializeOptimize() {
+    // Check if we're using BuySellAds as the ad provider
+    const BUCKET_KEY = 'tab_ad_provider_bucket'
+    let adProviderBucket = null
+    
+    try {
+      adProviderBucket = localStorage.getItem(BUCKET_KEY)
+    } catch (e) {
+      console.error('Failed to access localStorage for ad provider check:', e)
+      return
+    }
+    
+    // Only initialize optimize if we're using BuySellAds
+    if (adProviderBucket !== 'buysellads') {
+      console.log('[Ad Provider] Not using BuySellAds, skipping optimize initialization')
+      return
+    }
+    
+    // Ensure window.optimize exists
+    window.optimize = window.optimize || { queue: [] }
+    
+    // Push both BSA zones to the optimize queue
+    window.optimize.queue.push(function() {
+      window.optimize.push('bsa-zone_1754918740585-0_123456')
+      window.optimize.push('bsa-zone_1755538933410-5_123456')
+    })
+    
+    console.log('[Ad Provider] Initialized optimize for BuySellAds zones')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -1235,7 +1273,6 @@ class Dashboard extends React.Component {
           >
 
             <div id="bsa-zone_1754918740585-0_123456"></div>
-
 
             <div id="bsa-zone_1755538933410-5_123456"></div>
 
