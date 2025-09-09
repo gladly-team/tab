@@ -75,6 +75,24 @@ export const replaceUrl = (
   const queryString = keepURLParams
     ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
     : qs.stringify(paramsObj)
+
+  // For the purpose of loading ads and ensuring proper auth flow,
+  // we always do a full browser redirect for specific routes.
+  if (
+    path === '/newtab/' ||
+    path === '/newtab/settings/widgets/' ||
+    path === '/newtab/settings/background/' ||
+    path === '/newtab/profile/stats/' ||
+    path === '/newtab/profile/donate/' ||
+    path === '/newtab/profile/invite/' ||
+    path === '/newtab/account/' ||
+    path === '/newtab/auth/'
+  ) {
+    let externalURL = queryString ? `${path}?${queryString}` : path
+    externalRedirect(externalURL)
+    return
+  }
+
   if (isURLForDifferentApp(path)) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
