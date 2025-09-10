@@ -112,19 +112,22 @@ const withUser = (options = {}) => WrappedComponent => {
           this.setState({
             userCreationInProgress: true,
           })
-          try {
-            this.userCreatePromise = makePromiseCancelable(
-              createAnonymousUserIfPossible()
-            )
-            authUser = await this.userCreatePromise.promise
-          } catch (e) {
-            // If the component already unmounted, don't do anything with
-            // the returned data.
-            if (e && e.isCanceled) {
-              return
-            }
-            logger.error(e)
-          }
+          //
+          // 9/10/25 disable because we are moving to v5 auth ~Spicer
+          //
+          // try {
+          //   this.userCreatePromise = makePromiseCancelable(
+          //     createAnonymousUserIfPossible()
+          //   )
+          //   authUser = await this.userCreatePromise.promise
+          // } catch (e) {
+          //   // If the component already unmounted, don't do anything with
+          //   // the returned data.
+          //   if (e && e.isCanceled) {
+          //     return
+          //   }
+          //   logger.error(e)
+          // }
 
           // This is an antipattern, and canceling our promises on unmount
           // should handle the problem. However, in practice, the component
