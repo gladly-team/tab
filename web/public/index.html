@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta name="theme-color" content="#000000" />
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -15,102 +17,109 @@
       Ad Provider A/B Test: Raptive (90%) vs Buy/Sell Ads (10%)
     -->
     <script>
-        ;
-        (function(w, d) {
-            // Check for URL parameter to set ad provider preference
-            function checkAndSetAdProviderFromURL() {
-                var BUCKET_KEY = 'tab_ad_provider_bucket'
-                
-                try {
-                    // Parse URL parameters
-                    var urlParams = new URLSearchParams(w.location.search)
-                    var adsParam = urlParams.get('ads')
-                    
-                    // If ads parameter is present and valid, update localStorage
-                    if (adsParam === 'buysellads' || adsParam === 'raptive') {
-                        localStorage.setItem(BUCKET_KEY, adsParam)
-                        console.log('[Ad Provider] Set via URL parameter: ' + adsParam)
-                    }
-                } catch (e) {
-                    console.error('Failed to process URL parameter:', e)
-                }
+      ;(function(w, d) {
+        // Check for URL parameter to set ad provider preference
+        function checkAndSetAdProviderFromURL() {
+          var BUCKET_KEY = 'tab_ad_provider_bucket_v2'
+
+          try {
+            // Parse URL parameters
+            var urlParams = new URLSearchParams(w.location.search)
+            var adsParam = urlParams.get('ads')
+
+            // If ads parameter is present and valid, update localStorage
+            if (adsParam === 'buysellads' || adsParam === 'raptive') {
+              localStorage.setItem(BUCKET_KEY, adsParam)
+              console.log('[Ad Provider] Set via URL parameter: ' + adsParam)
             }
-            
-            // A/B Test: Determine which ad provider to use
-            function getAdProviderBucket() {
-                var BUCKET_KEY = 'tab_ad_provider_bucket'
-                var bucket = null
+          } catch (e) {
+            console.error('Failed to process URL parameter:', e)
+          }
+        }
 
-                try {
-                    bucket = localStorage.getItem(BUCKET_KEY)
-                } catch (e) {
-                    console.error('Failed to access localStorage:', e)
-                }
+        // A/B Test: Determine which ad provider to use
+        function getAdProviderBucket() {
+          var BUCKET_KEY = 'tab_ad_provider_bucket_v2'
+          var bucket = null
 
-                // To test Buy/Sell Ads via URL: ?ads=buysellads
-                // To test Raptive via URL: ?ads=raptive
-                // Or set via console:
-                // localStorage.setItem('tab_ad_provider_bucket', 'buysellads')
-                // localStorage.setItem('tab_ad_provider_bucket', 'raptive')
-                // Or clear: localStorage.removeItem('tab_ad_provider_bucket')
-                if (!bucket) {
-                    // Generate random bucket (0-99)
-                    // 0-9 (10%) = buysellads, 10-99 (90%) = raptive
-                    var randomValue = Math.floor(Math.random() * 100)
-                    bucket = randomValue < 10 ? 'buysellads' : 'raptive'
+          try {
+            bucket = localStorage.getItem(BUCKET_KEY)
+          } catch (e) {
+            console.error('Failed to access localStorage:', e)
+          }
 
-                    try {
-                        localStorage.setItem(BUCKET_KEY, bucket)
-                    } catch (e) {
-                        console.error('Failed to save to localStorage:', e)
-                        // Default to raptive if localStorage fails
-                        bucket = 'raptive'
-                    }
-                }
+          // To test Buy/Sell Ads via URL: ?ads=buysellads
+          // To test Raptive via URL: ?ads=raptive
+          // Or set via console:
+          // localStorage.setItem('tab_ad_provider_bucket', 'buysellads')
+          // localStorage.setItem('tab_ad_provider_bucket', 'raptive')
+          // Or clear: localStorage.removeItem('tab_ad_provider_bucket')
+          if (!bucket) {
+            // Generate random bucket (0-99)
+            // 0-49 (50%) = buysellads, 50-99 (50%) = raptive
+            var randomValue = Math.floor(Math.random() * 100)
+            bucket = randomValue < 50 ? 'buysellads' : 'raptive'
 
-                return bucket
+            try {
+              localStorage.setItem(BUCKET_KEY, bucket)
+            } catch (e) {
+              console.error('Failed to save to localStorage:', e)
+              // Default to raptive if localStorage fails
+              bucket = 'raptive'
             }
+          }
 
-            // Check if the current pathname is '/newtab/'
-            if (w.location.pathname === '/newtab/') {
-                // Check URL parameters first to see if we need to update the ad provider
-                checkAndSetAdProviderFromURL()
-                
-                var adBucket = getAdProviderBucket()
-                console.log('[Ad Provider] Current bucket:', adBucket, 
-                    '| Testing mode - Use ?ads=buysellads or ?ads=raptive in URL to switch')
+          return bucket
+        }
 
-                if (adBucket === 'raptive') {
-                    // Load Raptive Ads (90% of users)
-                    w.adthrive = w.adthrive || {}
-                    w.adthrive.cmd = w.adthrive.cmd || []
-                    w.adthrive.plugin = 'adthrive-ads-manual'
-                    w.adthrive.host = 'ads.adthrive.com'
-                    var s = d.createElement('script')
-                    s.async = true
-                    s.referrerpolicy = 'no-referrer-when-downgrade'
-                    s.src =
-                        'https://' +
-                        w.adthrive.host +
-                        '/sites/655cd66352dfc71af0778a48/ads.min.js?referrer=' +
-                        w.encodeURIComponent(w.location.href) +
-                        '&cb=' +
-                        (Math.floor(Math.random() * 100) + 1)
-                    var n = d.getElementsByTagName('script')[0]
-                    n.parentNode.insertBefore(s, n)
-                } else if (adBucket === 'buysellads') {
-                  (function(){
-                    var bsa_optimize=document.createElement('script');
-                    bsa_optimize.type='text/javascript';
-                    bsa_optimize.async=true;
-                    bsa_optimize.src='https://cdn4.buysellads.net/pub/gladly.js?'+(new Date()-new Date()%600000);
-                    (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
-                  })();
-              }
-            } else {
-                console.log('Ads not loaded: not on newtab page')
-            }
-        })(window, document)
+        // Check if the current pathname is '/newtab/'
+        if (w.location.pathname === '/newtab/') {
+          // Check URL parameters first to see if we need to update the ad provider
+          checkAndSetAdProviderFromURL()
+
+          var adBucket = getAdProviderBucket()
+          console.log(
+            '[Ad Provider] Current bucket:',
+            adBucket,
+            '| Testing mode - Use ?ads=buysellads or ?ads=raptive in URL to switch'
+          )
+
+          if (adBucket === 'raptive') {
+            // Load Raptive Ads (90% of users)
+            w.adthrive = w.adthrive || {}
+            w.adthrive.cmd = w.adthrive.cmd || []
+            w.adthrive.plugin = 'adthrive-ads-manual'
+            w.adthrive.host = 'ads.adthrive.com'
+            var s = d.createElement('script')
+            s.async = true
+            s.referrerpolicy = 'no-referrer-when-downgrade'
+            s.src =
+              'https://' +
+              w.adthrive.host +
+              '/sites/655cd66352dfc71af0778a48/ads.min.js?referrer=' +
+              w.encodeURIComponent(w.location.href) +
+              '&cb=' +
+              (Math.floor(Math.random() * 100) + 1)
+            var n = d.getElementsByTagName('script')[0]
+            n.parentNode.insertBefore(s, n)
+          } else if (adBucket === 'buysellads') {
+            ;(function() {
+              var bsa_optimize = document.createElement('script')
+              bsa_optimize.type = 'text/javascript'
+              bsa_optimize.async = true
+              bsa_optimize.src =
+                'https://cdn4.buysellads.net/pub/gladly.js?' +
+                (new Date() - (new Date() % 600000))
+              ;(
+                document.getElementsByTagName('head')[0] ||
+                document.getElementsByTagName('body')[0]
+              ).appendChild(bsa_optimize)
+            })()
+          }
+        } else {
+          console.log('Ads not loaded: not on newtab page')
+        }
+      })(window, document)
     </script>
 
     <% if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE==="true" ){ %>
@@ -120,19 +129,19 @@
       https://github.com/GoogleChromeLabs/tti-polyfill
     -->
     <script>
-        /* eslint-disable */ !(function() {
-            if ('PerformanceLongTaskTiming' in window) {
-                var g = (window.__tti = {
-                    e: []
-                })
-                g.o = new PerformanceObserver(function(l) {
-                    g.e = g.e.concat(l.getEntries())
-                })
-                g.o.observe({
-                    entryTypes: ['longtask']
-                })
-            }
-        })()
+      /* eslint-disable */ !(function() {
+        if ('PerformanceLongTaskTiming' in window) {
+          var g = (window.__tti = {
+            e: [],
+          })
+          g.o = new PerformanceObserver(function(l) {
+            g.e = g.e.concat(l.getEntries())
+          })
+          g.o.observe({
+            entryTypes: ['longtask'],
+          })
+        }
+      })()
     </script>
     <% } %>
 
@@ -140,20 +149,20 @@
       @gladly-customization
     -->
     <script type="text/javascript">
-        /* eslint-disable */
-        window.runAnalyticsScripts = true
-        // Don't run analytics scripts if we are pre-rendering with react-snap.
-        // https://github.com/stereobooster/react-snap/blob/master/doc/recipes.md#usage-with-google-analytics
-        // Some analytics code, like the Reddit pixel, assumes its global is
-        // accessible before the script loads; but pre-rendering puts its
-        // script at the top of the head, before its inline script, which
-        // causes an error. (To reproduce this error, run on a fresh browser
-        // when the analytics JS is not in the memory cache.)
-        try {
-            window.runAnalyticsScripts = navigator.userAgent !== 'ReactSnap'
-        } catch (e) {
-            console.error(e)
-        }
+      /* eslint-disable */
+      window.runAnalyticsScripts = true
+      // Don't run analytics scripts if we are pre-rendering with react-snap.
+      // https://github.com/stereobooster/react-snap/blob/master/doc/recipes.md#usage-with-google-analytics
+      // Some analytics code, like the Reddit pixel, assumes its global is
+      // accessible before the script loads; but pre-rendering puts its
+      // script at the top of the head, before its inline script, which
+      // causes an error. (To reproduce this error, run on a fresh browser
+      // when the analytics JS is not in the memory cache.)
+      try {
+        window.runAnalyticsScripts = navigator.userAgent !== 'ReactSnap'
+      } catch (e) {
+        console.error(e)
+      }
     </script>
 
     <!--
@@ -161,24 +170,24 @@
       global style for all served HTML
     -->
     <style>
-        html,
-        body {
-            padding: 0px;
-            margin: 0px;
-        }
+      html,
+      body {
+        padding: 0px;
+        margin: 0px;
+      }
 
-        html {
-            min-height: 100%;
-            position: relative;
-        }
+      html {
+        min-height: 100%;
+        position: relative;
+      }
 
-        /*
+      /*
         Some 3rd-party (e.g. Quantcast Choice) code creates iframes with
         borders, which causes a flickering frame.
        */
-        iframe {
-            border-width: 0px !important;
-        }
+      iframe {
+        border-width: 0px !important;
+      }
     </style>
 
     <!--
@@ -190,337 +199,341 @@
 
     <!-- Begin tab-cmp -->
     <!-- MaxMind for determining user country location. -->
-    <script src="//geoip-js.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
+    <script
+      src="//geoip-js.com/js/apis/geoip2/v2.1/geoip2.js"
+      type="text/javascript"
+    ></script>
     <!-- Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <script type="text/javascript" async="true">
-        // Gladly modified: add try/catch.
-        try {
-            ;
-            (function() {
-                // Gladly modified: create window object.
-                window.tabCMP = window.tabCMP || {
-                    uspStubFunction: undefined,
+      // Gladly modified: add try/catch.
+      try {
+        ;(function() {
+          // Gladly modified: create window object.
+          window.tabCMP = window.tabCMP || {
+            uspStubFunction: undefined,
+          }
+
+          // Gladly modified: don't load the QC Choice script.
+          // We'll import it ourselves.
+          // var host = window.location.hostname;
+          // var element = document.createElement('script');
+          // var firstScript = document.getElementsByTagName('script')[0];
+          // var url = 'https://cmp.quantcast.com'
+          //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js?tag_version=V2');
+          var uspTries = 0
+          var uspTriesLimit = 3
+          // element.async = true;
+          // element.type = 'text/javascript';
+          // element.src = url;
+
+          // firstScript.parentNode.insertBefore(element, firstScript);
+
+          // Gladly modified.
+          // Add debug logging.
+          let debug = false
+          try {
+            const urlStr = window.location.href
+            const url = new URL(urlStr)
+            const tabCMPDebug = url.searchParams.get('tabCMPDebug')
+            debug = tabCMPDebug === 'true'
+          } catch (e) {}
+          const logPrefix = [
+            '%ctab-cmp',
+            'background: #7c7c7c; color: #fff; border-radius: 2px; padding: 2px 6px',
+            '[head script]',
+          ]
+          const logDebugging = (...args) => {
+            if (debug) {
+              console.log(...logPrefix, ...args)
+            }
+          }
+
+          function makeStub() {
+            var TCF_LOCATOR_NAME = '__tcfapiLocator'
+            var queue = []
+            var win = window
+            var cmpFrame
+
+            function addFrame() {
+              var doc = win.document
+              var otherCMP = !!win.frames[TCF_LOCATOR_NAME]
+
+              if (!otherCMP) {
+                if (doc.body) {
+                  var iframe = doc.createElement('iframe')
+
+                  iframe.style.cssText = 'display:none'
+                  iframe.name = TCF_LOCATOR_NAME
+                  doc.body.appendChild(iframe)
+                } else {
+                  setTimeout(addFrame, 5)
                 }
+              }
+              return !otherCMP
+            }
 
-                // Gladly modified: don't load the QC Choice script.
-                // We'll import it ourselves.
-                // var host = window.location.hostname;
-                // var element = document.createElement('script');
-                // var firstScript = document.getElementsByTagName('script')[0];
-                // var url = 'https://cmp.quantcast.com'
-                //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js?tag_version=V2');
-                var uspTries = 0
-                var uspTriesLimit = 3
-                // element.async = true;
-                // element.type = 'text/javascript';
-                // element.src = url;
+            function tcfAPIHandler() {
+              var gdprApplies
+              var args = arguments
 
-                // firstScript.parentNode.insertBefore(element, firstScript);
-
-                // Gladly modified.
-                // Add debug logging.
-                let debug = false
-                try {
-                    const urlStr = window.location.href
-                    const url = new URL(urlStr)
-                    const tabCMPDebug = url.searchParams.get('tabCMPDebug')
-                    debug = tabCMPDebug === 'true'
-                } catch (e) {}
-                const logPrefix = [
-                    '%ctab-cmp',
-                    'background: #7c7c7c; color: #fff; border-radius: 2px; padding: 2px 6px',
-                    '[head script]',
-                ]
-                const logDebugging = (...args) => {
-                    if (debug) {
-                        console.log(...logPrefix, ...args)
-                    }
+              // Gladly modified.
+              try {
+                if (!args.length) {
+                  return queue
                 }
-
-                function makeStub() {
-                    var TCF_LOCATOR_NAME = '__tcfapiLocator'
-                    var queue = []
-                    var win = window
-                    var cmpFrame
-
-                    function addFrame() {
-                        var doc = win.document
-                        var otherCMP = !!win.frames[TCF_LOCATOR_NAME]
-
-                        if (!otherCMP) {
-                            if (doc.body) {
-                                var iframe = doc.createElement('iframe')
-
-                                iframe.style.cssText = 'display:none'
-                                iframe.name = TCF_LOCATOR_NAME
-                                doc.body.appendChild(iframe)
-                            } else {
-                                setTimeout(addFrame, 5)
-                            }
-                        }
-                        return !otherCMP
-                    }
-
-                    function tcfAPIHandler() {
-                        var gdprApplies
-                        var args = arguments
-
-                        // Gladly modified.
-                        try {
-                            if (!args.length) {
-                                return queue
-                            }
-                            // Our modified code should handle some API calls for TCF v2.
-                            const cmd = args[0]
-                            const shouldHandle = [
-                                    'getTCData',
-                                    'ping',
-                                    'addEventListener',
-                                    'removeEventListener',
-                                ].indexOf(cmd) > -1 &&
-                                args[1] === 2 &&
-                                typeof args[2] === 'function'
-                            if (shouldHandle) {
-                                if (cmd === 'removeEventListener') {
-                                    // Our stubbed "addEventListener" logic doesn't add a
-                                    // listener, so we don't need to remove anything.
-                                    logDebugging(
-                                        `Handled TCF API call "removeEventListener" by taking no action.`
-                                    )
-                                    return
-                                } else {
-                                    // This item is set and updated in tab-cmp.
-                                    const storedTCFData = JSON.parse(
-                                        localStorage.getItem('tabCMP.tcfv2.data')
-                                    )
-                                    if (storedTCFData) {
-                                        const cb = args[2]
-                                        const data = {
-                                            ...storedTCFData,
-                                            // Google Ad Manager will consider the CMP failed if the
-                                            // "addEventListener" response doesn't contain a listenerId
-                                            // value, which is null in the response to "getTCData".
-                                            ...(cmd === 'addEventListener' && {
-                                                listenerId: 1, // a fake ID our stub won't use
-                                            }),
-                                        }
-                                        logDebugging(
-                                            `Responding to modified TCF API call "${cmd}" with TCF data:`,
-                                            data
-                                        )
-                                        cb(data, true)
-                                        return
-                                    } else {
-                                        logDebugging(
-                                            `No stored TCF data. Modified TCF stub is not handling a call to "${cmd}"`
-                                        )
-                                    }
-                                }
-                            } else {
-                                logDebugging(
-                                    `Modified TCF stub is not handling a call to "${cmd}".`
-                                )
-                            }
-                        } catch (e) {
-                            console.error('[tab-cmp]', e)
-                        }
-
-                        if (!args.length) {
-                            return queue
-                        } else if (args[0] === 'setGdprApplies') {
-                            if (
-                                args.length > 3 &&
-                                args[2] === 2 &&
-                                typeof args[3] === 'boolean'
-                            ) {
-                                gdprApplies = args[3]
-                                if (typeof args[2] === 'function') {
-                                    args[2]('set', true)
-                                }
-                            }
-                        } else if (args[0] === 'ping') {
-                            var retr = {
-                                gdprApplies: gdprApplies,
-                                cmpLoaded: false,
-                                cmpStatus: 'stub',
-                            }
-
-                            if (typeof args[2] === 'function') {
-                                args[2](retr)
-                            }
-                        } else {
-                            if (args[0] === 'init' && typeof args[3] === 'object') {
-                                args[3] = Object.assign(args[3], {
-                                    tag_version: 'V2'
-                                })
-                            }
-                            queue.push(args)
-                        }
-                    }
-
-                    function postMessageEventHandler(event) {
-                        var msgIsString = typeof event.data === 'string'
-                        var json = {}
-
-                        try {
-                            if (msgIsString) {
-                                json = JSON.parse(event.data)
-                            } else {
-                                json = event.data
-                            }
-                        } catch (ignore) {}
-
-                        var payload = json.__tcfapiCall
-
-                        if (payload) {
-                            window.__tcfapi(
-                                payload.command,
-                                payload.version,
-                                function(retValue, success) {
-                                    var returnMsg = {
-                                        __tcfapiReturn: {
-                                            returnValue: retValue,
-                                            success: success,
-                                            callId: payload.callId,
-                                        },
-                                    }
-                                    if (msgIsString) {
-                                        returnMsg = JSON.stringify(returnMsg)
-                                    }
-                                    if (event && event.source && event.source.postMessage) {
-                                        event.source.postMessage(returnMsg, '*')
-                                    }
-                                },
-                                payload.parameter
-                            )
-                        }
-                    }
-
-                    // Gladly modified:
-                    // Don't try to use the parent frame, which may be the
-                    // new tab page.
-                    try {
-                        if (win.frames[TCF_LOCATOR_NAME]) {
-                            cmpFrame = win
-                        }
-                    } catch (ignore) {}
-
-                    // while (win) {
-                    //   try {
-                    //     if (win.frames[TCF_LOCATOR_NAME]) {
-                    //       cmpFrame = win;
-                    //       break;
-                    //     }
-                    //   } catch (ignore) {}
-                    //
-                    //   if (win === window.top) {
-                    //     break;
-                    //   }
-                    //   win = win.parent;
-                    // }
-
-                    if (!cmpFrame) {
-                        addFrame()
-                        win.__tcfapi = tcfAPIHandler
-                        win.addEventListener('message', postMessageEventHandler, false)
-                    }
-                }
-
-                makeStub()
-
-                var uspStubFunction = function() {
-                    var arg = arguments
-
-                    // Gladly modified.
-                    try {
-                        if (!arg.length) {
-                            return queue
-                        }
-                        // Our modified code should handle some API calls for USP v1.
-                        const cmd = arg[0]
-                        const shouldHandle = ['getUSPData', 'uspPing'].indexOf(cmd) > -1 &&
-                            arg[1] === 1 &&
-                            typeof arg[2] === 'function'
-                        if (shouldHandle) {
-                            // These items are set and updated in tab-cmp.
-                            if (cmd === 'getUSPData') {
-                                const storedUSPData = JSON.parse(
-                                    localStorage.getItem('tabCMP.usp.data')
-                                )
-                                if (storedUSPData) {
-                                    const cb = arg[2]
-                                    logDebugging(
-                                        `Responding to modified USP API call "${cmd}" with stored USP data:`,
-                                        storedUSPData
-                                    )
-                                    cb(storedUSPData, true)
-                                    return
-                                } else {
-                                    logDebugging(
-                                        `No stored USP data. Modified USP stub is not handling a call to "${cmd}"`
-                                    )
-                                }
-                            } else if (cmd === 'uspPing') {
-                                const storedUSPPingData = JSON.parse(
-                                    localStorage.getItem('tabCMP.uspPing.data')
-                                )
-                                if (storedUSPPingData) {
-                                    const cb = arg[2]
-                                    logDebugging(
-                                        `Responding to modified USP API call "${cmd}" with stored USP ping data:`,
-                                        storedUSPPingData
-                                    )
-                                    cb(storedUSPPingData, true)
-                                    return
-                                } else {
-                                    logDebugging(
-                                        `No stored USP data. Modified USP stub is not handling a call to "${cmd}"`
-                                    )
-                                }
-                            }
-                        } else {
-                            logDebugging(
-                                `Modified USP stub is not handling a call to "${cmd}".`
-                            )
-                        }
-                    } catch (e) {
-                        console.error('[tab-cmp]', e)
-                    }
-
-                    if (typeof window.__uspapi !== uspStubFunction) {
-                        setTimeout(function() {
-                            if (typeof window.__uspapi !== 'undefined') {
-                                window.__uspapi.apply(window.__uspapi, arg)
-                            }
-                        }, 500)
-                    }
-                }
-
-                // Gladly modified: store the stub function so we know when
-                // Quantcast Choice has finished initializing.
-                window.tabCMP.uspStubFunction = uspStubFunction
-
-                var checkIfUspIsReady = function() {
-                    uspTries++
-                    if (
-                        window.__uspapi === uspStubFunction &&
-                        uspTries < uspTriesLimit
-                    ) {
-                        // Gladly modified: add [tab-cmp] prefix.
-                        console.error(...logPrefix, 'USP is not accessible.')
+                // Our modified code should handle some API calls for TCF v2.
+                const cmd = args[0]
+                const shouldHandle =
+                  [
+                    'getTCData',
+                    'ping',
+                    'addEventListener',
+                    'removeEventListener',
+                  ].indexOf(cmd) > -1 &&
+                  args[1] === 2 &&
+                  typeof args[2] === 'function'
+                if (shouldHandle) {
+                  if (cmd === 'removeEventListener') {
+                    // Our stubbed "addEventListener" logic doesn't add a
+                    // listener, so we don't need to remove anything.
+                    logDebugging(
+                      `Handled TCF API call "removeEventListener" by taking no action.`
+                    )
+                    return
+                  } else {
+                    // This item is set and updated in tab-cmp.
+                    const storedTCFData = JSON.parse(
+                      localStorage.getItem('tabCMP.tcfv2.data')
+                    )
+                    if (storedTCFData) {
+                      const cb = args[2]
+                      const data = {
+                        ...storedTCFData,
+                        // Google Ad Manager will consider the CMP failed if the
+                        // "addEventListener" response doesn't contain a listenerId
+                        // value, which is null in the response to "getTCData".
+                        ...(cmd === 'addEventListener' && {
+                          listenerId: 1, // a fake ID our stub won't use
+                        }),
+                      }
+                      logDebugging(
+                        `Responding to modified TCF API call "${cmd}" with TCF data:`,
+                        data
+                      )
+                      cb(data, true)
+                      return
                     } else {
-                        clearInterval(uspInterval)
+                      logDebugging(
+                        `No stored TCF data. Modified TCF stub is not handling a call to "${cmd}"`
+                      )
                     }
+                  }
+                } else {
+                  logDebugging(
+                    `Modified TCF stub is not handling a call to "${cmd}".`
+                  )
+                }
+              } catch (e) {
+                console.error('[tab-cmp]', e)
+              }
+
+              if (!args.length) {
+                return queue
+              } else if (args[0] === 'setGdprApplies') {
+                if (
+                  args.length > 3 &&
+                  args[2] === 2 &&
+                  typeof args[3] === 'boolean'
+                ) {
+                  gdprApplies = args[3]
+                  if (typeof args[2] === 'function') {
+                    args[2]('set', true)
+                  }
+                }
+              } else if (args[0] === 'ping') {
+                var retr = {
+                  gdprApplies: gdprApplies,
+                  cmpLoaded: false,
+                  cmpStatus: 'stub',
                 }
 
-                if (typeof window.__uspapi === 'undefined') {
-                    window.__uspapi = uspStubFunction
-                    var uspInterval = setInterval(checkIfUspIsReady, 6000)
+                if (typeof args[2] === 'function') {
+                  args[2](retr)
                 }
-            })()
-        } catch (e) {
-            console.error('[tab-cmp] Head tag errored:', e)
-        }
+              } else {
+                if (args[0] === 'init' && typeof args[3] === 'object') {
+                  args[3] = Object.assign(args[3], {
+                    tag_version: 'V2',
+                  })
+                }
+                queue.push(args)
+              }
+            }
+
+            function postMessageEventHandler(event) {
+              var msgIsString = typeof event.data === 'string'
+              var json = {}
+
+              try {
+                if (msgIsString) {
+                  json = JSON.parse(event.data)
+                } else {
+                  json = event.data
+                }
+              } catch (ignore) {}
+
+              var payload = json.__tcfapiCall
+
+              if (payload) {
+                window.__tcfapi(
+                  payload.command,
+                  payload.version,
+                  function(retValue, success) {
+                    var returnMsg = {
+                      __tcfapiReturn: {
+                        returnValue: retValue,
+                        success: success,
+                        callId: payload.callId,
+                      },
+                    }
+                    if (msgIsString) {
+                      returnMsg = JSON.stringify(returnMsg)
+                    }
+                    if (event && event.source && event.source.postMessage) {
+                      event.source.postMessage(returnMsg, '*')
+                    }
+                  },
+                  payload.parameter
+                )
+              }
+            }
+
+            // Gladly modified:
+            // Don't try to use the parent frame, which may be the
+            // new tab page.
+            try {
+              if (win.frames[TCF_LOCATOR_NAME]) {
+                cmpFrame = win
+              }
+            } catch (ignore) {}
+
+            // while (win) {
+            //   try {
+            //     if (win.frames[TCF_LOCATOR_NAME]) {
+            //       cmpFrame = win;
+            //       break;
+            //     }
+            //   } catch (ignore) {}
+            //
+            //   if (win === window.top) {
+            //     break;
+            //   }
+            //   win = win.parent;
+            // }
+
+            if (!cmpFrame) {
+              addFrame()
+              win.__tcfapi = tcfAPIHandler
+              win.addEventListener('message', postMessageEventHandler, false)
+            }
+          }
+
+          makeStub()
+
+          var uspStubFunction = function() {
+            var arg = arguments
+
+            // Gladly modified.
+            try {
+              if (!arg.length) {
+                return queue
+              }
+              // Our modified code should handle some API calls for USP v1.
+              const cmd = arg[0]
+              const shouldHandle =
+                ['getUSPData', 'uspPing'].indexOf(cmd) > -1 &&
+                arg[1] === 1 &&
+                typeof arg[2] === 'function'
+              if (shouldHandle) {
+                // These items are set and updated in tab-cmp.
+                if (cmd === 'getUSPData') {
+                  const storedUSPData = JSON.parse(
+                    localStorage.getItem('tabCMP.usp.data')
+                  )
+                  if (storedUSPData) {
+                    const cb = arg[2]
+                    logDebugging(
+                      `Responding to modified USP API call "${cmd}" with stored USP data:`,
+                      storedUSPData
+                    )
+                    cb(storedUSPData, true)
+                    return
+                  } else {
+                    logDebugging(
+                      `No stored USP data. Modified USP stub is not handling a call to "${cmd}"`
+                    )
+                  }
+                } else if (cmd === 'uspPing') {
+                  const storedUSPPingData = JSON.parse(
+                    localStorage.getItem('tabCMP.uspPing.data')
+                  )
+                  if (storedUSPPingData) {
+                    const cb = arg[2]
+                    logDebugging(
+                      `Responding to modified USP API call "${cmd}" with stored USP ping data:`,
+                      storedUSPPingData
+                    )
+                    cb(storedUSPPingData, true)
+                    return
+                  } else {
+                    logDebugging(
+                      `No stored USP data. Modified USP stub is not handling a call to "${cmd}"`
+                    )
+                  }
+                }
+              } else {
+                logDebugging(
+                  `Modified USP stub is not handling a call to "${cmd}".`
+                )
+              }
+            } catch (e) {
+              console.error('[tab-cmp]', e)
+            }
+
+            if (typeof window.__uspapi !== uspStubFunction) {
+              setTimeout(function() {
+                if (typeof window.__uspapi !== 'undefined') {
+                  window.__uspapi.apply(window.__uspapi, arg)
+                }
+              }, 500)
+            }
+          }
+
+          // Gladly modified: store the stub function so we know when
+          // Quantcast Choice has finished initializing.
+          window.tabCMP.uspStubFunction = uspStubFunction
+
+          var checkIfUspIsReady = function() {
+            uspTries++
+            if (
+              window.__uspapi === uspStubFunction &&
+              uspTries < uspTriesLimit
+            ) {
+              // Gladly modified: add [tab-cmp] prefix.
+              console.error(...logPrefix, 'USP is not accessible.')
+            } else {
+              clearInterval(uspInterval)
+            }
+          }
+
+          if (typeof window.__uspapi === 'undefined') {
+            window.__uspapi = uspStubFunction
+            var uspInterval = setInterval(checkIfUspIsReady, 6000)
+          }
+        })()
+      } catch (e) {
+        console.error('[tab-cmp] Head tag errored:', e)
+      }
     </script>
     <!-- End Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0) -->
     <!-- End tab-cmp -->
@@ -531,23 +544,28 @@
       Include Roboto for the search results styling. We can move this
       into the JS with react-helmet if we want.
     -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
-    <% } %>
-    <% if (process.env.REACT_APP_WHICH_APP==="newtab" ){ %>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+    />
+    <% } %> <% if (process.env.REACT_APP_WHICH_APP==="newtab" ){ %>
     <!-- Global site tag (gtag.js) - Google Analytics 4-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
+    ></script>
     <script>
-        window.dataLayer = window.dataLayer || []
+      window.dataLayer = window.dataLayer || []
 
-        function gtag() {
-            dataLayer.push(arguments)
-        }
-        gtag('js', new Date())
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
 
-        gtag('config', 'G-LDFLQCKVHG')
-        gtag('config', 'G-LDFLQCKVHG', {
-            tfac_app_version: 'legacy'
-        })
+      gtag('config', 'G-LDFLQCKVHG')
+      gtag('config', 'G-LDFLQCKVHG', {
+        tfac_app_version: 'legacy',
+      })
     </script>
     <% } %>
     <!--
@@ -555,68 +573,74 @@
       Facebook Pixel Code
     -->
     <script>
-        /* eslint-disable */
-        try {
-            if (window.runAnalyticsScripts) {
-                !(function(f, b, e, v, n, t, s) {
-                    if (f.fbq) return
-                    n = f.fbq = function() {
-                        n.callMethod ?
-                            n.callMethod.apply(n, arguments) :
-                            n.queue.push(arguments)
-                    }
-                    if (!f._fbq) f._fbq = n
-                    n.push = n
-                    n.loaded = !0
-                    n.version = '2.0'
-                    n.queue = []
-                    t = b.createElement(e)
-                    t.async = !0
-                    t.src = v
-                    s = b.getElementsByTagName(e)[0]
-                    s.parentNode.insertBefore(t, s)
-                })(
-                    window,
-                    document,
-                    'script',
-                    'https://connect.facebook.net/en_US/fbevents.js'
-                )
-                fbq('init', '1813501258922708')
+      /* eslint-disable */
+      try {
+        if (window.runAnalyticsScripts) {
+          !(function(f, b, e, v, n, t, s) {
+            if (f.fbq) return
+            n = f.fbq = function() {
+              n.callMethod
+                ? n.callMethod.apply(n, arguments)
+                : n.queue.push(arguments)
             }
-        } catch (e) {
-            console.error(e)
+            if (!f._fbq) f._fbq = n
+            n.push = n
+            n.loaded = !0
+            n.version = '2.0'
+            n.queue = []
+            t = b.createElement(e)
+            t.async = !0
+            t.src = v
+            s = b.getElementsByTagName(e)[0]
+            s.parentNode.insertBefore(t, s)
+          })(
+            window,
+            document,
+            'script',
+            'https://connect.facebook.net/en_US/fbevents.js'
+          )
+          fbq('init', '1813501258922708')
         }
+      } catch (e) {
+        console.error(e)
+      }
     </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1" /></noscript>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display:none"
+        src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
+    /></noscript>
 
     <!--
       @gladly-customization:
       Reddit conversion pixel
     -->
     <script>
-        /* eslint-disable */
-        try {
-            if (window.runAnalyticsScripts) {
-                !(function(w, d) {
-                    if (!w.rdt) {
-                        var p = (w.rdt = function() {
-                            p.sendEvent ?
-                                p.sendEvent.apply(p, arguments) :
-                                p.callQueue.push(arguments)
-                        })
-                        p.callQueue = []
-                        var t = d.createElement('script');
-                        (t.src = 'https://www.redditstatic.com/ads/pixel.js'),
-                        (t.async = !0)
-                        var s = d.getElementsByTagName('script')[0]
-                        s.parentNode.insertBefore(t, s)
-                    }
-                })(window, document)
-                rdt('init', 't2_9btvy')
+      /* eslint-disable */
+      try {
+        if (window.runAnalyticsScripts) {
+          !(function(w, d) {
+            if (!w.rdt) {
+              var p = (w.rdt = function() {
+                p.sendEvent
+                  ? p.sendEvent.apply(p, arguments)
+                  : p.callQueue.push(arguments)
+              })
+              p.callQueue = []
+              var t = d.createElement('script')
+              ;(t.src = 'https://www.redditstatic.com/ads/pixel.js'),
+                (t.async = !0)
+              var s = d.getElementsByTagName('script')[0]
+              s.parentNode.insertBefore(t, s)
             }
-        } catch (e) {
-            console.error(e)
+          })(window, document)
+          rdt('init', 't2_9btvy')
         }
+      } catch (e) {
+        console.error(e)
+      }
     </script>
 
     <% if (process.env.REACT_APP_WHICH_APP==="search" ){ %>
@@ -624,36 +648,42 @@
       @gladly-customization:
       Bing JS ads script.
     -->
-    <script type="text/javascript" src="https://msadsscale.azureedge.net/bingads/searchads.js"></script>
+    <script
+      type="text/javascript"
+      src="https://msadsscale.azureedge.net/bingads/searchads.js"
+    ></script>
     <% } %>
 
     <!--
       Google Ad Manager ad blocker.
     -->
-    <script async src="https://fundingchoicesmessages.google.com/i/pub-1918626353776886?ers=1" nonce="ddm3J5OJDKq2eEcQG-WYdg"></script>
+    <script
+      async
+      src="https://fundingchoicesmessages.google.com/i/pub-1918626353776886?ers=1"
+      nonce="ddm3J5OJDKq2eEcQG-WYdg"
+    ></script>
     <script nonce="ddm3J5OJDKq2eEcQG-WYdg">
-        ;
-        (function() {
-            function signalGooglefcPresent() {
-                if (!window.frames['googlefcPresent']) {
-                    if (document.body) {
-                        const iframe = document.createElement('iframe')
-                        iframe.style =
-                            'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'
-                        iframe.style.display = 'none'
-                        iframe.name = 'googlefcPresent'
-                        document.body.appendChild(iframe)
-                    } else {
-                        setTimeout(signalGooglefcPresent, 0)
-                    }
-                }
+      ;(function() {
+        function signalGooglefcPresent() {
+          if (!window.frames['googlefcPresent']) {
+            if (document.body) {
+              const iframe = document.createElement('iframe')
+              iframe.style =
+                'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'
+              iframe.style.display = 'none'
+              iframe.name = 'googlefcPresent'
+              document.body.appendChild(iframe)
+            } else {
+              setTimeout(signalGooglefcPresent, 0)
             }
-            signalGooglefcPresent()
-        })()
+          }
+        }
+        signalGooglefcPresent()
+      })()
     </script>
-</head>
+  </head>
 
-<body class="legacy">
+  <body class="legacy">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <% if (process.env.REACT_APP_WHICH_APP==="search" ){ %>
     <!--
@@ -661,29 +691,27 @@
       Search for a Cause global variable
     -->
     <script type="text/javascript">
-        /* eslint-disable */ ;
-        (() => {
-            // See search-utils.js for documentation.
-            window.searchforacause = window.searchforacause || {
-                search: {
-                    fetchedOnPageLoad: false,
-                    YPAErrorOnPageLoad: null,
-                },
-                queryRequest: {
-                    status: 'NONE',
-                    displayedResults: false,
-                    query: null,
-                    responseData: null,
-                },
-                extension: {
-                    isInstalled: false,
-                },
-            }
-        })()
+      /* eslint-disable */ ;(() => {
+        // See search-utils.js for documentation.
+        window.searchforacause = window.searchforacause || {
+          search: {
+            fetchedOnPageLoad: false,
+            YPAErrorOnPageLoad: null,
+          },
+          queryRequest: {
+            status: 'NONE',
+            displayedResults: false,
+            query: null,
+            responseData: null,
+          },
+          extension: {
+            isInstalled: false,
+          },
+        }
+      })()
     </script>
     <% } %>
 
     <div id="root"></div>
-</body>
-
+  </body>
 </html>
