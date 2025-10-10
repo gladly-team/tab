@@ -115,6 +115,17 @@
                 document.getElementsByTagName('body')[0]
               ).appendChild(bsa_optimize)
             })()
+
+            window.optimize = window.optimize || {
+              queue: [],
+            }
+
+            window.optimize.queue.push(() => {
+              window.optimize.customTargeting.push({
+                key: 'cause',
+                value: 'legacy',
+              })
+            })
           }
         } else {
           console.log('Ads not loaded: not on newtab page')
