@@ -216,11 +216,11 @@ class Dashboard extends React.Component {
       browser: detectSupportedBrowser(),
     })
     this.updateState()
-    
+
     // Initialize optimize for BuySellAds zones
     this.initializeOptimize()
   }
-  
+
   /**
    * Initialize the optimize script for BuySellAds ad zones
    * This pushes the zone IDs to the optimize queue for ad optimization
@@ -230,30 +230,32 @@ class Dashboard extends React.Component {
     // Check if we're using BuySellAds as the ad provider
     const BUCKET_KEY = 'tab_ad_provider_bucket'
     let adProviderBucket = null
-    
+
     try {
       adProviderBucket = localStorage.getItem(BUCKET_KEY)
     } catch (e) {
       console.error('Failed to access localStorage for ad provider check:', e)
       return
     }
-    
+
     // Only initialize optimize if we're using BuySellAds
     if (adProviderBucket !== 'buysellads') {
-      console.log('[Ad Provider] Not using BuySellAds, skipping optimize initialization')
+      console.log(
+        '[Ad Provider] Not using BuySellAds, skipping optimize initialization'
+      )
       return
     }
-    
-    // Ensure window.optimize exists
-    window.optimize = window.optimize || { queue: [] }
-    
-    // Push both BSA zones to the optimize queue
-    window.optimize.queue.push(function() {
-      window.optimize.push('bsa-zone_1754918740585-0_123456')
-      window.optimize.push('bsa-zone_1755538933410-5_123456')
-    })
-    
-    console.log('[Ad Provider] Initialized optimize for BuySellAds zones')
+
+    // // Ensure window.optimize exists
+    // window.optimize = window.optimize || { queue: [] }
+
+    // // Push both BSA zones to the optimize queue
+    // window.optimize.queue.push(function() {
+    //   window.optimize.push('bsa-zone_1754918740585-0_123456')
+    //   window.optimize.push('bsa-zone_1755538933410-5_123456')
+    // })
+
+    // console.log('[Ad Provider] Initialized optimize for BuySellAds zones')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -1089,49 +1091,49 @@ class Dashboard extends React.Component {
               ) : null}
               */}
               {// @experiment-referral-notification
-                isInReferralNotificationExperimentalGroup &&
-                  !(
-                    user.experimentActions.referralNotification === 'CLICK' ||
-                    user.experimentActions.referralNotification === 'DISMISS'
-                  ) ? (
-                    <Notification
-                      data-test-id={'experiment-referral-notification'}
-                      title={referralNotificationTitle}
-                      message={referralNotificationBody}
-                      buttonText={'Tell a friend'}
-                      onClick={async () => {
-                        // Log the click.
-                        await LogUserExperimentActionsMutation({
-                          userId: user.id,
-                          experimentActions: {
-                            [EXPERIMENT_REFERRAL_NOTIFICATION]: 'CLICK',
-                          },
-                        })
-                        this.setState({
-                          referralNotificationExperimentGroup: false,
-                        })
+              isInReferralNotificationExperimentalGroup &&
+              !(
+                user.experimentActions.referralNotification === 'CLICK' ||
+                user.experimentActions.referralNotification === 'DISMISS'
+              ) ? (
+                <Notification
+                  data-test-id={'experiment-referral-notification'}
+                  title={referralNotificationTitle}
+                  message={referralNotificationBody}
+                  buttonText={'Tell a friend'}
+                  onClick={async () => {
+                    // Log the click.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'CLICK',
+                      },
+                    })
+                    this.setState({
+                      referralNotificationExperimentGroup: false,
+                    })
 
-                        // Open the "invite friends" page.
-                        goTo(inviteFriendsURL)
-                      }}
-                      onDismiss={async () => {
-                        // Log the dismissal.
-                        await LogUserExperimentActionsMutation({
-                          userId: user.id,
-                          experimentActions: {
-                            [EXPERIMENT_REFERRAL_NOTIFICATION]: 'DISMISS',
-                          },
-                        })
-                        this.setState({
-                          referralNotificationExperimentGroup: false,
-                        })
-                      }}
-                      style={{
-                        width: 380,
-                        marginTop: 4,
-                      }}
-                    />
-                  ) : null}
+                    // Open the "invite friends" page.
+                    goTo(inviteFriendsURL)
+                  }}
+                  onDismiss={async () => {
+                    // Log the dismissal.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'DISMISS',
+                      },
+                    })
+                    this.setState({
+                      referralNotificationExperimentGroup: false,
+                    })
+                  }}
+                  style={{
+                    width: 380,
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
               {showSearchIntro ? (
                 <Notification
                   data-test-id={'search-intro-notif'}
@@ -1157,8 +1159,8 @@ class Dashboard extends React.Component {
                     browser === CHROME_BROWSER
                       ? searchChromeExtensionPage
                       : browser === FIREFOX_BROWSER
-                        ? searchFirefoxExtensionPage
-                        : searchChromeExtensionPage
+                      ? searchFirefoxExtensionPage
+                      : searchChromeExtensionPage
                   }
                   onClick={() => {
                     // Hide the message because we don't want the user to
@@ -1271,11 +1273,9 @@ class Dashboard extends React.Component {
               overflow: 'visible',
             }}
           >
+            <div id="bsa-zone_1754918740585-0_123456" />
 
-            <div id="bsa-zone_1754918740585-0_123456"></div>
-
-            <div id="bsa-zone_1755538933410-5_123456"></div>
-
+            <div id="bsa-zone_1755538933410-5_123456" />
 
             <div
               id="raptive-content-ad-1"
