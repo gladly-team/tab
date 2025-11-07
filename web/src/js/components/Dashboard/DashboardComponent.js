@@ -246,12 +246,24 @@ class Dashboard extends React.Component {
     
     // Ensure window.optimize exists
     window.optimize = window.optimize || { queue: [] }
-    
-    // Push both BSA zones to the optimize queue
-    window.optimize.queue.push(function() {
-      window.optimize.push('bsa-zone_1754918740585-0_123456')
-      window.optimize.push('bsa-zone_1755538933410-5_123456')
-    })
+
+    // Use pushAll to ensure all operations are queued properly on manual refresh
+    // This includes both custom targeting and BSA zone initialization
+    window.optimize.queue.pushAll([
+      // Set custom targeting for legacy cause
+      function() {
+        window.optimize.customTargeting = window.optimize.customTargeting || []
+        window.optimize.customTargeting.push({
+          key: 'cause',
+          value: 'legacy',
+        })
+      },
+      // Initialize both BSA zones
+      function() {
+        window.optimize.push('bsa-zone_1754918740585-0_123456')
+        window.optimize.push('bsa-zone_1755538933410-5_123456')
+      }
+    ])
     
     console.log('[Ad Provider] Initialized optimize for BuySellAds zones')
   }
