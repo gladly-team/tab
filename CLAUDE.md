@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Important Notes
+
+**DO NOT START DEV SERVERS** - The development server is already running. Never run `yarn run start:newtab`, `yarn run start:search`, or any other start commands. The servers are already active and attempting to start them will cause port conflicts.
+
 ## Common Development Commands
 
 ### Initial Setup
