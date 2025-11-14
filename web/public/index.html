@@ -152,21 +152,14 @@
               ).appendChild(bsa_optimize)
             })()
 
-            window.optimize = window.optimize || {
-              queue: [],
-            }
-
-            // Push both BSA zones to the optimize queue
-            window.optimize.queue.push(function() {
-              window.optimize.push('bsa-zone_1754918740585-0_123456')
-              window.optimize.push('bsa-zone_1755538933410-5_123456')
-            })
+            window.optimize = window.optimize || { queue: [] }
 
             window.optimize.queue.push(() => {
               window.optimize.customTargeting.push({
                 key: 'cause',
                 value: 'legacy',
               })
+              window.optimize.pushAll()
             })
           }
         } else {
