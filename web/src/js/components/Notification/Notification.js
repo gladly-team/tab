@@ -33,6 +33,7 @@ if (isBrowser) {
 const Notification = ({ slot, user, onOpenLeaderboard }) => {
   const [show, setShow] = useState(true)
   const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const [openWidget, setOpenWidget] = useState(false)
   const [iframeUrl, setIframeUrl] = useState('')
@@ -84,6 +85,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     if (event.data.show) {
       setShow(true)
       setHeight(event.data.height)
+      setWidth(event.data.width || 0)
 
       if (event.data.slot === 'modal-center') {
         setShowModal(true)
@@ -91,6 +93,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     } else {
       setShow(false)
       setHeight(0)
+      setWidth(0)
 
       if (event.data.slot === 'modal-center') {
         setShowModal(false)
@@ -190,12 +193,12 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           id={`notification-modal-${slot}`}
           open={showModal}
           style={{
-            height: height + 30,
+            height: height,
             marginTop: 'auto',
             marginBottom: 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
-            maxWidth: 900,
+            maxWidth: width || 800,
             position: 'absolute',
             backgroundColor: '#fff',
             zIndex: 100000000,
