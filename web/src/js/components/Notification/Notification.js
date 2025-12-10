@@ -70,8 +70,6 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
       return
     }
 
-    console.log(event.data)
-
     // Did we get the version? - Which version of the notification did we show?
     if (event.data.version) {
       setVersion(event.data.version)
@@ -197,7 +195,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
             marginBottom: 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
-            maxWidth: 800,
+            maxWidth: 900,
             position: 'absolute',
             backgroundColor: '#fff',
             zIndex: 100000000,
@@ -224,7 +222,6 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
                   sParams.NotificationOverride
                 }&version=${sParams.Version}`}
                 title={`notification-${slot}`}
-                style={{ marginTop: '10px', marginBottom: '10px' }}
                 width="100%"
                 height="100%"
                 frameBorder="0"
