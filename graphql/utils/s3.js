@@ -1,9 +1,13 @@
 import AWS from 'aws-sdk'
 import config from '../config'
 
+// Explicitly configure S3 client to avoid inheriting incorrect endpoints
+// from global AWS config (e.g., DYNAMODB_ENDPOINT).
 const s3 = new AWS.S3({
-  region: config.AWS_REGION,
+  region: config.AWS_REGION || 'us-west-2',
   signatureVersion: 'v4',
+  endpoint: `https://s3.${config.AWS_REGION || 'us-west-2'}.amazonaws.com`,
+  s3ForcePathStyle: false,
 })
 
 /**
