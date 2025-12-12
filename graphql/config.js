@@ -11,6 +11,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
+  STAGE: process.env.SLS_STAGE || 'dev',
   AWS_REGION: process.env.AWS_REGION,
   DYNAMODB_ENDPOINT: process.env.DYNAMODB_ENDPOINT,
   DB_TABLE_NAME_APPENDIX: process.env.DB_TABLE_NAME_APPENDIX,
