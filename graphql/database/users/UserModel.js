@@ -411,6 +411,32 @@ class User extends DynamoDBModel {
       campaignId: types
         .string()
         .description('the ID for the campaign the user came to tabs from.'),
+      backgroundConfig: types
+        .object({
+          type: types
+            .string()
+            .valid('daily', 'photo', 'color', 'custom')
+            .description('The type of background configuration.'),
+          updatedAt: types
+            .string()
+            .isoDate()
+            .description('When the background config was last updated.'),
+          collection: types
+            .string()
+            .description('For photo type: the collection name.'),
+          photo: types
+            .string()
+            .description('For photo type: the photo filename.'),
+          color: types.string().description('For color type: the hex color.'),
+          customPhoto: types
+            .object({
+              path: types.string().description('S3 path for the custom photo.'),
+            })
+            .description('For custom type: custom photo details.'),
+        })
+        .description(
+          'New background configuration that replaces the legacy backgroundImage system.'
+        ),
     }
   }
 

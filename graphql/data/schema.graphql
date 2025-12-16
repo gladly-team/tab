@@ -941,6 +941,11 @@ type User implements Node {
   backgroundColor: String
 
   """
+  User's new background configuration (replaces legacy backgroundImage system)
+  """
+  backgroundConfig: BackgroundConfig
+
+  """
   Whether this user was created by an existing user and then merged into the existing user
   """
   mergedIntoExistingUser: Boolean
@@ -1175,6 +1180,35 @@ type MissionEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""
+New background configuration that replaces the legacy backgroundImage system
+"""
+type BackgroundConfig {
+  """The type of background configuration (daily, photo, color, custom)"""
+  type: String
+
+  """ISO datetime string of when the background config was last updated"""
+  updatedAt: String
+
+  """For photo type: the collection name"""
+  collection: String
+
+  """For photo type: the photo filename"""
+  photo: String
+
+  """For color type: the hex color"""
+  color: String
+
+  """For custom type: custom photo details"""
+  customPhoto: CustomPhoto
+}
+
+"""Custom photo details for background config"""
+type CustomPhoto {
+  """S3 path for the custom photo"""
+  path: String
 }
 
 """user notifications to show on v4"""

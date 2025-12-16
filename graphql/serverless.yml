@@ -297,6 +297,11 @@ provider:
         - "dynamodb:GetItem"
       Resource:
         - "${self:custom.dbTableArnBase}UserGroupImpactMetricLog-${self:provider.stage}"
+    # S3 - Grant read access to private backgrounds bucket for signed URL generation
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+      Resource: "arn:aws:s3:::gladly-private-${self:provider.stage}/*"
     # @service/redis - Uncomment this if we re-launch the Redis service.
     # Grant access to our Redis service.
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
@@ -361,6 +366,7 @@ functions:
             # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
             identitySource: method.request.header.Authorization
     environment:
+      SLS_STAGE: ${self:provider.stage}
       IS_GLOBAL_CAMPAIGN_LIVE: false
       EST_MONEY_RAISED_PER_TAB: ${env:EST_MONEY_RAISED_PER_TAB}
       EST_MONEY_RAISED_PER_SEARCH: ${env:EST_MONEY_RAISED_PER_SEARCH}

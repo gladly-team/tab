@@ -326,6 +326,48 @@ const backgroundImageType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const customPhotoType = new GraphQLObjectType({
+  name: 'CustomPhoto',
+  description: 'Custom photo details for background config',
+  fields: () => ({
+    path: {
+      type: GraphQLString,
+      description: 'S3 path for the custom photo',
+    },
+  }),
+})
+
+const backgroundConfigType = new GraphQLObjectType({
+  name: 'BackgroundConfig',
+  description: 'New background configuration that replaces the legacy backgroundImage system',
+  fields: () => ({
+    type: {
+      type: GraphQLString,
+      description: 'The type of background configuration (daily, photo, color, custom)',
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the background config was last updated',
+    },
+    collection: {
+      type: GraphQLString,
+      description: 'For photo type: the collection name',
+    },
+    photo: {
+      type: GraphQLString,
+      description: 'For photo type: the photo filename',
+    },
+    color: {
+      type: GraphQLString,
+      description: 'For color type: the hex color',
+    },
+    customPhoto: {
+      type: customPhotoType,
+      description: 'For custom type: custom photo details',
+    },
+  }),
+})
+
 const maxTabsDayType = new GraphQLObjectType({
   name: 'MaxTabsDay',
   description: "Info about the user's day of most opened tabs",
@@ -707,6 +749,10 @@ const userType = new GraphQLObjectType({
     backgroundColor: {
       type: GraphQLString,
       description: "User's background color",
+    },
+    backgroundConfig: {
+      type: backgroundConfigType,
+      description: "User's new background configuration (replaces legacy backgroundImage system)",
     },
     mergedIntoExistingUser: {
       type: GraphQLBoolean,
