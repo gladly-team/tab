@@ -70,6 +70,13 @@ const TabSettingsPage = props => {
           <SettingsMenuItem key={'account'} to={accountURL}>
             Account
           </SettingsMenuItem>
+          <SettingsMenuItem
+            key={'background-v5'}
+            to="https://tab.gladly.io/v5/account/background"
+            external
+          >
+            Background
+          </SettingsMenuItem>
         </List>
       )}
       mainContent={({ showError }) => (
