@@ -36,4 +36,19 @@ const getPublicBackgroundUrl = (photoFilename) => {
   return `https://prod-tab2017-media.gladly.io/img/backgrounds/${photoFilename}`
 }
 
-export { getPrivateBackgroundSignedUrl, getPublicBackgroundUrl }
+/**
+ * Constructs the URL for the daily rotating background image from a collection.
+ * @param {string} collection - The collection name (e.g., "landscapes", "trees").
+ * @returns {string} The full URL to the daily background image for the collection.
+ */
+const getDailyCollectionBackgroundUrl = (collection) => {
+  // Convert collection name to URL-safe slug (lowercase, replace spaces with hyphens)
+  const slug = collection.toLowerCase().replace(/\s+/g, '-')
+  return `https://tab.gladly.io/v5/backgrounds/collection/${slug}/today/image.jpg`
+}
+
+export {
+  getPrivateBackgroundSignedUrl,
+  getPublicBackgroundUrl,
+  getDailyCollectionBackgroundUrl,
+}
