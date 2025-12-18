@@ -7,6 +7,7 @@ import setBackgroundImageDaily from './setBackgroundImageDaily'
 import {
   getPrivateBackgroundSignedUrl,
   getPublicBackgroundUrl,
+  getDailyCollectionBackgroundUrl,
 } from '../../utils/s3'
 
 const DEPRECATED_IMG_IDS = ['9308b921-44c7-4b4e-845d-3b01fa73fa2b']
@@ -28,9 +29,18 @@ const resolveBackgroundConfig = (backgroundConfig) => {
   const { type, updatedAt } = backgroundConfig
 
   switch (type) {
-    case 'daily':
-      // Fall through to legacy code
-      return null
+    case 'daily': {
+      const { collection } = backgroundConfig
+      if (!collection) {
+        // No collection specified, fall through to legacy code
+        return null
+      }
+      return {
+        id: `daily-${collection}`,
+        imageURL: getDailyCollectionBackgroundUrl(collection),
+        timestamp: updatedAt,
+      }
+    }
 
     case 'color':
       // Color backgrounds don't need an image URL - return null to indicate no image

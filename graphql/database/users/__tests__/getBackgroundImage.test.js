@@ -13,6 +13,10 @@ jest.mock('../../../utils/s3', () => ({
   getPublicBackgroundUrl: jest.fn(
     (photo) => `https://prod-tab2017-media.gladly.io/img/backgrounds/${photo}`
   ),
+  getDailyCollectionBackgroundUrl: jest.fn(
+    (collection) =>
+      `https://tab.gladly.io/v5/backgrounds/collection/${collection.toLowerCase()}/today/image.jpg`
+  ),
 }))
 
 afterEach(() => {
@@ -205,7 +209,28 @@ describe('getBackgroundImage', () => {
       })
     })
 
-    it('falls through to legacy code for daily type backgroundConfig', async () => {
+    it('returns daily collection URL for daily type with collection', async () => {
+      expect.assertions(1)
+      const getBackgroundImage = require('../getBackgroundImage').default
+      const userContext = getMockUserContext()
+      const mockUser = {
+        ...getMockUserInstance(),
+        backgroundConfig: {
+          type: 'daily',
+          collection: 'landscapes',
+          updatedAt: '2025-12-12T05:11:54Z',
+        },
+      }
+      const response = await getBackgroundImage(userContext, mockUser)
+      expect(response).toEqual({
+        id: 'daily-landscapes',
+        imageURL:
+          'https://tab.gladly.io/v5/backgrounds/collection/landscapes/today/image.jpg',
+        timestamp: '2025-12-12T05:11:54Z',
+      })
+    })
+
+    it('falls through to legacy code for daily type without collection', async () => {
       expect.assertions(1)
       const getBackgroundImage = require('../getBackgroundImage').default
       const userContext = getMockUserContext()
@@ -220,11 +245,12 @@ describe('getBackgroundImage', () => {
         backgroundImage: exampleImg,
         backgroundConfig: {
           type: 'daily',
+          // No collection specified
           updatedAt: '2025-12-12T05:11:54Z',
         },
       }
       const response = await getBackgroundImage(userContext, mockUser)
-      // Should return the legacy backgroundImage since daily type falls through
+      // Should return the legacy backgroundImage since no collection specified
       expect(response).toEqual(exampleImg)
     })
 

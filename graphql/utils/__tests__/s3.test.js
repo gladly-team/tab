@@ -90,4 +90,38 @@ describe('s3 utilities', () => {
       )
     })
   })
+
+  describe('getDailyCollectionBackgroundUrl', () => {
+    it('constructs the correct daily collection URL', () => {
+      const { getDailyCollectionBackgroundUrl } = require('../s3')
+      const result = getDailyCollectionBackgroundUrl('landscapes')
+      expect(result).toBe(
+        'https://tab.gladly.io/v5/backgrounds/collection/landscapes/today/image.jpg'
+      )
+    })
+
+    it('converts collection name to lowercase slug', () => {
+      const { getDailyCollectionBackgroundUrl } = require('../s3')
+      const result = getDailyCollectionBackgroundUrl('Black Photographers')
+      expect(result).toBe(
+        'https://tab.gladly.io/v5/backgrounds/collection/black-photographers/today/image.jpg'
+      )
+    })
+
+    it('replaces spaces with hyphens in collection name', () => {
+      const { getDailyCollectionBackgroundUrl } = require('../s3')
+      const result = getDailyCollectionBackgroundUrl('nature scenes')
+      expect(result).toBe(
+        'https://tab.gladly.io/v5/backgrounds/collection/nature-scenes/today/image.jpg'
+      )
+    })
+
+    it('handles collection names that are already slugified', () => {
+      const { getDailyCollectionBackgroundUrl } = require('../s3')
+      const result = getDailyCollectionBackgroundUrl('trees')
+      expect(result).toBe(
+        'https://tab.gladly.io/v5/backgrounds/collection/trees/today/image.jpg'
+      )
+    })
+  })
 })
