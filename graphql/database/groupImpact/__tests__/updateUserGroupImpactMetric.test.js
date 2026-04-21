@@ -60,7 +60,8 @@ const getGroupImpactMetric = () => ({
   dateStarted: moment.utc().toISOString(),
 })
 
-describe('updateUserGroupImpactMetric tests', () => {
+// Group Impact (Upstash-backed) is disabled; this suite is skipped.
+describe.skip('updateUserGroupImpactMetric tests', () => {
   it('creates correct instances of UserGroupImpactMetricModel if both do not exist', async () => {
     const user = getMockUserInstance()
     const groupImpactMetric = getGroupImpactMetric()

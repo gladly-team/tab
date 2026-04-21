@@ -151,7 +151,8 @@ describe('logSearch', () => {
     )
   })
 
-  test('it updates group impact if applicable', async () => {
+  // Group Impact (Upstash-backed) is disabled; this assertion no longer applies.
+  test.skip('it updates group impact if applicable', async () => {
     expect.assertions(2)
 
     const userId = userContext.id

@@ -8,10 +8,8 @@ import getUserSearchEngine from './getUserSearchEngine'
 import getSearchEngine from '../search/getSearchEngine'
 import getCause from '../cause/getCause'
 import { DatabaseItemDoesNotExistException } from '../../utils/exceptions'
-import getCauseByUser from '../cause/getCauseByUser'
-import { CAUSE_IMPACT_TYPES } from '../constants'
-import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
-import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
+// Group Impact (Upstash-backed) is disabled. Imports removed so logSearch no
+// longer triggers Upstash reads/writes. See PR that disabled Group Impact.
 
 // const PRODUCTION_STAGE = 'prod'
 
@@ -71,27 +69,7 @@ const logSearchKnownUser = async (userContext, userId, searchData) => {
     throw e
   }
 
-  if (user.v4BetaEnabled) {
-    const cause = await getCauseByUser(userContext, userId)
-
-    if (
-      cause &&
-      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
-        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
-    ) {
-      const groupImpactMetric = await updateGroupImpactMetric(
-        userContext,
-        cause.id,
-        'search'
-      )
-      await updateUserGroupImpactMetric(
-        userContext,
-        user,
-        groupImpactMetric,
-        'search'
-      )
-    }
-  }
+  // Group Impact tracking disabled (Upstash-backed).
 
   // Update the user's counter for max searches in a day.
   // If this is the user's first search today, reset the counter

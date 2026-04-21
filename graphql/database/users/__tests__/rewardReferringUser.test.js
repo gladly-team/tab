@@ -232,7 +232,9 @@ describe('rewardReferringUser', () => {
     expect(updateUserGroupImpactMetric).not.toHaveBeenCalled()
   })
 
-  it.only('updates user group impact metric if group impact metric', async () => {
+  // Group Impact (Upstash-backed) is disabled; this assertion no longer applies.
+  // Note: removing the lingering `.only` here re-enables the rest of the suite.
+  it.skip('updates user group impact metric if group impact metric', async () => {
     expect.assertions(1)
 
     const userContext = getMockUserContext()

@@ -17,10 +17,8 @@ import { getEstimatedMoneyRaisedPerTab } from '../globals/globals'
 import getCurrentUserMission from '../missions/getCurrentUserMission'
 import completeMission from '../missions/completeMission'
 import logger from '../../utils/logger'
-import getCauseByUser from '../cause/getCauseByUser'
-import { CAUSE_IMPACT_TYPES } from '../constants'
-import updateGroupImpactMetric from '../groupImpact/updateGroupImpactMetric'
-import updateUserGroupImpactMetric from '../groupImpact/updateUserGroupImpactMetric'
+// Group Impact (Upstash-backed) is disabled. Imports removed so logTab no
+// longer triggers Upstash reads/writes. See PR that disabled Group Impact.
 
 // const PRODUCTION_STAGE = 'prod'
 
@@ -231,26 +229,7 @@ const logTab = async (userContext, userId, tabId = null, isV4 = true) => {
     }
   }
 
-  if (user.v4BetaEnabled) {
-    const cause = await getCauseByUser(userContext, userId)
-    if (
-      cause &&
-      (cause.impactType === CAUSE_IMPACT_TYPES.group ||
-        cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group)
-    ) {
-      const groupImpactMetric = await updateGroupImpactMetric(
-        userContext,
-        cause.id,
-        'tab'
-      )
-      await updateUserGroupImpactMetric(
-        userContext,
-        user,
-        groupImpactMetric,
-        'tab'
-      )
-    }
-  }
+  // Group Impact tracking disabled (Upstash-backed).
 
   // TODO(spicer): Pull into a separate library.
   // Publish to Brandfluence SNS topic.
