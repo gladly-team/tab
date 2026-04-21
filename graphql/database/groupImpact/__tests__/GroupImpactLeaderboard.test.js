@@ -18,7 +18,8 @@ afterEach(async () => {
   client.clear()
 })
 
-describe('GroupImpactLeaderboard entity', () => {
+// Group Impact (Upstash-backed) is disabled; this suite is skipped.
+describe.skip('GroupImpactLeaderboard entity', () => {
   it('Add inserts into redis client', async () => {
     const val = 5
     GroupImpactLeaderboard.add('key', 'entity', val)

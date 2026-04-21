@@ -1219,7 +1219,8 @@ describe('campaign: estimating money raised', () => {
     await expect(logTab(userContext, userId)).rejects.toEqual(mockErr)
   })
 
-  describe('correctly updates group impact if applicable', () => {
+  // Group Impact (Upstash-backed) is disabled; these assertions no longer apply.
+  describe.skip('correctly updates group impact if applicable', () => {
     it('does nothing if user is not part of a cause', async () => {
       expect.assertions(3)
       const userId = userContext.id

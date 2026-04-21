@@ -44,7 +44,8 @@ afterEach(async () => {
   )
 })
 
-describe('incrementCauseImpactMetricCount tests', () => {
+// Group Impact (Upstash-backed) is disabled; this suite is skipped.
+describe.skip('incrementCauseImpactMetricCount tests', () => {
   it('updates count if exists', async () => {
     await CauseImpactMetricCountModel.create(groupImpactOverride, {
       id: `${causeId}_${impactMetricId}`,

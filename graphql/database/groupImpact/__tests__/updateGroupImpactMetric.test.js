@@ -67,7 +67,8 @@ afterEach(async () => {
   await client.del(GroupImpactMetricModel.getRedisKey(mockTestNanoId))
 })
 
-describe('updateGroupImpactMetric tests', () => {
+// Group Impact (Upstash-backed) is disabled; this suite is skipped.
+describe.skip('updateGroupImpactMetric tests', () => {
   it('creates correct instances of CauseGroupImpactMetricModel, GroupImpactMetricModel if both do not exist (tab)', async () => {
     await updateGroupImpactMetric(userContext, causeId, 'tab')
     const joinEntity = await CauseGroupImpactMetricModel.get(

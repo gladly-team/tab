@@ -25,7 +25,8 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('getCauseImpactMetricCount', () => {
+// Group Impact (Upstash-backed) is disabled; this suite is skipped.
+describe.skip('getCauseImpactMetricCount', () => {
   it('returns null if fetching group impact metric returns null', async () => {
     expect.assertions(1)
     getGroupImpactMetricForCause.mockResolvedValue(null)
